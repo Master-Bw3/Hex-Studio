@@ -1,0 +1,199 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --primary_dark: #1e1e1e;
+    --primary_medium: #242526;
+    --primary_light: #292a2b;
+    --primary_lightest: #4f5051;
+    --accent1: #bac5e2;
+    --accent2: #d8b8e0;
+}
+
+::-webkit-scrollbar {
+    width: 1px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--accent1);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary_medium);
+}
+
+#content {
+    display: flex;
+    flex-direction: row-reverse;
+    overflow: hidden;
+}
+
+#right {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 100px);
+}
+
+#left_box {
+    min-height: 100vh;
+    width: 400px;
+    background-color: #4f3a61;
+    display: flex;
+}
+
+#panels {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    max-height: 100vh;
+    overflow: hidden;
+}
+
+#menu {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--primary_dark);
+    width: 100px;
+    min-width: 80px;
+}
+
+#menu svg {
+    margin: 15%;
+    fill-opacity: 0.9;
+}
+
+#menu svg:hover {
+    margin: 15%;
+    fill-opacity: 1;
+}
+
+.panel {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--primary_medium);
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.panel_title {
+    align-self: center;
+    font-family: 'Cascadia Code';
+    font-weight: normal;
+    font-size: 1.3em;
+    color: rgba(255, 255, 255, 0.4);
+    margin: 3%;
+    position: initial;
+}
+
+#stack_panel {
+    display: none;
+}
+
+.outer_box {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    width: 100%;
+    min-height: 2em;
+    height: fit-content;
+    margin-bottom: 2px;
+    background-color: var(--primary_lightest);
+}
+
+.outer_box > .inner_box {
+    display: flex;
+    width: 100%;
+}
+
+.outer_box > form {
+    display: flex;
+    width: 100%;
+}
+
+.outer_box > form > label {
+    min-height: 1.3em;
+    margin-top: 0.45em;
+    margin-bottom: 0.3em;
+    margin-left: 2em;
+    margin-right: 0.3em;
+    height: fit-content;
+    word-wrap: break-word;
+    font-size: 0.9em;
+    font-family: 'Monospac821 BT';
+    color: rgba(255, 255, 255, 0.8);
+    padding-left: 0.3em;
+    min-width: fit-content;
+}
+
+.outer_box > form > input {
+    min-height: 1.3em;
+    margin-top: 0.3em;
+    margin-bottom: 0.3em;
+    margin-right: 1.95em;
+    font-size: 0.9em;
+    font-family: 'Monospac821 BT';
+    color: rgba(255, 255, 255, 0.8);
+    background-color: var(--primary_medium);
+    padding-left: 0.3em;
+    min-width: 0;
+    width: 100%;
+}
+
+.outer_box > .inner_box > .x_button {
+    display: flex;
+    align-items: center;
+}
+.outer_box > .inner_box > .x_button svg {
+    margin: 0.3em;
+    width: 0.55em;
+    height: 0.55em;
+}
+.outer_box > .inner_box > .text {
+    min-height: 1.3em;
+    margin-top: 0.3em;
+    margin-bottom: 0.3em;
+    height: fit-content;
+    word-wrap: break-word;
+    font-size: 1em;
+    font-family: 'Monospac821 BT';
+    background-color: var(--primary_medium);
+    color: rgba(255, 255, 255, 0.8);
+    padding-left: 0.3em;
+    min-width: 0;
+    width: 100%;
+}
+
+.outer_box > .inner_box > .move_button {
+    display: flex;
+    align-items: center;
+}
+.outer_box > .inner_box > .move_button svg {
+    margin: 0.3em;
+    width: 1.35em;
+    height: 0.85em;
+}
+
+.outer_box > .inner_box > .index_display {
+    margin-top: 0.1em;
+    margin-left: 0.3em;
+    margin-right: 0.3em;
+    color: rgba(255, 255, 255, 0.8);
+    font-family: 'Monospac821 BT';
+    font-size: 1.25em;
+}
+
+#stack_panel .text {
+    margin-right: 0.5em;
+}
+
+#bottom_box {
+    min-height: 100px;
+    height: 100px;
+    border-top: 1px var(--accent1) solid;
+    background-color: var(--primary_light);
+}
