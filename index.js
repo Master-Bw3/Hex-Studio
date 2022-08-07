@@ -34,10 +34,6 @@ $.getJSON('pattern_registry.json', function (data) {
     });
 }, 10); */
 
-function to_degrees(angle) {
-    return angle * (180 / Math.PI);
-}
-
 //iota data types
 class vector {
     constructor(v1, v2, v3) {
@@ -259,35 +255,35 @@ function determine_angle(line1, line2) {
     if (line2 === undefined) {
         return;
     }
-    /*     line1.point1.color = RED;
-    line1.point2.color = 'blue';
-    line2.point2.color = 'green'; */
     let pnt1 = line1.point1;
     let pnt2 = line1.point2;
     let pnt3 = line2.point2;
 
-    //get vector angle of line 1
-    let x_dist = pnt2.x - pnt1.x;
-    let y_dist = pnt1.y - pnt2.y;
-    let l1_angle = Math.round(to_degrees(Math.atan2(y_dist, x_dist)));
-    if (l1_angle == 180) {
-        l1_angle = -180;
-    }
+    let line1_x_dist = pnt2.x - pnt1.x;
+    let line1_y_dist = pnt1.y - pnt2.y;
+    let line2_x_dist = pnt3.x - pnt2.x;
+    let line2_y_dist = pnt2.y - pnt3.y;
 
-    //get vector angle of line 2
-    x_dist = pnt3.x - pnt2.x;
-    y_dist = pnt2.y - pnt3.y;
-    let l2_angle = Math.round(to_degrees(Math.atan2(y_dist, x_dist)));
+    let line1_magnitude = get_distance_between_points(pnt1.x, pnt2.x, pnt1.y, pnt2.y);
+    let line2_magnitude = get_distance_between_points(pnt2.x, pnt3.x, pnt2.y, pnt3.y);
+    let dot_product = line1_x_dist * line2_x_dist + line1_y_dist * line2_y_dist;
 
-    return l1_angle - l2_angle;
+    let angle = Math.acos(dot_product / (line1_magnitude * line2_magnitude));
+    angle = Math.round((angle * 180) / Math.PI); //convert to degrees for readability
+    let position = (pnt2.x - pnt1.x) * (pnt3.y - pnt1.y) - (pnt2.y - pnt1.y) * (pnt3.x - pnt1.x) > 0; //determe whether point 3 is to the left or right of line 1
+    angle *= position ? 1 : -1; //make angle negetive if to the left
+
+    return angle;
 }
 
 class Pattern {
-    constructor(command, str, outputs) {
+    constructor(command, str, outputs, heading) {
         this.command = command;
         this.str = str;
         this.outputs = outputs;
         if (str in PATTERNS) this.inputs = PATTERNS[str].inputs;
+        this.heading = heading;
+        console.log(this.heading);
     }
 }
 function detect_pattern() {
@@ -296,11 +292,13 @@ function detect_pattern() {
         return;
     }
     var str = '';
+    let heading;
     for (let i = 0; i < active_path.length; i++) {
         const segment = active_path.at(i);
         segment.point1.used = true;
         segment.point2.used = true;
         let angle = determine_angle(segment, active_path.at(i + 1));
+        if (i === 0) heading = angle;
         switch (angle) {
             case -60:
                 str += 'q';
@@ -314,20 +312,8 @@ function detect_pattern() {
             case 120:
                 str += 'd';
                 break;
-            case -240:
-                str += 'd';
-                break;
-            case 240:
-                str += 'a';
-                break;
             case 0:
                 str += 'w';
-                break;
-            case -360:
-                str += 'w';
-                break;
-            case -300:
-                str += 'e';
                 break;
             default:
                 break;
@@ -402,12 +388,12 @@ function detect_pattern() {
     }
     if (pattern === undefined) {
         pattern = `garbage (${str})`;
-        DRAWN_PATTERNS.push(new Pattern(pattern, str, outputs));
+        DRAWN_PATTERNS.push(new Pattern(pattern, str, outputs, heading));
         active_path.forEach((segment) => {
             segment.color = ACCENT2;
         });
     } else {
-        DRAWN_PATTERNS.push(new Pattern(pattern, str, outputs));
+        DRAWN_PATTERNS.push(new Pattern(pattern, str, outputs, heading));
         active_path.forEach((segment) => {
             segment.color = ACCENT1;
         });
@@ -642,19 +628,19 @@ function draw_pattern_old(pattern, x, y) {
         const letter = pattern.str[i];
         switch (letter) {
             case 'q':
-                angle += 1.0472;
+                angle += 1.0472; //60 degrees
                 break;
             case 'e':
-                angle -= 1.0472;
+                angle -= 1.0472; //-60 degrees
                 break;
             case 'a':
-                angle += 2.0944;
+                angle += 2.0944; //120 degrees
                 break;
             case 'd':
-                angle -= 2.0944;
+                angle -= 2.0944; //-120 degrees
                 break;
             case 'w':
-                angle += 0;
+                angle += 0; //totally not 0 degrees
             default:
                 break;
         }
@@ -700,6 +686,7 @@ function draw_pattern_old(pattern, x, y) {
 
 //draws patterns from the pattern list in order (left to right, top to bottom)
 function reorder_patterns() {
+    console.log('hi');
     clear_paths();
     let x_length = grid[0][0].x;
     let y_length = grid[0][0].y;
@@ -746,31 +733,46 @@ stack_menu_button.addEventListener('click', function (event) {
 
 let drag_container = dragula([pattern_draggable_container], {
     moves: function (el, container, handle) {
-        console.log(handle)
-        if (handle.classList.contains('move_button')) return true
-        function get_parent (element, depth = 0) {
-            console.log(element)
-            if (depth > 5) return false
-            if (element.parentElement.classList.contains('move_button')) {
-                return true
+        let result = false;
+        function get_parent(element, depth = 0) {
+            if (depth > 5) {
+                console.log('fail', element);
+                result = false;
+                return;
+            }
+            if (element.classList.contains('move_button')) {
+                console.log('pass', element);
+                result = true;
+                return;
             } else {
-                get_parent(element, depth+1)
+                get_parent(element.parentElement, depth + 1);
             }
         }
-        return get_parent(handle)
+        get_parent(handle);
+        return result;
     },
-})
+});
 drag_container.on('dragend', function (el) {
     let new_pattern_list = [];
     for (let i = 0; i < pattern_draggable_container.children.length; i++) {
         const element = pattern_draggable_container.children[i];
-        console.log(parseInt(element.getAttribute('data-index')));
         new_pattern_list.push(DRAWN_PATTERNS[parseInt(element.getAttribute('data-index'))]);
+        element.dataset.index = i;
     }
-    console.log('erere', DRAWN_PATTERNS, new_pattern_list);
     DRAWN_PATTERNS = Array.from(new_pattern_list);
     reorder_patterns();
+    re_simulate_stack();
 });
+
+function remove_pattern_from_panel(pattern_element) {
+    DRAWN_PATTERNS.splice(parseInt(pattern_element.getAttribute('data-index')), 1);
+    console.log('patterns', DRAWN_PATTERNS);
+    pattern_element.remove();
+    for (let i = 0; i < pattern_draggable_container.children.length; i++) {
+        pattern_draggable_container.children[i].dataset.index = i;
+    }
+    reorder_patterns();
+}
 
 function add_pattern_to_panel(pattern) {
     let outer_box = document.createElement('div');
@@ -820,6 +822,9 @@ function add_pattern_to_panel(pattern) {
     inner_box.appendChild(move_button);
     outer_box.appendChild(inner_box);
     pattern_draggable_container.appendChild(outer_box);
+    x_button.addEventListener('mousedown', function () {
+        remove_pattern_from_panel(x_button.parentElement.parentElement);
+    });
 }
 
 let STACK = [];
@@ -830,6 +835,13 @@ class Iota {
     }
 }
 //---the stack---
+function re_simulate_stack() {
+    STACK.length = 0;
+    DRAWN_PATTERNS.forEach(function (pattern) {
+        update_stack(pattern);
+    });
+}
+
 function update_stack(pattern) {
     function check_matching_iotas(iota1, iota2) {
         let matching = false;

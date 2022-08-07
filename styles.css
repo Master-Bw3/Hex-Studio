@@ -81,6 +81,7 @@
 }
 
 .panel_title {
+    user-select: none;
     align-self: center;
     font-family: 'Cascadia Code';
     font-weight: normal;
