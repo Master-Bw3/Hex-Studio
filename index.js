@@ -21,7 +21,7 @@ $.getJSON('pattern_registry.json', function (data) {
     PATTERNS = data;
 });
 
-setTimeout(function () {
+/* setTimeout(function () {
     let pattern_test_names = ['get_caster', 'get_caster', 'add', 'get_caster', 'add', 'ceil', 'get_caster', 'ceil', 'random'];
 
     pattern_test_names.forEach((pattern) => {
@@ -32,7 +32,7 @@ setTimeout(function () {
             }
         });
     });
-}, 10);
+}, 10); */
 
 function to_degrees(angle) {
     return angle * (180 / Math.PI);
@@ -250,7 +250,6 @@ function detect_point_clicked() {
             if (dist <= SPACING / 2 && pnt.used === false) {
                 drawing = true;
                 current_point = pnt;
-                console.log(current_point);
             }
         });
     });
@@ -422,6 +421,8 @@ function detect_pattern() {
 }
 
 var pattern_panel = document.getElementById('pattern_panel');
+var pattern_draggable_container = document.getElementById('pattern_draggable_container');
+
 var active_path = Array();
 var drawn_paths = Array();
 
@@ -549,8 +550,6 @@ function draw_pattern(pattern, y_ceiling = 0, depth = 0) {
     }
     let offset_x_coords = x_coords,
         offset_y_coords = y_coords;
-    console.log(x_coords);
-    console.log(y_coords);
 
     //until y is valid, offset shape by one row
     let index = 0;
@@ -562,7 +561,6 @@ function draw_pattern(pattern, y_ceiling = 0, depth = 0) {
             if (coord < y_topmost[0]) y_topmost = [coord, i];
         }
         let point_topmost_coords = [grid[0][0].x, y_topmost[0] + grid[0][0].y];
-        console.log('e', point_topmost_coords);
 
         if (!get_point_from_coords(point_topmost_coords[0], point_topmost_coords[1]) || y_topmost < y_ceiling) {
             for (let i = 0; i < offset_y_coords.length; i++) {
@@ -573,8 +571,6 @@ function draw_pattern(pattern, y_ceiling = 0, depth = 0) {
             break;
         }
     }
-    console.log(offset_x_coords);
-    console.log(offset_y_coords);
 
     //until x is valid, offset shape by one collumn
     y_ceiling =
@@ -586,10 +582,8 @@ function draw_pattern(pattern, y_ceiling = 0, depth = 0) {
     function all_points_valid() {
         for (let i = 0; i < offset_x_coords.length; i++) {
             if (!get_point_from_coords(offset_x_coords[i] + grid[0][0].x, offset_y_coords[i] + grid[0][0].y)) {
-                //console.log('invalid coord', offset_x_coords[i] + grid[0][0].x, offset_y_coords[i] + grid[0][0].y);
                 return false;
             } else if (get_point_from_coords(offset_x_coords[i] + grid[0][0].x, offset_y_coords[i] + grid[0][0].y).used == true) {
-                //console.log('invalid coord', offset_x_coords[i] + grid[0][0].x, offset_y_coords[i] + grid[0][0].y);
                 return false;
             }
         }
@@ -749,10 +743,39 @@ stack_menu_button.addEventListener('click', function (event) {
 });
 
 //---pattern panel---
+
+let drag_container = dragula([pattern_draggable_container], {
+    moves: function (el, container, handle) {
+        console.log(handle)
+        if (handle.classList.contains('move_button')) return true
+        function get_parent (element, depth = 0) {
+            console.log(element)
+            if (depth > 5) return false
+            if (element.parentElement.classList.contains('move_button')) {
+                return true
+            } else {
+                get_parent(element, depth+1)
+            }
+        }
+        return get_parent(handle)
+    },
+})
+drag_container.on('dragend', function (el) {
+    let new_pattern_list = [];
+    for (let i = 0; i < pattern_draggable_container.children.length; i++) {
+        const element = pattern_draggable_container.children[i];
+        console.log(parseInt(element.getAttribute('data-index')));
+        new_pattern_list.push(DRAWN_PATTERNS[parseInt(element.getAttribute('data-index'))]);
+    }
+    console.log('erere', DRAWN_PATTERNS, new_pattern_list);
+    DRAWN_PATTERNS = Array.from(new_pattern_list);
+    reorder_patterns();
+});
+
 function add_pattern_to_panel(pattern) {
     let outer_box = document.createElement('div');
     outer_box.className = 'outer_box';
-    outer_box.dataset.index = pattern_panel.childElementCount - 1;
+    outer_box.dataset.index = pattern_draggable_container.childElementCount;
     let inner_box = document.createElement('div');
     inner_box.className = 'inner_box';
     let x_button = document.createElement('div');
@@ -765,8 +788,7 @@ function add_pattern_to_panel(pattern) {
     let move_button = document.createElement('div');
     move_button.className = 'move_button';
     move_button.innerHTML =
-        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21.36 16.29"><defs><style>.cls-1{opacity:0.7;}.cls-2{fill:none;stroke:#f5faff;stroke-miterlimit:10;stroke-width:3px;}</style></defs><g id="Layer_2" data-name="Layer 2"><g id="Code"><g class="cls-1"><line class="cls-2" y1="14.79" x2="21.36" y2="14.79"/><line class="cls-2" y1="8.15" x2="21.36" y2="8.15"/><line class="cls-2" y1="1.5" x2="21.36" y2="1.5"/></g></g></g></svg>';
-
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21.36 16.29"><g opacity="0.7"><line y1="14.79" x2="21.36" y2="14.79" fill="none" stroke="#f5faff" stroke-miterlimit="10" stroke-width="3"/><line y1="8.15" x2="21.36" y2="8.15" fill="none" stroke="#f5faff" stroke-miterlimit="10" stroke-width="3"/><line y1="1.5" x2="21.36" y2="1.5" fill="none" stroke="#f5faff" stroke-miterlimit="10" stroke-width="3"/></g></svg>';
     //add editable value if
     //outputs: "x type/x type"
     //is a number
@@ -797,7 +819,7 @@ function add_pattern_to_panel(pattern) {
     inner_box.appendChild(text);
     inner_box.appendChild(move_button);
     outer_box.appendChild(inner_box);
-    pattern_panel.appendChild(outer_box);
+    pattern_draggable_container.appendChild(outer_box);
 }
 
 let STACK = [];

@@ -144,10 +144,15 @@
     width: 100%;
 }
 
+.outer_box > .inner_box > .x_button svg:hover g {
+    opacity: 1;
+}
+
 .outer_box > .inner_box > .x_button {
     display: flex;
     align-items: center;
 }
+
 .outer_box > .inner_box > .x_button svg {
     margin: 0.3em;
     width: 0.55em;
@@ -172,10 +177,15 @@
     display: flex;
     align-items: center;
 }
+
 .outer_box > .inner_box > .move_button svg {
     margin: 0.3em;
     width: 1.35em;
     height: 0.85em;
+}
+
+.outer_box > .inner_box > .move_button:hover g{
+    opacity: 1;
 }
 
 .outer_box > .inner_box > .index_display {
