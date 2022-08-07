@@ -21,6 +21,23 @@ $.getJSON('pattern_registry.json', function (data) {
     PATTERNS = data;
 });
 
+setTimeout(function () {
+    let pattern_test_names = ['get_caster', 'get_caster', 'add', 'get_caster', 'add', 'ceil', 'get_caster', 'ceil', 'random'];
+
+    pattern_test_names.forEach((pattern) => {
+        Object.keys(PATTERNS).forEach((element) => {
+            if (PATTERNS[element]['command'] == pattern) {
+                let str = Object.keys(PATTERNS).find((key) => PATTERNS[key] === PATTERNS[element]);
+                DRAWN_PATTERNS.push(new Pattern(PATTERNS[element]['command'], str, PATTERNS[element]['outputs']));
+            }
+        });
+    });
+}, 10);
+
+function to_degrees(angle) {
+    return angle * (180 / Math.PI);
+}
+
 //iota data types
 class vector {
     constructor(v1, v2, v3) {
@@ -42,7 +59,7 @@ class null_ {
         this.value = null;
     }
 }
-class pattern {
+class pattern_ {
     constructor(value) {
         this.value = value;
     }
@@ -155,12 +172,12 @@ class Point {
         ctx.fill();
         ctx.closePath();
     }
-    get_mouse_distance() {
-        var dist = get_distance_between_points(this.x, mousepos[0], this.y, mousepos[1]);
+    get_distance(coord) {
+        var dist = get_distance_between_points(this.x, coord[0], this.y, coord[1]);
         return dist;
     }
     calculate_radius_from_mouse_distance() {
-        var r = (100 * 4) / this.get_mouse_distance();
+        var r = (100 * 4) / this.get_distance(mousepos);
         if (r > this.max_radius) {
             r = this.max_radius;
         }
@@ -201,7 +218,6 @@ function update_grid() {
         });
         ypos += (SPACING * Math.sqrt(3)) / 2;
     });
-    //console.table(grid);
 }
 
 function update_paths() {
@@ -230,10 +246,11 @@ var prev_point;
 function detect_point_clicked() {
     grid.forEach((row) => {
         row.forEach((pnt) => {
-            var dist = pnt.get_mouse_distance();
+            var dist = pnt.get_distance(mousepos);
             if (dist <= SPACING / 2 && pnt.used === false) {
                 drawing = true;
                 current_point = pnt;
+                console.log(current_point);
             }
         });
     });
@@ -253,7 +270,7 @@ function determine_angle(line1, line2) {
     //get vector angle of line 1
     let x_dist = pnt2.x - pnt1.x;
     let y_dist = pnt1.y - pnt2.y;
-    let l1_angle = Math.round((Math.atan2(y_dist, x_dist) * 180) / Math.PI);
+    let l1_angle = Math.round(to_degrees(Math.atan2(y_dist, x_dist)));
     if (l1_angle == 180) {
         l1_angle = -180;
     }
@@ -261,7 +278,7 @@ function determine_angle(line1, line2) {
     //get vector angle of line 2
     x_dist = pnt3.x - pnt2.x;
     y_dist = pnt2.y - pnt3.y;
-    let l2_angle = Math.round((Math.atan2(y_dist, x_dist) * 180) / Math.PI);
+    let l2_angle = Math.round(to_degrees(Math.atan2(y_dist, x_dist)));
 
     return l1_angle - l2_angle;
 }
@@ -424,7 +441,7 @@ function check_line_not_in_path(line, path) {
 function detect_point_hover() {
     grid.forEach((row) => {
         row.forEach((pnt) => {
-            var dist = pnt.get_mouse_distance();
+            var dist = pnt.get_distance(mousepos);
             if (
                 dist <= SPACING / 2 &&
                 pnt != current_point &&
@@ -457,12 +474,247 @@ function detect_point_hover() {
 
 addEventListener('mousedown', (event) => {
     detect_point_clicked();
+    if (event.shiftKey == true) {
+        reorder_patterns();
+    }
 });
 addEventListener('mouseup', (event) => {
     if (drawing === true) {
         detect_pattern(), (drawing = false);
     }
 });
+//clears all paths on canvas
+function clear_paths() {
+    drawn_paths.forEach(function (path) {
+        path.point1.used = false;
+        path.point2.used = false;
+    });
+    drawn_paths.length = 0;
+}
+
+function get_point_from_coords(x, y) {
+    let point;
+    grid.forEach((row) => {
+        row.forEach((pnt) => {
+            var dist = pnt.get_distance([x, y]);
+            if (dist < 2) {
+                point = pnt;
+            }
+        });
+    });
+    return point;
+}
+
+//draws a pattern from its signature
+function draw_pattern(pattern, y_ceiling = 0, depth = 0) {
+    if (depth > 5) return;
+    let x = SPACING / 2,
+        y = y_ceiling;
+    let angle = 0, //radians
+        magnitude = SPACING,
+        x_coords = [x],
+        y_coords = [y],
+        new_x = x,
+        new_y = y;
+    //first line
+    new_x += magnitude * Math.cos(angle);
+    x_coords.push(new_x);
+    new_y += magnitude * Math.sin(angle) * -1;
+    y_coords.push(new_y);
+
+    for (let i = 0; i < pattern.str.length; i++) {
+        const letter = pattern.str[i];
+        switch (letter) {
+            case 'q':
+                angle += 1.0472;
+                break;
+            case 'e':
+                angle -= 1.0472;
+                break;
+            case 'a':
+                angle += 2.0944;
+                break;
+            case 'd':
+                angle -= 2.0944;
+                break;
+            case 'w':
+                angle += 0;
+            default:
+                break;
+        }
+        new_x += magnitude * Math.cos(angle);
+        x_coords.push(new_x);
+        new_y += magnitude * Math.sin(angle) * -1;
+        y_coords.push(new_y);
+    }
+    let offset_x_coords = x_coords,
+        offset_y_coords = y_coords;
+    console.log(x_coords);
+    console.log(y_coords);
+
+    //until y is valid, offset shape by one row
+    let index = 0;
+    while (index < grid.length) {
+        index += 1;
+        let y_topmost = [offset_y_coords[0], 0];
+        for (let i = 0; i < offset_y_coords.length; i++) {
+            const coord = offset_y_coords[i];
+            if (coord < y_topmost[0]) y_topmost = [coord, i];
+        }
+        let point_topmost_coords = [grid[0][0].x, y_topmost[0] + grid[0][0].y];
+        console.log('e', point_topmost_coords);
+
+        if (!get_point_from_coords(point_topmost_coords[0], point_topmost_coords[1]) || y_topmost < y_ceiling) {
+            for (let i = 0; i < offset_y_coords.length; i++) {
+                //offset_x_coords[i] += x_leftmost - x;
+                offset_y_coords[i] += (SPACING * Math.sqrt(3)) / 2;
+            }
+        } else {
+            break;
+        }
+    }
+    console.log(offset_x_coords);
+    console.log(offset_y_coords);
+
+    //until x is valid, offset shape by one collumn
+    y_ceiling =
+        offset_y_coords.reduce(function (accumulatedValue, currentValue) {
+            return Math.max(accumulatedValue, currentValue);
+        }) +
+        (SPACING * Math.sqrt(3)) / 2;
+
+    function all_points_valid() {
+        for (let i = 0; i < offset_x_coords.length; i++) {
+            if (!get_point_from_coords(offset_x_coords[i] + grid[0][0].x, offset_y_coords[i] + grid[0][0].y)) {
+                //console.log('invalid coord', offset_x_coords[i] + grid[0][0].x, offset_y_coords[i] + grid[0][0].y);
+                return false;
+            } else if (get_point_from_coords(offset_x_coords[i] + grid[0][0].x, offset_y_coords[i] + grid[0][0].y).used == true) {
+                //console.log('invalid coord', offset_x_coords[i] + grid[0][0].x, offset_y_coords[i] + grid[0][0].y);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    index = 0;
+    while (true) {
+        index += 1;
+        if (index > grid[0].length * 2) {
+            return draw_pattern(pattern, y_ceiling, depth + 1);
+        }
+        let x_leftmost = [offset_x_coords[0], 0];
+        for (let i = 0; i < offset_x_coords.length; i++) {
+            const coord = offset_x_coords[i];
+            if (coord < x_leftmost[0]) x_leftmost = [coord, i];
+        }
+
+        if (!all_points_valid()) {
+            for (let i = 0; i < offset_x_coords.length; i++) {
+                //offset_y_coords[i] += y_leftmost - y;
+                offset_x_coords[i] += SPACING / 2;
+            }
+        } else {
+            break;
+        }
+    }
+
+    for (let i = 1; i < offset_x_coords.length; i++) {
+        let point1 = get_point_from_coords(offset_x_coords[i - 1] + grid[0][0].x, offset_y_coords[i - 1] + grid[0][0].y);
+        let point2 = get_point_from_coords(offset_x_coords[i] + grid[0][0].x, offset_y_coords[i] + grid[0][0].y);
+        point1.used = true;
+        point2.used = true;
+        drawn_paths.push(new Path(point1, point2, 5));
+    }
+}
+
+function draw_pattern_old(pattern, x, y) {
+    if (!get_point_from_coords(x, y)) {
+        x += SPACING / 2;
+    }
+    //draw pattern
+    let angle = 0, //radians
+        magnitude = SPACING,
+        x_coords = [x],
+        y_coords = [y],
+        new_x = x,
+        new_y = y;
+    //first line
+    new_x += magnitude * Math.cos(angle);
+    x_coords.push(new_x);
+    new_y += magnitude * Math.sin(angle) * -1;
+    y_coords.push(new_y);
+
+    for (let i = 0; i < pattern.str.length; i++) {
+        const letter = pattern.str[i];
+        switch (letter) {
+            case 'q':
+                angle += 1.0472;
+                break;
+            case 'e':
+                angle -= 1.0472;
+                break;
+            case 'a':
+                angle += 2.0944;
+                break;
+            case 'd':
+                angle -= 2.0944;
+                break;
+            case 'w':
+                angle += 0;
+            default:
+                break;
+        }
+        new_x += magnitude * Math.cos(angle);
+        x_coords.push(new_x);
+        new_y += magnitude * Math.sin(angle) * -1;
+        y_coords.push(new_y);
+    }
+    let x_leftmost = x_coords.reduce(function (accumulatedValue, currentValue) {
+        return Math.min(accumulatedValue, currentValue);
+    });
+    let y_topmost = y_coords.reduce(function (accumulatedValue, currentValue) {
+        return Math.min(accumulatedValue, currentValue);
+    });
+
+    //fix for hexagonal grid x offset
+    if (Math.round((y - (y_topmost - y) - y) / ((SPACING * Math.sqrt(3)) / 2)) % 2 != 0) {
+        //dont question the math
+        x_leftmost += SPACING / 2;
+    }
+    for (let i = 0; i < x_coords.length; i++) {
+        x_coords[i] += x_leftmost - x;
+        y_coords[i] -= y_topmost - y;
+    }
+
+    for (let i = 1; i < x_coords.length; i++) {
+        let point1 = get_point_from_coords(x_coords[i - 1], y_coords[i - 1]);
+        let point2 = get_point_from_coords(x_coords[i], y_coords[i]);
+        drawn_paths.push(new Path(point1, point2, 5));
+    }
+
+    //get bottom right corner of pattern
+    let y_bottommost = y_coords.reduce(function (accumulatedValue, currentValue) {
+        return Math.max(accumulatedValue, currentValue);
+    });
+
+    let x_rightmost = x_coords.reduce(function (accumulatedValue, currentValue) {
+        return Math.max(accumulatedValue, currentValue);
+    });
+
+    return [x_rightmost, y_bottommost];
+}
+
+//draws patterns from the pattern list in order (left to right, top to bottom)
+function reorder_patterns() {
+    clear_paths();
+    let x_length = grid[0][0].x;
+    let y_length = grid[0][0].y;
+    DRAWN_PATTERNS.forEach(function (pattern) {
+        let r = draw_pattern(pattern);
+        //x_length = r[0] + SPACING;
+        //y_length = r[1];
+    });
+}
 
 animate();
 
@@ -591,7 +843,6 @@ function update_stack(pattern) {
             } else if (PATTERNS[pattern.str]['command'] === 'duplicate_n') {
                 if (check_matching_iotas(STACK[0].type, PATTERNS[pattern.str]['inputs'].at(-1))) {
                     let num = STACK[0].value;
-                    console.log(num);
                     STACK.shift();
                     let copied_iota = STACK[0];
                     STACK.shift();
@@ -665,7 +916,6 @@ function update_stack(pattern) {
     }
 
     //display stack in stack panel
-    console.log('stack: ', STACK);
     update_stack_panel();
 }
 
@@ -694,7 +944,7 @@ function update_stack_panel() {
         inner_box.className = 'inner_box';
         let text = document.createElement('div');
         text.className = 'text';
-        if (iota.value === undefined) {
+        if (iota.value === undefined && typeof iota.type === 'string') {
             text.innerText = iota.type.charAt(0).toUpperCase() + iota.type.slice(1);
         } else {
             text.innerText = iota.value;
