@@ -100,7 +100,7 @@ class Path {
         let run = this.point2.x - this.point1.x;
         let sub_segments = [];
         for (let i = 0; i < this.midpoint_count; i++) {
-            let point = new Point(this.point1.x + (run * (i + 1)) / 5, this.point1.y + (rise * (i + 1)) / 5, this.width / 2, this.color);
+            let point = new Point(this.point1.x + (run * (i + 1)) / this.midpoint_count, this.point1.y + (rise * (i + 1)) / this.midpoint_count, this.width / 2, this.color);
             if (sub_segments.length === 0) {
                 var segment = new Path(this.point1, point, 0);
             } else {
@@ -116,7 +116,7 @@ class Path {
         this.wiggle();
         this.sub_segment_offset.forEach((segment) => {
             segment.point2.draw();
-            ctx.lineWidth = this.width;
+            ctx.lineWidth = this.width*SCALE;
             ctx.strokeStyle = this.color;
             ctx.beginPath();
             ctx.moveTo(segment.point1.x, segment.point1.y);
@@ -126,17 +126,17 @@ class Path {
     }
 
     wiggle() {
-        let max_offset = 5;
+        let max_offset = 5*SCALE;
         this.sub_segments.forEach((s, index) => {
             let segment = this.sub_segment_offset[index];
             if (index === this.sub_segments.length - 1) {
                 return;
             } else {
-                let newX = segment.point2.x + (Math.random() < 0.5 ? -1 : 1);
+                let newX = segment.point2.x + (Math.random() < 0.5 ? -1 : 1)*SCALE;
                 if (newX <= s.point2.x + max_offset && newX >= s.point2.x - max_offset) {
                     segment.point2.x = newX;
                 }
-                let newY = segment.point2.y + (Math.random() < 0.5 ? -1 : 1);
+                let newY = segment.point2.y + (Math.random() < 0.5 ? -1 : 1)*SCALE;
                 if (newY <= s.point2.y + max_offset && newY >= s.point2.y - max_offset) {
                     segment.point2.y = newY;
                 }
@@ -155,7 +155,7 @@ class Point {
         this.color = color;
     }
     draw() {
-        var r = this.radius;
+        var r = this.radius*SCALE;
         ctx.fillStyle = this.color;
         //ctx.beginPath();
         //var circle = ctx.arc(this.x, this.y, r, 0, Math.PI * 2);
@@ -180,10 +180,11 @@ class Point {
         return r;
     }
 }
-
-const SPACING = 100;
+const SCALE = .5
+const SPACING = 100*SCALE;
 const WIDTH = parseInt(canvas.width / SPACING);
 const HEIGHT = parseInt(canvas.height / SPACING);
+console.log(HEIGHT, SPACING, canvas.height)
 
 const row = () =>
     Array(WIDTH)
@@ -221,7 +222,7 @@ function update_paths() {
     if (drawing === true) {
         ctx.beginPath();
         ctx.strokeStyle = ACCENT2;
-        ctx.lineWidth = 5;
+        ctx.lineWidth = 5*SCALE;
         ctx.moveTo(current_point.x, current_point.y);
         ctx.lineTo(mousepos[0], mousepos[1]);
         ctx.stroke();
@@ -252,11 +253,15 @@ function detect_point_clicked() {
 }
 
 function determine_angle(line1, line2) {
-    if (line2 === undefined) {
-        return;
-    }
     let pnt1 = line1.point1;
     let pnt2 = line1.point2;
+
+    if (line2 === undefined) {
+        //returns heading of first segment
+        let heading = Math.atan2(pnt2.y - pnt1.y, pnt2.x - pnt1.x) * -1;
+        return heading;
+    }
+
     let pnt3 = line2.point2;
 
     let line1_x_dist = pnt2.x - pnt1.x;
@@ -283,7 +288,6 @@ class Pattern {
         this.outputs = outputs;
         if (str in PATTERNS) this.inputs = PATTERNS[str].inputs;
         this.heading = heading;
-        console.log(this.heading);
     }
 }
 function detect_pattern() {
@@ -291,14 +295,13 @@ function detect_pattern() {
         active_path = [];
         return;
     }
+    let heading = determine_angle(active_path[0]);
     var str = '';
-    let heading;
     for (let i = 0; i < active_path.length; i++) {
         const segment = active_path.at(i);
         segment.point1.used = true;
         segment.point2.used = true;
         let angle = determine_angle(segment, active_path.at(i + 1));
-        if (i === 0) heading = angle;
         switch (angle) {
             case -60:
                 str += 'q';
@@ -493,11 +496,10 @@ function get_point_from_coords(x, y) {
 }
 
 //draws a pattern from its signature
-function draw_pattern(pattern, y_ceiling = 0, depth = 0) {
-    if (depth > 5) return;
+function draw_pattern(pattern, y_ceiling) {
     let x = SPACING / 2,
         y = y_ceiling;
-    let angle = 0, //radians
+    let angle = pattern.heading,
         magnitude = SPACING,
         x_coords = [x],
         y_coords = [y],
@@ -539,23 +541,14 @@ function draw_pattern(pattern, y_ceiling = 0, depth = 0) {
 
     //until y is valid, offset shape by one row
     let index = 0;
-    while (index < grid.length) {
-        index += 1;
-        let y_topmost = [offset_y_coords[0], 0];
-        for (let i = 0; i < offset_y_coords.length; i++) {
-            const coord = offset_y_coords[i];
-            if (coord < y_topmost[0]) y_topmost = [coord, i];
-        }
-        let point_topmost_coords = [grid[0][0].x, y_topmost[0] + grid[0][0].y];
+    let y_topmost = [offset_y_coords[0], 0];
+    for (let i = 0; i < offset_y_coords.length; i++) {
+        const coord = offset_y_coords[i];
+        if (coord < y_topmost[0]) y_topmost = [coord, i];
+    }
 
-        if (!get_point_from_coords(point_topmost_coords[0], point_topmost_coords[1]) || y_topmost < y_ceiling) {
-            for (let i = 0; i < offset_y_coords.length; i++) {
-                //offset_x_coords[i] += x_leftmost - x;
-                offset_y_coords[i] += (SPACING * Math.sqrt(3)) / 2;
-            }
-        } else {
-            break;
-        }
+    for (let i = 0; i < offset_y_coords.length; i++) {
+        offset_y_coords[i] += y_topmost[0] * -1 + y_ceiling;
     }
 
     //until x is valid, offset shape by one collumn
@@ -580,7 +573,7 @@ function draw_pattern(pattern, y_ceiling = 0, depth = 0) {
     while (true) {
         index += 1;
         if (index > grid[0].length * 2) {
-            return draw_pattern(pattern, y_ceiling, depth + 1);
+            return false;
         }
         let x_leftmost = [offset_x_coords[0], 0];
         for (let i = 0; i < offset_x_coords.length; i++) {
@@ -605,95 +598,23 @@ function draw_pattern(pattern, y_ceiling = 0, depth = 0) {
         point2.used = true;
         drawn_paths.push(new Path(point1, point2, 5));
     }
-}
-
-function draw_pattern_old(pattern, x, y) {
-    if (!get_point_from_coords(x, y)) {
-        x += SPACING / 2;
-    }
-    //draw pattern
-    let angle = 0, //radians
-        magnitude = SPACING,
-        x_coords = [x],
-        y_coords = [y],
-        new_x = x,
-        new_y = y;
-    //first line
-    new_x += magnitude * Math.cos(angle);
-    x_coords.push(new_x);
-    new_y += magnitude * Math.sin(angle) * -1;
-    y_coords.push(new_y);
-
-    for (let i = 0; i < pattern.str.length; i++) {
-        const letter = pattern.str[i];
-        switch (letter) {
-            case 'q':
-                angle += 1.0472; //60 degrees
-                break;
-            case 'e':
-                angle -= 1.0472; //-60 degrees
-                break;
-            case 'a':
-                angle += 2.0944; //120 degrees
-                break;
-            case 'd':
-                angle -= 2.0944; //-120 degrees
-                break;
-            case 'w':
-                angle += 0; //totally not 0 degrees
-            default:
-                break;
-        }
-        new_x += magnitude * Math.cos(angle);
-        x_coords.push(new_x);
-        new_y += magnitude * Math.sin(angle) * -1;
-        y_coords.push(new_y);
-    }
-    let x_leftmost = x_coords.reduce(function (accumulatedValue, currentValue) {
-        return Math.min(accumulatedValue, currentValue);
-    });
-    let y_topmost = y_coords.reduce(function (accumulatedValue, currentValue) {
-        return Math.min(accumulatedValue, currentValue);
-    });
-
-    //fix for hexagonal grid x offset
-    if (Math.round((y - (y_topmost - y) - y) / ((SPACING * Math.sqrt(3)) / 2)) % 2 != 0) {
-        //dont question the math
-        x_leftmost += SPACING / 2;
-    }
-    for (let i = 0; i < x_coords.length; i++) {
-        x_coords[i] += x_leftmost - x;
-        y_coords[i] -= y_topmost - y;
-    }
-
-    for (let i = 1; i < x_coords.length; i++) {
-        let point1 = get_point_from_coords(x_coords[i - 1], y_coords[i - 1]);
-        let point2 = get_point_from_coords(x_coords[i], y_coords[i]);
-        drawn_paths.push(new Path(point1, point2, 5));
-    }
-
-    //get bottom right corner of pattern
-    let y_bottommost = y_coords.reduce(function (accumulatedValue, currentValue) {
-        return Math.max(accumulatedValue, currentValue);
-    });
-
-    let x_rightmost = x_coords.reduce(function (accumulatedValue, currentValue) {
-        return Math.max(accumulatedValue, currentValue);
-    });
-
-    return [x_rightmost, y_bottommost];
+    return y_ceiling;
 }
 
 //draws patterns from the pattern list in order (left to right, top to bottom)
 function reorder_patterns() {
-    console.log('hi');
     clear_paths();
     let x_length = grid[0][0].x;
     let y_length = grid[0][0].y;
+    let y_ceiling = 0;
+    let y_ceiling_new = 0;
     DRAWN_PATTERNS.forEach(function (pattern) {
-        let r = draw_pattern(pattern);
-        //x_length = r[0] + SPACING;
-        //y_length = r[1];
+        let r = draw_pattern(pattern, y_ceiling);
+        if (r == false) {
+            y_ceiling = y_ceiling_new;
+            r = draw_pattern(pattern, y_ceiling);
+        }
+        y_ceiling_new = r > y_ceiling_new ? r : y_ceiling_new;
     });
 }
 
@@ -736,12 +657,10 @@ let drag_container = dragula([pattern_draggable_container], {
         let result = false;
         function get_parent(element, depth = 0) {
             if (depth > 5) {
-                console.log('fail', element);
                 result = false;
                 return;
             }
             if (element.classList.contains('move_button')) {
-                console.log('pass', element);
                 result = true;
                 return;
             } else {
@@ -766,7 +685,6 @@ drag_container.on('dragend', function (el) {
 
 function remove_pattern_from_panel(pattern_element) {
     DRAWN_PATTERNS.splice(parseInt(pattern_element.getAttribute('data-index')), 1);
-    console.log('patterns', DRAWN_PATTERNS);
     pattern_element.remove();
     for (let i = 0; i < pattern_draggable_container.children.length; i++) {
         pattern_draggable_container.children[i].dataset.index = i;
