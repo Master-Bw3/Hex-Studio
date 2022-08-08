@@ -1,14 +1,23 @@
 //color constants
 const ACCENT1 = '#BAC5E2';
 const ACCENT2 = '#D8B8E0';
-const ACCENT2_SATURATED = '#D695E5';
+const ACCENT2_SATURATED = '#D786EA'; //'#D695E5';
 const ACCENT3 = '#e0b8b8';
+const ACCENT4 = '#dd6666';
+
+//setting variables
+let SETTING_Path_Animations = true;
+let SETTING_Highlight_Start_End_Points = true;
 
 class Path {
-    constructor(point1, point2, midpoint_count = 5) {
+    constructor(point1, point2, midpoint_count = 5, color = ACCENT2) {
         this.point1 = point1;
+        this.point1.connected_paths.push(this);
         this.point2 = point2;
-        this.color = ACCENT2;
+        this.point2.connected_paths.push(this);
+        this.color = color;
+        this.point1.color = this.color;
+        this.point2.color = this.color;
         this.width = 5;
         this.midpoint_count = midpoint_count;
         this.sub_segments = this.gen_sub_segments();
@@ -27,12 +36,12 @@ class Path {
                 this.point1.x + (run * (i + 1)) / this.midpoint_count,
                 this.point1.y + (rise * (i + 1)) / this.midpoint_count,
                 this.width / 2,
-                ACCENT1
+                this.color
             );
             if (sub_segments.length === 0) {
-                var segment = new Path(this.point1, point, 0);
+                var segment = new Path(this.point1, point, 0, this.color);
             } else {
-                var segment = new Path(sub_segments[i - 1].point2, point, 0);
+                var segment = new Path(sub_segments[i - 1].point2, point, 0, this.color);
             }
             sub_segments.push(segment);
         }
@@ -47,8 +56,14 @@ class Path {
 
     update_color(color) {
         this.color = color;
-        this.sub_segment_offset.forEach((segment) => {
+        this.sub_segment_offset.forEach((segment, index) => {
             segment.color = color;
+            if (segment.point1.start_or_end) {
+                segment.point2.color = color;
+            } else {
+                segment.point1.color = color;
+                segment.point2.color = color;
+            }
         });
     }
 
@@ -86,21 +101,33 @@ class Path {
 }
 
 class Point {
-    constructor(x, y, max_radius = 8, color = ACCENT1) {
+    constructor(x, y, max_radius = 8, color = ACCENT1, start_or_end = false) {
         this.x = x;
         this.y = y;
         this.max_radius = max_radius;
         this.radius = max_radius;
         this.used = false;
         this.color = color;
+        this.start_or_end = start_or_end;
+        this.connected_paths = [];
+    }
+    check_if_part_of_path() {
+        for (let index = 0; index < this.connected_paths.length; index++) {
+            const path = this.connected_paths[index];
+            if (typeof path === 'undefined') {
+                this.connected_paths.slice(index, 1);
+            }
+        }
+        return this.connected_paths.length === 0 ? false : true;
     }
     draw() {
         var r = this.radius * SCALE;
-        if (r < 5 && this.color === ACCENT2_SATURATED) {
-            r = 6*SCALE;
+        if (this.start_or_end && SETTING_Highlight_Start_End_Points) {
+            r = 6 * SCALE;
+        } else if (this.used) {
+            r = 2.5 * SCALE;
         } else if (r < 0.4 && !this.used) {
-            console.log(r)
-            return
+            return;
         }
         ctx.fillStyle = this.color;
         //ctx.beginPath();
@@ -185,13 +212,11 @@ $.getJSON('pattern_registry.json', function (data) {
 document.getElementById('zoom_in').addEventListener('mousedown', (event) => {
     SCALE += 0.1;
     redraw_canvas();
-    console.log(SCALE);
 });
 
 document.getElementById('zoom_out').addEventListener('mousedown', (event) => {
     SCALE -= 0.1;
     redraw_canvas();
-    console.log(SCALE);
 });
 
 //iota data types
@@ -260,6 +285,7 @@ function update_grid() {
             pnt.x = xpos;
             pnt.y = ypos;
             pnt.radius = pnt.calculate_radius_from_mouse_distance();
+            if (!pnt.check_if_part_of_path()) pnt.color = ACCENT1;
             pnt.draw();
             xpos += SPACING;
         });
@@ -339,17 +365,39 @@ class Pattern {
         if (str in PATTERNS) this.inputs = PATTERNS[str].inputs;
         this.heading = heading;
         this.paths = paths;
+        this.animate_gradient = SETTING_Path_Animations;
         this.highlight_animation_step_index = -25;
-        this.paths[0].point1.color = ACCENT2_SATURATED;
-        this.paths[this.paths.length - 1].point2.color = ACCENT2_SATURATED;
+        this.animation_speed = 2.5;
+        this.colors = this.set_color();
+        this.update_colors();
     }
 
-    update_start_end_point_colors() {
-        this.paths[0].point1.color = ACCENT2_SATURATED;
-        this.paths[this.paths.length - 1].point2.color = ACCENT2_SATURATED;
+    set_color() {
+        if (this.command.startsWith('garbage')) {
+            return [ACCENT4, ACCENT3];
+        } else {
+            return [ACCENT2_SATURATED, ACCENT1];
+        }
     }
 
-    gradient_highlight_animation_step(color1, color2) {
+    update_colors() {
+        this.paths.forEach((path) => {
+            path.color = this.colors[1];
+            path.point1.color = this.colors[1];
+            path.point2.color = this.colors[1];
+            path.gen_sub_segments();
+        });
+        this.paths[0].point1.start_or_end = true;
+        this.paths[this.paths.length - 1].point2.start_or_end = true;
+
+        if (SETTING_Highlight_Start_End_Points) {
+            this.paths[0].point1.color = this.colors[0];
+            this.paths[this.paths.length - 1].point2.color = this.colors[0];
+        }
+    }
+
+    gradient_highlight_animation_step() {
+        if (!this.animate_gradient) return this.update_colors();
         let path_index = Math.floor(this.highlight_animation_step_index * 0.01);
         let highlighted_path;
         if (path_index === this.paths.length + 1) {
@@ -357,7 +405,6 @@ class Pattern {
             path_index = 0;
             highlighted_path = this.paths[0];
         } else if (path_index === -1) {
-            console.log(path_index);
             highlighted_path = this.paths[path_index + 1];
 
             let rise = highlighted_path.point2.y - highlighted_path.point1.y;
@@ -369,14 +416,13 @@ class Pattern {
                 highlighted_path.point1.x +
                 run * (this.highlight_animation_step_index * 0.01 - Math.floor(this.highlight_animation_step_index * 0.01) - 1);
             let grad = ctx.createRadialGradient(highlight_point_x, highlight_point_y, 5, highlight_point_x, highlight_point_y, 25);
-            grad.addColorStop(0, ACCENT2);
-            grad.addColorStop(1, color1);
+            grad.addColorStop(0, this.colors[0]);
+            grad.addColorStop(1, this.colors[1]);
             //highlighted_path.color = grad
             this.paths.forEach((path) => {
                 path.color = grad;
             });
         } else if (path_index === this.paths.length) {
-            console.log(path_index);
             highlighted_path = this.paths[path_index - 1];
 
             let rise = highlighted_path.point2.y - highlighted_path.point1.y;
@@ -388,14 +434,13 @@ class Pattern {
                 highlighted_path.point1.x +
                 run * (this.highlight_animation_step_index * 0.01 - Math.floor(this.highlight_animation_step_index * 0.01) + 1);
             let grad = ctx.createRadialGradient(highlight_point_x, highlight_point_y, 5, highlight_point_x, highlight_point_y, 25);
-            grad.addColorStop(0, ACCENT2);
-            grad.addColorStop(1, color1);
+            grad.addColorStop(0, this.colors[0]);
+            grad.addColorStop(1, this.colors[1]);
             //highlighted_path.color = grad
             this.paths.forEach((path) => {
                 path.color = grad;
             });
         } else {
-            console.log(path_index);
             highlighted_path = this.paths[path_index];
 
             //max steps per sub_segment: 10
@@ -409,19 +454,19 @@ class Pattern {
                 highlighted_path.point1.x +
                 run * (this.highlight_animation_step_index * 0.01 - Math.floor(this.highlight_animation_step_index * 0.01));
             let grad = ctx.createRadialGradient(highlight_point_x, highlight_point_y, 5, highlight_point_x, highlight_point_y, 25);
-            grad.addColorStop(0, color2);
-            grad.addColorStop(1, color1);
+            grad.addColorStop(0, this.colors[0]);
+            grad.addColorStop(1, this.colors[1]);
             //highlighted_path.color = grad
             this.paths.forEach((path) => {
                 path.update_color(grad);
             });
         }
         if (path_index > this.paths.length - 2) {
-            this.paths[0].color = ACCENT1;
+            this.paths[0].color = this.colors[1];
         } else if (path_index < 1) {
-            this.paths.at(-1).color = ACCENT1;
+            this.paths.at(-1).color = this.colors[1];
         }
-        this.highlight_animation_step_index += 1;
+        this.highlight_animation_step_index += this.animation_speed;
     }
 }
 function detect_pattern() {
@@ -431,29 +476,31 @@ function detect_pattern() {
     }
     let heading = determine_angle(active_path[0]);
     var str = '';
-    for (let i = 0; i < active_path.length - 1; i++) {
+    for (let i = 0; i < active_path.length; i++) {
         const segment = active_path.at(i);
         segment.point1.used = true;
         segment.point2.used = true;
-        let angle = determine_angle(segment, active_path.at(i + 1));
-        switch (angle) {
-            case -60:
-                str += 'q';
-                break;
-            case 60:
-                str += 'e';
-                break;
-            case -120:
-                str += 'a';
-                break;
-            case 120:
-                str += 'd';
-                break;
-            case 0:
-                str += 'w';
-                break;
-            default:
-                break;
+        if (i < active_path.length - 1) {
+            let angle = determine_angle(segment, active_path.at(i + 1));
+            switch (angle) {
+                case -60:
+                    str += 'q';
+                    break;
+                case 60:
+                    str += 'e';
+                    break;
+                case -120:
+                    str += 'a';
+                    break;
+                case 120:
+                    str += 'd';
+                    break;
+                case 0:
+                    str += 'w';
+                    break;
+                default:
+                    break;
+            }
         }
     }
     //let pattern = Object.keys(PATTERNS).find((key) => PATTERNS[key] === str);
@@ -572,7 +619,7 @@ function detect_point_hover() {
                 get_distance_between_points(pnt.x, current_point.x, pnt.y, current_point.y) <= SPACING * 1.5
             ) {
                 if (pnt != prev_point) {
-                    if (pnt.used === false && check_line_not_in_path([current_point, pnt], active_path)) {
+                    if (pnt.used != true && check_line_not_in_path([current_point, pnt], active_path)) {
                         active_path.push(new Path(current_point, pnt));
                         //pnt.used = true;
                         //current_point.used = true;
@@ -734,7 +781,7 @@ function draw_pattern(pattern, y_ceiling) {
     }
     drawn_paths = drawn_paths.concat(pattern_path);
     pattern.paths = pattern_path;
-    pattern.update_start_end_point_colors();
+    pattern.update_colors();
     return y_ceiling;
 }
 
