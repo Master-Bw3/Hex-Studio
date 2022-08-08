@@ -12,9 +12,7 @@ let SETTING_Highlight_Start_End_Points = true;
 class Path {
     constructor(point1, point2, midpoint_count = 5, color = ACCENT2) {
         this.point1 = point1;
-        this.point1.connected_paths.push(this);
         this.point2 = point2;
-        this.point2.connected_paths.push(this);
         this.color = color;
         this.point1.color = this.color;
         this.point2.color = this.color;
@@ -109,17 +107,9 @@ class Point {
         this.used = false;
         this.color = color;
         this.start_or_end = start_or_end;
-        this.connected_paths = [];
+        // console.log(this.connected_paths)
     }
-    check_if_part_of_path() {
-        for (let index = 0; index < this.connected_paths.length; index++) {
-            const path = this.connected_paths[index];
-            if (typeof path === 'undefined') {
-                this.connected_paths.slice(index, 1);
-            }
-        }
-        return this.connected_paths.length === 0 ? false : true;
-    }
+
     draw() {
         var r = this.radius * SCALE;
         if (this.start_or_end && SETTING_Highlight_Start_End_Points) {
@@ -285,7 +275,7 @@ function update_grid() {
             pnt.x = xpos;
             pnt.y = ypos;
             pnt.radius = pnt.calculate_radius_from_mouse_distance();
-            if (!pnt.check_if_part_of_path()) pnt.color = ACCENT1;
+
             pnt.draw();
             xpos += SPACING;
         });
@@ -320,8 +310,10 @@ function detect_point_clicked() {
     grid.forEach((row) => {
         row.forEach((pnt) => {
             var dist = pnt.get_distance(mousepos);
+            if (dist <= SPACING / 2) console.log(pnt);
             if (dist <= SPACING / 2 && pnt.used === false) {
                 drawing = true;
+                pnt.color = ACCENT2;
                 current_point = pnt;
             }
         });
@@ -470,8 +462,8 @@ class Pattern {
     }
 }
 function detect_pattern() {
-    if (active_path.length < 1) {
-        active_path = [];
+    if (active_path.length == 0) {
+        current_point.color = ACCENT1;
         return;
     }
     let heading = determine_angle(active_path[0]);
@@ -629,6 +621,19 @@ function detect_point_hover() {
                 } else {
                     //pnt.used = false;
                     //current_point.used = false;
+                    let pnt_not_in_path = true;
+                    for (let index = 0; index < active_path.length - 1; index++) {
+                        const path = active_path[index];
+                        console.log('hii');
+                        if (current_point == path.point1 || current_point == path.point2) {
+                            console.log('pnt in path');
+                            pnt_not_in_path = false;
+                            break;
+                        }
+                    }
+
+                    console.log(pnt_not_in_path);
+                    if (pnt_not_in_path == true) current_point.color = ACCENT1;
 
                     active_path.pop();
                     current_point = prev_point;
@@ -654,8 +659,10 @@ addEventListener('mouseup', (event) => {
 //clears all paths on canvas
 function clear_paths() {
     drawn_paths.forEach(function (path) {
+        path.point1.start_or_end = false;
         path.point1.used = false;
         path.point1.color = ACCENT1;
+        path.point2.start_or_end = false;
         path.point2.used = false;
         path.point2.color = ACCENT1;
     });
@@ -940,6 +947,7 @@ class Iota {
 //---the stack---
 function re_simulate_stack() {
     STACK.length = 0;
+    update_stack_panel()
     DRAWN_PATTERNS.forEach(function (pattern) {
         update_stack(pattern);
     });
@@ -1030,10 +1038,12 @@ function update_stack(pattern) {
 
         switch (error[0]) {
             case 'NotEnoughIotas':
+                pattern_draggable_container.children[DRAWN_PATTERNS.findIndex((ptrn) => ptrn === pattern)].style.backgroundColor = '#4F3737';
                 var garbages = Array(PATTERNS[pattern.str]['inputs'].length - STACK.length).fill(new Iota('garbage'));
                 STACK = garbages.concat(STACK);
                 break;
             case 'IncorrectIota':
+                pattern_draggable_container.children[DRAWN_PATTERNS.findIndex((ptrn) => ptrn === pattern)].style.backgroundColor = '#4F3737';
                 var garbages = [];
                 PATTERNS[error[1]]['inputs'].forEach((iota) => {
                     if (!check_matching_iotas(STACK[0].type, iota)) {
@@ -1044,6 +1054,7 @@ function update_stack(pattern) {
                 STACK = garbages.concat(STACK);
                 break;
             case 'NoSuchPattern':
+                pattern_draggable_container.children[DRAWN_PATTERNS.findIndex((ptrn) => ptrn === pattern)].style.backgroundColor = '#4F3737';
                 STACK.unshift(new Iota('garbage'));
                 break;
 
@@ -1057,13 +1068,14 @@ function update_stack(pattern) {
 }
 
 const IOTA_COLOR_MAP = {
+    garbage: '#4F3737',
     pattern: '#354C3F',
     entity: '#354B4C',
     null: '#354C3F',
     hex: '#4B4C35',
     list: '#354C3F',
-    vector: '#4F3737',
-    number: '#4F3737',
+    vector: '#4C3541',
+    number: '#4C3541',
 };
 
 function update_stack_panel() {
