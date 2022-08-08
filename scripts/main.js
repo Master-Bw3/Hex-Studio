@@ -46,9 +46,9 @@ class Path {
     }
 
     update_color(color) {
-        this.color = color
-        this.sub_segment_offset.forEach(segment => {
-            segment.color = color
+        this.color = color;
+        this.sub_segment_offset.forEach((segment) => {
+            segment.color = color;
         });
     }
 
@@ -138,17 +138,18 @@ const grid = Array(HEIGHT + 1)
     .fill()
     .map(grid_row);
 
-window.addEventListener('resize', function (event) {
+function redraw_canvas() {
+    SPACING = 100 * SCALE;
     canvas.width = window.innerWidth - 400;
     canvas.height = window.innerHeight - 100;
     WIDTH = parseInt(canvas.width / SPACING);
     HEIGHT = parseInt(canvas.height / ((SPACING * Math.sqrt(3)) / 2));
-    if (HEIGHT > grid.length) {
+    while (HEIGHT > grid.length) {
         for (let i = 0; i < HEIGHT - grid.length; i++) {
             grid.push(grid_row());
         }
     }
-    if (WIDTH > grid[0].length) {
+    while (WIDTH > grid[0].length) {
         for (let i = 0; i < grid.length; i++) {
             for (let i1 = 0; i1 < WIDTH - grid[i].length; i1++) {
                 grid[i].push(new Point());
@@ -159,7 +160,11 @@ window.addEventListener('resize', function (event) {
         drawn_paths.forEach((path) => {
             path.regen_sub_segments();
         });
-    }, 10);
+    }, 15);
+}
+
+window.addEventListener('resize', function (event) {
+    redraw_canvas()
 });
 
 var DRAWN_PATTERNS = Array();
@@ -170,18 +175,18 @@ $.getJSON('pattern_registry.json', function (data) {
     PATTERNS = data;
 });
 
-/* setTimeout(function () {
-    let pattern_test_names = ['get_caster', 'get_caster', 'add', 'get_caster', 'add', 'ceil', 'get_caster', 'ceil', 'random'];
+//zoom buttons
+document.getElementById('zoom_in').addEventListener('mousedown', (event) => {
+    SCALE += 0.1
+    redraw_canvas()
+    console.log(SCALE);
+});
 
-    pattern_test_names.forEach((pattern) => {
-        Object.keys(PATTERNS).forEach((element) => {
-            if (PATTERNS[element]['command'] == pattern) {
-                let str = Object.keys(PATTERNS).find((key) => PATTERNS[key] === PATTERNS[element]);
-                DRAWN_PATTERNS.push(new Pattern(PATTERNS[element]['command'], str, PATTERNS[element]['outputs']));
-            }
-        });
-    });
-}, 10); */
+document.getElementById('zoom_out').addEventListener('mousedown', (event) => {
+    SCALE -= 0.1
+    redraw_canvas()
+    console.log(SCALE);
+});
 
 //iota data types
 class vector {
@@ -329,8 +334,8 @@ class Pattern {
         this.heading = heading;
         this.paths = paths;
         this.highlight_animation_step_index = -25;
-        this.paths[0].point1.color = ACCENT2_SATURATED
-        this.paths[this.paths.length-1].point2.color = ACCENT2_SATURATED
+        this.paths[0].point1.color = ACCENT2_SATURATED;
+        this.paths[this.paths.length - 1].point2.color = ACCENT2_SATURATED;
     }
 
     gradient_highlight_animation_step(color1, color2) {
@@ -397,7 +402,7 @@ class Pattern {
             grad.addColorStop(1, color1);
             //highlighted_path.color = grad
             this.paths.forEach((path) => {
-                path.update_color(grad)
+                path.update_color(grad);
             });
         }
         if (path_index > this.paths.length - 2) {
@@ -582,9 +587,6 @@ function detect_point_hover() {
 
 canvas.addEventListener('mousedown', (event) => {
     detect_point_clicked();
-    if (event.shiftKey == true) {
-        reorder_patterns();
-    }
 });
 addEventListener('mouseup', (event) => {
     if (drawing === true) {

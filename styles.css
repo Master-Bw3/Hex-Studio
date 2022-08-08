@@ -208,3 +208,35 @@
     border-top: 1px var(--accent1) solid;
     background-color: var(--primary_light);
 }
+
+#zoom_buttons {
+    z-index: 1;
+    position: absolute;
+    bottom: 110px;
+    height: 110px;
+    width: 50px;
+    margin-left: 10px;
+}
+
+#zoom_buttons div {
+    display: flex;
+    border-radius: 10px;
+    height: 50px;
+    width: 50px;
+    margin-bottom: 10px;
+    background-color: var(--primary_dark);/* rgba(0, 0, 0, 0.2); */
+    justify-content: center;
+    align-items: center;
+}
+
+#zoom_buttons p {
+    font-size: 2em;
+    color: rgba(255, 255, 255, 0.8);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-bottom: 10px;
+    user-select: none;
+}
+
+#zoom_buttons div:hover p {
+    font-size: 2.5em; 
+}
