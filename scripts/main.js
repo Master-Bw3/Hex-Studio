@@ -27,7 +27,7 @@ class Path {
                 this.point1.x + (run * (i + 1)) / this.midpoint_count,
                 this.point1.y + (rise * (i + 1)) / this.midpoint_count,
                 this.width / 2,
-                this.color
+                ACCENT1
             );
             if (sub_segments.length === 0) {
                 var segment = new Path(this.point1, point, 0);
@@ -96,6 +96,12 @@ class Point {
     }
     draw() {
         var r = this.radius * SCALE;
+        if (r < 5 && this.color === ACCENT2_SATURATED) {
+            r = 6*SCALE;
+        } else if (r < 0.4 && !this.used) {
+            console.log(r)
+            return
+        }
         ctx.fillStyle = this.color;
         //ctx.beginPath();
         //var circle = ctx.arc(this.x, this.y, r, 0, Math.PI * 2);
@@ -164,7 +170,7 @@ function redraw_canvas() {
 }
 
 window.addEventListener('resize', function (event) {
-    redraw_canvas()
+    redraw_canvas();
 });
 
 var DRAWN_PATTERNS = Array();
@@ -177,14 +183,14 @@ $.getJSON('pattern_registry.json', function (data) {
 
 //zoom buttons
 document.getElementById('zoom_in').addEventListener('mousedown', (event) => {
-    SCALE += 0.1
-    redraw_canvas()
+    SCALE += 0.1;
+    redraw_canvas();
     console.log(SCALE);
 });
 
 document.getElementById('zoom_out').addEventListener('mousedown', (event) => {
-    SCALE -= 0.1
-    redraw_canvas()
+    SCALE -= 0.1;
+    redraw_canvas();
     console.log(SCALE);
 });
 
@@ -334,6 +340,11 @@ class Pattern {
         this.heading = heading;
         this.paths = paths;
         this.highlight_animation_step_index = -25;
+        this.paths[0].point1.color = ACCENT2_SATURATED;
+        this.paths[this.paths.length - 1].point2.color = ACCENT2_SATURATED;
+    }
+
+    update_start_end_point_colors() {
         this.paths[0].point1.color = ACCENT2_SATURATED;
         this.paths[this.paths.length - 1].point2.color = ACCENT2_SATURATED;
     }
@@ -597,7 +608,9 @@ addEventListener('mouseup', (event) => {
 function clear_paths() {
     drawn_paths.forEach(function (path) {
         path.point1.used = false;
+        path.point1.color = ACCENT1;
         path.point2.used = false;
+        path.point2.color = ACCENT1;
     });
     drawn_paths.length = 0;
 }
@@ -711,13 +724,17 @@ function draw_pattern(pattern, y_ceiling) {
         }
     }
 
+    let pattern_path = [];
     for (let i = 1; i < offset_x_coords.length; i++) {
         let point1 = get_point_from_coords(offset_x_coords[i - 1] + grid[0][0].x, offset_y_coords[i - 1] + grid[0][0].y);
         let point2 = get_point_from_coords(offset_x_coords[i] + grid[0][0].x, offset_y_coords[i] + grid[0][0].y);
         point1.used = true;
         point2.used = true;
-        drawn_paths.push(new Path(point1, point2, 5));
+        pattern_path.push(new Path(point1, point2, 5));
     }
+    drawn_paths = drawn_paths.concat(pattern_path);
+    pattern.paths = pattern_path;
+    pattern.update_start_end_point_colors();
     return y_ceiling;
 }
 
