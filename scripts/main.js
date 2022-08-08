@@ -1,19 +1,168 @@
+//color constants
+const ACCENT1 = '#BAC5E2';
+const ACCENT2 = '#D8B8E0';
+const ACCENT2_SATURATED = '#D695E5';
+const ACCENT3 = '#e0b8b8';
+
+class Path {
+    constructor(point1, point2, midpoint_count = 5) {
+        this.point1 = point1;
+        this.point2 = point2;
+        this.color = ACCENT2;
+        this.width = 5;
+        this.midpoint_count = midpoint_count;
+        this.sub_segments = this.gen_sub_segments();
+        this.sub_segment_offset = this.gen_sub_segments();
+    }
+
+    gen_sub_segments() {
+        if (this.midpoint_count === 0) {
+            return [];
+        }
+        let rise = this.point2.y - this.point1.y;
+        let run = this.point2.x - this.point1.x;
+        let sub_segments = [];
+        for (let i = 0; i < this.midpoint_count; i++) {
+            let point = new Point(
+                this.point1.x + (run * (i + 1)) / this.midpoint_count,
+                this.point1.y + (rise * (i + 1)) / this.midpoint_count,
+                this.width / 2,
+                this.color
+            );
+            if (sub_segments.length === 0) {
+                var segment = new Path(this.point1, point, 0);
+            } else {
+                var segment = new Path(sub_segments[i - 1].point2, point, 0);
+            }
+            sub_segments.push(segment);
+        }
+        //sub_segments.push(new Path(sub_segments[sub_segments.length].point2, this.point2, 0));
+        return sub_segments;
+    }
+
+    regen_sub_segments() {
+        this.sub_segments = this.gen_sub_segments();
+        this.sub_segment_offset = this.gen_sub_segments();
+    }
+
+    update_color(color) {
+        this.color = color
+        this.sub_segment_offset.forEach(segment => {
+            segment.color = color
+        });
+    }
+
+    draw() {
+        this.wiggle();
+        this.sub_segment_offset.forEach((segment) => {
+            segment.point2.draw();
+            ctx.lineWidth = this.width * SCALE;
+            ctx.strokeStyle = this.color;
+            ctx.beginPath();
+            ctx.moveTo(segment.point1.x, segment.point1.y);
+            ctx.lineTo(segment.point2.x, segment.point2.y);
+            ctx.stroke();
+        });
+    }
+
+    wiggle() {
+        let max_offset = 5 * SCALE;
+        this.sub_segments.forEach((s, index) => {
+            let segment = this.sub_segment_offset[index];
+            if (index === this.sub_segments.length - 1) {
+                return;
+            } else {
+                let newX = segment.point2.x + (Math.random() < 0.5 ? -1 : 1) * 0.6 * SCALE;
+                if (newX <= s.point2.x + max_offset && newX >= s.point2.x - max_offset) {
+                    segment.point2.x = newX;
+                }
+                let newY = segment.point2.y + (Math.random() < 0.5 ? -1 : 1) * 0.6 * SCALE;
+                if (newY <= s.point2.y + max_offset && newY >= s.point2.y - max_offset) {
+                    segment.point2.y = newY;
+                }
+            }
+        });
+    }
+}
+
+class Point {
+    constructor(x, y, max_radius = 8, color = ACCENT1) {
+        this.x = x;
+        this.y = y;
+        this.max_radius = max_radius;
+        this.radius = max_radius;
+        this.used = false;
+        this.color = color;
+    }
+    draw() {
+        var r = this.radius * SCALE;
+        ctx.fillStyle = this.color;
+        //ctx.beginPath();
+        //var circle = ctx.arc(this.x, this.y, r, 0, Math.PI * 2);
+        ctx.beginPath();
+        ctx.moveTo(this.x + r * Math.cos(0), this.y + r * Math.sin(0));
+
+        for (var i = 1; i <= 6; i += 1) {
+            ctx.lineTo(this.x + r * Math.cos((i * 2 * Math.PI) / 6), this.y + r * Math.sin((i * 2 * Math.PI) / 6));
+        }
+        ctx.fill();
+        ctx.closePath();
+    }
+    get_distance(coord) {
+        var dist = get_distance_between_points(this.x, coord[0], this.y, coord[1]);
+        return dist;
+    }
+    calculate_radius_from_mouse_distance() {
+        var r = (100 * 4) / this.get_distance(mousepos);
+        if (r > this.max_radius) {
+            r = this.max_radius;
+        }
+        return r;
+    }
+}
 //---canvas---
 const canvas = document.querySelector('canvas');
 
 canvas.width = window.innerWidth - 400;
 canvas.height = window.innerHeight - 100;
+let SCALE = 1;
+let SPACING = 100 * SCALE;
+let WIDTH = parseInt(canvas.width / SPACING);
+let HEIGHT = parseInt(canvas.height / ((SPACING * Math.sqrt(3)) / 2));
+
+const grid_row = () =>
+    Array(WIDTH)
+        .fill()
+        .map((u) => new Point());
+const grid = Array(HEIGHT + 1)
+    .fill()
+    .map(grid_row);
 
 window.addEventListener('resize', function (event) {
     canvas.width = window.innerWidth - 400;
     canvas.height = window.innerHeight - 100;
+    WIDTH = parseInt(canvas.width / SPACING);
+    HEIGHT = parseInt(canvas.height / ((SPACING * Math.sqrt(3)) / 2));
+    if (HEIGHT > grid.length) {
+        for (let i = 0; i < HEIGHT - grid.length; i++) {
+            grid.push(grid_row());
+        }
+    }
+    if (WIDTH > grid[0].length) {
+        for (let i = 0; i < grid.length; i++) {
+            for (let i1 = 0; i1 < WIDTH - grid[i].length; i1++) {
+                grid[i].push(new Point());
+            }
+        }
+    }
+    setTimeout(() => {
+        drawn_paths.forEach((path) => {
+            path.regen_sub_segments();
+        });
+    }, 10);
 });
 
 var DRAWN_PATTERNS = Array();
-
-//color constants
-const ACCENT1 = '#BAC5E2';
-const ACCENT2 = '#D8B8E0';
 
 let PATTERNS;
 //pattern list
@@ -81,131 +230,21 @@ function get_distance_between_points(x1, x2, y1, y2) {
     return dist;
 }
 
-class Path {
-    constructor(point1, point2, midpoint_count = 5) {
-        this.point1 = point1;
-        this.point2 = point2;
-        this.color = ACCENT2;
-        this.width = 5;
-        this.midpoint_count = midpoint_count;
-        this.sub_segments = this.gen_sub_segments();
-        this.sub_segment_offset = this.gen_sub_segments();
-    }
-
-    gen_sub_segments() {
-        if (this.midpoint_count === 0) {
-            return [];
-        }
-        let rise = this.point2.y - this.point1.y;
-        let run = this.point2.x - this.point1.x;
-        let sub_segments = [];
-        for (let i = 0; i < this.midpoint_count; i++) {
-            let point = new Point(this.point1.x + (run * (i + 1)) / this.midpoint_count, this.point1.y + (rise * (i + 1)) / this.midpoint_count, this.width / 2, this.color);
-            if (sub_segments.length === 0) {
-                var segment = new Path(this.point1, point, 0);
-            } else {
-                var segment = new Path(sub_segments[i - 1].point2, point, 0);
-            }
-            sub_segments.push(segment);
-        }
-        //sub_segments.push(new Path(sub_segments[sub_segments.length].point2, this.point2, 0));
-        return sub_segments;
-    }
-
-    draw() {
-        this.wiggle();
-        this.sub_segment_offset.forEach((segment) => {
-            segment.point2.draw();
-            ctx.lineWidth = this.width*SCALE;
-            ctx.strokeStyle = this.color;
-            ctx.beginPath();
-            ctx.moveTo(segment.point1.x, segment.point1.y);
-            ctx.lineTo(segment.point2.x, segment.point2.y);
-            ctx.stroke();
-        });
-    }
-
-    wiggle() {
-        let max_offset = 5*SCALE;
-        this.sub_segments.forEach((s, index) => {
-            let segment = this.sub_segment_offset[index];
-            if (index === this.sub_segments.length - 1) {
-                return;
-            } else {
-                let newX = segment.point2.x + (Math.random() < 0.5 ? -1 : 1)*SCALE;
-                if (newX <= s.point2.x + max_offset && newX >= s.point2.x - max_offset) {
-                    segment.point2.x = newX;
-                }
-                let newY = segment.point2.y + (Math.random() < 0.5 ? -1 : 1)*SCALE;
-                if (newY <= s.point2.y + max_offset && newY >= s.point2.y - max_offset) {
-                    segment.point2.y = newY;
-                }
-            }
-        });
-    }
-}
-
-class Point {
-    constructor(x, y, max_radius = 8, color = ACCENT1) {
-        this.x = x;
-        this.y = y;
-        this.max_radius = max_radius;
-        this.radius = max_radius;
-        this.used = false;
-        this.color = color;
-    }
-    draw() {
-        var r = this.radius*SCALE;
-        ctx.fillStyle = this.color;
-        //ctx.beginPath();
-        //var circle = ctx.arc(this.x, this.y, r, 0, Math.PI * 2);
-        ctx.beginPath();
-        ctx.moveTo(this.x + r * Math.cos(0), this.y + r * Math.sin(0));
-
-        for (var i = 1; i <= 6; i += 1) {
-            ctx.lineTo(this.x + r * Math.cos((i * 2 * Math.PI) / 6), this.y + r * Math.sin((i * 2 * Math.PI) / 6));
-        }
-        ctx.fill();
-        ctx.closePath();
-    }
-    get_distance(coord) {
-        var dist = get_distance_between_points(this.x, coord[0], this.y, coord[1]);
-        return dist;
-    }
-    calculate_radius_from_mouse_distance() {
-        var r = (100 * 4) / this.get_distance(mousepos);
-        if (r > this.max_radius) {
-            r = this.max_radius;
-        }
-        return r;
-    }
-}
-const SCALE = .5
-const SPACING = 100*SCALE;
-const WIDTH = parseInt(canvas.width / SPACING);
-const HEIGHT = parseInt(canvas.height / SPACING);
-console.log(HEIGHT, SPACING, canvas.height)
-
-const row = () =>
-    Array(WIDTH)
-        .fill()
-        .map((u) => new Point());
-const grid = Array(HEIGHT + 1)
-    .fill()
-    .map(row);
-
 function animate() {
     requestAnimationFrame(animate);
     ctx.fillStyle = '#292A2B';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+    DRAWN_PATTERNS.forEach((pattern) => {
+        pattern.gradient_highlight_animation_step(ACCENT1, ACCENT2_SATURATED);
+    });
     update_paths();
     update_grid();
 }
 
 function update_grid() {
-    var ypos = canvas.height / HEIGHT / 2;
+    var ypos = (canvas.height - ((SPACING * Math.sqrt(3)) / 2) * HEIGHT) / 2;
     grid.forEach((r, i) => {
-        var xpos = canvas.width / WIDTH / 2 + (SPACING / 2) * (i % 2);
+        var xpos = (canvas.width - SPACING * WIDTH) * 1.5 + (SPACING / 2) * (i % 2);
         r.forEach((pnt) => {
             pnt.x = xpos;
             pnt.y = ypos;
@@ -222,7 +261,7 @@ function update_paths() {
     if (drawing === true) {
         ctx.beginPath();
         ctx.strokeStyle = ACCENT2;
-        ctx.lineWidth = 5*SCALE;
+        ctx.lineWidth = 5 * SCALE;
         ctx.moveTo(current_point.x, current_point.y);
         ctx.lineTo(mousepos[0], mousepos[1]);
         ctx.stroke();
@@ -282,12 +321,91 @@ function determine_angle(line1, line2) {
 }
 
 class Pattern {
-    constructor(command, str, outputs, heading) {
+    constructor(command, str, outputs, heading, paths) {
         this.command = command;
         this.str = str;
         this.outputs = outputs;
         if (str in PATTERNS) this.inputs = PATTERNS[str].inputs;
         this.heading = heading;
+        this.paths = paths;
+        this.highlight_animation_step_index = -25;
+        this.paths[0].point1.color = ACCENT2_SATURATED
+        this.paths[this.paths.length-1].point2.color = ACCENT2_SATURATED
+    }
+
+    gradient_highlight_animation_step(color1, color2) {
+        let path_index = Math.floor(this.highlight_animation_step_index * 0.01);
+        let highlighted_path;
+        if (path_index === this.paths.length + 1) {
+            this.highlight_animation_step_index = -25;
+            path_index = 0;
+            highlighted_path = this.paths[0];
+        } else if (path_index === -1) {
+            console.log(path_index);
+            highlighted_path = this.paths[path_index + 1];
+
+            let rise = highlighted_path.point2.y - highlighted_path.point1.y;
+            let run = highlighted_path.point2.x - highlighted_path.point1.x;
+            let highlight_point_y =
+                highlighted_path.point1.y +
+                rise * (this.highlight_animation_step_index * 0.01 - Math.floor(this.highlight_animation_step_index * 0.01) - 1);
+            let highlight_point_x =
+                highlighted_path.point1.x +
+                run * (this.highlight_animation_step_index * 0.01 - Math.floor(this.highlight_animation_step_index * 0.01) - 1);
+            let grad = ctx.createRadialGradient(highlight_point_x, highlight_point_y, 5, highlight_point_x, highlight_point_y, 25);
+            grad.addColorStop(0, ACCENT2);
+            grad.addColorStop(1, color1);
+            //highlighted_path.color = grad
+            this.paths.forEach((path) => {
+                path.color = grad;
+            });
+        } else if (path_index === this.paths.length) {
+            console.log(path_index);
+            highlighted_path = this.paths[path_index - 1];
+
+            let rise = highlighted_path.point2.y - highlighted_path.point1.y;
+            let run = highlighted_path.point2.x - highlighted_path.point1.x;
+            let highlight_point_y =
+                highlighted_path.point1.y +
+                rise * (this.highlight_animation_step_index * 0.01 - Math.floor(this.highlight_animation_step_index * 0.01) + 1);
+            let highlight_point_x =
+                highlighted_path.point1.x +
+                run * (this.highlight_animation_step_index * 0.01 - Math.floor(this.highlight_animation_step_index * 0.01) + 1);
+            let grad = ctx.createRadialGradient(highlight_point_x, highlight_point_y, 5, highlight_point_x, highlight_point_y, 25);
+            grad.addColorStop(0, ACCENT2);
+            grad.addColorStop(1, color1);
+            //highlighted_path.color = grad
+            this.paths.forEach((path) => {
+                path.color = grad;
+            });
+        } else {
+            console.log(path_index);
+            highlighted_path = this.paths[path_index];
+
+            //max steps per sub_segment: 10
+            //max steps per line: midpoints*10
+            let rise = highlighted_path.point2.y - highlighted_path.point1.y;
+            let run = highlighted_path.point2.x - highlighted_path.point1.x;
+            let highlight_point_y =
+                highlighted_path.point1.y +
+                rise * (this.highlight_animation_step_index * 0.01 - Math.floor(this.highlight_animation_step_index * 0.01));
+            let highlight_point_x =
+                highlighted_path.point1.x +
+                run * (this.highlight_animation_step_index * 0.01 - Math.floor(this.highlight_animation_step_index * 0.01));
+            let grad = ctx.createRadialGradient(highlight_point_x, highlight_point_y, 5, highlight_point_x, highlight_point_y, 25);
+            grad.addColorStop(0, color2);
+            grad.addColorStop(1, color1);
+            //highlighted_path.color = grad
+            this.paths.forEach((path) => {
+                path.update_color(grad)
+            });
+        }
+        if (path_index > this.paths.length - 2) {
+            this.paths[0].color = ACCENT1;
+        } else if (path_index < 1) {
+            this.paths.at(-1).color = ACCENT1;
+        }
+        this.highlight_animation_step_index += 1;
     }
 }
 function detect_pattern() {
@@ -297,7 +415,7 @@ function detect_pattern() {
     }
     let heading = determine_angle(active_path[0]);
     var str = '';
-    for (let i = 0; i < active_path.length; i++) {
+    for (let i = 0; i < active_path.length - 1; i++) {
         const segment = active_path.at(i);
         segment.point1.used = true;
         segment.point2.used = true;
@@ -391,12 +509,12 @@ function detect_pattern() {
     }
     if (pattern === undefined) {
         pattern = `garbage (${str})`;
-        DRAWN_PATTERNS.push(new Pattern(pattern, str, outputs, heading));
+        DRAWN_PATTERNS.push(new Pattern(pattern, str, outputs, heading, active_path));
         active_path.forEach((segment) => {
             segment.color = ACCENT2;
         });
     } else {
-        DRAWN_PATTERNS.push(new Pattern(pattern, str, outputs, heading));
+        DRAWN_PATTERNS.push(new Pattern(pattern, str, outputs, heading, active_path));
         active_path.forEach((segment) => {
             segment.color = ACCENT1;
         });
@@ -462,7 +580,7 @@ function detect_point_hover() {
     });
 }
 
-addEventListener('mousedown', (event) => {
+canvas.addEventListener('mousedown', (event) => {
     detect_point_clicked();
     if (event.shiftKey == true) {
         reorder_patterns();
@@ -690,6 +808,7 @@ function remove_pattern_from_panel(pattern_element) {
         pattern_draggable_container.children[i].dataset.index = i;
     }
     reorder_patterns();
+    re_simulate_stack();
 }
 
 function add_pattern_to_panel(pattern) {
