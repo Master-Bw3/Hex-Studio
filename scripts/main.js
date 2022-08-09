@@ -9,6 +9,10 @@ const ACCENT4 = '#dd6666';
 let SETTING_Path_Animations = true;
 let SETTING_Highlight_Start_End_Points = true;
 
+
+
+
+
 class Path {
     constructor(point1, point2, midpoint_count = 5, color = ACCENT2) {
         this.point1 = point1;
@@ -107,7 +111,6 @@ class Point {
         this.used = false;
         this.color = color;
         this.start_or_end = start_or_end;
-        // console.log(this.connected_paths)
     }
 
     draw() {
@@ -157,9 +160,7 @@ const grid_row = () =>
     Array(WIDTH)
         .fill()
         .map((u) => new Point());
-const grid = Array(HEIGHT + 1)
-    .fill()
-    .map(grid_row);
+const grid = Array(HEIGHT).fill().map(grid_row);
 
 function redraw_canvas() {
     SPACING = 100 * SCALE;
@@ -192,9 +193,14 @@ window.addEventListener('resize', function (event) {
 
 var DRAWN_PATTERNS = Array();
 
+
+
 let PATTERNS;
 //pattern list
 $.getJSON('pattern_registry.json', function (data) {
+    data.forEach(pattern => {
+        pattern["outputs"].map(() => {})
+    });
     PATTERNS = data;
 });
 
@@ -210,34 +216,46 @@ document.getElementById('zoom_out').addEventListener('mousedown', (event) => {
 });
 
 //iota data types
-class vector {
-    constructor(v1, v2, v3) {
-        this.value = [n1, n2, n3];
+class Vector {
+    constructor (v1, v2, v3) {
+        this.v1 = v1
+        this.v2 = v2
+        this.v3 = v3
+        this.value = [v1, v2, v3]
+        this.type = "vector"
     }
 }
-class number {
+
+class Num {
     constructor(value) {
         this.value = value;
+        this.type = "number"
     }
 }
-class entity {
+class Entity {
     constructor(value) {
         this.value = value;
+        this.type = "entity"
+
     }
 }
-class null_ {
-    constructor() {
-        this.value = null;
+class Null {
+    constructor(value) {
+        this.value = "null";
+        this.type = "null"
     }
 }
-class pattern_ {
+class Pattern_ {
     constructor(value) {
         this.value = value;
+        this.type = "pattern"
+
     }
 }
-class list {
+class List {
     constructor(value) {
         this.value = value;
+        this.type = "List"
     }
 }
 
@@ -268,9 +286,9 @@ function animate() {
 }
 
 function update_grid() {
-    var ypos = (canvas.height - ((SPACING * Math.sqrt(3)) / 2) * HEIGHT) / 2;
+    var ypos = (canvas.height - ((SPACING * Math.sqrt(3)) / 2) * (HEIGHT - 1)) / 2;
     grid.forEach((r, i) => {
-        var xpos = (canvas.width - SPACING * WIDTH) * 1.5 + (SPACING / 2) * (i % 2);
+        var xpos = (canvas.width - SPACING * (WIDTH - 0.5)) / 2 + (SPACING / 2) * (i % 2);
         r.forEach((pnt) => {
             pnt.x = xpos;
             pnt.y = ypos;
@@ -310,7 +328,6 @@ function detect_point_clicked() {
     grid.forEach((row) => {
         row.forEach((pnt) => {
             var dist = pnt.get_distance(mousepos);
-            if (dist <= SPACING / 2) console.log(pnt);
             if (dist <= SPACING / 2 && pnt.used === false) {
                 drawing = true;
                 pnt.color = ACCENT2;
@@ -524,7 +541,7 @@ function detect_pattern() {
             }
         }
         pattern = 'number';
-        outputs.unshift(value);
+        outputs.unshift(new Num(value));
     } else if (str.startsWith('dedd')) {
         value = 0;
         for (let i = 4; i < str.length; i++) {
@@ -551,6 +568,10 @@ function detect_pattern() {
         }
         value *= -1;
         pattern = 'number';
+        outputs.unshift(new Num(value));
+    } else if (str === 'qqqqq') {
+        pattern = "const [0,0,0]"
+        value = new Vector(0,0,0)
         outputs.unshift(value);
     } else {
         try {
@@ -624,15 +645,12 @@ function detect_point_hover() {
                     let pnt_not_in_path = true;
                     for (let index = 0; index < active_path.length - 1; index++) {
                         const path = active_path[index];
-                        console.log('hii');
                         if (current_point == path.point1 || current_point == path.point2) {
-                            console.log('pnt in path');
                             pnt_not_in_path = false;
                             break;
                         }
                     }
 
-                    console.log(pnt_not_in_path);
                     if (pnt_not_in_path == true) current_point.color = ACCENT1;
 
                     active_path.pop();
@@ -916,10 +934,11 @@ function add_pattern_to_panel(pattern) {
         form.appendChild(input);
         outer_box.appendChild(form);
     }
+    console.log(pattern)
 
     if (pattern.command === 'number') {
         add_field('value:', pattern.outputs[0]);
-    } else if (pattern.str in PATTERNS) {
+    } else if (PATTERNS[pattern.str]["editable"] == true) {
         PATTERNS[pattern.str].outputs.forEach(function (output) {
             if (output.length > 1) {
                 add_field('result:', pattern.outputs[0]);
@@ -947,26 +966,19 @@ class Iota {
 //---the stack---
 function re_simulate_stack() {
     STACK.length = 0;
-    update_stack_panel()
+    update_stack_panel();
     DRAWN_PATTERNS.forEach(function (pattern) {
         update_stack(pattern);
     });
 }
 
 function update_stack(pattern) {
-    function check_matching_iotas(iota1, iota2) {
+    function check_matching_input(iota, input) {
         let matching = false;
-        if (Array.isArray(iota1)) {
-            iota1.forEach(function (type) {
-                if (iota2 === type) matching = true;
-            });
-        }
+        input.forEach(function (type) {
+            if (iota === type || type == 'any') matching = true;
+        });
 
-        if (Array.isArray(iota2)) {
-            iota2.forEach(function (type) {
-                if (iota1 === type) matching = true;
-            });
-        }
         return matching;
     }
 
@@ -980,13 +992,20 @@ function update_stack(pattern) {
             }
 
             //check if there are enough inputs in the stack
-        } else if (STACK.length >= PATTERNS[pattern.str]['inputs'].length) {
-            //
-            if (PATTERNS[pattern.str]['command'] === 'duplicate') {
-                STACK.unshift(STACK[0]);
+        } else if (STACK.length >= pattern.inputs.length) {
+            let check = true;
+            if (pattern.inputs.length > 0) {
+                if (!check_matching_input(STACK[0].type, pattern.inputs.at(-1))) check = false;
+            }
+
+            if (!check) {
+                throw ['IncorrectIota', pattern.str];
+            } else {
                 //
-            } else if (PATTERNS[pattern.str]['command'] === 'duplicate_n') {
-                if (check_matching_iotas(STACK[0].type, PATTERNS[pattern.str]['inputs'].at(-1))) {
+                if (pattern.command === 'duplicate') {
+                    STACK.unshift(STACK[0]);
+                    //
+                } else if (pattern.command === 'duplicate_n') {
                     let num = STACK[0].value;
                     STACK.shift();
                     let copied_iota = STACK[0];
@@ -994,40 +1013,48 @@ function update_stack(pattern) {
                     if (num >= 0) {
                         STACK = Array(num).fill(copied_iota).concat(STACK);
                     }
+                    //
+                } else if (pattern.command === 'stack_len') {
+                    STACK.unshift(new Iota('number', STACK.length));
+                    //
+                } else if (pattern.command === 'swap') {
+                    let temp = STACK[1];
+                    STACK[1] = STACK[0];
+                    STACK[0] = temp;
+                    //
+                } else if (pattern.command === 'fisherman') {
+                    let num = STACK[0].value;
+                    STACK.splice(0, 1);
+                    STACK.unshift(STACK[num - 1]);
+                    STACK.splice(num, 1);
+                    //
+                } else if (pattern.command === 'add') {
+                    let num1 = STACK[0].value;
+                    let num2 = STACK[1].value;
+                    STACK.splice(0, 2);
+                    STACK.unshift(new Iota('number', num2 + num1));
+                } else if (pattern.command === 'sub') {
+                    let num1 = STACK[0].value;
+                    let num2 = STACK[1].value;
+                    STACK.splice(0, 2);
+                    STACK.unshift(new Iota('number', num2 - num1));
                 } else {
-                    throw ['IncorrectIota', pattern.str];
-                }
-                //
-            } else if (PATTERNS[pattern.str]['command'] === 'stack_len') {
-                STACK.unshift(new Iota('number', STACK.length));
-                //
-            } else if (PATTERNS[pattern.str]['command'] === 'swap') {
-                let temp = STACK[1];
-                STACK[1] = STACK[0];
-                STACK[0] = temp;
-                //
-            } else if (PATTERNS[pattern.str]['command'] === 'fisherman') {
-                let num = STACK[0].value;
-                STACK.splice(0, 1);
-                STACK.unshift(STACK[num - 1]);
-                STACK.splice(num, 1);
-                //
-            } else {
-                //take inputs from stack
-                pattern.inputs.forEach((iota) => {
-                    if (check_matching_iotas(STACK[0].type, iota)) {
-                        STACK.shift();
-                    } else {
-                        throw ['IncorrectIota', pattern.str];
-                    }
-                });
-                //add outputs to stack
-                if (pattern.outputs == 0) {
-                    STACK.unshift(new Iota(pattern.outputs[0], pattern.outputs[0]));
-                } else {
-                    pattern.outputs.forEach((iota) => {
-                        STACK.unshift(new Iota(iota, pattern.outputs[0]));
+                    //take inputs from stack
+                    pattern.inputs.forEach((iota) => {
+                        if (check_matching_input(STACK[0].type, iota)) {
+                            STACK.shift();
+                        } else {
+                            throw ['IncorrectIota', pattern.str];
+                        }
                     });
+                    //add outputs to stack
+                    if (pattern.outputs == 0) {
+                        STACK.unshift(new Iota(pattern.outputs[0], pattern.outputs[0]));
+                    } else {
+                        pattern.outputs.forEach((iota) => {
+                            STACK.unshift(new Iota(iota, pattern.outputs[0]));
+                        });
+                    }
                 }
             }
         } else {
@@ -1046,7 +1073,7 @@ function update_stack(pattern) {
                 pattern_draggable_container.children[DRAWN_PATTERNS.findIndex((ptrn) => ptrn === pattern)].style.backgroundColor = '#4F3737';
                 var garbages = [];
                 PATTERNS[error[1]]['inputs'].forEach((iota) => {
-                    if (!check_matching_iotas(STACK[0].type, iota)) {
+                    if (!check_matching_input(STACK[0].type, iota)) {
                         STACK.shift();
                         garbages.unshift(new Iota('garbage'));
                     }
@@ -1086,6 +1113,7 @@ function update_stack_panel() {
     //delete old stack
     //add new stack
     STACK.forEach((iota, index) => {
+        console.log(iota.value.type)
         let outer_box = document.createElement('div');
         outer_box.className = 'outer_box';
         outer_box.style.backgroundColor = IOTA_COLOR_MAP[iota.type];
@@ -1095,6 +1123,8 @@ function update_stack_panel() {
         text.className = 'text';
         if (iota.value === undefined && typeof iota.type === 'string') {
             text.innerText = iota.type.charAt(0).toUpperCase() + iota.type.slice(1);
+        } else if (iota.value.hasOwnProperty('type') && iota.value.type == "vector") {
+            text.innerText = `[${iota.value.value}]`
         } else {
             text.innerText = iota.value;
         }
