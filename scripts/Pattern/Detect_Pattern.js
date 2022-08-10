@@ -1,11 +1,11 @@
 import * as color_consts from '../Colors.js';
 import { active_path, current_point, determine_angle, drawn_paths, set_active_path, set_drawn_paths } from '../Hex_Grid/Canvas.js';
+import Iota from '../Stack/Iota_Class.js';
 import { update_stack } from '../Stack/Stack.js';
 import { add_pattern_to_panel } from '../UI/Pattern_Panel.js';
 import DRAWN_PATTERNS from './Drawn_Patterns.js';
 import Pattern from './Pattern_Class.js';
 import PATTERNS from './Pattern_list.js';
-import {Vector} from '../Stack/Iota_Data_Types.js'
 
 
 function detect_pattern() {
@@ -71,7 +71,7 @@ function detect_pattern() {
             }
         }
         pattern = 'number';
-        outputs.unshift(value);
+        outputs.unshift(new Iota("number", value));
     } else if (str.startsWith('dedd')) {
         value = 0;
         for (let i = 4; i < str.length; i++) {
@@ -101,8 +101,8 @@ function detect_pattern() {
         outputs.unshift(value);
     } else if (str === 'qqqqq') {
         pattern = 'const [0,0,0]';
-        value = new Vector(0, 0, 0);
-        outputs.unshift(value);
+        value = [0, 0, 0];
+        outputs.unshift(new Iota("vector", value));
     } else {
         try {
             pattern = PATTERNS[str]['command'];
@@ -112,7 +112,7 @@ function detect_pattern() {
         } catch (err) {
             pattern = undefined;
         }
-    }
+    } 
     if (pattern === undefined) {
         pattern = `garbage (${str})`;
         DRAWN_PATTERNS.push(new Pattern(pattern, str, outputs, heading, active_path));

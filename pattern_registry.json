@@ -124,7 +124,7 @@
     "eeeeeqa": {"command" : "const/vec/nx", "inputs" : [], "outputs" : [], "editable" : false},
     "eeeeeqw": {"command" : "const/vec/ny", "inputs" : [], "outputs" : [], "editable" : false},
     "eeeeeqd": {"command" : "const/vec/nz", "inputs" : [], "outputs" : [], "editable" : false},
-    "qqqqq": {"command" : "const/vec/0", "inputs" : [], "outputs" : ["vector"], "editable" : false},
+    "qqqqq": {"command" : "const/vec/0", "inputs" : [], "outputs" : [["vector"]], "editable" : false},
     "qdwdq": {"command" : "const/double/pi", "inputs" : [], "outputs" : [], "editable" : false},
     "eawae": {"command" : "const/double/tau", "inputs" : [], "outputs" : [], "editable" : false},
     "aaq": {"command" : "const/double/e", "inputs" : [], "outputs" : [], "editable" : false},

@@ -68,13 +68,13 @@ function add_pattern_to_panel(pattern) {
     //add editable value if
     //outputs: "x type/x type"
     //is a number
-    function add_field(name, value) {
+    function add_field(name, iota) {
         let form = document.createElement('form');
         let label = document.createElement('label');
         label.type = 'text';
         label.innerText = name;
         let input = document.createElement('input');
-        input.value = value;
+        input.value = iota.value;
 
         form.appendChild(label);
         form.appendChild(input);

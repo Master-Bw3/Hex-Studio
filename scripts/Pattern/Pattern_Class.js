@@ -7,7 +7,7 @@ class Pattern {
     constructor(command, str, outputs, heading, paths) {
         this.command = command;
         this.str = str;
-        this.outputs = outputs;
+        this.outputs = outputs; //outputs should be a list of iotas
         if (str in PATTERNS) this.inputs = PATTERNS[str].inputs;
         this.heading = heading;
         this.paths = paths;
