@@ -34,4 +34,4 @@ function update_stack_panel() {
     });
 }
 
-export {update_stack_panel}
+export {update_stack_panel, stack_panel}

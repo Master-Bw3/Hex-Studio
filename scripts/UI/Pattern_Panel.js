@@ -101,4 +101,4 @@ function add_pattern_to_panel(pattern) {
     });
 }
 
-export {add_pattern_to_panel}
+export {add_pattern_to_panel, pattern_panel}

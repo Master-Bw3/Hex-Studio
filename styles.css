@@ -28,25 +28,29 @@
 
 #content {
     display: flex;
-    flex-direction: row-reverse;
     overflow: hidden;
 }
 
 #right {
     display: flex;
     flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+}
+
+#right canvas{
     height: calc(100vh - 100px);
 }
 
 #left_box {
     min-height: 100vh;
-    width: 400px;
     background-color: #4f3a61;
     display: flex;
+    max-width: 380px;
 }
 
 #panels {
-    width: 100%;
+    width: fit-content;
     display: flex;
     flex-direction: column;
     max-height: 100vh;
@@ -55,28 +59,38 @@
 
 #menu {
     display: flex;
+    text-align: center;
     flex-direction: column;
     background-color: var(--primary_dark);
-    width: 100px;
-    min-width: 80px;
+    width: 80px;
 }
 
-#menu svg {
-    margin: 15%;
-    fill-opacity: 0.9;
+.menu_button {
+    display: grid;
+    place-items: center;
+    width: 80px;
+    height: 80px;
 }
 
-#menu svg:hover {
-    cursor:pointer;
-    margin: 15%;
-    fill-opacity: 1;
+#menu i {
+    color: rgba(255, 255, 255, 0.8);
+    transform: scale(250%);
+}
+
+#stack_menu_button i {
+    transform: scaleY(250%) scaleX(280%);
+}
+
+#menu i:hover {
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.85);
 }
 
 .panel {
     display: flex;
     flex-direction: column;
     background-color: var(--primary_medium);
-    width: 100%;
+    width: 300px;
     height: 100%;
     overflow-y: auto;
 }
@@ -147,7 +161,7 @@
 }
 
 .outer_box > .inner_box > .x_button svg:hover g {
-    cursor:pointer;
+    cursor: pointer;
     opacity: 1;
 }
 
@@ -187,7 +201,7 @@
     height: 0.85em;
 }
 
-.outer_box > .inner_box > .move_button:hover g{
+.outer_box > .inner_box > .move_button:hover g {
     cursor: grab;
     opacity: 1;
 }
@@ -212,33 +226,42 @@
     background-color: var(--primary_light);
 }
 
-#zoom_buttons {
+#canvas_buttons {
+    display: flex;
     z-index: 1;
     position: absolute;
     bottom: 110px;
-    height: 110px;
-    width: 50px;
+    height: fit-content;
+    width: fit-content;
     margin-left: 10px;
 }
 
-#zoom_buttons div {
+#canvas_buttons div {
+    cursor: pointer;
     display: flex;
     border-radius: 10px;
     height: 50px;
     width: 50px;
-    margin-bottom: 10px;
-    background-color: var(--primary_dark);/* rgba(0, 0, 0, 0.2); */
+    margin-right: 10px;
+    background-color: var(--primary_dark); /* rgba(0, 0, 0, 0.2); */
     justify-content: center;
     align-items: center;
 }
 
-#zoom_buttons i {
+#canvas_buttons > :last-child {
+    margin-right: 0;
+}
+
+#canvas_buttons i {
     font-size: 1.4em;
     color: rgba(255, 255, 255, 0.8);
     user-select: none;
 }
 
-#zoom_buttons div:hover i {
-    font-size: 1.6em; 
-    cursor:pointer
+#canvas_buttons > #sort i {
+    transform: rotate(-90deg);
+}
+
+#canvas_buttons div:hover i {
+    font-size: 1.55em;
 }

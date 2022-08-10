@@ -13,73 +13,13 @@
 
 <body>
     <div id="content">
-        <div id="right">
-            <div id="zoom_buttons">
-                <div id="zoom_in">
-                    <i class="fa-solid fa-plus"></i>
-                </div>
-                <div id="zoom_out">
-                    <i class="fa-solid fa-minus"></i>
-                </div>
-            </div>
-            <canvas></canvas>
-            <div id="bottom_box"></div>
-
-
-        </div>
         <div id="left_box">
             <div id="menu">
-                <div id="pattern_menu_button">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52.1 43.36">
-                        <g opacity="0.77">
-                            <path d="M634.54,525.57l-2.9,2.93-17.9-15,17.9-14.94,2.9,3L620,513.5Z"
-                                transform="translate(-613.74 -490.44)" fill="#f5faff" />
-                            <path d="M665.84,490.44,647.57,533.8h-4.42l18.27-43.36Z"
-                                transform="translate(-613.74 -490.44)" fill="#f5faff" />
-                        </g>
-                    </svg>
+                <div id="pattern_menu_button" class="menu_button">
+                    <i class="fa-solid fa-code"></i>
                 </div>
-                <div id="stack_menu_button">
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                        viewBox="0 0 72.98 49.53">
-                        <defs>
-                            <clipPath id="a" transform="translate(-603.3 -487.35)">
-                                <polygon points="640.58 536.88 603.3 525.34 639 513.67 676.28 525.21 640.58 536.88"
-                                    fill="none" />
-                            </clipPath>
-                            <clipPath id="b" transform="translate(-603.3 -487.35)">
-                                <polygon points="640.58 523.73 603.3 512.18 639 500.51 676.28 512.05 640.58 523.73"
-                                    fill="none" />
-                            </clipPath>
-                            <clipPath id="c" transform="translate(-603.3 -487.35)">
-                                <polygon points="640.58 510.57 603.3 499.02 639 487.35 676.28 498.89 640.58 510.57"
-                                    fill="none" />
-                            </clipPath>
-                        </defs>
-                        <g opacity="0.77">
-                            <g style="isolation:isolate">
-                                <g clip-path="url(#a)">
-                                    <polyline points="35.7 26.32 0 37.99 37.27 49.53 72.98 37.86 35.7 26.32"
-                                        fill="#f5faff" />
-                                </g>
-                            </g>
-                        </g>
-                        <g opacity="0.77">
-                            <g style="isolation:isolate">
-                                <g clip-path="url(#b)">
-                                    <polyline points="35.7 13.16 0 24.83 37.27 36.38 72.98 24.7 35.7 13.16"
-                                        fill="#f5faff" />
-                                </g>
-                            </g>
-                        </g>
-                        <g opacity="0.77">
-                            <g style="isolation:isolate">
-                                <g clip-path="url(#c)">
-                                    <polyline points="35.7 0 0 11.67 37.27 23.22 72.98 11.54 35.7 0" fill="#f5faff" />
-                                </g>
-                            </g>
-                        </g>
-                    </svg>
+                <div id="stack_menu_button" class="menu_button">
+                    <i class="fa-solid fa-layer-group"></i>
                 </div>
             </div>
             <div id="panels">
@@ -94,6 +34,25 @@
             </div>
 
         </div>
+        <div id="right">
+            <div id="canvas_buttons">
+                <div id="sort">
+                    <i class="fa-solid fa-arrow-down-short-wide"></i>
+                </div>
+                <div id="zoom_out">
+                    <i class="fa-solid fa-minus"></i>
+                </div>
+                <div id="zoom_in">
+                    <i class="fa-solid fa-plus"></i>
+                </div>
+
+            </div>
+            <canvas></canvas>
+            <div id="bottom_box"></div>
+
+
+        </div>
+
 
     </div>
     <script src="https://code.createjs.com/1.0.0/tweenjs.min.js"></script>
