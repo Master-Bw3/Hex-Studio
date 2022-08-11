@@ -1,4 +1,4 @@
-import * as color_consts from "/scripts/Colors.js"
+import * as color_consts from "../Colors.js"
 import { SCALE, ctx } from "./Canvas.js";
 import Point from "./Point_Class.js";
 
