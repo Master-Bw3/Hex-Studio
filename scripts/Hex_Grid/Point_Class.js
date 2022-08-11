@@ -1,4 +1,4 @@
-import * as color_consts from "/scripts/Colors.js"
+import * as color_consts from "../Colors.js"
 import { SETTING_Highlight_Start_End_Points } from "../Settings.js";
 
 import { mousepos, get_distance_between_points, SCALE, ctx } from "./Canvas.js";
