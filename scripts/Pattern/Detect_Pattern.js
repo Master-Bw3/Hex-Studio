@@ -46,7 +46,7 @@ function detect_pattern() {
     let pattern;
     let outputs = [];
     let value;
-    if (str.startsWith('aqaa')) {
+    if (str.startsWith('aqaa') || str.startsWith('dedd')) {
         value = 0;
         for (let i = 4; i < str.length; i++) {
             const letter = str[i];
@@ -71,34 +71,8 @@ function detect_pattern() {
             }
         }
         pattern = 'number';
+        if (str.startsWith('dedd')) value *= -1
         outputs.unshift(new Iota("number", value));
-    } else if (str.startsWith('dedd')) {
-        value = 0;
-        for (let i = 4; i < str.length; i++) {
-            const letter = str[i];
-            switch (letter) {
-                case 'w':
-                    value += 1;
-                    break;
-                case 'q':
-                    value += 5;
-                    break;
-                case 'e':
-                    value += 10;
-                    break;
-                case 'a':
-                    value *= 2;
-                    break;
-                case 'd':
-                    value /= 2;
-                    break;
-                default:
-                    break;
-            }
-        }
-        value *= -1;
-        pattern = 'number';
-        outputs.unshift(value);
     } else if (str === 'qqqqq') {
         pattern = 'const [0,0,0]';
         value = [0, 0, 0];

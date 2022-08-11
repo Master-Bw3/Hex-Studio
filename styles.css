@@ -1,6 +1,11 @@
 * {
     margin: 0;
     padding: 0;
+    user-select: none;
+}
+
+.selectable {
+    user-select: all;
 }
 
 :root {
@@ -38,7 +43,7 @@
     height: 100vh;
 }
 
-#right canvas{
+#right canvas {
     height: calc(100vh - 100px);
 }
 
@@ -96,7 +101,6 @@
 }
 
 .panel_title {
-    user-select: none;
     align-self: center;
     font-family: 'Cascadia Code';
     font-weight: normal;
@@ -193,6 +197,7 @@
 .outer_box > .inner_box > .move_button {
     display: flex;
     align-items: center;
+    cursor: grab;
 }
 
 .outer_box > .inner_box > .move_button svg {
@@ -202,7 +207,6 @@
 }
 
 .outer_box > .inner_box > .move_button:hover g {
-    cursor: grab;
     opacity: 1;
 }
 
@@ -255,7 +259,6 @@
 #canvas_buttons i {
     font-size: 1.4em;
     color: rgba(255, 255, 255, 0.8);
-    user-select: none;
 }
 
 #canvas_buttons > #sort i {
