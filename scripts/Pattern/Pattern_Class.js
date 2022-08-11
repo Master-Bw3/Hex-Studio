@@ -52,7 +52,6 @@ class Pattern {
             highlighted_path = this.paths[0];
         } else if (path_index === -1) {
             highlighted_path = this.paths[path_index + 1];
-
             let rise = highlighted_path.point2.y - highlighted_path.point1.y;
             let run = highlighted_path.point2.x - highlighted_path.point1.x;
             let highlight_point_y =

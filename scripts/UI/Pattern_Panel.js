@@ -1,6 +1,7 @@
-import DRAWN_PATTERNS, { set_DRAWN_PATTERNS } from "../Pattern/Drawn_Patterns.js";
+import drawn_patterns, { set_drawn_patterns } from "../Pattern/Drawn_Patterns.js";
 import PATTERNS from "../Pattern/Pattern_list.js";
 import reorder_patterns from "../Pattern/Re_Order_Patterns.js";
+import update_pattern_value from "../Pattern/Update_Pattern_Value.js";
 import { resimulate_stack } from "../Stack/Stack.js";
 
 var pattern_panel = document.getElementById('pattern_panel');
@@ -30,16 +31,16 @@ drag_container.on('dragend', function (el) {
     let new_pattern_list = [];
     for (let i = 0; i < pattern_draggable_container.children.length; i++) {
         const element = pattern_draggable_container.children[i];
-        new_pattern_list.push(DRAWN_PATTERNS[parseInt(element.getAttribute('data-index'))]);
+        new_pattern_list.push(drawn_patterns[parseInt(element.getAttribute('data-index'))]);
         element.dataset.index = i;
     }
-    set_DRAWN_PATTERNS(Array.from(new_pattern_list))
+    set_drawn_patterns(Array.from(new_pattern_list))
     reorder_patterns();
     resimulate_stack();
 });
 
 function remove_pattern_from_panel(pattern_element) {
-    DRAWN_PATTERNS.splice(parseInt(pattern_element.getAttribute('data-index')), 1);
+    drawn_patterns.splice(parseInt(pattern_element.getAttribute('data-index')), 1);
     pattern_element.remove();
     for (let i = 0; i < pattern_draggable_container.children.length; i++) {
         pattern_draggable_container.children[i].dataset.index = i;
@@ -69,12 +70,19 @@ function add_pattern_to_panel(pattern) {
     //outputs: "x type/x type"
     //is a number
     function add_field(name, iota) {
-        let form = document.createElement('form');
+        let form = document.createElement('div');
+        form.className = 'values'
         let label = document.createElement('label');
         label.type = 'text';
         label.innerText = name;
         let input = document.createElement('input');
         input.value = iota.value;
+
+        input.addEventListener("keydown", (event)=>{
+            if(event.key === "Enter"){
+                update_pattern_value(event.target.parentElement.parentElement.getAttribute('data-index'), event.target.value)
+            }
+        })
 
         form.appendChild(label);
         form.appendChild(input);

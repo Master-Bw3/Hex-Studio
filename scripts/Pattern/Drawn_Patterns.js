@@ -1,9 +1,9 @@
-var DRAWN_PATTERNS = Array();
+var drawn_patterns = Array();
 
-export default DRAWN_PATTERNS;
-export function set_DRAWN_PATTERNS(values) {
-    DRAWN_PATTERNS.length = 0;
+export default drawn_patterns;
+export function set_drawn_patterns(values) {
+    drawn_patterns.length = 0;
     values.forEach((values) => {
-        DRAWN_PATTERNS.push(values);
+        drawn_patterns.push(values);
     });
 }

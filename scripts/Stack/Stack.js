@@ -1,4 +1,4 @@
-import DRAWN_PATTERNS from '../Pattern/Drawn_Patterns.js';
+import drawn_patterns from '../Pattern/Drawn_Patterns.js';
 import PATTERNS from '../Pattern/Pattern_list.js';
 import { stack_panel, update_stack_panel } from '../UI/Stack_Panel.js';
 import check_equality from './equality_checker.js';
@@ -13,7 +13,7 @@ function resimulate_stack() {
     }
     STACK.length = 0;
     update_stack_panel();
-    DRAWN_PATTERNS.forEach(function (pattern) {
+    drawn_patterns.forEach(function (pattern) {
         update_stack(pattern);
     });
 }
@@ -37,7 +37,6 @@ function update_stack(pattern) {
             //check if there are enough inputs in the stack
         } else if (STACK.length >= pattern.inputs.length) {
             let check = true;
-            console.log(pattern.inputs.at(-1));
             if (pattern.inputs.length > 0) {
                 check = pattern.inputs.every((element, i) => {
                     return check_accepted_input(STACK[i].type, pattern.inputs.at(i)) ? true : false;
@@ -295,6 +294,70 @@ function update_stack(pattern) {
                         STACK.splice(0, 2);
                         STACK.unshift(new Iota('number', value));
                         break;
+                    case 'not':
+                        var iota = STACK[0];
+                        var value = iota.type === 'null' || iota.value === 0 ? 1 : 0;
+                        STACK.shift();
+                        STACK.unshift(new Iota('number', value));
+                        break;
+                    case 'identity':
+                        var iota = STACK[0];
+                        var new_iota;
+                        if (iota.type === 'null') {
+                            new_iota = new Iota('number', 0);
+                        } else if (iota.value === 0) {
+                            new_iota = new Iota('null', undefined);
+                        } else {
+                            new_iota = iota;
+                        }
+                        STACK.shift();
+                        STACK.unshift(new_iota);
+                        break;
+                    case 'random':
+                        STACK.unshift(new Iota('number', Math.round(Math.random() * 10000) / 10000));
+                        break;
+                    case 'sin':
+                        var iota = STACK[0];
+                        STACK.shift();
+                        STACK.unshift(new Iota('number', Math.sin(iota.value)));
+                        break;
+                    case 'cos':
+                        var iota = STACK[0];
+                        STACK.shift();
+                        STACK.unshift(new Iota('number', Math.cos(iota.value)));
+                        break;
+                    case 'tan':
+                        var iota = STACK[0];
+                        STACK.shift();
+                        STACK.unshift(new Iota('number', Math.tan(iota.value)));
+                        break;
+                    case 'arcsin':
+                        var iota = STACK[0];
+                        STACK.shift();
+                        STACK.unshift(new Iota('number', Math.asin(iota.value)));
+                        break;
+                    case 'arccos':
+                        var iota = STACK[0];
+                        STACK.shift();
+                        STACK.unshift(new Iota('number', Math.acos(iota.value)));
+                        break;
+                    case 'arctan':
+                        var iota = STACK[0];
+                        STACK.shift();
+                        STACK.unshift(new Iota('number', Math.atan(iota.value)));
+                        break;
+                    case 'logarithm':
+                        var iota1 = STACK[1];
+                        var iota2 = STACK[0];
+                        STACK.splice(0,2);
+                        STACK.unshift(new Iota('number', math.log(iota1.value, iota2.value)));
+                        break;
+                    case 'd':
+                        break;
+                    case 'd':
+                        break;
+                    case 'd':
+                        break;
                     default:
                         //operators that take generic inputs and give generic outputs ie: raycast, get_caster
                         pattern.inputs.forEach((input) => {
@@ -319,12 +382,12 @@ function update_stack(pattern) {
 
         switch (error[0]) {
             case 'NotEnoughIotas':
-                pattern_draggable_container.children[DRAWN_PATTERNS.findIndex((ptrn) => ptrn === pattern)].style.backgroundColor = '#4F3737';
+                pattern_draggable_container.children[drawn_patterns.findIndex((ptrn) => ptrn === pattern)].style.backgroundColor = '#4F3737';
                 var garbages = Array(PATTERNS[pattern.str]['inputs'].length - STACK.length).fill(new Iota('garbage'));
                 STACK = garbages.concat(STACK);
                 break;
             case 'IncorrectIota':
-                pattern_draggable_container.children[DRAWN_PATTERNS.findIndex((ptrn) => ptrn === pattern)].style.backgroundColor = '#4F3737';
+                pattern_draggable_container.children[drawn_patterns.findIndex((ptrn) => ptrn === pattern)].style.backgroundColor = '#4F3737';
                 var garbages = [];
                 PATTERNS[error[1]]['inputs'].forEach((iota) => {
                     if (!check_accepted_input(STACK[0].type, iota)) {
@@ -335,7 +398,7 @@ function update_stack(pattern) {
                 STACK = garbages.concat(STACK);
                 break;
             case 'NoSuchPattern':
-                pattern_draggable_container.children[DRAWN_PATTERNS.findIndex((ptrn) => ptrn === pattern)].style.backgroundColor = '#4F3737';
+                pattern_draggable_container.children[drawn_patterns.findIndex((ptrn) => ptrn === pattern)].style.backgroundColor = '#4F3737';
                 STACK.unshift(new Iota('garbage'));
                 break;
 

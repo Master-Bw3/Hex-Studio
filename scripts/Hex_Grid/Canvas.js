@@ -1,7 +1,7 @@
 import * as color_consts from '../Colors.js';
 import Point from './Point_Class.js';
 import Path from './Path_Class.js';
-import DRAWN_PATTERNS from '../Pattern/Drawn_Patterns.js';
+import drawn_patterns from '../Pattern/Drawn_Patterns.js';
 import detect_pattern from '../Pattern/Detect_Pattern.js';
 
 const canvas = document.querySelector('canvas');
@@ -67,7 +67,7 @@ function animate() {
     requestAnimationFrame(animate);
     ctx.fillStyle = '#292A2B';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    DRAWN_PATTERNS.forEach((pattern) => {
+    drawn_patterns.forEach((pattern) => {
         pattern.gradient_highlight_animation_step(color_consts.ACCENT1, color_consts.ACCENT2_SATURATED);
     });
     update_paths();
