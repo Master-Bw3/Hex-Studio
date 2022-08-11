@@ -3,7 +3,7 @@ import { active_path, current_point, determine_angle, drawn_paths, set_active_pa
 import Iota from '../Stack/Iota_Class.js';
 import { update_stack } from '../Stack/Stack.js';
 import { add_pattern_to_panel } from '../UI/Pattern_Panel.js';
-import DRAWN_PATTERNS from './Drawn_Patterns.js';
+import drawn_patterns from './Drawn_Patterns.js';
 import Pattern from './Pattern_Class.js';
 import PATTERNS from './Pattern_list.js';
 
@@ -89,12 +89,12 @@ function detect_pattern() {
     } 
     if (pattern === undefined) {
         pattern = `garbage (${str})`;
-        DRAWN_PATTERNS.push(new Pattern(pattern, str, outputs, heading, active_path));
+        drawn_patterns.push(new Pattern(pattern, str, outputs, heading, active_path));
         active_path.forEach((segment) => {
             segment.color = color_consts.ACCENT2;
         });
     } else {
-        DRAWN_PATTERNS.push(new Pattern(pattern, str, outputs, heading, active_path));
+        drawn_patterns.push(new Pattern(pattern, str, outputs, heading, active_path));
         active_path.forEach((segment) => {
             segment.color = color_consts.ACCENT1;
         });
@@ -103,8 +103,8 @@ function detect_pattern() {
     //push active path to drawn paths
     set_drawn_paths(drawn_paths.concat(active_path));
     set_active_path([]);
-    add_pattern_to_panel(DRAWN_PATTERNS.at(-1));
-    update_stack(DRAWN_PATTERNS.at(-1));
+    add_pattern_to_panel(drawn_patterns.at(-1));
+    update_stack(drawn_patterns.at(-1));
 }
 
 export default detect_pattern;
