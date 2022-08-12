@@ -4,10 +4,6 @@
     user-select: none;
 }
 
-.selectable {
-    user-select: all;
-}
-
 :root {
     --primary_dark: #1e1e1e;
     --primary_medium: #242526;
@@ -16,6 +12,16 @@
     --accent1: #bac5e2;
     --accent2: #d8b8e0;
 }
+
+.selectable {
+    user-select: all;
+}
+
+body {
+    background-color: var(--primary_light);
+}
+
+
 
 ::-webkit-scrollbar {
     width: 1px;
