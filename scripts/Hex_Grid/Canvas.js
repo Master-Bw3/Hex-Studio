@@ -74,8 +74,36 @@ function animate() {
     update_grid();
 }
 
+function get_unused_points() {
+    let unused_points = [];
+
+    let drawn_paths_points = [];
+    drawn_paths.forEach((path) => {
+        drawn_paths_points.push([path.point1.x, path.point1.y].toString(), [path.point2.x, path.point2.y].toString());
+    });
+
+    grid.forEach((row, i) => {
+        let r = row.map((pnt) => [pnt.x, pnt.y].toString());
+        unused_points.push(
+            r
+                .map((x, i) => {
+                    if (!drawn_paths_points.includes(x)) return row[i];
+                })
+                .filter((elm) => elm != undefined)
+        );
+    });
+    return unused_points;
+}
+
 function update_grid() {
     var ypos = (canvas.height - ((SPACING * Math.sqrt(3)) / 2) * (HEIGHT - 1)) / 2;
+
+    let unused_points = get_unused_points();
+    for (let i = 0; i < unused_points.length; i++) {
+        const row = unused_points[i];
+        row.map((point) => (point.color = color_consts.ACCENT1));
+    }
+
     grid.forEach((r, i) => {
         var xpos = (canvas.width - SPACING * (WIDTH - 0.5)) / 2 + (SPACING / 2) * (i % 2);
         r.forEach((pnt) => {
@@ -86,6 +114,7 @@ function update_grid() {
             pnt.draw();
             xpos += SPACING;
         });
+
         ypos += (SPACING * Math.sqrt(3)) / 2;
     });
 }
@@ -378,7 +407,7 @@ export {
     determine_angle,
     drawn_paths,
     clear_paths,
-    draw_pattern
+    draw_pattern,
 };
 export function set_drawn_paths(value) {
     drawn_paths = value;
@@ -389,4 +418,3 @@ export function set_active_path(value) {
 export function set_SCALE(value) {
     SCALE = value;
 }
-
