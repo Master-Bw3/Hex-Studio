@@ -1,12 +1,13 @@
-import drawn_patterns, { set_drawn_patterns } from "../Pattern/Drawn_Patterns.js";
-import PATTERNS from "../Pattern/Pattern_list.js";
-import reorder_patterns from "../Pattern/Re_Order_Patterns.js";
-import update_pattern_value from "../Pattern/Update_Pattern_Value.js";
-import { resimulate_stack } from "../Stack/Stack.js";
+import add_pattern_from_command from '../Pattern/Add_Pattern_From_Command.js';
+import drawn_patterns, { set_drawn_patterns } from '../Pattern/Drawn_Patterns.js';
+import PATTERNS from '../Pattern/Pattern_list.js';
+import reorder_patterns from '../Pattern/Re_Order_Patterns.js';
+import sig_from_command from '../Pattern/Sig_From_Command.js';
+import update_pattern_value from '../Pattern/Update_Pattern_Value.js';
+import { resimulate_stack } from '../Stack/Stack.js';
 
 var pattern_panel = document.getElementById('pattern_panel');
 var pattern_draggable_container = document.getElementById('pattern_draggable_container');
-
 
 let drag_container = dragula([pattern_draggable_container], {
     moves: function (el, container, handle) {
@@ -34,7 +35,7 @@ drag_container.on('dragend', function (el) {
         new_pattern_list.push(drawn_patterns[parseInt(element.getAttribute('data-index'))]);
         element.dataset.index = i;
     }
-    set_drawn_patterns(Array.from(new_pattern_list))
+    set_drawn_patterns(Array.from(new_pattern_list));
     reorder_patterns();
     resimulate_stack();
 });
@@ -71,18 +72,18 @@ function add_pattern_to_panel(pattern) {
     //is a number
     function add_field(name, iota) {
         let form = document.createElement('div');
-        form.className = 'values'
+        form.className = 'values';
         let label = document.createElement('label');
         label.type = 'text';
         label.innerText = name;
         let input = document.createElement('input');
         input.value = iota.value;
 
-        input.addEventListener("keydown", (event)=>{
-            if(event.key === "Enter"){
-                update_pattern_value(event.target.parentElement.parentElement.getAttribute('data-index'), event.target.value)
+        input.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                update_pattern_value(event.target.parentElement.parentElement.getAttribute('data-index'), event.target.value);
             }
-        })
+        });
 
         form.appendChild(label);
         form.appendChild(input);
@@ -91,7 +92,7 @@ function add_pattern_to_panel(pattern) {
 
     if (pattern.command === 'number') {
         add_field('value:', pattern.outputs[0]);
-    } else if (!pattern.command.startsWith("garbage") && PATTERNS[pattern.str]["editable"] == true) {
+    } else if (!pattern.command.startsWith('garbage') && PATTERNS[pattern.str]['editable'] == true) {
         PATTERNS[pattern.str].outputs.forEach(function (output) {
             if (output.length > 1) {
                 add_field('result:', pattern.outputs[0]);
@@ -107,6 +108,37 @@ function add_pattern_to_panel(pattern) {
     x_button.addEventListener('mousedown', function () {
         remove_pattern_from_panel(x_button.parentElement.parentElement);
     });
+    pattern_panel.scrollTop = pattern_panel.scrollHeight - pattern_panel.offsetHeight;
+    //$(pattern_panel).animate({ scrollTop: pattern_panel.scrollHeight - pattern_panel.offsetHeight }, 100);
+}
+let add_pattern_input = document.getElementById('add_pattern_input');
+let add_pattern_button = document.getElementById('add_pattern_button');
+
+function blink_red() {
+    document.getElementById('add_pattern').style.backgroundColor = '#4F3737';
+    setTimeout(() => {
+        document.getElementById('add_pattern').style.backgroundColor = '';
+    }, 1000);
 }
 
-export {add_pattern_to_panel, pattern_panel}
+add_pattern_button.addEventListener('click', function (event) {
+    if (sig_from_command(add_pattern_input.value) !== undefined) {
+        add_pattern_from_command(add_pattern_input.value);
+    } else {
+        blink_red();
+    }
+    add_pattern_input.value = '';
+});
+
+add_pattern_input.addEventListener('keypress', function (event) {
+    if (event.key === 'Enter') {
+        if (sig_from_command(add_pattern_input.value) !== undefined) {
+            add_pattern_from_command(add_pattern_input.value);
+        } else {
+            blink_red();
+        }
+        add_pattern_input.value = '';
+    }
+});
+
+export { add_pattern_to_panel, pattern_panel };

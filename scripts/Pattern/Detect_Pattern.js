@@ -105,7 +105,6 @@ function detect_pattern() {
     set_active_path([]);
     add_pattern_to_panel(drawn_patterns.at(-1));
     update_stack(drawn_patterns.at(-1));
-    console.log(drawn_patterns.at(-1))
 }
 
 export default detect_pattern;

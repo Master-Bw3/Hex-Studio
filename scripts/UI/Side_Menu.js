@@ -27,5 +27,6 @@ stack_menu_button.addEventListener('click', function (event) {
     }
 });
 
+
 pattern_menu_button.style.backgroundColor = 'var(--primary_medium)';
 pattern_menu_button.children[0].setAttribute('style', 'fill-opacity: 1');

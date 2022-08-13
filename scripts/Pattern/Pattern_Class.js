@@ -4,7 +4,7 @@ import PATTERNS from "./Pattern_list.js"
 import {SETTING_Highlight_Start_End_Points, SETTING_Path_Animations} from "../Settings.js"
 
 class Pattern {
-    constructor(command, str, outputs, heading, paths) {
+    constructor(command, str, outputs, heading = 0, paths = []) {
         this.command = command;
         this.str = str;
         this.outputs = outputs; //outputs should be a list of iotas
@@ -15,7 +15,7 @@ class Pattern {
         this.highlight_animation_step_index = -25;
         this.animation_speed = 2.5;
         this.colors = this.set_color();
-        this.update_colors();
+        if(this.paths.length > 0)  this.update_colors();
     }
 
     set_color() {

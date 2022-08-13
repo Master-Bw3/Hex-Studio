@@ -10,7 +10,7 @@ const NUMBER_SIGNATURES = {
     4: 'aqaawaa',
     5: 'aqaaq',
     6: 'aqaaedwda',
-    7: 'aqaaedww', //alternative: aqaaedwdaw
+    7: 'aqaawaq', //alternative: aqaaedwdaw
     8: 'aqaaedwdq',
     9: 'aqaawaaq',
     10: 'aqaae',

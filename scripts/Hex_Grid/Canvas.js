@@ -352,9 +352,9 @@ function draw_pattern(pattern, y_ceiling) {
         }
         return true;
     }
-
     index = 0;
     while (true) {
+        
         index += 1;
         if (index > grid[0].length * 2) {
             return false;
