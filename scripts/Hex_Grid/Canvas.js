@@ -6,7 +6,7 @@ import detect_pattern from '../Pattern/Detect_Pattern.js';
 
 const canvas = document.querySelector('canvas');
 
-canvas.width = window.innerWidth - 400;
+canvas.width = window.innerWidth - 380;
 canvas.height = window.innerHeight - 100;
 let SCALE = 1;
 let SPACING = 100 * SCALE;
@@ -21,7 +21,7 @@ const grid = Array(HEIGHT).fill().map(grid_row);
 
 function redraw_canvas() {
     SPACING = 100 * SCALE;
-    canvas.width = window.innerWidth - 400;
+    canvas.width = window.innerWidth - 380;
     canvas.height = window.innerHeight - 100;
     WIDTH = parseInt(canvas.width / SPACING);
     HEIGHT = parseInt(canvas.height / ((SPACING * Math.sqrt(3)) / 2));

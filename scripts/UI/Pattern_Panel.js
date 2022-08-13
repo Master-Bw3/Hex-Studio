@@ -1,5 +1,6 @@
 import add_pattern_from_command from '../Pattern/Add_Pattern_From_Command.js';
 import drawn_patterns, { set_drawn_patterns } from '../Pattern/Drawn_Patterns.js';
+import patterns_from_number from '../Pattern/Patterns_From_Number.js';
 import PATTERNS from '../Pattern/Pattern_list.js';
 import reorder_patterns from '../Pattern/Re_Order_Patterns.js';
 import sig_from_command from '../Pattern/Sig_From_Command.js';
@@ -115,25 +116,54 @@ let add_pattern_input = document.getElementById('add_pattern_input');
 let add_pattern_button = document.getElementById('add_pattern_button');
 
 function blink_red() {
+    document.getElementById('add_pattern').classList.add('blink');
     document.getElementById('add_pattern').style.backgroundColor = '#4F3737';
     setTimeout(() => {
         document.getElementById('add_pattern').style.backgroundColor = '';
+        setTimeout(() => {
+            document.getElementById('add_pattern').classList.remove('blink');
+        }, 1000);
     }, 1000);
 }
 
 add_pattern_button.addEventListener('click', function (event) {
-    if (sig_from_command(add_pattern_input.value) !== undefined) {
-        add_pattern_from_command(add_pattern_input.value);
-    } else {
-        blink_red();
+    let inputs = multiline_mode ? add_pattern_textarea.value.split('\n') : [add_pattern_input.value];
+
+    for (let i = 0; i < inputs.length; i++) {
+        const input = inputs[i];
+
+        if (sig_from_command(input) !== undefined) {
+            add_pattern_from_command(input);
+            resimulate_stack();
+        } else if (!isNaN(input) && input !== "") {
+            let patterns = patterns_from_number(parseFloat(input));
+            set_drawn_patterns(drawn_patterns.concat(patterns));
+            patterns.forEach((pat) => {
+                add_pattern_to_panel(pat);
+            });
+            reorder_patterns();
+            resimulate_stack();
+        } else {
+            blink_red();
+        }
     }
     add_pattern_input.value = '';
+    add_pattern_textarea.value = '';
 });
 
 add_pattern_input.addEventListener('keypress', function (event) {
     if (event.key === 'Enter') {
         if (sig_from_command(add_pattern_input.value) !== undefined) {
             add_pattern_from_command(add_pattern_input.value);
+            resimulate_stack();
+        } else if (!isNaN(add_pattern_input.value) && add_pattern_input.value !== "") {
+            let patterns = patterns_from_number(parseFloat(add_pattern_input.value));
+            set_drawn_patterns(drawn_patterns.concat(patterns));
+            patterns.forEach((pat) => {
+                add_pattern_to_panel(pat);
+            });
+            reorder_patterns();
+            resimulate_stack();
         } else {
             blink_red();
         }
@@ -141,4 +171,18 @@ add_pattern_input.addEventListener('keypress', function (event) {
     }
 });
 
-export { add_pattern_to_panel, pattern_panel };
+let add_pattern_textarea = document.createElement('textarea');
+let multiline_mode = false;
+document.getElementById('paragraph_dropdown').addEventListener('click', function (event) {
+    if (!multiline_mode) {
+        add_pattern_textarea.value = add_pattern_input.value;
+        add_pattern_input.replaceWith(add_pattern_textarea);
+        multiline_mode = true;
+    } else {
+        add_pattern_input.value = add_pattern_textarea.value.split('\n')[0];
+        add_pattern_textarea.replaceWith(add_pattern_input);
+        multiline_mode = false;
+    }
+});
+
+export { add_pattern_to_panel, pattern_panel, remove_pattern_from_panel, pattern_draggable_container };

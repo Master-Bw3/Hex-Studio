@@ -121,7 +121,7 @@ body {
 
 .panel_title::after {
     transition: opacity 0.1s;
-    pointer-events:none;
+    pointer-events: none;
     content: '';
     z-index: -1;
     position: absolute;
@@ -129,18 +129,16 @@ body {
     right: 0;
     bottom: 0;
     left: 0;
-    background: linear-gradient(180deg, rgba(0,0,0,0.3), rgba(0,0,0,0));
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0));
     height: 20px;
     transform: translate3d(0px, 44px, 0);
     opacity: 0;
     border-radius: inherit;
 }
 
-
 .panel_title.stuck::after {
     transition: opacity 0.1s;
     opacity: 1;
-
 }
 
 #stack_panel {
@@ -183,7 +181,7 @@ body {
     min-width: fit-content;
 }
 
-.outer_box input {
+.outer_box input, textarea {
     min-height: 1.3em;
     margin-top: 0.3em;
     margin-bottom: 0.3em;
@@ -198,7 +196,6 @@ body {
 }
 
 .outer_box .x_button svg:hover g {
-    cursor: pointer;
     opacity: 1;
 }
 
@@ -208,6 +205,8 @@ body {
 }
 
 .outer_box .x_button svg {
+    cursor: pointer;
+
     margin: 0.3em;
     width: 0.55em;
     height: 0.55em;
@@ -303,15 +302,24 @@ body {
 }
 
 #add_pattern {
-    transition: background-color 1s;
     z-index: 1;
     position: sticky;
     bottom: 0px;
+    min-height: fit-content;
+}
+
+#add_pattern.big_input{
+    height: 100%;
+}
+
+.blink {
+    transition: background-color 1s;
+
 }
 
 #add_pattern::after {
     transition: opacity 0.1s;
-    pointer-events:none;
+    pointer-events: none;
     content: '';
     z-index: -1;
     position: absolute;
@@ -319,7 +327,7 @@ body {
     right: 0;
     bottom: 0;
     left: 0;
-    background: linear-gradient(0deg, rgba(0,0,0,0.3), rgba(0,0,0,0));
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0));
     height: 20px;
     transform: translate3d(0px, -20px, 0);
     opacity: 0;
@@ -329,17 +337,15 @@ body {
 #add_pattern.stuck::after {
     transition: opacity 0.1s;
     opacity: 1;
-
 }
 
-
 #add_pattern .inner_box {
-    justify-content: center;
+    align-items: flex-start;
+    height: 100%;
 }
 
 #add_pattern_input {
     height: 1em;
-    margin-left: 1.2em;
     margin-right: 0;
 }
 
@@ -348,6 +354,7 @@ body {
 }
 
 .add_button {
+    margin-top: 0.3em;
     color: rgba(255, 255, 255, 0.7);
     display: flex;
     align-items: center;
@@ -355,4 +362,25 @@ body {
     font-size: 1.25em;
     margin-right: 0.3em;
     margin-left: 0.3em;
+}
+
+#paragraph_dropdown {
+    margin-top: 0.3em;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+#paragraph_dropdown svg {
+    margin: 0.3em;
+    width: 1.35em;
+    height: 0.85em;
+}
+
+#paragraph_dropdown:hover g {
+    opacity: 1;
+}
+#add_pattern textarea {
+    min-height: 10em;
+    height: calc(100% - 0.6em);
+    margin-right: 0;
 }

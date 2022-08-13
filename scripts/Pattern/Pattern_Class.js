@@ -1,10 +1,10 @@
-import * as color_consts from "../Colors.js"
-import { ctx } from "../Hex_Grid/Canvas.js";
-import PATTERNS from "./Pattern_list.js"
-import {SETTING_Highlight_Start_End_Points, SETTING_Path_Animations} from "../Settings.js"
+import * as color_consts from '../Colors.js';
+import { ctx, SCALE } from '../Hex_Grid/Canvas.js';
+import PATTERNS from './Pattern_list.js';
+import { SETTING_Highlight_Start_End_Points, SETTING_Path_Animations } from '../Settings.js';
 
 class Pattern {
-    constructor(command, str, outputs, heading = 0, paths = []) {
+    constructor(command, str, outputs = [], heading = 0, paths = []) {
         this.command = command;
         this.str = str;
         this.outputs = outputs; //outputs should be a list of iotas
@@ -15,7 +15,7 @@ class Pattern {
         this.highlight_animation_step_index = -25;
         this.animation_speed = 2.5;
         this.colors = this.set_color();
-        if(this.paths.length > 0)  this.update_colors();
+        if (this.paths.length > 0) this.update_colors();
     }
 
     set_color() {
@@ -60,7 +60,7 @@ class Pattern {
             let highlight_point_x =
                 highlighted_path.point1.x +
                 run * (this.highlight_animation_step_index * 0.01 - Math.floor(this.highlight_animation_step_index * 0.01) - 1);
-            let grad = ctx.createRadialGradient(highlight_point_x, highlight_point_y, 5, highlight_point_x, highlight_point_y, 25);
+            let grad = ctx.createRadialGradient(highlight_point_x, highlight_point_y, 5, highlight_point_x, highlight_point_y, 25 * SCALE);
             grad.addColorStop(0, this.colors[0]);
             grad.addColorStop(1, this.colors[1]);
             //highlighted_path.color = grad
@@ -78,7 +78,7 @@ class Pattern {
             let highlight_point_x =
                 highlighted_path.point1.x +
                 run * (this.highlight_animation_step_index * 0.01 - Math.floor(this.highlight_animation_step_index * 0.01) + 1);
-            let grad = ctx.createRadialGradient(highlight_point_x, highlight_point_y, 5, highlight_point_x, highlight_point_y, 25);
+            let grad = ctx.createRadialGradient(highlight_point_x, highlight_point_y, 5, highlight_point_x, highlight_point_y, 25 * SCALE);
             grad.addColorStop(0, this.colors[0]);
             grad.addColorStop(1, this.colors[1]);
             //highlighted_path.color = grad
@@ -98,7 +98,7 @@ class Pattern {
             let highlight_point_x =
                 highlighted_path.point1.x +
                 run * (this.highlight_animation_step_index * 0.01 - Math.floor(this.highlight_animation_step_index * 0.01));
-            let grad = ctx.createRadialGradient(highlight_point_x, highlight_point_y, 5, highlight_point_x, highlight_point_y, 25);
+            let grad = ctx.createRadialGradient(highlight_point_x, highlight_point_y, 5, highlight_point_x, highlight_point_y, 25 * SCALE);
             grad.addColorStop(0, this.colors[0]);
             grad.addColorStop(1, this.colors[1]);
             //highlighted_path.color = grad
@@ -115,4 +115,4 @@ class Pattern {
     }
 }
 
-export default Pattern
+export default Pattern;
