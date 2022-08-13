@@ -1,5 +1,5 @@
 import drawn_patterns from '../Pattern/Drawn_Patterns.js';
-import PATTERNS from '../Pattern/Pattern_list.js';
+import {PATTERNS} from '../Pattern/Pattern_list.js';
 import { stack_panel, update_stack_panel } from '../UI/Stack_Panel.js';
 import check_equality from './equality_checker.js';
 import Iota from './Iota_Class.js';

@@ -1,6 +1,6 @@
 import * as color_consts from '../Colors.js';
 import { ctx, SCALE } from '../Hex_Grid/Canvas.js';
-import PATTERNS from './Pattern_list.js';
+import {PATTERNS} from './Pattern_list.js';
 import { SETTING_Highlight_Start_End_Points, SETTING_Path_Animations } from '../Settings.js';
 
 class Pattern {

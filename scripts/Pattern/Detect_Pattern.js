@@ -5,7 +5,7 @@ import { update_stack } from '../Stack/Stack.js';
 import { add_pattern_to_panel } from '../UI/Pattern_Panel.js';
 import drawn_patterns from './Drawn_Patterns.js';
 import Pattern from './Pattern_Class.js';
-import PATTERNS from './Pattern_list.js';
+import {PATTERNS} from './Pattern_list.js';
 
 
 function detect_pattern() {

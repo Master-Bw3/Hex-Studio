@@ -19,6 +19,28 @@ $.getJSON('pattern_registry.json', function (data) {
         }
     }
     PATTERNS = data;
-
 });
-export default PATTERNS;
+
+let TRANSLATED_PATTERNS = {};
+$.getJSON('en_us.json', function (data) {
+    for (var key in PATTERNS) {
+        var command = PATTERNS[key]['command'];
+        if (!(command === 'num/positive' || command === 'num/negative')) {
+            TRANSLATED_PATTERNS[key] = data[`hexcasting.spell.hexcasting:${command}`];
+            PATTERNS[key]['translation'] = TRANSLATED_PATTERNS[key];
+        }
+    }
+});
+
+function get_command_from_translation(translation) {
+    try {
+        let sig = Object.keys(TRANSLATED_PATTERNS).find((key) => TRANSLATED_PATTERNS[key] === translation);
+        return PATTERNS[sig]['command'];
+    } catch (error) {
+        return false;
+    }
+}
+
+console.log(PATTERNS);
+
+export { PATTERNS, TRANSLATED_PATTERNS, get_command_from_translation };

@@ -6,9 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://kit.fontawesome.com/331de8ffb9.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bevacqua/dragula@3.7.3/dist/dragula.min.css">
-    <script src="https://kit.fontawesome.com/331de8ffb9.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="scripts/tribute/tribute.css" />
 </head>
 
 <body>
@@ -43,9 +44,7 @@
                                     </g>
                                 </svg>
                             </div>
-                            <input id="add_pattern_input" list="patterns_list" placeholder="Add a pattern">
-                            <datalist id="patterns_list">
-                            </datalist>
+                            <input id="add_pattern_input" placeholder="Add a pattern" autocomplete="false">
                             <div id="add_pattern_button" class="add_button">
                                 <i class="fa-solid fa-plus"></i>
                             </div>
@@ -82,6 +81,7 @@
     </div>
     <script src="https://unpkg.com/mathjs/lib/browser/math.js"></script>
     <!--     <script src="https://code.createjs.com/1.0.0/tweenjs.min.js"></script> -->
+    <script src="scripts/tribute/tribute.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/bevacqua/dragula@3.7.3/dist/dragula.min.js"></script>
     <script type="module" src="scripts/main.js"> </script>
 </body>

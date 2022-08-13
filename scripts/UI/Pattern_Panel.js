@@ -1,7 +1,7 @@
 import add_pattern_from_command from '../Pattern/Add_Pattern_From_Command.js';
 import drawn_patterns, { set_drawn_patterns } from '../Pattern/Drawn_Patterns.js';
 import patterns_from_number from '../Pattern/Patterns_From_Number.js';
-import PATTERNS from '../Pattern/Pattern_list.js';
+import {get_command_from_translation, PATTERNS, TRANSLATED_PATTERNS} from '../Pattern/Pattern_list.js';
 import reorder_patterns from '../Pattern/Re_Order_Patterns.js';
 import sig_from_command from '../Pattern/Sig_From_Command.js';
 import update_pattern_value from '../Pattern/Update_Pattern_Value.js';
@@ -63,7 +63,7 @@ function add_pattern_to_panel(pattern) {
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10.98 10.98"><defs><style>.cls-1{opacity:0.51;}.cls-2{fill:none;stroke:#f5faff;stroke-miterlimit:10;stroke-width:3px;}</style></defs><g id="Layer_2" data-name="Layer 2"><g id="Code"><g class="cls-1"><line class="cls-2" x1="1.06" y1="1.06" x2="9.92" y2="9.92"/><line class="cls-2" x1="9.92" y1="1.06" x2="1.06" y2="9.92"/></g></g></g></svg>';
     let text = document.createElement('div');
     text.className = 'text';
-    text.innerText = pattern.command;
+    text.innerText = TRANSLATED_PATTERNS[pattern.str];
     let move_button = document.createElement('div');
     move_button.className = 'move_button';
     move_button.innerHTML =
@@ -115,27 +115,35 @@ function add_pattern_to_panel(pattern) {
 let add_pattern_input = document.getElementById('add_pattern_input');
 let add_pattern_button = document.getElementById('add_pattern_button');
 
-function blink_red() {
-    document.getElementById('add_pattern').classList.add('blink');
-    document.getElementById('add_pattern').style.backgroundColor = '#4F3737';
+function blink_red(elm) {
+    elm.classList.add('blink');
+    elm.style.backgroundColor = '#4F3737';
     setTimeout(() => {
-        document.getElementById('add_pattern').style.backgroundColor = '';
+        elm.style.backgroundColor = '';
         setTimeout(() => {
-            document.getElementById('add_pattern').classList.remove('blink');
+            elm.classList.remove('blink');
         }, 1000);
     }, 1000);
 }
 
 add_pattern_button.addEventListener('click', function (event) {
     let inputs = multiline_mode ? add_pattern_textarea.value.split('\n') : [add_pattern_input.value];
+    inputs = inputs.filter(input => input !== "")
+
+    let invalid_inputs = inputs.filter(elm => !(get_command_from_translation(elm) || (!isNaN(elm) && elm !== '')))
+    if(multiline_mode && invalid_inputs.length > 0) {
+        blink_red(document.getElementById('add_pattern'))
+        console.log(invalid_inputs)
+        return
+    }
 
     for (let i = 0; i < inputs.length; i++) {
-        const input = inputs[i];
-
-        if (sig_from_command(input) !== undefined) {
+        let input = inputs[i];
+        if (get_command_from_translation(input) !== false) {
+            input = get_command_from_translation(input)
             add_pattern_from_command(input);
             resimulate_stack();
-        } else if (!isNaN(input) && input !== "") {
+        } else if (!isNaN(input) && input !== '') {
             let patterns = patterns_from_number(parseFloat(input));
             set_drawn_patterns(drawn_patterns.concat(patterns));
             patterns.forEach((pat) => {
@@ -144,7 +152,7 @@ add_pattern_button.addEventListener('click', function (event) {
             reorder_patterns();
             resimulate_stack();
         } else {
-            blink_red();
+            blink_red(document.getElementById('add_pattern'))
         }
     }
     add_pattern_input.value = '';
@@ -152,12 +160,14 @@ add_pattern_button.addEventListener('click', function (event) {
 });
 
 add_pattern_input.addEventListener('keypress', function (event) {
+    let input = add_pattern_input.value
     if (event.key === 'Enter') {
-        if (sig_from_command(add_pattern_input.value) !== undefined) {
-            add_pattern_from_command(add_pattern_input.value);
+        if (get_command_from_translation(input) !== false) {
+            input = get_command_from_translation(input)
+            add_pattern_from_command(input);
             resimulate_stack();
-        } else if (!isNaN(add_pattern_input.value) && add_pattern_input.value !== "") {
-            let patterns = patterns_from_number(parseFloat(add_pattern_input.value));
+        } else if (!isNaN(add_pattern_input.value) && input !== '') {
+            let patterns = patterns_from_number(parseFloat(input));
             set_drawn_patterns(drawn_patterns.concat(patterns));
             patterns.forEach((pat) => {
                 add_pattern_to_panel(pat);
@@ -165,7 +175,7 @@ add_pattern_input.addEventListener('keypress', function (event) {
             reorder_patterns();
             resimulate_stack();
         } else {
-            blink_red();
+            blink_red(document.getElementById('add_pattern'));
         }
         add_pattern_input.value = '';
     }
@@ -185,4 +195,4 @@ document.getElementById('paragraph_dropdown').addEventListener('click', function
     }
 });
 
-export { add_pattern_to_panel, pattern_panel, remove_pattern_from_panel, pattern_draggable_container };
+export { add_pattern_to_panel, pattern_panel, remove_pattern_from_panel, pattern_draggable_container, add_pattern_input, add_pattern_textarea };
