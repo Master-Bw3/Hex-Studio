@@ -1,5 +1,5 @@
 import drawn_patterns from '../Pattern/Drawn_Patterns.js';
-import {PATTERNS} from '../Pattern/Pattern_list.js';
+import { PATTERNS } from '../Pattern/Pattern_list.js';
 import { stack_panel, update_stack_panel } from '../UI/Stack_Panel.js';
 import check_equality from './equality_checker.js';
 import Iota from './Iota_Class.js';
@@ -39,11 +39,12 @@ function update_stack(pattern) {
             let check = true;
             if (pattern.inputs.length > 0) {
                 check = pattern.inputs.every((element, i) => {
-                    return check_accepted_input(STACK[i].type, pattern.inputs.at(i)) ? true : false;
+                    return check_accepted_input(STACK.at(pattern.inputs.length - i - 1).type, pattern.inputs.at(i)) ? true : false;
                 });
             }
 
             if (!check) {
+                console.log(pattern);
                 throw ['IncorrectIota', pattern.str];
             } else {
                 switch (pattern.command) {
@@ -349,7 +350,7 @@ function update_stack(pattern) {
                     case 'logarithm':
                         var iota1 = STACK[1];
                         var iota2 = STACK[0];
-                        STACK.splice(0,2);
+                        STACK.splice(0, 2);
                         STACK.unshift(new Iota('number', math.log(iota1.value, iota2.value)));
                         break;
                     case 'd':
@@ -360,13 +361,11 @@ function update_stack(pattern) {
                         break;
                     default:
                         //operators that take generic inputs and give generic outputs ie: raycast, get_caster
-                        pattern.inputs.forEach((input) => {
-                            if (check_accepted_input(STACK[0].type, input)) {
-                                STACK.shift();
-                            } else {
-                                throw ['IncorrectIota', pattern.str];
-                            }
+                        pattern.inputs.forEach((input, i) => {
+                            console.log(pattern.inputs.length - i - 1, input);
+                            STACK.shift();
                         });
+
                         //add outputs to stack
                         pattern.outputs.forEach((output) => {
                             STACK.unshift(output);

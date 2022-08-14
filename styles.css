@@ -28,6 +28,7 @@ body {
 
 ::-webkit-scrollbar {
     width: 1px;
+    height: 1px;
 }
 ::-webkit-scrollbar-track {
     background: transparent;
@@ -189,16 +190,15 @@ body {
 
 .outer_box input,
 .outer_box textarea {
-    resize: vertical;
-    padding-top: 0.1em;
+    padding-top: 0.125em;
     padding-bottom: 0.07em;
     border-width: 1px;
-    border-color:rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.3);
     min-height: 1.3em;
     margin-top: 0.3em;
     margin-bottom: 0.3em;
     margin-right: 30.4px;
-    font-size: 0.9em;
+    font-size: 0.85em;
     font-family: 'fira';
     color: rgba(255, 255, 255, 0.8);
     background-color: var(--primary_medium);
@@ -210,7 +210,7 @@ body {
 .outer_box input:focus,
 .outer_box textarea:focus {
     outline: none !important;
-    border-color:rgba(255, 255, 255, 0.4);
+    border-color: rgba(255, 255, 255, 0.4);
 }
 
 .outer_box .x_button svg:hover g {
@@ -235,8 +235,9 @@ body {
     margin-bottom: 0.3em;
     height: fit-content;
     word-wrap: break-word;
-    font-size: 0.9em;
-    padding: 0.1em;
+    font-size: 0.85em;
+    padding-top: 0.2em;
+    padding-bottom: 0.1em;
     font-family: 'fira';
     background-color: var(--primary_medium);
     color: rgba(255, 255, 255, 0.8);
@@ -398,6 +399,9 @@ body {
     opacity: 1;
 }
 #add_pattern textarea {
+    white-space: pre;
+    overflow-wrap: normal;
+    resize: vertical;
     min-height: 10em;
     height: calc(100% - 0.6em);
     margin-right: 0;

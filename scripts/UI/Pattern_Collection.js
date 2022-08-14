@@ -22,7 +22,7 @@ for (var key in TRANSLATED_PATTERNS) {
 }
 
 let tribute = new Tribute({
-    menuItemLimit: 5,
+    menuItemLimit: 3,
     noMatchTemplate: "",
     autocompleteMode: true,
     replaceTextSuffix: '\n',

@@ -1,6 +1,6 @@
 {
-    "wawawddew": {"command" : "interop/gravity/get", "inputs" : [], "outputs" : [], "editable" : false},
-    "wdwdwaaqw": {"command" : "interop/gravity/set", "inputs" : [], "outputs" : [], "editable" : false},
+    "wawawddew": {"command" : "interop/gravity/get", "inputs" : [["entity"]], "outputs" : [["vector"]], "editable" : false},
+    "wdwdwaaqw": {"command" : "interop/gravity/set", "inputs" : [["entity"],["vector"]], "outputs" : [], "editable" : false},
     "aawawwawwa": {"command" : "interop/pehkui/get", "inputs" : [], "outputs" : [], "editable" : false},
     "ddwdwwdwwd": {"command" : "interop/pehkui/set", "inputs" : [], "outputs" : [], "editable" : false},
     "qaq": {"command" : "get_caster", "inputs" : [], "outputs" : [["entity"]], "editable" : false},
