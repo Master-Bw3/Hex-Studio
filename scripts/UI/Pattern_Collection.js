@@ -25,11 +25,12 @@ let tribute = new Tribute({
     menuItemLimit: 3,
     noMatchTemplate: "",
     autocompleteMode: true,
-    replaceTextSuffix: '\n',
+    replaceTextSuffix: '\n\n',
+    positionMenu: false,
+    menuShowMinLength: 1,
     values: collection,
 });
 
-tribute.attach(add_pattern_input);
-tribute.attach(add_pattern_textarea);
+
 
 export default tribute;

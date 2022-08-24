@@ -1,11 +1,12 @@
 import add_pattern_from_command from '../Pattern/Add_Pattern_From_Command.js';
 import drawn_patterns, { set_drawn_patterns } from '../Pattern/Drawn_Patterns.js';
 import patterns_from_number from '../Pattern/Patterns_From_Number.js';
-import {get_command_from_translation, PATTERNS, TRANSLATED_PATTERNS} from '../Pattern/Pattern_list.js';
+import { get_command_from_translation, PATTERNS, TRANSLATED_PATTERNS } from '../Pattern/Pattern_list.js';
 import reorder_patterns from '../Pattern/Re_Order_Patterns.js';
 import sig_from_command from '../Pattern/Sig_From_Command.js';
 import update_pattern_value from '../Pattern/Update_Pattern_Value.js';
 import { resimulate_stack } from '../Stack/Stack.js';
+import tribute from './Pattern_Collection.js';
 
 var pattern_panel = document.getElementById('pattern_panel');
 var pattern_draggable_container = document.getElementById('pattern_draggable_container');
@@ -127,20 +128,20 @@ function blink_red(elm) {
 }
 
 add_pattern_button.addEventListener('click', function (event) {
-    let inputs = multiline_mode ? add_pattern_textarea.value.split('\n') : [add_pattern_input.value];
-    inputs = inputs.filter(input => input !== "")
+    let inputs = multiline_mode ? add_pattern_multiline_input.value.split('\n') : [add_pattern_input.value];
+    inputs = inputs.filter((input) => input !== '');
 
-    let invalid_inputs = inputs.filter(elm => !(get_command_from_translation(elm) || (!isNaN(elm) && elm !== '')))
-    if(multiline_mode && invalid_inputs.length > 0) {
-        blink_red(document.getElementById('add_pattern'))
-        console.log(invalid_inputs)
-        return
+    let invalid_inputs = inputs.filter((elm) => !(get_command_from_translation(elm) || (!isNaN(elm) && elm !== '')));
+    if (multiline_mode && invalid_inputs.length > 0) {
+        blink_red(document.getElementById('add_pattern'));
+        console.log(invalid_inputs);
+        return;
     }
 
     for (let i = 0; i < inputs.length; i++) {
         let input = inputs[i];
         if (get_command_from_translation(input) !== false) {
-            input = get_command_from_translation(input)
+            input = get_command_from_translation(input);
             add_pattern_from_command(input);
             resimulate_stack();
         } else if (!isNaN(input) && input !== '') {
@@ -152,18 +153,18 @@ add_pattern_button.addEventListener('click', function (event) {
             reorder_patterns();
             resimulate_stack();
         } else {
-            blink_red(document.getElementById('add_pattern'))
+            blink_red(document.getElementById('add_pattern'));
         }
     }
     add_pattern_input.value = '';
-    add_pattern_textarea.value = '';
+    add_pattern_multiline_input.value = '';
 });
 
 add_pattern_input.addEventListener('keypress', function (event) {
-    let input = add_pattern_input.value
+    let input = add_pattern_input.value;
     if (event.key === 'Enter') {
         if (get_command_from_translation(input) !== false) {
-            input = get_command_from_translation(input)
+            input = get_command_from_translation(input);
             add_pattern_from_command(input);
             resimulate_stack();
         } else if (!isNaN(add_pattern_input.value) && input !== '') {
@@ -181,18 +182,70 @@ add_pattern_input.addEventListener('keypress', function (event) {
     }
 });
 
-let add_pattern_textarea = document.createElement('textarea');
+let add_pattern_multiline_input = document.createElement('div');
+add_pattern_multiline_input.contentEditable = true;
+add_pattern_multiline_input.classList.add('mutliline_input');
 let multiline_mode = false;
 document.getElementById('paragraph_dropdown').addEventListener('click', function (event) {
     if (!multiline_mode) {
-        add_pattern_textarea.value = add_pattern_input.value;
-        add_pattern_input.replaceWith(add_pattern_textarea);
+        add_pattern_multiline_input.value = add_pattern_input.value;
+        add_pattern_input.replaceWith(add_pattern_multiline_input);
         multiline_mode = true;
     } else {
-        add_pattern_input.value = add_pattern_textarea.value.split('\n')[0];
-        add_pattern_textarea.replaceWith(add_pattern_input);
+        add_pattern_input.value = add_pattern_multiline_input.value.split('\n')[0];
+        add_pattern_multiline_input.replaceWith(add_pattern_input);
         multiline_mode = false;
     }
 });
 
-export { add_pattern_to_panel, pattern_panel, remove_pattern_from_panel, pattern_draggable_container, add_pattern_input, add_pattern_textarea };
+function getCaretCoordinates() {
+    let x = 0,
+        y = 0;
+    const isSupported = typeof window.getSelection !== 'undefined';
+    if (isSupported) {
+        const selection = window.getSelection();
+        if (selection.rangeCount !== 0) {
+            const range = selection.getRangeAt(0).cloneRange();
+            range.collapse(true);
+            const rect = range.getClientRects()[0];
+            if (rect) {
+                x = rect.left;
+                y = rect.top;
+            }
+        }
+    }
+    return { x, y };
+}
+
+function set_autocomplete_pos(event) {
+    const menu_detector = setInterval(() => {
+        if (tribute.menu !== undefined) {
+            clearInterval(menu_detector);
+            
+            //clear formatting on pasted text
+            for (let index = 0; index < event.target.childElementCount; index++) {
+                const child = event.target.children[index];
+                child.style.cssText = '';
+            }
+
+            document.querySelector(':root').style.setProperty('--tribute-container-top', getCaretCoordinates()['y'] + 20 + 'px');
+            document.querySelector(':root').style.setProperty('--tribute-container-left', getCaretCoordinates()['x'] + 'px');
+        }
+    }, 0.01);
+}
+//I swear this is just a temporary solution
+add_pattern_multiline_input.addEventListener('keydown', set_autocomplete_pos);
+add_pattern_input.addEventListener('keydown', set_autocomplete_pos);
+
+
+tribute.attach(add_pattern_input);
+tribute.attach(add_pattern_multiline_input);
+
+export {
+    add_pattern_to_panel,
+    pattern_panel,
+    remove_pattern_from_panel,
+    pattern_draggable_container,
+    add_pattern_input,
+    add_pattern_multiline_input as add_pattern_textarea,
+};

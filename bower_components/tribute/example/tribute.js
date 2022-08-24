@@ -531,6 +531,7 @@
   var TributeRange = /*#__PURE__*/function () {
     function TributeRange(tribute) {
       _classCallCheck(this, TributeRange);
+
       this.tribute = tribute;
       this.tribute.range = this;
     }
@@ -571,7 +572,7 @@
             coordinates = this.getContentEditableCaretPosition(info.mentionPosition);
           }
 
-          //this.tribute.menu.style.cssText = "top: ".concat(coordinates.top, "px;\n                                     left: ").concat(coordinates.left, "px;\n                                     right: ").concat(coordinates.right, "px;\n                                     bottom: ").concat(coordinates.bottom, "px;\n                                     position: absolute;\n                                     display: block;");
+          this.tribute.menu.style.cssText = "top: ".concat(coordinates.top, "px;\n                                     left: ").concat(coordinates.left, "px;\n                                     right: ").concat(coordinates.right, "px;\n                                     bottom: ").concat(coordinates.bottom, "px;\n                                     position: absolute;\n                                     display: block;");
 
           if (coordinates.left === 'auto') {
             this.tribute.menu.style.left = 'auto';
@@ -592,7 +593,7 @@
 
             var menuIsOffScreenHorizontally = window.innerWidth > menuDimensions.width && (menuIsOffScreen.left || menuIsOffScreen.right);
             var menuIsOffScreenVertically = window.innerHeight > menuDimensions.height && (menuIsOffScreen.top || menuIsOffScreen.bottom);
-            
+
             if (menuIsOffScreenHorizontally || menuIsOffScreenVertically) {
               _this.tribute.menu.style.cssText = 'display: none';
 
@@ -950,7 +951,7 @@
           width: null,
           height: null
         };
-        this.tribute.menu.style.cssText = "                                 position: fixed;\n                                 display: block;\n                                 visibility; hidden;";
+        this.tribute.menu.style.cssText = "top: 0px;\n                                 left: 0px;\n                                 position: fixed;\n                                 display: block;\n                                 visibility; hidden;";
         dimensions.width = this.tribute.menu.offsetWidth;
         dimensions.height = this.tribute.menu.offsetHeight;
         this.tribute.menu.style.cssText = "display: none;";
@@ -1076,7 +1077,6 @@
         }
 
         var parentHeight = this.tribute.menuContainer ? this.tribute.menuContainer.offsetHeight : this.getDocument().body.offsetHeight;
-        
 
         if (menuIsOffScreen.bottom) {
           var parentRect = this.tribute.menuContainer ? this.tribute.menuContainer.getBoundingClientRect() : this.getDocument().body.getBoundingClientRect();
