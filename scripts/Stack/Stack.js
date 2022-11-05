@@ -353,7 +353,11 @@ function update_stack(pattern) {
                         STACK.splice(0, 2);
                         STACK.unshift(new Iota('number', math.log(iota1.value, iota2.value)));
                         break;
-                    case 'd':
+                    case 'modulo':
+                        var iota1 = STACK[1];
+                        var iota2 = STACK[0];
+                        STACK.splice(0, 2);
+                        STACK.unshift(new Iota('number', iota1.value % iota2.value));
                         break;
                     case 'd':
                         break;
