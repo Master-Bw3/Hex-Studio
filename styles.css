@@ -3,6 +3,11 @@
     src: url('./fonts/FiraCode-Light.ttf');
 }
 
+@font-face {
+    font-family: Cascadia Code;
+    src: url('./fonts/CascadiaCode.ttf');
+}
+
 * {
     margin: 0;
     padding: 0;
