@@ -42,6 +42,13 @@ drag_container.on('dragend', function (el) {
     resimulate_stack();
 });
 
+function clear_pattern_panel() {
+    set_drawn_patterns([])
+    pattern_draggable_container.innerHTML = "";
+    reorder_patterns();
+    resimulate_stack();
+}
+
 function remove_pattern_from_panel(pattern_element) {
     drawn_patterns.splice(parseInt(pattern_element.getAttribute('data-index')), 1);
     pattern_element.remove();
@@ -248,4 +255,5 @@ export {
     pattern_draggable_container,
     add_pattern_input,
     add_pattern_multiline_input as add_pattern_textarea,
+    clear_pattern_panel
 };
