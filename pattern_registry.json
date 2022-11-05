@@ -51,7 +51,7 @@
     "adeeeee": {"command" : "arccos", "inputs" : [["number"]], "outputs" : [["number"]], "editable" : false},
     "eadeeeeew": {"command" : "arctan", "inputs" : [["number"]], "outputs" : [["number"]], "editable" : false},
     "eqaqe": {"command" : "logarithm", "inputs" : [["number"],["number"]], "outputs" : [["number"]], "editable" : false},
-    "addwaad": {"command" : "modulo", "inputs" : [], "outputs" : [], "editable" : false},
+    "addwaad": {"command" : "modulo", "inputs" : [["number"],["number"]], "outputs" : [["number"]], "editable" : false},
     "wdweaqa": {"command" : "and_bit", "inputs" : [], "outputs" : [], "editable" : false},
     "waweaqa": {"command" : "or_bit", "inputs" : [], "outputs" : [], "editable" : false},
     "dwaeaqa": {"command" : "xor_bit", "inputs" : [], "outputs" : [], "editable" : false},
