@@ -19,10 +19,14 @@ function resimulate_stack() {
 }
 
 function update_stack(pattern) {
-    function check_accepted_input(type, input) {
+    function check_matching_inputs(input_values, valid_input_combinations) {
         let matching = false;
-        input.forEach(function (iota) {
-            if (iota.type === type || iota.type == 'any') matching = true;
+        console.log("owo", input_values)
+        input_values = input_values.map(iota => iota.type)
+        valid_input_combinations.forEach(function (valid_inputs) {
+            valid_inputs = valid_inputs.map(iota => iota.type)
+            console.log("e: ", valid_inputs, input_values)
+            if (valid_inputs.length === input_values.length && valid_inputs.every((x, i) => x === input_values[i] || x === "any")) matching = true;
         });
 
         return matching;
@@ -35,17 +39,11 @@ function update_stack(pattern) {
             //pattern does not exist
             throw ['NoSuchPattern', pattern.str];
             //check if there are enough inputs in the stack
-        } else if (STACK.length >= pattern.inputs.length) {
+        }         
+        else if (STACK.length >= pattern.inputs[0].length) {
             let check = true;
-            if (pattern.inputs.length > 0) {
-                check = pattern.inputs.every((element, i) => {
-                    return check_accepted_input(
-                        STACK.at(pattern.inputs.length - i - 1).type,
-                        pattern.inputs.at(i)
-                    )
-                        ? true
-                        : false;
-                });
+            if (pattern.inputs[0].length > 0) {
+                check = check_matching_inputs(STACK.slice(0,pattern.inputs[0].length), pattern.inputs);
             }
 
             if (!check) {
@@ -82,116 +80,58 @@ function update_stack(pattern) {
                     case 'add':
                         var iota1 = STACK[1];
                         var iota2 = STACK[0];
-                        if (
-                            iota1.type === 'number' &&
-                            iota2.type === 'number'
-                        ) {
+                        if (iota1.type === 'number' && iota2.type === 'number') {
                             STACK.splice(0, 2);
-                            STACK.unshift(
-                                new Iota('number', iota1.value + iota2.value)
-                            );
-                        } else if (
-                            iota1.type == 'vector' &&
-                            iota2.type === 'number'
-                        ) {
+                            STACK.unshift(new Iota('number', iota1.value + iota2.value));
+                        } else if (iota1.type == 'vector' && iota2.type === 'number') {
                             STACK.splice(0, 2);
-                            var value = iota1.value.map(
-                                (val) => val + iota2.value
-                            );
+                            var value = iota1.value.map((val) => val + iota2.value);
                             STACK.unshift(new Iota('vector', value));
-                        } else if (
-                            iota2.type == 'vector' &&
-                            iota1.type === 'number'
-                        ) {
+                        } else if (iota2.type == 'vector' && iota1.type === 'number') {
                             STACK.splice(0, 2);
-                            var value = iota2.value.map(
-                                (val) => iota1.value + val
-                            );
+                            var value = iota2.value.map((val) => iota1.value + val);
                             STACK.unshift(new Iota('vector', value));
-                        } else if (
-                            iota1.type == 'vector' &&
-                            iota2.type === 'vector'
-                        ) {
+                        } else if (iota1.type == 'vector' && iota2.type === 'vector') {
                             STACK.splice(0, 2);
-                            var value = iota1.value.map(
-                                (val, i) => val + iota2.value[i]
-                            );
+                            var value = iota1.value.map((val, i) => val + iota2.value[i]);
                             STACK.unshift(new Iota('vector', value));
                         }
                         break;
                     case 'sub':
                         var iota1 = STACK[1];
                         var iota2 = STACK[0];
-                        if (
-                            iota1.type === 'number' &&
-                            iota2.type === 'number'
-                        ) {
+                        if (iota1.type === 'number' && iota2.type === 'number') {
                             STACK.splice(0, 2);
-                            STACK.unshift(
-                                new Iota('number', iota1.value - iota2.value)
-                            );
-                        } else if (
-                            iota1.type == 'vector' &&
-                            iota2.type === 'number'
-                        ) {
+                            STACK.unshift(new Iota('number', iota1.value - iota2.value));
+                        } else if (iota1.type == 'vector' && iota2.type === 'number') {
                             STACK.splice(0, 2);
-                            var value = iota1.value.map(
-                                (val) => val - iota2.value
-                            );
+                            var value = iota1.value.map((val) => val - iota2.value);
                             STACK.unshift(new Iota('vector', value));
-                        } else if (
-                            iota2.type == 'vector' &&
-                            iota1.type === 'number'
-                        ) {
+                        } else if (iota2.type == 'vector' && iota1.type === 'number') {
                             STACK.splice(0, 2);
-                            var value = iota2.value.map(
-                                (val) => iota1.value - val
-                            );
+                            var value = iota2.value.map((val) => iota1.value - val);
                             STACK.unshift(new Iota('vector', value));
-                        } else if (
-                            iota1.type == 'vector' &&
-                            iota2.type === 'vector'
-                        ) {
+                        } else if (iota1.type == 'vector' && iota2.type === 'vector') {
                             STACK.splice(0, 2);
-                            var value = iota1.value.map(
-                                (val, i) => val - iota2.value[i]
-                            );
+                            var value = iota1.value.map((val, i) => val - iota2.value[i]);
                             STACK.unshift(new Iota('vector', value));
                         }
                         break;
                     case 'mul_dot':
                         var iota1 = STACK[1];
                         var iota2 = STACK[0];
-                        if (
-                            iota1.type === 'number' &&
-                            iota2.type === 'number'
-                        ) {
+                        if (iota1.type === 'number' && iota2.type === 'number') {
                             STACK.splice(0, 2);
-                            STACK.unshift(
-                                new Iota('number', iota1.value * iota2.value)
-                            );
-                        } else if (
-                            iota1.type == 'vector' &&
-                            iota2.type === 'number'
-                        ) {
+                            STACK.unshift(new Iota('number', iota1.value * iota2.value));
+                        } else if (iota1.type == 'vector' && iota2.type === 'number') {
                             STACK.splice(0, 2);
-                            var value = iota1.value.map(
-                                (val) => val * iota2.value
-                            );
+                            var value = iota1.value.map((val) => val * iota2.value);
                             STACK.unshift(new Iota('vector', value));
-                        } else if (
-                            iota2.type == 'vector' &&
-                            iota1.type === 'number'
-                        ) {
+                        } else if (iota2.type == 'vector' && iota1.type === 'number') {
                             STACK.splice(0, 2);
-                            var value = iota2.value.map(
-                                (val) => iota1.value * val
-                            );
+                            var value = iota2.value.map((val) => iota1.value * val);
                             STACK.unshift(new Iota('vector', value));
-                        } else if (
-                            iota1.type == 'vector' &&
-                            iota2.type === 'vector'
-                        ) {
+                        } else if (iota1.type == 'vector' && iota2.type === 'vector') {
                             STACK.splice(0, 2);
                             value = math.dot(iota1.value, iota2.value);
                             STACK.unshift(new Iota('vector', value));
@@ -200,36 +140,18 @@ function update_stack(pattern) {
                     case 'div_cross':
                         var iota1 = STACK[1];
                         var iota2 = STACK[0];
-                        if (
-                            iota1.type === 'number' &&
-                            iota2.type === 'number'
-                        ) {
+                        if (iota1.type === 'number' && iota2.type === 'number') {
                             STACK.splice(0, 2);
-                            STACK.unshift(
-                                new Iota('number', iota1.value / iota2.value)
-                            );
-                        } else if (
-                            iota1.type == 'vector' &&
-                            iota2.type === 'number'
-                        ) {
+                            STACK.unshift(new Iota('number', iota1.value / iota2.value));
+                        } else if (iota1.type == 'vector' && iota2.type === 'number') {
                             STACK.splice(0, 2);
-                            var value = iota1.value.map(
-                                (val) => val / iota2.value
-                            );
+                            var value = iota1.value.map((val) => val / iota2.value);
                             STACK.unshift(new Iota('vector', value));
-                        } else if (
-                            iota2.type == 'vector' &&
-                            iota1.type === 'number'
-                        ) {
+                        } else if (iota2.type == 'vector' && iota1.type === 'number') {
                             STACK.splice(0, 2);
-                            var value = iota2.value.map(
-                                (val) => iota1.value * val
-                            );
+                            var value = iota2.value.map((val) => iota1.value * val);
                             STACK.unshift(new Iota('vector', value));
-                        } else if (
-                            iota1.type == 'vector' &&
-                            iota2.type === 'vector'
-                        ) {
+                        } else if (iota1.type == 'vector' && iota2.type === 'vector') {
                             STACK.splice(0, 2);
                             value = math.cross(iota1.value, iota2.value);
                             STACK.unshift(new Iota('vector', value));
@@ -249,43 +171,20 @@ function update_stack(pattern) {
                     case 'pow_proj':
                         var iota1 = STACK[1];
                         var iota2 = STACK[0];
-                        if (
-                            iota1.type === 'number' &&
-                            iota2.type === 'number'
-                        ) {
+                        if (iota1.type === 'number' && iota2.type === 'number') {
                             STACK.splice(0, 2);
-                            STACK.unshift(
-                                new Iota('number', iota1.value ** iota2.value)
-                            );
-                        } else if (
-                            iota1.type == 'vector' &&
-                            iota2.type === 'number'
-                        ) {
+                            STACK.unshift(new Iota('number', iota1.value ** iota2.value));
+                        } else if (iota1.type == 'vector' && iota2.type === 'number') {
                             STACK.splice(0, 2);
-                            var value = iota1.value.map(
-                                (val) => val ** iota2.value
-                            );
+                            var value = iota1.value.map((val) => val ** iota2.value);
                             STACK.unshift(new Iota('vector', value));
-                        } else if (
-                            iota2.type == 'vector' &&
-                            iota1.type === 'number'
-                        ) {
+                        } else if (iota2.type == 'vector' && iota1.type === 'number') {
                             STACK.splice(0, 2);
-                            var value = iota2.value.map(
-                                (val) => iota1.value ** val
-                            );
+                            var value = iota2.value.map((val) => iota1.value ** val);
                             STACK.unshift(new Iota('vector', value));
-                        } else if (
-                            iota1.type == 'vector' &&
-                            iota2.type === 'vector'
-                        ) {
+                        } else if (iota1.type == 'vector' && iota2.type === 'vector') {
                             STACK.splice(0, 2);
-                            var value = iota1.value.map(
-                                (val) =>
-                                    val *
-                                    (math.dot(iota2.value, iota1.value) /
-                                        math.dot(iota1.value, iota1.value))
-                            );
+                            var value = iota1.value.map((val) => val * (math.dot(iota2.value, iota1.value) / math.dot(iota1.value, iota1.value)));
                             STACK.unshift(new Iota('vector', value));
                         }
                         break;
@@ -300,11 +199,7 @@ function update_stack(pattern) {
                         STACK.unshift(new Iota('number', value));
                         break;
                     case 'construct_vec':
-                        value = [
-                            STACK[2].value,
-                            STACK[1].value,
-                            STACK[0].value,
-                        ];
+                        value = [STACK[2].value, STACK[1].value, STACK[0].value];
                         STACK.splice(0, 3);
                         STACK.unshift(new Iota('vector', value));
                         break;
@@ -317,48 +212,33 @@ function update_stack(pattern) {
                         break;
                     case 'coerce_axial':
                         var vector = STACK[0].value;
-                        var magnitude = Math.sqrt(
-                            vector[0] ** 2 + vector[1] ** 2 + vector[2] ** 2
-                        );
+                        var magnitude = Math.sqrt(vector[0] ** 2 + vector[1] ** 2 + vector[2] ** 2);
                         var azimuth = Math.acos(vector[2] / magnitude);
                         var theta = Math.atan(vector[1] / vector[0]);
 
                         //snap to nearest 90 degrees
-                        var snapped_azimuth =
-                            Math.round(azimuth / 1.5708) * 1.5708;
+                        var snapped_azimuth = Math.round(azimuth / 1.5708) * 1.5708;
                         var snapped_theta = Math.round(theta / 1.5708) * 1.5708;
 
                         vector = [...vector];
-                        vector[0] =
-                            Math.sin(snapped_azimuth) * Math.cos(snapped_theta);
-                        vector[1] =
-                            Math.sin(snapped_azimuth) * Math.sin(snapped_theta);
+                        vector[0] = Math.sin(snapped_azimuth) * Math.cos(snapped_theta);
+                        vector[1] = Math.sin(snapped_azimuth) * Math.sin(snapped_theta);
                         vector[2] = Math.cos(snapped_azimuth);
-                        vector = vector.map((component) =>
-                            Math.round(component) == 0
-                                ? 0
-                                : Math.round(component)
-                        ); //round to int and get rid of -0
+                        vector = vector.map((component) => (Math.round(component) == 0 ? 0 : Math.round(component))); //round to int and get rid of -0
                         STACK.shift();
                         STACK.unshift(new Iota('vector', vector));
                         break;
                     case 'and':
                         var iota1 = STACK[1];
                         var iota2 = STACK[0];
-                        var new_iota =
-                            iota1.type === 'null'
-                                ? new Iota('null', undefined)
-                                : structuredClone(iota2);
+                        var new_iota = iota1.type === 'null' ? new Iota('null', undefined) : structuredClone(iota2);
                         STACK.splice(0, 2);
                         STACK.unshift(new_iota);
                         break;
                     case 'or':
                         var iota1 = STACK[1];
                         var iota2 = STACK[0];
-                        var new_iota =
-                            iota1.type !== 'null'
-                                ? structuredClone(iota1)
-                                : structuredClone(iota2);
+                        var new_iota = iota1.type !== 'null' ? structuredClone(iota1) : structuredClone(iota2);
                         STACK.splice(0, 2);
                         STACK.unshift(new_iota);
                         break;
@@ -366,10 +246,7 @@ function update_stack(pattern) {
                         var iota1 = STACK[1];
                         var iota2 = STACK[0];
                         var new_iota;
-                        if (
-                            (iota1.type === 'null' && iota2.type === 'null') ||
-                            (iota1.type !== 'null' && iota2.type !== 'null')
-                        ) {
+                        if ((iota1.type === 'null' && iota2.type === 'null') || (iota1.type !== 'null' && iota2.type !== 'null')) {
                             new_iota = new Iota('null', undefined);
                         } else if (iota1.type === 'null') {
                             new_iota = structuredClone(iota2);
@@ -423,8 +300,7 @@ function update_stack(pattern) {
                         break;
                     case 'not':
                         var iota = STACK[0];
-                        var value =
-                            iota.type === 'null' || iota.value === 0 ? 1 : 0;
+                        var value = iota.type === 'null' || iota.value === 0 ? 1 : 0;
                         STACK.shift();
                         STACK.unshift(new Iota('number', value));
                         break;
@@ -442,12 +318,7 @@ function update_stack(pattern) {
                         STACK.unshift(new_iota);
                         break;
                     case 'random':
-                        STACK.unshift(
-                            new Iota(
-                                'number',
-                                Math.round(Math.random() * 10000) / 10000
-                            )
-                        );
+                        STACK.unshift(new Iota('number', Math.round(Math.random() * 10000) / 10000));
                         break;
                     case 'sin':
                         var iota = STACK[0];
@@ -467,59 +338,46 @@ function update_stack(pattern) {
                     case 'arcsin':
                         var iota = STACK[0];
                         STACK.shift();
-                        STACK.unshift(
-                            new Iota('number', Math.asin(iota.value))
-                        );
+                        STACK.unshift(new Iota('number', Math.asin(iota.value)));
                         break;
                     case 'arccos':
                         var iota = STACK[0];
                         STACK.shift();
-                        STACK.unshift(
-                            new Iota('number', Math.acos(iota.value))
-                        );
+                        STACK.unshift(new Iota('number', Math.acos(iota.value)));
                         break;
                     case 'arctan':
                         var iota = STACK[0];
                         STACK.shift();
-                        STACK.unshift(
-                            new Iota('number', Math.atan(iota.value))
-                        );
+                        STACK.unshift(new Iota('number', Math.atan(iota.value)));
                         break;
                     case 'logarithm':
                         var iota1 = STACK[1];
                         var iota2 = STACK[0];
                         STACK.splice(0, 2);
-                        STACK.unshift(
-                            new Iota(
-                                'number',
-                                math.log(iota1.value, iota2.value)
-                            )
-                        );
+                        STACK.unshift(new Iota('number', math.log(iota1.value, iota2.value)));
                         break;
                     case 'modulo':
                         var iota1 = STACK[1];
                         var iota2 = STACK[0];
                         STACK.splice(0, 2);
-                        STACK.unshift(
-                            new Iota('number', iota1.value % iota2.value)
-                        );
+                        STACK.unshift(new Iota('number', iota1.value % iota2.value));
                         break;
                     case 'and_bit':
                         var iota1 = STACK[1];
                         var iota2 = STACK[0];
-                        if (
-                            iota1.type === 'number' &&
-                            iota2.type === 'number'
-                        ) {
+                        if (iota1.type === 'number' && iota2.type === 'number') {
+                            STACK.splice(0, 2);
+                            STACK.unshift(new Iota('number', iota1.value & iota2.value));
+                        } else if (iota1.type === 'list' && iota2.type === 'list') {
                             STACK.splice(0, 2);
                             STACK.unshift(
-                                new Iota('number', iota1.value & iota2.value)
+                                new Iota(
+                                    'list',
+                                    iota1.value.filter((x) => iota2.value.includes(x))
+                                )
                             );
                         } else {
-                            STACK.splice(0, 2);
-                            STACK.unshift(
-                                new Iota('number', /*TODO: array intersection*/)
-                            );
+                            throw ['IncorrectIota', pattern.str];
                         }
                         break;
                     case 'd':
@@ -534,7 +392,10 @@ function update_stack(pattern) {
                         break;
                     case 'd':
                         break;
-                    case 'd':
+                    case 'singleton':
+                        var iota = STACK[0];
+                        STACK.shift();
+                        STACK.unshift(new Iota('list', [iota]));
                         break;
                     default:
                         //operators that take generic inputs and give generic outputs ie: raycast, get_caster
@@ -558,21 +419,15 @@ function update_stack(pattern) {
 
         switch (error[0]) {
             case 'NotEnoughIotas':
-                pattern_draggable_container.children[
-                    drawn_patterns.findIndex((ptrn) => ptrn === pattern)
-                ].style.backgroundColor = '#4F3737';
-                var garbages = Array(
-                    PATTERNS[pattern.str]['inputs'].length - STACK.length
-                ).fill(new Iota('garbage'));
+                pattern_draggable_container.children[drawn_patterns.findIndex((ptrn) => ptrn === pattern)].style.backgroundColor = '#4F3737';
+                var garbages = Array(PATTERNS[pattern.str]['inputs'].length - STACK.length).fill(new Iota('garbage'));
                 STACK = garbages.concat(STACK);
                 break;
             case 'IncorrectIota':
-                pattern_draggable_container.children[
-                    drawn_patterns.findIndex((ptrn) => ptrn === pattern)
-                ].style.backgroundColor = '#4F3737';
+                pattern_draggable_container.children[drawn_patterns.findIndex((ptrn) => ptrn === pattern)].style.backgroundColor = '#4F3737';
                 var garbages = [];
                 PATTERNS[error[1]]['inputs'].forEach((iota) => {
-                    if (!check_accepted_input(STACK[0].type, iota)) {
+                    if (!check_matching_inputs(STACK[0].type, iota)) {
                         STACK.shift();
                         garbages.unshift(new Iota('garbage'));
                     }
@@ -580,9 +435,7 @@ function update_stack(pattern) {
                 STACK = garbages.concat(STACK);
                 break;
             case 'NoSuchPattern':
-                pattern_draggable_container.children[
-                    drawn_patterns.findIndex((ptrn) => ptrn === pattern)
-                ].style.backgroundColor = '#4F3737';
+                pattern_draggable_container.children[drawn_patterns.findIndex((ptrn) => ptrn === pattern)].style.backgroundColor = '#4F3737';
                 STACK.unshift(new Iota('garbage'));
                 break;
 
