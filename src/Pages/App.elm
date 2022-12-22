@@ -9,6 +9,9 @@ import Page
 import Request
 import Shared
 import View exposing (View)
+import Logic.App.Model exposing (Model)
+import Logic.App.Types exposing (..)
+
 
 
 page : Shared.Model -> Request.With Params -> Page.With Model Msg
@@ -22,49 +25,14 @@ page shared req =
 
 
 
--- Types
 
-
-type Panel
-    = StackPanel
-    | PatternPanel
-
-
-type EntityType
-    = Player
-    | Chicken
-    | Minecart
-
-
-type alias Pattern =
-    {}
-
-
-type Iota
-    = Number Float
-    | Vector Float
-    | Boolean Bool
-    | Entity EntityType
-    | PatternList (Array Pattern)
-    | IotaList (Array Iota)
-    | Null
-    | Pattern Pattern
-
-
-type alias Model =
-    { stack : Array Int
-    , patternList : Array Pattern
-    , ui :
-        { openPanels : List Panel
-        }
-    }
 
 
 init : ( Model, Cmd Msg )
 init =
     ( { stack = Array.empty
       , patternList = Array.empty
-      , ui = { openPanels = [PatternPanel] }
+      , ui = { openPanels = [ PatternPanel ] }
       }
     , Cmd.none
     )
@@ -81,12 +49,16 @@ type Msg
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
+    let
+        ui =
+            model.ui
+    in
     case msg of
         ViewPanel panel ->
-            ( model, Cmd.none )
+            ( { model | ui = { ui | openPanels = [ panel ] } }, Cmd.none )
 
         ViewAdditionalPanel panel ->
-            ( model, Cmd.none )
+            ( { model | ui = { ui | openPanels = ui.openPanels ++ [ panel ] } }, Cmd.none )
 
 
 

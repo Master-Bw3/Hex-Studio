@@ -5,9 +5,10 @@ import Components.App.Panels.StackPanel exposing (stackPanel)
 
 import Html exposing (..)
 import Html.Attributes exposing (class, id)
+import Logic.App.Model exposing (Model)
 
 
-panels : model -> Html msg
+panels : Model -> Html msg
 panels model =
     div [ id "panels" ]
         [ patternPanel model 

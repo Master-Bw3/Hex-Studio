@@ -12,7 +12,7 @@ import Html.Attributes exposing (attribute, class, id, placeholder)
 
 
 patternPanel : model -> Html msg
-patternPanel model visibility =
+patternPanel model =
     div [ id "pattern_panel", class "panel" ]
         [ h1
             [ class "panel_title"

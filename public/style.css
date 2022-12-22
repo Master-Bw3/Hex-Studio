@@ -154,10 +154,6 @@ body {
     opacity: 1;
 }
 
-#stack_panel {
-    display: none;
-}
-
 .outer_box {
     display: flex;
     flex-direction: column-reverse;
