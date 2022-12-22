@@ -5,13 +5,21 @@ import Components.App.Content exposing (content)
 import Gen.Params.App exposing (Params)
 import Html exposing (..)
 import Html.Attributes exposing (class, id)
+import Logic.App.Model as L
+import Logic.App.Msg as L exposing (..)
+import Logic.App.Types exposing (..)
 import Page
 import Request
 import Shared
 import View exposing (View)
-import Logic.App.Model exposing (Model)
-import Logic.App.Types exposing (..)
 
+
+type alias Model =
+    L.Model
+
+
+type alias Msg =
+    L.Msg
 
 
 page : Shared.Model -> Request.With Params -> Page.With Model Msg
@@ -24,10 +32,6 @@ page shared req =
         }
 
 
-
-
-
-
 init : ( Model, Cmd Msg )
 init =
     ( { stack = Array.empty
@@ -36,15 +40,6 @@ init =
       }
     , Cmd.none
     )
-
-
-
--- UPDATE
-
-
-type Msg
-    = ViewPanel Panel
-    | ViewAdditionalPanel Panel
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )

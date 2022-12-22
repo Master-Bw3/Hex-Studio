@@ -9,11 +9,18 @@ import FontAwesome.Solid as Icon
 import FontAwesome.Styles as Icon
 import Html exposing (..)
 import Html.Attributes exposing (attribute, class, id, placeholder)
+import Components.App.Panels.Utils exposing (visibilityToDisplayStyle)
+import Logic.App.Model exposing (Model)
+import Logic.App.Types exposing (Panel(..))
 
 
-patternPanel : model -> Html msg
+patternPanel : Model -> Html msg
 patternPanel model =
-    div [ id "pattern_panel", class "panel" ]
+    let
+        visibility =
+            List.member PatternPanel model.ui.openPanels
+    in
+    div [ id "pattern_panel", class "panel", visibilityToDisplayStyle visibility ]
         [ h1
             [ class "panel_title"
             ]

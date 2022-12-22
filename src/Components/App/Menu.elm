@@ -7,10 +7,12 @@ import FontAwesome.Layering as Icon
 import FontAwesome.Solid as Icon
 import FontAwesome.Styles as Icon
 import Html exposing (..)
-import Html.Attributes exposing (class, href, id)
+import Html.Attributes exposing (class, id)
+import Html.Events exposing (onClick)
+import Logic.App.Msg exposing (Msg(..))
+import Logic.App.Types exposing (Panel(..))
 
-
-menu : model -> Html msg
+menu : model -> Html Msg
 menu model =
     div
         [ id "menu"
@@ -18,6 +20,7 @@ menu model =
         [ div
             [ id "pattern_menu_button"
             , class "menu_button"
+            , onClick (ViewPanel PatternPanel)
             ]
             [ Icon.css
             , Icon.code |> Icon.styled [ Icon.sm ] |> Icon.view
@@ -25,6 +28,7 @@ menu model =
         , div
             [ id "stack_menu_button"
             , class "menu_button"
+            , onClick (ViewPanel StackPanel)
             ]
             [ Icon.css
             , Icon.layerGroup |> Icon.styled [ Icon.sm ] |> Icon.view

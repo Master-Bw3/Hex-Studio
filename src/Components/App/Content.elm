@@ -4,9 +4,11 @@ import Components.App.LeftBox exposing (leftBox)
 import Components.App.Right exposing (right)
 import Html exposing (..)
 import Html.Attributes exposing (class, id)
+import Logic.App.Model exposing (Model)
+import Logic.App.Msg exposing (Msg(..))
 
 
-content : model -> Html msg
+content : Model -> Html Msg
 content model =
     div [ id "content" ]
         [ leftBox model,
