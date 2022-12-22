@@ -1,5 +1,7 @@
 module Pages.App exposing (Model, Msg, page)
 
+import Array exposing (Array)
+import Components.App.Content exposing (content)
 import Gen.Params.App exposing (Params)
 import Html exposing (..)
 import Html.Attributes exposing (class, id)
@@ -20,16 +22,52 @@ page shared req =
 
 
 
--- INIT
+-- Types
+
+
+type Panel
+    = StackPanel
+    | PatternPanel
+
+
+type EntityType
+    = Player
+    | Chicken
+    | Minecart
+
+
+type alias Pattern =
+    {}
+
+
+type Iota
+    = Number Float
+    | Vector Float
+    | Boolean Bool
+    | Entity EntityType
+    | PatternList (Array Pattern)
+    | IotaList (Array Iota)
+    | Null
+    | Pattern Pattern
 
 
 type alias Model =
-    {}
+    { stack : Array Int
+    , patternList : Array Pattern
+    , ui :
+        { openPanels : List Panel
+        }
+    }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( {}, Cmd.none )
+    ( { stack = Array.empty
+      , patternList = Array.empty
+      , ui = { openPanels = [PatternPanel] }
+      }
+    , Cmd.none
+    )
 
 
 
@@ -37,13 +75,17 @@ init =
 
 
 type Msg
-    = ReplaceMe
+    = ViewPanel Panel
+    | ViewAdditionalPanel Panel
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        ReplaceMe ->
+        ViewPanel panel ->
+            ( model, Cmd.none )
+
+        ViewAdditionalPanel panel ->
             ( model, Cmd.none )
 
 
@@ -63,11 +105,5 @@ subscriptions model =
 view : Model -> View Msg
 view model =
     { title = "Hex Studio"
-    , body =
-        [ div [ id "content" ]
-            [ div [ id "left_box" ]
-                [ div [ id "menu" ] []
-                ]
-            ]
-        ]
+    , body = [ content model ]
     }

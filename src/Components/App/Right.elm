@@ -5,5 +5,6 @@ import Html exposing (..)
 import Html.Attributes exposing (class, id)
 
 
-right =
-    div [] []
+right : model -> Html msg
+right model =
+    div [id "right"] []
