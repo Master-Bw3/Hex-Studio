@@ -60,7 +60,7 @@ body {
     height: 100vh;
 }
 
-#right canvas {
+#hex_grid {
     height: calc(100vh - 100px);
 }
 
@@ -311,16 +311,16 @@ body {
     margin-right: 0;
 }
 
-#canvas_buttons i {
+#canvas_buttons svg {
     font-size: 1.4em;
     color: rgba(255, 255, 255, 0.8);
 }
 
-#canvas_buttons > #sort i {
+#canvas_buttons > #sort svg {
     transform: rotate(-90deg);
 }
 
-#canvas_buttons div:hover i {
+#canvas_buttons div:hover svg {
     font-size: 1.55em;
 }
 

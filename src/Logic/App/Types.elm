@@ -26,3 +26,5 @@ type Iota
     | Null
     | Pattern PatternType
 
+type alias GridPoint =
+    { x : Float, y : Float, radius : Float, used : Bool, color : String }

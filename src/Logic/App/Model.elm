@@ -1,7 +1,7 @@
 module Logic.App.Model exposing (..)
 
 import Array exposing (Array)
-import Logic.App.Types exposing (Panel, PatternType)
+import Logic.App.Types exposing (GridPoint, Panel, PatternType)
 
 
 type alias Model =
@@ -9,5 +9,10 @@ type alias Model =
     , patternList : Array PatternType
     , ui :
         { openPanels : List Panel
+        }
+    , grid :
+        { width : Float
+        , height : Float
+        , points : List (List GridPoint)
         }
     }

@@ -1,6 +1,7 @@
 module Pages.App exposing (Model, Msg, page)
 
 import Array exposing (Array)
+import Browser.Dom exposing (getElement)
 import Components.App.Content exposing (content)
 import Gen.Params.App exposing (Params)
 import Html exposing (..)
@@ -11,8 +12,9 @@ import Logic.App.Types exposing (..)
 import Page
 import Request
 import Shared
+import Task
 import View exposing (View)
-
+import Components.App.Grid exposing (..)
 
 type alias Model =
     L.Model
@@ -37,8 +39,13 @@ init =
     ( { stack = Array.empty
       , patternList = Array.empty
       , ui = { openPanels = [ PatternPanel ] }
+      , grid =
+            { height = 0
+            , width = 0
+            , points = []
+            }
       }
-    , Cmd.none
+    , Task.attempt GotGrid (getElement "hex_grid")
     )
 
 
@@ -47,13 +54,32 @@ update msg model =
     let
         ui =
             model.ui
+
+        grid =
+            model.grid
     in
     case msg of
-        ViewPanel panel ->
-            ( { model | ui = { ui | openPanels = [ panel ] } }, Cmd.none )
+        ViewPanel panel keys ->
+            if not keys.shift then
+                ( { model | ui = { ui | openPanels = [ panel ] } }, Cmd.none )
 
-        ViewAdditionalPanel panel ->
-            ( { model | ui = { ui | openPanels = ui.openPanels ++ [ panel ] } }, Cmd.none )
+            else
+                ( { model | ui = { ui | openPanels = ui.openPanels ++ [ panel ] } }, Cmd.none )
+
+        GotGrid (Ok element) ->
+            ( { model
+                | grid =
+                    { grid
+                        | height = element.element.height
+                        , width = element.element.width
+                        , points = generateGrid element.element.width element.element.height
+                    }
+              }
+            , Cmd.none
+            )
+
+        GotGrid (Err _) ->
+            ( model, Cmd.none )
 
 
 
