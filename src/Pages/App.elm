@@ -2,11 +2,13 @@ module Pages.App exposing (Model, Msg, page)
 
 import Array exposing (Array)
 import Browser.Dom exposing (getElement)
+import Browser.Events exposing (onKeyPress, onMouseMove)
 import Components.App.Content exposing (content)
+import Components.App.Grid exposing (..)
 import Gen.Params.App exposing (Params)
 import Html exposing (..)
 import Html.Attributes exposing (class, id)
-import Logic.App.Model as L
+import Logic.App.Model as L exposing (Model)
 import Logic.App.Msg as L exposing (..)
 import Logic.App.Types exposing (..)
 import Page
@@ -14,7 +16,7 @@ import Request
 import Shared
 import Task
 import View exposing (View)
-import Components.App.Grid exposing (..)
+
 
 type alias Model =
     L.Model
@@ -44,8 +46,13 @@ init =
             , width = 0
             , points = []
             }
+      , mousePos = ( 0.0, 0.0 )
+      , window =
+            { width = 0.0
+            , height = 0.0
+            }
       }
-    , Task.attempt GotGrid (getElement "hex_grid")
+    , Cmd.batch [ Task.attempt GotGrid (getElement "hex_grid"), Task.attempt GotContent (getElement "content") ]
     )
 
 
@@ -81,6 +88,20 @@ update msg model =
         GotGrid (Err _) ->
             ( model, Cmd.none )
 
+        GotContent (Ok element) ->
+            ( { model
+                | window =
+                    { height = element.element.height, width = element.element.width }
+              }
+            , Cmd.none
+            )
+
+        GotContent (Err _) ->
+            ( model, Cmd.none )
+
+        MouseMove data ->
+            ( { model | mousePos = ( toFloat data.pageX, toFloat data.pageY ) }, Cmd.none )
+
 
 
 -- SUBSCRIPTIONS
@@ -89,10 +110,6 @@ update msg model =
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.none
-
-
-
--- VIEW
 
 
 view : Model -> View Msg

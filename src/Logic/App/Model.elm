@@ -15,4 +15,9 @@ type alias Model =
         , height : Float
         , points : List (List GridPoint)
         }
+    , mousePos : ( Float, Float )
+    , window :
+        { width : Float
+        , height : Float
+        }
     }

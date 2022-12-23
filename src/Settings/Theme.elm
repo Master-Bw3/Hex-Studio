@@ -1,6 +1,5 @@
 module Settings.Theme exposing (..)
 
-
 accent1 =
     "#BAC5E2"
 
