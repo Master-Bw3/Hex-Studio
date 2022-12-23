@@ -26,19 +26,23 @@ renderPoints model =
 
         gridHeight =
             model.grid.height
+
         mousePos =
             model.mousePos
-        gridOffset = model.window.width-gridWidth
+
+        gridOffset =
+            model.window.width - gridWidth
     in
     --List.map (renderPoint gridWidth gridHeight mousePos gridOffset) (List.concat points)
     List.concat points
-    |> List.map (renderPoint gridWidth gridHeight mousePos gridOffset)
+        |> List.map (renderPoint gridWidth gridHeight mousePos gridOffset)
 
 
-renderPoint : Float -> Float -> (Float, Float) -> Float -> GridPoint -> Html msg
+renderPoint : Float -> Float -> ( Float, Float ) -> Float -> GridPoint -> Html msg
 renderPoint gridWidth gridHeight mousePos gridOffset point =
     let
-        size = (String.fromFloat (Basics.min 1 (1/(distanceBetweenCoordinates mousePos (point.x+gridOffset, point.y+101)/30)) ))
+        size =
+            String.fromFloat (Basics.min 1 (1 / (distanceBetweenCoordinates mousePos ( point.x + gridOffset, point.y + 101 ) / 30)))
     in
     svg
         [ width "16"
@@ -47,23 +51,33 @@ renderPoint gridWidth gridHeight mousePos gridOffset point =
         , Attr.style "position" "absolute"
         , Attr.style "left" ("calc(100vw - " ++ String.fromFloat (gridWidth - point.x) ++ "px)")
         , Attr.style "top" ("calc(100vh - " ++ String.fromFloat (gridHeight - point.y) ++ "px)")
-        , Attr.style "transform" ("scale("++size++")")
+        , Attr.style "transform" ("scale(" ++ size ++ ")")
         , fill accent1
         ]
         [ polygon [ points "300,150 225,280 75,280 0,150 75,20 225,20" ] []
         ]
 
 
+
 -- helper functions
+
 
 distanceBetweenCoordinates a b =
     let
-        x1 = Tuple.first a
-        y1 = Tuple.second a
-        x2 = Tuple.first b
-        y2 = Tuple.second b
+        x1 =
+            Tuple.first a
+
+        y1 =
+            Tuple.second a
+
+        x2 =
+            Tuple.first b
+
+        y2 =
+            Tuple.second b
     in
     sqrt ((x1 - x2) ^ 2 + (y1 - y2) ^ 2)
+
 
 
 -- settings
@@ -91,12 +105,12 @@ generateGrid gridWidth gridHeight =
             floor (gridWidth / spacing)
     in
     --Debug.log (Debug.toString (pointCount * spacing))
-        List.indexedMap
+    List.indexedMap
         (\r x ->
             List.indexedMap
                 (\i y ->
                     { x = (spacing * toFloat i) + (gridWidth - toFloat pointCount * spacing) + (spacing / 2 * toFloat (modBy 2 r))
-                    , y = verticalSpacing * toFloat r - verticalSpacing
+                    , y = verticalSpacing * toFloat (r - 1) + ((gridHeight - (toFloat rowCount * verticalSpacing)) / 2)
                     , radius = 8.0
                     , used = False
                     , color = "red"
