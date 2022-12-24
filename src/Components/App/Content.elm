@@ -4,7 +4,8 @@ import Components.App.LeftBox exposing (leftBox)
 import Components.App.Right exposing (right)
 import Html exposing (..)
 import Html.Attributes exposing (id)
-import Html.Events exposing (on)
+import Html.Events exposing (on, onClick, onMouseUp)
+import Html.Events.Extra.Mouse exposing (onMove)
 import Json.Decode as Decode exposing (Decoder, at, float, int, map4)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (MouseMoveData, Msg(..))
@@ -12,11 +13,11 @@ import Logic.App.Msg exposing (MouseMoveData, Msg(..))
 
 content : Model -> Html Msg
 content model =
-    let
-        d =
-            Debug.log <| Debug.toString model.grid.points
-    in
-    div [ id "content", on "mousemove" (Decode.map MouseMove mouseMoveDecoder) ]
+    div
+        [ id "content"
+        , onMove (.clientPos >> MouseMove)
+        , onMouseUp MouseUp
+        ]
         [ leftBox model
         , right model
         ]

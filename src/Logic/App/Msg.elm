@@ -7,7 +7,9 @@ type Msg
     = ViewPanel Panel Keys
     | GotGrid (Result Browser.Dom.Error Browser.Dom.Element)
     | GotContent (Result Browser.Dom.Error Browser.Dom.Element)
-    | MouseMove MouseMoveData
+    | MouseMove (Float, Float)
+    | GridDown
+    | MouseUp
 
 type alias MouseMoveData =
     { pageX : Int

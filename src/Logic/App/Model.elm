@@ -14,6 +14,10 @@ type alias Model =
         { width : Float
         , height : Float
         , points : List (List GridPoint)
+        , drawing :
+            { drawingMode : Bool
+            , activePath : List GridPoint
+            }
         }
     , mousePos : ( Float, Float )
     , window :

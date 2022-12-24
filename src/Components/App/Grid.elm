@@ -1,18 +1,111 @@
-module Components.App.Grid exposing (generateGrid, grid, scale, spacing)
+module Components.App.Grid exposing (addNearbyPoint, distanceBetweenCoordinates, generateGrid, getClosestPoint, grid, scale, spacing)
 
+import FontAwesome.Solid exposing (mouse)
 import Html exposing (..)
 import Html.Attributes as Attr
+import Html.Events exposing (onMouseDown)
 import Logic.App.Model exposing (Model)
-import Logic.App.Msg exposing (Msg)
-import Logic.App.Types exposing (GridPoint)
+import Logic.App.Msg exposing (Msg(..))
+import Logic.App.Types exposing (CoordinatePair, GridPoint)
 import Settings.Theme exposing (..)
-import Svg exposing (circle, polygon, svg)
+import Svg exposing (Svg, line, polygon, svg)
 import Svg.Attributes exposing (..)
+
+
+emptyGridpoint =
+    { x = 0
+    , y = 0
+    , radius = 0
+    , used = False
+    , color = ""
+    , connectedPoints = []
+    }
 
 
 grid : Model -> Html Msg
 grid model =
-    div [ Attr.id "hex_grid" ] (renderPoints model)
+    div
+        [ Attr.id "hex_grid"
+        , onMouseDown GridDown
+        ]
+        (renderPoints model
+            ++ [ svg
+                    [ height (String.fromFloat model.grid.height)
+                    , width (String.fromFloat model.grid.width)
+                    ]
+                    (renderDrawingLine model ++ renderActivePath model ++ renderLines model)
+               ]
+        )
+
+
+renderDrawingLine : Model -> List (Svg msg)
+renderDrawingLine model =
+    let
+        drawingMode =
+            model.grid.drawing.drawingMode
+
+        mousePos =
+            model.mousePos
+
+        gridOffset =
+            model.window.width - model.grid.width
+
+        activePoint : GridPoint
+        activePoint =
+            Maybe.withDefault emptyGridpoint (List.head model.grid.drawing.activePath)
+    in
+    if drawingMode then
+        [ renderLine
+            { x1 = Tuple.first mousePos - gridOffset
+            , y1 = Tuple.second mousePos
+            , x2 = activePoint.x
+            , y2 = activePoint.y
+            }
+        ]
+
+    else
+        []
+
+
+renderActivePath : Model -> List (Svg msg)
+renderActivePath model =
+    let
+        points =
+            model.grid.drawing.activePath
+    in
+    List.map renderLine (List.concatMap findLinkedPoints points)
+
+
+renderLines : Model -> List (Svg msg)
+renderLines model =
+    let
+        points =
+            model.grid.points
+    in
+    List.map renderLine (List.concatMap findLinkedPoints (List.concat points))
+
+
+findLinkedPoints : GridPoint -> List CoordinatePair
+findLinkedPoints point =
+    point.connectedPoints
+        |> List.map (\conPnt -> { x1 = conPnt.x, y1 = conPnt.y, x2 = point.x, y2 = point.y })
+
+
+
+--connectedPoints : List {x: Float, y: Float}
+
+
+renderLine : CoordinatePair -> Svg msg
+renderLine coordinatePair =
+    line
+        [ x1 <| String.fromFloat <| coordinatePair.x1
+        , y1 <| String.fromFloat <| coordinatePair.y1
+        , x2 <| String.fromFloat <| coordinatePair.x2
+        , y2 <| String.fromFloat <| coordinatePair.y2
+        , stroke accent2
+        , strokeWidth "5"
+        ]
+        []
 
 
 renderPoints : Model -> List (Html msg)
@@ -24,9 +117,6 @@ renderPoints model =
         gridWidth =
             model.grid.width
 
-        gridHeight =
-            model.grid.height
-
         mousePos =
             model.mousePos
 
@@ -35,33 +125,108 @@ renderPoints model =
     in
     --List.map (renderPoint gridWidth gridHeight mousePos gridOffset) (List.concat points)
     List.concat points
-        |> List.map (renderPoint gridWidth gridHeight mousePos gridOffset)
+        |> List.map (renderPoint mousePos gridOffset)
 
 
-renderPoint : Float -> Float -> ( Float, Float ) -> Float -> GridPoint -> Html msg
-renderPoint gridWidth gridHeight mousePos gridOffset point =
+renderPoint : ( Float, Float ) -> Float -> GridPoint -> Html msg
+renderPoint mousePos gridOffset point =
     let
         size =
-            String.fromFloat (Basics.min 1 (1 / (distanceBetweenCoordinates mousePos ( point.x + gridOffset, point.y + 101 ) / 30)))
+            String.fromFloat (Basics.min 1 (1 / (distanceBetweenCoordinates mousePos ( point.x + gridOffset, point.y ) / 30)))
     in
     svg
         [ width "16"
         , height "16"
         , viewBox "0 0 300 280"
         , Attr.style "position" "absolute"
-        , Attr.style "left" ("calc(100vw - " ++ String.fromFloat (gridWidth - point.x) ++ "px)")
-        , Attr.style "top" ("calc(100vh - " ++ String.fromFloat (gridHeight - point.y) ++ "px)")
+        , Attr.style "left" (String.fromFloat (gridOffset + point.x - 8) ++ "px")
+        , Attr.style "top" (String.fromFloat (point.y - 8))
         , Attr.style "transform" ("scale(" ++ size ++ ")")
         , fill accent1
         ]
         [ polygon [ points "300,150 225,280 75,280 0,150 75,20 225,20" ] []
         ]
 
+-- this made my brain hurt a lot
+addNearbyPoint : Model -> List GridPoint
+addNearbyPoint model =
+    let
+        modelGrid =
+            model.grid
+
+        gridOffset =
+            model.window.width - model.grid.width
+
+        offsetMousePos =
+            ( Tuple.first model.mousePos - gridOffset, Tuple.second model.mousePos )
+
+        closestPoint =
+            getClosestPoint model.mousePos modelGrid.points model
+        
+        prevGridNode = 
+            Maybe.withDefault emptyGridpoint <| List.head modelGrid.drawing.activePath
+        
+        otherNodes =
+            Maybe.withDefault [] <| List.tail modelGrid.drawing.activePath
+        prevNode : GridPoint
+        prevNode =
+            Maybe.withDefault prevGridNode (List.head <| List.filter (\point -> ( point.x, point.y ) == ( prevGridNode.x, prevGridNode.y )) <| otherNodes)
+
+        prevPrevNode =
+             Maybe.withDefault emptyGridpoint <| List.head otherNodes
+
+        pointNotPrevPrevPoint = 
+           ( prevPrevNode.x, prevPrevNode.y ) /= ( closestPoint.x, closestPoint.y )
+
+        pointNotConnectedToPrevPoint =
+            --0 == Debug.log "h" (List.length <| List.filter (\point -> (point.x, point.y) == (closestPoint.x, closestPoint.y)) <| modelGrid.drawing.activePath)
+            not <| List.any (\x -> x == True) <| List.map (\pnt -> pnt == {x = closestPoint.x, y = closestPoint.y}) prevNode.connectedPoints
+
+        pointNotPrevPoint =
+            ( prevNode.x, prevNode.y ) /= ( closestPoint.x, closestPoint.y )
+
+        mouseDistanceCloseToPoint =
+            distanceBetweenCoordinates offsetMousePos ( closestPoint.x, closestPoint.y ) <= (spacing / 2)
+
+        pointCloseToPrevPoint =
+            distanceBetweenCoordinates ( prevNode.x, prevNode.y ) ( closestPoint.x, closestPoint.y ) <= (spacing * 1.5)
+    in
+    if mouseDistanceCloseToPoint && pointCloseToPrevPoint && pointNotPrevPoint && pointNotConnectedToPrevPoint && pointNotPrevPrevPoint then
+        [ {closestPoint | connectedPoints = [{ x = prevNode.x, y = prevNode.y }]}, { prevNode | connectedPoints = { x = closestPoint.x, y = closestPoint.y } :: prevNode.connectedPoints } ] ++ otherNodes
+
+    else
+        modelGrid.drawing.activePath
+
 
 
 -- helper functions
 
 
+getClosestPoint : ( Float, Float ) -> List (List GridPoint) -> Model -> GridPoint
+getClosestPoint coordinates points model =
+    let
+        gridOffset =
+            model.window.width - model.grid.width
+
+        offsetCoords =
+            ( Tuple.first coordinates - gridOffset, Tuple.second coordinates )
+
+        distanceComparison : GridPoint -> GridPoint -> Order
+        distanceComparison a b =
+            case compare (distanceBetweenCoordinates ( a.x, a.y ) offsetCoords) (distanceBetweenCoordinates ( b.x, b.y ) offsetCoords) of
+                LT ->
+                    LT
+
+                EQ ->
+                    EQ
+
+                GT ->
+                    GT
+    in
+    Maybe.withDefault emptyGridpoint (List.head (List.sortWith distanceComparison (List.concat points)))
+
+
+distanceBetweenCoordinates : ( Float, Float ) -> ( Float, Float ) -> Float
 distanceBetweenCoordinates a b =
     let
         x1 =
@@ -104,16 +269,16 @@ generateGrid gridWidth gridHeight =
         pointCount =
             floor (gridWidth / spacing)
     in
-    --Debug.log (Debug.toString (pointCount * spacing))
     List.indexedMap
         (\r x ->
             List.indexedMap
                 (\i y ->
                     { x = (spacing * toFloat i) + (gridWidth - toFloat pointCount * spacing) + (spacing / 2 * toFloat (modBy 2 r))
-                    , y = verticalSpacing * toFloat (r - 1) + ((gridHeight - (toFloat rowCount * verticalSpacing)) / 2)
+                    , y = verticalSpacing * toFloat r + (gridHeight - (toFloat rowCount * verticalSpacing)) --this might not be right idk
                     , radius = 8.0
                     , used = False
                     , color = "red"
+                    , connectedPoints = []
                     }
                 )
                 (List.repeat pointCount 0)

@@ -45,6 +45,10 @@ init =
             { height = 0
             , width = 0
             , points = []
+            , drawing =
+                { drawingMode = False
+                , activePath = []
+                }
             }
       , mousePos = ( 0.0, 0.0 )
       , window =
@@ -64,6 +68,9 @@ update msg model =
 
         grid =
             model.grid
+
+        drawing =
+            model.grid.drawing
     in
     case msg of
         ViewPanel panel keys ->
@@ -99,11 +106,29 @@ update msg model =
         GotContent (Err _) ->
             ( model, Cmd.none )
 
-        MouseMove data ->
-            ( { model | mousePos = ( toFloat data.pageX, toFloat data.pageY ) }, Cmd.none )
+        MouseMove ( x, y ) ->
+            if drawing.drawingMode == True then
+                
+                ( { model | mousePos = ( x, y ), grid = {grid | drawing = {drawing | activePath = (addNearbyPoint model)}} }, Cmd.none )
+
+            else
+                ( { model | mousePos = ( x, y ) }, Cmd.none )
+
+        GridDown ->
+            ( { model | grid = { grid | drawing = { drawing | drawingMode = True, activePath = Debug.log "Closest Point" [ getClosestPoint model.mousePos grid.points model ] } } }, Cmd.none )
+
+        MouseUp ->
+            if drawing.drawingMode == True then
+                ( { model | grid = { grid | drawing = { drawing | drawingMode = False } } }, Cmd.none )
+
+            else
+                ( model, Cmd.none )
 
 
 
+-- argg : List (List (GridPoint)) -> (Float, Float) -> List (List (GridPoint))
+-- argg points mousePos =
+--     List.map (\x -> (List.map (\y -> {y | connectedPoints = [{x = Tuple.first mousePos - 380.0, y = Tuple.second mousePos}]}) x)) points
 -- SUBSCRIPTIONS
 
 

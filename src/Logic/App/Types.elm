@@ -1,5 +1,7 @@
 module Logic.App.Types exposing (..)
+
 import Array exposing (Array)
+
 
 type Panel
     = StackPanel
@@ -26,5 +28,20 @@ type Iota
     | Null
     | Pattern PatternType
 
+
 type alias GridPoint =
-    { x : Float, y : Float, radius : Float, used : Bool, color : String }
+    { x : Float
+    , y : Float
+    , radius : Float
+    , used : Bool
+    , color : String
+    , connectedPoints : List { x : Float, y : Float }
+    }
+
+
+type alias CoordinatePair =
+        { x1 : Float
+        , y1 : Float
+        , x2 : Float
+        , y2 : Float
+        }
