@@ -15,7 +15,7 @@ type EntityType
 
 
 type alias PatternType =
-    {}
+    { signature : String, action : List (Iota) -> List (Iota), displayName : String, internalName : String }
 
 
 type Iota
@@ -40,8 +40,8 @@ type alias GridPoint =
 
 
 type alias CoordinatePair =
-        { x1 : Float
-        , y1 : Float
-        , x2 : Float
-        , y2 : Float
-        }
+    { x1 : Float
+    , y1 : Float
+    , x2 : Float
+    , y2 : Float
+    }

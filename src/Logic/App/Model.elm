@@ -6,7 +6,7 @@ import Logic.App.Types exposing (GridPoint, Panel, PatternType)
 
 type alias Model =
     { stack : Array Int
-    , patternList : Array PatternType
+    , patternList : Array { pattern : PatternType, drawing : List GridPoint }
     , ui :
         { openPanels : List Panel
         }

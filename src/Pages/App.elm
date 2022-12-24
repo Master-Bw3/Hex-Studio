@@ -10,6 +10,7 @@ import Html exposing (..)
 import Html.Attributes exposing (class, id)
 import Logic.App.Model as L exposing (Model)
 import Logic.App.Msg as L exposing (..)
+import Logic.App.PatternRegistry exposing (..)
 import Logic.App.Types exposing (..)
 import Page
 import Request
@@ -108,18 +109,35 @@ update msg model =
 
         MouseMove ( x, y ) ->
             if drawing.drawingMode == True then
-                
-                ( { model | mousePos = ( x, y ), grid = {grid | drawing = {drawing | activePath = (addNearbyPoint model)}} }, Cmd.none )
+                ( { model | mousePos = ( x, y ), grid = { grid | drawing = { drawing | activePath = addNearbyPoint model } } }, Cmd.none )
 
             else
                 ( { model | mousePos = ( x, y ) }, Cmd.none )
 
         GridDown ->
-            ( { model | grid = { grid | drawing = { drawing | drawingMode = True, activePath = Debug.log "Closest Point" [ getClosestPoint model.mousePos grid.points model ] } } }, Cmd.none )
+            ( { model | grid = { grid | drawing = { drawing | drawingMode = True, activePath = [ getClosestPoint model.mousePos grid.points model ] } } }, Cmd.none )
 
         MouseUp ->
             if drawing.drawingMode == True then
-                ( { model | grid = { grid | drawing = { drawing | drawingMode = False } } }, Cmd.none )
+                --TODO: make function that gets the pattern from the drawn string thing
+                ( { model
+                    | patternList =
+                        Array.append
+                            (Array.fromList
+                                [ { pattern = tempPattern
+                                  , drawing = drawing.activePath
+                                  }
+                                ]
+                            )
+                            model.patternList
+                    , grid =
+                        { grid
+                            | points = applyActivePathToGrid model
+                            , drawing = { drawing | drawingMode = False, activePath = [] }
+                        }
+                  }
+                , Cmd.none
+                )
 
             else
                 ( model, Cmd.none )

@@ -1,4 +1,4 @@
-module Components.App.Grid exposing (addNearbyPoint, distanceBetweenCoordinates, generateGrid, getClosestPoint, grid, scale, spacing)
+module Components.App.Grid exposing (addNearbyPoint, applyActivePathToGrid, distanceBetweenCoordinates, generateGrid, getClosestPoint, grid, scale, spacing)
 
 import FontAwesome.Solid exposing (mouse)
 import Html exposing (..)
@@ -128,26 +128,60 @@ renderPoints model =
         |> List.map (renderPoint mousePos gridOffset)
 
 
+applyActivePathToGrid : Model -> List (List GridPoint)
+applyActivePathToGrid model =
+    let
+        gridPoints =
+            model.grid.points
+
+        activePoints =
+            model.grid.drawing.activePath
+
+        replace : GridPoint -> GridPoint
+        replace pnt =
+            Maybe.withDefault pnt <| List.head <| List.filter (\activePnt -> ( activePnt.x, activePnt.y ) == ( pnt.x, pnt.y )) activePoints
+
+        makeUsed : GridPoint -> GridPoint
+        makeUsed pnt =
+            if List.length pnt.connectedPoints > 0 then
+                { pnt | used = True, color = accent2 }
+
+            else
+                pnt
+
+        --find matching points
+        --replace grid points with matching active points
+    in
+    List.map (\row -> List.map (makeUsed << replace) row) gridPoints
+
+
 renderPoint : ( Float, Float ) -> Float -> GridPoint -> Html msg
 renderPoint mousePos gridOffset point =
     let
-        size =
-            String.fromFloat (Basics.min 1 (1 / (distanceBetweenCoordinates mousePos ( point.x + gridOffset, point.y ) / 30)))
+        pointScale =
+            if point.used == False then
+                String.fromFloat (Basics.min 1 (1 / (distanceBetweenCoordinates mousePos ( point.x + gridOffset, point.y ) / 30)))
+            else
+                String.fromFloat <| 3.2 / point.radius
     in
     svg
-        [ width "16"
-        , height "16"
+        [ width <| String.fromFloat <| point.radius * 2
+        , height <| String.fromFloat <| point.radius * 2
         , viewBox "0 0 300 280"
         , Attr.style "position" "absolute"
         , Attr.style "left" (String.fromFloat (gridOffset + point.x - 8) ++ "px")
         , Attr.style "top" (String.fromFloat (point.y - 8))
-        , Attr.style "transform" ("scale(" ++ size ++ ")")
-        , fill accent1
+        , Attr.style "transform" ("scale(" ++ pointScale ++ ")")
+        , fill point.color
         ]
         [ polygon [ points "300,150 225,280 75,280 0,150 75,20 225,20" ] []
         ]
 
+
+
 -- this made my brain hurt a lot
+
+
 addNearbyPoint : Model -> List GridPoint
 addNearbyPoint model =
     let
@@ -162,25 +196,26 @@ addNearbyPoint model =
 
         closestPoint =
             getClosestPoint model.mousePos modelGrid.points model
-        
-        prevGridNode = 
+
+        prevGridNode =
             Maybe.withDefault emptyGridpoint <| List.head modelGrid.drawing.activePath
-        
+
         otherNodes =
             Maybe.withDefault [] <| List.tail modelGrid.drawing.activePath
+
         prevNode : GridPoint
         prevNode =
             Maybe.withDefault prevGridNode (List.head <| List.filter (\point -> ( point.x, point.y ) == ( prevGridNode.x, prevGridNode.y )) <| otherNodes)
 
         prevPrevNode =
-             Maybe.withDefault emptyGridpoint <| List.head otherNodes
+            Maybe.withDefault emptyGridpoint <| List.head otherNodes
 
-        pointNotPrevPrevPoint = 
-           ( prevPrevNode.x, prevPrevNode.y ) /= ( closestPoint.x, closestPoint.y )
+        pointNotPrevPrevPoint =
+            ( prevPrevNode.x, prevPrevNode.y ) /= ( closestPoint.x, closestPoint.y )
 
         pointNotConnectedToPrevPoint =
             --0 == Debug.log "h" (List.length <| List.filter (\point -> (point.x, point.y) == (closestPoint.x, closestPoint.y)) <| modelGrid.drawing.activePath)
-            not <| List.any (\x -> x == True) <| List.map (\pnt -> pnt == {x = closestPoint.x, y = closestPoint.y}) prevNode.connectedPoints
+            not <| List.any (\x -> x == True) <| List.map (\pnt -> pnt == { x = closestPoint.x, y = closestPoint.y }) prevNode.connectedPoints
 
         pointNotPrevPoint =
             ( prevNode.x, prevNode.y ) /= ( closestPoint.x, closestPoint.y )
@@ -190,9 +225,18 @@ addNearbyPoint model =
 
         pointCloseToPrevPoint =
             distanceBetweenCoordinates ( prevNode.x, prevNode.y ) ( closestPoint.x, closestPoint.y ) <= (spacing * 1.5)
+
+        --closestPoint.used == False
     in
-    if mouseDistanceCloseToPoint && pointCloseToPrevPoint && pointNotPrevPoint && pointNotConnectedToPrevPoint && pointNotPrevPrevPoint then
-        [ {closestPoint | connectedPoints = [{ x = prevNode.x, y = prevNode.y }]}, { prevNode | connectedPoints = { x = closestPoint.x, y = closestPoint.y } :: prevNode.connectedPoints } ] ++ otherNodes
+    if
+        mouseDistanceCloseToPoint
+            && pointCloseToPrevPoint
+            && pointNotPrevPoint
+            && pointNotConnectedToPrevPoint
+            && pointNotPrevPrevPoint
+            && not closestPoint.used
+    then
+        [ { closestPoint | connectedPoints = [ { x = prevNode.x, y = prevNode.y } ] }, { prevNode | connectedPoints = { x = closestPoint.x, y = closestPoint.y } :: prevNode.connectedPoints } ] ++ otherNodes
 
     else
         modelGrid.drawing.activePath
@@ -277,7 +321,7 @@ generateGrid gridWidth gridHeight =
                     , y = verticalSpacing * toFloat r + (gridHeight - (toFloat rowCount * verticalSpacing)) --this might not be right idk
                     , radius = 8.0
                     , used = False
-                    , color = "red"
+                    , color = accent1
                     , connectedPoints = []
                     }
                 )
