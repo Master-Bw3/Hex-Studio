@@ -115,29 +115,45 @@ update msg model =
                 ( { model | mousePos = ( x, y ) }, Cmd.none )
 
         GridDown ->
-            ( { model | grid = { grid | drawing = { drawing | drawingMode = True, activePath = [ getClosestPoint model.mousePos grid.points model ] } } }, Cmd.none )
+            let
+                closestPoint =
+                    getClosestPoint model.mousePos grid.points model
+            in
+            if closestPoint.used == False then
+                ( { model | grid = { grid | drawing = { drawing | drawingMode = True, activePath = [ closestPoint ] } } }, Cmd.none )
+
+            else
+                ( model, Cmd.none )
 
         MouseUp ->
             if drawing.drawingMode == True then
-                --TODO: make function that gets the pattern from the drawn string thing
-                ( { model
-                    | patternList =
-                        Array.append
-                            (Array.fromList
-                                [ { pattern = tempPattern
-                                  , drawing = drawing.activePath
-                                  }
-                                ]
-                            )
-                            model.patternList
-                    , grid =
-                        { grid
-                            | points = applyActivePathToGrid model
-                            , drawing = { drawing | drawingMode = False, activePath = [] }
-                        }
-                  }
-                , Cmd.none
-                )
+                if List.length drawing.activePath > 1 then
+                    --TODO: make function that gets the pattern from the drawn string thing
+                    ( { model
+                        | patternList =
+                            Array.append
+                                (Array.fromList
+                                    [ { pattern = tempPattern
+                                      , drawing = drawing.activePath
+                                      }
+                                    ]
+                                )
+                                model.patternList
+                        , grid =
+                            { grid
+                                | points = applyActivePathToGrid model
+                                , drawing =
+                                    { drawing
+                                        | drawingMode = False
+                                        , activePath = []
+                                    }
+                            }
+                      }
+                    , Cmd.none
+                    )
+
+                else
+                    ( {model | grid = {grid | drawing = {drawing | drawingMode = False, activePath = []}}}, Cmd.none )
 
             else
                 ( model, Cmd.none )

@@ -123,7 +123,6 @@ renderPoints model =
         gridOffset =
             model.window.width - gridWidth
     in
-    --List.map (renderPoint gridWidth gridHeight mousePos gridOffset) (List.concat points)
     List.concat points
         |> List.map (renderPoint mousePos gridOffset)
 
@@ -131,6 +130,8 @@ renderPoints model =
 applyActivePathToGrid : Model -> List (List GridPoint)
 applyActivePathToGrid model =
     let
+        -- debug =
+        --     Debug.log "paths" <| List.map (\x -> { x = x.x, y = x.y }) model.grid.drawing.activePath
         gridPoints =
             model.grid.points
 
@@ -139,20 +140,19 @@ applyActivePathToGrid model =
 
         replace : GridPoint -> GridPoint
         replace pnt =
-            Maybe.withDefault pnt <| List.head <| List.filter (\activePnt -> ( activePnt.x, activePnt.y ) == ( pnt.x, pnt.y )) activePoints
-
-        makeUsed : GridPoint -> GridPoint
-        makeUsed pnt =
-            if List.length pnt.connectedPoints > 0 then
-                { pnt | used = True, color = accent2 }
-
-            else
-                pnt
+            let
+                replacedPnt = List.head <| List.filter (\activePnt -> ( activePnt.x, activePnt.y ) == ( pnt.x, pnt.y )) activePoints
+            in
+                case replacedPnt of
+                    Just point ->
+                        {point | used = True}
+                    Nothing ->
+                        pnt
 
         --find matching points
         --replace grid points with matching active points
     in
-    List.map (\row -> List.map (makeUsed << replace) row) gridPoints
+    List.map (\row -> List.map (replace) row) gridPoints
 
 
 renderPoint : ( Float, Float ) -> Float -> GridPoint -> Html msg
@@ -161,8 +161,9 @@ renderPoint mousePos gridOffset point =
         pointScale =
             if point.used == False then
                 String.fromFloat (Basics.min 1 (1 / (distanceBetweenCoordinates mousePos ( point.x + gridOffset, point.y ) / 30)))
+
             else
-                String.fromFloat <| 3.2 / point.radius
+                String.fromFloat <| 2 / point.radius
     in
     svg
         [ width <| String.fromFloat <| point.radius * 2
@@ -194,8 +195,11 @@ addNearbyPoint model =
         offsetMousePos =
             ( Tuple.first model.mousePos - gridOffset, Tuple.second model.mousePos )
 
-        closestPoint =
+        closestGridNode =
             getClosestPoint model.mousePos modelGrid.points model
+
+        closestPoint =
+            Maybe.withDefault closestGridNode (List.head <| List.filter (\point -> ( point.x, point.y ) == ( closestGridNode.x, closestGridNode.y )) <| modelGrid.drawing.activePath)
 
         prevGridNode =
             Maybe.withDefault emptyGridpoint <| List.head modelGrid.drawing.activePath
@@ -215,7 +219,10 @@ addNearbyPoint model =
 
         pointNotConnectedToPrevPoint =
             --0 == Debug.log "h" (List.length <| List.filter (\point -> (point.x, point.y) == (closestPoint.x, closestPoint.y)) <| modelGrid.drawing.activePath)
-            not <| List.any (\x -> x == True) <| List.map (\pnt -> pnt == { x = closestPoint.x, y = closestPoint.y }) prevNode.connectedPoints
+            not
+                ((List.any (\x -> x == True) <| List.map (\pnt -> pnt == { x = closestPoint.x, y = closestPoint.y }) prevNode.connectedPoints)
+                    || (List.any (\x -> x == True) <| List.map (\pnt -> pnt == { x = prevNode.x, y = prevNode.y }) closestPoint.connectedPoints)
+                )
 
         pointNotPrevPoint =
             ( prevNode.x, prevNode.y ) /= ( closestPoint.x, closestPoint.y )
@@ -225,6 +232,9 @@ addNearbyPoint model =
 
         pointCloseToPrevPoint =
             distanceBetweenCoordinates ( prevNode.x, prevNode.y ) ( closestPoint.x, closestPoint.y ) <= (spacing * 1.5)
+
+        filterDuplicates point point2 =
+            not <| ( point.x, point.y ) == ( point2.x, point2.y )
 
         --closestPoint.used == False
     in
@@ -236,7 +246,11 @@ addNearbyPoint model =
             && pointNotPrevPrevPoint
             && not closestPoint.used
     then
-        [ { closestPoint | connectedPoints = [ { x = prevNode.x, y = prevNode.y } ] }, { prevNode | connectedPoints = { x = closestPoint.x, y = closestPoint.y } :: prevNode.connectedPoints } ] ++ otherNodes
+        [ closestPoint --{ closestPoint | connectedPoints = [ { x = prevNode.x, y = prevNode.y } ] }
+        , { prevNode | connectedPoints = { x = closestPoint.x, y = closestPoint.y } :: prevNode.connectedPoints }
+        ]
+            -- Todo: try merging instead of filtering
+            ++ List.filter (filterDuplicates prevGridNode) otherNodes
 
     else
         modelGrid.drawing.activePath
