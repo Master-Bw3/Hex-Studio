@@ -32,6 +32,8 @@ type Iota
 type alias GridPoint =
     { x : Float
     , y : Float
+    , offsetX : Int -- doubled coordinates (https://www.redblobgames.com/grids/hexagons/#coordinates)
+    , offsetY : Int
     , radius : Float
     , used : Bool
     , color : String
@@ -44,4 +46,11 @@ type alias CoordinatePair =
     , y1 : Float
     , x2 : Float
     , y2 : Float
+    }
+
+type alias IntCoordinatePair =
+    { x1 : Int
+    , y1 : Int
+    , x2 : Int
+    , y2 : Int
     }

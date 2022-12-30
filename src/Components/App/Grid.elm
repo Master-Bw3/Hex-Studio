@@ -15,6 +15,8 @@ import Svg.Attributes exposing (..)
 emptyGridpoint =
     { x = 0
     , y = 0
+    , offsetX = 0
+    , offsetY = 0
     , radius = 0
     , used = False
     , color = ""
@@ -249,8 +251,7 @@ addNearbyPoint model =
         [ closestPoint --{ closestPoint | connectedPoints = [ { x = prevNode.x, y = prevNode.y } ] }
         , { prevNode | connectedPoints = { x = closestPoint.x, y = closestPoint.y } :: prevNode.connectedPoints }
         ]
-            -- Todo: try merging instead of filtering
-            ++ List.filter (filterDuplicates prevGridNode) otherNodes
+            ++ otherNodes
 
     else
         modelGrid.drawing.activePath
@@ -328,11 +329,13 @@ generateGrid gridWidth gridHeight =
             floor (gridWidth / spacing)
     in
     List.indexedMap
-        (\r x ->
+        (\r _ ->
             List.indexedMap
-                (\i y ->
+                (\i _ ->
                     { x = (spacing * toFloat i) + (gridWidth - toFloat pointCount * spacing) + (spacing / 2 * toFloat (modBy 2 r))
                     , y = verticalSpacing * toFloat r + (gridHeight - (toFloat rowCount * verticalSpacing)) --this might not be right idk
+                    , offsetX = i * 2 + (modBy 2 r)
+                    , offsetY = r
                     , radius = 8.0
                     , used = False
                     , color = accent1
@@ -342,3 +345,4 @@ generateGrid gridWidth gridHeight =
                 (List.repeat pointCount 0)
         )
         (List.repeat rowCount 0)
+

@@ -1,13 +1,10 @@
 module Pages.App exposing (Model, Msg, page)
 
-import Array exposing (Array)
 import Browser.Dom exposing (getElement)
-import Browser.Events exposing (onKeyPress, onMouseMove)
 import Components.App.Content exposing (content)
 import Components.App.Grid exposing (..)
 import Gen.Params.App exposing (Params)
 import Html exposing (..)
-import Html.Attributes exposing (class, id)
 import Logic.App.Model as L exposing (Model)
 import Logic.App.Msg as L exposing (..)
 import Logic.App.PatternRegistry exposing (..)
@@ -17,7 +14,8 @@ import Request
 import Shared
 import Task
 import View exposing (View)
-
+import Logic.App.PatternList exposing (updatePatternList)
+import Array
 
 type alias Model =
     L.Model
@@ -128,32 +126,20 @@ update msg model =
         MouseUp ->
             if drawing.drawingMode == True then
                 if List.length drawing.activePath > 1 then
-                    --TODO: make function that gets the pattern from the drawn string thing
+                    let
+                        newGrid =
+                            { grid | points = applyActivePathToGrid model, drawing = { drawing | drawingMode = False, activePath = [] } }
+                    in
                     ( { model
                         | patternList =
-                            Array.append
-                                (Array.fromList
-                                    [ { pattern = tempPattern
-                                      , drawing = drawing.activePath
-                                      }
-                                    ]
-                                )
-                                model.patternList
-                        , grid =
-                            { grid
-                                | points = applyActivePathToGrid model
-                                , drawing =
-                                    { drawing
-                                        | drawingMode = False
-                                        , activePath = []
-                                    }
-                            }
+                            updatePatternList model
+                        , grid = newGrid
                       }
                     , Cmd.none
                     )
 
                 else
-                    ( {model | grid = {grid | drawing = {drawing | drawingMode = False, activePath = []}}}, Cmd.none )
+                    ( { model | grid = { grid | drawing = { drawing | drawingMode = False, activePath = [] } } }, Cmd.none )
 
             else
                 ( model, Cmd.none )
@@ -173,6 +159,10 @@ subscriptions model =
 
 view : Model -> View Msg
 view model =
+    let
+        debug =
+            Debug.log "DEBUG" <| Array.toList model.patternList
+    in
     { title = "Hex Studio"
     , body = [ content model ]
     }

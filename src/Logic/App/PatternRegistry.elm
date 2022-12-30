@@ -7,6 +7,7 @@ test : List Iota -> List Iota
 test stack =
     stack
 
+tempPattern : PatternType
 tempPattern = { signature = "wawawddew", action = test, displayName = "", internalName = "interop/gravity/get" }
 
 patternRegistry : List PatternType
