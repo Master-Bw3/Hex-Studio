@@ -2,10 +2,11 @@ module Logic.App.Model exposing (..)
 
 import Array exposing (Array)
 import Logic.App.Types exposing (GridPoint, Panel, PatternType)
+import Logic.App.Types exposing (Iota)
 
 
 type alias Model =
-    { stack : Array Int
+    { stack : Array Iota
     , patternList : Array { pattern : PatternType, drawing : List GridPoint }
     , ui :
         { openPanels : List Panel

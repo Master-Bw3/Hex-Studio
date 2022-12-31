@@ -9,13 +9,15 @@ type Panel
 
 
 type EntityType
-    = Player
+    = Unset
+    | Player
     | Chicken
     | Minecart
 
 
+
 type alias PatternType =
-    { signature : String, action : List (Iota) -> List (Iota), displayName : String, internalName : String }
+    { signature : String, action : Array (Iota) -> Array (Iota), displayName : String, internalName : String }
 
 
 type Iota

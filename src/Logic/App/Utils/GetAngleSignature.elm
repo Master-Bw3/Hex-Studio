@@ -47,7 +47,6 @@ getAngleSignature unflippedPath =
                 |> Tuple.first
 
         directionList =
-            Debug.log "gfewgs" <|
                 List.map2
                     (\pnt1 pnt2 -> directionBetweenPoints ( pnt1.offsetX, pnt1.offsetY ) ( pnt2.offsetX, pnt2.offsetY ))
                     path
@@ -61,7 +60,7 @@ getAngleSignature unflippedPath =
                 --Todo: make this ^ less jank
                 |> Tuple.first
     in
-    Debug.log "owo" <| String.concat <|
+    String.concat <|
         List.map2
             (\dir1 dir2 -> getAngleLetter dir1 dir2)
             directionList

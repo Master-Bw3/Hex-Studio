@@ -7,15 +7,18 @@ import Gen.Params.App exposing (Params)
 import Html exposing (..)
 import Logic.App.Model as L exposing (Model)
 import Logic.App.Msg as L exposing (..)
-import Logic.App.PatternRegistry exposing (..)
+import Logic.App.Patterns.PatternRegistry exposing (..)
 import Logic.App.Types exposing (..)
 import Page
 import Request
 import Shared
 import Task
 import View exposing (View)
-import Logic.App.PatternList exposing (updatePatternList)
+import Logic.App.PatternList.PatternList exposing (addToPatternList, getPatternFromSignature)
 import Array
+import Logic.App.Stack.Stack exposing (applyPatternToStack)
+import Logic.App.Utils.GetAngleSignature exposing (getAngleSignature)
+
 
 type alias Model =
     L.Model
@@ -129,11 +132,13 @@ update msg model =
                     let
                         newGrid =
                             { grid | points = applyActivePathToGrid model, drawing = { drawing | drawingMode = False, activePath = [] } }
+                        newPattern = getPatternFromSignature <| getAngleSignature drawing.activePath
+
                     in
                     ( { model
-                        | patternList =
-                            updatePatternList model
+                        | patternList = addToPatternList model newPattern
                         , grid = newGrid
+                        , stack = applyPatternToStack model.stack newPattern
                       }
                     , Cmd.none
                     )
@@ -161,7 +166,8 @@ view : Model -> View Msg
 view model =
     let
         debug =
-            Debug.log "DEBUG" <| Array.toList model.patternList
+            --Debug.log "DEBUG" <| List.map (\x -> x.pattern.internalName) <| Array.toList model.patternList
+            Debug.log "stack" <| Array.toList model.stack
     in
     { title = "Hex Studio"
     , body = [ content model ]

@@ -132,8 +132,6 @@ renderPoints model =
 applyActivePathToGrid : Model -> List (List GridPoint)
 applyActivePathToGrid model =
     let
-        -- debug =
-        --     Debug.log "paths" <| List.map (\x -> { x = x.x, y = x.y }) model.grid.drawing.activePath
         gridPoints =
             model.grid.points
 
