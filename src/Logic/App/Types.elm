@@ -15,20 +15,20 @@ type EntityType
     | Minecart
 
 
-
 type alias PatternType =
-    { signature : String, action : Array (Iota) -> Array (Iota), displayName : String, internalName : String }
+    { signature : String, action : Array Iota -> Array Iota, displayName : String, internalName : String }
 
 
 type Iota
     = Number Float
-    | Vector Float
+    | Vector ( Float, Float, Float )
     | Boolean Bool
     | Entity EntityType
     | PatternList (Array PatternType)
     | IotaList (Array Iota)
-    | Null
     | Pattern PatternType
+    | Null
+    | Garbage
 
 
 type alias GridPoint =
@@ -49,6 +49,7 @@ type alias CoordinatePair =
     , x2 : Float
     , y2 : Float
     }
+
 
 type alias IntCoordinatePair =
     { x1 : Int

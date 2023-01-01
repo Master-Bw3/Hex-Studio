@@ -1,7 +1,7 @@
 module Logic.App.Stack.Stack exposing (..)
 
 import Array exposing (Array)
-import Logic.App.Types exposing (Iota, PatternType)
+import Logic.App.Types exposing (Iota(..), PatternType)
 
 
 -- untested; might not work properly

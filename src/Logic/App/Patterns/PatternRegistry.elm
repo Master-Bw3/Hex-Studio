@@ -3,6 +3,8 @@ module Logic.App.Patterns.PatternRegistry exposing (patternRegistry, unkownPatte
 import Logic.App.Types exposing (Iota, PatternType)
 import Logic.App.Patterns.Selectors exposing (getCaster)
 import Array exposing (Array)
+import Logic.App.Patterns.Misc exposing (entityPos)
+import Logic.App.Patterns.Misc exposing (raycast)
 
 
 test : Array Iota -> Array Iota
@@ -22,12 +24,12 @@ patternRegistry =
     , { signature = "aawawwawwa", internalName = "interop/pehkui/get", action = test, displayName = "" }
     , { signature = "ddwdwwdwwd", internalName = "interop/pehkui/set", action = test, displayName = "" }
     , { signature = "qaq", internalName = "get_caster", action = getCaster, displayName = "Mind's Reflection" }
-    , { signature = "aa", internalName = "entity_pos/eye", action = test, displayName = "Compass' Purification" }
-    , { signature = "dd", internalName = "entity_pos/foot", action = test, displayName = "Compass' Purification II" }
+    , { signature = "aa", internalName = "entity_pos/eye", action = entityPos, displayName = "Compass' Purification" }
+    , { signature = "dd", internalName = "entity_pos/foot", action = entityPos, displayName = "Compass' Purification II" }
     , { signature = "wa", internalName = "get_entity_look", action = test, displayName = "" }
     , { signature = "awq", internalName = "get_entity_height", action = test, displayName = "" }
     , { signature = "wq", internalName = "get_entity_velocity", action = test, displayName = "" }
-    , { signature = "wqaawdd", internalName = "raycast", action = test, displayName = "" }
+    , { signature = "wqaawdd", internalName = "raycast", action = raycast, displayName = "" }
     , { signature = "weddwaa", internalName = "raycast/axis", action = test, displayName = "" }
     , { signature = "weaqa", internalName = "raycast/entity", action = test, displayName = "" }
     , { signature = "eaqwqae", internalName = "circle/impetus_pos", action = test, displayName = "" }
