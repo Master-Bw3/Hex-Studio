@@ -375,6 +375,11 @@ body {
     margin-left: 0.3em;
 }
 
+#pattern_draggable_container {
+    display: flex;
+    flex-direction: column-reverse
+}
+
 .add_button {
     margin-top: 0.3em;
     color: rgba(255, 255, 255, 0.7);

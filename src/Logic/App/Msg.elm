@@ -10,6 +10,7 @@ type Msg
     | MouseMove (Float, Float)
     | GridDown
     | MouseUp
+    | RemoveFromPatternArray Int Int
 
 type alias MouseMoveData =
     { pageX : Int

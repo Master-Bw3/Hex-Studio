@@ -1,5 +1,6 @@
 module Pages.App exposing (Model, Msg, page)
 
+import Array
 import Browser.Dom exposing (getElement)
 import Components.App.Content exposing (content)
 import Components.App.Grid exposing (..)
@@ -7,17 +8,17 @@ import Gen.Params.App exposing (Params)
 import Html exposing (..)
 import Logic.App.Model as L exposing (Model)
 import Logic.App.Msg as L exposing (..)
+import Logic.App.PatternList.PatternArray exposing (addToPatternArray, getPatternFromSignature)
 import Logic.App.Patterns.PatternRegistry exposing (..)
+import Logic.App.Stack.Stack exposing (applyPatternToStack)
 import Logic.App.Types exposing (..)
+import Logic.App.Utils.GetAngleSignature exposing (getAngleSignature)
+import Logic.App.Utils.Utils exposing (removeFromArray)
 import Page
 import Request
 import Shared
 import Task
 import View exposing (View)
-import Logic.App.PatternList.PatternList exposing (addToPatternList, getPatternFromSignature)
-import Array
-import Logic.App.Stack.Stack exposing (applyPatternToStack)
-import Logic.App.Utils.GetAngleSignature exposing (getAngleSignature)
 
 
 type alias Model =
@@ -41,7 +42,7 @@ page shared req =
 init : ( Model, Cmd Msg )
 init =
     ( { stack = Array.empty
-      , patternList = Array.empty
+      , patternArray = Array.empty
       , ui = { openPanels = [ PatternPanel ] }
       , grid =
             { height = 0
@@ -132,11 +133,12 @@ update msg model =
                     let
                         newGrid =
                             { grid | points = applyActivePathToGrid model, drawing = { drawing | drawingMode = False, activePath = [] } }
-                        newPattern = getPatternFromSignature <| getAngleSignature drawing.activePath
 
+                        newPattern =
+                            getPatternFromSignature <| getAngleSignature drawing.activePath
                     in
                     ( { model
-                        | patternList = addToPatternList model newPattern
+                        | patternArray = addToPatternArray model newPattern
                         , grid = newGrid
                         , stack = applyPatternToStack model.stack newPattern
                       }
@@ -148,6 +150,14 @@ update msg model =
 
             else
                 ( model, Cmd.none )
+
+        RemoveFromPatternArray startIndex endIndex ->
+            ( { model
+                | patternArray = removeFromArray startIndex endIndex model.patternArray
+                , grid = { grid | points = updateGridPoints model}
+              }
+            , Cmd.none
+            )
 
 
 

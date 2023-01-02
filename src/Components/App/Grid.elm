@@ -1,4 +1,14 @@
-module Components.App.Grid exposing (addNearbyPoint, applyActivePathToGrid, distanceBetweenCoordinates, generateGrid, getClosestPoint, grid, scale, spacing)
+module Components.App.Grid exposing
+    ( addNearbyPoint
+    , applyActivePathToGrid
+    , distanceBetweenCoordinates
+    , generateGrid
+    , getClosestPoint
+    , grid
+    , scale
+    , spacing
+    , updateGridPoints
+    )
 
 import FontAwesome.Solid exposing (mouse)
 import Html exposing (..)
@@ -137,22 +147,29 @@ applyActivePathToGrid model =
 
         activePoints =
             model.grid.drawing.activePath
+    in
+    applyPathToGrid gridPoints activePoints
 
+
+applyPathToGrid gridPoints pointsToAdd =
+    let
         replace : GridPoint -> GridPoint
         replace pnt =
             let
-                replacedPnt = List.head <| List.filter (\activePnt -> ( activePnt.x, activePnt.y ) == ( pnt.x, pnt.y )) activePoints
+                replacedPnt =
+                    List.head <| List.filter (\activePnt -> ( activePnt.x, activePnt.y ) == ( pnt.x, pnt.y )) pointsToAdd
             in
-                case replacedPnt of
-                    Just point ->
-                        {point | used = True}
-                    Nothing ->
-                        pnt
+            case replacedPnt of
+                Just point ->
+                    { point | used = True }
+
+                Nothing ->
+                    pnt
 
         --find matching points
         --replace grid points with matching active points
     in
-    List.map (\row -> List.map (replace) row) gridPoints
+    List.map (\row -> List.map replace row) gridPoints
 
 
 renderPoint : ( Float, Float ) -> Float -> GridPoint -> Html msg
@@ -332,7 +349,7 @@ generateGrid gridWidth gridHeight =
                 (\i _ ->
                     { x = (spacing * toFloat i) + (gridWidth - toFloat pointCount * spacing) + (spacing / 2 * toFloat (modBy 2 r))
                     , y = verticalSpacing * toFloat r + (gridHeight - (toFloat rowCount * verticalSpacing)) --this might not be right idk
-                    , offsetX = i * 2 + (modBy 2 r)
+                    , offsetX = i * 2 + modBy 2 r
                     , offsetY = r
                     , radius = 8.0
                     , used = False
@@ -344,3 +361,11 @@ generateGrid gridWidth gridHeight =
         )
         (List.repeat rowCount 0)
 
+
+-- TODO: Finish this
+updateGridPoints model =
+    let
+        newGrid =
+            generateGrid model.grid.width model.grid.height
+    in
+        applyPathToGrid

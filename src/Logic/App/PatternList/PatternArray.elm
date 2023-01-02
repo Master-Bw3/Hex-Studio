@@ -1,4 +1,4 @@
-module Logic.App.PatternList.PatternList exposing (addToPatternList, getPatternFromSignature)
+module Logic.App.PatternList.PatternArray exposing (addToPatternArray, getPatternFromSignature)
 
 import Array exposing (Array)
 import Logic.App.Model exposing (Model)
@@ -12,11 +12,11 @@ getPatternFromSignature signature =
     Maybe.withDefault {unkownPattern | signature = signature} <| List.head <| List.filter (\regPattern -> regPattern.signature == signature) patternRegistry
 
 
-addToPatternList : Model -> PatternType -> Array (PatternType, List GridPoint)
-addToPatternList model pattern =
+addToPatternArray : Model -> PatternType -> Array (PatternType, List GridPoint)
+addToPatternArray model pattern =
     let
         patternList =
-            model.patternList
+            model.patternArray
 
         drawing =
             model.grid.drawing

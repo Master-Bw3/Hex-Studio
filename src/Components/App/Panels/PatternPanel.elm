@@ -15,9 +15,11 @@ import Logic.App.Model exposing (Model)
 import Logic.App.Types exposing (GridPoint, Panel(..), PatternType)
 import Components.Icon.XButton exposing (xButton)
 import Components.Icon.MoveButton exposing (moveButton)
+import Html.Events exposing (onClick)
+import Logic.App.Msg exposing (Msg(..))
 
 
-patternPanel : Model -> Html msg
+patternPanel : Model -> Html Msg
 patternPanel model =
     let
         visibility =
@@ -31,7 +33,7 @@ patternPanel model =
         , div
             [ id "pattern_draggable_container"
             ]
-            (renderPatternList model.patternList)
+            (renderPatternList model.patternArray)
         , div
             [ id "add_pattern"
             , class "outer_box"
@@ -58,21 +60,21 @@ patternPanel model =
         ]
 
 
-renderPatternList : Array ( PatternType, List GridPoint ) -> List (Html msg)
+renderPatternList : Array ( PatternType, List GridPoint ) -> List (Html Msg)
 renderPatternList patternList =
     let
         patterns : List PatternType
         patterns =
             Tuple.first <| List.unzip <| Array.toList patternList
 
-        renderPattern : PatternType -> Html msg
-        renderPattern pattern =
-            div [ class "outer_box" ]
+        renderPattern : Int -> PatternType -> Html Msg
+        renderPattern index pattern =
+            div [ class "outer_box"]
                 [ div [ class "inner_box" ]
-                    [ div [ class "x_button" ] [xButton]
+                    [ div [ class "x_button", onClick (RemoveFromPatternArray index (index + 1)) ] [xButton]
                     , div [ class "text" ] [ text pattern.internalName ]
                     , div [ class "move_button" ] [moveButton]
                     ]
                 ]
     in
-    List.map renderPattern patterns
+    List.indexedMap renderPattern patterns
