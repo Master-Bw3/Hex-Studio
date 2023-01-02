@@ -12,7 +12,7 @@ getPatternFromSignature signature =
     Maybe.withDefault {unkownPattern | signature = signature} <| List.head <| List.filter (\regPattern -> regPattern.signature == signature) patternRegistry
 
 
-addToPatternList : Model -> PatternType -> Array { pattern : PatternType, drawing : List GridPoint }
+addToPatternList : Model -> PatternType -> Array (PatternType, List GridPoint)
 addToPatternList model pattern =
     let
         patternList =
@@ -22,6 +22,7 @@ addToPatternList model pattern =
             model.grid.drawing
 
         patternDrawingPair =
-            { pattern = pattern, drawing = drawing.activePath }
+            (pattern, drawing.activePath)
     in
     Array.append (Array.fromList [ patternDrawingPair ]) patternList
+

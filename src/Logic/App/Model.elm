@@ -7,7 +7,7 @@ import Logic.App.Types exposing (Iota)
 
 type alias Model =
     { stack : Array Iota
-    , patternList : Array { pattern : PatternType, drawing : List GridPoint }
+    , patternList : Array (PatternType, List GridPoint)
     , ui :
         { openPanels : List Panel
         }

@@ -24,12 +24,10 @@ type Iota
     | Vector ( Float, Float, Float )
     | Boolean Bool
     | Entity EntityType
-    | PatternList (Array PatternType)
-    | IotaList (Array Iota)
+    | List (Array Iota)
     | Pattern PatternType
     | Null
     | Garbage
-
 
 type alias GridPoint =
     { x : Float

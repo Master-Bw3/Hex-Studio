@@ -29,7 +29,7 @@ patternRegistry =
     , { signature = "wa", internalName = "get_entity_look", action = test, displayName = "" }
     , { signature = "awq", internalName = "get_entity_height", action = test, displayName = "" }
     , { signature = "wq", internalName = "get_entity_velocity", action = test, displayName = "" }
-    , { signature = "wqaawdd", internalName = "raycast", action = raycast, displayName = "" }
+    , { signature = "wqaawdd", internalName = "raycast", action = raycast, displayName = "Archer's Distillation" }
     , { signature = "weddwaa", internalName = "raycast/axis", action = test, displayName = "" }
     , { signature = "weaqa", internalName = "raycast/entity", action = test, displayName = "" }
     , { signature = "eaqwqae", internalName = "circle/impetus_pos", action = test, displayName = "" }
