@@ -1,6 +1,7 @@
 module Logic.App.Utils.Utils exposing (..)
 
 import Array exposing (Array)
+import Html.Events.Extra.Touch as Touch
 
 
 
@@ -25,3 +26,10 @@ removeFromArray start end array =
             not <| List.member (Tuple.first item) rangeToRemove
     in
     Array.fromList <| Tuple.second <| List.unzip <| List.filter removeRange <| Array.toIndexedList array
+
+
+touchCoordinates : Touch.Event -> ( Float, Float )
+touchCoordinates touchEvent =
+    List.head touchEvent.changedTouches
+        |> Maybe.map .clientPos
+        |> Maybe.withDefault ( 0, 0 )

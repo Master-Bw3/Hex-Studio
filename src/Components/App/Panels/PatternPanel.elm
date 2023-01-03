@@ -71,7 +71,7 @@ renderPatternList patternList =
         renderPattern index pattern =
             div [ class "outer_box"]
                 [ div [ class "inner_box" ]
-                    [ div [ class "x_button", onClick (RemoveFromPatternArray index (index + 1)) ] [xButton]
+                    [ button [ class "x_button", onClick (RemoveFromPatternArray index (index + 1)) ] [xButton]
                     , div [ class "text" ] [ text pattern.internalName ]
                     , div [ class "move_button" ] [moveButton]
                     ]

@@ -117,13 +117,14 @@ update msg model =
             else
                 ( { model | mousePos = ( x, y ) }, Cmd.none )
 
-        GridDown ->
+        GridDown (x, y) ->
             let
+                mousePos = ( x, y )
                 closestPoint =
-                    getClosestPoint model.mousePos grid.points model
+                    getClosestPoint mousePos grid.points model
             in
             if closestPoint.used == False then
-                ( { model | grid = { grid | drawing = { drawing | drawingMode = True, activePath = [ closestPoint ] } } }, Cmd.none )
+                ( { model | mousePos = mousePos, grid = { grid | drawing = { drawing | drawingMode = True, activePath = [ closestPoint ] } } }, Cmd.none )
 
             else
                 ( model, Cmd.none )

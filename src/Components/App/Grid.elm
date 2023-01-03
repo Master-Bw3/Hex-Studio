@@ -14,11 +14,13 @@ import Array exposing (Array)
 import FontAwesome.Solid exposing (mouse)
 import Html exposing (..)
 import Html.Attributes as Attr
-import Html.Events exposing (onMouseDown)
+import Html.Events.Extra.Mouse as MouseEvent
+import Html.Events.Extra.Touch as TouchEvent
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (Msg(..))
 import Logic.App.Patterns.PatternRegistry exposing (unknownPattern)
 import Logic.App.Types exposing (CoordinatePair, GridPoint, PatternType)
+import Logic.App.Utils.Utils exposing (touchCoordinates)
 import Settings.Theme exposing (..)
 import Svg exposing (Svg, line, polygon, svg)
 import Svg.Attributes exposing (..)
@@ -40,7 +42,9 @@ grid : Model -> Html Msg
 grid model =
     div
         [ Attr.id "hex_grid"
-        , onMouseDown GridDown
+        , MouseEvent.onDown (.clientPos >> GridDown)
+        , TouchEvent.onStart (touchCoordinates >> GridDown)
+        , TouchEvent.onEnd (\_ -> MouseUp)
         ]
         (renderPoints model
             ++ [ svg
@@ -378,8 +382,10 @@ updateGridPoints gridWidth gridHeight patternArray oldGrid =
         grid_ =
             if oldGrid == [] then
                 generateGrid gridWidth gridHeight
+
             else
                 oldGrid
+
         newGrid =
             applyPathToGrid grid_ drawing
 
@@ -388,5 +394,6 @@ updateGridPoints gridWidth gridHeight patternArray oldGrid =
     in
     if Array.length tail == 0 then
         newGrid
+
     else
         updateGridPoints gridWidth gridHeight tail newGrid
