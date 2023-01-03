@@ -94,7 +94,7 @@ body {
     height: 80px;
 }
 
-#menu svg {
+.menu_button svg {
     color: rgba(255, 255, 255, 0.8);
     transform: scale(286%);
 }
@@ -103,8 +103,7 @@ body {
     transform: scaleY(286%) scaleX(316%);
 }
 
-#menu svg:hover {
-    cursor: pointer;
+.menu_button:hover svg {
     color: rgba(255, 255, 255, 0.85);
 }
 
@@ -300,13 +299,14 @@ button {
     display: flex;
     z-index: 1;
     position: absolute;
-    bottom: 110px;
+    bottom: 100px;
     height: fit-content;
     width: fit-content;
-    margin-left: 10px;
+    margin: 10px;
+    background-color: var(--primary_light);
 }
 
-#canvas_buttons div {
+#canvas_buttons button {
     cursor: pointer;
     display: flex;
     border-radius: 10px;

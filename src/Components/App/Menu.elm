@@ -27,7 +27,7 @@ menu model =
     div
         [ id "menu"
         ]
-        [ div
+        [ button
             ([ id "pattern_menu_button"
              , class "menu_button"
              , onClick (\event -> ViewPanel PatternPanel event.keys)
@@ -37,7 +37,7 @@ menu model =
             [ Icon.css
             , Icon.code |> Icon.styled [ Icon.sm ] |> Icon.view
             ]
-        , div
+        , button
             ([ id "stack_menu_button"
              , class "menu_button"
              , onClick (\event -> ViewPanel StackPanel event.keys)

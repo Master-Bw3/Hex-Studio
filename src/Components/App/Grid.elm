@@ -354,8 +354,8 @@ generateGrid gridWidth gridHeight =
         (\r _ ->
             List.indexedMap
                 (\i _ ->
-                    { x = (spacing * toFloat i) + (gridWidth - (toFloat pointCount * spacing)) + (spacing / 2 * toFloat (modBy 2 r))
-                    , y = verticalSpacing * toFloat r + (gridHeight - (toFloat rowCount * verticalSpacing)) --this might not be right idk
+                    { x = (spacing * toFloat i) + ((gridWidth - ((toFloat pointCount - 0.5) * spacing)) / 2) + (spacing / 2 * toFloat (modBy 2 r))
+                    , y = verticalSpacing * toFloat r + ((gridHeight - (toFloat (rowCount - 1) * verticalSpacing))/2) --this might not be right idk
                     , offsetX = i * 2 + modBy 2 r
                     , offsetY = r
                     , radius = 8.0

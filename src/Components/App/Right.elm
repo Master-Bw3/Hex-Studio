@@ -20,19 +20,19 @@ right model =
         [ div
             [ id "canvas_buttons"
             ]
-            [ div
+            [ button
                 [ id "sort"
                 ]
                 [ Icon.css
                 , Icon.arrowDownShortWide |> Icon.styled [ Icon.sm ] |> Icon.view
                 ]
-            , div
+            , button
                 [ id "zoom_out"
                 ]
                 [ Icon.css
                 , Icon.minus |> Icon.styled [ Icon.sm ] |> Icon.view
                 ]
-            , div
+            , button
                 [ id "zoom_in"
                 ]
                 [ Icon.css
