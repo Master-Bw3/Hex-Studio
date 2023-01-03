@@ -19,6 +19,7 @@ import Request
 import Shared
 import Task
 import View exposing (View)
+import Logic.App.Stack.Stack exposing (applyPatternsToStack)
 
 
 type alias Model =
@@ -152,9 +153,13 @@ update msg model =
                 ( model, Cmd.none )
 
         RemoveFromPatternArray startIndex endIndex ->
+            let
+                newPatternArray = removeFromArray startIndex endIndex model.patternArray
+            in
             ( { model
-                | patternArray = removeFromArray startIndex endIndex model.patternArray
-                , grid = { grid | points = updateGridPoints model}
+                | patternArray = newPatternArray
+                , grid = { grid | points = updateGridPoints grid.width grid.height newPatternArray []}
+                , stack = applyPatternsToStack Array.empty <| List.reverse <| Tuple.first <| List.unzip <| Array.toList newPatternArray
               }
             , Cmd.none
             )

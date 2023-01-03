@@ -10,13 +10,15 @@ module Components.App.Grid exposing
     , updateGridPoints
     )
 
+import Array exposing (Array)
 import FontAwesome.Solid exposing (mouse)
 import Html exposing (..)
 import Html.Attributes as Attr
 import Html.Events exposing (onMouseDown)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (Msg(..))
-import Logic.App.Types exposing (CoordinatePair, GridPoint)
+import Logic.App.Patterns.PatternRegistry exposing (unknownPattern)
+import Logic.App.Types exposing (CoordinatePair, GridPoint, PatternType)
 import Settings.Theme exposing (..)
 import Svg exposing (Svg, line, polygon, svg)
 import Svg.Attributes exposing (..)
@@ -151,6 +153,7 @@ applyActivePathToGrid model =
     applyPathToGrid gridPoints activePoints
 
 
+applyPathToGrid : List (List GridPoint) -> List GridPoint -> List (List GridPoint)
 applyPathToGrid gridPoints pointsToAdd =
     let
         replace : GridPoint -> GridPoint
@@ -347,7 +350,7 @@ generateGrid gridWidth gridHeight =
         (\r _ ->
             List.indexedMap
                 (\i _ ->
-                    { x = (spacing * toFloat i) + (gridWidth - toFloat pointCount * spacing) + (spacing / 2 * toFloat (modBy 2 r))
+                    { x = (spacing * toFloat i) + (gridWidth - (toFloat pointCount * spacing)) + (spacing / 2 * toFloat (modBy 2 r))
                     , y = verticalSpacing * toFloat r + (gridHeight - (toFloat rowCount * verticalSpacing)) --this might not be right idk
                     , offsetX = i * 2 + modBy 2 r
                     , offsetY = r
@@ -362,10 +365,28 @@ generateGrid gridWidth gridHeight =
         (List.repeat rowCount 0)
 
 
+
 -- TODO: Finish this
-updateGridPoints model =
+
+
+updateGridPoints : Float -> Float -> Array ( PatternType, List GridPoint ) -> List (List GridPoint) -> List (List GridPoint)
+updateGridPoints gridWidth gridHeight patternArray oldGrid =
     let
+        drawing =
+            Debug.log "drawing" <| Tuple.second <| Maybe.withDefault ( unknownPattern, [] ) <| Array.get 0 patternArray
+
+        grid_ =
+            if oldGrid == [] then
+                generateGrid gridWidth gridHeight
+            else
+                oldGrid
         newGrid =
-            generateGrid model.grid.width model.grid.height
+            applyPathToGrid grid_ drawing
+
+        tail =
+            Array.slice 1 (Array.length patternArray) patternArray
     in
-        applyPathToGrid
+    if Array.length tail == 0 then
+        newGrid
+    else
+        updateGridPoints gridWidth gridHeight tail newGrid

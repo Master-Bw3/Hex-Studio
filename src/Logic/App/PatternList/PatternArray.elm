@@ -9,7 +9,7 @@ import Logic.App.Utils.GetAngleSignature exposing (getAngleSignature)
 
 getPatternFromSignature : String -> PatternType
 getPatternFromSignature signature =
-    Maybe.withDefault {unkownPattern | signature = signature} <| List.head <| List.filter (\regPattern -> regPattern.signature == signature) patternRegistry
+    Maybe.withDefault {unknownPattern | signature = signature} <| List.head <| List.filter (\regPattern -> regPattern.signature == signature) patternRegistry
 
 
 addToPatternArray : Model -> PatternType -> Array (PatternType, List GridPoint)

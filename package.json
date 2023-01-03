@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "elm-format": "^0.8.5"
+  }
+}

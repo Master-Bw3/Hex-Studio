@@ -1,4 +1,4 @@
-module Logic.App.Patterns.PatternRegistry exposing (patternRegistry, unkownPattern)
+module Logic.App.Patterns.PatternRegistry exposing (patternRegistry, unknownPattern)
 
 import Logic.App.Types exposing (Iota, PatternType)
 import Logic.App.Patterns.Selectors exposing (getCaster)
@@ -12,8 +12,8 @@ test stack =
     stack
 
 
-unkownPattern : PatternType
-unkownPattern =
+unknownPattern : PatternType
+unknownPattern =
     { signature = "", action = test, displayName = "", internalName = "OwO whats this" }
 
 

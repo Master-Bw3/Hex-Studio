@@ -4,7 +4,10 @@ import Array exposing (Array)
 import Logic.App.Types exposing (Iota(..), PatternType)
 
 
+
 -- untested; might not work properly
+
+
 applyPatternsToStack : Array Iota -> List PatternType -> Array Iota
 applyPatternsToStack stack patterns =
     case List.head patterns of
@@ -12,6 +15,10 @@ applyPatternsToStack stack patterns =
             stack
 
         Just pattern ->
+            let
+                debug =
+                    Debug.log "pattern" pattern.internalName
+            in
             applyPatternsToStack (applyPatternToStack stack pattern) <| Maybe.withDefault [] <| List.tail patterns
 
 
