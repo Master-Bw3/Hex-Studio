@@ -6,13 +6,14 @@ import Browser.Dom
 
 type Msg
     = ViewPanel Panel Keys
-    | GotGrid (Result Browser.Dom.Error Browser.Dom.Element)
-    | GotContent (Result Browser.Dom.Error Browser.Dom.Element)
+    | GetGrid (Result Browser.Dom.Error Browser.Dom.Element)
+    | GetContentSize (Result Browser.Dom.Error Browser.Dom.Element)
     | MouseMove (Float, Float)
     | GridDown (Float, Float)
     | MouseUp
     | RemoveFromPatternArray Int Int
     | SetGridScale Float
+    | WindowResize
 
 type alias MouseMoveData =
     { pageX : Int

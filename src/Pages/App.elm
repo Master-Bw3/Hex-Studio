@@ -2,10 +2,12 @@ module Pages.App exposing (Model, Msg, page)
 
 import Array
 import Browser.Dom exposing (getElement)
+import Browser.Events
 import Components.App.Content exposing (content)
 import Components.App.Grid exposing (..)
 import Gen.Params.App exposing (Params)
 import Html exposing (..)
+import Json.Decode as Decode
 import Logic.App.Model as L exposing (Model)
 import Logic.App.Msg as L exposing (..)
 import Logic.App.PatternList.PatternArray exposing (addToPatternArray, getPatternFromSignature)
@@ -62,7 +64,7 @@ init =
             { gridScale = 1.0
             }
       }
-    , Cmd.batch [ Task.attempt GotGrid (getElement "hex_grid"), Task.attempt GotContent (getElement "content") ]
+    , Cmd.batch [ Task.attempt GetGrid (getElement "hex_grid"), Task.attempt GetContentSize (getElement "content") ]
     )
 
 
@@ -89,22 +91,22 @@ update msg model =
             else
                 ( { model | ui = { ui | openPanels = ui.openPanels ++ [ panel ] } }, Cmd.none )
 
-        GotGrid (Ok element) ->
+        GetGrid (Ok element) ->
             ( { model
                 | grid =
                     { grid
                         | height = element.element.height
                         , width = element.element.width
-                        , points = generateGrid element.element.width element.element.height settings.gridScale
+                        , points = updateGridPoints element.element.width element.element.height model.patternArray [] model.settings.gridScale
                     }
               }
             , Cmd.none
             )
 
-        GotGrid (Err _) ->
+        GetGrid (Err _) ->
             ( model, Cmd.none )
 
-        GotContent (Ok element) ->
+        GetContentSize (Ok element) ->
             ( { model
                 | window =
                     { height = element.element.height, width = element.element.width }
@@ -112,7 +114,7 @@ update msg model =
             , Cmd.none
             )
 
-        GotContent (Err _) ->
+        GetContentSize (Err _) ->
             ( model, Cmd.none )
 
         MouseMove ( x, y ) ->
@@ -174,7 +176,10 @@ update msg model =
             )
 
         SetGridScale scale ->
-            ( { model | grid = {grid | points = updateGridPoints grid.width grid.height model.patternArray [] scale}, settings = { settings | gridScale = scale } }, Cmd.none )
+            ( { model | grid = { grid | points = updateGridPoints grid.width grid.height model.patternArray [] scale }, settings = { settings | gridScale = scale } }, Cmd.none )
+
+        WindowResize ->
+            (model, Cmd.batch [ Task.attempt GetGrid (getElement "hex_grid"), Task.attempt GetContentSize (getElement "content") ])
 
 
 
@@ -186,7 +191,7 @@ update msg model =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Sub.none
+    Browser.Events.onResize (\_ _ -> WindowResize)
 
 
 view : Model -> View Msg

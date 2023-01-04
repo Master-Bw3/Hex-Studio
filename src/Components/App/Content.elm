@@ -7,7 +7,7 @@ import Html.Attributes exposing (id)
 import Html.Events exposing (onMouseUp)
 import Html.Events.Extra.Mouse as MouseEvent
 import Html.Events.Extra.Touch as TouchEvent
-import Json.Decode as Decode exposing (Decoder, at, float, int, map4)
+import Json.Decode exposing (Decoder, at, float, int, map4)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (MouseMoveData, Msg(..))
 import Logic.App.Utils.Utils exposing (touchCoordinates)
