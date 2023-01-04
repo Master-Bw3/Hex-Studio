@@ -56,12 +56,16 @@ body {
 #right {
     display: flex;
     flex-direction: column;
-    width: 100vw;
+    width: calc(100vw - 380px);
     height: 100vh;
+
 }
 
 #hex_grid {
     height: calc(100vh - 100px);
+    overflow: hidden;
+    position: relative;
+
 }
 
 #left_box {

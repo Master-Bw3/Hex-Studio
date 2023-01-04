@@ -111,9 +111,41 @@ renderLines : Model -> List (Svg msg)
 renderLines model =
     let
         points =
-            model.grid.points   
+            model.grid.points
     in
     List.map (renderLine model.settings.gridScale) (List.concatMap (findLinkedPoints points) (List.concat points))
+
+
+renderLine : Float -> CoordinatePair -> Svg msg
+renderLine scale coordinatePair =
+    let
+        x1 =
+            String.fromFloat <| coordinatePair.x1
+
+        y1 =
+            String.fromFloat <| coordinatePair.y1
+
+        x2 =
+            String.fromFloat <| coordinatePair.x2
+
+        y2 =
+            String.fromFloat <| coordinatePair.y2
+
+        allPointsValid =
+            --checks to make sure no points are at (0,0), since that represents a point that doesn't exist
+            (( coordinatePair.x1, coordinatePair.y1 ) /= ( 0.0, 0.0 )) && (( coordinatePair.x2, coordinatePair.y2 ) /= ( 0.0, 0.0 ))
+    in
+    if allPointsValid then
+        Svg.path
+            [ d <| String.join " " [ "M", x1, y1, x2, y2 ]
+            , stroke accent2
+            , strokeWidth <| String.fromFloat (5.0 * scale)
+            , strokeLinecap "round"
+            ]
+            []
+
+    else
+        text ""
 
 
 
@@ -130,6 +162,7 @@ findLinkedPoints grid_ point =
         |> List.map (\conPnt -> { x1 = conPnt.x, y1 = conPnt.y, x2 = point.x, y2 = point.y })
         |> Debug.log "pairs"
 
+
 getGridpointFromOffsetCoordinates : List (List GridPoint) -> { offsetX : Int, offsetY : Int } -> GridPoint
 getGridpointFromOffsetCoordinates grid_ offsetCoords =
     let
@@ -137,19 +170,6 @@ getGridpointFromOffsetCoordinates grid_ offsetCoords =
             ( point.offsetX, point.offsetY ) == ( offsetCoords.offsetX, offsetCoords.offsetY )
     in
     Maybe.withDefault emptyGridpoint <| List.head <| List.filter checkMatchingOffsetCoords <| List.concat grid_
-
-
-renderLine : Float -> CoordinatePair -> Svg msg
-renderLine scale coordinatePair =
-    line
-        [ x1 <| String.fromFloat <| coordinatePair.x1
-        , y1 <| String.fromFloat <| coordinatePair.y1
-        , x2 <| String.fromFloat <| coordinatePair.x2
-        , y2 <| String.fromFloat <| coordinatePair.y2
-        , stroke accent2
-        , strokeWidth <| String.fromFloat (5.0 * scale)
-        ]
-        []
 
 
 renderPoints : Model -> List (Html msg)
@@ -197,7 +217,7 @@ applyPathToGrid gridPoints pointsToAdd =
             in
             case replacedPnt of
                 Just point ->
-                    { point | used = True, x = pnt.x, y = pnt.y }
+                    { pnt | used = True, connectedPoints = point.connectedPoints, color = accent2 }
 
                 Nothing ->
                     pnt
@@ -216,14 +236,14 @@ renderPoint mousePos gridOffset scale point =
                 String.fromFloat (Basics.min 1 (1 / (distanceBetweenCoordinates mousePos ( point.x + gridOffset, point.y ) / 30)))
 
             else
-                String.fromFloat <| 0.5
+                String.fromFloat 0
     in
     svg
         [ width <| String.fromFloat <| point.radius * 2
         , height <| String.fromFloat <| point.radius * 2
         , viewBox "0 0 300 280"
         , Attr.style "position" "absolute"
-        , Attr.style "left" (String.fromFloat (gridOffset + point.x - (8 * scale)) ++ "px")
+        , Attr.style "left" (String.fromFloat (point.x - (8 * scale)) ++ "px")
         , Attr.style "top" (String.fromFloat (point.y - (8 * scale)))
         , Attr.style "transform" ("scale(" ++ pointScale ++ ")")
         , fill point.color
@@ -361,17 +381,17 @@ generateGrid : Float -> Float -> Float -> List (List GridPoint)
 generateGrid gridWidth gridHeight scale =
     let
         rowCount =
-            floor (gridHeight / verticalSpacing scale)
+            3 + floor (gridHeight / verticalSpacing scale)
 
         pointCount =
-            floor (gridWidth / spacing scale)
+            3 + floor (gridWidth / spacing scale)
     in
     List.indexedMap
         (\r _ ->
             List.indexedMap
                 (\i _ ->
-                    { x = (spacing scale * toFloat i) + ((gridWidth - ((toFloat pointCount - 0.5) * spacing scale)) / 2) + (spacing scale / 2 * toFloat (modBy 2 r))
-                    , y = verticalSpacing scale * toFloat r + ((gridHeight - (toFloat (rowCount - 1) * verticalSpacing scale)) / 2) --this might not be right idk
+                    { x = (spacing scale * toFloat i) + (spacing scale / 2 * toFloat (modBy 2 r)) + ((gridWidth - ((toFloat pointCount - 3.5) * spacing scale)) / 2)
+                    , y = (verticalSpacing scale * toFloat r) + ((gridHeight - (toFloat (rowCount - 4) * verticalSpacing scale)) / 2)
                     , offsetX = i * 2 + modBy 2 r
                     , offsetY = r
                     , radius = 8.0 * scale
@@ -390,20 +410,20 @@ generateGrid gridWidth gridHeight scale =
 
 
 updateGridPoints : Float -> Float -> Array ( PatternType, List GridPoint ) -> List (List GridPoint) -> Float -> List (List GridPoint)
-updateGridPoints gridWidth gridHeight patternArray oldGrid scale =
+updateGridPoints gridWidth gridHeight patternArray maybeGrid scale =
     let
         drawing =
             Tuple.second <| Maybe.withDefault ( unknownPattern, [] ) <| Array.get 0 patternArray
 
-        grid_ =
-            if oldGrid == [] then
+        oldGrid =
+            if maybeGrid == [] then
                 generateGrid gridWidth gridHeight scale
 
             else
-                oldGrid
+                maybeGrid
 
         newGrid =
-            applyPathToGrid grid_ drawing
+            applyPathToGrid oldGrid drawing
 
         tail =
             Array.slice 1 (Array.length patternArray) patternArray
