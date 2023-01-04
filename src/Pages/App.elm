@@ -191,11 +191,11 @@ subscriptions model =
 
 view : Model -> View Msg
 view model =
-    let
-        debug =
-            --Debug.log "DEBUG" <| List.map (\x -> x.pattern.internalName) <| Array.toList model.patternList
-            Debug.log "stack" <| Array.toList model.stack
-    in
+    -- let
+    --     debug =
+    --         --Debug.log "DEBUG" <| List.map (\x -> x.pattern.internalName) <| Array.toList model.patternList
+    --         Debug.log "stack" <| Array.toList model.stack
+    -- in
     { title = "Hex Studio"
     , body = [ content model ]
     }

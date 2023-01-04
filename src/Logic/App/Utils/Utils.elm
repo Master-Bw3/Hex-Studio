@@ -16,8 +16,6 @@ unshift item array =
 removeFromArray : Int -> Int -> Array a -> Array a
 removeFromArray start end array =
     let
-        debug =
-            Debug.log "remove this" <| rangeToRemove
 
         rangeToRemove =
             List.range start (end - 1)

@@ -35,10 +35,10 @@ action2Inputs stack inputGetter1 inputGetter2 action =
             get2Inputs stack inputGetter1 inputGetter2
 
         iota1 =
-            Debug.log "iota1" <| Tuple.first iotas
+            Tuple.first iotas
 
         iota2 =
-            Debug.log "iota2" <| Tuple.second iotas
+            Tuple.second iotas
 
         newStack =
             Array.slice 2 (Array.length stack) stack

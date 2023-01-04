@@ -15,10 +15,6 @@ applyPatternsToStack stack patterns =
             stack
 
         Just pattern ->
-            let
-                debug =
-                    Debug.log "pattern" pattern.internalName
-            in
             applyPatternsToStack (applyPatternToStack stack pattern) <| Maybe.withDefault [] <| List.tail patterns
 
 

@@ -160,7 +160,6 @@ findLinkedPoints grid_ point =
     in
     connectedPoints
         |> List.map (\conPnt -> { x1 = conPnt.x, y1 = conPnt.y, x2 = point.x, y2 = point.y })
-        |> Debug.log "pairs"
 
 
 getGridpointFromOffsetCoordinates : List (List GridPoint) -> { offsetX : Int, offsetY : Int } -> GridPoint
@@ -252,10 +251,6 @@ renderPoint mousePos gridOffset scale point =
         ]
 
 
-
--- this made my brain hurt a lot
-
-
 addNearbyPoint : Model -> List GridPoint
 addNearbyPoint model =
     let
@@ -290,11 +285,10 @@ addNearbyPoint model =
         prevPrevNode =
             Maybe.withDefault emptyGridpoint <| List.head otherNodes
 
-        pointNotPrevPrevPoint =
-            ( prevPrevNode.x, prevPrevNode.y ) /= ( closestPoint.x, closestPoint.y )
+        pointPrevPrevPoint =
+            ( prevPrevNode.x, prevPrevNode.y ) == ( closestPoint.x, closestPoint.y )
 
         pointNotConnectedToPrevPoint =
-            --0 == Debug.log "h" (List.length <| List.filter (\point -> (point.x, point.y) == (closestPoint.x, closestPoint.y)) <| modelGrid.drawing.activePath)
             not
                 ((List.any (\x -> x == True) <| List.map (\pnt -> pnt == { offsetX = closestPoint.offsetX, offsetY = closestPoint.offsetY }) prevNode.connectedPoints)
                     || (List.any (\x -> x == True) <| List.map (\pnt -> pnt == { offsetX = prevNode.offsetX, offsetY = prevNode.offsetY }) closestPoint.connectedPoints)
@@ -308,18 +302,22 @@ addNearbyPoint model =
 
         pointCloseToPrevPoint =
             distanceBetweenCoordinates ( prevNode.x, prevNode.y ) ( closestPoint.x, closestPoint.y ) <= (spacing scale * 1.5)
-
-        filterDuplicates point point2 =
-            not <| ( point.x, point.y ) == ( point2.x, point2.y )
-
-        --closestPoint.used == False
     in
-    if
+    if pointPrevPrevPoint then
+        -- disconnect the previous point to allow for lines to be undrawn
+        { prevPrevNode
+            | connectedPoints =
+                List.filter
+                    (\pnt -> ( pnt.offsetX, pnt.offsetY ) /= ( prevNode.offsetX, prevNode.offsetY ))
+                    prevPrevNode.connectedPoints
+        }
+            :: (Maybe.withDefault [] <| List.tail otherNodes)
+
+    else if
         mouseDistanceCloseToPoint
             && pointCloseToPrevPoint
-            && pointNotPrevPoint
             && pointNotConnectedToPrevPoint
-            && pointNotPrevPrevPoint
+            && pointNotPrevPoint
             && not closestPoint.used
     then
         [ closestPoint --{ closestPoint | connectedPoints = [ { x = prevNode.x, y = prevNode.y } ] }
