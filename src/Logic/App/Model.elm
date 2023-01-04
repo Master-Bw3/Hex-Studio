@@ -1,13 +1,12 @@
 module Logic.App.Model exposing (..)
 
 import Array exposing (Array)
-import Logic.App.Types exposing (GridPoint, Panel, PatternType)
-import Logic.App.Types exposing (Iota)
+import Logic.App.Types exposing (GridPoint, Iota, Panel, PatternType)
 
 
 type alias Model =
     { stack : Array Iota
-    , patternArray : Array (PatternType, List GridPoint)
+    , patternArray : Array ( PatternType, List GridPoint )
     , ui :
         { openPanels : List Panel
         }
@@ -26,5 +25,6 @@ type alias Model =
         , height : Float
         }
     , settings :
-        {gridScale : Float}
+        { gridScale : Float }
+    , time : Int
     }

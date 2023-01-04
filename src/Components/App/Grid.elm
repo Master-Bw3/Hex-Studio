@@ -20,6 +20,7 @@ import Logic.App.Msg exposing (Msg(..))
 import Logic.App.Patterns.PatternRegistry exposing (unknownPattern)
 import Logic.App.Types exposing (CoordinatePair, GridPoint, PatternType)
 import Logic.App.Utils.Utils exposing (touchCoordinates)
+import Random
 import Settings.Theme exposing (..)
 import String exposing (fromInt)
 import Svg exposing (Svg, line, polygon, svg)
@@ -87,6 +88,7 @@ renderDrawingLine model =
     if drawingMode then
         [ renderLine
             model.settings.gridScale
+            model.time
             { x1 = Tuple.first mousePos - gridOffset
             , y1 = Tuple.second mousePos
             , x2 = activePoint.x
@@ -104,7 +106,7 @@ renderActivePath model =
         points =
             model.grid.drawing.activePath
     in
-    List.map (renderLine model.settings.gridScale) (List.concatMap (findLinkedPoints model.grid.points) points)
+    List.map (renderLine model.settings.gridScale model.time) (List.concatMap (findLinkedPoints model.grid.points) points)
 
 
 renderLines : Model -> List (Svg msg)
@@ -113,23 +115,35 @@ renderLines model =
         points =
             model.grid.points
     in
-    List.map (renderLine model.settings.gridScale) (List.concatMap (findLinkedPoints points) (List.concat points))
+    List.map (renderLine model.settings.gridScale model.time) (List.concatMap (findLinkedPoints points) (List.concat points))
 
 
-renderLine : Float -> CoordinatePair -> Svg msg
-renderLine scale coordinatePair =
+renderLine : Float -> Int -> CoordinatePair -> Svg msg
+renderLine scale time coordinatePair =
     let
         x1 =
-            String.fromFloat <| coordinatePair.x1
+            coordinatePair.x1
 
         y1 =
-            String.fromFloat <| coordinatePair.y1
+            coordinatePair.y1
 
         x2 =
-            String.fromFloat <| coordinatePair.x2
+            coordinatePair.x2
 
         y2 =
-            String.fromFloat <| coordinatePair.y2
+            coordinatePair.y2
+
+        rise =
+            y2 - y1
+
+        run =
+            x2 - x1
+
+        randomNum seedPart =
+            toFloat <| Tuple.first <| Random.step (Random.int -3 3) (Random.initialSeed <| time + round seedPart)
+
+        coordsList =
+            [ x1, y1, x1 + 0.25 * run, y1 + randomNum (x1 + 1) + 0.25 * rise, x1 + 0.5 * run, y1 + randomNum (x1 + 2) + 0.5 * rise, x1 + 0.75 * run, y1 + randomNum (x1 + 3) + 0.75 * rise, x2, y2 ]
 
         allPointsValid =
             --checks to make sure no points are at (0,0), since that represents a point that doesn't exist
@@ -137,10 +151,12 @@ renderLine scale coordinatePair =
     in
     if allPointsValid then
         Svg.path
-            [ d <| String.join " " [ "M", x1, y1, x2, y2 ]
+            [ d <| (++) "M" <| String.join " " <| List.map String.fromFloat coordsList
             , stroke accent2
             , strokeWidth <| String.fromFloat (5.0 * scale)
             , strokeLinecap "round"
+            , strokeLinejoin "round"
+            , fillOpacity "0"
             ]
             []
 

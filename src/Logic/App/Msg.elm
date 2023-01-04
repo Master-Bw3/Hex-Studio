@@ -2,7 +2,7 @@ module Logic.App.Msg exposing (..)
 import Logic.App.Types exposing (Panel)
 import Html.Events.Extra.Mouse exposing (Keys)
 import Browser.Dom
-
+import Time
 
 type Msg
     = ViewPanel Panel Keys
@@ -14,6 +14,7 @@ type Msg
     | RemoveFromPatternArray Int Int
     | SetGridScale Float
     | WindowResize
+    | Tick Time.Posix
 
 type alias MouseMoveData =
     { pageX : Int

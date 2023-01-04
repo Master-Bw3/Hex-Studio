@@ -20,6 +20,7 @@ import Page
 import Request
 import Shared
 import Task
+import Time
 import View exposing (View)
 
 
@@ -63,6 +64,7 @@ init =
       , settings =
             { gridScale = 1.0
             }
+      , time = 0      
       }
     , Cmd.batch [ Task.attempt GetGrid (getElement "hex_grid"), Task.attempt GetContentSize (getElement "content") ]
     )
@@ -179,7 +181,12 @@ update msg model =
             ( { model | grid = { grid | points = updateGridPoints grid.width grid.height model.patternArray [] scale }, settings = { settings | gridScale = scale } }, Cmd.none )
 
         WindowResize ->
-            (model, Cmd.batch [ Task.attempt GetGrid (getElement "hex_grid"), Task.attempt GetContentSize (getElement "content") ])
+            ( model, Cmd.batch [ Task.attempt GetGrid (getElement "hex_grid"), Task.attempt GetContentSize (getElement "content") ] )
+
+        Tick newTime ->
+            ( { model | time = Time.posixToMillis newTime }
+            , Cmd.none
+            )
 
 
 
@@ -191,7 +198,7 @@ update msg model =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Browser.Events.onResize (\_ _ -> WindowResize)
+    Sub.batch [ Browser.Events.onResize (\_ _ -> WindowResize), Time.every 50 Tick ]
 
 
 view : Model -> View Msg
