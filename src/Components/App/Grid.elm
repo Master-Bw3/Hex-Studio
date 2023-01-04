@@ -5,7 +5,6 @@ module Components.App.Grid exposing
     , generateGrid
     , getClosestPoint
     , grid
-    , scale
     , spacing
     , updateGridPoints
     )
@@ -22,8 +21,21 @@ import Logic.App.Patterns.PatternRegistry exposing (unknownPattern)
 import Logic.App.Types exposing (CoordinatePair, GridPoint, PatternType)
 import Logic.App.Utils.Utils exposing (touchCoordinates)
 import Settings.Theme exposing (..)
+import String exposing (fromInt)
 import Svg exposing (Svg, line, polygon, svg)
 import Svg.Attributes exposing (..)
+
+
+
+-- settings
+
+
+spacing scale =
+    100 * scale
+
+
+verticalSpacing scale =
+    (spacing scale * sqrt 3.0) / 2
 
 
 emptyGridpoint =
@@ -74,6 +86,7 @@ renderDrawingLine model =
     in
     if drawingMode then
         [ renderLine
+            model.settings.gridScale
             { x1 = Tuple.first mousePos - gridOffset
             , y1 = Tuple.second mousePos
             , x2 = activePoint.x
@@ -91,37 +104,50 @@ renderActivePath model =
         points =
             model.grid.drawing.activePath
     in
-    List.map renderLine (List.concatMap findLinkedPoints points)
+    List.map (renderLine model.settings.gridScale) (List.concatMap (findLinkedPoints model.grid.points) points)
 
 
 renderLines : Model -> List (Svg msg)
 renderLines model =
     let
         points =
-            model.grid.points
+            model.grid.points   
     in
-    List.map renderLine (List.concatMap findLinkedPoints (List.concat points))
+    List.map (renderLine model.settings.gridScale) (List.concatMap (findLinkedPoints points) (List.concat points))
 
 
-findLinkedPoints : GridPoint -> List CoordinatePair
-findLinkedPoints point =
-    point.connectedPoints
+
+-- turns a gridPoint into a list of coordinate pairs of the point and connected point
+
+
+findLinkedPoints : List (List GridPoint) -> GridPoint -> List CoordinatePair
+findLinkedPoints grid_ point =
+    let
+        connectedPoints =
+            List.map (getGridpointFromOffsetCoordinates grid_) point.connectedPoints
+    in
+    connectedPoints
         |> List.map (\conPnt -> { x1 = conPnt.x, y1 = conPnt.y, x2 = point.x, y2 = point.y })
+        |> Debug.log "pairs"
+
+getGridpointFromOffsetCoordinates : List (List GridPoint) -> { offsetX : Int, offsetY : Int } -> GridPoint
+getGridpointFromOffsetCoordinates grid_ offsetCoords =
+    let
+        checkMatchingOffsetCoords point =
+            ( point.offsetX, point.offsetY ) == ( offsetCoords.offsetX, offsetCoords.offsetY )
+    in
+    Maybe.withDefault emptyGridpoint <| List.head <| List.filter checkMatchingOffsetCoords <| List.concat grid_
 
 
-
---connectedPoints : List {x: Float, y: Float}
-
-
-renderLine : CoordinatePair -> Svg msg
-renderLine coordinatePair =
+renderLine : Float -> CoordinatePair -> Svg msg
+renderLine scale coordinatePair =
     line
         [ x1 <| String.fromFloat <| coordinatePair.x1
         , y1 <| String.fromFloat <| coordinatePair.y1
         , x2 <| String.fromFloat <| coordinatePair.x2
         , y2 <| String.fromFloat <| coordinatePair.y2
         , stroke accent2
-        , strokeWidth "5"
+        , strokeWidth <| String.fromFloat (5.0 * scale)
         ]
         []
 
@@ -140,9 +166,12 @@ renderPoints model =
 
         gridOffset =
             model.window.width - gridWidth
+
+        scale =
+            model.settings.gridScale
     in
     List.concat points
-        |> List.map (renderPoint mousePos gridOffset)
+        |> List.map (renderPoint mousePos gridOffset scale)
 
 
 applyActivePathToGrid : Model -> List (List GridPoint)
@@ -164,11 +193,11 @@ applyPathToGrid gridPoints pointsToAdd =
         replace pnt =
             let
                 replacedPnt =
-                    List.head <| List.filter (\activePnt -> ( activePnt.x, activePnt.y ) == ( pnt.x, pnt.y )) pointsToAdd
+                    List.head <| List.filter (\activePnt -> ( activePnt.offsetX, activePnt.offsetY ) == ( pnt.offsetX, pnt.offsetY )) pointsToAdd
             in
             case replacedPnt of
                 Just point ->
-                    { point | used = True }
+                    { point | used = True, x = pnt.x, y = pnt.y }
 
                 Nothing ->
                     pnt
@@ -179,23 +208,23 @@ applyPathToGrid gridPoints pointsToAdd =
     List.map (\row -> List.map replace row) gridPoints
 
 
-renderPoint : ( Float, Float ) -> Float -> GridPoint -> Html msg
-renderPoint mousePos gridOffset point =
+renderPoint : ( Float, Float ) -> Float -> Float -> GridPoint -> Html msg
+renderPoint mousePos gridOffset scale point =
     let
         pointScale =
             if point.used == False then
                 String.fromFloat (Basics.min 1 (1 / (distanceBetweenCoordinates mousePos ( point.x + gridOffset, point.y ) / 30)))
 
             else
-                String.fromFloat <| 2 / point.radius
+                String.fromFloat <| 0.5
     in
     svg
         [ width <| String.fromFloat <| point.radius * 2
         , height <| String.fromFloat <| point.radius * 2
         , viewBox "0 0 300 280"
         , Attr.style "position" "absolute"
-        , Attr.style "left" (String.fromFloat (gridOffset + point.x - 8) ++ "px")
-        , Attr.style "top" (String.fromFloat (point.y - 8))
+        , Attr.style "left" (String.fromFloat (gridOffset + point.x - (8 * scale)) ++ "px")
+        , Attr.style "top" (String.fromFloat (point.y - (8 * scale)))
         , Attr.style "transform" ("scale(" ++ pointScale ++ ")")
         , fill point.color
         ]
@@ -212,6 +241,9 @@ addNearbyPoint model =
     let
         modelGrid =
             model.grid
+
+        scale =
+            model.settings.gridScale
 
         gridOffset =
             model.window.width - model.grid.width
@@ -244,18 +276,18 @@ addNearbyPoint model =
         pointNotConnectedToPrevPoint =
             --0 == Debug.log "h" (List.length <| List.filter (\point -> (point.x, point.y) == (closestPoint.x, closestPoint.y)) <| modelGrid.drawing.activePath)
             not
-                ((List.any (\x -> x == True) <| List.map (\pnt -> pnt == { x = closestPoint.x, y = closestPoint.y }) prevNode.connectedPoints)
-                    || (List.any (\x -> x == True) <| List.map (\pnt -> pnt == { x = prevNode.x, y = prevNode.y }) closestPoint.connectedPoints)
+                ((List.any (\x -> x == True) <| List.map (\pnt -> pnt == { offsetX = closestPoint.offsetX, offsetY = closestPoint.offsetY }) prevNode.connectedPoints)
+                    || (List.any (\x -> x == True) <| List.map (\pnt -> pnt == { offsetX = prevNode.offsetX, offsetY = prevNode.offsetY }) closestPoint.connectedPoints)
                 )
 
         pointNotPrevPoint =
             ( prevNode.x, prevNode.y ) /= ( closestPoint.x, closestPoint.y )
 
         mouseDistanceCloseToPoint =
-            distanceBetweenCoordinates offsetMousePos ( closestPoint.x, closestPoint.y ) <= (spacing / 2)
+            distanceBetweenCoordinates offsetMousePos ( closestPoint.x, closestPoint.y ) <= (spacing scale / 2)
 
         pointCloseToPrevPoint =
-            distanceBetweenCoordinates ( prevNode.x, prevNode.y ) ( closestPoint.x, closestPoint.y ) <= (spacing * 1.5)
+            distanceBetweenCoordinates ( prevNode.x, prevNode.y ) ( closestPoint.x, closestPoint.y ) <= (spacing scale * 1.5)
 
         filterDuplicates point point2 =
             not <| ( point.x, point.y ) == ( point2.x, point2.y )
@@ -271,7 +303,7 @@ addNearbyPoint model =
             && not closestPoint.used
     then
         [ closestPoint --{ closestPoint | connectedPoints = [ { x = prevNode.x, y = prevNode.y } ] }
-        , { prevNode | connectedPoints = { x = closestPoint.x, y = closestPoint.y } :: prevNode.connectedPoints }
+        , { prevNode | connectedPoints = { offsetX = closestPoint.offsetX, offsetY = closestPoint.offsetY } :: prevNode.connectedPoints }
         ]
             ++ otherNodes
 
@@ -325,40 +357,24 @@ distanceBetweenCoordinates a b =
     sqrt ((x1 - x2) ^ 2 + (y1 - y2) ^ 2)
 
 
-
--- settings
-
-
-scale =
-    1
-
-
-spacing =
-    100 * scale
-
-
-verticalSpacing =
-    (spacing * sqrt 3.0) / 2
-
-
-generateGrid : Float -> Float -> List (List GridPoint)
-generateGrid gridWidth gridHeight =
+generateGrid : Float -> Float -> Float -> List (List GridPoint)
+generateGrid gridWidth gridHeight scale =
     let
         rowCount =
-            floor (gridHeight / verticalSpacing)
+            floor (gridHeight / verticalSpacing scale)
 
         pointCount =
-            floor (gridWidth / spacing)
+            floor (gridWidth / spacing scale)
     in
     List.indexedMap
         (\r _ ->
             List.indexedMap
                 (\i _ ->
-                    { x = (spacing * toFloat i) + ((gridWidth - ((toFloat pointCount - 0.5) * spacing)) / 2) + (spacing / 2 * toFloat (modBy 2 r))
-                    , y = verticalSpacing * toFloat r + ((gridHeight - (toFloat (rowCount - 1) * verticalSpacing))/2) --this might not be right idk
+                    { x = (spacing scale * toFloat i) + ((gridWidth - ((toFloat pointCount - 0.5) * spacing scale)) / 2) + (spacing scale / 2 * toFloat (modBy 2 r))
+                    , y = verticalSpacing scale * toFloat r + ((gridHeight - (toFloat (rowCount - 1) * verticalSpacing scale)) / 2) --this might not be right idk
                     , offsetX = i * 2 + modBy 2 r
                     , offsetY = r
-                    , radius = 8.0
+                    , radius = 8.0 * scale
                     , used = False
                     , color = accent1
                     , connectedPoints = []
@@ -373,15 +389,15 @@ generateGrid gridWidth gridHeight =
 -- TODO: Finish this
 
 
-updateGridPoints : Float -> Float -> Array ( PatternType, List GridPoint ) -> List (List GridPoint) -> List (List GridPoint)
-updateGridPoints gridWidth gridHeight patternArray oldGrid =
+updateGridPoints : Float -> Float -> Array ( PatternType, List GridPoint ) -> List (List GridPoint) -> Float -> List (List GridPoint)
+updateGridPoints gridWidth gridHeight patternArray oldGrid scale =
     let
         drawing =
-            Debug.log "drawing" <| Tuple.second <| Maybe.withDefault ( unknownPattern, [] ) <| Array.get 0 patternArray
+            Tuple.second <| Maybe.withDefault ( unknownPattern, [] ) <| Array.get 0 patternArray
 
         grid_ =
             if oldGrid == [] then
-                generateGrid gridWidth gridHeight
+                generateGrid gridWidth gridHeight scale
 
             else
                 oldGrid
@@ -396,4 +412,4 @@ updateGridPoints gridWidth gridHeight patternArray oldGrid =
         newGrid
 
     else
-        updateGridPoints gridWidth gridHeight tail newGrid
+        updateGridPoints gridWidth gridHeight tail newGrid scale

@@ -12,6 +12,7 @@ type Msg
     | GridDown (Float, Float)
     | MouseUp
     | RemoveFromPatternArray Int Int
+    | SetGridScale Float
 
 type alias MouseMoveData =
     { pageX : Int

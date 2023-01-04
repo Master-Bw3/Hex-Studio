@@ -10,7 +10,7 @@ import Logic.App.Model as L exposing (Model)
 import Logic.App.Msg as L exposing (..)
 import Logic.App.PatternList.PatternArray exposing (addToPatternArray, getPatternFromSignature)
 import Logic.App.Patterns.PatternRegistry exposing (..)
-import Logic.App.Stack.Stack exposing (applyPatternToStack)
+import Logic.App.Stack.Stack exposing (applyPatternToStack, applyPatternsToStack)
 import Logic.App.Types exposing (..)
 import Logic.App.Utils.GetAngleSignature exposing (getAngleSignature)
 import Logic.App.Utils.Utils exposing (removeFromArray)
@@ -19,7 +19,6 @@ import Request
 import Shared
 import Task
 import View exposing (View)
-import Logic.App.Stack.Stack exposing (applyPatternsToStack)
 
 
 type alias Model =
@@ -59,6 +58,9 @@ init =
             { width = 0.0
             , height = 0.0
             }
+      , settings =
+            { gridScale = 1.0
+            }
       }
     , Cmd.batch [ Task.attempt GotGrid (getElement "hex_grid"), Task.attempt GotContent (getElement "content") ]
     )
@@ -75,6 +77,9 @@ update msg model =
 
         drawing =
             model.grid.drawing
+
+        settings =
+            model.settings
     in
     case msg of
         ViewPanel panel keys ->
@@ -90,7 +95,7 @@ update msg model =
                     { grid
                         | height = element.element.height
                         , width = element.element.width
-                        , points = generateGrid element.element.width element.element.height
+                        , points = generateGrid element.element.width element.element.height settings.gridScale
                     }
               }
             , Cmd.none
@@ -117,9 +122,11 @@ update msg model =
             else
                 ( { model | mousePos = ( x, y ) }, Cmd.none )
 
-        GridDown (x, y) ->
+        GridDown ( x, y ) ->
             let
-                mousePos = ( x, y )
+                mousePos =
+                    ( x, y )
+
                 closestPoint =
                     getClosestPoint mousePos grid.points model
             in
@@ -155,15 +162,19 @@ update msg model =
 
         RemoveFromPatternArray startIndex endIndex ->
             let
-                newPatternArray = removeFromArray startIndex endIndex model.patternArray
+                newPatternArray =
+                    removeFromArray startIndex endIndex model.patternArray
             in
             ( { model
                 | patternArray = newPatternArray
-                , grid = { grid | points = updateGridPoints grid.width grid.height newPatternArray []}
+                , grid = { grid | points = updateGridPoints grid.width grid.height newPatternArray [] settings.gridScale }
                 , stack = applyPatternsToStack Array.empty <| List.reverse <| Tuple.first <| List.unzip <| Array.toList newPatternArray
               }
             , Cmd.none
             )
+
+        SetGridScale scale ->
+            ( { model | grid = {grid | points = updateGridPoints grid.width grid.height model.patternArray [] scale}, settings = { settings | gridScale = scale } }, Cmd.none )
 
 
 

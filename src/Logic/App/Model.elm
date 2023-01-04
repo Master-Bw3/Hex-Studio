@@ -25,4 +25,6 @@ type alias Model =
         { width : Float
         , height : Float
         }
+    , settings :
+        {gridScale : Float}
     }
