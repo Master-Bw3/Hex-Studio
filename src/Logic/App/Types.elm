@@ -24,7 +24,7 @@ type Iota
     | Vector ( Float, Float, Float )
     | Boolean Bool
     | Entity EntityType
-    | List (Array Iota)
+    | IotaList (Array Iota)
     | Pattern PatternType
     | Null
     | Garbage

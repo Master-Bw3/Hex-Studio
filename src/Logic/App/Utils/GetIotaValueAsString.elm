@@ -31,7 +31,7 @@ getIotaValueAsString iota =
         Entity _ ->
             "Entity" --fix later
 
-        List _ ->
+        IotaList _ ->
             Debug.todo "branch 'IotaList _' not implemented"
 
         Pattern pattern ->
