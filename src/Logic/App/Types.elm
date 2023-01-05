@@ -37,7 +37,7 @@ type alias GridPoint =
     , radius : Float
     , used : Bool
     , color : String
-    , connectedPoints : List { offsetX : Int, offsetY : Int }
+    , connectedPoints : List { offsetX : Int, offsetY : Int, betweenOffsetValues : ((Int, Int), (Int, Int), (Int, Int))}
     }
 
 

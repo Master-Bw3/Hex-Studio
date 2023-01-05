@@ -7,6 +7,7 @@ module Components.App.Grid exposing
     , grid
     , spacing
     , updateGridPoints
+    , updatemidLineOffsets
     )
 
 import Array exposing (Array)
@@ -22,8 +23,7 @@ import Logic.App.Types exposing (CoordinatePair, GridPoint, PatternType)
 import Logic.App.Utils.Utils exposing (touchCoordinates)
 import Random
 import Settings.Theme exposing (..)
-import String exposing (fromInt)
-import Svg exposing (Svg, line, polygon, svg)
+import Svg exposing (Svg, polygon, svg)
 import Svg.Attributes exposing (..)
 
 
@@ -88,12 +88,12 @@ renderDrawingLine model =
     if drawingMode then
         [ renderLine
             model.settings.gridScale
-            model.time
             { x1 = Tuple.first mousePos - gridOffset
             , y1 = Tuple.second mousePos
             , x2 = activePoint.x
             , y2 = activePoint.y
             }
+            ( ( 0, 0 ), ( 0, 0 ), ( 0, 0 ) )
         ]
 
     else
@@ -106,7 +106,7 @@ renderActivePath model =
         points =
             model.grid.drawing.activePath
     in
-    List.map (renderLine model.settings.gridScale model.time) (List.concatMap (findLinkedPoints model.grid.points) points)
+    List.map (\x -> renderLine model.settings.gridScale (Tuple.first x) (Tuple.second x)) (List.concatMap (findLinkedPoints model.grid.points) points)
 
 
 renderLines : Model -> List (Svg msg)
@@ -115,11 +115,11 @@ renderLines model =
         points =
             model.grid.points
     in
-    List.map (renderLine model.settings.gridScale model.time) (List.concatMap (findLinkedPoints points) (List.concat points))
+    List.map (\x -> renderLine model.settings.gridScale (Tuple.first x) (Tuple.second x)) (List.concatMap (findLinkedPoints points) (List.concat points))
 
 
-renderLine : Float -> Int -> CoordinatePair -> Svg msg
-renderLine scale time coordinatePair =
+renderLine : Float -> CoordinatePair -> ( ( Int, Int ), ( Int, Int ), ( Int, Int ) ) -> Svg msg
+renderLine scale coordinatePair offsetsTuple =
     let
         x1 =
             coordinatePair.x1
@@ -139,11 +139,15 @@ renderLine scale time coordinatePair =
         run =
             x2 - x1
 
-        randomNum seedPart =
-            toFloat <| Tuple.first <| Random.step (Random.int -3 3) (Random.initialSeed <| time + round seedPart)
-
         coordsList =
-            [ x1, y1, x1 + 0.25 * run, y1 + randomNum (x1 + 1) + 0.25 * rise, x1 + 0.5 * run, y1 + randomNum (x1 + 2) + 0.5 * rise, x1 + 0.75 * run, y1 + randomNum (x1 + 3) + 0.75 * rise, x2, y2 ]
+            case offsetsTuple of
+                ( ( a1, a2 ), ( b1, b2 ), ( c1, c2 ) ) ->
+                    [ [ x1, y1 ]
+                    , [ x1 + (0.6 * scale) * toFloat a1 + 0.25 * run, y1 + (0.6 * scale) * toFloat a2 + 0.25 * rise ]
+                    , [ x1 + (0.6 * scale) * toFloat b1 + 0.5 * run, y1 + (0.6 * scale) * toFloat b2 + 0.5 * rise ]
+                    , [ x1 + (0.6 * scale) * toFloat c1 + 0.75 * run, y1 + (0.6 * scale) * toFloat c2 + 0.75 * rise ]
+                    , [ x2, y2 ]
+                    ]
 
         allPointsValid =
             --checks to make sure no points are at (0,0), since that represents a point that doesn't exist
@@ -151,7 +155,7 @@ renderLine scale time coordinatePair =
     in
     if allPointsValid then
         Svg.path
-            [ d <| (++) "M" <| String.join " " <| List.map String.fromFloat coordsList
+            [ d <| (++) "M" <| String.join " " <| List.map String.fromFloat <| List.concat coordsList
             , stroke accent2
             , strokeWidth <| String.fromFloat (5.0 * scale)
             , strokeLinecap "round"
@@ -168,17 +172,26 @@ renderLine scale time coordinatePair =
 -- turns a gridPoint into a list of coordinate pairs of the point and connected point
 
 
-findLinkedPoints : List (List GridPoint) -> GridPoint -> List CoordinatePair
+findLinkedPoints : List (List GridPoint) -> GridPoint -> List ( CoordinatePair, ( ( Int, Int ), ( Int, Int ), ( Int, Int ) ) )
 findLinkedPoints grid_ point =
     let
+        connectedPoints : List ( GridPoint, ( ( Int, Int ), ( Int, Int ), ( Int, Int ) ) )
         connectedPoints =
-            List.map (getGridpointFromOffsetCoordinates grid_) point.connectedPoints
+            List.map (\pnt -> ( getGridpointFromOffsetCoordinates grid_ pnt, pnt.betweenOffsetValues )) point.connectedPoints
     in
-    connectedPoints
-        |> List.map (\conPnt -> { x1 = conPnt.x, y1 = conPnt.y, x2 = point.x, y2 = point.y })
+    List.map
+        (\conPnt ->
+            let
+                conPntCoords : GridPoint
+                conPntCoords =
+                    Tuple.first conPnt
+            in
+            ( { x1 = conPntCoords.x, y1 = conPntCoords.y, x2 = point.x, y2 = point.y }, Tuple.second conPnt )
+        )
+        connectedPoints
 
 
-getGridpointFromOffsetCoordinates : List (List GridPoint) -> { offsetX : Int, offsetY : Int } -> GridPoint
+getGridpointFromOffsetCoordinates : List (List GridPoint) -> { offsetX : Int, offsetY : Int, betweenOffsetValues : ( ( Int, Int ), ( Int, Int ), ( Int, Int ) ) } -> GridPoint
 getGridpointFromOffsetCoordinates grid_ offsetCoords =
     let
         checkMatchingOffsetCoords point =
@@ -306,8 +319,8 @@ addNearbyPoint model =
 
         pointNotConnectedToPrevPoint =
             not
-                ((List.any (\x -> x == True) <| List.map (\pnt -> pnt == { offsetX = closestPoint.offsetX, offsetY = closestPoint.offsetY }) prevNode.connectedPoints)
-                    || (List.any (\x -> x == True) <| List.map (\pnt -> pnt == { offsetX = prevNode.offsetX, offsetY = prevNode.offsetY }) closestPoint.connectedPoints)
+                ((List.any (\x -> x == True) <| List.map (\pnt -> ( pnt.offsetX, pnt.offsetY ) == ( closestPoint.offsetX, closestPoint.offsetY )) prevNode.connectedPoints)
+                    || (List.any (\x -> x == True) <| List.map (\pnt -> ( pnt.offsetX, pnt.offsetY ) == ( prevNode.offsetX, prevNode.offsetY )) closestPoint.connectedPoints)
                 )
 
         pointNotPrevPoint =
@@ -337,7 +350,7 @@ addNearbyPoint model =
             && not closestPoint.used
     then
         [ closestPoint --{ closestPoint | connectedPoints = [ { x = prevNode.x, y = prevNode.y } ] }
-        , { prevNode | connectedPoints = { offsetX = closestPoint.offsetX, offsetY = closestPoint.offsetY } :: prevNode.connectedPoints }
+        , { prevNode | connectedPoints = { offsetX = closestPoint.offsetX, offsetY = closestPoint.offsetY, betweenOffsetValues = ( ( 0, 0 ), ( 0, 0 ), ( 0, 0 ) ) } :: prevNode.connectedPoints }
         ]
             ++ otherNodes
 
@@ -447,3 +460,46 @@ updateGridPoints gridWidth gridHeight patternArray maybeGrid scale =
 
     else
         updateGridPoints gridWidth gridHeight tail newGrid scale
+
+
+updatemidLineOffsets : List (List GridPoint) -> Int -> List (List GridPoint)
+updatemidLineOffsets grid_ time =
+    let
+        randomNum seed =
+            if (Tuple.first <| Random.step (Random.int 0 1) <| Random.initialSeed seed) == 0 then
+                -1
+
+            else
+                1
+
+        offset oldVal amount =
+            let
+                newVal =
+                    oldVal + amount
+            in
+            if newVal > 8 || newVal < -8 then
+                oldVal
+
+            else
+                newVal
+
+        updateOffsets : GridPoint -> GridPoint
+        updateOffsets point =
+            { point
+                | connectedPoints =
+                    List.map
+                        (\conPoint ->
+                            case conPoint.betweenOffsetValues of
+                                ( ( a1, a2 ), ( b1, b2 ), ( c1, c2 ) ) ->
+                                    { conPoint
+                                        | betweenOffsetValues =
+                                            ( ( offset a1 <| randomNum (time + conPoint.offsetX), offset a2 <| randomNum (time + conPoint.offsetX + 1) )
+                                            , ( offset b1 <| randomNum (time + conPoint.offsetY), offset b2 <| randomNum (time + conPoint.offsetY + 1) )
+                                            , ( offset c1 <| randomNum time, offset c2 <| randomNum (time + 1) )
+                                            )
+                                    }
+                        )
+                        point.connectedPoints
+            }
+    in
+    List.map (\row -> List.map updateOffsets row) grid_

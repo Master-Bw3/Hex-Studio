@@ -7,7 +7,6 @@ import Components.App.Content exposing (content)
 import Components.App.Grid exposing (..)
 import Gen.Params.App exposing (Params)
 import Html exposing (..)
-import Json.Decode as Decode
 import Logic.App.Model as L exposing (Model)
 import Logic.App.Msg as L exposing (..)
 import Logic.App.PatternList.PatternArray exposing (addToPatternArray, getPatternFromSignature)
@@ -64,7 +63,7 @@ init =
       , settings =
             { gridScale = 1.0
             }
-      , time = 0      
+      , time = 0
       }
     , Cmd.batch [ Task.attempt GetGrid (getElement "hex_grid"), Task.attempt GetContentSize (getElement "content") ]
     )
@@ -184,7 +183,14 @@ update msg model =
             ( model, Cmd.batch [ Task.attempt GetGrid (getElement "hex_grid"), Task.attempt GetContentSize (getElement "content") ] )
 
         Tick newTime ->
-            ( { model | time = Time.posixToMillis newTime }
+            let
+                points =
+                    grid.points
+            in
+            ( { model
+                | time = Time.posixToMillis newTime
+                , grid = { grid | points = updatemidLineOffsets points (Time.posixToMillis newTime)}
+              }
             , Cmd.none
             )
 
