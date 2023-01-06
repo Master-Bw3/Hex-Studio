@@ -40,7 +40,7 @@ iotaColorMap iota =
         Entity _ ->
             "#354B4C"
 
-        List _ ->
+        IotaList _ ->
             "#354C3F"
 
         Pattern _ ->
