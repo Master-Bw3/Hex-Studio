@@ -417,11 +417,19 @@ generateGrid gridWidth gridHeight scale =
         (\r _ ->
             List.indexedMap
                 (\i _ ->
+                    let
+                        radius =
+                            if r >= (rowCount - 3) || (i >= pointCount - 3) then
+                                0
+
+                            else
+                                8.0 * scale
+                    in
                     { x = (spacing scale * toFloat i) + (spacing scale / 2 * toFloat (modBy 2 r)) + ((gridWidth - ((toFloat pointCount - 3.5) * spacing scale)) / 2)
                     , y = (verticalSpacing scale * toFloat r) + ((gridHeight - (toFloat (rowCount - 4) * verticalSpacing scale)) / 2)
                     , offsetX = i * 2 + modBy 2 r
                     , offsetY = r
-                    , radius = 8.0 * scale
+                    , radius = radius
                     , used = False
                     , color = accent1
                     , connectedPoints = []

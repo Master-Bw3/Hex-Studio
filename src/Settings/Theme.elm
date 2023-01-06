@@ -3,26 +3,32 @@ module Settings.Theme exposing (..)
 import Logic.App.Types exposing (Iota(..))
 
 
+accent1 : String
 accent1 =
     "#BAC5E2"
 
 
+accent2 : String
 accent2 =
     "#D8B8E0"
 
 
+accent2_saturated : String
 accent2_saturated =
     "#D786EA"
 
 
+accent3 : String
 accent3 =
     "#e0b8b8"
 
 
+accent4 : String
 accent4 =
     "#dd6666"
 
 
+iotaColorMap : Iota -> String
 iotaColorMap iota =
     case iota of
         Null ->

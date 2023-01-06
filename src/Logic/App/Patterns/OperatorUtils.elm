@@ -4,12 +4,15 @@ import Array exposing (Array)
 import Logic.App.Types exposing (Iota(..))
 import Logic.App.Utils.Utils exposing (unshift)
 
+makeConstant : Iota -> Array Iota -> Array Iota
+makeConstant iota stack =
+    unshift iota stack
 
 actionNoInput : Array Iota -> Array Iota -> Array Iota
 actionNoInput stack action =
     Array.append action stack
 
-
+action1Input : Array Iota -> (Iota -> Iota) -> (Iota -> Array Iota) -> Array Iota
 action1Input stack inputGetter action =
     let
         iota =

@@ -1,10 +1,10 @@
 module Logic.App.Patterns.PatternRegistry exposing (patternRegistry, unknownPattern)
 
-import Logic.App.Types exposing (Iota, PatternType)
-import Logic.App.Patterns.Selectors exposing (getCaster)
 import Array exposing (Array)
-import Logic.App.Patterns.Misc exposing (entityPos)
-import Logic.App.Patterns.Misc exposing (raycast)
+import Logic.App.Patterns.Misc exposing (entityPos, raycast)
+import Logic.App.Patterns.OperatorUtils exposing (makeConstant)
+import Logic.App.Patterns.Selectors exposing (getCaster)
+import Logic.App.Types exposing (Iota(..), PatternType)
 
 
 test : Array Iota -> Array Iota
@@ -130,16 +130,16 @@ patternRegistry =
     , { signature = "wdwewewewewewqw", internalName = "writable/entity", action = test, displayName = "" }
     , { signature = "qeewdweddw", internalName = "read/local", action = test, displayName = "" }
     , { signature = "eqqwawqaaw", internalName = "write/local", action = test, displayName = "" }
-    , { signature = "d", internalName = "const/null", action = test, displayName = "" }
-    , { signature = "aqae", internalName = "const/true", action = test, displayName = "" }
-    , { signature = "dedq", internalName = "const/false", action = test, displayName = "" }
+    , { signature = "d", internalName = "const/null", action = makeConstant Null, displayName = "" }
+    , { signature = "aqae", internalName = "const/true", action = makeConstant (Boolean True), displayName = "" }
+    , { signature = "dedq", internalName = "const/false", action = makeConstant (Boolean False), displayName = "" }
     , { signature = "qqqqqea", internalName = "const/vec/px", action = test, displayName = "" }
     , { signature = "qqqqqew", internalName = "const/vec/py", action = test, displayName = "" }
     , { signature = "qqqqqed", internalName = "const/vec/pz", action = test, displayName = "" }
     , { signature = "eeeeeqa", internalName = "const/vec/nx", action = test, displayName = "" }
     , { signature = "eeeeeqw", internalName = "const/vec/ny", action = test, displayName = "" }
     , { signature = "eeeeeqd", internalName = "const/vec/nz", action = test, displayName = "" }
-    , { signature = "qqqqq", internalName = "const/vec/0", action = test, displayName = "" }
+    , { signature = "qqqqq", internalName = "const/vec/0", action = makeConstant (Vector ( 0, 0, 0 )), displayName = "" }
     , { signature = "qdwdq", internalName = "const/double/pi", action = test, displayName = "" }
     , { signature = "eawae", internalName = "const/double/tau", action = test, displayName = "" }
     , { signature = "aaq", internalName = "const/double/e", action = test, displayName = "" }
@@ -175,5 +175,5 @@ patternRegistry =
     , { signature = "qaeaqwded", internalName = "slice", action = test, displayName = "" }
     , { signature = "wqaeaqw", internalName = "modify_in_place", action = test, displayName = "" }
     , { signature = "ddewedd", internalName = "construct", action = test, displayName = "" }
-    , { signature = "aaqwqaa", internalName = "deconstruct", action = test, displayName = ""  }
+    , { signature = "aaqwqaa", internalName = "deconstruct", action = test, displayName = "" }
     ]
