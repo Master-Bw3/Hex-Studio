@@ -133,15 +133,15 @@ patternRegistry =
     , { signature = "d", internalName = "const/null", action = makeConstant Null, displayName = "" }
     , { signature = "aqae", internalName = "const/true", action = makeConstant (Boolean True), displayName = "" }
     , { signature = "dedq", internalName = "const/false", action = makeConstant (Boolean False), displayName = "" }
-    , { signature = "qqqqqea", internalName = "const/vec/px", action = test, displayName = "" }
-    , { signature = "qqqqqew", internalName = "const/vec/py", action = test, displayName = "" }
-    , { signature = "qqqqqed", internalName = "const/vec/pz", action = test, displayName = "" }
-    , { signature = "eeeeeqa", internalName = "const/vec/nx", action = test, displayName = "" }
-    , { signature = "eeeeeqw", internalName = "const/vec/ny", action = test, displayName = "" }
-    , { signature = "eeeeeqd", internalName = "const/vec/nz", action = test, displayName = "" }
+    , { signature = "qqqqqea", internalName = "const/vec/px", action = makeConstant (Vector ( 1, 0, 0 )), displayName = "" }
+    , { signature = "qqqqqew", internalName = "const/vec/py", action = makeConstant (Vector ( 0, 1, 0 )), displayName = "" }
+    , { signature = "qqqqqed", internalName = "const/vec/pz", action = makeConstant (Vector ( 0, 0, 1 )), displayName = "" }
+    , { signature = "eeeeeqa", internalName = "const/vec/nx", action = makeConstant (Vector ( -1, 0, 0 )), displayName = "" }
+    , { signature = "eeeeeqw", internalName = "const/vec/ny", action = makeConstant (Vector ( 0, -1, 0 )), displayName = "" }
+    , { signature = "eeeeeqd", internalName = "const/vec/nz", action = makeConstant (Vector ( 0, 0, -1 )), displayName = "" }
     , { signature = "qqqqq", internalName = "const/vec/0", action = makeConstant (Vector ( 0, 0, 0 )), displayName = "" }
-    , { signature = "qdwdq", internalName = "const/double/pi", action = test, displayName = "" }
-    , { signature = "eawae", internalName = "const/double/tau", action = test, displayName = "" }
+    , { signature = "qdwdq", internalName = "const/double/pi", action = makeConstant (Number pi), displayName = "" }
+    , { signature = "eawae", internalName = "const/double/tau", action = makeConstant (Number (pi * 2)), displayName = "" }
     , { signature = "aaq", internalName = "const/double/e", action = test, displayName = "" }
     , { signature = "qqqqqdaqa", internalName = "get_entity", action = test, displayName = "" }
     , { signature = "qqqqqdaqaawa", internalName = "get_entity/animal", action = test, displayName = "" }
