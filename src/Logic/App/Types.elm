@@ -19,6 +19,22 @@ type alias PatternType =
     { signature : String, action : Array Iota -> Array Iota, displayName : String, internalName : String }
 
 
+type Mishap
+    = InvalidPattern
+    | NotEnoughIotas
+    | IncorrectIota
+    | VectorOutOfAmbit
+    | EntityOutOfAmbit
+    | EntityIsImmune
+    | MathematicalError
+    | IncorrectItem
+    | IncorrectBlock
+    | HastyRetrospection
+    | DelveTooDeep
+    | TransgressOther
+    | DisallowedAction
+    | CatastrophicFailure
+
 type Iota
     = Number Float
     | Vector ( Float, Float, Float )
@@ -27,7 +43,8 @@ type Iota
     | IotaList (Array Iota)
     | Pattern PatternType
     | Null
-    | Garbage
+    | Garbage Mishap
+
 
 type alias GridPoint =
     { x : Float
@@ -37,7 +54,7 @@ type alias GridPoint =
     , radius : Float
     , used : Bool
     , color : String
-    , connectedPoints : List { offsetX : Int, offsetY : Int, betweenOffsetValues : ((Int, Int), (Int, Int), (Int, Int))}
+    , connectedPoints : List { offsetX : Int, offsetY : Int, betweenOffsetValues : ( ( Int, Int ), ( Int, Int ), ( Int, Int ) ) }
     }
 
 

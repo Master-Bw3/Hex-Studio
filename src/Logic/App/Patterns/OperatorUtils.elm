@@ -1,16 +1,19 @@
 module Logic.App.Patterns.OperatorUtils exposing (..)
 
 import Array exposing (Array)
-import Logic.App.Types exposing (Iota(..))
+import Logic.App.Types exposing (Iota(..), Mishap(..))
 import Logic.App.Utils.Utils exposing (unshift)
+
 
 makeConstant : Iota -> Array Iota -> Array Iota
 makeConstant iota stack =
     unshift iota stack
 
+
 actionNoInput : Array Iota -> Array Iota -> Array Iota
 actionNoInput stack action =
     Array.append action stack
+
 
 action1Input : Array Iota -> (Iota -> Iota) -> (Iota -> Array Iota) -> Array Iota
 action1Input stack inputGetter action =
@@ -21,14 +24,16 @@ action1Input stack inputGetter action =
         newStack =
             Array.slice 1 (Array.length stack) stack
     in
-    if iota /= Garbage then
-        Array.append (action iota) newStack
-    else
-        unshift Garbage newStack
+    case iota of
+        Garbage _ ->
+            unshift iota newStack
+
+        _ ->
+            Array.append (action iota) newStack
 
 
 get1Input stack inputGetter =
-    inputGetter <| Maybe.withDefault Garbage <| Array.get 0 stack
+    inputGetter <| Maybe.withDefault (Garbage NotEnoughIotas) <| Array.get 0 stack
 
 
 action2Inputs : Array Iota -> (Iota -> Iota) -> (Iota -> Iota) -> (Iota -> Iota -> Array Iota) -> Array Iota
@@ -45,12 +50,22 @@ action2Inputs stack inputGetter1 inputGetter2 action =
 
         newStack =
             Array.slice 2 (Array.length stack) stack
-    in
-    if iota1 /= Garbage && iota2 /= Garbage then
-        Array.append (action iota1 iota2) newStack
 
-    else
-        Array.append (Array.fromList [ iota1, iota2 ]) newStack
+        noAction =
+            Array.append (Array.fromList [ iota1, iota2 ]) newStack
+    in
+    case ( iota1, iota2 ) of
+        ( Garbage _, Garbage _ ) ->
+            noAction
+
+        ( Garbage _, _ ) ->
+            noAction
+
+        ( _, Garbage _ ) ->
+            noAction
+
+        _ ->
+            Array.append (action iota1 iota2) newStack
 
 
 get2Inputs :
@@ -59,33 +74,25 @@ get2Inputs :
     -> (Iota -> Iota)
     -> ( Iota, Iota )
 get2Inputs stack inputGetter1 inputGetter2 =
-    if Array.length stack >= 2 then
-        let
-            iota1 =
-                inputGetter1 <| Maybe.withDefault Garbage <| Array.get 0 stack
+    let
+        maybeIota1 =
+            Array.get 0 stack
 
-            iota2 =
-                inputGetter2 <| Maybe.withDefault Garbage <| Array.get 1 stack
-        in
-        ( iota1, iota2 )
+        maybeIota2 =
+            Array.get 1 stack
+    in
+    case ( maybeIota1, maybeIota2 ) of
+        ( Just iota, Nothing ) ->
+            ( Garbage NotEnoughIotas, iota )
 
-    else
-        let
-            maybeIota1 =
-                Array.get 0 stack
+        ( Nothing, Just iota ) ->
+            ( Garbage NotEnoughIotas, iota )
 
-            maybeIota2 =
-                Array.get 1 stack
-        in
-        case ( maybeIota1, maybeIota2 ) of
-            ( Just iota, Nothing ) ->
-                ( Garbage, iota )
+        ( Nothing, Nothing ) ->
+            ( Garbage NotEnoughIotas, Garbage NotEnoughIotas )
 
-            ( Nothing, Just iota ) ->
-                ( Garbage, iota )
-
-            _ ->
-                ( Garbage, Garbage )
+        ( Just iota1, Just iota2 ) ->
+            ( inputGetter1 iota1, inputGetter2 iota2 )
 
 
 getNumberOrVector iota =
@@ -96,8 +103,11 @@ getNumberOrVector iota =
         Number _ ->
             iota
 
+        Garbage _ ->
+            iota
+
         _ ->
-            Garbage
+            Garbage IncorrectIota
 
 
 getVector iota =
@@ -105,8 +115,11 @@ getVector iota =
         Vector _ ->
             iota
 
+        Garbage _ ->
+            iota
+
         _ ->
-            Garbage
+            Garbage IncorrectIota
 
 
 getEntity iota =
@@ -114,5 +127,8 @@ getEntity iota =
         Entity _ ->
             iota
 
+        Garbage _ ->
+            iota
+
         _ ->
-            Garbage
+            Garbage IncorrectIota

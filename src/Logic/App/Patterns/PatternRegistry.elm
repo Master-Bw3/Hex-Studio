@@ -1,9 +1,10 @@
 module Logic.App.Patterns.PatternRegistry exposing (patternRegistry, unknownPattern)
 
 import Array exposing (Array)
-import Logic.App.Patterns.Misc exposing (entityPos, raycast)
+import Logic.App.Patterns.Circles exposing (..)
+import Logic.App.Patterns.Misc exposing (..)
 import Logic.App.Patterns.OperatorUtils exposing (makeConstant)
-import Logic.App.Patterns.Selectors exposing (getCaster)
+import Logic.App.Patterns.Selectors exposing (..)
 import Logic.App.Types exposing (Iota(..), PatternType)
 
 
@@ -26,16 +27,16 @@ patternRegistry =
     , { signature = "qaq", internalName = "get_caster", action = getCaster, displayName = "Mind's Reflection" }
     , { signature = "aa", internalName = "entity_pos/eye", action = entityPos, displayName = "Compass' Purification" }
     , { signature = "dd", internalName = "entity_pos/foot", action = entityPos, displayName = "Compass' Purification II" }
-    , { signature = "wa", internalName = "get_entity_look", action = test, displayName = "" }
-    , { signature = "awq", internalName = "get_entity_height", action = test, displayName = "" }
-    , { signature = "wq", internalName = "get_entity_velocity", action = test, displayName = "" }
+    , { signature = "wa", internalName = "get_entity_look", action = getEntityLook, displayName = "Alidade's Purification" }
+    , { signature = "awq", internalName = "get_entity_height", action = getEntityHeight, displayName = "Stadiometer's Purification" }
+    , { signature = "wq", internalName = "get_entity_velocity", action = getEntityVelocity, displayName = "Pace Purification" }
     , { signature = "wqaawdd", internalName = "raycast", action = raycast, displayName = "Archer's Distillation" }
-    , { signature = "weddwaa", internalName = "raycast/axis", action = test, displayName = "" }
-    , { signature = "weaqa", internalName = "raycast/entity", action = test, displayName = "" }
-    , { signature = "eaqwqae", internalName = "circle/impetus_pos", action = test, displayName = "" }
-    , { signature = "eaqwqaewede", internalName = "circle/impetus_dir", action = test, displayName = "" }
-    , { signature = "eaqwqaewdd", internalName = "circle/bounds/min", action = test, displayName = "" }
-    , { signature = "aqwqawaaqa", internalName = "circle/bounds/max", action = test, displayName = "" }
+    , { signature = "weddwaa", internalName = "raycast/axis", action = raycastAxis, displayName = "Architect's Distillation" }
+    , { signature = "weaqa", internalName = "raycast/entity", action = raycastEntity, displayName = "Scout's Distillation" }
+    , { signature = "eaqwqae", internalName = "circle/impetus_pos", action = test, displayName = "Waystone Reflection" }
+    , { signature = "eaqwqaewede", internalName = "circle/impetus_dir", action = circleImpetusDirection, displayName = "Lodestone Reflection" }
+    , { signature = "eaqwqaewdd", internalName = "circle/bounds/min", action = circleBoundsMin, displayName = "Lesser Fold Reflection" }
+    , { signature = "aqwqawaaqa", internalName = "circle/bounds/max", action = circleBoundsMax, displayName = "Greater Fold Reflection" }
     , { signature = "aawdd", internalName = "swap", action = test, displayName = "" }
     , { signature = "aaeaa", internalName = "rotate", action = test, displayName = "" }
     , { signature = "ddqdd", internalName = "rotate_reverse", action = test, displayName = "" }

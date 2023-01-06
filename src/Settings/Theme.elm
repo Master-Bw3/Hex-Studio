@@ -52,5 +52,5 @@ iotaColorMap iota =
         Pattern _ ->
             "#354C3F"
 
-        Garbage ->
+        Garbage _ ->
             "#4F3737"
