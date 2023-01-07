@@ -40,11 +40,11 @@ patternRegistry =
     , { signature = "aqwqawaaqa", internalName = "circle/bounds/max", action = circleBoundsMax, displayName = "Greater Fold Reflection" }
     , { signature = "aawdd", internalName = "swap", action = swap, displayName = "Jester's Gambit" }
     , { signature = "aaeaa", internalName = "rotate", action = rotate, displayName = "Rotation Gambit" }
-    , { signature = "ddqdd", internalName = "rotate_reverse", action = test, displayName = "" }
-    , { signature = "aadaa", internalName = "duplicate", action = test, displayName = "" }
-    , { signature = "aaedd", internalName = "over", action = test, displayName = "" }
-    , { signature = "ddqaa", internalName = "tuck", action = test, displayName = "" }
-    , { signature = "aadadaaw", internalName = "2dup", action = test, displayName = "" }
+    , { signature = "ddqdd", internalName = "rotate_reverse", action = rotateReverse, displayName = "Rotation Gambit II" }
+    , { signature = "aadaa", internalName = "duplicate", action = duplicate, displayName = "Gemini Decomposition" }
+    , { signature = "aaedd", internalName = "over", action = over, displayName = "Prospector's Gambit" }
+    , { signature = "ddqaa", internalName = "tuck", action = tuck, displayName = "Undertaker's Gambit" }
+    , { signature = "aadadaaw", internalName = "2dup", action = dup2, displayName = "Dioscuri Gambi" }
     , { signature = "qwaeawqaeaqa", internalName = "stack_len", action = test, displayName = "" }
     , { signature = "aadaadaa", internalName = "duplicate_n", action = test, displayName = "" }
     , { signature = "ddad", internalName = "fisherman", action = test, displayName = "" }
