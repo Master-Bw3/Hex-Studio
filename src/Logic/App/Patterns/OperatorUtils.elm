@@ -43,10 +43,10 @@ action2Inputs : Array Iota -> (Iota -> Iota) -> (Iota -> Iota) -> (Iota -> Iota 
 action2Inputs stack inputGetter1 inputGetter2 action =
     let
         maybeIota1 =
-            Array.get 0 stack
+            Array.get 1 stack
 
         maybeIota2 =
-            Array.get 1 stack
+            Array.get 0 stack
 
         newStack =
             Array.slice 2 (Array.length stack) stack
@@ -72,13 +72,13 @@ action3Inputs : Array Iota -> (Iota -> Iota) -> (Iota -> Iota) -> (Iota -> Iota)
 action3Inputs stack inputGetter1 inputGetter2 inputGetter3 action =
     let
         maybeIota1 =
-            Array.get 0 stack
+            Array.get 2 stack
 
         maybeIota2 =
             Array.get 1 stack
 
         maybeIota3 =
-            Array.get 2 stack
+            Array.get 0 stack
 
         newStack =
             Array.slice 3 (Array.length stack) stack
@@ -106,6 +106,30 @@ getNumberOrVector iota =
         Vector _ ->
             iota
 
+        Number _ ->
+            iota
+
+        _ ->
+            Garbage IncorrectIota
+
+
+getInteger : Iota -> Iota
+getInteger iota =
+    case iota of
+        Number number ->
+            if toFloat (round number) == number then
+                iota
+
+            else
+                Garbage IncorrectIota
+
+        _ ->
+            Garbage IncorrectIota
+
+
+getNumber : Iota -> Iota
+getNumber iota =
+    case iota of
         Number _ ->
             iota
 

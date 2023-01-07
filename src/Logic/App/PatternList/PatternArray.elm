@@ -21,7 +21,7 @@ getPatternFromSignature signature =
                 numberLiteralGenerator signature True
 
             else
-                { unknownPattern | signature = signature }
+                { unknownPattern | signature = signature, displayName = "Pattern " ++ "\"" ++ signature ++ "\"" }
 
 
 addToPatternArray : Model -> PatternType -> Array ( PatternType, List GridPoint )

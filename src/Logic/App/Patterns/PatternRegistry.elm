@@ -6,7 +6,9 @@ import Logic.App.Patterns.Misc exposing (..)
 import Logic.App.Patterns.OperatorUtils exposing (makeConstant)
 import Logic.App.Patterns.Selectors exposing (..)
 import Logic.App.Patterns.Stack exposing (..)
+import Logic.App.Patterns.Math exposing (..)
 import Logic.App.Types exposing (Iota(..), PatternType)
+import Logic.App.Types exposing (Mishap(..))
 
 
 test : Array Iota -> Array Iota
@@ -16,7 +18,7 @@ test stack =
 
 unknownPattern : PatternType
 unknownPattern =
-    { signature = "", action = test, displayName = "OwO whats this", internalName = "" }
+    { signature = "", action = makeConstant (Garbage InvalidPattern), displayName = "Unknown Pattern", internalName = "" }
 
 
 patternRegistry : List PatternType
@@ -45,15 +47,15 @@ patternRegistry =
     , { signature = "aaedd", internalName = "over", action = over, displayName = "Prospector's Gambit" }
     , { signature = "ddqaa", internalName = "tuck", action = tuck, displayName = "Undertaker's Gambit" }
     , { signature = "aadadaaw", internalName = "2dup", action = dup2, displayName = "Dioscuri Gambi" }
-    , { signature = "qwaeawqaeaqa", internalName = "stack_len", action = test, displayName = "" }
-    , { signature = "aadaadaa", internalName = "duplicate_n", action = test, displayName = "" }
-    , { signature = "ddad", internalName = "fisherman", action = test, displayName = "" }
-    , { signature = "aada", internalName = "fisherman/copy", action = test, displayName = "" }
+    , { signature = "qwaeawqaeaqa", internalName = "stack_len", action = stackLength, displayName = "Flock's Reflection" }
+    , { signature = "aadaadaa", internalName = "duplicate_n", action = duplicateN, displayName = "Gemini Gambit" }
+    , { signature = "ddad", internalName = "fisherman", action = fisherman, displayName = "Fisherman's Gambit" }
+    , { signature = "aada", internalName = "fisherman/copy", action = fishermanCopy, displayName = "Fisherman's Gambit II" }
     , { signature = "qaawdde", internalName = "swizzle", action = test, displayName = "" }
-    , { signature = "waaw", internalName = "add", action = test, displayName = "" }
-    , { signature = "wddw", internalName = "sub", action = test, displayName = "" }
-    , { signature = "waqaw", internalName = "mul_dot", action = test, displayName = "" }
-    , { signature = "wdedw", internalName = "div_cross", action = test, displayName = "" }
+    , { signature = "waaw", internalName = "add", action = add, displayName = "Additive Distillation" }
+    , { signature = "wddw", internalName = "sub", action = subtract, displayName = "Subtractive Distillation" }
+    , { signature = "waqaw", internalName = "mul_dot", action = mulDot, displayName = "Multiplicative Distillation" }
+    , { signature = "wdedw", internalName = "div_cross", action = divCross, displayName = "Division Distillation" }
     , { signature = "wqaqw", internalName = "abs_len", action = test, displayName = "" }
     , { signature = "wedew", internalName = "pow_proj", action = test, displayName = "" }
     , { signature = "ewq", internalName = "floor", action = test, displayName = "" }
