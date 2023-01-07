@@ -1,6 +1,8 @@
 module Logic.App.Patterns.OperatorUtils exposing (..)
 
 import Array exposing (Array)
+import Html exposing (th)
+import Json.Decode exposing (maybe)
 import Logic.App.Types exposing (Iota(..), Mishap(..))
 import Logic.App.Utils.Utils exposing (unshift)
 
@@ -18,100 +20,56 @@ actionNoInput stack action =
 action1Input : Array Iota -> (Iota -> Iota) -> (Iota -> Array Iota) -> Array Iota
 action1Input stack inputGetter action =
     let
-        iota =
-            get1Input stack inputGetter
+        maybeIota =
+            Array.get 0 stack
 
         newStack =
             Array.slice 1 (Array.length stack) stack
     in
-    case iota of
-        Garbage _ ->
-            unshift iota newStack
+    case maybeIota of
+        Nothing ->
+            unshift (Garbage NotEnoughIotas) newStack
 
-        _ ->
-            Array.append (action iota) newStack
+        Just iota ->
+            case inputGetter <| iota of
+                Garbage IncorrectIota ->
+                    unshift (Garbage IncorrectIota) newStack
 
-
-get1Input : Array Iota -> (Iota -> b) -> b
-get1Input stack inputGetter =
-    inputGetter <| mapNothingToMissingIota <| Array.get 0 stack
+                _ ->
+                    Array.append (action iota) newStack
 
 
 action2Inputs : Array Iota -> (Iota -> Iota) -> (Iota -> Iota) -> (Iota -> Iota -> Array Iota) -> Array Iota
 action2Inputs stack inputGetter1 inputGetter2 action =
-    let
-        iotas =
-            get2Inputs stack inputGetter1 inputGetter2
-
-        newStack =
-            Array.slice 2 (Array.length stack) stack
-    in
-    case iotas of
-        ( iota1, iota2 ) ->
-            if checkNotGarbage iota1 && checkNotGarbage iota2 then
-                Array.append (action iota1 iota2) newStack
-
-            else
-                Array.append (Array.fromList [ iota1, iota2 ]) newStack
-
-
-get2Inputs :
-    Array Iota
-    -> (Iota -> Iota)
-    -> (Iota -> Iota)
-    -> ( Iota, Iota )
-get2Inputs stack inputGetter1 inputGetter2 =
     let
         maybeIota1 =
             Array.get 0 stack
 
         maybeIota2 =
             Array.get 1 stack
+
+        newStack =
+            Array.slice 2 (Array.length stack) stack
     in
     if maybeIota1 == Nothing || maybeIota2 == Nothing then
-        let
-            iotas =
-                Array.fromList <| List.map mapNothingToMissingIota (moveNothingsToFront [ maybeIota1, maybeIota2 ])
-
-            iota1 =
-                Maybe.withDefault (Garbage CatastrophicFailure) <| Array.get 0 iotas
-
-            iota2 =
-                Maybe.withDefault (Garbage CatastrophicFailure) <| Array.get 1 iotas
-        in
-        ( iota1, iota2 )
+        Array.append (Array.map mapNothingToMissingIota <| Array.fromList <| moveNothingsToFront [ maybeIota1, maybeIota2 ]) newStack
 
     else
-        ( inputGetter1 <| Maybe.withDefault (Garbage CatastrophicFailure) maybeIota1
-        , inputGetter2 <| Maybe.withDefault (Garbage CatastrophicFailure) maybeIota2
-        )
+        case ( Maybe.map inputGetter1 maybeIota1, Maybe.map inputGetter2 maybeIota2 ) of
+            ( Just iota1, Just iota2 ) ->
+                if iota1 == Garbage IncorrectIota || iota2 == Garbage IncorrectIota then
+                    Array.append (Array.fromList [ iota1, iota2 ]) newStack
+
+                else
+                    Array.append (action iota1 iota2) newStack
+
+            _ ->
+                -- this should never happen
+                unshift (Garbage CatastrophicFailure) newStack
 
 
 action3Inputs : Array Iota -> (Iota -> Iota) -> (Iota -> Iota) -> (Iota -> Iota) -> (Iota -> Iota -> Iota -> Array Iota) -> Array Iota
 action3Inputs stack inputGetter1 inputGetter2 inputGetter3 action =
-    let
-        iotas =
-            get3Inputs stack inputGetter1 inputGetter2 inputGetter3
-
-        newStack =
-            Array.slice 3 (Array.length stack) stack
-    in
-    case iotas of
-        ( iota1, iota2, iota3 ) ->
-            if checkNotGarbage iota1 && checkNotGarbage iota2 && checkNotGarbage iota3 then
-                Array.append (action iota1 iota2 iota3) newStack
-
-            else
-                Array.append (Array.fromList [ iota1, iota2, iota3 ]) newStack
-
-
-get3Inputs :
-    Array Iota
-    -> (Iota -> Iota)
-    -> (Iota -> Iota)
-    -> (Iota -> Iota)
-    -> ( Iota, Iota, Iota )
-get3Inputs stack inputGetter1 inputGetter2 inputGetter3 =
     let
         maybeIota1 =
             Array.get 0 stack
@@ -121,28 +79,25 @@ get3Inputs stack inputGetter1 inputGetter2 inputGetter3 =
 
         maybeIota3 =
             Array.get 2 stack
+
+        newStack =
+            Array.slice 3 (Array.length stack) stack
     in
     if maybeIota1 == Nothing || maybeIota2 == Nothing || maybeIota3 == Nothing then
-        let
-            iotas =
-                Array.fromList <| List.map mapNothingToMissingIota (moveNothingsToFront [ maybeIota1, maybeIota2, maybeIota3 ])
-
-            iota1 =
-                Maybe.withDefault (Garbage CatastrophicFailure) <| Array.get 0 iotas
-
-            iota2 =
-                Maybe.withDefault (Garbage CatastrophicFailure) <| Array.get 1 iotas
-
-            iota3 =
-                Maybe.withDefault (Garbage CatastrophicFailure) <| Array.get 2 iotas
-        in
-        ( iota1, iota2, iota3 )
+        Array.append (Array.map mapNothingToMissingIota <| Array.fromList <| moveNothingsToFront [ maybeIota1, maybeIota2, maybeIota3 ]) newStack
 
     else
-        ( inputGetter1 <| Maybe.withDefault (Garbage CatastrophicFailure) maybeIota1
-        , inputGetter2 <| Maybe.withDefault (Garbage CatastrophicFailure) maybeIota2
-        , inputGetter3 <| Maybe.withDefault (Garbage CatastrophicFailure) maybeIota3
-        )
+        case ( Maybe.map inputGetter1 maybeIota1, Maybe.map inputGetter2 maybeIota2, Maybe.map inputGetter3 maybeIota3 ) of
+            ( Just iota1, Just iota2, Just iota3 ) ->
+                if iota1 == Garbage IncorrectIota || iota2 == Garbage IncorrectIota || iota3 == Garbage IncorrectIota then
+                    Array.append (Array.fromList [ iota1, iota2, iota3 ]) newStack
+
+                else
+                    Array.append (action iota1 iota2 iota3) newStack
+
+            _ ->
+                -- this should never happen
+                unshift (Garbage CatastrophicFailure) newStack
 
 
 getNumberOrVector : Iota -> Iota
@@ -152,9 +107,6 @@ getNumberOrVector iota =
             iota
 
         Number _ ->
-            iota
-
-        Garbage _ ->
             iota
 
         _ ->
@@ -167,9 +119,6 @@ getVector iota =
         Vector _ ->
             iota
 
-        Garbage _ ->
-            iota
-
         _ ->
             Garbage IncorrectIota
 
@@ -178,9 +127,6 @@ getEntity : Iota -> Iota
 getEntity iota =
     case iota of
         Entity _ ->
-            iota
-
-        Garbage _ ->
             iota
 
         _ ->
