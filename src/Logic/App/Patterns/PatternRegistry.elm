@@ -1,4 +1,4 @@
-module Logic.App.Patterns.PatternRegistry exposing (patternRegistry, unknownPattern)
+module Logic.App.Patterns.PatternRegistry exposing (numberLiteralGenerator, patternRegistry, unknownPattern)
 
 import Array exposing (Array)
 import Logic.App.Patterns.Circles exposing (..)
@@ -179,3 +179,40 @@ patternRegistry =
     , { signature = "ddewedd", internalName = "construct", action = test, displayName = "" }
     , { signature = "aaqwqaa", internalName = "deconstruct", action = test, displayName = "" }
     ]
+
+
+numberLiteralGenerator : String -> Bool -> PatternType
+numberLiteralGenerator angleSignature isNegative =
+    let
+        letterMap : Char -> (Float -> Float)
+        letterMap letter =
+            case letter of
+                'w' ->
+                    (+) 1
+
+                'q' ->
+                    (+) 5
+
+                'e' ->
+                    (+) 10
+
+                'a' ->
+                    (*) 2
+
+                'd' ->
+                    (*) 0.5
+
+                _ ->
+                    (+) 0
+
+        numberAbs =
+            List.foldl letterMap 0 <| String.toList <| String.dropLeft 4 angleSignature
+
+        number =
+            if isNegative then
+                -numberAbs
+
+            else
+                numberAbs
+    in
+    { signature = angleSignature, action = numberLiteral number, displayName = "Numerical Reflection: " ++ String.fromFloat number, internalName = String.fromFloat number }

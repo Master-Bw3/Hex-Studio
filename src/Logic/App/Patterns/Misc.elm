@@ -4,6 +4,11 @@ import Array exposing (Array)
 import Logic.App.Patterns.OperatorUtils exposing (action1Input, action2Inputs, getEntity, getVector)
 import Logic.App.Types exposing (Iota(..))
 import Logic.App.Types exposing (EntityType(..))
+import Logic.App.Utils.Utils exposing (unshift)
+
+numberLiteral : Float -> Array Iota -> Array Iota 
+numberLiteral number stack = 
+    unshift (Number number) stack
 
 
 entityPos : Array Iota -> Array Iota

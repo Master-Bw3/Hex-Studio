@@ -9,10 +9,22 @@ import Logic.App.Utils.GetAngleSignature exposing (getAngleSignature)
 
 getPatternFromSignature : String -> PatternType
 getPatternFromSignature signature =
-    Maybe.withDefault {unknownPattern | signature = signature} <| List.head <| List.filter (\regPattern -> regPattern.signature == signature) patternRegistry
+    case List.head <| List.filter (\regPattern -> regPattern.signature == signature) patternRegistry of
+        Just a ->
+            a
+
+        Nothing ->
+            if String.startsWith "aqaa" signature then
+                numberLiteralGenerator signature False
+
+            else if String.startsWith "dedd" signature then
+                numberLiteralGenerator signature True
+
+            else
+                { unknownPattern | signature = signature }
 
 
-addToPatternArray : Model -> PatternType -> Array (PatternType, List GridPoint)
+addToPatternArray : Model -> PatternType -> Array ( PatternType, List GridPoint )
 addToPatternArray model pattern =
     let
         patternList =
@@ -22,7 +34,6 @@ addToPatternArray model pattern =
             model.grid.drawing
 
         patternDrawingPair =
-            (pattern, drawing.activePath)
+            ( pattern, drawing.activePath )
     in
     Array.append (Array.fromList [ patternDrawingPair ]) patternList
-
