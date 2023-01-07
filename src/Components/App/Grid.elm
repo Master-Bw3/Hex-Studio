@@ -11,7 +11,6 @@ module Components.App.Grid exposing
     )
 
 import Array exposing (Array)
-import FontAwesome.Solid exposing (mouse)
 import Html exposing (..)
 import Html.Attributes as Attr
 import Html.Events.Extra.Mouse as MouseEvent

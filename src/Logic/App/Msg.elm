@@ -15,6 +15,10 @@ type Msg
     | SetGridScale Float
     | WindowResize
     | Tick Time.Posix
+    | UpdatePatternInputField String
+    | InputPattern
+    | SendNumberLiteralToGenerate Float
+    | RecieveGeneratedNumberLiteral String
 
 type alias MouseMoveData =
     { pageX : Int

@@ -9,13 +9,14 @@ import Gen.Params.App exposing (Params)
 import Html exposing (..)
 import Logic.App.Model as L exposing (Model)
 import Logic.App.Msg as L exposing (..)
-import Logic.App.PatternList.PatternArray exposing (addToPatternArray, getPatternFromSignature)
+import Logic.App.PatternList.PatternArray exposing (addToPatternArray, getPatternFromName, getPatternFromSignature)
 import Logic.App.Patterns.PatternRegistry exposing (..)
 import Logic.App.Stack.Stack exposing (applyPatternToStack, applyPatternsToStack)
 import Logic.App.Types exposing (..)
 import Logic.App.Utils.GetAngleSignature exposing (getAngleSignature)
 import Logic.App.Utils.Utils exposing (removeFromArray)
 import Page
+import Ports.HexNumGen as HexNumGen
 import Request
 import Shared
 import Task
@@ -45,7 +46,10 @@ init : ( Model, Cmd Msg )
 init =
     ( { stack = Array.empty
       , patternArray = Array.empty
-      , ui = { openPanels = [ PatternPanel ] }
+      , ui =
+            { openPanels = [ PatternPanel ]
+            , patternInputField = ""
+            }
       , grid =
             { height = 0
             , width = 0
@@ -189,7 +193,47 @@ update msg model =
             in
             ( { model
                 | time = Time.posixToMillis newTime
-                , grid = { grid | points = updatemidLineOffsets points (Time.posixToMillis newTime)}
+                , grid = { grid | points = updatemidLineOffsets points (Time.posixToMillis newTime) }
+              }
+            , Cmd.none
+            )
+
+        UpdatePatternInputField text ->
+            ( { model | ui = { ui | patternInputField = text } }, Cmd.none )
+
+        InputPattern ->
+            let
+                getPattern =
+                    getPatternFromName model.ui.patternInputField
+
+                newPattern =
+                    Tuple.first <| getPattern
+
+                command =
+                    Tuple.second <| getPattern
+            in
+            if command == Cmd.none then
+                ( { model
+                    | patternArray = addToPatternArray model newPattern
+                    , stack = applyPatternToStack model.stack newPattern
+                  }
+                , Cmd.none
+                )
+
+            else
+                ( model, command )
+
+        SendNumberLiteralToGenerate number ->
+            ( model, HexNumGen.call number )
+
+        RecieveGeneratedNumberLiteral signature ->
+            let
+                newPattern =
+                    getPatternFromSignature signature
+            in
+            ( { model
+                | patternArray = addToPatternArray model newPattern
+                , stack = applyPatternToStack model.stack newPattern
               }
             , Cmd.none
             )
@@ -204,7 +248,7 @@ update msg model =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Sub.batch [ Browser.Events.onResize (\_ _ -> WindowResize), Time.every 50 Tick ]
+    Sub.batch [ Browser.Events.onResize (\_ _ -> WindowResize), Time.every 50 Tick, HexNumGen.return RecieveGeneratedNumberLiteral ]
 
 
 view : Model -> View Msg

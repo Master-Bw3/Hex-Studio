@@ -17,6 +17,7 @@ import Components.Icon.XButton exposing (xButton)
 import Components.Icon.MoveButton exposing (moveButton)
 import Html.Events exposing (onClick)
 import Logic.App.Msg exposing (Msg(..))
+import Html.Events exposing (onInput)
 
 
 patternPanel : Model -> Html Msg
@@ -46,11 +47,13 @@ patternPanel model =
                     [ id "add_pattern_input"
                     , placeholder "Add a pattern"
                     , attribute "autocomplete" "off"
+                    , onInput UpdatePatternInputField
                     ]
                     []
-                , div
+                , button
                     [ id "add_pattern_button"
                     , class "add_button"
+                    , onClick InputPattern
                     ]
                     [ Icon.css
                     , Icon.plus |> Icon.styled [ Icon.sm ] |> Icon.view

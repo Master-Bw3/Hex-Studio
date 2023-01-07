@@ -9,6 +9,7 @@ type alias Model =
     , patternArray : Array ( PatternType, List GridPoint )
     , ui :
         { openPanels : List Panel
+        , patternInputField : String
         }
     , grid :
         { width : Float
