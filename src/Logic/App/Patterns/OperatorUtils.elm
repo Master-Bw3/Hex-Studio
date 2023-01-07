@@ -32,8 +32,9 @@ action1Input stack inputGetter action =
             Array.append (action iota) newStack
 
 
+get1Input : Array Iota -> (Iota -> b) -> b
 get1Input stack inputGetter =
-    inputGetter <| Maybe.withDefault (Garbage NotEnoughIotas) <| Array.get 0 stack
+    inputGetter <| mapNothingToMissingIota <| Array.get 0 stack
 
 
 action2Inputs : Array Iota -> (Iota -> Iota) -> (Iota -> Iota) -> (Iota -> Iota -> Array Iota) -> Array Iota
@@ -42,30 +43,16 @@ action2Inputs stack inputGetter1 inputGetter2 action =
         iotas =
             get2Inputs stack inputGetter1 inputGetter2
 
-        iota1 =
-            Tuple.first iotas
-
-        iota2 =
-            Tuple.second iotas
-
         newStack =
             Array.slice 2 (Array.length stack) stack
-
-        noAction =
-            Array.append (Array.fromList [ iota1, iota2 ]) newStack
     in
-    case ( iota1, iota2 ) of
-        ( Garbage _, Garbage _ ) ->
-            noAction
+    case iotas of
+        ( iota1, iota2 ) ->
+            if checkNotGarbage iota1 && checkNotGarbage iota2 then
+                Array.append (action iota1 iota2) newStack
 
-        ( Garbage _, _ ) ->
-            noAction
-
-        ( _, Garbage _ ) ->
-            noAction
-
-        _ ->
-            Array.append (action iota1 iota2) newStack
+            else
+                Array.append (Array.fromList [ iota1, iota2 ]) newStack
 
 
 get2Inputs :
@@ -81,20 +68,84 @@ get2Inputs stack inputGetter1 inputGetter2 =
         maybeIota2 =
             Array.get 1 stack
     in
-    case ( maybeIota1, maybeIota2 ) of
-        ( Just iota, Nothing ) ->
-            ( Garbage NotEnoughIotas, iota )
+    if maybeIota1 == Nothing || maybeIota2 == Nothing then
+        let
+            iotas =
+                Array.fromList <| List.map mapNothingToMissingIota (moveNothingsToFront [ maybeIota1, maybeIota2 ])
 
-        ( Nothing, Just iota ) ->
-            ( Garbage NotEnoughIotas, iota )
+            iota1 =
+                Maybe.withDefault (Garbage CatastrophicFailure) <| Array.get 0 iotas
 
-        ( Nothing, Nothing ) ->
-            ( Garbage NotEnoughIotas, Garbage NotEnoughIotas )
+            iota2 =
+                Maybe.withDefault (Garbage CatastrophicFailure) <| Array.get 1 iotas
+        in
+        ( iota1, iota2 )
 
-        ( Just iota1, Just iota2 ) ->
-            ( inputGetter1 iota1, inputGetter2 iota2 )
+    else
+        ( inputGetter1 <| Maybe.withDefault (Garbage CatastrophicFailure) maybeIota1
+        , inputGetter2 <| Maybe.withDefault (Garbage CatastrophicFailure) maybeIota2
+        )
 
 
+action3Inputs : Array Iota -> (Iota -> Iota) -> (Iota -> Iota) -> (Iota -> Iota) -> (Iota -> Iota -> Iota -> Array Iota) -> Array Iota
+action3Inputs stack inputGetter1 inputGetter2 inputGetter3 action =
+    let
+        iotas =
+            get3Inputs stack inputGetter1 inputGetter2 inputGetter3
+
+        newStack =
+            Array.slice 3 (Array.length stack) stack
+    in
+    case iotas of
+        ( iota1, iota2, iota3 ) ->
+            if checkNotGarbage iota1 && checkNotGarbage iota2 && checkNotGarbage iota3 then
+                Array.append (action iota1 iota2 iota3) newStack
+
+            else
+                Array.append (Array.fromList [ iota1, iota2, iota3 ]) newStack
+
+
+get3Inputs :
+    Array Iota
+    -> (Iota -> Iota)
+    -> (Iota -> Iota)
+    -> (Iota -> Iota)
+    -> ( Iota, Iota, Iota )
+get3Inputs stack inputGetter1 inputGetter2 inputGetter3 =
+    let
+        maybeIota1 =
+            Array.get 0 stack
+
+        maybeIota2 =
+            Array.get 1 stack
+
+        maybeIota3 =
+            Array.get 2 stack
+    in
+    if maybeIota1 == Nothing || maybeIota2 == Nothing || maybeIota3 == Nothing then
+        let
+            iotas =
+                Array.fromList <| List.map mapNothingToMissingIota (moveNothingsToFront [ maybeIota1, maybeIota2, maybeIota3 ])
+
+            iota1 =
+                Maybe.withDefault (Garbage CatastrophicFailure) <| Array.get 0 iotas
+
+            iota2 =
+                Maybe.withDefault (Garbage CatastrophicFailure) <| Array.get 1 iotas
+
+            iota3 =
+                Maybe.withDefault (Garbage CatastrophicFailure) <| Array.get 2 iotas
+        in
+        ( iota1, iota2, iota3 )
+
+    else
+        ( inputGetter1 <| Maybe.withDefault (Garbage CatastrophicFailure) maybeIota1
+        , inputGetter2 <| Maybe.withDefault (Garbage CatastrophicFailure) maybeIota2
+        , inputGetter3 <| Maybe.withDefault (Garbage CatastrophicFailure) maybeIota3
+        )
+
+
+getNumberOrVector : Iota -> Iota
 getNumberOrVector iota =
     case iota of
         Vector _ ->
@@ -110,6 +161,7 @@ getNumberOrVector iota =
             Garbage IncorrectIota
 
 
+getVector : Iota -> Iota
 getVector iota =
     case iota of
         Vector _ ->
@@ -122,6 +174,7 @@ getVector iota =
             Garbage IncorrectIota
 
 
+getEntity : Iota -> Iota
 getEntity iota =
     case iota of
         Entity _ ->
@@ -132,3 +185,54 @@ getEntity iota =
 
         _ ->
             Garbage IncorrectIota
+
+
+getAny : Iota -> Iota
+getAny iota =
+    iota
+
+
+checkNotGarbage : Iota -> Bool
+checkNotGarbage iota =
+    case iota of
+        Garbage _ ->
+            False
+
+        _ ->
+            True
+
+
+mapNothingToMissingIota maybeIota =
+    case maybeIota of
+        Nothing ->
+            Garbage NotEnoughIotas
+
+        Just iota ->
+            iota
+
+
+moveNothingsToFront : List (Maybe a) -> List (Maybe a)
+moveNothingsToFront list =
+    let
+        comparison : Maybe a -> Maybe a -> Order
+        comparison a b =
+            let
+                checkNothing x =
+                    case x of
+                        Nothing ->
+                            1
+
+                        _ ->
+                            2
+            in
+            case compare (checkNothing a) (checkNothing b) of
+                LT ->
+                    LT
+
+                EQ ->
+                    EQ
+
+                GT ->
+                    GT
+    in
+    List.sortWith comparison list

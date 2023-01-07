@@ -5,6 +5,7 @@ import Logic.App.Patterns.Circles exposing (..)
 import Logic.App.Patterns.Misc exposing (..)
 import Logic.App.Patterns.OperatorUtils exposing (makeConstant)
 import Logic.App.Patterns.Selectors exposing (..)
+import Logic.App.Patterns.Stack exposing (..)
 import Logic.App.Types exposing (Iota(..), PatternType)
 
 
@@ -15,7 +16,7 @@ test stack =
 
 unknownPattern : PatternType
 unknownPattern =
-    { signature = "", action = test, displayName = "", internalName = "OwO whats this" }
+    { signature = "", action = test, displayName = "OwO whats this", internalName = "" }
 
 
 patternRegistry : List PatternType
@@ -37,8 +38,8 @@ patternRegistry =
     , { signature = "eaqwqaewede", internalName = "circle/impetus_dir", action = circleImpetusDirection, displayName = "Lodestone Reflection" }
     , { signature = "eaqwqaewdd", internalName = "circle/bounds/min", action = circleBoundsMin, displayName = "Lesser Fold Reflection" }
     , { signature = "aqwqawaaqa", internalName = "circle/bounds/max", action = circleBoundsMax, displayName = "Greater Fold Reflection" }
-    , { signature = "aawdd", internalName = "swap", action = test, displayName = "" }
-    , { signature = "aaeaa", internalName = "rotate", action = test, displayName = "" }
+    , { signature = "aawdd", internalName = "swap", action = swap, displayName = "Jester's Gambit" }
+    , { signature = "aaeaa", internalName = "rotate", action = rotate, displayName = "Rotation Gambit" }
     , { signature = "ddqdd", internalName = "rotate_reverse", action = test, displayName = "" }
     , { signature = "aadaa", internalName = "duplicate", action = test, displayName = "" }
     , { signature = "aaedd", internalName = "over", action = test, displayName = "" }
@@ -131,19 +132,19 @@ patternRegistry =
     , { signature = "wdwewewewewewqw", internalName = "writable/entity", action = test, displayName = "" }
     , { signature = "qeewdweddw", internalName = "read/local", action = test, displayName = "" }
     , { signature = "eqqwawqaaw", internalName = "write/local", action = test, displayName = "" }
-    , { signature = "d", internalName = "const/null", action = makeConstant Null, displayName = "" }
-    , { signature = "aqae", internalName = "const/true", action = makeConstant (Boolean True), displayName = "" }
-    , { signature = "dedq", internalName = "const/false", action = makeConstant (Boolean False), displayName = "" }
-    , { signature = "qqqqqea", internalName = "const/vec/px", action = makeConstant (Vector ( 1, 0, 0 )), displayName = "" }
-    , { signature = "qqqqqew", internalName = "const/vec/py", action = makeConstant (Vector ( 0, 1, 0 )), displayName = "" }
-    , { signature = "qqqqqed", internalName = "const/vec/pz", action = makeConstant (Vector ( 0, 0, 1 )), displayName = "" }
-    , { signature = "eeeeeqa", internalName = "const/vec/nx", action = makeConstant (Vector ( -1, 0, 0 )), displayName = "" }
-    , { signature = "eeeeeqw", internalName = "const/vec/ny", action = makeConstant (Vector ( 0, -1, 0 )), displayName = "" }
-    , { signature = "eeeeeqd", internalName = "const/vec/nz", action = makeConstant (Vector ( 0, 0, -1 )), displayName = "" }
-    , { signature = "qqqqq", internalName = "const/vec/0", action = makeConstant (Vector ( 0, 0, 0 )), displayName = "" }
-    , { signature = "qdwdq", internalName = "const/double/pi", action = makeConstant (Number pi), displayName = "" }
-    , { signature = "eawae", internalName = "const/double/tau", action = makeConstant (Number (pi * 2)), displayName = "" }
-    , { signature = "aaq", internalName = "const/double/e", action = test, displayName = "" }
+    , { signature = "d", internalName = "const/null", action = makeConstant Null, displayName = "Nullary Reflection" }
+    , { signature = "aqae", internalName = "const/true", action = makeConstant (Boolean True), displayName = "True Reflection" }
+    , { signature = "dedq", internalName = "const/false", action = makeConstant (Boolean False), displayName = "False Reflection" }
+    , { signature = "qqqqqea", internalName = "const/vec/px", action = makeConstant (Vector ( 1, 0, 0 )), displayName = "Vector Reflection +X" }
+    , { signature = "qqqqqew", internalName = "const/vec/py", action = makeConstant (Vector ( 0, 1, 0 )), displayName = "Vector Reflection +Y" }
+    , { signature = "qqqqqed", internalName = "const/vec/pz", action = makeConstant (Vector ( 0, 0, 1 )), displayName = "Vector Reflection +Z" }
+    , { signature = "eeeeeqa", internalName = "const/vec/nx", action = makeConstant (Vector ( -1, 0, 0 )), displayName = "Vector Reflection -X" }
+    , { signature = "eeeeeqw", internalName = "const/vec/ny", action = makeConstant (Vector ( 0, -1, 0 )), displayName = "Vector Reflection -Y" }
+    , { signature = "eeeeeqd", internalName = "const/vec/nz", action = makeConstant (Vector ( 0, 0, -1 )), displayName = "Vector Reflection -Z" }
+    , { signature = "qqqqq", internalName = "const/vec/0", action = makeConstant (Vector ( 0, 0, 0 )), displayName = "Vector Reflection Zero" }
+    , { signature = "qdwdq", internalName = "const/double/pi", action = makeConstant (Number pi), displayName = "Arc's Reflection" }
+    , { signature = "eawae", internalName = "const/double/tau", action = makeConstant (Number (pi * 2)), displayName = "Euler's Reflection" }
+    , { signature = "aaq", internalName = "const/double/e", action = makeConstant (Number e), displayName = "Numerical Reflection" }
     , { signature = "qqqqqdaqa", internalName = "get_entity", action = test, displayName = "" }
     , { signature = "qqqqqdaqaawa", internalName = "get_entity/animal", action = test, displayName = "" }
     , { signature = "qqqqqdaqaawq", internalName = "get_entity/monster", action = test, displayName = "" }
