@@ -5,7 +5,8 @@ import Browser.Dom
 import Time
 
 type Msg
-    = ViewPanel Panel Keys
+    = NoOp
+    | ViewPanel Panel Keys
     | GetGrid (Result Browser.Dom.Error Browser.Dom.Element)
     | GetContentSize (Result Browser.Dom.Error Browser.Dom.Element)
     | MouseMove (Float, Float)
@@ -16,9 +17,10 @@ type Msg
     | WindowResize
     | Tick Time.Posix
     | UpdatePatternInputField String
-    | InputPattern
+    | InputPattern String
     | SendNumberLiteralToGenerate Float
     | RecieveGeneratedNumberLiteral String
+    | SelectNextSuggestion Int
 
 type alias MouseMoveData =
     { pageX : Int

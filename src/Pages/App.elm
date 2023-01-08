@@ -50,6 +50,7 @@ init =
       , ui =
             { openPanels = [ PatternPanel ]
             , patternInputField = ""
+            , suggestionIndex = 0
             }
       , grid =
             { height = 0
@@ -90,6 +91,9 @@ update msg model =
             model.settings
     in
     case msg of
+        NoOp ->
+            ( model, Cmd.none )
+
         ViewPanel panel keys ->
             if not keys.shift then
                 ( { model | ui = { ui | openPanels = [ panel ] } }, Cmd.none )
@@ -205,10 +209,10 @@ update msg model =
         UpdatePatternInputField text ->
             ( { model | ui = { ui | patternInputField = text } }, Cmd.none )
 
-        InputPattern ->
+        InputPattern name ->
             let
                 getPattern =
-                    getPatternFromName model.ui.patternInputField
+                    getPatternFromName name
 
                 newPattern =
                     Tuple.first <| getPattern
@@ -243,6 +247,17 @@ update msg model =
               }
             , Cmd.none
             )
+
+        SelectNextSuggestion suggestLength ->
+            let
+                newIndex =
+                    if model.ui.suggestionIndex >= (min 3 (Debug.log "e" suggestLength) - 1) then
+                        Debug.log "s_index" 0
+
+                    else
+                        Debug.log "s_index" <| model.ui.suggestionIndex + 1
+            in
+            ( { model | ui = { ui | suggestionIndex = newIndex } }, Cmd.none )
 
 
 
