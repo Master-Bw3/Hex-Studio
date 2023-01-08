@@ -97,8 +97,6 @@ getIotaValueAsString iota =
             in
             "Garbage (" ++ mishapMessage ++ ")"
 
-        Escape ->
-            "Consideration"
 
         OpenParenthesis list ->
             (++) "List: " <|

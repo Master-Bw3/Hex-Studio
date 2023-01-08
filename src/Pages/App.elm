@@ -149,16 +149,7 @@ update msg model =
                 if List.length drawing.activePath > 1 then
                     let
                         newPattern =
-                            let
-                                patternFromSig =
-                                    getPatternFromSignature <| getAngleSignature drawing.activePath
-                            in
-                            case Array.get 0 model.stack of
-                                Just Escape ->
-                                    { patternFromSig | color = accent5 }
-
-                                _ ->
-                                    patternFromSig
+                            getPatternFromSignature <| getAngleSignature drawing.activePath
 
                         newGrid =
                             { grid
@@ -169,7 +160,7 @@ update msg model =
                     ( { model
                         | patternArray = addToPatternArray model newPattern
                         , grid = newGrid
-                        , stack = applyPatternsToStack Array.empty <| List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern)
+                        , stack = applyPatternsToStack Array.empty (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern)) False
                       }
                     , Cmd.none
                     )
@@ -188,7 +179,7 @@ update msg model =
             ( { model
                 | patternArray = newPatternArray
                 , grid = { grid | points = updateGridPoints grid.width grid.height newPatternArray [] settings.gridScale }
-                , stack = applyPatternsToStack Array.empty <| List.reverse <| Tuple.first <| List.unzip <| Array.toList newPatternArray
+                , stack = applyPatternsToStack Array.empty (List.reverse <| Tuple.first <| List.unzip <| Array.toList newPatternArray) False
               }
             , Cmd.none
             )
@@ -229,7 +220,7 @@ update msg model =
                 ( { model
                     | patternArray = addToPatternArray model newPattern
                     , ui = { ui | patternInputField = "" }
-                    , stack = applyPatternsToStack Array.empty <| List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern)
+                    , stack = applyPatternsToStack Array.empty (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern)) False
                   }
                 , Cmd.none
                 )
@@ -248,7 +239,7 @@ update msg model =
             ( { model
                 | patternArray = addToPatternArray model newPattern
                 , ui = { ui | patternInputField = "" }
-                , stack = applyPatternsToStack Array.empty <| List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern)
+                , stack = applyPatternsToStack Array.empty (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern)) False
               }
             , Cmd.none
             )

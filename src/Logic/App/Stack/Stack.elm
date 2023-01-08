@@ -2,25 +2,39 @@ module Logic.App.Stack.Stack exposing (..)
 
 import Array exposing (Array)
 import List.Extra as List
-import Logic.App.Types exposing (Iota(..), PatternType)
+import Logic.App.Types exposing (Iota(..), Mishap(..), PatternType)
 import Logic.App.Utils.Utils exposing (unshift)
-import Logic.App.Types exposing (Mishap(..))
+
 
 
 -- untested; might not work properly
 
 
-applyPatternsToStack : Array Iota -> List PatternType -> Array Iota
-applyPatternsToStack stack patterns =
+applyPatternsToStack : Array Iota -> List PatternType -> Bool -> Array Iota
+applyPatternsToStack stack patterns escapeThis =
     case List.head patterns of
         Nothing ->
             stack
 
         Just pattern ->
-            applyPatternsToStack (applyPatternToStack stack pattern) <| Maybe.withDefault [] <| List.tail patterns
+            if escapeThis then
+                applyPatternsToStack (addPatternIotatoStack stack pattern) (Maybe.withDefault [] <| List.tail patterns) False
+
+            else
+                let
+                    stackEscapeTuple =
+                        applyPatternToStack stack pattern
+
+                    newStack =
+                        Tuple.first <| stackEscapeTuple
+
+                    escapeNext =
+                        Tuple.second <| stackEscapeTuple
+                in
+                applyPatternsToStack newStack (Maybe.withDefault [] <| List.tail patterns) escapeNext
 
 
-applyPatternToStack : Array Iota -> PatternType -> Array Iota
+applyPatternToStack : Array Iota -> PatternType -> ( Array Iota, Bool )
 applyPatternToStack stack pattern =
     case Array.get 0 stack of
         Just (OpenParenthesis list) ->
@@ -51,16 +65,18 @@ applyPatternToStack stack pattern =
                                         _ ->
                                             False
                                 )
-                             <|
-                                Debug.log "lisrt" list
+                                list
                             )
 
                 addToIntroList =
                     Array.set 0 (OpenParenthesis (unshift (Pattern pattern) list)) stack
             in
-            if pattern.internalName == "close_paren" then
+            if pattern.internalName == "escape" then
+                ( stack, True )
+
+            else if pattern.internalName == "close_paren" then
                 if pattern.internalName == "close_paren" && (numberOfCloseParen + 1) >= numberOfOpenParen then
-                    Array.map
+                    ( Array.map
                         (\iota ->
                             case iota of
                                 OpenParenthesis l ->
@@ -70,20 +86,32 @@ applyPatternToStack stack pattern =
                                     otherIota
                         )
                         stack
+                    , False
+                    )
 
                 else
-                    addToIntroList
+                    ( addToIntroList, False )
 
             else
-                addToIntroList
+                ( addToIntroList, False )
 
         _ ->
-            if List.member Escape <| Array.toList stack then
-                unshift (Pattern pattern) <| Array.slice 1 (Array.length stack) stack
+            if pattern.internalName == "escape" then
+                ( stack, True )
 
             else if pattern.internalName == "close_paren" then
-                unshift (Garbage CatastrophicFailure) stack --temporary
+                ( unshift (Garbage CatastrophicFailure) stack, False )
+                --temporary
 
             else
-                pattern.action stack
+                ( pattern.action stack, False )
 
+
+addPatternIotatoStack : Array Iota -> PatternType -> Array Iota
+addPatternIotatoStack stack pattern =
+    case Array.get 0 stack of
+        Just (OpenParenthesis list) ->
+            Array.set 0 (OpenParenthesis (unshift (Pattern pattern) list)) stack
+
+        _ ->
+            unshift (Pattern pattern) stack

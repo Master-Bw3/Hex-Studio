@@ -214,7 +214,7 @@ patternRegistry =
     , { signature = "wqaeaqw", internalName = "modify_in_place", action = noAction, displayName = "", color = accent1 }
     , { signature = "ddewedd", internalName = "construct", action = noAction, displayName = "", color = accent1 }
     , { signature = "aaqwqaa", internalName = "deconstruct", action = noAction, displayName = "", color = accent1 }
-    , { signature = "qqqaw", internalName = "escape", action = makeConstant Escape, displayName = "Consideration", color = accent1 }
+    , { signature = "qqqaw", internalName = "escape", action = noAction, displayName = "Consideration", color = accent1 }
     , { signature = "qqq", internalName = "open_paren", action = makeConstant (OpenParenthesis Array.empty), displayName = "Introspection", color = accent1 }
     , { signature = "eee", internalName = "close_paren", action = noAction, displayName = "Retrospection", color = accent1 }
     , { signature = "deaqq", internalName = "eval", action = eval, displayName = "Hermes' Gambit", color = accent1 }
@@ -242,8 +242,8 @@ eval stack =
                 _ ->
                     case iota of
                         IotaList list ->
-                            applyPatternsToStack newStack <|
-                                List.reverse <|
+                            applyPatternsToStack newStack
+                                (List.reverse <|
                                     Array.toList <|
                                         Array.map
                                             (\i ->
@@ -255,9 +255,11 @@ eval stack =
                                                         unknownPattern
                                             )
                                             list
+                                )
+                                False
 
                         Pattern pattern ->
-                            applyPatternToStack newStack pattern
+                            applyPatternsToStack newStack [ pattern ] False
 
                         _ ->
                             Array.fromList [ Garbage CatastrophicFailure ]

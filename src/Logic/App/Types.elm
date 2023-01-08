@@ -54,7 +54,6 @@ type Iota
     | Pattern PatternType
     | Null
     | Garbage Mishap
-    | Escape -- used to handle consideration
     | OpenParenthesis (Array Iota)
 
 type alias GridPoint =
