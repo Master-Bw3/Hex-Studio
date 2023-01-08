@@ -18,7 +18,7 @@ import Html.Events.Extra.Touch as TouchEvent
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (Msg(..))
 import Logic.App.Patterns.PatternRegistry exposing (unknownPattern)
-import Logic.App.Types exposing (CoordinatePair, GridPoint, PatternType)
+import Logic.App.Types exposing (CoordinatePair, GridPoint, PatternType, PointConnection)
 import Logic.App.Utils.Utils exposing (touchCoordinates)
 import Random
 import Settings.Theme exposing (..)
@@ -87,6 +87,7 @@ renderDrawingLine model =
     if drawingMode then
         [ renderLine
             model.settings.gridScale
+            accent2
             { x1 = Tuple.first mousePos - gridOffset
             , y1 = Tuple.second mousePos
             , x2 = activePoint.x
@@ -105,7 +106,7 @@ renderActivePath model =
         points =
             model.grid.drawing.activePath
     in
-    List.map (\x -> renderLine model.settings.gridScale (Tuple.first x) (Tuple.second x)) (List.concatMap (findLinkedPoints model.grid.points) points)
+    List.map (\x -> renderLine model.settings.gridScale x.color x.coordPair x.betweenOffsetValues) (List.concatMap (findLinkedPoints model.grid.points) points)
 
 
 renderLines : Model -> List (Svg msg)
@@ -114,11 +115,11 @@ renderLines model =
         points =
             model.grid.points
     in
-    List.map (\x -> renderLine model.settings.gridScale (Tuple.first x) (Tuple.second x)) (List.concatMap (findLinkedPoints points) (List.concat points))
+    List.map (\x -> renderLine model.settings.gridScale x.color x.coordPair x.betweenOffsetValues) (List.concatMap (findLinkedPoints points) (List.concat points))
 
 
-renderLine : Float -> CoordinatePair -> ( ( Int, Int ), ( Int, Int ), ( Int, Int ) ) -> Svg msg
-renderLine scale coordinatePair offsetsTuple =
+renderLine : Float -> String -> CoordinatePair -> ( ( Int, Int ), ( Int, Int ), ( Int, Int ) ) -> Svg msg
+renderLine scale color coordinatePair offsetsTuple =
     let
         x1 =
             coordinatePair.x1
@@ -155,7 +156,7 @@ renderLine scale coordinatePair offsetsTuple =
     if allPointsValid then
         Svg.path
             [ d <| (++) "M" <| String.join " " <| List.map String.fromFloat <| List.concat coordsList
-            , stroke accent2
+            , stroke color
             , strokeWidth <| String.fromFloat (5.0 * scale)
             , strokeLinecap "round"
             , strokeLinejoin "round"
@@ -171,26 +172,23 @@ renderLine scale coordinatePair offsetsTuple =
 -- turns a gridPoint into a list of coordinate pairs of the point and connected point
 
 
-findLinkedPoints : List (List GridPoint) -> GridPoint -> List ( CoordinatePair, ( ( Int, Int ), ( Int, Int ), ( Int, Int ) ) )
+findLinkedPoints : List (List GridPoint) -> GridPoint -> List { color : String, coordPair : CoordinatePair, betweenOffsetValues : ( ( Int, Int ), ( Int, Int ), ( Int, Int ) ) }
 findLinkedPoints grid_ point =
     let
-        connectedPoints : List ( GridPoint, ( ( Int, Int ), ( Int, Int ), ( Int, Int ) ) )
+        connectedPoints : List ( GridPoint, ( ( Int, Int ), ( Int, Int ), ( Int, Int ) ), String )
         connectedPoints =
-            List.map (\pnt -> ( getGridpointFromOffsetCoordinates grid_ pnt, pnt.betweenOffsetValues )) point.connectedPoints
+            List.map (\pnt -> ( getGridpointFromOffsetCoordinates grid_ pnt, pnt.betweenOffsetValues, pnt.color )) point.connectedPoints
     in
     List.map
         (\conPnt ->
-            let
-                conPntCoords : GridPoint
-                conPntCoords =
-                    Tuple.first conPnt
-            in
-            ( { x1 = conPntCoords.x, y1 = conPntCoords.y, x2 = point.x, y2 = point.y }, Tuple.second conPnt )
+            case conPnt of
+                ( conPntCoords, betweenOffsetValues, color ) ->
+                    { color = color, coordPair = { x1 = conPntCoords.x, y1 = conPntCoords.y, x2 = point.x, y2 = point.y }, betweenOffsetValues = betweenOffsetValues }
         )
         connectedPoints
 
 
-getGridpointFromOffsetCoordinates : List (List GridPoint) -> { offsetX : Int, offsetY : Int, betweenOffsetValues : ( ( Int, Int ), ( Int, Int ), ( Int, Int ) ) } -> GridPoint
+getGridpointFromOffsetCoordinates : List (List GridPoint) -> PointConnection -> GridPoint
 getGridpointFromOffsetCoordinates grid_ offsetCoords =
     let
         checkMatchingOffsetCoords point =
@@ -221,15 +219,8 @@ renderPoints model =
         |> List.map (renderPoint mousePos gridOffset scale)
 
 
-applyActivePathToGrid : Model -> List (List GridPoint)
-applyActivePathToGrid model =
-    let
-        gridPoints =
-            model.grid.points
-
-        activePoints =
-            model.grid.drawing.activePath
-    in
+applyActivePathToGrid : List (List GridPoint) -> List GridPoint -> List (List GridPoint)
+applyActivePathToGrid gridPoints activePoints =
     applyPathToGrid gridPoints activePoints
 
 
@@ -349,7 +340,7 @@ addNearbyPoint model =
             && not closestPoint.used
     then
         [ closestPoint --{ closestPoint | connectedPoints = [ { x = prevNode.x, y = prevNode.y } ] }
-        , { prevNode | connectedPoints = { offsetX = closestPoint.offsetX, offsetY = closestPoint.offsetY, betweenOffsetValues = ( ( 0, 0 ), ( 0, 0 ), ( 0, 0 ) ) } :: prevNode.connectedPoints }
+        , { prevNode | connectedPoints = { color = accent2, offsetX = closestPoint.offsetX, offsetY = closestPoint.offsetY, betweenOffsetValues = ( ( 0, 0 ), ( 0, 0 ), ( 0, 0 ) ) } :: prevNode.connectedPoints }
         ]
             ++ otherNodes
 

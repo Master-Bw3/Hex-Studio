@@ -16,7 +16,17 @@ type EntityType
 
 
 type alias PatternType =
-    { signature : String, action : Array Iota -> Array Iota, displayName : String, internalName : String }
+    { signature : String
+    , action : Array Iota -> Array Iota
+    , displayName : String
+    , internalName : String
+    , color : String
+    }
+
+
+type PatternValidationState
+    = Error
+    | Success
 
 
 type Mishap
@@ -34,6 +44,7 @@ type Mishap
     | TransgressOther
     | DisallowedAction
     | CatastrophicFailure
+
 
 type Iota
     = Number Float
@@ -54,8 +65,12 @@ type alias GridPoint =
     , radius : Float
     , used : Bool
     , color : String
-    , connectedPoints : List { offsetX : Int, offsetY : Int, betweenOffsetValues : ( ( Int, Int ), ( Int, Int ), ( Int, Int ) ) }
+    , connectedPoints : List PointConnection
     }
+
+
+type alias PointConnection =
+    { color : String, offsetX : Int, offsetY : Int, betweenOffsetValues : ( ( Int, Int ), ( Int, Int ), ( Int, Int ) ) }
 
 
 type alias CoordinatePair =

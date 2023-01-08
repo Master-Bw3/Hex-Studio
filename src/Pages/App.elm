@@ -9,7 +9,7 @@ import Gen.Params.App exposing (Params)
 import Html exposing (..)
 import Logic.App.Model as L exposing (Model)
 import Logic.App.Msg as L exposing (..)
-import Logic.App.PatternList.PatternArray exposing (addToPatternArray, getPatternFromName, getPatternFromSignature)
+import Logic.App.PatternList.PatternArray exposing (addToPatternArray, getPatternFromName, getPatternFromSignature, updateDrawingColors)
 import Logic.App.Patterns.PatternRegistry exposing (..)
 import Logic.App.Stack.Stack exposing (applyPatternToStack, applyPatternsToStack)
 import Logic.App.Types exposing (..)
@@ -147,11 +147,14 @@ update msg model =
             if drawing.drawingMode == True then
                 if List.length drawing.activePath > 1 then
                     let
-                        newGrid =
-                            { grid | points = applyActivePathToGrid model, drawing = { drawing | drawingMode = False, activePath = [] } }
-
                         newPattern =
                             getPatternFromSignature <| getAngleSignature drawing.activePath
+
+                        newGrid =
+                            { grid
+                                | points = applyActivePathToGrid model.grid.points (Tuple.second (updateDrawingColors ( newPattern, drawing.activePath )))
+                                , drawing = { drawing | drawingMode = False, activePath = [] }
+                            }
                     in
                     ( { model
                         | patternArray = addToPatternArray model newPattern

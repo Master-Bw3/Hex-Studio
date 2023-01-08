@@ -1,12 +1,10 @@
-module Logic.App.PatternList.PatternArray exposing (addToPatternArray, getPatternFromName, getPatternFromSignature)
+module Logic.App.PatternList.PatternArray exposing (addToPatternArray, getPatternFromName, getPatternFromSignature, updateDrawingColors)
 
 import Array exposing (Array)
 import Html.Attributes exposing (name)
 import Logic.App.Model exposing (Model)
-import Logic.App.Patterns.Misc exposing (numberLiteral)
 import Logic.App.Patterns.PatternRegistry exposing (..)
 import Logic.App.Types exposing (GridPoint, PatternType)
-import Logic.App.Utils.GetAngleSignature exposing (getAngleSignature)
 import Ports.HexNumGen as HexNumGen
 
 
@@ -36,7 +34,7 @@ getPatternFromName name =
         Nothing ->
             case String.toFloat name of
                 Just number ->
-                    ( unknownPattern, HexNumGen.call number)
+                    ( unknownPattern, HexNumGen.call number )
 
                 Nothing ->
                     ( unknownPattern, Cmd.none )
@@ -54,4 +52,19 @@ addToPatternArray model pattern =
         patternDrawingPair =
             ( pattern, drawing.activePath )
     in
-    Array.append (Array.fromList [ patternDrawingPair ]) patternList
+    Debug.log "eee" <| Array.append (Array.fromList [ updateDrawingColors patternDrawingPair ]) patternList
+
+
+updateDrawingColors : ( PatternType, List GridPoint ) -> ( PatternType, List GridPoint )
+updateDrawingColors patternTuple =
+    ( Tuple.first patternTuple
+    , List.map
+        (\pnt ->
+            { pnt
+                | connectedPoints =
+                    List.map (\conPnt -> { conPnt | color = (Tuple.first patternTuple).color })
+                        pnt.connectedPoints
+            }
+        )
+        (Tuple.second patternTuple)
+    )
