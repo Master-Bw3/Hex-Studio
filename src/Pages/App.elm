@@ -9,7 +9,7 @@ import Gen.Params.App exposing (Params)
 import Html exposing (..)
 import Logic.App.Model as L exposing (Model)
 import Logic.App.Msg as L exposing (..)
-import Logic.App.PatternList.PatternArray exposing (addToPatternArray, getPatternFromName, updateDrawingColors, getPatternFromSignature)
+import Logic.App.PatternList.PatternArray exposing (addToPatternArray, updateDrawingColors)
 import Logic.App.Patterns.PatternRegistry exposing (..)
 import Logic.App.Stack.Stack exposing (applyPatternToStack, applyPatternsToStack)
 import Logic.App.Types exposing (..)
@@ -18,12 +18,11 @@ import Logic.App.Utils.Utils exposing (removeFromArray)
 import Page
 import Ports.HexNumGen as HexNumGen
 import Request
+import Settings.Theme exposing (..)
 import Shared
 import Task
 import Time
 import View exposing (View)
-import Settings.Theme exposing (..)
-
 
 
 type alias Model =
@@ -229,6 +228,7 @@ update msg model =
             if command == Cmd.none then
                 ( { model
                     | patternArray = addToPatternArray model newPattern
+                    , ui = { ui | patternInputField = "" }
                     , stack = applyPatternsToStack Array.empty <| List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern)
                   }
                 , Cmd.none
@@ -247,6 +247,7 @@ update msg model =
             in
             ( { model
                 | patternArray = addToPatternArray model newPattern
+                , ui = { ui | patternInputField = "" }
                 , stack = applyPatternsToStack Array.empty <| List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern)
               }
             , Cmd.none

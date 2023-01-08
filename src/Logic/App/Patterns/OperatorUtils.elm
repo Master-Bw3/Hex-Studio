@@ -100,6 +100,35 @@ action3Inputs stack inputGetter1 inputGetter2 inputGetter3 action =
                 unshift (Garbage CatastrophicFailure) newStack
 
 
+getPatternOrPatternList : Iota -> Iota
+getPatternOrPatternList iota =
+    case iota of
+        Pattern _ ->
+            iota
+
+        IotaList list ->
+            if
+                List.all
+                    (\i ->
+                        case i of
+                            Pattern _ ->
+                                True
+
+                            _ ->
+                                False
+                    )
+                <|
+                    Array.toList list
+            then
+                iota
+
+            else
+                Garbage IncorrectIota
+
+        _ ->
+            Garbage IncorrectIota
+
+
 getNumberOrVector : Iota -> Iota
 getNumberOrVector iota =
     case iota of

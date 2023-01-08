@@ -105,3 +105,4 @@ mulDot stack =
 divCross : Array Iota -> Array Iota
 divCross stack =
     stack
+

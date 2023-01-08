@@ -1,13 +1,16 @@
-module Logic.App.Patterns.PatternRegistry exposing (numberLiteralGenerator, patternRegistry, unknownPattern)
+module Logic.App.Patterns.PatternRegistry exposing (getPatternFromName, getPatternFromSignature, numberLiteralGenerator, patternRegistry, unknownPattern)
 
 import Array exposing (Array)
 import Logic.App.Patterns.Circles exposing (..)
 import Logic.App.Patterns.Math exposing (..)
 import Logic.App.Patterns.Misc exposing (..)
-import Logic.App.Patterns.OperatorUtils exposing (makeConstant)
+import Logic.App.Patterns.OperatorUtils exposing (action1Input, getPatternOrPatternList, makeConstant)
 import Logic.App.Patterns.Selectors exposing (..)
 import Logic.App.Patterns.Stack exposing (..)
+import Logic.App.Stack.Stack exposing (applyPatternToStack, applyPatternsToStack)
 import Logic.App.Types exposing (Iota(..), Mishap(..), PatternType)
+import Logic.App.Utils.Utils exposing (unshift)
+import Ports.HexNumGen as HexNumGen
 import Settings.Theme exposing (..)
 
 
@@ -19,6 +22,38 @@ noAction stack =
 unknownPattern : PatternType
 unknownPattern =
     { signature = "", action = makeConstant (Garbage InvalidPattern), displayName = "Unknown Pattern", internalName = "", color = accent3 }
+
+
+getPatternFromSignature : String -> PatternType
+getPatternFromSignature signature =
+    case List.head <| List.filter (\regPattern -> regPattern.signature == signature) patternRegistry of
+        Just a ->
+            a
+
+        Nothing ->
+            if String.startsWith "aqaa" signature then
+                numberLiteralGenerator signature False
+
+            else if String.startsWith "dedd" signature then
+                numberLiteralGenerator signature True
+
+            else
+                { unknownPattern | signature = signature, displayName = "Pattern " ++ "\"" ++ signature ++ "\"" }
+
+
+getPatternFromName : String -> ( PatternType, Cmd msg )
+getPatternFromName name =
+    case List.head <| List.filter (\regPattern -> regPattern.displayName == name || regPattern.internalName == name || regPattern.signature == name) patternRegistry of
+        Just a ->
+            ( a, Cmd.none )
+
+        Nothing ->
+            case String.toFloat name of
+                Just number ->
+                    ( unknownPattern, HexNumGen.call number )
+
+                Nothing ->
+                    ( unknownPattern, Cmd.none )
 
 
 patternRegistry : List PatternType
@@ -122,7 +157,6 @@ patternRegistry =
     , { signature = "waeawaedwa", internalName = "sentinel/wayfind", action = noAction, displayName = "", color = accent1 }
     , { signature = "qqqwqqqqqaq", internalName = "akashic/read", action = noAction, displayName = "", color = accent1 }
     , { signature = "eeeweeeeede", internalName = "akashic/write", action = noAction, displayName = "", color = accent1 }
-    , { signature = "deaqq", internalName = "eval", action = noAction, displayName = "Hermes' Gambit", color = accent1 }
     , { signature = "aqdee", internalName = "halt", action = noAction, displayName = "", color = accent1 }
     , { signature = "aqqqqq", internalName = "read", action = noAction, displayName = "", color = accent1 }
     , { signature = "wawqwqwqwqwqw", internalName = "read/entity", action = noAction, displayName = "", color = accent1 }
@@ -183,7 +217,50 @@ patternRegistry =
     , { signature = "qqqaw", internalName = "escape", action = makeConstant Escape, displayName = "Consideration", color = accent1 }
     , { signature = "qqq", internalName = "open_paren", action = makeConstant (OpenParenthesis Array.empty), displayName = "Introspection", color = accent1 }
     , { signature = "eee", internalName = "close_paren", action = noAction, displayName = "Retrospection", color = accent1 }
+    , { signature = "deaqq", internalName = "eval", action = eval, displayName = "Hermes' Gambit", color = accent1 }
     ]
+
+
+eval : Array Iota -> Array Iota
+eval stack =
+    let
+        maybeIota =
+            Array.get 0 stack
+
+        newStack =
+            Array.slice 1 (Array.length stack) stack
+    in
+    case maybeIota of
+        Nothing ->
+            unshift (Garbage NotEnoughIotas) newStack
+
+        Just iota ->
+            case getPatternOrPatternList <| iota of
+                Garbage IncorrectIota ->
+                    unshift (Garbage IncorrectIota) newStack
+
+                _ ->
+                    case iota of
+                        IotaList list ->
+                            applyPatternsToStack newStack <|
+                                List.reverse <|
+                                    Array.toList <|
+                                        Array.map
+                                            (\i ->
+                                                case i of
+                                                    Pattern pattern ->
+                                                        pattern
+
+                                                    _ ->
+                                                        unknownPattern
+                                            )
+                                            list
+
+                        Pattern pattern ->
+                            applyPatternToStack newStack pattern
+
+                        _ ->
+                            Array.fromList [ Garbage CatastrophicFailure ]
 
 
 numberLiteralGenerator : String -> Bool -> PatternType

@@ -2,7 +2,9 @@ module Components.App.Panels.PatternPanel exposing (patternPanel)
 
 import Array exposing (Array)
 import Components.App.Panels.Utils exposing (visibilityToDisplayStyle)
+import Components.Icon.MoveButton exposing (moveButton)
 import Components.Icon.ParagraphDropdown exposing (paragraphDropdown)
+import Components.Icon.XButton exposing (xButton)
 import FontAwesome as Icon exposing (Icon)
 import FontAwesome.Attributes as Icon
 import FontAwesome.Brands as Icon
@@ -11,13 +13,11 @@ import FontAwesome.Solid as Icon
 import FontAwesome.Styles as Icon
 import Html exposing (..)
 import Html.Attributes exposing (attribute, class, id, placeholder)
+import Html.Events exposing (onClick, onInput)
 import Logic.App.Model exposing (Model)
-import Logic.App.Types exposing (GridPoint, Panel(..), PatternType)
-import Components.Icon.XButton exposing (xButton)
-import Components.Icon.MoveButton exposing (moveButton)
-import Html.Events exposing (onClick)
 import Logic.App.Msg exposing (Msg(..))
-import Html.Events exposing (onInput)
+import Logic.App.Types exposing (GridPoint, Panel(..), PatternType)
+import Html.Attributes exposing (value)
 
 
 patternPanel : Model -> Html Msg
@@ -48,6 +48,7 @@ patternPanel model =
                     , placeholder "Add a pattern"
                     , attribute "autocomplete" "off"
                     , onInput UpdatePatternInputField
+                    , value model.ui.patternInputField
                     ]
                     []
                 , button
@@ -72,11 +73,11 @@ renderPatternList patternList =
 
         renderPattern : Int -> PatternType -> Html Msg
         renderPattern index pattern =
-            div [ class "outer_box"]
+            div [ class "outer_box" ]
                 [ div [ class "inner_box" ]
-                    [ button [ class "x_button", onClick (RemoveFromPatternArray index (index + 1)) ] [xButton]
+                    [ button [ class "x_button", onClick (RemoveFromPatternArray index (index + 1)) ] [ xButton ]
                     , div [ class "text" ] [ text pattern.displayName ]
-                    , div [ class "move_button" ] [moveButton]
+                    , div [ class "move_button" ] [ moveButton ]
                     ]
                 ]
     in

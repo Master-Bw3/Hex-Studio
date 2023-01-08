@@ -2,11 +2,9 @@ module Logic.App.Stack.Stack exposing (..)
 
 import Array exposing (Array)
 import List.Extra as List
-import Logic.App.PatternList.PatternArray exposing (getPatternFromName)
 import Logic.App.Types exposing (Iota(..), PatternType)
 import Logic.App.Utils.Utils exposing (unshift)
-import Logic.App.PatternList.PatternArray exposing (getPatternFromSignature)
-
+import Logic.App.Types exposing (Mishap(..))
 
 
 -- untested; might not work properly
@@ -84,7 +82,8 @@ applyPatternToStack stack pattern =
                 unshift (Pattern pattern) <| Array.slice 1 (Array.length stack) stack
 
             else if pattern.internalName == "close_paren" then
-                unshift (Pattern (getPatternFromSignature "eee")) stack
+                unshift (Garbage CatastrophicFailure) stack --temporary
 
             else
                 pattern.action stack
+
