@@ -39,7 +39,6 @@ type Mishap
     | MathematicalError
     | IncorrectItem
     | IncorrectBlock
-    | HastyRetrospection
     | DelveTooDeep
     | TransgressOther
     | DisallowedAction

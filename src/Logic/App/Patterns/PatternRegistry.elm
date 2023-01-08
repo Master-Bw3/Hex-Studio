@@ -122,7 +122,7 @@ patternRegistry =
     , { signature = "waeawaedwa", internalName = "sentinel/wayfind", action = noAction, displayName = "", color = accent1 }
     , { signature = "qqqwqqqqqaq", internalName = "akashic/read", action = noAction, displayName = "", color = accent1 }
     , { signature = "eeeweeeeede", internalName = "akashic/write", action = noAction, displayName = "", color = accent1 }
-    , { signature = "deaqq", internalName = "eval", action = noAction, displayName = "", color = accent1 }
+    , { signature = "deaqq", internalName = "eval", action = noAction, displayName = "Hermes' Gambit", color = accent1 }
     , { signature = "aqdee", internalName = "halt", action = noAction, displayName = "", color = accent1 }
     , { signature = "aqqqqq", internalName = "read", action = noAction, displayName = "", color = accent1 }
     , { signature = "wawqwqwqwqwqw", internalName = "read/entity", action = noAction, displayName = "", color = accent1 }

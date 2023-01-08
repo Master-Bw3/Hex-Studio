@@ -83,9 +83,6 @@ getIotaValueAsString iota =
                         IncorrectBlock ->
                             "Incorrect Block"
 
-                        HastyRetrospection ->
-                            "Hasty Retrospection"
-
                         DelveTooDeep ->
                             "Delve Too Deep"
 

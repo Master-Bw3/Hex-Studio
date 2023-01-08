@@ -5,6 +5,7 @@ import List.Extra as List
 import Logic.App.PatternList.PatternArray exposing (getPatternFromName)
 import Logic.App.Types exposing (Iota(..), PatternType)
 import Logic.App.Utils.Utils exposing (unshift)
+import Logic.App.PatternList.PatternArray exposing (getPatternFromSignature)
 
 
 
@@ -23,10 +24,10 @@ applyPatternsToStack stack patterns =
 
 applyPatternToStack : Array Iota -> PatternType -> Array Iota
 applyPatternToStack stack pattern =
-    let
-        numberOfCloseParen =
-            case Array.get 0 stack of
-                Just (OpenParenthesis list) ->
+    case Array.get 0 stack of
+        Just (OpenParenthesis list) ->
+            let
+                numberOfCloseParen =
                     Array.length
                         (Array.filter
                             (\iota ->
@@ -40,13 +41,8 @@ applyPatternToStack stack pattern =
                             list
                         )
 
-                _ ->
-                    0
-
-        numberOfOpenParen =
-            (+) 1 <|
-                case Array.get 0 stack of
-                    Just (OpenParenthesis list) ->
+                numberOfOpenParen =
+                    (+) 1 <|
                         Array.length
                             (Array.filter
                                 (\iota ->
@@ -61,38 +57,34 @@ applyPatternToStack stack pattern =
                                 Debug.log "lisrt" list
                             )
 
-                    _ ->
-                        0
-
-        addToIntroList =
-            case Array.get 0 stack of
-                Just (OpenParenthesis list) ->
+                addToIntroList =
                     Array.set 0 (OpenParenthesis (unshift (Pattern pattern) list)) stack
+            in
+            if pattern.internalName == "close_paren" then
+                if pattern.internalName == "close_paren" && (numberOfCloseParen + 1) >= numberOfOpenParen then
+                    Array.map
+                        (\iota ->
+                            case iota of
+                                OpenParenthesis l ->
+                                    IotaList l
 
-                _ ->
-                    unshift (OpenParenthesis Array.empty) stack
-    in
-    if List.member Escape <| Array.toList stack then
-        unshift (Pattern pattern) <| Array.slice 1 (Array.length stack) stack
+                                otherIota ->
+                                    otherIota
+                        )
+                        stack
 
-    else if pattern.internalName == "close_paren" then
-        if pattern.internalName == "close_paren" && (numberOfCloseParen + 1) >= numberOfOpenParen then
-            Array.map
-                (\iota ->
-                    case iota of
-                        OpenParenthesis list ->
-                            IotaList list
+                else
+                    addToIntroList
 
-                        otherIota ->
-                            otherIota
-                )
-                stack
+            else
+                addToIntroList
 
-        else
-            addToIntroList
+        _ ->
+            if List.member Escape <| Array.toList stack then
+                unshift (Pattern pattern) <| Array.slice 1 (Array.length stack) stack
 
-    else if numberOfOpenParen > 0 then
-        addToIntroList
+            else if pattern.internalName == "close_paren" then
+                unshift (Pattern (getPatternFromSignature "eee")) stack
 
-    else
-        pattern.action stack
+            else
+                pattern.action stack
