@@ -1,11 +1,11 @@
-module Pages.App exposing (Model, Msg, page)
+module Main exposing (main)
 
 import Array
+import Browser
 import Browser.Dom exposing (getElement)
 import Browser.Events
 import Components.App.Content exposing (content)
 import Components.App.Grid exposing (..)
-import Gen.Params.App exposing (Params)
 import Html exposing (..)
 import Logic.App.Model as L exposing (Model)
 import Logic.App.Msg as L exposing (..)
@@ -15,14 +15,10 @@ import Logic.App.Stack.Stack exposing (applyPatternToStack, applyPatternsToStack
 import Logic.App.Types exposing (..)
 import Logic.App.Utils.GetAngleSignature exposing (getAngleSignature)
 import Logic.App.Utils.Utils exposing (removeFromArray)
-import Page
 import Ports.HexNumGen as HexNumGen
-import Request
 import Settings.Theme exposing (..)
-import Shared
 import Task
 import Time
-import View exposing (View)
 
 
 type alias Model =
@@ -33,9 +29,8 @@ type alias Msg =
     L.Msg
 
 
-page : Shared.Model -> Request.With Params -> Page.With Model Msg
-page shared req =
-    Page.element
+main =
+    Browser.document
         { init = init
         , update = update
         , view = view
@@ -43,8 +38,8 @@ page shared req =
         }
 
 
-init : ( Model, Cmd Msg )
-init =
+init : () -> ( Model, Cmd Msg )
+init _ =
     ( { stack = Array.empty
       , patternArray = Array.empty
       , ui =
@@ -272,13 +267,7 @@ subscriptions model =
     Sub.batch [ Browser.Events.onResize (\_ _ -> WindowResize), Time.every 50 Tick, HexNumGen.return RecieveGeneratedNumberLiteral ]
 
 
-view : Model -> View Msg
 view model =
-    -- let
-    --     debug =
-    --         --Debug.log "DEBUG" <| List.map (\x -> x.pattern.internalName) <| Array.toList model.patternList
-    --         Debug.log "stack" <| Array.toList model.stack
-    -- in
     { title = "Hex Studio"
     , body = [ content model ]
     }
