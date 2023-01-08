@@ -52,7 +52,7 @@ addToPatternArray model pattern =
         patternDrawingPair =
             ( pattern, drawing.activePath )
     in
-    Debug.log "eee" <| Array.append (Array.fromList [ updateDrawingColors patternDrawingPair ]) patternList
+    Array.append (Array.fromList [ updateDrawingColors patternDrawingPair ]) patternList
 
 
 updateDrawingColors : ( PatternType, List GridPoint ) -> ( PatternType, List GridPoint )

@@ -28,6 +28,11 @@ accent4 =
     "#dd6666"
 
 
+accent5 : String
+accent5 =
+    "#E0E3B8"
+
+
 iotaColorMap : Iota -> String
 iotaColorMap iota =
     case iota of
@@ -54,3 +59,9 @@ iotaColorMap iota =
 
         Garbage _ ->
             "#4F3737"
+
+        Escape ->
+            "#4B4845"
+
+        OpenParenthesis _ ->
+            "#4B4845"

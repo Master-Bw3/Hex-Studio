@@ -1,5 +1,6 @@
 module Logic.App.Utils.GetIotaValueAsString exposing (..)
 
+import Array
 import Logic.App.Types exposing (Iota(..), Mishap(..))
 
 
@@ -32,8 +33,21 @@ getIotaValueAsString iota =
             "Entity"
 
         --fix later
-        IotaList _ ->
-            Debug.todo "branch 'IotaList _' not implemented"
+        IotaList list ->
+            (++) "List: " <|
+                String.join ", " <|
+                    List.reverse <|
+                        List.map
+                            (\item ->
+                                case item of
+                                    Pattern pattern ->
+                                        pattern.displayName
+
+                                    x ->
+                                        getIotaValueAsString x
+                            )
+                        <|
+                            Array.toList list
 
         Pattern pattern ->
             pattern.displayName
@@ -85,3 +99,22 @@ getIotaValueAsString iota =
                             "Catastrophic Failure"
             in
             "Garbage (" ++ mishapMessage ++ ")"
+
+        Escape ->
+            "Consideration"
+
+        OpenParenthesis list ->
+            (++) "List: " <|
+                String.join ", " <|
+                    List.reverse <|
+                        List.map
+                            (\item ->
+                                case item of
+                                    Pattern pattern ->
+                                        pattern.displayName
+
+                                    _ ->
+                                        ""
+                            )
+                        <|
+                            Array.toList list

@@ -22,6 +22,8 @@ import Shared
 import Task
 import Time
 import View exposing (View)
+import Settings.Theme exposing (..)
+
 
 
 type alias Model =
@@ -148,7 +150,16 @@ update msg model =
                 if List.length drawing.activePath > 1 then
                     let
                         newPattern =
-                            getPatternFromSignature <| getAngleSignature drawing.activePath
+                            let
+                                patternFromSig =
+                                    getPatternFromSignature <| getAngleSignature drawing.activePath
+                            in
+                            case Array.get 0 model.stack of
+                                Just Escape ->
+                                    { patternFromSig | color = accent5 }
+
+                                _ ->
+                                    patternFromSig
 
                         newGrid =
                             { grid
@@ -159,7 +170,7 @@ update msg model =
                     ( { model
                         | patternArray = addToPatternArray model newPattern
                         , grid = newGrid
-                        , stack = applyPatternToStack model.stack newPattern
+                        , stack = applyPatternsToStack Array.empty <| List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern)
                       }
                     , Cmd.none
                     )
@@ -218,7 +229,7 @@ update msg model =
             if command == Cmd.none then
                 ( { model
                     | patternArray = addToPatternArray model newPattern
-                    , stack = applyPatternToStack model.stack newPattern
+                    , stack = applyPatternsToStack Array.empty <| List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern)
                   }
                 , Cmd.none
                 )
@@ -236,7 +247,7 @@ update msg model =
             in
             ( { model
                 | patternArray = addToPatternArray model newPattern
-                , stack = applyPatternToStack model.stack newPattern
+                , stack = applyPatternsToStack Array.empty <| List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern)
               }
             , Cmd.none
             )
