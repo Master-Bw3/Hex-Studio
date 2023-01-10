@@ -10,8 +10,11 @@
 
 * {
     margin: 0;
-    padding: 0;
     user-select: none;
+}
+
+*:not(ol) {
+    padding: 0;
 }
 
 :root {
@@ -58,14 +61,12 @@ body {
     flex-direction: column;
     width: calc(100vw - 380px);
     height: 100vh;
-
 }
 
 #hex_grid {
     height: calc(100vh - 100px);
     overflow: hidden;
     position: relative;
-
 }
 
 #left_box {
@@ -225,18 +226,17 @@ body {
 
 button {
     background: none;
-	color: inherit;
-	border: none;
-	padding: 0;
-	font: inherit;
-	cursor: pointer;
-	outline: inherit;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
 }
 
 .outer_box .x_button {
     display: flex;
     align-items: center;
-    
 }
 
 .outer_box .x_button svg {
@@ -339,10 +339,15 @@ button {
     font-size: 1.55em;
 }
 
+.scroll_container {
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
 #add_pattern {
     z-index: 1;
     position: sticky;
-    bottom: 0px;
+    bottom: -1px;
     min-height: fit-content;
 }
 
@@ -391,8 +396,7 @@ button {
 }
 
 #pattern_draggable_container {
-    display: flex;
-    flex-direction: column-reverse
+    overflow-y: scroll;
 }
 
 .add_button {
@@ -455,11 +459,10 @@ button {
 }
 
 .autocomplete_container ::marker {
-    content: "";
+    content: '';
 }
 
 .highlighted_suggestion {
     background-color: var(--primary_light);
     font-weight: bold;
 }
-
