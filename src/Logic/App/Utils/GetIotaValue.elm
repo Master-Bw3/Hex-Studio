@@ -1,7 +1,31 @@
-module Logic.App.Utils.GetIotaValueAsString exposing (..)
+module Logic.App.Utils.GetIotaValue exposing (..)
 
 import Array
+import Html exposing (br, li, ol, p, text)
+import Html.Attributes exposing (style)
 import Logic.App.Types exposing (Iota(..), Mishap(..))
+
+
+getIotaValueAsHtmlMsg : Iota -> List (Html.Html msg)
+getIotaValueAsHtmlMsg iota =
+    let
+        string =
+            getIotaValueAsString iota
+    in
+    if String.startsWith "List: " string then
+        if string == "List: " then
+            [ p [] [ text "List:" ] ]
+
+        else
+            String.dropLeft 6 string
+                |> String.split ", "
+                |> List.map (\str -> li [] [ text str ])
+                |> ol []
+                |> List.singleton
+                |> (::) (p [] [ text "List:" ])
+
+    else
+        [ p [] [ text string ] ]
 
 
 getIotaValueAsString : Iota -> String
@@ -96,7 +120,6 @@ getIotaValueAsString iota =
                             "Catastrophic Failure"
             in
             "Garbage (" ++ mishapMessage ++ ")"
-
 
         OpenParenthesis list ->
             (++) "List: " <|

@@ -55,7 +55,7 @@ patternPanel model =
         , div
             [ id "pattern_draggable_container"
             ]
-            (renderPatternList model.patternArray)
+            (List.reverse (renderPatternList model.patternArray))
         , div
             [ id "add_pattern"
             , class "outer_box"

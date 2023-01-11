@@ -10001,7 +10001,8 @@ var $author$project$Components$App$Panels$PatternPanel$patternPanel = function (
 					[
 						$elm$html$Html$Attributes$id('pattern_draggable_container')
 					]),
-				$author$project$Components$App$Panels$PatternPanel$renderPatternList(model.patternArray)),
+				$elm$core$List$reverse(
+					$author$project$Components$App$Panels$PatternPanel$renderPatternList(model.patternArray))),
 				A2(
 				$elm$html$Html$div,
 				_List_fromArray(
@@ -10068,7 +10069,7 @@ var $author$project$Components$App$Panels$PatternPanel$patternPanel = function (
 					]))
 			]));
 };
-var $author$project$Logic$App$Utils$GetIotaValueAsString$getIotaValueAsString = function (iota) {
+var $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString = function (iota) {
 	switch (iota.$) {
 		case 'Null':
 			return 'Null';
@@ -10100,7 +10101,7 @@ var $author$project$Logic$App$Utils$GetIotaValueAsString$getIotaValueAsString = 
 								return pattern.displayName;
 							} else {
 								var x = item;
-								return $author$project$Logic$App$Utils$GetIotaValueAsString$getIotaValueAsString(x);
+								return $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString(x);
 							}
 						},
 						$elm$core$Array$toList(list))));
@@ -10158,6 +10159,61 @@ var $author$project$Logic$App$Utils$GetIotaValueAsString$getIotaValueAsString = 
 						},
 						$elm$core$Array$toList(list))));
 	}
+};
+var $elm$html$Html$ol = _VirtualDom_node('ol');
+var $elm$html$Html$p = _VirtualDom_node('p');
+var $elm$core$List$singleton = function (value) {
+	return _List_fromArray(
+		[value]);
+};
+var $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsHtmlMsg = function (iota) {
+	var string = $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString(iota);
+	return A2($elm$core$String$startsWith, 'List: ', string) ? ((string === 'List: ') ? _List_fromArray(
+		[
+			A2(
+			$elm$html$Html$p,
+			_List_Nil,
+			_List_fromArray(
+				[
+					$elm$html$Html$text('List:')
+				]))
+		]) : A2(
+		$elm$core$List$cons,
+		A2(
+			$elm$html$Html$p,
+			_List_Nil,
+			_List_fromArray(
+				[
+					$elm$html$Html$text('List:')
+				])),
+		$elm$core$List$singleton(
+			A2(
+				$elm$html$Html$ol,
+				_List_Nil,
+				A2(
+					$elm$core$List$map,
+					function (str) {
+						return A2(
+							$elm$html$Html$li,
+							_List_Nil,
+							_List_fromArray(
+								[
+									$elm$html$Html$text(str)
+								]));
+					},
+					A2(
+						$elm$core$String$split,
+						', ',
+						A2($elm$core$String$dropLeft, 6, string))))))) : _List_fromArray(
+		[
+			A2(
+			$elm$html$Html$p,
+			_List_Nil,
+			_List_fromArray(
+				[
+					$elm$html$Html$text(string)
+				]))
+		]);
 };
 var $elm$core$Elm$JsArray$indexedMap = _JsArray_indexedMap;
 var $elm$core$Array$indexedMap = F2(
@@ -10260,8 +10316,10 @@ var $author$project$Components$App$Panels$StackPanel$renderStack = function (sta
 									]),
 								_List_fromArray(
 									[
-										$elm$html$Html$text(
-										$author$project$Logic$App$Utils$GetIotaValueAsString$getIotaValueAsString(iota))
+										A2(
+										$elm$html$Html$div,
+										_List_Nil,
+										$author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsHtmlMsg(iota))
 									]))
 							]))
 					]));
@@ -10279,22 +10337,26 @@ var $author$project$Components$App$Panels$StackPanel$stackPanel = function (mode
 				$elm$html$Html$Attributes$class('panel'),
 				$author$project$Components$App$Panels$Utils$visibilityToDisplayStyle(visibility)
 			]),
-		A2(
-			$elm$core$List$append,
-			_List_fromArray(
-				[
-					A2(
-					$elm$html$Html$h1,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('panel_title')
-						]),
-					_List_fromArray(
-						[
-							$elm$html$Html$text('Stack ∧')
-						]))
-				]),
-			$author$project$Components$App$Panels$StackPanel$renderStack(model.stack)));
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$h1,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('panel_title')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Stack ∧')
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('scroll_container')
+					]),
+				$author$project$Components$App$Panels$StackPanel$renderStack(model.stack))
+			]));
 };
 var $author$project$Components$App$Panels$Panels$panels = function (model) {
 	return A2(
