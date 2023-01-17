@@ -7346,34 +7346,241 @@ var $author$project$Logic$App$Patterns$OperatorUtils$actionNoInput = F2(
 		return A2($elm$core$Array$append, action, stack);
 	});
 var $author$project$Logic$App$Patterns$Circles$circleBoundsMax = function (stack) {
-	var action = $elm$core$Array$fromList(
-		_List_fromArray(
-			[
-				$author$project$Logic$App$Types$Vector(
-				_Utils_Tuple3(0.0, 0.0, 0.0))
-			]));
+	var action = A2(
+		$elm$core$Array$repeat,
+		1,
+		$author$project$Logic$App$Types$Vector(
+			_Utils_Tuple3(0.0, 0.0, 0.0)));
 	return A2($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, action);
 };
 var $author$project$Logic$App$Patterns$Circles$circleBoundsMin = function (stack) {
-	var action = $elm$core$Array$fromList(
-		_List_fromArray(
-			[
-				$author$project$Logic$App$Types$Vector(
-				_Utils_Tuple3(0.0, 0.0, 0.0))
-			]));
+	var action = A2(
+		$elm$core$Array$repeat,
+		1,
+		$author$project$Logic$App$Types$Vector(
+			_Utils_Tuple3(0.0, 0.0, 0.0)));
 	return A2($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, action);
 };
 var $author$project$Logic$App$Patterns$Circles$circleImpetusDirection = function (stack) {
-	var action = $elm$core$Array$fromList(
-		_List_fromArray(
-			[
-				$author$project$Logic$App$Types$Vector(
-				_Utils_Tuple3(1.0, 0.0, 0.0))
-			]));
+	var action = A2(
+		$elm$core$Array$repeat,
+		1,
+		$author$project$Logic$App$Types$Vector(
+			_Utils_Tuple3(1.0, 0.0, 0.0)));
 	return A2($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, action);
 };
+var $author$project$Logic$App$Patterns$OperatorUtils$action3Inputs = F5(
+	function (stack, inputGetter1, inputGetter2, inputGetter3, action) {
+		var newStack = A3(
+			$elm$core$Array$slice,
+			3,
+			$elm$core$Array$length(stack),
+			stack);
+		var maybeIota3 = A2($elm$core$Array$get, 0, stack);
+		var maybeIota2 = A2($elm$core$Array$get, 1, stack);
+		var maybeIota1 = A2($elm$core$Array$get, 2, stack);
+		if (_Utils_eq(maybeIota1, $elm$core$Maybe$Nothing) || (_Utils_eq(maybeIota2, $elm$core$Maybe$Nothing) || _Utils_eq(maybeIota3, $elm$core$Maybe$Nothing))) {
+			return A2(
+				$elm$core$Array$append,
+				A2(
+					$elm$core$Array$map,
+					$author$project$Logic$App$Patterns$OperatorUtils$mapNothingToMissingIota,
+					$elm$core$Array$fromList(
+						$author$project$Logic$App$Patterns$OperatorUtils$moveNothingsToFront(
+							_List_fromArray(
+								[maybeIota1, maybeIota2, maybeIota3])))),
+				newStack);
+		} else {
+			var _v0 = _Utils_Tuple3(
+				A2($elm$core$Maybe$map, inputGetter1, maybeIota1),
+				A2($elm$core$Maybe$map, inputGetter2, maybeIota2),
+				A2($elm$core$Maybe$map, inputGetter3, maybeIota3));
+			if (((_v0.a.$ === 'Just') && (_v0.b.$ === 'Just')) && (_v0.c.$ === 'Just')) {
+				var iota1 = _v0.a.a;
+				var iota2 = _v0.b.a;
+				var iota3 = _v0.c.a;
+				return (_Utils_eq(
+					iota1,
+					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota)) || (_Utils_eq(
+					iota2,
+					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota)) || _Utils_eq(
+					iota3,
+					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota)))) ? A2(
+					$elm$core$Array$append,
+					$elm$core$Array$fromList(
+						_List_fromArray(
+							[iota1, iota2, iota3])),
+					newStack) : A2(
+					$elm$core$Array$append,
+					A3(action, iota1, iota2, iota3),
+					newStack);
+			} else {
+				return A2(
+					$author$project$Logic$App$Utils$Utils$unshift,
+					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure),
+					newStack);
+			}
+		}
+	});
+var $author$project$Logic$App$Patterns$OperatorUtils$getNumber = function (iota) {
+	if (iota.$ === 'Number') {
+		return iota;
+	} else {
+		return $author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota);
+	}
+};
+var $author$project$Logic$App$Patterns$Math$constructVector = function (stack) {
+	var action = F3(
+		function (iota1, iota2, iota3) {
+			var _v0 = _Utils_Tuple3(iota1, iota2, iota3);
+			if (((_v0.a.$ === 'Number') && (_v0.b.$ === 'Number')) && (_v0.c.$ === 'Number')) {
+				var number1 = _v0.a.a;
+				var number2 = _v0.b.a;
+				var number3 = _v0.c.a;
+				return A2(
+					$elm$core$Array$repeat,
+					1,
+					$author$project$Logic$App$Types$Vector(
+						_Utils_Tuple3(number1, number2, number3)));
+			} else {
+				return A2(
+					$elm$core$Array$repeat,
+					1,
+					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+			}
+		});
+	return A5($author$project$Logic$App$Patterns$OperatorUtils$action3Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
+};
+var $ianmackenzie$elm_geometry$Geometry$Types$Vector3d = function (a) {
+	return {$: 'Vector3d', a: a};
+};
+var $ianmackenzie$elm_geometry$Vector3d$cross = F2(
+	function (_v0, _v1) {
+		var v2 = _v0.a;
+		var v1 = _v1.a;
+		return $ianmackenzie$elm_geometry$Geometry$Types$Vector3d(
+			{x: (v1.y * v2.z) - (v1.z * v2.y), y: (v1.z * v2.x) - (v1.x * v2.z), z: (v1.x * v2.y) - (v1.y * v2.x)});
+	});
+var $ianmackenzie$elm_geometry$Vector3d$xyz = F3(
+	function (_v0, _v1, _v2) {
+		var x = _v0.a;
+		var y = _v1.a;
+		var z = _v2.a;
+		return $ianmackenzie$elm_geometry$Geometry$Types$Vector3d(
+			{x: x, y: y, z: z});
+	});
+var $ianmackenzie$elm_geometry$Vector3d$fromTuple = F2(
+	function (toQuantity, _v0) {
+		var x = _v0.a;
+		var y = _v0.b;
+		var z = _v0.c;
+		return A3(
+			$ianmackenzie$elm_geometry$Vector3d$xyz,
+			toQuantity(x),
+			toQuantity(y),
+			toQuantity(z));
+	});
+var $ianmackenzie$elm_units$Area$inSquareMeters = function (_v0) {
+	var numSquareMeters = _v0.a;
+	return numSquareMeters;
+};
+var $ianmackenzie$elm_units$Quantity$Quantity = function (a) {
+	return {$: 'Quantity', a: a};
+};
+var $ianmackenzie$elm_units$Length$meters = function (numMeters) {
+	return $ianmackenzie$elm_units$Quantity$Quantity(numMeters);
+};
+var $ianmackenzie$elm_geometry$Vector3d$xComponent = function (_v0) {
+	var v = _v0.a;
+	return $ianmackenzie$elm_units$Quantity$Quantity(v.x);
+};
+var $ianmackenzie$elm_geometry$Vector3d$yComponent = function (_v0) {
+	var v = _v0.a;
+	return $ianmackenzie$elm_units$Quantity$Quantity(v.y);
+};
+var $ianmackenzie$elm_geometry$Vector3d$zComponent = function (_v0) {
+	var v = _v0.a;
+	return $ianmackenzie$elm_units$Quantity$Quantity(v.z);
+};
+var $ianmackenzie$elm_geometry$Vector3d$toTuple = F2(
+	function (fromQuantity, vector) {
+		return _Utils_Tuple3(
+			fromQuantity(
+				$ianmackenzie$elm_geometry$Vector3d$xComponent(vector)),
+			fromQuantity(
+				$ianmackenzie$elm_geometry$Vector3d$yComponent(vector)),
+			fromQuantity(
+				$ianmackenzie$elm_geometry$Vector3d$zComponent(vector)));
+	});
 var $author$project$Logic$App$Patterns$Math$divCross = function (stack) {
-	return stack;
+	var action = F2(
+		function (iota1, iota2) {
+			var _v0 = _Utils_Tuple2(iota1, iota2);
+			_v0$4:
+			while (true) {
+				switch (_v0.a.$) {
+					case 'Number':
+						switch (_v0.b.$) {
+							case 'Number':
+								var number1 = _v0.a.a;
+								var number2 = _v0.b.a;
+								return A2(
+									$elm$core$Array$repeat,
+									1,
+									$author$project$Logic$App$Types$Number(number1 / number2));
+							case 'Vector':
+								var number = _v0.a.a;
+								var vector = _v0.b.a;
+								var x = vector.a;
+								var y = vector.b;
+								var z = vector.c;
+								return A2(
+									$elm$core$Array$repeat,
+									1,
+									$author$project$Logic$App$Types$Vector(
+										_Utils_Tuple3(number / x, number / y, number / z)));
+							default:
+								break _v0$4;
+						}
+					case 'Vector':
+						switch (_v0.b.$) {
+							case 'Number':
+								var vector = _v0.a.a;
+								var number = _v0.b.a;
+								var x = vector.a;
+								var y = vector.b;
+								var z = vector.c;
+								return A2(
+									$elm$core$Array$repeat,
+									1,
+									$author$project$Logic$App$Types$Vector(
+										_Utils_Tuple3(x / number, y / number, z / number)));
+							case 'Vector':
+								var vector1 = _v0.a.a;
+								var vector2 = _v0.b.a;
+								var vec2 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector2);
+								var vec1 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector1);
+								var newVec = A2(
+									$ianmackenzie$elm_geometry$Vector3d$toTuple,
+									$ianmackenzie$elm_units$Area$inSquareMeters,
+									A2($ianmackenzie$elm_geometry$Vector3d$cross, vec2, vec1));
+								return A2(
+									$elm$core$Array$repeat,
+									1,
+									$author$project$Logic$App$Types$Vector(newVec));
+							default:
+								break _v0$4;
+						}
+					default:
+						break _v0$4;
+				}
+			}
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+		});
+	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, action);
 };
 var $author$project$Logic$App$Patterns$OperatorUtils$getAny = function (iota) {
 	return iota;
@@ -7487,12 +7694,11 @@ var $author$project$Logic$App$Patterns$OperatorUtils$getEntity = function (iota)
 };
 var $author$project$Logic$App$Patterns$Misc$entityPos = function (stack) {
 	var action = function (_v0) {
-		return $elm$core$Array$fromList(
-			_List_fromArray(
-				[
-					$author$project$Logic$App$Types$Vector(
-					_Utils_Tuple3(0.0, 0.0, 0.0))
-				]));
+		return A2(
+			$elm$core$Array$repeat,
+			1,
+			$author$project$Logic$App$Types$Vector(
+				_Utils_Tuple3(0.0, 0.0, 0.0)));
 	};
 	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, action);
 };
@@ -7769,47 +7975,114 @@ var $author$project$Logic$App$Types$Entity = function (a) {
 };
 var $author$project$Logic$App$Types$Player = {$: 'Player'};
 var $author$project$Logic$App$Patterns$Selectors$getCaster = function (stack) {
-	var action = $elm$core$Array$fromList(
-		_List_fromArray(
-			[
-				$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Player)
-			]));
+	var action = A2(
+		$elm$core$Array$repeat,
+		1,
+		$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Player));
 	return A2($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, action);
 };
 var $author$project$Logic$App$Patterns$Misc$getEntityHeight = function (stack) {
 	var action = function (_v0) {
-		return $elm$core$Array$fromList(
-			_List_fromArray(
-				[
-					$author$project$Logic$App$Types$Number(0)
-				]));
+		return A2(
+			$elm$core$Array$repeat,
+			1,
+			$author$project$Logic$App$Types$Number(0));
 	};
 	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, action);
 };
 var $author$project$Logic$App$Patterns$Misc$getEntityLook = function (stack) {
 	var action = function (_v0) {
-		return $elm$core$Array$fromList(
-			_List_fromArray(
-				[
-					$author$project$Logic$App$Types$Vector(
-					_Utils_Tuple3(0.0, 0.0, 0.0))
-				]));
+		return A2(
+			$elm$core$Array$repeat,
+			1,
+			$author$project$Logic$App$Types$Vector(
+				_Utils_Tuple3(0.0, 0.0, 0.0)));
 	};
 	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, action);
 };
 var $author$project$Logic$App$Patterns$Misc$getEntityVelocity = function (stack) {
 	var action = function (_v0) {
-		return $elm$core$Array$fromList(
-			_List_fromArray(
-				[
-					$author$project$Logic$App$Types$Vector(
-					_Utils_Tuple3(0.0, 0.0, 0.0))
-				]));
+		return A2(
+			$elm$core$Array$repeat,
+			1,
+			$author$project$Logic$App$Types$Vector(
+				_Utils_Tuple3(0.0, 0.0, 0.0)));
 	};
 	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, action);
 };
+var $ianmackenzie$elm_geometry$Vector3d$dot = F2(
+	function (_v0, _v1) {
+		var v2 = _v0.a;
+		var v1 = _v1.a;
+		return $ianmackenzie$elm_units$Quantity$Quantity(((v1.x * v2.x) + (v1.y * v2.y)) + (v1.z * v2.z));
+	});
 var $author$project$Logic$App$Patterns$Math$mulDot = function (stack) {
-	return stack;
+	var action = F2(
+		function (iota1, iota2) {
+			var _v0 = _Utils_Tuple2(iota1, iota2);
+			_v0$4:
+			while (true) {
+				switch (_v0.a.$) {
+					case 'Number':
+						switch (_v0.b.$) {
+							case 'Number':
+								var number1 = _v0.a.a;
+								var number2 = _v0.b.a;
+								return A2(
+									$elm$core$Array$repeat,
+									1,
+									$author$project$Logic$App$Types$Number(number1 * number2));
+							case 'Vector':
+								var number = _v0.a.a;
+								var vector = _v0.b.a;
+								var x = vector.a;
+								var y = vector.b;
+								var z = vector.c;
+								return A2(
+									$elm$core$Array$repeat,
+									1,
+									$author$project$Logic$App$Types$Vector(
+										_Utils_Tuple3(number * x, number * y, number * z)));
+							default:
+								break _v0$4;
+						}
+					case 'Vector':
+						switch (_v0.b.$) {
+							case 'Number':
+								var vector = _v0.a.a;
+								var number = _v0.b.a;
+								var x = vector.a;
+								var y = vector.b;
+								var z = vector.c;
+								return A2(
+									$elm$core$Array$repeat,
+									1,
+									$author$project$Logic$App$Types$Vector(
+										_Utils_Tuple3(x * number, y * number, z * number)));
+							case 'Vector':
+								var vector1 = _v0.a.a;
+								var vector2 = _v0.b.a;
+								var vec2 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector2);
+								var vec1 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector1);
+								var _v3 = A2($ianmackenzie$elm_geometry$Vector3d$dot, vec2, vec1);
+								var number = _v3.a;
+								return A2(
+									$elm$core$Array$repeat,
+									1,
+									$author$project$Logic$App$Types$Number(number));
+							default:
+								break _v0$4;
+						}
+					default:
+						break _v0$4;
+				}
+			}
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+		});
+	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, action);
 };
 var $author$project$Logic$App$Patterns$PatternRegistry$noAction = function (stack) {
 	return stack;
@@ -7834,24 +8107,22 @@ var $author$project$Logic$App$Patterns$OperatorUtils$getVector = function (iota)
 var $author$project$Logic$App$Patterns$Misc$raycast = function (stack) {
 	var action = F2(
 		function (_v0, _v1) {
-			return $elm$core$Array$fromList(
-				_List_fromArray(
-					[
-						$author$project$Logic$App$Types$Vector(
-						_Utils_Tuple3(0.0, 0.0, 0.0))
-					]));
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Vector(
+					_Utils_Tuple3(0.0, 0.0, 0.0)));
 		});
 	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector, $author$project$Logic$App$Patterns$OperatorUtils$getVector, action);
 };
 var $author$project$Logic$App$Patterns$Misc$raycastAxis = function (stack) {
 	var action = F2(
 		function (_v0, _v1) {
-			return $elm$core$Array$fromList(
-				_List_fromArray(
-					[
-						$author$project$Logic$App$Types$Vector(
-						_Utils_Tuple3(0.0, 0.0, 0.0))
-					]));
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Vector(
+					_Utils_Tuple3(0.0, 0.0, 0.0)));
 		});
 	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector, $author$project$Logic$App$Patterns$OperatorUtils$getVector, action);
 };
@@ -7859,67 +8130,13 @@ var $author$project$Logic$App$Types$Chicken = {$: 'Chicken'};
 var $author$project$Logic$App$Patterns$Misc$raycastEntity = function (stack) {
 	var action = F2(
 		function (_v0, _v1) {
-			return $elm$core$Array$fromList(
-				_List_fromArray(
-					[
-						$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Chicken)
-					]));
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Chicken));
 		});
 	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector, $author$project$Logic$App$Patterns$OperatorUtils$getVector, action);
 };
-var $author$project$Logic$App$Patterns$OperatorUtils$action3Inputs = F5(
-	function (stack, inputGetter1, inputGetter2, inputGetter3, action) {
-		var newStack = A3(
-			$elm$core$Array$slice,
-			3,
-			$elm$core$Array$length(stack),
-			stack);
-		var maybeIota3 = A2($elm$core$Array$get, 0, stack);
-		var maybeIota2 = A2($elm$core$Array$get, 1, stack);
-		var maybeIota1 = A2($elm$core$Array$get, 2, stack);
-		if (_Utils_eq(maybeIota1, $elm$core$Maybe$Nothing) || (_Utils_eq(maybeIota2, $elm$core$Maybe$Nothing) || _Utils_eq(maybeIota3, $elm$core$Maybe$Nothing))) {
-			return A2(
-				$elm$core$Array$append,
-				A2(
-					$elm$core$Array$map,
-					$author$project$Logic$App$Patterns$OperatorUtils$mapNothingToMissingIota,
-					$elm$core$Array$fromList(
-						$author$project$Logic$App$Patterns$OperatorUtils$moveNothingsToFront(
-							_List_fromArray(
-								[maybeIota1, maybeIota2, maybeIota3])))),
-				newStack);
-		} else {
-			var _v0 = _Utils_Tuple3(
-				A2($elm$core$Maybe$map, inputGetter1, maybeIota1),
-				A2($elm$core$Maybe$map, inputGetter2, maybeIota2),
-				A2($elm$core$Maybe$map, inputGetter3, maybeIota3));
-			if (((_v0.a.$ === 'Just') && (_v0.b.$ === 'Just')) && (_v0.c.$ === 'Just')) {
-				var iota1 = _v0.a.a;
-				var iota2 = _v0.b.a;
-				var iota3 = _v0.c.a;
-				return (_Utils_eq(
-					iota1,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota)) || (_Utils_eq(
-					iota2,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota)) || _Utils_eq(
-					iota3,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota)))) ? A2(
-					$elm$core$Array$append,
-					$elm$core$Array$fromList(
-						_List_fromArray(
-							[iota1, iota2, iota3])),
-					newStack) : A2(
-					$elm$core$Array$append,
-					A3(action, iota1, iota2, iota3),
-					newStack);
-			} else {
-				return A2(
-					$author$project$Logic$App$Utils$Utils$unshift,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure),
-					newStack);
-			}
-		}
-	});
 var $author$project$Logic$App$Patterns$Stack$rotate = function (stack) {
 	var action = F3(
 		function (iota1, iota2, iota3) {
@@ -8076,7 +8293,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _List_f
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'pow_proj', signature: 'wedew'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'floor', signature: 'ewq'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'ceil', signature: 'qwe'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'construct_vec', signature: 'eqqqqq'},
+		{action: $author$project$Logic$App$Patterns$Math$constructVector, color: $author$project$Settings$Theme$accent1, displayName: 'Vector Exaltation', internalName: 'construct_vec', signature: 'eqqqqq'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'deconstruct_vec', signature: 'qeeeee'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'coerce_axial', signature: 'qqqqqaww'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'and', signature: 'wdw'},
@@ -8247,7 +8464,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _List_f
 		action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
 			$author$project$Logic$App$Types$Number($elm$core$Basics$pi * 2)),
 		color: $author$project$Settings$Theme$accent1,
-		displayName: 'Euler\'s Reflection',
+		displayName: 'Circle\'s Reflection',
 		internalName: 'const/double/tau',
 		signature: 'eawae'
 	},
@@ -8255,7 +8472,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _List_f
 		action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
 			$author$project$Logic$App$Types$Number($elm$core$Basics$e)),
 		color: $author$project$Settings$Theme$accent1,
-		displayName: 'Numerical Reflection',
+		displayName: 'Euler\'s Reflection',
 		internalName: 'const/double/e',
 		signature: 'aaq'
 	},

@@ -10,6 +10,7 @@ getCaster : Array Iota -> Array Iota
 getCaster stack =
     let
         action =
-            Array.fromList [ Entity Player ]
+            Entity Player
+                |> Array.repeat 1
     in
     actionNoInput stack action

@@ -95,7 +95,7 @@ patternRegistry =
     , { signature = "wedew", internalName = "pow_proj", action = noAction, displayName = "", color = accent1 }
     , { signature = "ewq", internalName = "floor", action = noAction, displayName = "", color = accent1 }
     , { signature = "qwe", internalName = "ceil", action = noAction, displayName = "", color = accent1 }
-    , { signature = "eqqqqq", internalName = "construct_vec", action = noAction, displayName = "", color = accent1 }
+    , { signature = "eqqqqq", internalName = "construct_vec", action = constructVector, displayName = "Vector Exaltation", color = accent1 }
     , { signature = "qeeeee", internalName = "deconstruct_vec", action = noAction, displayName = "", color = accent1 }
     , { signature = "qqqqqaww", internalName = "coerce_axial", action = noAction, displayName = "", color = accent1 }
     , { signature = "wdw", internalName = "and", action = noAction, displayName = "", color = accent1 }
@@ -179,8 +179,8 @@ patternRegistry =
     , { signature = "eeeeeqd", internalName = "const/vec/nz", action = makeConstant (Vector ( 0, 0, -1 )), displayName = "Vector Reflection -Z", color = accent1 }
     , { signature = "qqqqq", internalName = "const/vec/0", action = makeConstant (Vector ( 0, 0, 0 )), displayName = "Vector Reflection Zero", color = accent1 }
     , { signature = "qdwdq", internalName = "const/double/pi", action = makeConstant (Number pi), displayName = "Arc's Reflection", color = accent1 }
-    , { signature = "eawae", internalName = "const/double/tau", action = makeConstant (Number (pi * 2)), displayName = "Euler's Reflection", color = accent1 }
-    , { signature = "aaq", internalName = "const/double/e", action = makeConstant (Number e), displayName = "Numerical Reflection", color = accent1 }
+    , { signature = "eawae", internalName = "const/double/tau", action = makeConstant (Number (pi * 2)), displayName = "Circle's Reflection", color = accent1 }
+    , { signature = "aaq", internalName = "const/double/e", action = makeConstant (Number e), displayName = "Euler's Reflection", color = accent1 }
     , { signature = "qqqqqdaqa", internalName = "get_entity", action = noAction, displayName = "", color = accent1 }
     , { signature = "qqqqqdaqaawa", internalName = "get_entity/animal", action = noAction, displayName = "", color = accent1 }
     , { signature = "qqqqqdaqaawq", internalName = "get_entity/monster", action = noAction, displayName = "", color = accent1 }

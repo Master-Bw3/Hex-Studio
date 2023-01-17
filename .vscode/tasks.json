@@ -1,0 +1,9 @@
+{   "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "launch dev server",
+            "command": "elm-live src/Main.elm --open --  --output gen/source.js"
+        }
+    ]
+}

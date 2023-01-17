@@ -4,7 +4,7 @@
         "src"
     ],
     "elm-version": "0.19.1",
-"dependencies": {
+    "dependencies": {
         "direct": {
             "elm/browser": "1.0.2",
             "elm/core": "1.0.5",
@@ -16,6 +16,8 @@
             "elm/url": "1.0.0",
             "elm-community/json-extra": "4.3.0",
             "elm-community/list-extra": "8.7.0",
+            "ianmackenzie/elm-geometry": "3.9.1",
+            "ianmackenzie/elm-units": "2.9.0",
             "lattyware/elm-fontawesome": "6.0.0",
             "mpizenberg/elm-pointer-events": "4.0.2",
             "ryannhg/elm-spa": "6.0.0"
@@ -25,6 +27,11 @@
             "elm/file": "1.0.5",
             "elm/parser": "1.1.0",
             "elm/virtual-dom": "1.0.2",
+            "ianmackenzie/elm-1d-parameter": "1.0.1",
+            "ianmackenzie/elm-float-extra": "1.1.0",
+            "ianmackenzie/elm-interval": "2.0.0",
+            "ianmackenzie/elm-triangular-mesh": "1.1.0",
+            "ianmackenzie/elm-units-interval": "2.3.0",
             "rtfeldman/elm-iso8601-date-strings": "1.1.4"
         }
     },
