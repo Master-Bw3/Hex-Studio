@@ -8779,34 +8779,37 @@ var $author$project$Components$App$Grid$updatemidLineOffsets = F2(
 							return _Utils_update(
 								conPoint,
 								{
-									betweenOffsetValues: _Utils_Tuple3(
-										_Utils_Tuple2(
-											A2(
-												offset,
-												a1,
-												randomNum(time + conPoint.offsetX)),
-											A2(
-												offset,
-												a2,
-												randomNum((time + conPoint.offsetX) + 1))),
-										_Utils_Tuple2(
-											A2(
-												offset,
-												b1,
-												randomNum(time + conPoint.offsetY)),
-											A2(
-												offset,
-												b2,
-												randomNum((time + conPoint.offsetY) + 1))),
-										_Utils_Tuple2(
-											A2(
-												offset,
-												c1,
-												randomNum((time + conPoint.offsetX) + 2)),
-											A2(
-												offset,
-												c2,
-												randomNum((time + conPoint.offsetY) + 2))))
+									betweenOffsetValues: function () {
+										var uniqueNumber = ((conPoint.offsetY * 10000) + conPoint.offsetX) + time;
+										return _Utils_Tuple3(
+											_Utils_Tuple2(
+												A2(
+													offset,
+													a1,
+													randomNum(uniqueNumber + 1)),
+												A2(
+													offset,
+													a2,
+													randomNum(uniqueNumber + 4))),
+											_Utils_Tuple2(
+												A2(
+													offset,
+													b1,
+													randomNum(uniqueNumber + 2)),
+												A2(
+													offset,
+													b2,
+													randomNum(uniqueNumber + 5))),
+											_Utils_Tuple2(
+												A2(
+													offset,
+													c1,
+													randomNum(uniqueNumber + 3)),
+												A2(
+													offset,
+													c2,
+													randomNum(uniqueNumber + 6))));
+									}()
 								});
 						},
 						point.connectedPoints)

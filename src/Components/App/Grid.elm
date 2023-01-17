@@ -491,9 +491,13 @@ updatemidLineOffsets grid_ time =
                                 ( ( a1, a2 ), ( b1, b2 ), ( c1, c2 ) ) ->
                                     { conPoint
                                         | betweenOffsetValues =
-                                            ( ( offset a1 <| randomNum (time + conPoint.offsetX), offset a2 <| randomNum (time + conPoint.offsetX + 1) )
-                                            , ( offset b1 <| randomNum (time + conPoint.offsetY), offset b2 <| randomNum (time + conPoint.offsetY + 1) )
-                                            , ( offset c1 <| randomNum (time + conPoint.offsetX + 2), offset c2 <| randomNum (time + conPoint.offsetY + 2) )
+                                            let
+                                                uniqueNumber =
+                                                    conPoint.offsetY * 10000 + conPoint.offsetX + time
+                                            in
+                                            ( ( offset a1 <| randomNum (uniqueNumber + 1), offset a2 <| randomNum (uniqueNumber + 4) )
+                                            , ( offset b1 <| randomNum (uniqueNumber + 2), offset b2 <| randomNum (uniqueNumber + 5) )
+                                            , ( offset c1 <| randomNum (uniqueNumber + 3), offset c2 <| randomNum (uniqueNumber + 6) )
                                             )
                                     }
                         )
