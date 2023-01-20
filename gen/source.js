@@ -5945,6 +5945,7 @@ var $author$project$Main$subscriptions = function (model) {
 				$author$project$Ports$HexNumGen$return($author$project$Logic$App$Msg$RecieveGeneratedNumberLiteral)
 			]));
 };
+var $author$project$Settings$Theme$accent5 = '#E0E3B8';
 var $author$project$Settings$Theme$accent2 = '#D8B8E0';
 var $elm$core$List$any = F2(
 	function (isOkay, list) {
@@ -6746,6 +6747,26 @@ var $author$project$Logic$App$Stack$Stack$applyPatternsToStack = F3(
 	});
 var $elm$json$Json$Encode$float = _Json_wrap;
 var $author$project$Ports$HexNumGen$call = _Platform_outgoingPort('call', $elm$json$Json$Encode$float);
+var $elm$core$Array$foldl = F3(
+	function (func, baseCase, _v0) {
+		var tree = _v0.c;
+		var tail = _v0.d;
+		var helper = F2(
+			function (node, acc) {
+				if (node.$ === 'SubTree') {
+					var subTree = node.a;
+					return A3($elm$core$Elm$JsArray$foldl, helper, acc, subTree);
+				} else {
+					var values = node.a;
+					return A3($elm$core$Elm$JsArray$foldl, func, acc, values);
+				}
+			});
+		return A3(
+			$elm$core$Elm$JsArray$foldl,
+			func,
+			A3($elm$core$Elm$JsArray$foldl, helper, baseCase, tree),
+			tail);
+	});
 var $author$project$Logic$App$Utils$GetAngleSignature$East = {$: 'East'};
 var $author$project$Logic$App$Utils$GetAngleSignature$Error = {$: 'Error'};
 var $author$project$Logic$App$Utils$GetAngleSignature$Northeast = {$: 'Northeast'};
@@ -8649,11 +8670,11 @@ var $elm$core$Basics$min = F2(
 	function (x, y) {
 		return (_Utils_cmp(x, y) < 0) ? x : y;
 	});
+var $elm$core$Basics$modBy = _Basics_modBy;
 var $elm$time$Time$posixToMillis = function (_v0) {
 	var millis = _v0.a;
 	return millis;
 };
-var $elm$core$Basics$modBy = _Basics_modBy;
 var $author$project$Components$App$Grid$verticalSpacing = function (scale) {
 	return ($author$project$Components$App$Grid$spacing(scale) * $elm$core$Basics$sqrt(3.0)) / 2;
 };
@@ -8981,8 +9002,27 @@ var $author$project$Main$update = F2(
 			case 'MouseUp':
 				if (drawing.drawingMode) {
 					if ($elm$core$List$length(drawing.activePath) > 1) {
-						var newPattern = $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature(
-							$author$project$Logic$App$Utils$GetAngleSignature$getAngleSignature(drawing.activePath));
+						var precedingEscapeCount = function () {
+							var countEscapes = F2(
+								function (patternTuple, accumulator) {
+									return accumulator.b ? ((patternTuple.a.internalName === 'escape') ? _Utils_Tuple2(accumulator.a + 1, true) : _Utils_Tuple2(accumulator.a, false)) : _Utils_Tuple2(accumulator.a, false);
+								});
+							return A2(
+								$elm$core$Debug$log,
+								'consider this',
+								A3(
+									$elm$core$Array$foldl,
+									countEscapes,
+									_Utils_Tuple2(0, true),
+									model.patternArray).a);
+						}();
+						var newPattern = function () {
+							var uncoloredPattern = $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature(
+								$author$project$Logic$App$Utils$GetAngleSignature$getAngleSignature(drawing.activePath));
+							return (A2($elm$core$Basics$modBy, 2, precedingEscapeCount) === 1) ? _Utils_update(
+								uncoloredPattern,
+								{color: $author$project$Settings$Theme$accent5}) : uncoloredPattern;
+						}();
 						var newGrid = _Utils_update(
 							grid,
 							{

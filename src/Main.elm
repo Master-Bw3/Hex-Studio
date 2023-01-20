@@ -147,8 +147,31 @@ update msg model =
             if drawing.drawingMode == True then
                 if List.length drawing.activePath > 1 then
                     let
+                        precedingEscapeCount =
+                            let
+                                countEscapes patternTuple accumulator =
+                                    if Tuple.second accumulator == True then
+                                        if (Tuple.first patternTuple).internalName == "escape" then
+                                            ( Tuple.first accumulator + 1, True )
+
+                                        else
+                                            ( Tuple.first accumulator, False )
+
+                                    else
+                                        ( Tuple.first accumulator, False )
+                            in
+                            Debug.log "consider this" <| Tuple.first <| Array.foldl countEscapes ( 0, True ) model.patternArray
+
                         newPattern =
-                            getPatternFromSignature <| getAngleSignature drawing.activePath
+                            let
+                                uncoloredPattern =
+                                    getPatternFromSignature <| getAngleSignature drawing.activePath
+                            in
+                            if modBy 2 precedingEscapeCount == 1 then
+                                { uncoloredPattern | color = accent5 }
+
+                            else
+                                uncoloredPattern
 
                         newGrid =
                             { grid
