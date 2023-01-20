@@ -248,7 +248,7 @@ eval stack =
                                         Array.map
                                             (\i ->
                                                 case i of
-                                                    Pattern pattern ->
+                                                    Pattern pattern _ ->
                                                         pattern
 
                                                     _ ->
@@ -258,7 +258,7 @@ eval stack =
                                 )
                                 False
 
-                        Pattern pattern ->
+                        Pattern pattern _ ->
                             applyPatternsToStack newStack [ pattern ] False
 
                         _ ->

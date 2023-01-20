@@ -1,8 +1,7 @@
 module Logic.App.Patterns.OperatorUtils exposing (..)
 
 import Array exposing (Array)
-import Html exposing (th)
-import Json.Decode exposing (maybe)
+
 import Logic.App.Types exposing (Iota(..), Mishap(..))
 import Logic.App.Utils.Utils exposing (unshift)
 
@@ -103,7 +102,7 @@ action3Inputs stack inputGetter1 inputGetter2 inputGetter3 action =
 getPatternOrPatternList : Iota -> Iota
 getPatternOrPatternList iota =
     case iota of
-        Pattern _ ->
+        Pattern _ _ ->
             iota
 
         IotaList list ->
@@ -111,7 +110,7 @@ getPatternOrPatternList iota =
                 List.all
                     (\i ->
                         case i of
-                            Pattern _ ->
+                            Pattern _ _ ->
                                 True
 
                             _ ->

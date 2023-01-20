@@ -18,7 +18,7 @@ applyPatternsToStack stack patterns escapeThis =
 
         Just pattern ->
             if escapeThis then
-                applyPatternsToStack (addPatternIotatoStack stack pattern) (Maybe.withDefault [] <| List.tail patterns) False
+                applyPatternsToStack (addEscapedPatternIotaToStack stack pattern) (Maybe.withDefault [] <| List.tail patterns) False
 
             else
                 let
@@ -44,7 +44,7 @@ applyPatternToStack stack pattern =
                         (Array.filter
                             (\iota ->
                                 case iota of
-                                    Pattern pat ->
+                                    Pattern pat False ->
                                         pat.internalName == "close_paren"
 
                                     _ ->
@@ -59,7 +59,7 @@ applyPatternToStack stack pattern =
                             (Array.filter
                                 (\iota ->
                                     case iota of
-                                        Pattern pat ->
+                                        Pattern pat False ->
                                             pat.internalName == "open_paren"
 
                                         _ ->
@@ -69,7 +69,7 @@ applyPatternToStack stack pattern =
                             )
 
                 addToIntroList =
-                    Array.set 0 (OpenParenthesis (unshift (Pattern pattern) list)) stack
+                    Array.set 0 (OpenParenthesis (unshift (Pattern pattern False) list)) stack
             in
             if pattern.internalName == "escape" then
                 ( stack, True )
@@ -107,11 +107,11 @@ applyPatternToStack stack pattern =
                 ( pattern.action stack, False )
 
 
-addPatternIotatoStack : Array Iota -> PatternType -> Array Iota
-addPatternIotatoStack stack pattern =
+addEscapedPatternIotaToStack : Array Iota -> PatternType -> Array Iota
+addEscapedPatternIotaToStack stack pattern =
     case Array.get 0 stack of
         Just (OpenParenthesis list) ->
-            Array.set 0 (OpenParenthesis (unshift (Pattern pattern) list)) stack
+            Array.set 0 (OpenParenthesis (unshift (Pattern pattern True) list)) stack
 
         _ ->
-            unshift (Pattern pattern) stack
+            unshift (Pattern pattern True) stack

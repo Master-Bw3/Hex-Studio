@@ -64,7 +64,7 @@ getIotaValueAsString iota =
                         List.map
                             (\item ->
                                 case item of
-                                    Pattern pattern ->
+                                    Pattern pattern _ ->
                                         pattern.displayName
 
                                     x ->
@@ -73,7 +73,7 @@ getIotaValueAsString iota =
                         <|
                             Array.toList list
 
-        Pattern pattern ->
+        Pattern pattern _ ->
             pattern.displayName
 
         Garbage mishap ->
@@ -128,7 +128,7 @@ getIotaValueAsString iota =
                         List.map
                             (\item ->
                                 case item of
-                                    Pattern pattern ->
+                                    Pattern pattern _ ->
                                         pattern.displayName
 
                                     _ ->

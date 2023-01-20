@@ -51,7 +51,7 @@ type Iota
     | Boolean Bool
     | Entity EntityType
     | IotaList (Array Iota)
-    | Pattern PatternType
+    | Pattern PatternType Bool -- bool is for if pattern was from consideration
     | Null
     | Garbage Mishap
     | OpenParenthesis (Array Iota)

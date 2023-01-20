@@ -6483,9 +6483,10 @@ var $author$project$Components$App$Grid$applyActivePathToGrid = F2(
 var $author$project$Logic$App$Types$OpenParenthesis = function (a) {
 	return {$: 'OpenParenthesis', a: a};
 };
-var $author$project$Logic$App$Types$Pattern = function (a) {
-	return {$: 'Pattern', a: a};
-};
+var $author$project$Logic$App$Types$Pattern = F2(
+	function (a, b) {
+		return {$: 'Pattern', a: a, b: b};
+	});
 var $elm$core$Array$getHelp = F3(
 	function (shift, index, tree) {
 		getHelp:
@@ -6573,7 +6574,7 @@ var $author$project$Logic$App$Utils$Utils$unshift = F2(
 					[item])),
 			array);
 	});
-var $author$project$Logic$App$Stack$Stack$addPatternIotatoStack = F2(
+var $author$project$Logic$App$Stack$Stack$addEscapedPatternIotaToStack = F2(
 	function (stack, pattern) {
 		var _v0 = A2($elm$core$Array$get, 0, stack);
 		if ((_v0.$ === 'Just') && (_v0.a.$ === 'OpenParenthesis')) {
@@ -6584,13 +6585,13 @@ var $author$project$Logic$App$Stack$Stack$addPatternIotatoStack = F2(
 				$author$project$Logic$App$Types$OpenParenthesis(
 					A2(
 						$author$project$Logic$App$Utils$Utils$unshift,
-						$author$project$Logic$App$Types$Pattern(pattern),
+						A2($author$project$Logic$App$Types$Pattern, pattern, true),
 						list)),
 				stack);
 		} else {
 			return A2(
 				$author$project$Logic$App$Utils$Utils$unshift,
-				$author$project$Logic$App$Types$Pattern(pattern),
+				A2($author$project$Logic$App$Types$Pattern, pattern, true),
 				stack);
 		}
 	});
@@ -6651,7 +6652,7 @@ var $author$project$Logic$App$Stack$Stack$applyPatternToStack = F2(
 				A2(
 					$elm$core$Array$filter,
 					function (iota) {
-						if (iota.$ === 'Pattern') {
+						if ((iota.$ === 'Pattern') && (!iota.b)) {
 							var pat = iota.a;
 							return pat.internalName === 'open_paren';
 						} else {
@@ -6663,7 +6664,7 @@ var $author$project$Logic$App$Stack$Stack$applyPatternToStack = F2(
 				A2(
 					$elm$core$Array$filter,
 					function (iota) {
-						if (iota.$ === 'Pattern') {
+						if ((iota.$ === 'Pattern') && (!iota.b)) {
 							var pat = iota.a;
 							return pat.internalName === 'close_paren';
 						} else {
@@ -6677,7 +6678,7 @@ var $author$project$Logic$App$Stack$Stack$applyPatternToStack = F2(
 				$author$project$Logic$App$Types$OpenParenthesis(
 					A2(
 						$author$project$Logic$App$Utils$Utils$unshift,
-						$author$project$Logic$App$Types$Pattern(pattern),
+						A2($author$project$Logic$App$Types$Pattern, pattern, false),
 						list)),
 				stack);
 			return (pattern.internalName === 'escape') ? _Utils_Tuple2(stack, true) : ((pattern.internalName === 'close_paren') ? (((pattern.internalName === 'close_paren') && (_Utils_cmp(numberOfCloseParen + 1, numberOfOpenParen) > -1)) ? _Utils_Tuple2(
@@ -6715,7 +6716,7 @@ var $author$project$Logic$App$Stack$Stack$applyPatternsToStack = F3(
 			} else {
 				var pattern = _v0.a;
 				if (escapeThis) {
-					var $temp$stack = A2($author$project$Logic$App$Stack$Stack$addPatternIotatoStack, stack, pattern),
+					var $temp$stack = A2($author$project$Logic$App$Stack$Stack$addEscapedPatternIotaToStack, stack, pattern),
 						$temp$patterns = A2(
 						$elm$core$Maybe$withDefault,
 						_List_Nil,

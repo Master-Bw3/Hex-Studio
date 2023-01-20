@@ -54,7 +54,7 @@ iotaColorMap iota =
         IotaList _ ->
             "#354C3F"
 
-        Pattern _ ->
+        Pattern _ _ ->
             "#354C3F"
 
         Garbage _ ->
