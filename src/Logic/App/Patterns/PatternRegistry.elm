@@ -5,6 +5,8 @@ import Logic.App.Patterns.Circles exposing (..)
 import Logic.App.Patterns.Math exposing (..)
 import Logic.App.Patterns.Misc exposing (..)
 import Logic.App.Patterns.OperatorUtils exposing (action1Input, getPatternOrPatternList, makeConstant)
+import Logic.App.Patterns.Lists exposing (..)
+
 import Logic.App.Patterns.Selectors exposing (..)
 import Logic.App.Patterns.Stack exposing (..)
 import Logic.App.Stack.Stack exposing (applyPatternToStack, applyPatternsToStack)
@@ -198,12 +200,12 @@ patternRegistry =
     , { signature = "eeeeewaqaawe", internalName = "zone_entity/not_player", action = noAction, displayName = "", color = accent1 }
     , { signature = "qqqqqwdeddwd", internalName = "zone_entity/living", action = noAction, displayName = "", color = accent1 }
     , { signature = "eeeeewaqaawd", internalName = "zone_entity/not_living", action = noAction, displayName = "", color = accent1 }
-    , { signature = "edqde", internalName = "append", action = noAction, displayName = "", color = accent1 }
+    , { signature = "edqde", internalName = "append", action = append, displayName = "Integration Distillation", color = accent1 }
     , { signature = "qaeaq", internalName = "concat", action = noAction, displayName = "", color = accent1 }
     , { signature = "deeed", internalName = "index", action = noAction, displayName = "", color = accent1 }
     , { signature = "dadad", internalName = "for_each", action = noAction, displayName = "", color = accent1 }
     , { signature = "aqaeaq", internalName = "list_size", action = noAction, displayName = "", color = accent1 }
-    , { signature = "adeeed", internalName = "singleton", action = noAction, displayName = "", color = accent1 }
+    , { signature = "adeeed", internalName = "singleton", action = singleton, displayName = "Single's Purification", color = accent1 }
     , { signature = "qqaeaae", internalName = "empty_list", action = noAction, displayName = "", color = accent1 }
     , { signature = "qqqaede", internalName = "reverse_list", action = noAction, displayName = "", color = accent1 }
     , { signature = "ewdqdwe", internalName = "last_n_list", action = noAction, displayName = "", color = accent1 }

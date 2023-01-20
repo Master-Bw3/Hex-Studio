@@ -7342,6 +7342,35 @@ var $author$project$Logic$App$Patterns$Math$add = function (stack) {
 		});
 	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, action);
 };
+var $author$project$Logic$App$Patterns$OperatorUtils$getAny = function (iota) {
+	return iota;
+};
+var $author$project$Logic$App$Patterns$OperatorUtils$getIotaList = function (iota) {
+	if (iota.$ === 'IotaList') {
+		return iota;
+	} else {
+		return $author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota);
+	}
+};
+var $author$project$Logic$App$Patterns$Lists$append = function (stack) {
+	var action = F2(
+		function (listIota, iota) {
+			if (listIota.$ === 'IotaList') {
+				var list = listIota.a;
+				return A2(
+					$elm$core$Array$repeat,
+					1,
+					$author$project$Logic$App$Types$IotaList(
+						A2($author$project$Logic$App$Utils$Utils$unshift, iota, list)));
+			} else {
+				return A2(
+					$elm$core$Array$repeat,
+					1,
+					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+			}
+		});
+	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getIotaList, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
+};
 var $author$project$Logic$App$Patterns$OperatorUtils$actionNoInput = F2(
 	function (stack, action) {
 		return A2($elm$core$Array$append, action, stack);
@@ -7582,9 +7611,6 @@ var $author$project$Logic$App$Patterns$Math$divCross = function (stack) {
 				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
 		});
 	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, action);
-};
-var $author$project$Logic$App$Patterns$OperatorUtils$getAny = function (iota) {
-	return iota;
 };
 var $author$project$Logic$App$Patterns$Stack$dup2 = function (stack) {
 	var action = F2(
@@ -8156,6 +8182,16 @@ var $author$project$Logic$App$Patterns$Stack$rotateReverse = function (stack) {
 		});
 	return A5($author$project$Logic$App$Patterns$OperatorUtils$action3Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
 };
+var $author$project$Logic$App$Patterns$Lists$singleton = function (stack) {
+	var action = function (iota) {
+		return A2(
+			$elm$core$Array$repeat,
+			1,
+			$author$project$Logic$App$Types$IotaList(
+				A2($elm$core$Array$repeat, 1, iota)));
+	};
+	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
+};
 var $author$project$Logic$App$Patterns$Stack$stackLength = function (stack) {
 	return A2(
 		$author$project$Logic$App$Utils$Utils$unshift,
@@ -8494,12 +8530,12 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _List_f
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'zone_entity/not_player', signature: 'eeeeewaqaawe'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'zone_entity/living', signature: 'qqqqqwdeddwd'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'zone_entity/not_living', signature: 'eeeeewaqaawd'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'append', signature: 'edqde'},
+		{action: $author$project$Logic$App$Patterns$Lists$append, color: $author$project$Settings$Theme$accent1, displayName: 'Integration Distillation', internalName: 'append', signature: 'edqde'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'concat', signature: 'qaeaq'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'index', signature: 'deeed'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'for_each', signature: 'dadad'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'list_size', signature: 'aqaeaq'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'singleton', signature: 'adeeed'},
+		{action: $author$project$Logic$App$Patterns$Lists$singleton, color: $author$project$Settings$Theme$accent1, displayName: 'Single\'s Purification', internalName: 'singleton', signature: 'adeeed'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'empty_list', signature: 'qqaeaae'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'reverse_list', signature: 'qqqaede'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'last_n_list', signature: 'ewdqdwe'},

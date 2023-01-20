@@ -184,6 +184,14 @@ getEntity iota =
         _ ->
             Garbage IncorrectIota
 
+getIotaList : Iota -> Iota
+getIotaList iota =
+    case iota of
+        IotaList _ ->
+            iota
+
+        _ ->
+            Garbage IncorrectIota
 
 getAny : Iota -> Iota
 getAny iota =
