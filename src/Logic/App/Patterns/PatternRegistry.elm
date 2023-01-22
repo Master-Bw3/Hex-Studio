@@ -93,13 +93,13 @@ patternRegistry =
     , { signature = "wddw", internalName = "sub", action = subtract, displayName = "Subtractive Distillation", color = accent1 }
     , { signature = "waqaw", internalName = "mul_dot", action = mulDot, displayName = "Multiplicative Distillation", color = accent1 }
     , { signature = "wdedw", internalName = "div_cross", action = divCross, displayName = "Division Distillation", color = accent1 }
-    , { signature = "wqaqw", internalName = "abs_len", action = noAction, displayName = "", color = accent1 }
-    , { signature = "wedew", internalName = "pow_proj", action = noAction, displayName = "", color = accent1 }
-    , { signature = "ewq", internalName = "floor", action = noAction, displayName = "", color = accent1 }
-    , { signature = "qwe", internalName = "ceil", action = noAction, displayName = "", color = accent1 }
+    , { signature = "wqaqw", internalName = "abs_len", action = absLen, displayName = "Length Purification", color = accent1 }
+    , { signature = "wedew", internalName = "pow_proj", action = powProj, displayName = "Power Distillation", color = accent1 }
+    , { signature = "ewq", internalName = "floor", action = floorAction, displayName = "Floor Purification", color = accent1 }
+    , { signature = "qwe", internalName = "ceil", action = ceilAction, displayName = "Ceiling Purification", color = accent1 }
     , { signature = "eqqqqq", internalName = "construct_vec", action = constructVector, displayName = "Vector Exaltation", color = accent1 }
     , { signature = "qeeeee", internalName = "deconstruct_vec", action = noAction, displayName = "", color = accent1 }
-    , { signature = "qqqqqaww", internalName = "coerce_axial", action = noAction, displayName = "", color = accent1 }
+    , { signature = "qqqqqaww", internalName = "coerce_axial", action = coerceAxial, displayName = "Axial Purification", color = accent1 }
     , { signature = "wdw", internalName = "and", action = noAction, displayName = "", color = accent1 }
     , { signature = "waw", internalName = "or", action = noAction, displayName = "", color = accent1 }
     , { signature = "dwa", internalName = "xor", action = noAction, displayName = "", color = accent1 }

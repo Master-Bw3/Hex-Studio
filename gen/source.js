@@ -6976,52 +6976,11 @@ var $author$project$Logic$App$Types$Number = function (a) {
 var $author$project$Logic$App$Types$Vector = function (a) {
 	return {$: 'Vector', a: a};
 };
-var $author$project$Settings$Theme$accent1 = '#BAC5E2';
+var $elm$core$Basics$abs = function (n) {
+	return (n < 0) ? (-n) : n;
+};
 var $author$project$Logic$App$Types$IncorrectIota = {$: 'IncorrectIota'};
-var $elm$core$Maybe$map = F2(
-	function (f, maybe) {
-		if (maybe.$ === 'Just') {
-			var value = maybe.a;
-			return $elm$core$Maybe$Just(
-				f(value));
-		} else {
-			return $elm$core$Maybe$Nothing;
-		}
-	});
 var $author$project$Logic$App$Types$NotEnoughIotas = {$: 'NotEnoughIotas'};
-var $author$project$Logic$App$Patterns$OperatorUtils$mapNothingToMissingIota = function (maybeIota) {
-	if (maybeIota.$ === 'Nothing') {
-		return $author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas);
-	} else {
-		var iota = maybeIota.a;
-		return iota;
-	}
-};
-var $author$project$Logic$App$Patterns$OperatorUtils$moveNothingsToFront = function (list) {
-	var comparison = F2(
-		function (a, b) {
-			var checkNothing = function (x) {
-				if (x.$ === 'Nothing') {
-					return 1;
-				} else {
-					return 2;
-				}
-			};
-			var _v0 = A2(
-				$elm$core$Basics$compare,
-				checkNothing(a),
-				checkNothing(b));
-			switch (_v0.$) {
-				case 'LT':
-					return $elm$core$Basics$LT;
-				case 'EQ':
-					return $elm$core$Basics$EQ;
-				default:
-					return $elm$core$Basics$GT;
-			}
-		});
-	return A2($elm$core$List$sortWith, comparison, list);
-};
 var $elm$core$List$drop = F2(
 	function (n, list) {
 		drop:
@@ -7222,6 +7181,179 @@ var $elm$core$Array$slice = F3(
 			correctFrom,
 			A2($elm$core$Array$sliceRight, correctTo, array));
 	});
+var $author$project$Logic$App$Patterns$OperatorUtils$action1Input = F3(
+	function (stack, inputGetter, action) {
+		var newStack = A3(
+			$elm$core$Array$slice,
+			1,
+			$elm$core$Array$length(stack),
+			stack);
+		var maybeIota = A2($elm$core$Array$get, 0, stack);
+		if (maybeIota.$ === 'Nothing') {
+			return A2(
+				$author$project$Logic$App$Utils$Utils$unshift,
+				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
+				newStack);
+		} else {
+			var iota = maybeIota.a;
+			var _v1 = inputGetter(iota);
+			if ((_v1.$ === 'Garbage') && (_v1.a.$ === 'IncorrectIota')) {
+				var _v2 = _v1.a;
+				return A2(
+					$author$project$Logic$App$Utils$Utils$unshift,
+					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+					newStack);
+			} else {
+				return A2(
+					$elm$core$Array$append,
+					action(iota),
+					newStack);
+			}
+		}
+	});
+var $ianmackenzie$elm_geometry$Geometry$Types$Vector3d = function (a) {
+	return {$: 'Vector3d', a: a};
+};
+var $ianmackenzie$elm_geometry$Vector3d$xyz = F3(
+	function (_v0, _v1, _v2) {
+		var x = _v0.a;
+		var y = _v1.a;
+		var z = _v2.a;
+		return $ianmackenzie$elm_geometry$Geometry$Types$Vector3d(
+			{x: x, y: y, z: z});
+	});
+var $ianmackenzie$elm_geometry$Vector3d$fromTuple = F2(
+	function (toQuantity, _v0) {
+		var x = _v0.a;
+		var y = _v0.b;
+		var z = _v0.c;
+		return A3(
+			$ianmackenzie$elm_geometry$Vector3d$xyz,
+			toQuantity(x),
+			toQuantity(y),
+			toQuantity(z));
+	});
+var $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector = function (iota) {
+	switch (iota.$) {
+		case 'Vector':
+			return iota;
+		case 'Number':
+			return iota;
+		default:
+			return $author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota);
+	}
+};
+var $ianmackenzie$elm_units$Quantity$Quantity = function (a) {
+	return {$: 'Quantity', a: a};
+};
+var $ianmackenzie$elm_units$Quantity$zero = $ianmackenzie$elm_units$Quantity$Quantity(0);
+var $ianmackenzie$elm_geometry$Vector3d$length = function (_v0) {
+	var v = _v0.a;
+	var largestComponent = A2(
+		$elm$core$Basics$max,
+		$elm$core$Basics$abs(v.x),
+		A2(
+			$elm$core$Basics$max,
+			$elm$core$Basics$abs(v.y),
+			$elm$core$Basics$abs(v.z)));
+	if (!largestComponent) {
+		return $ianmackenzie$elm_units$Quantity$zero;
+	} else {
+		var scaledZ = v.z / largestComponent;
+		var scaledY = v.y / largestComponent;
+		var scaledX = v.x / largestComponent;
+		var scaledLength = $elm$core$Basics$sqrt(((scaledX * scaledX) + (scaledY * scaledY)) + (scaledZ * scaledZ));
+		return $ianmackenzie$elm_units$Quantity$Quantity(scaledLength * largestComponent);
+	}
+};
+var $ianmackenzie$elm_units$Length$meters = function (numMeters) {
+	return $ianmackenzie$elm_units$Quantity$Quantity(numMeters);
+};
+var $elm$core$Array$repeat = F2(
+	function (n, e) {
+		return A2(
+			$elm$core$Array$initialize,
+			n,
+			function (_v0) {
+				return e;
+			});
+	});
+var $ianmackenzie$elm_units$Quantity$unwrap = function (_v0) {
+	var value = _v0.a;
+	return value;
+};
+var $author$project$Logic$App$Patterns$Math$absLen = function (stack) {
+	var action = function (iota) {
+		switch (iota.$) {
+			case 'Number':
+				var number = iota.a;
+				return A2(
+					$elm$core$Array$repeat,
+					1,
+					$author$project$Logic$App$Types$Number(
+						$elm$core$Basics$abs(number)));
+			case 'Vector':
+				var vector = iota.a;
+				var length = $ianmackenzie$elm_units$Quantity$unwrap(
+					$ianmackenzie$elm_geometry$Vector3d$length(
+						A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector)));
+				return A2(
+					$elm$core$Array$repeat,
+					1,
+					$author$project$Logic$App$Types$Number(length));
+			default:
+				return A2(
+					$elm$core$Array$repeat,
+					1,
+					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+		}
+	};
+	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, action);
+};
+var $author$project$Settings$Theme$accent1 = '#BAC5E2';
+var $elm$core$Maybe$map = F2(
+	function (f, maybe) {
+		if (maybe.$ === 'Just') {
+			var value = maybe.a;
+			return $elm$core$Maybe$Just(
+				f(value));
+		} else {
+			return $elm$core$Maybe$Nothing;
+		}
+	});
+var $author$project$Logic$App$Patterns$OperatorUtils$mapNothingToMissingIota = function (maybeIota) {
+	if (maybeIota.$ === 'Nothing') {
+		return $author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas);
+	} else {
+		var iota = maybeIota.a;
+		return iota;
+	}
+};
+var $author$project$Logic$App$Patterns$OperatorUtils$moveNothingsToFront = function (list) {
+	var comparison = F2(
+		function (a, b) {
+			var checkNothing = function (x) {
+				if (x.$ === 'Nothing') {
+					return 1;
+				} else {
+					return 2;
+				}
+			};
+			var _v0 = A2(
+				$elm$core$Basics$compare,
+				checkNothing(a),
+				checkNothing(b));
+			switch (_v0.$) {
+				case 'LT':
+					return $elm$core$Basics$LT;
+				case 'EQ':
+					return $elm$core$Basics$EQ;
+				default:
+					return $elm$core$Basics$GT;
+			}
+		});
+	return A2($elm$core$List$sortWith, comparison, list);
+};
 var $author$project$Logic$App$Patterns$OperatorUtils$action2Inputs = F4(
 	function (stack, inputGetter1, inputGetter2, action) {
 		var newStack = A3(
@@ -7269,25 +7401,6 @@ var $author$project$Logic$App$Patterns$OperatorUtils$action2Inputs = F4(
 					newStack);
 			}
 		}
-	});
-var $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector = function (iota) {
-	switch (iota.$) {
-		case 'Vector':
-			return iota;
-		case 'Number':
-			return iota;
-		default:
-			return $author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota);
-	}
-};
-var $elm$core$Array$repeat = F2(
-	function (n, e) {
-		return A2(
-			$elm$core$Array$initialize,
-			n,
-			function (_v0) {
-				return e;
-			});
 	});
 var $author$project$Logic$App$Patterns$Math$add = function (stack) {
 	var action = F2(
@@ -7392,6 +7505,31 @@ var $author$project$Logic$App$Patterns$Lists$append = function (stack) {
 		});
 	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getIotaList, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
 };
+var $author$project$Logic$App$Patterns$OperatorUtils$getNumber = function (iota) {
+	if (iota.$ === 'Number') {
+		return iota;
+	} else {
+		return $author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota);
+	}
+};
+var $author$project$Logic$App$Patterns$Math$ceilAction = function (stack) {
+	var action = function (iota) {
+		if (iota.$ === 'Number') {
+			var number = iota.a;
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Number(
+					$elm$core$Basics$ceiling(number)));
+		} else {
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+		}
+	};
+	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
+};
 var $author$project$Logic$App$Patterns$OperatorUtils$actionNoInput = F2(
 	function (stack, action) {
 		return A2($elm$core$Array$append, action, stack);
@@ -7419,6 +7557,52 @@ var $author$project$Logic$App$Patterns$Circles$circleImpetusDirection = function
 		$author$project$Logic$App$Types$Vector(
 			_Utils_Tuple3(1.0, 0.0, 0.0)));
 	return A2($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, action);
+};
+var $elm$core$Basics$acos = _Basics_acos;
+var $elm$core$Basics$atan = _Basics_atan;
+var $elm$core$Basics$cos = _Basics_cos;
+var $author$project$Logic$App$Patterns$OperatorUtils$getVector = function (iota) {
+	if (iota.$ === 'Vector') {
+		return iota;
+	} else {
+		return $author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota);
+	}
+};
+var $elm$core$Basics$pi = _Basics_pi;
+var $elm$core$Basics$round = _Basics_round;
+var $elm$core$Basics$sin = _Basics_sin;
+var $author$project$Logic$App$Patterns$Math$coerceAxial = function (stack) {
+	var action = function (iota) {
+		if (iota.$ === 'Vector') {
+			var vector = iota.a;
+			var x = vector.a;
+			var y = vector.b;
+			var z = vector.c;
+			var theta = $elm$core$Basics$atan(y / x);
+			var snapped_theta = ($elm$core$Basics$pi / 2) * $elm$core$Basics$round(theta / ($elm$core$Basics$pi / 2));
+			var magnitude = $elm$core$Basics$sqrt(
+				(A2($elm$core$Basics$pow, x, 2) + A2($elm$core$Basics$pow, y, 2)) + A2($elm$core$Basics$pow, z, 2));
+			var azimuth = $elm$core$Basics$acos(z / magnitude);
+			var snapped_azimuth = ($elm$core$Basics$pi / 2) * $elm$core$Basics$round(azimuth / ($elm$core$Basics$pi / 2));
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Vector(
+					_Utils_Tuple3(
+						$elm$core$Basics$round(
+							$elm$core$Basics$sin(snapped_azimuth) * $elm$core$Basics$cos(snapped_theta)),
+						$elm$core$Basics$round(
+							$elm$core$Basics$sin(snapped_azimuth) * $elm$core$Basics$sin(snapped_theta)),
+						$elm$core$Basics$round(
+							$elm$core$Basics$cos(snapped_azimuth)))));
+		} else {
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+		}
+	};
+	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector, action);
 };
 var $author$project$Logic$App$Patterns$OperatorUtils$action3Inputs = F5(
 	function (stack, inputGetter1, inputGetter2, inputGetter3, action) {
@@ -7473,13 +7657,6 @@ var $author$project$Logic$App$Patterns$OperatorUtils$action3Inputs = F5(
 			}
 		}
 	});
-var $author$project$Logic$App$Patterns$OperatorUtils$getNumber = function (iota) {
-	if (iota.$ === 'Number') {
-		return iota;
-	} else {
-		return $author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota);
-	}
-};
 var $author$project$Logic$App$Patterns$Math$constructVector = function (stack) {
 	var action = F3(
 		function (iota1, iota2, iota3) {
@@ -7502,9 +7679,6 @@ var $author$project$Logic$App$Patterns$Math$constructVector = function (stack) {
 		});
 	return A5($author$project$Logic$App$Patterns$OperatorUtils$action3Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
 };
-var $ianmackenzie$elm_geometry$Geometry$Types$Vector3d = function (a) {
-	return {$: 'Vector3d', a: a};
-};
 var $ianmackenzie$elm_geometry$Vector3d$cross = F2(
 	function (_v0, _v1) {
 		var v2 = _v0.a;
@@ -7512,34 +7686,9 @@ var $ianmackenzie$elm_geometry$Vector3d$cross = F2(
 		return $ianmackenzie$elm_geometry$Geometry$Types$Vector3d(
 			{x: (v1.y * v2.z) - (v1.z * v2.y), y: (v1.z * v2.x) - (v1.x * v2.z), z: (v1.x * v2.y) - (v1.y * v2.x)});
 	});
-var $ianmackenzie$elm_geometry$Vector3d$xyz = F3(
-	function (_v0, _v1, _v2) {
-		var x = _v0.a;
-		var y = _v1.a;
-		var z = _v2.a;
-		return $ianmackenzie$elm_geometry$Geometry$Types$Vector3d(
-			{x: x, y: y, z: z});
-	});
-var $ianmackenzie$elm_geometry$Vector3d$fromTuple = F2(
-	function (toQuantity, _v0) {
-		var x = _v0.a;
-		var y = _v0.b;
-		var z = _v0.c;
-		return A3(
-			$ianmackenzie$elm_geometry$Vector3d$xyz,
-			toQuantity(x),
-			toQuantity(y),
-			toQuantity(z));
-	});
 var $ianmackenzie$elm_units$Area$inSquareMeters = function (_v0) {
 	var numSquareMeters = _v0.a;
 	return numSquareMeters;
-};
-var $ianmackenzie$elm_units$Quantity$Quantity = function (a) {
-	return {$: 'Quantity', a: a};
-};
-var $ianmackenzie$elm_units$Length$meters = function (numMeters) {
-	return $ianmackenzie$elm_units$Quantity$Quantity(numMeters);
 };
 var $ianmackenzie$elm_geometry$Vector3d$xComponent = function (_v0) {
 	var v = _v0.a;
@@ -7642,36 +7791,6 @@ var $author$project$Logic$App$Patterns$Stack$dup2 = function (stack) {
 		});
 	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
 };
-var $author$project$Logic$App$Patterns$OperatorUtils$action1Input = F3(
-	function (stack, inputGetter, action) {
-		var newStack = A3(
-			$elm$core$Array$slice,
-			1,
-			$elm$core$Array$length(stack),
-			stack);
-		var maybeIota = A2($elm$core$Array$get, 0, stack);
-		if (maybeIota.$ === 'Nothing') {
-			return A2(
-				$author$project$Logic$App$Utils$Utils$unshift,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
-				newStack);
-		} else {
-			var iota = maybeIota.a;
-			var _v1 = inputGetter(iota);
-			if ((_v1.$ === 'Garbage') && (_v1.a.$ === 'IncorrectIota')) {
-				var _v2 = _v1.a;
-				return A2(
-					$author$project$Logic$App$Utils$Utils$unshift,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
-					newStack);
-			} else {
-				return A2(
-					$elm$core$Array$append,
-					action(iota),
-					newStack);
-			}
-		}
-	});
 var $author$project$Logic$App$Patterns$Stack$duplicate = function (stack) {
 	var action = function (iota) {
 		return $elm$core$Array$fromList(
@@ -7680,7 +7799,6 @@ var $author$project$Logic$App$Patterns$Stack$duplicate = function (stack) {
 	};
 	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
 };
-var $elm$core$Basics$round = _Basics_round;
 var $author$project$Logic$App$Patterns$OperatorUtils$getInteger = function (iota) {
 	if (iota.$ === 'Number') {
 		var number = iota.a;
@@ -8018,6 +8136,24 @@ var $author$project$Logic$App$Patterns$Stack$fishermanCopy = function (stack) {
 		}
 	}
 };
+var $author$project$Logic$App$Patterns$Math$floorAction = function (stack) {
+	var action = function (iota) {
+		if (iota.$ === 'Number') {
+			var number = iota.a;
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Number(
+					$elm$core$Basics$floor(number)));
+		} else {
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+		}
+	};
+	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
+};
 var $author$project$Logic$App$Types$Entity = function (a) {
 	return {$: 'Entity', a: a};
 };
@@ -8112,12 +8248,12 @@ var $author$project$Logic$App$Patterns$Math$mulDot = function (stack) {
 								var vector2 = _v0.b.a;
 								var vec2 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector2);
 								var vec1 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector1);
-								var _v3 = A2($ianmackenzie$elm_geometry$Vector3d$dot, vec2, vec1);
-								var number = _v3.a;
 								return A2(
 									$elm$core$Array$repeat,
 									1,
-									$author$project$Logic$App$Types$Number(number));
+									$author$project$Logic$App$Types$Number(
+										$ianmackenzie$elm_units$Quantity$unwrap(
+											A2($ianmackenzie$elm_geometry$Vector3d$dot, vec2, vec1))));
 							default:
 								break _v0$4;
 						}
@@ -8144,13 +8280,90 @@ var $author$project$Logic$App$Patterns$Stack$over = function (stack) {
 		});
 	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
 };
-var $elm$core$Basics$pi = _Basics_pi;
-var $author$project$Logic$App$Patterns$OperatorUtils$getVector = function (iota) {
-	if (iota.$ === 'Vector') {
-		return iota;
-	} else {
-		return $author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota);
-	}
+var $author$project$Logic$App$Patterns$Math$powProj = function (stack) {
+	var action = F2(
+		function (iota1, iota2) {
+			var _v0 = _Utils_Tuple2(iota1, iota2);
+			_v0$4:
+			while (true) {
+				switch (_v0.a.$) {
+					case 'Number':
+						switch (_v0.b.$) {
+							case 'Number':
+								var number1 = _v0.a.a;
+								var number2 = _v0.b.a;
+								return A2(
+									$elm$core$Array$repeat,
+									1,
+									$author$project$Logic$App$Types$Number(
+										A2($elm$core$Basics$pow, number1, number2)));
+							case 'Vector':
+								var number = _v0.a.a;
+								var vector = _v0.b.a;
+								var x = vector.a;
+								var y = vector.b;
+								var z = vector.c;
+								return A2(
+									$elm$core$Array$repeat,
+									1,
+									$author$project$Logic$App$Types$Vector(
+										_Utils_Tuple3(
+											A2($elm$core$Basics$pow, number, x),
+											A2($elm$core$Basics$pow, number, y),
+											A2($elm$core$Basics$pow, number, z))));
+							default:
+								break _v0$4;
+						}
+					case 'Vector':
+						switch (_v0.b.$) {
+							case 'Number':
+								var vector = _v0.a.a;
+								var number = _v0.b.a;
+								var x = vector.a;
+								var y = vector.b;
+								var z = vector.c;
+								return A2(
+									$elm$core$Array$repeat,
+									1,
+									$author$project$Logic$App$Types$Vector(
+										_Utils_Tuple3(
+											A2($elm$core$Basics$pow, x, number),
+											A2($elm$core$Basics$pow, y, number),
+											A2($elm$core$Basics$pow, z, number))));
+							case 'Vector':
+								var vector1Tuple = _v0.a.a;
+								var vector2Tuple = _v0.b.a;
+								var vector2 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector2Tuple);
+								var vector1 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector1Tuple);
+								var mapFunction = function (number) {
+									return (number * $ianmackenzie$elm_units$Quantity$unwrap(
+										A2($ianmackenzie$elm_geometry$Vector3d$dot, vector1, vector2))) / $ianmackenzie$elm_units$Quantity$unwrap(
+										A2($ianmackenzie$elm_geometry$Vector3d$dot, vector1, vector1));
+								};
+								var x = vector1Tuple.a;
+								var y = vector1Tuple.b;
+								var z = vector1Tuple.c;
+								return A2(
+									$elm$core$Array$repeat,
+									1,
+									$author$project$Logic$App$Types$Vector(
+										_Utils_Tuple3(
+											mapFunction(x),
+											mapFunction(y),
+											mapFunction(z))));
+							default:
+								break _v0$4;
+						}
+					default:
+						break _v0$4;
+				}
+			}
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+		});
+	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, action);
 };
 var $author$project$Logic$App$Patterns$Misc$raycast = function (stack) {
 	var action = F2(
@@ -8347,13 +8560,13 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _List_f
 		{action: $author$project$Logic$App$Patterns$Math$subtract, color: $author$project$Settings$Theme$accent1, displayName: 'Subtractive Distillation', internalName: 'sub', signature: 'wddw'},
 		{action: $author$project$Logic$App$Patterns$Math$mulDot, color: $author$project$Settings$Theme$accent1, displayName: 'Multiplicative Distillation', internalName: 'mul_dot', signature: 'waqaw'},
 		{action: $author$project$Logic$App$Patterns$Math$divCross, color: $author$project$Settings$Theme$accent1, displayName: 'Division Distillation', internalName: 'div_cross', signature: 'wdedw'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'abs_len', signature: 'wqaqw'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'pow_proj', signature: 'wedew'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'floor', signature: 'ewq'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'ceil', signature: 'qwe'},
+		{action: $author$project$Logic$App$Patterns$Math$absLen, color: $author$project$Settings$Theme$accent1, displayName: 'Length Purification', internalName: 'abs_len', signature: 'wqaqw'},
+		{action: $author$project$Logic$App$Patterns$Math$powProj, color: $author$project$Settings$Theme$accent1, displayName: 'Power Distillation', internalName: 'pow_proj', signature: 'wedew'},
+		{action: $author$project$Logic$App$Patterns$Math$floorAction, color: $author$project$Settings$Theme$accent1, displayName: 'Floor Purification', internalName: 'floor', signature: 'ewq'},
+		{action: $author$project$Logic$App$Patterns$Math$ceilAction, color: $author$project$Settings$Theme$accent1, displayName: 'Ceiling Purification', internalName: 'ceil', signature: 'qwe'},
 		{action: $author$project$Logic$App$Patterns$Math$constructVector, color: $author$project$Settings$Theme$accent1, displayName: 'Vector Exaltation', internalName: 'construct_vec', signature: 'eqqqqq'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'deconstruct_vec', signature: 'qeeeee'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'coerce_axial', signature: 'qqqqqaww'},
+		{action: $author$project$Logic$App$Patterns$Math$coerceAxial, color: $author$project$Settings$Theme$accent1, displayName: 'Axial Purification', internalName: 'coerce_axial', signature: 'qqqqqaww'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'and', signature: 'wdw'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'or', signature: 'waw'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'xor', signature: 'dwa'},
