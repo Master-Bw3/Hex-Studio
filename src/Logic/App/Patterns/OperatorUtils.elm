@@ -1,9 +1,11 @@
 module Logic.App.Patterns.OperatorUtils exposing (..)
 
 import Array exposing (Array)
-
+import Length
 import Logic.App.Types exposing (Iota(..), Mishap(..))
 import Logic.App.Utils.Utils exposing (unshift)
+import Quantity exposing (Quantity(..))
+import Vector3d as Vec3d
 
 
 makeConstant : Iota -> Array Iota -> Array Iota
@@ -184,6 +186,7 @@ getEntity iota =
         _ ->
             Garbage IncorrectIota
 
+
 getIotaList : Iota -> Iota
 getIotaList iota =
     case iota of
@@ -192,6 +195,17 @@ getIotaList iota =
 
         _ ->
             Garbage IncorrectIota
+
+
+getBoolean : Iota -> Iota
+getBoolean iota =
+    case iota of
+        Boolean _ ->
+            iota
+
+        _ ->
+            Garbage IncorrectIota
+
 
 getAny : Iota -> Iota
 getAny iota =
@@ -242,3 +256,38 @@ moveNothingsToFront list =
                     GT
     in
     List.sortWith comparison list
+
+
+checkEquality : Iota -> Iota -> Bool
+checkEquality iota1 iota2 =
+    let
+        tolerance =
+            0.0001
+    in
+    case ( iota1, iota2 ) of
+        ( Pattern pattern1 _, Pattern pattern2 _ ) ->
+            pattern1.signature == pattern2.signature
+
+        ( IotaList list1, IotaList list2 ) ->
+            List.map2 (\i1 i2 -> checkEquality i1 i2) (Array.toList list1) (Array.toList list2)
+                |> List.member False
+                |> not
+
+        ( Vector vector1Tuple, Vector vector2Tuple ) ->
+            let
+                vector1 =
+                    Vec3d.fromTuple Length.meters vector1Tuple
+
+                vector2 =
+                    Vec3d.fromTuple Length.meters vector2Tuple
+            in
+            Vec3d.equalWithin (Quantity tolerance) vector1 vector2
+
+        ( Number number1, Number number2 ) ->
+            abs (number1 - number2) < tolerance
+
+        ( Entity entity1, Entity entity2 ) ->
+            entity1 == entity2
+
+        _ ->
+            iota1 == iota2

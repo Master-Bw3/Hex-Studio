@@ -3,7 +3,7 @@ module Logic.App.Patterns.Math exposing (..)
 import Area exposing (Area)
 import Array exposing (Array)
 import Length
-import Logic.App.Patterns.OperatorUtils exposing (action1Input, action2Inputs, action3Inputs, getNumber, getNumberOrVector, getVector)
+import Logic.App.Patterns.OperatorUtils exposing (action1Input, action2Inputs, action3Inputs, checkEquality, getAny, getBoolean, getNumber, getNumberOrVector, getVector)
 import Logic.App.Types exposing (Iota(..), Mishap(..))
 import Quantity exposing (Quantity(..))
 import Svg.Attributes exposing (azimuth)
@@ -365,3 +365,154 @@ constructVector stack =
                         |> Array.repeat 1
     in
     action3Inputs stack getNumber getNumber getNumber action
+
+
+deconstructVector : Array Iota -> Array Iota
+deconstructVector stack =
+    let
+        action iota =
+            case iota of
+                Vector ( x, y, z ) ->
+                    Array.fromList
+                        [ Number z
+                        , Number y
+                        , Number x
+                        ]
+
+                _ ->
+                    Garbage CatastrophicFailure
+                        |> Array.repeat 1
+    in
+    action1Input stack getVector action
+
+
+andBool : Array Iota -> Array Iota
+andBool stack =
+    let
+        action iota1 iota2 =
+            case ( iota1, iota2 ) of
+                ( Boolean bool1, Boolean bool2 ) ->
+                    Boolean (bool1 && bool2)
+                        |> Array.repeat 1
+
+                _ ->
+                    Garbage CatastrophicFailure
+                        |> Array.repeat 1
+    in
+    action2Inputs stack getBoolean getBoolean action
+
+
+orBool : Array Iota -> Array Iota
+orBool stack =
+    let
+        action iota1 iota2 =
+            case ( iota1, iota2 ) of
+                ( Boolean bool1, Boolean bool2 ) ->
+                    Boolean (bool1 || bool2)
+                        |> Array.repeat 1
+
+                _ ->
+                    Garbage CatastrophicFailure
+                        |> Array.repeat 1
+    in
+    action2Inputs stack getBoolean getBoolean action
+
+
+xorBool : Array Iota -> Array Iota
+xorBool stack =
+    let
+        action iota1 iota2 =
+            case ( iota1, iota2 ) of
+                ( Boolean bool1, Boolean bool2 ) ->
+                    Boolean (xor bool1 bool2)
+                        |> Array.repeat 1
+
+                _ ->
+                    Garbage CatastrophicFailure
+                        |> Array.repeat 1
+    in
+    action2Inputs stack getBoolean getBoolean action
+
+
+greaterThan : Array Iota -> Array Iota
+greaterThan stack =
+    let
+        action iota1 iota2 =
+            case ( iota1, iota2 ) of
+                ( Number number1, Number number2 ) ->
+                    Boolean (number1 > number2)
+                        |> Array.repeat 1
+
+                _ ->
+                    Garbage CatastrophicFailure
+                        |> Array.repeat 1
+    in
+    action2Inputs stack getNumber getNumber action
+
+
+lessThan : Array Iota -> Array Iota
+lessThan stack =
+    let
+        action iota1 iota2 =
+            case ( iota1, iota2 ) of
+                ( Number number1, Number number2 ) ->
+                    Boolean (number1 < number2)
+                        |> Array.repeat 1
+
+                _ ->
+                    Garbage CatastrophicFailure
+                        |> Array.repeat 1
+    in
+    action2Inputs stack getNumber getNumber action
+
+
+greaterThanOrEqualTo : Array Iota -> Array Iota
+greaterThanOrEqualTo stack =
+    let
+        action iota1 iota2 =
+            case ( iota1, iota2 ) of
+                ( Number number1, Number number2 ) ->
+                    Boolean (number1 >= number2)
+                        |> Array.repeat 1
+
+                _ ->
+                    Garbage CatastrophicFailure
+                        |> Array.repeat 1
+    in
+    action2Inputs stack getNumber getNumber action
+
+
+lessThanOrEqualTo : Array Iota -> Array Iota
+lessThanOrEqualTo stack =
+    let
+        action iota1 iota2 =
+            case ( iota1, iota2 ) of
+                ( Number number1, Number number2 ) ->
+                    Boolean (number1 <= number2)
+                        |> Array.repeat 1
+
+                _ ->
+                    Garbage CatastrophicFailure
+                        |> Array.repeat 1
+    in
+    action2Inputs stack getNumber getNumber action
+
+
+equalTo : Array Iota -> Array Iota
+equalTo stack =
+    let
+        action iota1 iota2 =
+            Boolean (checkEquality iota1 iota2)
+                |> Array.repeat 1
+    in
+    action2Inputs stack getAny getAny action
+
+
+notEqualTo : Array Iota -> Array Iota
+notEqualTo stack =
+    let
+        action iota1 iota2 =
+            Boolean (not (checkEquality iota1 iota2))
+                |> Array.repeat 1
+    in
+    action2Inputs stack getAny getAny action

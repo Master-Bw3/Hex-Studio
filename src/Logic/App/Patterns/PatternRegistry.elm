@@ -2,11 +2,10 @@ module Logic.App.Patterns.PatternRegistry exposing (getPatternFromName, getPatte
 
 import Array exposing (Array)
 import Logic.App.Patterns.Circles exposing (..)
+import Logic.App.Patterns.Lists exposing (..)
 import Logic.App.Patterns.Math exposing (..)
 import Logic.App.Patterns.Misc exposing (..)
 import Logic.App.Patterns.OperatorUtils exposing (action1Input, getPatternOrPatternList, makeConstant)
-import Logic.App.Patterns.Lists exposing (..)
-
 import Logic.App.Patterns.Selectors exposing (..)
 import Logic.App.Patterns.Stack exposing (..)
 import Logic.App.Stack.Stack exposing (applyPatternToStack, applyPatternsToStack)
@@ -88,7 +87,7 @@ patternRegistry =
     , { signature = "aadaadaa", internalName = "duplicate_n", action = duplicateN, displayName = "Gemini Gambit", color = accent1 }
     , { signature = "ddad", internalName = "fisherman", action = fisherman, displayName = "Fisherman's Gambit", color = accent1 }
     , { signature = "aada", internalName = "fisherman/copy", action = fishermanCopy, displayName = "Fisherman's Gambit II", color = accent1 }
-    , { signature = "qaawdde", internalName = "swizzle", action = noAction, displayName = "", color = accent1 }
+    , { signature = "qaawdde", internalName = "swizzle", action = noAction, displayName = "", color = accent1 } -- do this
     , { signature = "waaw", internalName = "add", action = add, displayName = "Additive Distillation", color = accent1 }
     , { signature = "wddw", internalName = "sub", action = subtract, displayName = "Subtractive Distillation", color = accent1 }
     , { signature = "waqaw", internalName = "mul_dot", action = mulDot, displayName = "Multiplicative Distillation", color = accent1 }
@@ -98,17 +97,17 @@ patternRegistry =
     , { signature = "ewq", internalName = "floor", action = floorAction, displayName = "Floor Purification", color = accent1 }
     , { signature = "qwe", internalName = "ceil", action = ceilAction, displayName = "Ceiling Purification", color = accent1 }
     , { signature = "eqqqqq", internalName = "construct_vec", action = constructVector, displayName = "Vector Exaltation", color = accent1 }
-    , { signature = "qeeeee", internalName = "deconstruct_vec", action = noAction, displayName = "", color = accent1 }
+    , { signature = "qeeeee", internalName = "deconstruct_vec", action = deconstructVector, displayName = "Vector Disintegration", color = accent1 }
     , { signature = "qqqqqaww", internalName = "coerce_axial", action = coerceAxial, displayName = "Axial Purification", color = accent1 }
-    , { signature = "wdw", internalName = "and", action = noAction, displayName = "", color = accent1 }
-    , { signature = "waw", internalName = "or", action = noAction, displayName = "", color = accent1 }
-    , { signature = "dwa", internalName = "xor", action = noAction, displayName = "", color = accent1 }
-    , { signature = "e", internalName = "greater", action = noAction, displayName = "", color = accent1 }
-    , { signature = "q", internalName = "less", action = noAction, displayName = "", color = accent1 }
-    , { signature = "ee", internalName = "greater_eq", action = noAction, displayName = "", color = accent1 }
-    , { signature = "qq", internalName = "less_eq", action = noAction, displayName = "", color = accent1 }
-    , { signature = "ad", internalName = "equals", action = noAction, displayName = "", color = accent1 }
-    , { signature = "da", internalName = "not_equals", action = noAction, displayName = "", color = accent1 }
+    , { signature = "wdw", internalName = "and", action = andBool, displayName = "Conjunction Distillation", color = accent1 }
+    , { signature = "waw", internalName = "or", action = orBool, displayName = "Disjunction Distillation", color = accent1 }
+    , { signature = "dwa", internalName = "xor", action = xorBool, displayName = "Exclusion Distillation", color = accent1 }
+    , { signature = "e", internalName = "greater", action = greaterThan, displayName = "Maximus Distillation", color = accent1 }
+    , { signature = "q", internalName = "less", action = lessThan, displayName = "Minimus Distillation", color = accent1 }
+    , { signature = "ee", internalName = "greater_eq", action = greaterThanOrEqualTo, displayName = "Maximus Distillation II", color = accent1 }
+    , { signature = "qq", internalName = "less_eq", action = lessThanOrEqualTo, displayName = "Minimus Distillation II", color = accent1 }
+    , { signature = "ad", internalName = "equals", action = equalTo, displayName = "Equality Distillation", color = accent1 }
+    , { signature = "da", internalName = "not_equals", action = notEqualTo, displayName = "Inequality Distillation", color = accent1 }
     , { signature = "dw", internalName = "not", action = noAction, displayName = "", color = accent1 }
     , { signature = "aw", internalName = "bool_coerce", action = noAction, displayName = "", color = accent1 }
     , { signature = "awdd", internalName = "if", action = noAction, displayName = "", color = accent1 }
