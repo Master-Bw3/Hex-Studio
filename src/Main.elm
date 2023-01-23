@@ -7,8 +7,8 @@ import Browser.Events
 import Components.App.Content exposing (content)
 import Components.App.Grid exposing (..)
 import Html exposing (..)
-import Logic.App.Model as L exposing (Model)
-import Logic.App.Msg as L exposing (..)
+import Logic.App.Model exposing (Model)
+import Logic.App.Msg exposing (..)
 import Logic.App.PatternList.PatternArray exposing (addToPatternArray, updateDrawingColors)
 import Logic.App.Patterns.PatternRegistry exposing (..)
 import Logic.App.Stack.Stack exposing (applyPatternToStack, applyPatternsToStack)
@@ -19,14 +19,6 @@ import Ports.HexNumGen as HexNumGen
 import Settings.Theme exposing (..)
 import Task
 import Time
-
-
-type alias Model =
-    L.Model
-
-
-type alias Msg =
-    L.Msg
 
 
 main =
