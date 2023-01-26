@@ -108,9 +108,9 @@ patternRegistry =
     , { signature = "qq", internalName = "less_eq", action = lessThanOrEqualTo, displayName = "Minimus Distillation II", color = accent1 }
     , { signature = "ad", internalName = "equals", action = equalTo, displayName = "Equality Distillation", color = accent1 }
     , { signature = "da", internalName = "not_equals", action = notEqualTo, displayName = "Inequality Distillation", color = accent1 }
-    , { signature = "dw", internalName = "not", action = noAction, displayName = "", color = accent1 }
-    , { signature = "aw", internalName = "bool_coerce", action = noAction, displayName = "", color = accent1 }
-    , { signature = "awdd", internalName = "if", action = noAction, displayName = "", color = accent1 }
+    , { signature = "dw", internalName = "not", action = invertBool, displayName = "Negation Purification", color = accent1 }
+    , { signature = "aw", internalName = "bool_coerce", action = boolCoerce, displayName = "Augur's Purification", color = accent1 }
+    , { signature = "awdd", internalName = "if", action = ifBool, displayName = "Augur's Exaltation", color = accent1 }
     , { signature = "eqqq", internalName = "random", action = noAction, displayName = "", color = accent1 }
     , { signature = "qqqqqaa", internalName = "sin", action = noAction, displayName = "", color = accent1 }
     , { signature = "qqqqqad", internalName = "cos", action = noAction, displayName = "", color = accent1 }

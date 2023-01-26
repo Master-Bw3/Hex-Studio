@@ -7532,6 +7532,146 @@ var $author$project$Logic$App$Patterns$Lists$append = function (stack) {
 		});
 	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getIotaList, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
 };
+var $ianmackenzie$elm_units$Quantity$lessThanOrEqualTo = F2(
+	function (_v0, _v1) {
+		var y = _v0.a;
+		var x = _v1.a;
+		return _Utils_cmp(x, y) < 1;
+	});
+var $ianmackenzie$elm_geometry$Vector3d$minus = F2(
+	function (_v0, _v1) {
+		var v2 = _v0.a;
+		var v1 = _v1.a;
+		return $ianmackenzie$elm_geometry$Geometry$Types$Vector3d(
+			{x: v1.x - v2.x, y: v1.y - v2.y, z: v1.z - v2.z});
+	});
+var $ianmackenzie$elm_geometry$Vector3d$equalWithin = F3(
+	function (givenTolerance, firstVector, secondVector) {
+		return A2(
+			$ianmackenzie$elm_units$Quantity$lessThanOrEqualTo,
+			givenTolerance,
+			$ianmackenzie$elm_geometry$Vector3d$length(
+				A2($ianmackenzie$elm_geometry$Vector3d$minus, firstVector, secondVector)));
+	});
+var $elm$core$List$member = F2(
+	function (x, xs) {
+		return A2(
+			$elm$core$List$any,
+			function (a) {
+				return _Utils_eq(a, x);
+			},
+			xs);
+	});
+var $author$project$Logic$App$Patterns$OperatorUtils$checkEquality = F2(
+	function (iota1, iota2) {
+		var tolerance = 0.0001;
+		var _v0 = _Utils_Tuple2(iota1, iota2);
+		_v0$5:
+		while (true) {
+			switch (_v0.a.$) {
+				case 'Pattern':
+					if (_v0.b.$ === 'Pattern') {
+						var _v1 = _v0.a;
+						var pattern1 = _v1.a;
+						var _v2 = _v0.b;
+						var pattern2 = _v2.a;
+						return _Utils_eq(pattern1.signature, pattern2.signature);
+					} else {
+						break _v0$5;
+					}
+				case 'IotaList':
+					if (_v0.b.$ === 'IotaList') {
+						var list1 = _v0.a.a;
+						var list2 = _v0.b.a;
+						return !A2(
+							$elm$core$List$member,
+							false,
+							A3(
+								$elm$core$List$map2,
+								F2(
+									function (i1, i2) {
+										return A2($author$project$Logic$App$Patterns$OperatorUtils$checkEquality, i1, i2);
+									}),
+								$elm$core$Array$toList(list1),
+								$elm$core$Array$toList(list2)));
+					} else {
+						break _v0$5;
+					}
+				case 'Vector':
+					if (_v0.b.$ === 'Vector') {
+						var vector1Tuple = _v0.a.a;
+						var vector2Tuple = _v0.b.a;
+						var vector2 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector2Tuple);
+						var vector1 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector1Tuple);
+						return A3(
+							$ianmackenzie$elm_geometry$Vector3d$equalWithin,
+							$ianmackenzie$elm_units$Quantity$Quantity(tolerance),
+							vector1,
+							vector2);
+					} else {
+						break _v0$5;
+					}
+				case 'Number':
+					if (_v0.b.$ === 'Number') {
+						var number1 = _v0.a.a;
+						var number2 = _v0.b.a;
+						return _Utils_cmp(
+							$elm$core$Basics$abs(number1 - number2),
+							tolerance) < 0;
+					} else {
+						break _v0$5;
+					}
+				case 'Entity':
+					if (_v0.b.$ === 'Entity') {
+						var entity1 = _v0.a.a;
+						var entity2 = _v0.b.a;
+						return _Utils_eq(entity1, entity2);
+					} else {
+						break _v0$5;
+					}
+				default:
+					break _v0$5;
+			}
+		}
+		return _Utils_eq(iota1, iota2);
+	});
+var $author$project$Logic$App$Patterns$Math$boolCoerce = function (stack) {
+	var action = function (iota) {
+		switch (iota.$) {
+			case 'Number':
+				return A2(
+					$author$project$Logic$App$Patterns$OperatorUtils$checkEquality,
+					iota,
+					$author$project$Logic$App$Types$Number(0.0)) ? A2(
+					$elm$core$Array$repeat,
+					1,
+					$author$project$Logic$App$Types$Boolean(false)) : A2(
+					$elm$core$Array$repeat,
+					1,
+					$author$project$Logic$App$Types$Boolean(true));
+			case 'Null':
+				return A2(
+					$elm$core$Array$repeat,
+					1,
+					$author$project$Logic$App$Types$Boolean(false));
+			case 'IotaList':
+				var x = iota.a;
+				return _Utils_eq(x, $elm$core$Array$empty) ? A2(
+					$elm$core$Array$repeat,
+					1,
+					$author$project$Logic$App$Types$Boolean(false)) : A2(
+					$elm$core$Array$repeat,
+					1,
+					$author$project$Logic$App$Types$Boolean(true));
+			default:
+				return A2(
+					$elm$core$Array$repeat,
+					1,
+					$author$project$Logic$App$Types$Boolean(true));
+		}
+	};
+	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
+};
 var $author$project$Logic$App$Patterns$OperatorUtils$getNumber = function (iota) {
 	if (iota.$ === 'Number') {
 		return iota;
@@ -7918,109 +8058,6 @@ var $author$project$Logic$App$Patterns$Misc$entityPos = function (stack) {
 	};
 	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, action);
 };
-var $ianmackenzie$elm_units$Quantity$lessThanOrEqualTo = F2(
-	function (_v0, _v1) {
-		var y = _v0.a;
-		var x = _v1.a;
-		return _Utils_cmp(x, y) < 1;
-	});
-var $ianmackenzie$elm_geometry$Vector3d$minus = F2(
-	function (_v0, _v1) {
-		var v2 = _v0.a;
-		var v1 = _v1.a;
-		return $ianmackenzie$elm_geometry$Geometry$Types$Vector3d(
-			{x: v1.x - v2.x, y: v1.y - v2.y, z: v1.z - v2.z});
-	});
-var $ianmackenzie$elm_geometry$Vector3d$equalWithin = F3(
-	function (givenTolerance, firstVector, secondVector) {
-		return A2(
-			$ianmackenzie$elm_units$Quantity$lessThanOrEqualTo,
-			givenTolerance,
-			$ianmackenzie$elm_geometry$Vector3d$length(
-				A2($ianmackenzie$elm_geometry$Vector3d$minus, firstVector, secondVector)));
-	});
-var $elm$core$List$member = F2(
-	function (x, xs) {
-		return A2(
-			$elm$core$List$any,
-			function (a) {
-				return _Utils_eq(a, x);
-			},
-			xs);
-	});
-var $author$project$Logic$App$Patterns$OperatorUtils$checkEquality = F2(
-	function (iota1, iota2) {
-		var tolerance = 0.0001;
-		var _v0 = _Utils_Tuple2(iota1, iota2);
-		_v0$5:
-		while (true) {
-			switch (_v0.a.$) {
-				case 'Pattern':
-					if (_v0.b.$ === 'Pattern') {
-						var _v1 = _v0.a;
-						var pattern1 = _v1.a;
-						var _v2 = _v0.b;
-						var pattern2 = _v2.a;
-						return _Utils_eq(pattern1.signature, pattern2.signature);
-					} else {
-						break _v0$5;
-					}
-				case 'IotaList':
-					if (_v0.b.$ === 'IotaList') {
-						var list1 = _v0.a.a;
-						var list2 = _v0.b.a;
-						return !A2(
-							$elm$core$List$member,
-							false,
-							A3(
-								$elm$core$List$map2,
-								F2(
-									function (i1, i2) {
-										return A2($author$project$Logic$App$Patterns$OperatorUtils$checkEquality, i1, i2);
-									}),
-								$elm$core$Array$toList(list1),
-								$elm$core$Array$toList(list2)));
-					} else {
-						break _v0$5;
-					}
-				case 'Vector':
-					if (_v0.b.$ === 'Vector') {
-						var vector1Tuple = _v0.a.a;
-						var vector2Tuple = _v0.b.a;
-						var vector2 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector2Tuple);
-						var vector1 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector1Tuple);
-						return A3(
-							$ianmackenzie$elm_geometry$Vector3d$equalWithin,
-							$ianmackenzie$elm_units$Quantity$Quantity(tolerance),
-							vector1,
-							vector2);
-					} else {
-						break _v0$5;
-					}
-				case 'Number':
-					if (_v0.b.$ === 'Number') {
-						var number1 = _v0.a.a;
-						var number2 = _v0.b.a;
-						return _Utils_cmp(
-							$elm$core$Basics$abs(number1 - number2),
-							tolerance) < 0;
-					} else {
-						break _v0$5;
-					}
-				case 'Entity':
-					if (_v0.b.$ === 'Entity') {
-						var entity1 = _v0.a.a;
-						var entity2 = _v0.b.a;
-						return _Utils_eq(entity1, entity2);
-					} else {
-						break _v0$5;
-					}
-				default:
-					break _v0$5;
-			}
-		}
-		return _Utils_eq(iota1, iota2);
-	});
 var $author$project$Logic$App$Patterns$Math$equalTo = function (stack) {
 	var action = F2(
 		function (iota1, iota2) {
@@ -8390,6 +8427,44 @@ var $author$project$Logic$App$Patterns$Math$greaterThanOrEqualTo = function (sta
 			}
 		});
 	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
+};
+var $author$project$Logic$App$Patterns$Math$ifBool = function (stack) {
+	var action = F3(
+		function (iota1, iota2, iota3) {
+			if (iota1.$ === 'Boolean') {
+				var bool = iota1.a;
+				return bool ? A2($elm$core$Array$repeat, 1, iota2) : A2($elm$core$Array$repeat, 1, iota3);
+			} else {
+				return A2(
+					$elm$core$Array$repeat,
+					1,
+					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+			}
+		});
+	return A5($author$project$Logic$App$Patterns$OperatorUtils$action3Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getBoolean, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
+};
+var $author$project$Logic$App$Patterns$Math$invertBool = function (stack) {
+	var action = function (iota) {
+		if (iota.$ === 'Boolean') {
+			if (iota.a) {
+				return A2(
+					$elm$core$Array$repeat,
+					1,
+					$author$project$Logic$App$Types$Boolean(false));
+			} else {
+				return A2(
+					$elm$core$Array$repeat,
+					1,
+					$author$project$Logic$App$Types$Boolean(true));
+			}
+		} else {
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+		}
+	};
+	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getBoolean, action);
 };
 var $author$project$Logic$App$Patterns$Math$lessThan = function (stack) {
 	var action = F2(
@@ -8867,9 +8942,9 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _List_f
 		{action: $author$project$Logic$App$Patterns$Math$lessThanOrEqualTo, color: $author$project$Settings$Theme$accent1, displayName: 'Minimus Distillation II', internalName: 'less_eq', signature: 'qq'},
 		{action: $author$project$Logic$App$Patterns$Math$equalTo, color: $author$project$Settings$Theme$accent1, displayName: 'Equality Distillation', internalName: 'equals', signature: 'ad'},
 		{action: $author$project$Logic$App$Patterns$Math$notEqualTo, color: $author$project$Settings$Theme$accent1, displayName: 'Inequality Distillation', internalName: 'not_equals', signature: 'da'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'not', signature: 'dw'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'bool_coerce', signature: 'aw'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'if', signature: 'awdd'},
+		{action: $author$project$Logic$App$Patterns$Math$invertBool, color: $author$project$Settings$Theme$accent1, displayName: 'Negation Purification', internalName: 'not', signature: 'dw'},
+		{action: $author$project$Logic$App$Patterns$Math$boolCoerce, color: $author$project$Settings$Theme$accent1, displayName: 'Augur\'s Purification', internalName: 'bool_coerce', signature: 'aw'},
+		{action: $author$project$Logic$App$Patterns$Math$ifBool, color: $author$project$Settings$Theme$accent1, displayName: 'Augur\'s Exaltation', internalName: 'if', signature: 'awdd'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'random', signature: 'eqqq'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'sin', signature: 'qqqqqaa'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'cos', signature: 'qqqqqad'},

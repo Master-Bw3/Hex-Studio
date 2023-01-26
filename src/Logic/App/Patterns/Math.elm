@@ -516,3 +516,78 @@ notEqualTo stack =
                 |> Array.repeat 1
     in
     action2Inputs stack getAny getAny action
+
+
+invertBool : Array Iota -> Array Iota
+invertBool stack =
+    let
+        action iota =
+            case iota of
+                Boolean True ->
+                    Boolean False
+                        |> Array.repeat 1
+
+                Boolean False ->
+                    Boolean True
+                        |> Array.repeat 1
+
+                _ ->
+                    Garbage CatastrophicFailure
+                        |> Array.repeat 1
+    in
+    action1Input stack getBoolean action
+
+
+boolCoerce : Array Iota -> Array Iota
+boolCoerce stack =
+    let
+        action iota =
+            case iota of
+                Number _ ->
+                    if checkEquality iota (Number 0.0) then
+                        Boolean False
+                            |> Array.repeat 1
+
+                    else
+                        Boolean True
+                            |> Array.repeat 1
+
+                Null ->
+                    Boolean False
+                        |> Array.repeat 1
+
+                IotaList x ->
+                    if x == Array.empty then
+                        Boolean False
+                            |> Array.repeat 1
+
+                    else
+                        Boolean True
+                            |> Array.repeat 1
+
+                _ ->
+                    Boolean True
+                        |> Array.repeat 1
+    in
+    action1Input stack getAny action
+
+
+ifBool : Array Iota -> Array Iota
+ifBool stack =
+    let
+        action iota1 iota2 iota3 =
+            case iota1 of
+                Boolean bool ->
+                    if bool == True then
+                        iota2
+                            |> Array.repeat 1
+
+                    else
+                        iota3
+                            |> Array.repeat 1
+
+                _ ->
+                    Garbage CatastrophicFailure
+                        |> Array.repeat 1
+    in
+    action3Inputs stack getBoolean getAny getAny action
