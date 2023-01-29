@@ -351,6 +351,111 @@ coerceAxial stack =
     action1Input stack getVector action
 
 
+sine : Array Iota -> Array Iota
+sine stack =
+    let
+        action iota =
+            case iota of 
+            Number number -> 
+                Number (sin number)
+                |> Array.repeat 1
+            _ ->
+                Garbage CatastrophicFailure
+                    |> Array.repeat 1
+    in
+    action1Input stack getNumber action
+
+
+cosine : Array Iota -> Array Iota
+cosine stack =
+    let
+        action iota =
+            case iota of 
+            Number number -> 
+                Number (cos number)
+                |> Array.repeat 1
+            _ ->
+                Garbage CatastrophicFailure
+                    |> Array.repeat 1
+    in
+    action1Input stack getNumber action
+
+
+tangent : Array Iota -> Array Iota
+tangent stack =
+    let
+        action iota =
+            case iota of 
+            Number number -> 
+                Number (tan number)
+                |> Array.repeat 1
+            _ ->
+                Garbage CatastrophicFailure
+                    |> Array.repeat 1
+    in
+    action1Input stack getNumber action
+
+
+arcsin : Array Iota -> Array Iota
+arcsin stack =
+    let
+        action iota =
+            case iota of 
+            Number number -> 
+                Number (asin number)
+                |> Array.repeat 1
+            _ ->
+                Garbage CatastrophicFailure
+                    |> Array.repeat 1
+    in
+    action1Input stack getNumber action
+
+
+arccos : Array Iota -> Array Iota
+arccos stack =
+    let
+        action iota =
+            case iota of 
+            Number number -> 
+                Number (acos number)
+                |> Array.repeat 1
+            _ ->
+                Garbage CatastrophicFailure
+                    |> Array.repeat 1
+    in
+    action1Input stack getNumber action
+
+
+arctan : Array Iota -> Array Iota
+arctan stack =
+    let
+        action iota =
+            case iota of 
+            Number number -> 
+                Number (atan number)
+                |> Array.repeat 1
+            _ ->
+                Garbage CatastrophicFailure
+                    |> Array.repeat 1
+    in
+    action1Input stack getNumber action
+
+
+logarithm : Array Iota -> Array Iota
+logarithm stack =
+    let
+        action iota1 iota2 =
+            case (iota1 , iota2) of 
+            (Number number1, Number number2) -> 
+                Number (logBase number2 number1)
+                |> Array.repeat 1
+            _ ->
+                Garbage CatastrophicFailure
+                    |> Array.repeat 1
+    in
+    action2Inputs stack getNumber getNumber action
+
+
 constructVector : Array Iota -> Array Iota
 constructVector stack =
     let

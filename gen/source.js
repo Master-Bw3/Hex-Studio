@@ -7532,6 +7532,70 @@ var $author$project$Logic$App$Patterns$Lists$append = function (stack) {
 		});
 	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getIotaList, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
 };
+var $elm$core$Basics$acos = _Basics_acos;
+var $author$project$Logic$App$Patterns$OperatorUtils$getNumber = function (iota) {
+	if (iota.$ === 'Number') {
+		return iota;
+	} else {
+		return $author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota);
+	}
+};
+var $author$project$Logic$App$Patterns$Math$arccos = function (stack) {
+	var action = function (iota) {
+		if (iota.$ === 'Number') {
+			var number = iota.a;
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Number(
+					$elm$core$Basics$acos(number)));
+		} else {
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+		}
+	};
+	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
+};
+var $elm$core$Basics$asin = _Basics_asin;
+var $author$project$Logic$App$Patterns$Math$arcsin = function (stack) {
+	var action = function (iota) {
+		if (iota.$ === 'Number') {
+			var number = iota.a;
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Number(
+					$elm$core$Basics$asin(number)));
+		} else {
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+		}
+	};
+	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
+};
+var $elm$core$Basics$atan = _Basics_atan;
+var $author$project$Logic$App$Patterns$Math$arctan = function (stack) {
+	var action = function (iota) {
+		if (iota.$ === 'Number') {
+			var number = iota.a;
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Number(
+					$elm$core$Basics$atan(number)));
+		} else {
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+		}
+	};
+	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
+};
 var $ianmackenzie$elm_units$Quantity$lessThanOrEqualTo = F2(
 	function (_v0, _v1) {
 		var y = _v0.a;
@@ -7672,13 +7736,6 @@ var $author$project$Logic$App$Patterns$Math$boolCoerce = function (stack) {
 	};
 	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
 };
-var $author$project$Logic$App$Patterns$OperatorUtils$getNumber = function (iota) {
-	if (iota.$ === 'Number') {
-		return iota;
-	} else {
-		return $author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota);
-	}
-};
 var $author$project$Logic$App$Patterns$Math$ceilAction = function (stack) {
 	var action = function (iota) {
 		if (iota.$ === 'Number') {
@@ -7725,8 +7782,6 @@ var $author$project$Logic$App$Patterns$Circles$circleImpetusDirection = function
 			_Utils_Tuple3(1.0, 0.0, 0.0)));
 	return A2($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, action);
 };
-var $elm$core$Basics$acos = _Basics_acos;
-var $elm$core$Basics$atan = _Basics_atan;
 var $elm$core$Basics$cos = _Basics_cos;
 var $author$project$Logic$App$Patterns$OperatorUtils$getVector = function (iota) {
 	if (iota.$ === 'Vector') {
@@ -7845,6 +7900,24 @@ var $author$project$Logic$App$Patterns$Math$constructVector = function (stack) {
 			}
 		});
 	return A5($author$project$Logic$App$Patterns$OperatorUtils$action3Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
+};
+var $author$project$Logic$App$Patterns$Math$cosine = function (stack) {
+	var action = function (iota) {
+		if (iota.$ === 'Number') {
+			var number = iota.a;
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Number(
+					$elm$core$Basics$cos(number)));
+		} else {
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+		}
+	};
+	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
 };
 var $author$project$Logic$App$Patterns$Math$deconstructVector = function (stack) {
 	var action = function (iota) {
@@ -8508,6 +8581,27 @@ var $author$project$Logic$App$Patterns$Math$lessThanOrEqualTo = function (stack)
 		});
 	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
 };
+var $author$project$Logic$App$Patterns$Math$logarithm = function (stack) {
+	var action = F2(
+		function (iota1, iota2) {
+			var _v0 = _Utils_Tuple2(iota1, iota2);
+			if ((_v0.a.$ === 'Number') && (_v0.b.$ === 'Number')) {
+				var number1 = _v0.a.a;
+				var number2 = _v0.b.a;
+				return A2(
+					$elm$core$Array$repeat,
+					1,
+					$author$project$Logic$App$Types$Number(
+						A2($elm$core$Basics$logBase, number2, number1)));
+			} else {
+				return A2(
+					$elm$core$Array$repeat,
+					1,
+					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+			}
+		});
+	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
+};
 var $ianmackenzie$elm_geometry$Vector3d$dot = F2(
 	function (_v0, _v1) {
 		var v2 = _v0.a;
@@ -8761,6 +8855,24 @@ var $author$project$Logic$App$Patterns$Stack$rotateReverse = function (stack) {
 		});
 	return A5($author$project$Logic$App$Patterns$OperatorUtils$action3Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
 };
+var $author$project$Logic$App$Patterns$Math$sine = function (stack) {
+	var action = function (iota) {
+		if (iota.$ === 'Number') {
+			var number = iota.a;
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Number(
+					$elm$core$Basics$sin(number)));
+		} else {
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+		}
+	};
+	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
+};
 var $author$project$Logic$App$Patterns$Lists$singleton = function (stack) {
 	var action = function (iota) {
 		return A2(
@@ -8861,6 +8973,25 @@ var $author$project$Logic$App$Patterns$Stack$swap = function (stack) {
 		});
 	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
 };
+var $elm$core$Basics$tan = _Basics_tan;
+var $author$project$Logic$App$Patterns$Math$tangent = function (stack) {
+	var action = function (iota) {
+		if (iota.$ === 'Number') {
+			var number = iota.a;
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Number(
+					$elm$core$Basics$tan(number)));
+		} else {
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+		}
+	};
+	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
+};
 var $author$project$Logic$App$Patterns$Stack$tuck = function (stack) {
 	var action = F2(
 		function (iota1, iota2) {
@@ -8945,21 +9076,28 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _List_f
 		{action: $author$project$Logic$App$Patterns$Math$invertBool, color: $author$project$Settings$Theme$accent1, displayName: 'Negation Purification', internalName: 'not', signature: 'dw'},
 		{action: $author$project$Logic$App$Patterns$Math$boolCoerce, color: $author$project$Settings$Theme$accent1, displayName: 'Augur\'s Purification', internalName: 'bool_coerce', signature: 'aw'},
 		{action: $author$project$Logic$App$Patterns$Math$ifBool, color: $author$project$Settings$Theme$accent1, displayName: 'Augur\'s Exaltation', internalName: 'if', signature: 'awdd'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'random', signature: 'eqqq'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'sin', signature: 'qqqqqaa'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'cos', signature: 'qqqqqad'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'tan', signature: 'wqqqqqadq'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'arcsin', signature: 'ddeeeee'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'arccos', signature: 'adeeeee'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'arctan', signature: 'eadeeeeew'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'logarithm', signature: 'eqaqe'},
+		{
+		action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
+			$author$project$Logic$App$Types$Number(0.5)),
+		color: $author$project$Settings$Theme$accent1,
+		displayName: 'Entropy Reflection',
+		internalName: 'random',
+		signature: 'eqqq'
+	},
+		{action: $author$project$Logic$App$Patterns$Math$sine, color: $author$project$Settings$Theme$accent1, displayName: 'Sine Purification', internalName: 'sin', signature: 'qqqqqaa'},
+		{action: $author$project$Logic$App$Patterns$Math$cosine, color: $author$project$Settings$Theme$accent1, displayName: 'Cosine Purification', internalName: 'cos', signature: 'qqqqqad'},
+		{action: $author$project$Logic$App$Patterns$Math$tangent, color: $author$project$Settings$Theme$accent1, displayName: 'Tangent Purification', internalName: 'tan', signature: 'wqqqqqadq'},
+		{action: $author$project$Logic$App$Patterns$Math$arcsin, color: $author$project$Settings$Theme$accent1, displayName: 'Inverse Sine Purification', internalName: 'arcsin', signature: 'ddeeeee'},
+		{action: $author$project$Logic$App$Patterns$Math$arccos, color: $author$project$Settings$Theme$accent1, displayName: 'Inverse Cosine Purification', internalName: 'arccos', signature: 'adeeeee'},
+		{action: $author$project$Logic$App$Patterns$Math$arctan, color: $author$project$Settings$Theme$accent1, displayName: 'Inverse Tangent Purification', internalName: 'arctan', signature: 'eadeeeeew'},
+		{action: $author$project$Logic$App$Patterns$Math$logarithm, color: $author$project$Settings$Theme$accent1, displayName: 'Logarithmic Distillation', internalName: 'logarithm', signature: 'eqaqe'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'modulo', signature: 'addwaad'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'and_bit', signature: 'wdweaqa'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'or_bit', signature: 'waweaqa'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'xor_bit', signature: 'dwaeaqa'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'not_bit', signature: 'dweaqa'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'to_set', signature: 'aweaqa'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'print', signature: 'de'},
+		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: 'Reveal', internalName: 'print', signature: 'de'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'explode', signature: 'aawaawaa'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'explode/fire', signature: 'ddwddwdd'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'add_motion', signature: 'awqqqwaqw'},

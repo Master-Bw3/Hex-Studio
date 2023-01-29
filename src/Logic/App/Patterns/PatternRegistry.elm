@@ -111,21 +111,21 @@ patternRegistry =
     , { signature = "dw", internalName = "not", action = invertBool, displayName = "Negation Purification", color = accent1 }
     , { signature = "aw", internalName = "bool_coerce", action = boolCoerce, displayName = "Augur's Purification", color = accent1 }
     , { signature = "awdd", internalName = "if", action = ifBool, displayName = "Augur's Exaltation", color = accent1 }
-    , { signature = "eqqq", internalName = "random", action = noAction, displayName = "", color = accent1 }
-    , { signature = "qqqqqaa", internalName = "sin", action = noAction, displayName = "", color = accent1 }
-    , { signature = "qqqqqad", internalName = "cos", action = noAction, displayName = "", color = accent1 }
-    , { signature = "wqqqqqadq", internalName = "tan", action = noAction, displayName = "", color = accent1 }
-    , { signature = "ddeeeee", internalName = "arcsin", action = noAction, displayName = "", color = accent1 }
-    , { signature = "adeeeee", internalName = "arccos", action = noAction, displayName = "", color = accent1 }
-    , { signature = "eadeeeeew", internalName = "arctan", action = noAction, displayName = "", color = accent1 }
-    , { signature = "eqaqe", internalName = "logarithm", action = noAction, displayName = "", color = accent1 }
+    , { signature = "eqqq", internalName = "random", action = makeConstant(Number 0.5), displayName = "Entropy Reflection", color = accent1 }
+    , { signature = "qqqqqaa", internalName = "sin", action = sine, displayName = "Sine Purification", color = accent1 }
+    , { signature = "qqqqqad", internalName = "cos", action = cosine, displayName = "Cosine Purification", color = accent1 }
+    , { signature = "wqqqqqadq", internalName = "tan", action = tangent, displayName = "Tangent Purification", color = accent1 }
+    , { signature = "ddeeeee", internalName = "arcsin", action = arcsin, displayName = "Inverse Sine Purification", color = accent1 }
+    , { signature = "adeeeee", internalName = "arccos", action = arccos, displayName = "Inverse Cosine Purification", color = accent1 }
+    , { signature = "eadeeeeew", internalName = "arctan", action = arctan, displayName = "Inverse Tangent Purification", color = accent1 }
+    , { signature = "eqaqe", internalName = "logarithm", action = logarithm, displayName = "Logarithmic Distillation", color = accent1 }
     , { signature = "addwaad", internalName = "modulo", action = noAction, displayName = "", color = accent1 }
     , { signature = "wdweaqa", internalName = "and_bit", action = noAction, displayName = "", color = accent1 }
     , { signature = "waweaqa", internalName = "or_bit", action = noAction, displayName = "", color = accent1 }
     , { signature = "dwaeaqa", internalName = "xor_bit", action = noAction, displayName = "", color = accent1 }
     , { signature = "dweaqa", internalName = "not_bit", action = noAction, displayName = "", color = accent1 }
     , { signature = "aweaqa", internalName = "to_set", action = noAction, displayName = "", color = accent1 }
-    , { signature = "de", internalName = "print", action = noAction, displayName = "", color = accent1 }
+    , { signature = "de", internalName = "print", action = noAction, displayName = "Reveal", color = accent1 }
     , { signature = "aawaawaa", internalName = "explode", action = noAction, displayName = "", color = accent1 }
     , { signature = "ddwddwdd", internalName = "explode/fire", action = noAction, displayName = "", color = accent1 }
     , { signature = "awqqqwaqw", internalName = "add_motion", action = noAction, displayName = "", color = accent1 }
