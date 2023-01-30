@@ -7476,6 +7476,173 @@ var $author$project$Logic$App$Patterns$Math$add = function (stack) {
 		});
 	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, action);
 };
+var $ianmackenzie$elm_units$Quantity$lessThanOrEqualTo = F2(
+	function (_v0, _v1) {
+		var y = _v0.a;
+		var x = _v1.a;
+		return _Utils_cmp(x, y) < 1;
+	});
+var $ianmackenzie$elm_geometry$Vector3d$minus = F2(
+	function (_v0, _v1) {
+		var v2 = _v0.a;
+		var v1 = _v1.a;
+		return $ianmackenzie$elm_geometry$Geometry$Types$Vector3d(
+			{x: v1.x - v2.x, y: v1.y - v2.y, z: v1.z - v2.z});
+	});
+var $ianmackenzie$elm_geometry$Vector3d$equalWithin = F3(
+	function (givenTolerance, firstVector, secondVector) {
+		return A2(
+			$ianmackenzie$elm_units$Quantity$lessThanOrEqualTo,
+			givenTolerance,
+			$ianmackenzie$elm_geometry$Vector3d$length(
+				A2($ianmackenzie$elm_geometry$Vector3d$minus, firstVector, secondVector)));
+	});
+var $elm$core$List$member = F2(
+	function (x, xs) {
+		return A2(
+			$elm$core$List$any,
+			function (a) {
+				return _Utils_eq(a, x);
+			},
+			xs);
+	});
+var $author$project$Logic$App$Patterns$OperatorUtils$checkEquality = F2(
+	function (iota1, iota2) {
+		var tolerance = 0.0001;
+		var _v0 = _Utils_Tuple2(iota1, iota2);
+		_v0$5:
+		while (true) {
+			switch (_v0.a.$) {
+				case 'Pattern':
+					if (_v0.b.$ === 'Pattern') {
+						var _v1 = _v0.a;
+						var pattern1 = _v1.a;
+						var _v2 = _v0.b;
+						var pattern2 = _v2.a;
+						return _Utils_eq(pattern1.signature, pattern2.signature);
+					} else {
+						break _v0$5;
+					}
+				case 'IotaList':
+					if (_v0.b.$ === 'IotaList') {
+						var list1 = _v0.a.a;
+						var list2 = _v0.b.a;
+						return !A2(
+							$elm$core$List$member,
+							false,
+							A3(
+								$elm$core$List$map2,
+								F2(
+									function (i1, i2) {
+										return A2($author$project$Logic$App$Patterns$OperatorUtils$checkEquality, i1, i2);
+									}),
+								$elm$core$Array$toList(list1),
+								$elm$core$Array$toList(list2)));
+					} else {
+						break _v0$5;
+					}
+				case 'Vector':
+					if (_v0.b.$ === 'Vector') {
+						var vector1Tuple = _v0.a.a;
+						var vector2Tuple = _v0.b.a;
+						var vector2 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector2Tuple);
+						var vector1 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector1Tuple);
+						return A3(
+							$ianmackenzie$elm_geometry$Vector3d$equalWithin,
+							$ianmackenzie$elm_units$Quantity$Quantity(tolerance),
+							vector1,
+							vector2);
+					} else {
+						break _v0$5;
+					}
+				case 'Number':
+					if (_v0.b.$ === 'Number') {
+						var number1 = _v0.a.a;
+						var number2 = _v0.b.a;
+						return _Utils_cmp(
+							$elm$core$Basics$abs(number1 - number2),
+							tolerance) < 0;
+					} else {
+						break _v0$5;
+					}
+				case 'Entity':
+					if (_v0.b.$ === 'Entity') {
+						var entity1 = _v0.a.a;
+						var entity2 = _v0.b.a;
+						return _Utils_eq(entity1, entity2);
+					} else {
+						break _v0$5;
+					}
+				default:
+					break _v0$5;
+			}
+		}
+		return _Utils_eq(iota1, iota2);
+	});
+var $elm$core$Basics$round = _Basics_round;
+var $author$project$Logic$App$Patterns$OperatorUtils$getIntegerOrList = function (iota) {
+	switch (iota.$) {
+		case 'Number':
+			var number = iota.a;
+			return _Utils_eq(
+				$elm$core$Basics$round(number),
+				number) ? iota : $author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota);
+		case 'IotaList':
+			return iota;
+		default:
+			return $author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota);
+	}
+};
+var $author$project$Logic$App$Patterns$Math$andBit = function (stack) {
+	var action = F2(
+		function (iota1, iota2) {
+			var _v0 = _Utils_Tuple2(iota1, iota2);
+			_v0$2:
+			while (true) {
+				switch (_v0.a.$) {
+					case 'Number':
+						if (_v0.b.$ === 'Number') {
+							var number1 = _v0.a.a;
+							var number2 = _v0.b.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Number(
+									$elm$core$Basics$round(number1) & $elm$core$Basics$round(number2)));
+						} else {
+							break _v0$2;
+						}
+					case 'IotaList':
+						if (_v0.b.$ === 'IotaList') {
+							var list1 = _v0.a.a;
+							var list2 = _v0.b.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$IotaList(
+									A2(
+										$elm$core$Array$filter,
+										function (iota) {
+											return A2(
+												$elm$core$List$any,
+												$author$project$Logic$App$Patterns$OperatorUtils$checkEquality(iota),
+												$elm$core$Array$toList(list2));
+										},
+										list1)));
+						} else {
+							break _v0$2;
+						}
+					default:
+						break _v0$2;
+				}
+			}
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+		});
+	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getIntegerOrList, $author$project$Logic$App$Patterns$OperatorUtils$getIntegerOrList, action);
+};
 var $author$project$Logic$App$Patterns$OperatorUtils$getBoolean = function (iota) {
 	if (iota.$ === 'Boolean') {
 		return iota;
@@ -7596,109 +7763,6 @@ var $author$project$Logic$App$Patterns$Math$arctan = function (stack) {
 	};
 	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
 };
-var $ianmackenzie$elm_units$Quantity$lessThanOrEqualTo = F2(
-	function (_v0, _v1) {
-		var y = _v0.a;
-		var x = _v1.a;
-		return _Utils_cmp(x, y) < 1;
-	});
-var $ianmackenzie$elm_geometry$Vector3d$minus = F2(
-	function (_v0, _v1) {
-		var v2 = _v0.a;
-		var v1 = _v1.a;
-		return $ianmackenzie$elm_geometry$Geometry$Types$Vector3d(
-			{x: v1.x - v2.x, y: v1.y - v2.y, z: v1.z - v2.z});
-	});
-var $ianmackenzie$elm_geometry$Vector3d$equalWithin = F3(
-	function (givenTolerance, firstVector, secondVector) {
-		return A2(
-			$ianmackenzie$elm_units$Quantity$lessThanOrEqualTo,
-			givenTolerance,
-			$ianmackenzie$elm_geometry$Vector3d$length(
-				A2($ianmackenzie$elm_geometry$Vector3d$minus, firstVector, secondVector)));
-	});
-var $elm$core$List$member = F2(
-	function (x, xs) {
-		return A2(
-			$elm$core$List$any,
-			function (a) {
-				return _Utils_eq(a, x);
-			},
-			xs);
-	});
-var $author$project$Logic$App$Patterns$OperatorUtils$checkEquality = F2(
-	function (iota1, iota2) {
-		var tolerance = 0.0001;
-		var _v0 = _Utils_Tuple2(iota1, iota2);
-		_v0$5:
-		while (true) {
-			switch (_v0.a.$) {
-				case 'Pattern':
-					if (_v0.b.$ === 'Pattern') {
-						var _v1 = _v0.a;
-						var pattern1 = _v1.a;
-						var _v2 = _v0.b;
-						var pattern2 = _v2.a;
-						return _Utils_eq(pattern1.signature, pattern2.signature);
-					} else {
-						break _v0$5;
-					}
-				case 'IotaList':
-					if (_v0.b.$ === 'IotaList') {
-						var list1 = _v0.a.a;
-						var list2 = _v0.b.a;
-						return !A2(
-							$elm$core$List$member,
-							false,
-							A3(
-								$elm$core$List$map2,
-								F2(
-									function (i1, i2) {
-										return A2($author$project$Logic$App$Patterns$OperatorUtils$checkEquality, i1, i2);
-									}),
-								$elm$core$Array$toList(list1),
-								$elm$core$Array$toList(list2)));
-					} else {
-						break _v0$5;
-					}
-				case 'Vector':
-					if (_v0.b.$ === 'Vector') {
-						var vector1Tuple = _v0.a.a;
-						var vector2Tuple = _v0.b.a;
-						var vector2 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector2Tuple);
-						var vector1 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector1Tuple);
-						return A3(
-							$ianmackenzie$elm_geometry$Vector3d$equalWithin,
-							$ianmackenzie$elm_units$Quantity$Quantity(tolerance),
-							vector1,
-							vector2);
-					} else {
-						break _v0$5;
-					}
-				case 'Number':
-					if (_v0.b.$ === 'Number') {
-						var number1 = _v0.a.a;
-						var number2 = _v0.b.a;
-						return _Utils_cmp(
-							$elm$core$Basics$abs(number1 - number2),
-							tolerance) < 0;
-					} else {
-						break _v0$5;
-					}
-				case 'Entity':
-					if (_v0.b.$ === 'Entity') {
-						var entity1 = _v0.a.a;
-						var entity2 = _v0.b.a;
-						return _Utils_eq(entity1, entity2);
-					} else {
-						break _v0$5;
-					}
-				default:
-					break _v0$5;
-			}
-		}
-		return _Utils_eq(iota1, iota2);
-	});
 var $author$project$Logic$App$Patterns$Math$boolCoerce = function (stack) {
 	var action = function (iota) {
 		switch (iota.$) {
@@ -7791,7 +7855,6 @@ var $author$project$Logic$App$Patterns$OperatorUtils$getVector = function (iota)
 	}
 };
 var $elm$core$Basics$pi = _Basics_pi;
-var $elm$core$Basics$round = _Basics_round;
 var $elm$core$Basics$sin = _Basics_sin;
 var $author$project$Logic$App$Patterns$Math$coerceAxial = function (stack) {
 	var action = function (iota) {
@@ -8602,6 +8665,38 @@ var $author$project$Logic$App$Patterns$Math$logarithm = function (stack) {
 		});
 	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
 };
+var $elm$core$Basics$truncate = _Basics_truncate;
+var $ianmackenzie$elm_units$Quantity$fractionalRemainderBy = F2(
+	function (_v0, _v1) {
+		var modulus = _v0.a;
+		var value = _v1.a;
+		return $ianmackenzie$elm_units$Quantity$Quantity(value - (modulus * ((value / modulus) | 0)));
+	});
+var $author$project$Logic$App$Patterns$Math$modulo = function (stack) {
+	var action = F2(
+		function (iota1, iota2) {
+			var _v0 = _Utils_Tuple2(iota1, iota2);
+			if ((_v0.a.$ === 'Number') && (_v0.b.$ === 'Number')) {
+				var number1 = _v0.a.a;
+				var number2 = _v0.b.a;
+				return A2(
+					$elm$core$Array$repeat,
+					1,
+					$author$project$Logic$App$Types$Number(
+						$ianmackenzie$elm_units$Quantity$unwrap(
+							A2(
+								$ianmackenzie$elm_units$Quantity$fractionalRemainderBy,
+								$ianmackenzie$elm_units$Quantity$Quantity(number2),
+								$ianmackenzie$elm_units$Quantity$Quantity(number1)))));
+			} else {
+				return A2(
+					$elm$core$Array$repeat,
+					1,
+					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+			}
+		});
+	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
+};
 var $ianmackenzie$elm_geometry$Vector3d$dot = F2(
 	function (_v0, _v1) {
 		var v2 = _v0.a;
@@ -8689,6 +8784,60 @@ var $author$project$Logic$App$Patterns$Math$notEqualTo = function (stack) {
 					!A2($author$project$Logic$App$Patterns$OperatorUtils$checkEquality, iota1, iota2)));
 		});
 	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
+};
+var $elm$core$Bitwise$or = _Bitwise_or;
+var $author$project$Logic$App$Patterns$Math$orBit = function (stack) {
+	var action = F2(
+		function (iota1, iota2) {
+			var _v0 = _Utils_Tuple2(iota1, iota2);
+			_v0$2:
+			while (true) {
+				switch (_v0.a.$) {
+					case 'Number':
+						if (_v0.b.$ === 'Number') {
+							var number1 = _v0.a.a;
+							var number2 = _v0.b.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Number(
+									$elm$core$Basics$round(number1) | $elm$core$Basics$round(number2)));
+						} else {
+							break _v0$2;
+						}
+					case 'IotaList':
+						if (_v0.b.$ === 'IotaList') {
+							var list1 = _v0.a.a;
+							var list2 = _v0.b.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$IotaList(
+									A2(
+										$elm$core$Array$append,
+										list1,
+										A2(
+											$elm$core$Array$filter,
+											function (iota) {
+												return !A2(
+													$elm$core$List$any,
+													$author$project$Logic$App$Patterns$OperatorUtils$checkEquality(iota),
+													$elm$core$Array$toList(list1));
+											},
+											list2))));
+						} else {
+							break _v0$2;
+						}
+					default:
+						break _v0$2;
+				}
+			}
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+		});
+	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getIntegerOrList, $author$project$Logic$App$Patterns$OperatorUtils$getIntegerOrList, action);
 };
 var $author$project$Logic$App$Patterns$Math$orBool = function (stack) {
 	var action = F2(
@@ -9001,6 +9150,68 @@ var $author$project$Logic$App$Patterns$Stack$tuck = function (stack) {
 		});
 	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
 };
+var $elm$core$Bitwise$xor = _Bitwise_xor;
+var $author$project$Logic$App$Patterns$Math$xorBit = function (stack) {
+	var action = F2(
+		function (iota1, iota2) {
+			var _v0 = _Utils_Tuple2(iota1, iota2);
+			_v0$2:
+			while (true) {
+				switch (_v0.a.$) {
+					case 'Number':
+						if (_v0.b.$ === 'Number') {
+							var number1 = _v0.a.a;
+							var number2 = _v0.b.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Number(
+									$elm$core$Basics$round(number1) ^ $elm$core$Basics$round(number2)));
+						} else {
+							break _v0$2;
+						}
+					case 'IotaList':
+						if (_v0.b.$ === 'IotaList') {
+							var list1 = _v0.a.a;
+							var list2 = _v0.b.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$IotaList(
+									A2(
+										$elm$core$Array$append,
+										A2(
+											$elm$core$Array$filter,
+											function (iota) {
+												return !A2(
+													$elm$core$List$any,
+													$author$project$Logic$App$Patterns$OperatorUtils$checkEquality(iota),
+													$elm$core$Array$toList(list1));
+											},
+											list2),
+										A2(
+											$elm$core$Array$filter,
+											function (iota) {
+												return !A2(
+													$elm$core$List$any,
+													$author$project$Logic$App$Patterns$OperatorUtils$checkEquality(iota),
+													$elm$core$Array$toList(list2));
+											},
+											list1))));
+						} else {
+							break _v0$2;
+						}
+					default:
+						break _v0$2;
+				}
+			}
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+		});
+	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getIntegerOrList, $author$project$Logic$App$Patterns$OperatorUtils$getIntegerOrList, action);
+};
 var $elm$core$Basics$xor = _Basics_xor;
 var $author$project$Logic$App$Patterns$Math$xorBool = function (stack) {
 	var action = F2(
@@ -9091,10 +9302,10 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _List_f
 		{action: $author$project$Logic$App$Patterns$Math$arccos, color: $author$project$Settings$Theme$accent1, displayName: 'Inverse Cosine Purification', internalName: 'arccos', signature: 'adeeeee'},
 		{action: $author$project$Logic$App$Patterns$Math$arctan, color: $author$project$Settings$Theme$accent1, displayName: 'Inverse Tangent Purification', internalName: 'arctan', signature: 'eadeeeeew'},
 		{action: $author$project$Logic$App$Patterns$Math$logarithm, color: $author$project$Settings$Theme$accent1, displayName: 'Logarithmic Distillation', internalName: 'logarithm', signature: 'eqaqe'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'modulo', signature: 'addwaad'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'and_bit', signature: 'wdweaqa'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'or_bit', signature: 'waweaqa'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'xor_bit', signature: 'dwaeaqa'},
+		{action: $author$project$Logic$App$Patterns$Math$modulo, color: $author$project$Settings$Theme$accent1, displayName: 'Modulus Distillation', internalName: 'modulo', signature: 'addwaad'},
+		{action: $author$project$Logic$App$Patterns$Math$andBit, color: $author$project$Settings$Theme$accent1, displayName: 'Intersection Distillation', internalName: 'and_bit', signature: 'wdweaqa'},
+		{action: $author$project$Logic$App$Patterns$Math$orBit, color: $author$project$Settings$Theme$accent1, displayName: 'Unifying Distillation', internalName: 'or_bit', signature: 'waweaqa'},
+		{action: $author$project$Logic$App$Patterns$Math$xorBit, color: $author$project$Settings$Theme$accent1, displayName: 'Exclusionary Distillation', internalName: 'xor_bit', signature: 'dwaeaqa'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'not_bit', signature: 'dweaqa'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'to_set', signature: 'aweaqa'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: 'Reveal', internalName: 'print', signature: 'de'},
@@ -9478,7 +9689,6 @@ var $elm$random$Random$initialSeed = function (x) {
 var $elm$random$Random$Generator = function (a) {
 	return {$: 'Generator', a: a};
 };
-var $elm$core$Bitwise$xor = _Bitwise_xor;
 var $elm$random$Random$peel = function (_v0) {
 	var state = _v0.a;
 	var word = (state ^ (state >>> ((state >>> 28) + 4))) * 277803737;

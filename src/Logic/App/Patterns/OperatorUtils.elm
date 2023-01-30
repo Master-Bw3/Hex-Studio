@@ -211,6 +211,32 @@ getAny : Iota -> Iota
 getAny iota =
     iota
 
+getNumberOrList : Iota -> Iota
+getNumberOrList iota =
+    case iota of
+        Number _ ->
+            iota
+
+        IotaList _ ->
+            iota
+
+        _ ->
+            Garbage IncorrectIota
+
+getIntegerOrList : Iota -> Iota
+getIntegerOrList iota =
+    case iota of
+        Number number ->
+            if toFloat (round number) == number then
+                iota
+            else
+                Garbage IncorrectIota
+
+        IotaList _ ->
+            iota
+
+        _ ->
+            Garbage IncorrectIota
 
 checkNotGarbage : Iota -> Bool
 checkNotGarbage iota =

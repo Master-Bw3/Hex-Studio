@@ -119,10 +119,10 @@ patternRegistry =
     , { signature = "adeeeee", internalName = "arccos", action = arccos, displayName = "Inverse Cosine Purification", color = accent1 }
     , { signature = "eadeeeeew", internalName = "arctan", action = arctan, displayName = "Inverse Tangent Purification", color = accent1 }
     , { signature = "eqaqe", internalName = "logarithm", action = logarithm, displayName = "Logarithmic Distillation", color = accent1 }
-    , { signature = "addwaad", internalName = "modulo", action = noAction, displayName = "", color = accent1 }
-    , { signature = "wdweaqa", internalName = "and_bit", action = noAction, displayName = "", color = accent1 }
-    , { signature = "waweaqa", internalName = "or_bit", action = noAction, displayName = "", color = accent1 }
-    , { signature = "dwaeaqa", internalName = "xor_bit", action = noAction, displayName = "", color = accent1 }
+    , { signature = "addwaad", internalName = "modulo", action = modulo, displayName = "Modulus Distillation", color = accent1 }
+    , { signature = "wdweaqa", internalName = "and_bit", action = andBit, displayName = "Intersection Distillation", color = accent1 }
+    , { signature = "waweaqa", internalName = "or_bit", action = orBit, displayName = "Unifying Distillation", color = accent1 }
+    , { signature = "dwaeaqa", internalName = "xor_bit", action = xorBit, displayName = "Exclusionary Distillation", color = accent1 }
     , { signature = "dweaqa", internalName = "not_bit", action = noAction, displayName = "", color = accent1 }
     , { signature = "aweaqa", internalName = "to_set", action = noAction, displayName = "", color = accent1 }
     , { signature = "de", internalName = "print", action = noAction, displayName = "Reveal", color = accent1 }

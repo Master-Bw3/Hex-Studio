@@ -2,8 +2,9 @@ module Logic.App.Patterns.Math exposing (..)
 
 import Area exposing (Area)
 import Array exposing (Array)
-import Length
-import Logic.App.Patterns.OperatorUtils exposing (action1Input, action2Inputs, action3Inputs, checkEquality, getAny, getBoolean, getNumber, getNumberOrVector, getVector)
+import Bitwise
+import Length exposing (Meters)
+import Logic.App.Patterns.OperatorUtils exposing (action1Input, action2Inputs, action3Inputs, checkEquality, getAny, getBoolean, getIntegerOrList, getNumber, getNumberOrList, getNumberOrVector, getVector)
 import Logic.App.Types exposing (Iota(..), Mishap(..))
 import Quantity exposing (Quantity(..))
 import Svg.Attributes exposing (azimuth)
@@ -355,13 +356,14 @@ sine : Array Iota -> Array Iota
 sine stack =
     let
         action iota =
-            case iota of 
-            Number number -> 
-                Number (sin number)
-                |> Array.repeat 1
-            _ ->
-                Garbage CatastrophicFailure
-                    |> Array.repeat 1
+            case iota of
+                Number number ->
+                    Number (sin number)
+                        |> Array.repeat 1
+
+                _ ->
+                    Garbage CatastrophicFailure
+                        |> Array.repeat 1
     in
     action1Input stack getNumber action
 
@@ -370,13 +372,14 @@ cosine : Array Iota -> Array Iota
 cosine stack =
     let
         action iota =
-            case iota of 
-            Number number -> 
-                Number (cos number)
-                |> Array.repeat 1
-            _ ->
-                Garbage CatastrophicFailure
-                    |> Array.repeat 1
+            case iota of
+                Number number ->
+                    Number (cos number)
+                        |> Array.repeat 1
+
+                _ ->
+                    Garbage CatastrophicFailure
+                        |> Array.repeat 1
     in
     action1Input stack getNumber action
 
@@ -385,13 +388,14 @@ tangent : Array Iota -> Array Iota
 tangent stack =
     let
         action iota =
-            case iota of 
-            Number number -> 
-                Number (tan number)
-                |> Array.repeat 1
-            _ ->
-                Garbage CatastrophicFailure
-                    |> Array.repeat 1
+            case iota of
+                Number number ->
+                    Number (tan number)
+                        |> Array.repeat 1
+
+                _ ->
+                    Garbage CatastrophicFailure
+                        |> Array.repeat 1
     in
     action1Input stack getNumber action
 
@@ -400,13 +404,14 @@ arcsin : Array Iota -> Array Iota
 arcsin stack =
     let
         action iota =
-            case iota of 
-            Number number -> 
-                Number (asin number)
-                |> Array.repeat 1
-            _ ->
-                Garbage CatastrophicFailure
-                    |> Array.repeat 1
+            case iota of
+                Number number ->
+                    Number (asin number)
+                        |> Array.repeat 1
+
+                _ ->
+                    Garbage CatastrophicFailure
+                        |> Array.repeat 1
     in
     action1Input stack getNumber action
 
@@ -415,13 +420,14 @@ arccos : Array Iota -> Array Iota
 arccos stack =
     let
         action iota =
-            case iota of 
-            Number number -> 
-                Number (acos number)
-                |> Array.repeat 1
-            _ ->
-                Garbage CatastrophicFailure
-                    |> Array.repeat 1
+            case iota of
+                Number number ->
+                    Number (acos number)
+                        |> Array.repeat 1
+
+                _ ->
+                    Garbage CatastrophicFailure
+                        |> Array.repeat 1
     in
     action1Input stack getNumber action
 
@@ -430,13 +436,14 @@ arctan : Array Iota -> Array Iota
 arctan stack =
     let
         action iota =
-            case iota of 
-            Number number -> 
-                Number (atan number)
-                |> Array.repeat 1
-            _ ->
-                Garbage CatastrophicFailure
-                    |> Array.repeat 1
+            case iota of
+                Number number ->
+                    Number (atan number)
+                        |> Array.repeat 1
+
+                _ ->
+                    Garbage CatastrophicFailure
+                        |> Array.repeat 1
     in
     action1Input stack getNumber action
 
@@ -445,15 +452,97 @@ logarithm : Array Iota -> Array Iota
 logarithm stack =
     let
         action iota1 iota2 =
-            case (iota1 , iota2) of 
-            (Number number1, Number number2) -> 
-                Number (logBase number2 number1)
-                |> Array.repeat 1
-            _ ->
-                Garbage CatastrophicFailure
-                    |> Array.repeat 1
+            case ( iota1, iota2 ) of
+                ( Number number1, Number number2 ) ->
+                    Number (logBase number2 number1)
+                        |> Array.repeat 1
+
+                _ ->
+                    Garbage CatastrophicFailure
+                        |> Array.repeat 1
     in
     action2Inputs stack getNumber getNumber action
+
+
+modulo : Array Iota -> Array Iota
+modulo stack =
+    let
+        action iota1 iota2 =
+            case ( iota1, iota2 ) of
+                ( Number number1, Number number2 ) ->
+                    Number (Quantity.unwrap <| Quantity.fractionalRemainderBy (Quantity number2) (Quantity number1))
+                        |> Array.repeat 1
+
+                _ ->
+                    Garbage CatastrophicFailure
+                        |> Array.repeat 1
+    in
+    action2Inputs stack getNumber getNumber action
+
+
+andBit : Array Iota -> Array Iota
+andBit stack =
+    let
+        action iota1 iota2 =
+            case ( iota1, iota2 ) of
+                ( Number number1, Number number2 ) ->
+                    Number (toFloat <| Bitwise.and (round number1) (round number2))
+                        |> Array.repeat 1
+
+                ( IotaList list1, IotaList list2 ) ->
+                    Array.filter (\iota -> List.any (checkEquality iota) <| Array.toList list2) list1
+                        |> IotaList
+                        |> Array.repeat 1
+
+                _ ->
+                    Garbage CatastrophicFailure
+                        |> Array.repeat 1
+    in
+    action2Inputs stack getIntegerOrList getIntegerOrList action
+
+
+orBit : Array Iota -> Array Iota
+orBit stack =
+    let
+        action iota1 iota2 =
+            case ( iota1, iota2 ) of
+                ( Number number1, Number number2 ) ->
+                    Number (toFloat <| Bitwise.or (round number1) (round number2))
+                        |> Array.repeat 1
+
+                ( IotaList list1, IotaList list2 ) ->
+                    Array.filter (\iota -> not <| List.any (checkEquality iota) <| Array.toList list1) list2
+                        |> Array.append list1
+                        |> IotaList
+                        |> Array.repeat 1
+
+                _ ->
+                    Garbage CatastrophicFailure
+                        |> Array.repeat 1
+    in
+    action2Inputs stack getIntegerOrList getIntegerOrList action
+
+
+xorBit : Array Iota -> Array Iota
+xorBit stack =
+    let
+        action iota1 iota2 =
+            case ( iota1, iota2 ) of
+                ( Number number1, Number number2 ) ->
+                    Number (toFloat <| Bitwise.xor (round number1) (round number2))
+                        |> Array.repeat 1
+
+                ( IotaList list1, IotaList list2 ) ->
+                    Array.filter (\iota -> not <| List.any (checkEquality iota) <| Array.toList list2) list1
+                        |> Array.append (Array.filter (\iota -> not <| List.any (checkEquality iota) <| Array.toList list1) list2)
+                        |> IotaList
+                        |> Array.repeat 1
+
+                _ ->
+                    Garbage CatastrophicFailure
+                        |> Array.repeat 1
+    in
+    action2Inputs stack getIntegerOrList getIntegerOrList action
 
 
 constructVector : Array Iota -> Array Iota
