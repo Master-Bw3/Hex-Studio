@@ -166,7 +166,6 @@ patternInputSuggestionList model =
             model.ui.patternInputField
     in
     if inputValue /= "" then
-        Debug.log "owo" <|
             Tuple.first <|
                 List.unzip <|
                     List.filter

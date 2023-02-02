@@ -152,7 +152,7 @@ update msg model =
                                     else
                                         ( Tuple.first accumulator, False )
                             in
-                            Debug.log "consider this" <| Tuple.first <| Array.foldl countEscapes ( 0, True ) model.patternArray
+                                Tuple.first <| Array.foldl countEscapes ( 0, True ) model.patternArray
 
                         newPattern =
                             let
@@ -261,11 +261,11 @@ update msg model =
         SelectNextSuggestion suggestLength ->
             let
                 newIndex =
-                    if model.ui.suggestionIndex >= (min 3 (Debug.log "e" suggestLength) - 1) then
-                        Debug.log "s_index" 0
+                    if model.ui.suggestionIndex >= (min 3 (suggestLength) - 1) then
+                        0
 
                     else
-                        Debug.log "s_index" <| model.ui.suggestionIndex + 1
+                        model.ui.suggestionIndex + 1
             in
             ( { model | ui = { ui | suggestionIndex = newIndex } }, Cmd.none )
 
