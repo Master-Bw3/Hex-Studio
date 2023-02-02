@@ -123,8 +123,8 @@ patternRegistry =
     , { signature = "wdweaqa", internalName = "and_bit", action = andBit, displayName = "Intersection Distillation", color = accent1 }
     , { signature = "waweaqa", internalName = "or_bit", action = orBit, displayName = "Unifying Distillation", color = accent1 }
     , { signature = "dwaeaqa", internalName = "xor_bit", action = xorBit, displayName = "Exclusionary Distillation", color = accent1 }
-    , { signature = "dweaqa", internalName = "not_bit", action = noAction, displayName = "", color = accent1 }
-    , { signature = "aweaqa", internalName = "to_set", action = noAction, displayName = "", color = accent1 }
+    , { signature = "dweaqa", internalName = "not_bit", action = notBit, displayName = "Inversion Purification", color = accent1 }
+    , { signature = "aweaqa", internalName = "to_set", action = toSet, displayName = "Uniqueness Purification", color = accent1 }
     , { signature = "de", internalName = "print", action = noAction, displayName = "Reveal", color = accent1 }
     , { signature = "aawaawaa", internalName = "explode", action = noAction, displayName = "", color = accent1 }
     , { signature = "ddwddwdd", internalName = "explode/fire", action = noAction, displayName = "", color = accent1 }

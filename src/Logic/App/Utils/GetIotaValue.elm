@@ -18,7 +18,7 @@ getIotaValueAsHtmlMsg iota =
 
         else
             String.dropLeft 6 string
-                |> String.split ", "
+                |> String.split "| "
                 |> List.map (\str -> li [] [ text str ])
                 |> ol []
                 |> List.singleton
@@ -59,7 +59,7 @@ getIotaValueAsString iota =
         --fix later
         IotaList list ->
             (++) "List: " <|
-                String.join ", " <|
+                String.join "| " <|
                     List.reverse <|
                         List.map
                             (\item ->
@@ -123,7 +123,7 @@ getIotaValueAsString iota =
 
         OpenParenthesis list ->
             (++) "List: " <|
-                String.join ", " <|
+                String.join "| " <|
                     List.reverse <|
                         List.map
                             (\item ->

@@ -3,8 +3,9 @@ module Logic.App.Patterns.Math exposing (..)
 import Area exposing (Area)
 import Array exposing (Array)
 import Bitwise
+import Json.Decode exposing (array)
 import Length exposing (Meters)
-import Logic.App.Patterns.OperatorUtils exposing (action1Input, action2Inputs, action3Inputs, checkEquality, getAny, getBoolean, getIntegerOrList, getNumber, getNumberOrList, getNumberOrVector, getVector)
+import Logic.App.Patterns.OperatorUtils exposing (action1Input, action2Inputs, action3Inputs, checkEquality, getAny, getBoolean, getInteger, getIntegerOrList, getIotaList, getNumber, getNumberOrList, getNumberOrVector, getVector)
 import Logic.App.Types exposing (Iota(..), Mishap(..))
 import Quantity exposing (Quantity(..))
 import Svg.Attributes exposing (azimuth)
@@ -543,6 +544,46 @@ xorBit stack =
                         |> Array.repeat 1
     in
     action2Inputs stack getIntegerOrList getIntegerOrList action
+
+
+notBit : Array Iota -> Array Iota
+notBit stack =
+    let
+        action iota =
+            case iota of
+                Number number ->
+                    Number (toFloat <| Bitwise.complement <| round number)
+                        |> Array.repeat 1
+
+                _ ->
+                    Garbage CatastrophicFailure
+                        |> Array.repeat 1
+    in
+    action1Input stack getInteger action
+
+
+toSet : Array Iota -> Array Iota
+toSet stack =
+    let
+        constructSet iota out = 
+            if List.any (checkEquality iota) (Array.toList out) then
+                out
+            else
+                Array.push iota out
+
+
+        action iota =
+            case iota of
+                IotaList list ->
+                        
+                        IotaList (Array.foldl constructSet Array.empty list)
+                        |> Array.repeat 1
+
+                _ ->
+                    Garbage CatastrophicFailure
+                        |> Array.repeat 1
+    in
+    action1Input stack getIotaList action
 
 
 constructVector : Array Iota -> Array Iota
