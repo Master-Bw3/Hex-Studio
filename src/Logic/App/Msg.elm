@@ -3,6 +3,8 @@ import Logic.App.Types exposing (Panel)
 import Html.Events.Extra.Mouse exposing (Keys)
 import Browser.Dom
 import Time
+import Json.Decode
+import Logic.App.Types exposing (ElementLocation)
 
 type Msg
     = NoOp
@@ -20,7 +22,11 @@ type Msg
     | InputPattern String
     | SendNumberLiteralToGenerate Float
     | RecieveGeneratedNumberLiteral String
+    | SelectPreviousSuggestion Int
     | SelectNextSuggestion Int
+    | SelectFirstSuggestion
+    | RequestInputBoundingBox String
+    | RecieveInputBoundingBox (Result Json.Decode.Error ElementLocation)
 
 type alias MouseMoveData =
     { pageX : Int

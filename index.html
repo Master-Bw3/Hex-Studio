@@ -7,6 +7,7 @@
     </head>
     <body>
         <div id="elm-app-is-loaded-here"></div>
+        <script src="./gen/Ports.js"></script>
         <script src="./gen/source.js"></script>
         <script type="module">
             var app = Elm.Main.init({
@@ -19,8 +20,24 @@
             }
             setup();
 
-            app.ports.call.subscribe(function (input) {
-                app.ports.return.send(hexNumGen.generate_number(input));
+            app.ports.sendNumber.subscribe(function (input) {
+                app.ports.recieveNumber.send(hexNumGen.generate_number(input));
+            });
+
+            function getElmentBoundingBoxById (id) {
+                let element = document.getElementById(id)
+                let boundingBox = element.getBoundingClientRect()
+                boundingBox = {
+                    "left": Math.round(boundingBox.left),
+                    "bottom": Math.round(boundingBox.bottom),
+                    "right": Math.round(boundingBox.right),
+                    "top" : Math.round(boundingBox.top)
+                }
+                return boundingBox
+}
+
+            app.ports.requestBoundingBox.subscribe(function (input) {
+                app.ports.recieveBoundingBox.send(getElmentBoundingBoxById(input));
             });
         </script>
     </body>

@@ -5278,6 +5278,7 @@ var $author$project$Main$init = function (_v0) {
 				openPanels: _List_fromArray(
 					[$author$project$Logic$App$Types$PatternPanel]),
 				patternInputField: '',
+				patternInputLocation: _Utils_Tuple2(0, 0),
 				suggestionIndex: 0
 			},
 			window: {height: 0.0, width: 0.0}
@@ -5298,11 +5299,20 @@ var $author$project$Main$init = function (_v0) {
 var $author$project$Logic$App$Msg$RecieveGeneratedNumberLiteral = function (a) {
 	return {$: 'RecieveGeneratedNumberLiteral', a: a};
 };
+var $author$project$Logic$App$Msg$RecieveInputBoundingBox = function (a) {
+	return {$: 'RecieveInputBoundingBox', a: a};
+};
 var $author$project$Logic$App$Msg$Tick = function (a) {
 	return {$: 'Tick', a: a};
 };
 var $author$project$Logic$App$Msg$WindowResize = {$: 'WindowResize'};
 var $elm$core$Platform$Sub$batch = _Platform_batch;
+var $elm$core$Basics$composeR = F3(
+	function (f, g, x) {
+		return g(
+			f(x));
+	});
+var $elm$json$Json$Decode$decodeValue = _Json_run;
 var $elm$time$Time$Every = F2(
 	function (a, b) {
 		return {$: 'Every', a: a, b: b};
@@ -5713,9 +5723,21 @@ var $elm$time$Time$every = F2(
 		return $elm$time$Time$subscription(
 			A2($elm$time$Time$Every, interval, tagger));
 	});
-var $elm$browser$Browser$Events$Window = {$: 'Window'};
+var $author$project$Logic$App$Types$ElementLocation = F4(
+	function (left, bottom, top, right) {
+		return {bottom: bottom, left: left, right: right, top: top};
+	});
 var $elm$json$Json$Decode$field = _Json_decodeField;
 var $elm$json$Json$Decode$int = _Json_decodeInt;
+var $elm$json$Json$Decode$map4 = _Json_map4;
+var $author$project$Main$locationDecoder = A5(
+	$elm$json$Json$Decode$map4,
+	$author$project$Logic$App$Types$ElementLocation,
+	A2($elm$json$Json$Decode$field, 'left', $elm$json$Json$Decode$int),
+	A2($elm$json$Json$Decode$field, 'bottom', $elm$json$Json$Decode$int),
+	A2($elm$json$Json$Decode$field, 'top', $elm$json$Json$Decode$int),
+	A2($elm$json$Json$Decode$field, 'right', $elm$json$Json$Decode$int));
+var $elm$browser$Browser$Events$Window = {$: 'Window'};
 var $elm$browser$Browser$Events$MySub = F3(
 	function (a, b, c) {
 		return {$: 'MySub', a: a, b: b, c: c};
@@ -5930,8 +5952,10 @@ var $elm$browser$Browser$Events$onResize = function (func) {
 				A2($elm$json$Json$Decode$field, 'innerWidth', $elm$json$Json$Decode$int),
 				A2($elm$json$Json$Decode$field, 'innerHeight', $elm$json$Json$Decode$int))));
 };
+var $elm$json$Json$Decode$value = _Json_decodeValue;
+var $author$project$Ports$GetElementBoundingBoxById$recieveBoundingBox = _Platform_incomingPort('recieveBoundingBox', $elm$json$Json$Decode$value);
 var $elm$json$Json$Decode$string = _Json_decodeString;
-var $author$project$Ports$HexNumGen$return = _Platform_incomingPort('return', $elm$json$Json$Decode$string);
+var $author$project$Ports$HexNumGen$recieveNumber = _Platform_incomingPort('recieveNumber', $elm$json$Json$Decode$string);
 var $author$project$Main$subscriptions = function (model) {
 	return $elm$core$Platform$Sub$batch(
 		_List_fromArray(
@@ -5942,7 +5966,12 @@ var $author$project$Main$subscriptions = function (model) {
 						return $author$project$Logic$App$Msg$WindowResize;
 					})),
 				A2($elm$time$Time$every, 50, $author$project$Logic$App$Msg$Tick),
-				$author$project$Ports$HexNumGen$return($author$project$Logic$App$Msg$RecieveGeneratedNumberLiteral)
+				$author$project$Ports$HexNumGen$recieveNumber($author$project$Logic$App$Msg$RecieveGeneratedNumberLiteral),
+				$author$project$Ports$GetElementBoundingBoxById$recieveBoundingBox(
+				A2(
+					$elm$core$Basics$composeR,
+					$elm$json$Json$Decode$decodeValue($author$project$Main$locationDecoder),
+					$author$project$Logic$App$Msg$RecieveInputBoundingBox))
 			]));
 };
 var $author$project$Settings$Theme$accent5 = '#E0E3B8';
@@ -6745,8 +6774,6 @@ var $author$project$Logic$App$Stack$Stack$applyPatternsToStack = F3(
 			}
 		}
 	});
-var $elm$json$Json$Encode$float = _Json_wrap;
-var $author$project$Ports$HexNumGen$call = _Platform_outgoingPort('call', $elm$json$Json$Encode$float);
 var $elm$core$Array$foldl = F3(
 	function (func, baseCase, _v0) {
 		var tree = _v0.c;
@@ -9559,6 +9586,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _List_f
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: 'Retrospection', internalName: 'close_paren', signature: 'eee'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$eval, color: $author$project$Settings$Theme$accent1, displayName: 'Hermes\' Gambit', internalName: 'eval', signature: 'deaqq'}
 	]);
+var $elm$json$Json$Encode$float = _Json_wrap;
+var $author$project$Ports$HexNumGen$sendNumber = _Platform_outgoingPort('sendNumber', $elm$json$Json$Encode$float);
 var $elm$core$String$toFloat = _String_toFloat;
 var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName = function (name) {
 	var _v0 = $elm$core$List$head(
@@ -9577,7 +9606,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName = func
 			var number = _v1.a;
 			return _Utils_Tuple2(
 				$author$project$Logic$App$Patterns$PatternRegistry$unknownPattern,
-				$author$project$Ports$HexNumGen$call(number));
+				$author$project$Ports$HexNumGen$sendNumber(number));
 		} else {
 			return _Utils_Tuple2($author$project$Logic$App$Patterns$PatternRegistry$unknownPattern, $elm$core$Platform$Cmd$none);
 		}
@@ -9645,6 +9674,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature =
 			{displayName: 'Pattern ' + ('\"' + (signature + '\"')), signature: signature}));
 	}
 };
+var $elm$core$Debug$log = _Debug_log;
 var $elm$core$Basics$min = F2(
 	function (x, y) {
 		return (_Utils_cmp(x, y) < 0) ? x : y;
@@ -9654,6 +9684,8 @@ var $elm$time$Time$posixToMillis = function (_v0) {
 	var millis = _v0.a;
 	return millis;
 };
+var $elm$json$Json$Encode$string = _Json_wrap;
+var $author$project$Ports$GetElementBoundingBoxById$requestBoundingBox = _Platform_outgoingPort('requestBoundingBox', $elm$json$Json$Encode$string);
 var $author$project$Components$App$Grid$verticalSpacing = function (scale) {
 	return ($author$project$Components$App$Grid$spacing(scale) * $elm$core$Basics$sqrt(3.0)) / 2;
 };
@@ -10105,6 +10137,7 @@ var $author$project$Main$update = F2(
 			case 'Tick':
 				var newTime = msg.a;
 				var points = grid.points;
+				var autocompleteIndex = (model.ui.patternInputField === '') ? 0 : model.ui.suggestionIndex;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
@@ -10117,9 +10150,12 @@ var $author$project$Main$update = F2(
 										points,
 										$elm$time$Time$posixToMillis(newTime))
 								}),
-							time: $elm$time$Time$posixToMillis(newTime)
+							time: $elm$time$Time$posixToMillis(newTime),
+							ui: _Utils_update(
+								ui,
+								{suggestionIndex: autocompleteIndex})
 						}),
-					$elm$core$Platform$Cmd$none);
+					$author$project$Ports$GetElementBoundingBoxById$requestBoundingBox('add_pattern_input'));
 			case 'UpdatePatternInputField':
 				var text = msg.a;
 				return _Utils_Tuple2(
@@ -10162,7 +10198,7 @@ var $author$project$Main$update = F2(
 				var number = msg.a;
 				return _Utils_Tuple2(
 					model,
-					$author$project$Ports$HexNumGen$call(number));
+					$author$project$Ports$HexNumGen$sendNumber(number));
 			case 'RecieveGeneratedNumberLiteral':
 				var signature = msg.a;
 				var newPattern = $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature(signature);
@@ -10188,7 +10224,19 @@ var $author$project$Main$update = F2(
 								{patternInputField: ''})
 						}),
 					$elm$core$Platform$Cmd$none);
-			default:
+			case 'SelectPreviousSuggestion':
+				var suggestLength = msg.a;
+				var newIndex = (model.ui.suggestionIndex <= 0) ? (A2($elm$core$Basics$min, 3, suggestLength) - 1) : (model.ui.suggestionIndex - 1);
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							ui: _Utils_update(
+								ui,
+								{suggestionIndex: newIndex})
+						}),
+					$elm$core$Platform$Cmd$none);
+			case 'SelectNextSuggestion':
 				var suggestLength = msg.a;
 				var newIndex = (_Utils_cmp(
 					model.ui.suggestionIndex,
@@ -10202,19 +10250,47 @@ var $author$project$Main$update = F2(
 								{suggestionIndex: newIndex})
 						}),
 					$elm$core$Platform$Cmd$none);
+			case 'SelectFirstSuggestion':
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							ui: _Utils_update(
+								ui,
+								{suggestionIndex: 0})
+						}),
+					$elm$core$Platform$Cmd$none);
+			case 'RequestInputBoundingBox':
+				var id = msg.a;
+				return _Utils_Tuple2(
+					model,
+					$author$project$Ports$GetElementBoundingBoxById$requestBoundingBox(id));
+			default:
+				var result = msg.a;
+				if (result.$ === 'Ok') {
+					var value = result.a;
+					var owo = A2($elm$core$Debug$log, 'owo', value);
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								ui: _Utils_update(
+									ui,
+									{
+										patternInputLocation: _Utils_Tuple2(value.left, value.bottom)
+									})
+							}),
+						$elm$core$Platform$Cmd$none);
+				} else {
+					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+				}
 		}
 	});
 var $author$project$Logic$App$Msg$MouseMove = function (a) {
 	return {$: 'MouseMove', a: a};
 };
 var $author$project$Logic$App$Msg$MouseUp = {$: 'MouseUp'};
-var $elm$core$Basics$composeR = F3(
-	function (f, g, x) {
-		return g(
-			f(x));
-	});
 var $elm$html$Html$div = _VirtualDom_node('div');
-var $elm$json$Json$Encode$string = _Json_wrap;
 var $elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {
 		return A2(
@@ -10805,6 +10881,9 @@ var $author$project$Logic$App$Msg$InputPattern = function (a) {
 var $author$project$Logic$App$Msg$SelectNextSuggestion = function (a) {
 	return {$: 'SelectNextSuggestion', a: a};
 };
+var $author$project$Logic$App$Msg$SelectPreviousSuggestion = function (a) {
+	return {$: 'SelectPreviousSuggestion', a: a};
+};
 var $author$project$Logic$App$Msg$UpdatePatternInputField = function (a) {
 	return {$: 'UpdatePatternInputField', a: a};
 };
@@ -10947,14 +11026,14 @@ var $author$project$Components$Icon$ParagraphDropdown$paragraphDropdown = A2(
 				]))
 		]));
 var $elm$html$Html$li = _VirtualDom_node('li');
-var $author$project$Components$App$Panels$PatternPanel$autocompleteList = A2(
+var $author$project$Components$App$PatternAutoComplete$autocompleteList = A2(
 	$elm$core$List$map,
 	function (pat) {
 		return _Utils_Tuple2(pat.displayName, pat.internalName);
 	},
 	$author$project$Logic$App$Patterns$PatternRegistry$patternRegistry);
 var $elm$core$String$toLower = _String_toLower;
-var $author$project$Components$App$Panels$PatternPanel$patternInputSuggestionList = function (model) {
+var $author$project$Components$App$PatternAutoComplete$patternInputSuggestionList = function (model) {
 	var inputValue = model.ui.patternInputField;
 	return (inputValue !== '') ? $elm$core$List$unzip(
 		A2(
@@ -10968,9 +11047,9 @@ var $author$project$Components$App$Panels$PatternPanel$patternInputSuggestionLis
 					$elm$core$String$toLower(inputValue),
 					$elm$core$String$toLower(name.b));
 			},
-			$author$project$Components$App$Panels$PatternPanel$autocompleteList)).a : _List_Nil;
+			$author$project$Components$App$PatternAutoComplete$autocompleteList)).a : _List_Nil;
 };
-var $author$project$Components$App$Panels$PatternPanel$patternInputAutoComplete = function (model) {
+var $author$project$Components$App$PatternAutoComplete$patternInputAutoComplete = function (model) {
 	var suggestionIndex = model.ui.suggestionIndex;
 	var getHighlightedOption = A2(
 		$elm$core$Maybe$withDefault,
@@ -10987,7 +11066,7 @@ var $author$project$Components$App$Panels$PatternPanel$patternInputAutoComplete 
 						function (index, name) {
 							return _Utils_eq(index, suggestionIndex) ? name : '';
 						}),
-					$author$project$Components$App$Panels$PatternPanel$patternInputSuggestionList(model)))));
+					$author$project$Components$App$PatternAutoComplete$patternInputSuggestionList(model)))));
 	var constructOption = F2(
 		function (index, name) {
 			return A2(
@@ -11007,12 +11086,20 @@ var $author$project$Components$App$Panels$PatternPanel$patternInputAutoComplete 
 			$elm$html$Html$div,
 			_List_fromArray(
 				[
-					$elm$html$Html$Attributes$class('autocomplete_container')
+					$elm$html$Html$Attributes$class('autocomplete_container'),
+					A2(
+					$elm$html$Html$Attributes$style,
+					'left',
+					$elm$core$String$fromInt(model.ui.patternInputLocation.a) + 'px'),
+					A2(
+					$elm$html$Html$Attributes$style,
+					'top',
+					$elm$core$String$fromInt(model.ui.patternInputLocation.b) + 'px')
 				]),
 			A2(
 				$elm$core$List$indexedMap,
 				constructOption,
-				$author$project$Components$App$Panels$PatternPanel$patternInputSuggestionList(model))),
+				$author$project$Components$App$PatternAutoComplete$patternInputSuggestionList(model))),
 		getHighlightedOption);
 };
 var $elm$html$Html$Attributes$placeholder = $elm$html$Html$Attributes$stringProperty('placeholder');
@@ -11228,18 +11315,23 @@ var $author$project$Components$App$Panels$Utils$visibilityToDisplayStyle = funct
 };
 var $author$project$Components$App$Panels$PatternPanel$patternPanel = function (model) {
 	var visibility = A2($elm$core$List$member, $author$project$Logic$App$Types$PatternPanel, model.ui.openPanels);
-	var autocompleteTuple = $author$project$Components$App$Panels$PatternPanel$patternInputAutoComplete(model);
+	var autocompleteTuple = $author$project$Components$App$PatternAutoComplete$patternInputAutoComplete(model);
 	var valueToSend = (autocompleteTuple.b !== '') ? autocompleteTuple.b : model.ui.patternInputField;
-	var isEnter = function (code) {
-		return (code === 13) ? $elm$json$Json$Decode$succeed(
+	var detectKey = function (code) {
+		return ((code === 13) || (code === 9)) ? $elm$json$Json$Decode$succeed(
 			_Utils_Tuple2(
 				$author$project$Logic$App$Msg$InputPattern(valueToSend),
-				true)) : ((code === 9) ? $elm$json$Json$Decode$succeed(
+				true)) : ((code === 38) ? $elm$json$Json$Decode$succeed(
+			_Utils_Tuple2(
+				$author$project$Logic$App$Msg$SelectPreviousSuggestion(
+					$elm$core$List$length(
+						$author$project$Components$App$PatternAutoComplete$patternInputSuggestionList(model))),
+				true)) : ((code === 40) ? $elm$json$Json$Decode$succeed(
 			_Utils_Tuple2(
 				$author$project$Logic$App$Msg$SelectNextSuggestion(
 					$elm$core$List$length(
-						$author$project$Components$App$Panels$PatternPanel$patternInputSuggestionList(model))),
-				true)) : $elm$json$Json$Decode$fail('not ENTER'));
+						$author$project$Components$App$PatternAutoComplete$patternInputSuggestionList(model))),
+				true)) : $elm$json$Json$Decode$fail('')));
 	};
 	return A2(
 		$elm$html$Html$div,
@@ -11307,10 +11399,9 @@ var $author$project$Components$App$Panels$PatternPanel$patternPanel = function (
 												A2(
 												$elm$html$Html$Events$preventDefaultOn,
 												'keydown',
-												A2($elm$json$Json$Decode$andThen, isEnter, $elm$html$Html$Events$keyCode))
+												A2($elm$json$Json$Decode$andThen, detectKey, $elm$html$Html$Events$keyCode))
 											]),
-										_List_Nil),
-										autocompleteTuple.a
+										_List_Nil)
 									])),
 								A2(
 								$elm$html$Html$button,
@@ -11662,7 +11753,6 @@ var $mpizenberg$elm_pointer_events$Html$Events$Extra$Touch$Event = F4(
 	function (keys, changedTouches, targetTouches, touches) {
 		return {changedTouches: changedTouches, keys: keys, targetTouches: targetTouches, touches: touches};
 	});
-var $elm$json$Json$Decode$map4 = _Json_map4;
 var $mpizenberg$elm_pointer_events$Html$Events$Extra$Touch$Touch = F4(
 	function (identifier, clientPos, pagePos, screenPos) {
 		return {clientPos: clientPos, identifier: identifier, pagePos: pagePos, screenPos: screenPos};
@@ -12110,7 +12200,8 @@ var $author$project$Components$App$Content$content = function (model) {
 		_List_fromArray(
 			[
 				$author$project$Components$App$LeftBox$leftBox(model),
-				$author$project$Components$App$Right$right(model)
+				$author$project$Components$App$Right$right(model),
+				$author$project$Components$App$PatternAutoComplete$patternInputAutoComplete(model).a
 			]));
 };
 var $author$project$Main$view = function (model) {

@@ -11,7 +11,7 @@ import Json.Decode exposing (Decoder, at, float, int, map4)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (MouseMoveData, Msg(..))
 import Logic.App.Utils.Utils exposing (touchCoordinates)
-
+import Components.App.PatternAutoComplete exposing (patternInputAutoComplete)
 
 content : Model -> Html Msg
 content model =
@@ -23,6 +23,7 @@ content model =
         ]
         [ leftBox model
         , right model
+        , Tuple.first <| patternInputAutoComplete model
         ]
 
 

@@ -19,7 +19,7 @@ import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (Msg(..))
 import Logic.App.Patterns.PatternRegistry exposing (patternRegistry)
 import Logic.App.Types exposing (GridPoint, Panel(..), PatternType)
-
+import Components.App.PatternAutoComplete exposing (..)
 
 patternPanel : Model -> Html Msg
 patternPanel model =
@@ -37,15 +37,18 @@ patternPanel model =
         visibility =
             List.member PatternPanel model.ui.openPanels
 
-        isEnter code =
-            if code == 13 then
+        detectKey code =                
+            if code == 13 || code == 9 then
                 Json.succeed ( InputPattern valueToSend, True )
 
-            else if code == 9 then
+            else if code == 38 then
+                Json.succeed ( SelectPreviousSuggestion <| List.length <| patternInputSuggestionList model, True )
+
+            else if code == 40 then
                 Json.succeed ( SelectNextSuggestion <| List.length <| patternInputSuggestionList model, True )
 
             else
-                Json.fail "not ENTER"
+                Json.fail ""
     in
     div [ id "pattern_panel", class "panel", visibilityToDisplayStyle visibility ]
         [ h1
@@ -71,10 +74,9 @@ patternPanel model =
                         , attribute "autocomplete" "off"
                         , onInput UpdatePatternInputField
                         , value model.ui.patternInputField
-                        , preventDefaultOn "keydown" (Json.andThen isEnter keyCode)
+                        , preventDefaultOn "keydown" (Json.andThen detectKey keyCode)
                         ]
                         []
-                    , Tuple.first autocompleteTuple
                     ]
                 , button
                     [ id "add_pattern_button"
@@ -109,71 +111,3 @@ renderPatternList patternList =
     List.indexedMap renderPattern patterns
 
 
-autocompleteList : List ( String, String )
-autocompleteList =
-    List.map (\pat -> ( pat.displayName, pat.internalName )) patternRegistry
-
-
-patternInputAutoComplete : Model -> ( Html Msg, String )
-patternInputAutoComplete model =
-    let
-        suggestionIndex =
-            model.ui.suggestionIndex
-
-        constructOption index name =
-            li
-                [ if index == suggestionIndex then
-                    class "highlighted_suggestion"
-
-                  else
-                    class ""
-                ]
-                [ text
-                    (if name == "" then
-                        "owo"
-
-                     else
-                        name
-                    )
-                ]
-
-        getHighlightedOption =
-            Maybe.withDefault "" <|
-                List.head <|
-                    List.filter
-                        (\name -> name /= "")
-                        (List.indexedMap
-                            (\index name ->
-                                if index == suggestionIndex then
-                                    name
-
-                                else
-                                    ""
-                            )
-                            (patternInputSuggestionList model)
-                        )
-    in
-    ( div [ class "autocomplete_container" ]
-        (List.indexedMap constructOption (patternInputSuggestionList model))
-    , getHighlightedOption
-    )
-
-
-patternInputSuggestionList : Model -> List String
-patternInputSuggestionList model =
-    let
-        inputValue =
-            model.ui.patternInputField
-    in
-    if inputValue /= "" then
-            Tuple.first <|
-                List.unzip <|
-                    List.filter
-                        (\name ->
-                            String.contains (String.toLower inputValue) (String.toLower <| Tuple.first name)
-                                || String.contains (String.toLower inputValue) (String.toLower <| Tuple.second name)
-                        )
-                        autocompleteList
-
-    else
-        []

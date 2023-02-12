@@ -11,6 +11,7 @@ type alias Model =
         { openPanels : List Panel
         , patternInputField : String
         , suggestionIndex : Int
+        , patternInputLocation : (Int, Int)
         }
     , grid :
         { width : Float

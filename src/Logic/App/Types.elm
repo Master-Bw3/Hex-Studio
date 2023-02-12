@@ -56,6 +56,7 @@ type Iota
     | Garbage Mishap
     | OpenParenthesis (Array Iota)
 
+
 type alias GridPoint =
     { x : Float
     , y : Float
@@ -85,4 +86,12 @@ type alias IntCoordinatePair =
     , y1 : Int
     , x2 : Int
     , y2 : Int
+    }
+
+
+type alias ElementLocation =
+    { left : Int
+    , bottom : Int
+    , top : Int
+    , right : Int
     }

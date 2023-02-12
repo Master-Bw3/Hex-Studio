@@ -1,6 +1,6 @@
 port module Ports.HexNumGen exposing (..)
 
-port call : Float -> Cmd msg
+port sendNumber : Float -> Cmd msg
 
 
-port return : (String -> msg) -> Sub msg
+port recieveNumber : (String -> msg) -> Sub msg

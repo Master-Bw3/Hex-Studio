@@ -6,7 +6,9 @@ import Browser.Dom exposing (getElement)
 import Browser.Events
 import Components.App.Content exposing (content)
 import Components.App.Grid exposing (..)
+import FontAwesome.Solid exposing (j)
 import Html exposing (..)
+import Json.Decode
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (..)
 import Logic.App.PatternList.PatternArray exposing (addToPatternArray, updateDrawingColors)
@@ -15,6 +17,7 @@ import Logic.App.Stack.Stack exposing (applyPatternToStack, applyPatternsToStack
 import Logic.App.Types exposing (..)
 import Logic.App.Utils.GetAngleSignature exposing (getAngleSignature)
 import Logic.App.Utils.Utils exposing (removeFromArray)
+import Ports.GetElementBoundingBoxById as GetElementBoundingBoxById
 import Ports.HexNumGen as HexNumGen
 import Settings.Theme exposing (..)
 import Task
@@ -38,6 +41,7 @@ init _ =
             { openPanels = [ PatternPanel ]
             , patternInputField = ""
             , suggestionIndex = 0
+            , patternInputLocation = ( 0, 0 )
             }
       , grid =
             { height = 0
@@ -152,7 +156,7 @@ update msg model =
                                     else
                                         ( Tuple.first accumulator, False )
                             in
-                                Tuple.first <| Array.foldl countEscapes ( 0, True ) model.patternArray
+                            Tuple.first <| Array.foldl countEscapes ( 0, True ) model.patternArray
 
                         newPattern =
                             let
@@ -206,14 +210,22 @@ update msg model =
 
         Tick newTime ->
             let
+                autocompleteIndex =
+                    if model.ui.patternInputField == "" then
+                        0
+
+                    else
+                        model.ui.suggestionIndex
+
                 points =
                     grid.points
             in
             ( { model
                 | time = Time.posixToMillis newTime
                 , grid = { grid | points = updatemidLineOffsets points (Time.posixToMillis newTime) }
+                , ui = { ui | suggestionIndex = autocompleteIndex }
               }
-            , Cmd.none
+            , GetElementBoundingBoxById.requestBoundingBox "add_pattern_input"
             )
 
         UpdatePatternInputField text ->
@@ -243,7 +255,7 @@ update msg model =
                 ( model, command )
 
         SendNumberLiteralToGenerate number ->
-            ( model, HexNumGen.call number )
+            ( model, HexNumGen.sendNumber number )
 
         RecieveGeneratedNumberLiteral signature ->
             let
@@ -258,16 +270,45 @@ update msg model =
             , Cmd.none
             )
 
+        SelectPreviousSuggestion suggestLength ->
+            let
+                newIndex =
+                    if model.ui.suggestionIndex <= 0 then
+                        min 3 suggestLength - 1
+
+                    else
+                        model.ui.suggestionIndex - 1
+            in
+            ( { model | ui = { ui | suggestionIndex = newIndex } }, Cmd.none )
+
         SelectNextSuggestion suggestLength ->
             let
                 newIndex =
-                    if model.ui.suggestionIndex >= (min 3 (suggestLength) - 1) then
+                    if model.ui.suggestionIndex >= (min 3 suggestLength - 1) then
                         0
 
                     else
                         model.ui.suggestionIndex + 1
             in
             ( { model | ui = { ui | suggestionIndex = newIndex } }, Cmd.none )
+
+        SelectFirstSuggestion ->
+            ( { model | ui = { ui | suggestionIndex = 0 } }, Cmd.none )
+
+        RequestInputBoundingBox id ->
+            ( model, GetElementBoundingBoxById.requestBoundingBox id )
+
+        RecieveInputBoundingBox result ->
+            case result of
+                Ok value ->
+                    let
+                        owo =
+                            Debug.log "owo" value
+                    in
+                    ( { model | ui = { ui | patternInputLocation = ( value.left, value.bottom ) } }, Cmd.none )
+
+                Err _ ->
+                    ( model, Cmd.none )
 
 
 
@@ -279,7 +320,20 @@ update msg model =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Sub.batch [ Browser.Events.onResize (\_ _ -> WindowResize), Time.every 50 Tick, HexNumGen.return RecieveGeneratedNumberLiteral ]
+    Sub.batch
+        [ Browser.Events.onResize (\_ _ -> WindowResize)
+        , Time.every 50 Tick
+        , HexNumGen.recieveNumber RecieveGeneratedNumberLiteral
+        , GetElementBoundingBoxById.recieveBoundingBox (Json.Decode.decodeValue locationDecoder >> RecieveInputBoundingBox)
+        ]
+
+
+locationDecoder =
+    Json.Decode.map4 ElementLocation
+        (Json.Decode.field "left" Json.Decode.int)
+        (Json.Decode.field "bottom" Json.Decode.int)
+        (Json.Decode.field "top" Json.Decode.int)
+        (Json.Decode.field "right" Json.Decode.int)
 
 
 view model =

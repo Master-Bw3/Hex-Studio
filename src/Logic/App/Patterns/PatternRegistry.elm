@@ -51,7 +51,7 @@ getPatternFromName name =
         Nothing ->
             case String.toFloat name of
                 Just number ->
-                    ( unknownPattern, HexNumGen.call number )
+                    ( unknownPattern, HexNumGen.sendNumber number )
 
                 Nothing ->
                     ( unknownPattern, Cmd.none )
