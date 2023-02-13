@@ -5460,6 +5460,7 @@ var $author$project$Main$init = function (_v0) {
 				mouseOverElementIndex: -1,
 				openPanels: _List_fromArray(
 					[$author$project$Logic$App$Types$PatternPanel]),
+				patternElementMiddleLocations: _List_Nil,
 				patternInputField: '',
 				patternInputLocation: _Utils_Tuple2(0, 0),
 				selectedInputID: '',
@@ -5485,6 +5486,9 @@ var $author$project$Logic$App$Msg$RecieveGeneratedNumberLiteral = function (a) {
 };
 var $author$project$Logic$App$Msg$RecieveInputBoundingBox = function (a) {
 	return {$: 'RecieveInputBoundingBox', a: a};
+};
+var $author$project$Logic$App$Msg$RecieveInputBoundingBoxes = function (a) {
+	return {$: 'RecieveInputBoundingBoxes', a: a};
 };
 var $author$project$Logic$App$Msg$Tick = function (a) {
 	return {$: 'Tick', a: a};
@@ -5907,16 +5911,18 @@ var $elm$time$Time$every = F2(
 		return $elm$time$Time$subscription(
 			A2($elm$time$Time$Every, interval, tagger));
 	});
-var $author$project$Logic$App$Types$ElementLocation = F4(
-	function (left, bottom, top, right) {
-		return {bottom: bottom, left: left, right: right, top: top};
+var $author$project$Logic$App$Types$ElementLocation = F5(
+	function (element, left, bottom, top, right) {
+		return {bottom: bottom, element: element, left: left, right: right, top: top};
 	});
 var $elm$json$Json$Decode$field = _Json_decodeField;
 var $elm$json$Json$Decode$int = _Json_decodeInt;
-var $elm$json$Json$Decode$map4 = _Json_map4;
-var $author$project$Main$locationDecoder = A5(
-	$elm$json$Json$Decode$map4,
+var $elm$json$Json$Decode$map5 = _Json_map5;
+var $elm$json$Json$Decode$string = _Json_decodeString;
+var $author$project$Main$locationDecoder = A6(
+	$elm$json$Json$Decode$map5,
 	$author$project$Logic$App$Types$ElementLocation,
+	A2($elm$json$Json$Decode$field, 'element', $elm$json$Json$Decode$string),
 	A2($elm$json$Json$Decode$field, 'left', $elm$json$Json$Decode$int),
 	A2($elm$json$Json$Decode$field, 'bottom', $elm$json$Json$Decode$int),
 	A2($elm$json$Json$Decode$field, 'top', $elm$json$Json$Decode$int),
@@ -6138,7 +6144,10 @@ var $elm$browser$Browser$Events$onResize = function (func) {
 };
 var $elm$json$Json$Decode$value = _Json_decodeValue;
 var $author$project$Ports$GetElementBoundingBoxById$recieveBoundingBox = _Platform_incomingPort('recieveBoundingBox', $elm$json$Json$Decode$value);
-var $elm$json$Json$Decode$string = _Json_decodeString;
+var $elm$json$Json$Decode$list = _Json_decodeList;
+var $author$project$Ports$GetElementBoundingBoxById$recieveBoundingBoxes = _Platform_incomingPort(
+	'recieveBoundingBoxes',
+	$elm$json$Json$Decode$list($elm$json$Json$Decode$value));
 var $author$project$Ports$HexNumGen$recieveNumber = _Platform_incomingPort('recieveNumber', $elm$json$Json$Decode$string);
 var $author$project$Main$subscriptions = function (_v0) {
 	return $elm$core$Platform$Sub$batch(
@@ -6155,7 +6164,13 @@ var $author$project$Main$subscriptions = function (_v0) {
 				A2(
 					$elm$core$Basics$composeR,
 					$elm$json$Json$Decode$decodeValue($author$project$Main$locationDecoder),
-					$author$project$Logic$App$Msg$RecieveInputBoundingBox))
+					$author$project$Logic$App$Msg$RecieveInputBoundingBox)),
+				$author$project$Ports$GetElementBoundingBoxById$recieveBoundingBoxes(
+				A2(
+					$elm$core$Basics$composeR,
+					$elm$core$List$map(
+						$elm$json$Json$Decode$decodeValue($author$project$Main$locationDecoder)),
+					$author$project$Logic$App$Msg$RecieveInputBoundingBoxes))
 			]));
 };
 var $author$project$Settings$Theme$accent5 = '#E0E3B8';
@@ -9855,6 +9870,43 @@ var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature =
 			{displayName: 'Pattern ' + ('\"' + (signature + '\"')), signature: signature}));
 	}
 };
+var $elm$core$Elm$JsArray$indexedMap = _JsArray_indexedMap;
+var $elm$core$Array$indexedMap = F2(
+	function (func, _v0) {
+		var len = _v0.a;
+		var tree = _v0.c;
+		var tail = _v0.d;
+		var initialBuilder = {
+			nodeList: _List_Nil,
+			nodeListSize: 0,
+			tail: A3(
+				$elm$core$Elm$JsArray$indexedMap,
+				func,
+				$elm$core$Array$tailIndex(len),
+				tail)
+		};
+		var helper = F2(
+			function (node, builder) {
+				if (node.$ === 'SubTree') {
+					var subTree = node.a;
+					return A3($elm$core$Elm$JsArray$foldl, helper, builder, subTree);
+				} else {
+					var leaf = node.a;
+					var offset = builder.nodeListSize * $elm$core$Array$branchFactor;
+					var mappedLeaf = $elm$core$Array$Leaf(
+						A3($elm$core$Elm$JsArray$indexedMap, func, offset, leaf));
+					return {
+						nodeList: A2($elm$core$List$cons, mappedLeaf, builder.nodeList),
+						nodeListSize: builder.nodeListSize + 1,
+						tail: builder.tail
+					};
+				}
+			});
+		return A2(
+			$elm$core$Array$builderToArray,
+			true,
+			A3($elm$core$Elm$JsArray$foldl, helper, initialBuilder, tree));
+	});
 var $elm_community$array_extra$Array$Extra$insertAt = F2(
 	function (index, val) {
 		return function (array) {
@@ -9871,17 +9923,63 @@ var $elm_community$array_extra$Array$Extra$insertAt = F2(
 			}
 		};
 	});
+var $elm$core$Debug$log = _Debug_log;
 var $elm$core$Basics$min = F2(
 	function (x, y) {
 		return (_Utils_cmp(x, y) < 0) ? x : y;
 	});
 var $elm$core$Basics$modBy = _Basics_modBy;
+var $author$project$Logic$App$Msg$MouseMoveData = F4(
+	function (pageX, pageY, offsetHeight, offsetWidth) {
+		return {offsetHeight: offsetHeight, offsetWidth: offsetWidth, pageX: pageX, pageY: pageY};
+	});
+var $elm$json$Json$Decode$at = F2(
+	function (fields, decoder) {
+		return A3($elm$core$List$foldr, $elm$json$Json$Decode$field, decoder, fields);
+	});
+var $elm$json$Json$Decode$float = _Json_decodeFloat;
+var $elm$json$Json$Decode$map4 = _Json_map4;
+var $author$project$Main$mouseMoveDecoder = A5(
+	$elm$json$Json$Decode$map4,
+	$author$project$Logic$App$Msg$MouseMoveData,
+	A2(
+		$elm$json$Json$Decode$at,
+		_List_fromArray(
+			['pageX']),
+		$elm$json$Json$Decode$int),
+	A2(
+		$elm$json$Json$Decode$at,
+		_List_fromArray(
+			['pageY']),
+		$elm$json$Json$Decode$int),
+	A2(
+		$elm$json$Json$Decode$at,
+		_List_fromArray(
+			['target', 'offsetHeight']),
+		$elm$json$Json$Decode$float),
+	A2(
+		$elm$json$Json$Decode$at,
+		_List_fromArray(
+			['target', 'offsetWidth']),
+		$elm$json$Json$Decode$float));
 var $elm$time$Time$posixToMillis = function (_v0) {
 	var millis = _v0.a;
 	return millis;
 };
 var $elm$json$Json$Encode$string = _Json_wrap;
 var $author$project$Ports$GetElementBoundingBoxById$requestBoundingBox = _Platform_outgoingPort('requestBoundingBox', $elm$json$Json$Encode$string);
+var $elm$json$Json$Encode$list = F2(
+	function (func, entries) {
+		return _Json_wrap(
+			A3(
+				$elm$core$List$foldl,
+				_Json_addEntry(func),
+				_Json_emptyArray(_Utils_Tuple0),
+				entries));
+	});
+var $author$project$Ports$GetElementBoundingBoxById$requestBoundingBoxes = _Platform_outgoingPort(
+	'requestBoundingBoxes',
+	$elm$json$Json$Encode$list($elm$json$Json$Encode$string));
 var $author$project$Components$App$Grid$verticalSpacing = function (scale) {
 	return ($author$project$Components$App$Grid$spacing(scale) * $elm$core$Basics$sqrt(3.0)) / 2;
 };
@@ -10352,7 +10450,20 @@ var $author$project$Main$update = F2(
 								ui,
 								{suggestionIndex: autocompleteIndex})
 						}),
-					$author$project$Ports$GetElementBoundingBoxById$requestBoundingBox('add_pattern_input'));
+					$elm$core$Platform$Cmd$batch(
+						_List_fromArray(
+							[
+								$author$project$Ports$GetElementBoundingBoxById$requestBoundingBox('#add_pattern_input'),
+								$author$project$Ports$GetElementBoundingBoxById$requestBoundingBoxes(
+								$elm$core$Array$toList(
+									A2(
+										$elm$core$Array$indexedMap,
+										F2(
+											function (index, _v3) {
+												return '[data-index=\"' + ($elm$core$String$fromInt(index) + '\"]');
+											}),
+										model.patternArray)))
+							])));
 			case 'UpdatePatternInputField':
 				var text = msg.a;
 				return _Utils_Tuple2(
@@ -10466,7 +10577,7 @@ var $author$project$Main$update = F2(
 				var result = msg.a;
 				if (result.$ === 'Ok') {
 					var value = result.a;
-					return _Utils_Tuple2(
+					return (value.element === '#add_pattern_input') ? _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
@@ -10476,10 +10587,31 @@ var $author$project$Main$update = F2(
 										patternInputLocation: _Utils_Tuple2(value.left, value.bottom)
 									})
 							}),
-						$elm$core$Platform$Cmd$none);
+						$elm$core$Platform$Cmd$none) : _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				} else {
 					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				}
+			case 'RecieveInputBoundingBoxes':
+				var resultList = msg.a;
+				var handleResult = function (result) {
+					if (result.$ === 'Ok') {
+						var value = result.a;
+						return (value.top + value.bottom) / 2;
+					} else {
+						return 0.0;
+					}
+				};
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							ui: _Utils_update(
+								ui,
+								{
+									patternElementMiddleLocations: A2($elm$core$List$map, handleResult, resultList)
+								})
+						}),
+					$elm$core$Platform$Cmd$none);
 			case 'DragStart':
 				var index = msg.a;
 				return _Utils_Tuple2(
@@ -10508,23 +10640,77 @@ var $author$project$Main$update = F2(
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 'DragOver':
-				var index = msg.a;
+				var eventJson = msg.b;
+				var event = A2($elm$json$Json$Decode$decodeValue, $author$project$Main$mouseMoveDecoder, eventJson);
+				var mousePos = function () {
+					if (event.$ === 'Ok') {
+						var value = event.a;
+						return _Utils_Tuple2(value.pageX, value.pageY);
+					} else {
+						return _Utils_Tuple2(0.0, 0.0);
+					}
+				}();
+				var closestElementToMouseY = A2(
+					$elm$core$Debug$log,
+					'index',
+					A2(
+						$elm$core$Maybe$withDefault,
+						_Utils_Tuple2(
+							$elm$core$List$length(model.ui.patternElementMiddleLocations),
+							0),
+						$elm$core$List$head(
+							A2(
+								$elm$core$List$sortWith,
+								F2(
+									function (a, b) {
+										var _v6 = A2($elm$core$Basics$compare, a.b, b.b);
+										switch (_v6.$) {
+											case 'LT':
+												return $elm$core$Basics$LT;
+											case 'EQ':
+												return $elm$core$Basics$EQ;
+											default:
+												return $elm$core$Basics$GT;
+										}
+									}),
+								A2(
+									$elm$core$List$filter,
+									function (element) {
+										return element.b > 0;
+									},
+									A2(
+										$elm$core$List$indexedMap,
+										F2(
+											function (index, yPos) {
+												return _Utils_Tuple2(index, mousePos.b - yPos);
+											}),
+										model.ui.patternElementMiddleLocations))))).a);
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
+							mousePos: mousePos,
 							ui: _Utils_update(
 								ui,
-								{mouseOverElementIndex: index})
+								{mouseOverElementIndex: closestElementToMouseY})
 						}),
 					$elm$core$Platform$Cmd$none);
+			case 'Drag':
+				var event = msg.a;
+				var mouseEvent = event.mouseEvent;
+				var mousePos = mouseEvent.clientPos;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{mousePos: mousePos}),
+					$elm$core$Platform$Cmd$none);
 			case 'Drop':
-				var index = msg.a;
 				var originIndex = model.ui.dragging.b;
+				var index = (_Utils_cmp(model.ui.mouseOverElementIndex, originIndex) > 0) ? (model.ui.mouseOverElementIndex - 1) : model.ui.mouseOverElementIndex;
 				var newPatternArray = function () {
-					var _v4 = A2($elm$core$Array$get, originIndex, patternArray);
-					if (_v4.$ === 'Just') {
-						var element = _v4.a;
+					var _v8 = A2($elm$core$Array$get, originIndex, patternArray);
+					if (_v8.$ === 'Just') {
+						var element = _v8.a;
 						return A3(
 							$elm_community$array_extra$Array$Extra$insertAt,
 							index,
@@ -10674,7 +10860,6 @@ var $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$buttonDecoder = A2(
 	$elm$json$Json$Decode$map,
 	$mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$buttonFromId,
 	A2($elm$json$Json$Decode$field, 'button', $elm$json$Json$Decode$int));
-var $elm$json$Json$Decode$float = _Json_decodeFloat;
 var $mpizenberg$elm_pointer_events$Internal$Decode$clientPos = A3(
 	$elm$json$Json$Decode$map2,
 	F2(
@@ -11177,27 +11362,22 @@ var $author$project$Logic$App$Msg$UpdatePatternInputField = function (a) {
 	return {$: 'UpdatePatternInputField', a: a};
 };
 var $elm$json$Json$Decode$andThen = _Json_andThen;
-var $author$project$Logic$App$Msg$DragOver = F3(
-	function (a, b, c) {
-		return {$: 'DragOver', a: a, b: b, c: c};
+var $author$project$Logic$App$Msg$DragOver = F2(
+	function (a, b) {
+		return {$: 'DragOver', a: a, b: b};
 	});
-var $author$project$Logic$App$Msg$Drop = function (a) {
-	return {$: 'Drop', a: a};
-};
+var $author$project$Logic$App$Msg$Drop = {$: 'Drop'};
 var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$MoveOnDrop = {$: 'MoveOnDrop'};
 var $elm$core$Basics$always = F2(
 	function (a, _v0) {
 		return a;
 	});
-var $author$project$Components$App$Panels$PatternPanel$dropTargetConfig = function (index) {
-	return {
-		dropEffect: $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$MoveOnDrop,
-		onDrop: $elm$core$Basics$always(
-			$author$project$Logic$App$Msg$Drop(index)),
-		onEnter: $elm$core$Maybe$Nothing,
-		onLeave: $elm$core$Maybe$Nothing,
-		onOver: $author$project$Logic$App$Msg$DragOver(index)
-	};
+var $author$project$Components$App$Panels$PatternPanel$dropTargetConfig = {
+	dropEffect: $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$MoveOnDrop,
+	onDrop: $elm$core$Basics$always($author$project$Logic$App$Msg$Drop),
+	onEnter: $elm$core$Maybe$Nothing,
+	onLeave: $elm$core$Maybe$Nothing,
+	onOver: $author$project$Logic$App$Msg$DragOver
 };
 var $elm$json$Json$Decode$fail = _Json_fail;
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
@@ -11258,7 +11438,6 @@ var $mpizenberg$elm_pointer_events$Internal$Decode$dynamicListOf = function (ite
 		A2($elm$json$Json$Decode$field, 'length', $elm$json$Json$Decode$int));
 };
 var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$fileListDecoder = $mpizenberg$elm_pointer_events$Internal$Decode$dynamicListOf;
-var $elm$json$Json$Decode$list = _Json_decodeList;
 var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$dataTransferDecoder = A4(
 	$elm$json$Json$Decode$map3,
 	$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$DataTransfer,
@@ -11349,10 +11528,6 @@ var $elm$html$Html$Events$stopPropagationOn = F2(
 			$elm$virtual_dom$VirtualDom$on,
 			event,
 			$elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
-	});
-var $elm$json$Json$Decode$at = F2(
-	function (fields, decoder) {
-		return A3($elm$core$List$foldr, $elm$json$Json$Decode$field, decoder, fields);
 	});
 var $elm$html$Html$Events$targetValue = A2(
 	$elm$json$Json$Decode$at,
@@ -11746,80 +11921,105 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F3(
 	function (patternList, dragoverIndex, dragstartIndex) {
 		var renderPattern = F2(
 			function (index, pattern) {
-				return A2(
-					$elm$html$Html$div,
-					_Utils_ap(
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$class('outer_box'),
-								A2(
-								$elm$html$Html$Attributes$attribute,
-								'data-index',
-								$elm$core$String$fromInt(index)),
-								A2($elm$html$Html$Attributes$attribute, 'draggable', 'true')
-							]),
-						_Utils_ap(
-							$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$onSourceDrag(
-								$author$project$Components$App$Panels$PatternPanel$draggedSourceConfig(index)),
-							_Utils_ap(
-								$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$onDropTarget(
-									$author$project$Components$App$Panels$PatternPanel$dropTargetConfig(index)),
-								_Utils_ap(
-									_Utils_eq(index, dragstartIndex) ? _List_fromArray(
-										[
-											A2($elm$html$Html$Attributes$style, 'opacity', '40%')
-										]) : _List_fromArray(
-										[
-											A2($elm$html$Html$Attributes$style, 'opacity', '100%')
-										]),
-									(_Utils_eq(dragoverIndex, index) && (!_Utils_eq(index, dragstartIndex))) ? _List_fromArray(
-										[
-											$elm$html$Html$Attributes$class('dragover')
-										]) : _List_Nil)))),
-					_List_fromArray(
+				return _Utils_ap(
+					(_Utils_eq(dragoverIndex, index) && (!_Utils_eq(index, dragstartIndex))) ? _List_fromArray(
 						[
 							A2(
 							$elm$html$Html$div,
 							_List_fromArray(
 								[
-									$elm$html$Html$Attributes$class('inner_box')
+									$elm$html$Html$Attributes$class('seperator')
 								]),
+							_List_Nil)
+						]) : _List_Nil,
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$div,
+							_Utils_ap(
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('outer_box'),
+										A2(
+										$elm$html$Html$Attributes$attribute,
+										'data-index',
+										$elm$core$String$fromInt(index)),
+										A2($elm$html$Html$Attributes$attribute, 'draggable', 'true')
+									]),
+								_Utils_ap(
+									$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$onSourceDrag(
+										$author$project$Components$App$Panels$PatternPanel$draggedSourceConfig(index)),
+									_Utils_ap(
+										_Utils_eq(index, dragstartIndex) ? _List_fromArray(
+											[
+												A2($elm$html$Html$Attributes$style, 'opacity', '40%')
+											]) : _List_fromArray(
+											[
+												A2($elm$html$Html$Attributes$style, 'opacity', '100%')
+											]),
+										(_Utils_eq(dragoverIndex, index) && (!_Utils_eq(index, dragstartIndex))) ? _List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('dragover')
+											]) : _List_Nil))),
 							_List_fromArray(
 								[
 									A2(
-									$elm$html$Html$button,
-									_List_fromArray(
-										[
-											$elm$html$Html$Attributes$class('x_button'),
-											$elm$html$Html$Events$onClick(
-											A2($author$project$Logic$App$Msg$RemoveFromPatternArray, index, index + 1))
-										]),
-									_List_fromArray(
-										[$author$project$Components$Icon$XButton$xButton])),
-									A2(
 									$elm$html$Html$div,
 									_List_fromArray(
 										[
-											$elm$html$Html$Attributes$class('text')
+											$elm$html$Html$Attributes$class('inner_box')
 										]),
 									_List_fromArray(
 										[
-											$elm$html$Html$text(pattern.displayName)
-										])),
-									A2(
-									$elm$html$Html$div,
-									_List_fromArray(
-										[
-											$elm$html$Html$Attributes$class('move_button')
-										]),
-									_List_fromArray(
-										[$author$project$Components$Icon$MoveButton$moveButton]))
+											A2(
+											$elm$html$Html$button,
+											_List_fromArray(
+												[
+													$elm$html$Html$Attributes$class('x_button'),
+													$elm$html$Html$Events$onClick(
+													A2($author$project$Logic$App$Msg$RemoveFromPatternArray, index, index + 1))
+												]),
+											_List_fromArray(
+												[$author$project$Components$Icon$XButton$xButton])),
+											A2(
+											$elm$html$Html$div,
+											_List_fromArray(
+												[
+													$elm$html$Html$Attributes$class('text')
+												]),
+											_List_fromArray(
+												[
+													$elm$html$Html$text(pattern.displayName)
+												])),
+											A2(
+											$elm$html$Html$div,
+											_List_fromArray(
+												[
+													$elm$html$Html$Attributes$class('move_button')
+												]),
+											_List_fromArray(
+												[$author$project$Components$Icon$MoveButton$moveButton]))
+										]))
 								]))
 						]));
 			});
 		var patterns = $elm$core$List$unzip(
 			$elm$core$Array$toList(patternList)).a;
-		return A2($elm$core$List$indexedMap, renderPattern, patterns);
+		return _Utils_ap(
+			$elm$core$List$concat(
+				A2($elm$core$List$indexedMap, renderPattern, patterns)),
+			(_Utils_cmp(
+				dragoverIndex,
+				$elm$core$List$length(patterns) - 1) > 0) ? _List_fromArray(
+				[
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('seperator')
+						]),
+					_List_Nil)
+				]) : _List_Nil);
 	});
 var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
 var $author$project$Components$App$Panels$Utils$visibilityToDisplayStyle = function (visibility) {
@@ -11870,8 +12070,7 @@ var $author$project$Components$App$Panels$PatternPanel$patternPanel = function (
 				A2(
 					$elm$core$List$cons,
 					$elm$html$Html$Attributes$id('pattern_draggable_container'),
-					$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$onDropTarget(
-						$author$project$Components$App$Panels$PatternPanel$dropTargetConfig(model.ui.mouseOverElementIndex))),
+					$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$onDropTarget($author$project$Components$App$Panels$PatternPanel$dropTargetConfig)),
 				$elm$core$List$reverse(
 					A3($author$project$Components$App$Panels$PatternPanel$renderPatternList, model.patternArray, model.ui.mouseOverElementIndex, model.ui.dragging.b))),
 				A2(
@@ -12089,43 +12288,6 @@ var $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsHtmlMsg = functio
 				]))
 		]);
 };
-var $elm$core$Elm$JsArray$indexedMap = _JsArray_indexedMap;
-var $elm$core$Array$indexedMap = F2(
-	function (func, _v0) {
-		var len = _v0.a;
-		var tree = _v0.c;
-		var tail = _v0.d;
-		var initialBuilder = {
-			nodeList: _List_Nil,
-			nodeListSize: 0,
-			tail: A3(
-				$elm$core$Elm$JsArray$indexedMap,
-				func,
-				$elm$core$Array$tailIndex(len),
-				tail)
-		};
-		var helper = F2(
-			function (node, builder) {
-				if (node.$ === 'SubTree') {
-					var subTree = node.a;
-					return A3($elm$core$Elm$JsArray$foldl, helper, builder, subTree);
-				} else {
-					var leaf = node.a;
-					var offset = builder.nodeListSize * $elm$core$Array$branchFactor;
-					var mappedLeaf = $elm$core$Array$Leaf(
-						A3($elm$core$Elm$JsArray$indexedMap, func, offset, leaf));
-					return {
-						nodeList: A2($elm$core$List$cons, mappedLeaf, builder.nodeList),
-						nodeListSize: builder.nodeListSize + 1,
-						tail: builder.tail
-					};
-				}
-			});
-		return A2(
-			$elm$core$Array$builderToArray,
-			true,
-			A3($elm$core$Elm$JsArray$foldl, helper, initialBuilder, tree));
-	});
 var $author$project$Settings$Theme$iotaColorMap = function (iota) {
 	switch (iota.$) {
 		case 'Null':

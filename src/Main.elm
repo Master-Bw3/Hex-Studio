@@ -9,7 +9,7 @@ import Components.App.Content exposing (content)
 import Components.App.Grid exposing (..)
 import FontAwesome.Solid
 import Html exposing (..)
-import Json.Decode
+import Json.Decode exposing (Decoder)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (..)
 import Logic.App.PatternList.PatternArray exposing (addToPatternArray, updateDrawingColors)
@@ -21,6 +21,7 @@ import Logic.App.Utils.Utils exposing (removeFromArray)
 import Ports.GetElementBoundingBoxById as GetElementBoundingBoxById
 import Ports.HexNumGen as HexNumGen
 import Settings.Theme exposing (..)
+import String exposing (fromInt)
 import Task
 import Time
 
@@ -46,6 +47,7 @@ init _ =
             , patternInputLocation = ( 0, 0 )
             , mouseOverElementIndex = -1
             , dragging = ( False, -1 )
+            , patternElementMiddleLocations = []
             }
       , grid =
             { height = 0
@@ -232,7 +234,12 @@ update msg model =
                 , grid = { grid | points = updatemidLineOffsets points (Time.posixToMillis newTime) }
                 , ui = { ui | suggestionIndex = autocompleteIndex }
               }
-            , GetElementBoundingBoxById.requestBoundingBox "add_pattern_input"
+            , Cmd.batch
+                [ GetElementBoundingBoxById.requestBoundingBox "#add_pattern_input"
+                , Array.indexedMap (\index _ -> "[data-index=\"" ++ fromInt index ++ "\"]") model.patternArray
+                    |> Array.toList
+                    |> GetElementBoundingBoxById.requestBoundingBoxes
+                ]
             )
 
         UpdatePatternInputField text ->
@@ -308,10 +315,26 @@ update msg model =
         RecieveInputBoundingBox result ->
             case result of
                 Ok value ->
-                    ( { model | ui = { ui | patternInputLocation = ( value.left, value.bottom ) } }, Cmd.none )
+                    if value.element == "#add_pattern_input" then
+                        ( { model | ui = { ui | patternInputLocation = ( value.left, value.bottom ) } }, Cmd.none )
+
+                    else
+                        ( model, Cmd.none )
 
                 Err _ ->
                     ( model, Cmd.none )
+
+        RecieveInputBoundingBoxes resultList ->
+            let
+                handleResult result =
+                    case result of
+                        Ok value ->
+                            toFloat (value.top + value.bottom) / 2
+
+                        Err _ ->
+                            0.0
+            in
+            ( { model | ui = { ui | patternElementMiddleLocations = List.map handleResult resultList } }, Cmd.none )
 
         DragStart index _ _ ->
             ( { model | ui = { ui | mouseOverElementIndex = index, dragging = ( True, index ) } }, Cmd.none )
@@ -319,11 +342,69 @@ update msg model =
         DragEnd ->
             ( { model | ui = { ui | mouseOverElementIndex = -1, dragging = ( False, -1 ) } }, Cmd.none )
 
-        DragOver index _ _ ->
-            ( { model | ui = { ui | mouseOverElementIndex = index } }, Cmd.none )
-
-        Drop index ->
+        DragOver _ eventJson ->
             let
+                event =
+                    Json.Decode.decodeValue mouseMoveDecoder eventJson
+
+                mousePos =
+                    case event of
+                        Ok value ->
+                            ( toFloat value.pageX, toFloat value.pageY )
+
+                        Err _ ->
+                            ( 0.0, 0.0 )
+
+                closestElementToMouseY =
+                    List.indexedMap (\index yPos -> ( index, Tuple.second mousePos - yPos )) model.ui.patternElementMiddleLocations
+                        |> List.filter (\element -> Tuple.second element > 0)
+                        |> List.sortWith
+                            (\a b ->
+                                case compare (Tuple.second a) (Tuple.second b) of
+                                    LT ->
+                                        LT
+
+                                    EQ ->
+                                        EQ
+
+                                    GT ->
+                                        GT
+                            )
+                        |> List.head
+                        |> Maybe.withDefault ( List.length model.ui.patternElementMiddleLocations, 0 )
+                        |> Tuple.first 
+                        |> Debug.log "index"
+            in
+            ( { model
+                | mousePos = mousePos
+                , ui = { ui | mouseOverElementIndex = closestElementToMouseY }
+              }
+            , Cmd.none
+            )
+
+        Drag event ->
+            let
+                mouseEvent =
+                    event.mouseEvent
+
+                mousePos =
+                    mouseEvent.clientPos
+            in
+            ( { model
+                | mousePos = mousePos
+              }
+            , Cmd.none
+            )
+
+        Drop ->
+            let
+                index =
+                    if model.ui.mouseOverElementIndex > originIndex then
+                        model.ui.mouseOverElementIndex - 1
+
+                    else
+                        model.ui.mouseOverElementIndex
+
                 originIndex =
                     Tuple.second model.ui.dragging
 
@@ -362,11 +443,22 @@ subscriptions _ =
         , Time.every 50 Tick
         , HexNumGen.recieveNumber RecieveGeneratedNumberLiteral
         , GetElementBoundingBoxById.recieveBoundingBox (Json.Decode.decodeValue locationDecoder >> RecieveInputBoundingBox)
+        , GetElementBoundingBoxById.recieveBoundingBoxes (List.map (Json.Decode.decodeValue locationDecoder) >> RecieveInputBoundingBoxes)
         ]
 
 
+mouseMoveDecoder : Decoder MouseMoveData
+mouseMoveDecoder =
+    Json.Decode.map4 MouseMoveData
+        (Json.Decode.at [ "pageX" ] Json.Decode.int)
+        (Json.Decode.at [ "pageY" ] Json.Decode.int)
+        (Json.Decode.at [ "target", "offsetHeight" ] Json.Decode.float)
+        (Json.Decode.at [ "target", "offsetWidth" ] Json.Decode.float)
+
+
 locationDecoder =
-    Json.Decode.map4 ElementLocation
+    Json.Decode.map5 ElementLocation
+        (Json.Decode.field "element" Json.Decode.string)
         (Json.Decode.field "left" Json.Decode.int)
         (Json.Decode.field "bottom" Json.Decode.int)
         (Json.Decode.field "top" Json.Decode.int)

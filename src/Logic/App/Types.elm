@@ -90,7 +90,8 @@ type alias IntCoordinatePair =
 
 
 type alias ElementLocation =
-    { left : Int
+    { element : String
+    , left : Int
     , bottom : Int
     , top : Int
     , right : Int

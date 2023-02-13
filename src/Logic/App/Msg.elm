@@ -29,11 +29,15 @@ type Msg
     | SelectFirstSuggestion
     | RequestInputBoundingBox String
     | RecieveInputBoundingBox (Result Json.Decode.Error ElementLocation)
+    | RecieveInputBoundingBoxes (List (Result Json.Decode.Error ElementLocation))
     | DragStart Int Drag.EffectAllowed Value
     | DragEnd
-    | DragOver Int Drag.DropEffect Value
-    | Drop Int
+    | DragOver Drag.DropEffect Value
+    | Drag Drag.Event
+    | Drop
     | SetFocus String
+
+one = Html.Events.Extra.Mouse.onLeave
 
 type alias MouseMoveData =
     { pageX : Int

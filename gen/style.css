@@ -171,12 +171,17 @@ body {
     background-color: var(--primary_lightest);
 }
 
-.dragover::after {
+.seperator {
+    height: 2em;
+    width: 100%;
+}
+
+/* .dragover::after {
     content: "";
     height: 2em;
     width: 100%;
     background-color: var(--primary_medium);
-}
+} */
 
 .outer_box > .inner_box {
     display: flex;
@@ -465,7 +470,7 @@ button {
     font-family: 'fira';
     width: 240px;
     z-index: 100;
-    transform: translate(1px , -1px);
+    transform: translate(1px, -1px);
 }
 
 .autocomplete_container ::marker {

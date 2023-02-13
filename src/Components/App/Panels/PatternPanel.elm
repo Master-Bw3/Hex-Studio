@@ -15,11 +15,11 @@ import FontAwesome.Styles as Icon
 import Html exposing (..)
 import Html.Attributes exposing (attribute, class, id, placeholder, style, value)
 import Html.Events exposing (keyCode, onBlur, onClick, onFocus, onInput, preventDefaultOn)
-import Html.Events.Extra.Drag exposing (DraggedSourceConfig, DropTargetConfig, onDropTarget, onSourceDrag)
+import Html.Events.Extra.Drag exposing (DraggedSourceConfig, DropTargetConfig, Event, onDropTarget, onSourceDrag)
 import Html.Events.Extra.Mouse exposing (onOver, onWithOptions)
-import Json.Decode as Json
+import Json.Decode as Json exposing (Decoder, at, float, int, map4)
 import Logic.App.Model exposing (Model)
-import Logic.App.Msg exposing (Msg(..))
+import Logic.App.Msg exposing (MouseMoveData, Msg(..))
 import Logic.App.Patterns.PatternRegistry exposing (patternRegistry)
 import Logic.App.Types exposing (GridPoint, Panel(..), PatternType)
 import String exposing (fromInt)
@@ -60,7 +60,7 @@ patternPanel model =
             ]
             [ text "Pattern Order ∨" ]
         , div
-            (id "pattern_draggable_container" :: onDropTarget (dropTargetConfig model.ui.mouseOverElementIndex))
+            (id "pattern_draggable_container" :: onDropTarget dropTargetConfig)
             (List.reverse (renderPatternList model.patternArray model.ui.mouseOverElementIndex (Tuple.second model.ui.dragging)))
         , div
             [ id "add_pattern"
@@ -96,11 +96,11 @@ patternPanel model =
         ]
 
 
-dropTargetConfig : Int -> DropTargetConfig Msg
-dropTargetConfig index =
+dropTargetConfig : DropTargetConfig Msg
+dropTargetConfig =
     { dropEffect = Html.Events.Extra.Drag.MoveOnDrop
-    , onOver = DragOver index
-    , onDrop = always (Drop index)
+    , onOver = DragOver
+    , onDrop = always Drop
     , onEnter = Nothing
     , onLeave = Nothing
     }
@@ -122,33 +122,45 @@ renderPatternList patternList dragoverIndex dragstartIndex =
         patterns =
             Tuple.first <| List.unzip <| Array.toList patternList
 
-        renderPattern : Int -> PatternType -> Html Msg
+        renderPattern : Int -> PatternType -> List (Html Msg)
         renderPattern index pattern =
-            div
-                ([ class "outer_box"
-                 , attribute "data-index" <| fromInt index
-                 , attribute "draggable" "true"
-                 ]
-                    ++ onSourceDrag (draggedSourceConfig index)
-                    ++ onDropTarget (dropTargetConfig index)
-                    ++ (if index == dragstartIndex then
-                            [ style "opacity" "40%" ]
+            (if dragoverIndex == index && index /= dragstartIndex then
+                [ div [ class "seperator" ] [] ]
 
-                        else
-                            [ style "opacity" "100%" ]
-                       )
-                    ++ (if dragoverIndex == index && index /= dragstartIndex then
-                            [ class "dragover" ]
+             else
+                []
+            )
+                ++ [ div
+                        ([ class "outer_box"
+                         , attribute "data-index" <| fromInt index
+                         , attribute "draggable" "true"
+                         ]
+                            ++ onSourceDrag (draggedSourceConfig index)
+                            ++ (if index == dragstartIndex then
+                                    [ style "opacity" "40%" ]
 
-                        else
-                            []
-                       )
-                )
-                [ div [ class "inner_box" ]
-                    [ button [ class "x_button", onClick (RemoveFromPatternArray index (index + 1)) ] [ xButton ]
-                    , div [ class "text" ] [ text pattern.displayName ]
-                    , div [ class "move_button" ] [ moveButton ]
-                    ]
-                ]
+                                else
+                                    [ style "opacity" "100%" ]
+                               )
+                            ++ (if dragoverIndex == index && index /= dragstartIndex then
+                                    [ class "dragover" ]
+
+                                else
+                                    []
+                               )
+                        )
+                        [ div [ class "inner_box" ]
+                            [ button [ class "x_button", onClick (RemoveFromPatternArray index (index + 1)) ] [ xButton ]
+                            , div [ class "text" ] [ text pattern.displayName ]
+                            , div [ class "move_button" ] [ moveButton ]
+                            ]
+                        ]
+                   ]
     in
-    List.indexedMap renderPattern patterns
+    List.concat (List.indexedMap renderPattern patterns)
+        ++ (if dragoverIndex > List.length patterns - 1 then
+                [ div [ class "seperator" ] [] ]
+
+            else
+                []
+           )

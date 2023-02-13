@@ -24,22 +24,38 @@
                 app.ports.recieveNumber.send(hexNumGen.generate_number(input));
             });
 
-            function getElmentBoundingBoxById (id) {
-                let element = document.getElementById(id)
-                let boundingBox = element.getBoundingClientRect()
-                boundingBox = {
-                    "left": Math.round(boundingBox.left),
-                    "bottom": Math.round(boundingBox.bottom),
-                    "right": Math.round(boundingBox.right),
-                    "top" : Math.round(boundingBox.top)
+            function getElmentBoundingBoxById(id) {
+                try {
+                    let element = document.querySelector(id);
+                    let boundingBox = element.getBoundingClientRect();
+                    boundingBox = {
+                        element: id,
+                        left: Math.round(boundingBox.left),
+                        bottom: Math.round(boundingBox.bottom),
+                        right: Math.round(boundingBox.right),
+                        top: Math.round(boundingBox.top),
+                    };
+                    return boundingBox;
+                } catch (error) {
+                    return false;
                 }
-                return boundingBox
-}
+            }
+            function getElmentBoundingBoxes(ids) {
+                let result = [];
+                for (let i = 0; i < ids.length; i++) {
+                    const element = ids[i];
+                    result.push(getElmentBoundingBoxById(element));
+                }
+                return result;
+            }
 
             app.ports.requestBoundingBox.subscribe(function (input) {
                 app.ports.recieveBoundingBox.send(getElmentBoundingBoxById(input));
             });
+
+            app.ports.requestBoundingBoxes.subscribe(function (input) {
+                app.ports.recieveBoundingBoxes.send(getElmentBoundingBoxes(input));
+            });
         </script>
     </body>
-    
-</html> 
+</html>
