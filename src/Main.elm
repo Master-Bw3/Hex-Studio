@@ -42,6 +42,7 @@ init _ =
             { openPanels = [ PatternPanel ]
             , patternInputField = ""
             , suggestionIndex = 0
+            , selectedInputID = ""
             , patternInputLocation = ( 0, 0 )
             , mouseOverElementIndex = -1
             , dragging = ( False, -1 )
@@ -319,10 +320,6 @@ update msg model =
             ( { model | ui = { ui | mouseOverElementIndex = -1, dragging = ( False, -1 ) } }, Cmd.none )
 
         DragOver index _ _ ->
-            let
-                _ =
-                    Debug.log "index" index
-            in
             ( { model | ui = { ui | mouseOverElementIndex = index } }, Cmd.none )
 
         Drop index ->
@@ -346,6 +343,9 @@ update msg model =
               }
             , Cmd.none
             )
+
+        SetFocus id ->
+            ( { model | ui = { ui | selectedInputID = id } }, Cmd.none )
 
 
 

@@ -1,7 +1,7 @@
 module Components.App.PatternAutoComplete exposing (..)
 
 import Html exposing (..)
-import Html.Attributes exposing (style, class)
+import Html.Attributes exposing (class, style)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (Msg(..))
 import Logic.App.Patterns.PatternRegistry exposing (patternRegistry)
@@ -53,10 +53,17 @@ patternInputAutoComplete model =
                         )
     in
     ( div
-        [ class "autocomplete_container"
-        , style "left" <| (fromInt <| Tuple.first model.ui.patternInputLocation) ++ "px"
-        , style "top" <| (fromInt <| Tuple.second model.ui.patternInputLocation) ++ "px"
-        ]
+        ([ class "autocomplete_container"
+         , style "left" <| (fromInt <| Tuple.first model.ui.patternInputLocation) ++ "px"
+         , style "top" <| (fromInt <| Tuple.second model.ui.patternInputLocation) ++ "px"
+         ]
+            ++ (if model.ui.patternInputLocation == ( 0, 0 ) || model.ui.selectedInputID == "" then
+                    [ style "display" "none" ]
+
+                else
+                    []
+               )
+        )
         (List.indexedMap constructOption (patternInputSuggestionList model))
     , getHighlightedOption
     )

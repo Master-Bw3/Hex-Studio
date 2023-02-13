@@ -14,7 +14,7 @@ import FontAwesome.Solid as Icon
 import FontAwesome.Styles as Icon
 import Html exposing (..)
 import Html.Attributes exposing (attribute, class, id, placeholder, style, value)
-import Html.Events exposing (keyCode, onClick, onInput, preventDefaultOn)
+import Html.Events exposing (keyCode, onBlur, onClick, onFocus, onInput, preventDefaultOn)
 import Html.Events.Extra.Drag exposing (DraggedSourceConfig, DropTargetConfig, onDropTarget, onSourceDrag)
 import Html.Events.Extra.Mouse exposing (onOver, onWithOptions)
 import Json.Decode as Json
@@ -60,7 +60,7 @@ patternPanel model =
             ]
             [ text "Pattern Order ∨" ]
         , div
-            [ id "pattern_draggable_container" ]
+            (id "pattern_draggable_container" :: onDropTarget (dropTargetConfig model.ui.mouseOverElementIndex))
             (List.reverse (renderPatternList model.patternArray model.ui.mouseOverElementIndex (Tuple.second model.ui.dragging)))
         , div
             [ id "add_pattern"
@@ -76,6 +76,8 @@ patternPanel model =
                         , placeholder "Add a pattern"
                         , attribute "autocomplete" "off"
                         , onInput UpdatePatternInputField
+                        , onFocus (SetFocus "add_pattern_input")
+                        , onBlur (SetFocus "")
                         , value model.ui.patternInputField
                         , preventDefaultOn "keydown" (Json.andThen detectKey keyCode)
                         ]
@@ -135,7 +137,7 @@ renderPatternList patternList dragoverIndex dragstartIndex =
                         else
                             [ style "opacity" "100%" ]
                        )
-                    ++ (if dragoverIndex == index && index /= dragstartIndex  then
+                    ++ (if dragoverIndex == index && index /= dragstartIndex then
                             [ class "dragover" ]
 
                         else

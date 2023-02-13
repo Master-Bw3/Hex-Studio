@@ -33,6 +33,7 @@ type Msg
     | DragEnd
     | DragOver Int Drag.DropEffect Value
     | Drop Int
+    | SetFocus String
 
 type alias MouseMoveData =
     { pageX : Int

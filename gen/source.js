@@ -5462,6 +5462,7 @@ var $author$project$Main$init = function (_v0) {
 					[$author$project$Logic$App$Types$PatternPanel]),
 				patternInputField: '',
 				patternInputLocation: _Utils_Tuple2(0, 0),
+				selectedInputID: '',
 				suggestionIndex: 0
 			},
 			window: {height: 0.0, width: 0.0}
@@ -9870,7 +9871,6 @@ var $elm_community$array_extra$Array$Extra$insertAt = F2(
 			}
 		};
 	});
-var $elm$core$Debug$log = _Debug_log;
 var $elm$core$Basics$min = F2(
 	function (x, y) {
 		return (_Utils_cmp(x, y) < 0) ? x : y;
@@ -10509,7 +10509,6 @@ var $author$project$Main$update = F2(
 					$elm$core$Platform$Cmd$none);
 			case 'DragOver':
 				var index = msg.a;
-				var _v4 = A2($elm$core$Debug$log, 'index', index);
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
@@ -10519,13 +10518,13 @@ var $author$project$Main$update = F2(
 								{mouseOverElementIndex: index})
 						}),
 					$elm$core$Platform$Cmd$none);
-			default:
+			case 'Drop':
 				var index = msg.a;
 				var originIndex = model.ui.dragging.b;
 				var newPatternArray = function () {
-					var _v5 = A2($elm$core$Array$get, originIndex, patternArray);
-					if (_v5.$ === 'Just') {
-						var element = _v5.a;
+					var _v4 = A2($elm$core$Array$get, originIndex, patternArray);
+					if (_v4.$ === 'Just') {
+						var element = _v4.a;
 						return A3(
 							$elm_community$array_extra$Array$Extra$insertAt,
 							index,
@@ -10558,6 +10557,17 @@ var $author$project$Main$update = F2(
 									dragging: _Utils_Tuple2(false, -1),
 									mouseOverElementIndex: -1
 								})
+						}),
+					$elm$core$Platform$Cmd$none);
+			default:
+				var id = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							ui: _Utils_update(
+								ui,
+								{selectedInputID: id})
 						}),
 					$elm$core$Platform$Cmd$none);
 		}
@@ -11160,10 +11170,35 @@ var $author$project$Logic$App$Msg$SelectNextSuggestion = function (a) {
 var $author$project$Logic$App$Msg$SelectPreviousSuggestion = function (a) {
 	return {$: 'SelectPreviousSuggestion', a: a};
 };
+var $author$project$Logic$App$Msg$SetFocus = function (a) {
+	return {$: 'SetFocus', a: a};
+};
 var $author$project$Logic$App$Msg$UpdatePatternInputField = function (a) {
 	return {$: 'UpdatePatternInputField', a: a};
 };
 var $elm$json$Json$Decode$andThen = _Json_andThen;
+var $author$project$Logic$App$Msg$DragOver = F3(
+	function (a, b, c) {
+		return {$: 'DragOver', a: a, b: b, c: c};
+	});
+var $author$project$Logic$App$Msg$Drop = function (a) {
+	return {$: 'Drop', a: a};
+};
+var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$MoveOnDrop = {$: 'MoveOnDrop'};
+var $elm$core$Basics$always = F2(
+	function (a, _v0) {
+		return a;
+	});
+var $author$project$Components$App$Panels$PatternPanel$dropTargetConfig = function (index) {
+	return {
+		dropEffect: $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$MoveOnDrop,
+		onDrop: $elm$core$Basics$always(
+			$author$project$Logic$App$Msg$Drop(index)),
+		onEnter: $elm$core$Maybe$Nothing,
+		onLeave: $elm$core$Maybe$Nothing,
+		onOver: $author$project$Logic$App$Msg$DragOver(index)
+	};
+};
 var $elm$json$Json$Decode$fail = _Json_fail;
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
 var $elm$html$Html$input = _VirtualDom_node('input');
@@ -11178,10 +11213,128 @@ var $elm$html$Html$Events$on = F2(
 			event,
 			$elm$virtual_dom$VirtualDom$Normal(decoder));
 	});
+var $elm$html$Html$Events$onBlur = function (msg) {
+	return A2(
+		$elm$html$Html$Events$on,
+		'blur',
+		$elm$json$Json$Decode$succeed(msg));
+};
 var $elm$html$Html$Events$onClick = function (msg) {
 	return A2(
 		$elm$html$Html$Events$on,
 		'click',
+		$elm$json$Json$Decode$succeed(msg));
+};
+var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$Event = F2(
+	function (dataTransfer, mouseEvent) {
+		return {dataTransfer: dataTransfer, mouseEvent: mouseEvent};
+	});
+var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$DataTransfer = F3(
+	function (files, types, dropEffect) {
+		return {dropEffect: dropEffect, files: files, types: types};
+	});
+var $elm$file$File$decoder = _File_decoder;
+var $mpizenberg$elm_pointer_events$Internal$Decode$all = A2(
+	$elm$core$List$foldr,
+	$elm$json$Json$Decode$map2($elm$core$List$cons),
+	$elm$json$Json$Decode$succeed(_List_Nil));
+var $mpizenberg$elm_pointer_events$Internal$Decode$dynamicListOf = function (itemDecoder) {
+	var decodeOne = function (n) {
+		return A2(
+			$elm$json$Json$Decode$field,
+			$elm$core$String$fromInt(n),
+			itemDecoder);
+	};
+	var decodeN = function (n) {
+		return $mpizenberg$elm_pointer_events$Internal$Decode$all(
+			A2(
+				$elm$core$List$map,
+				decodeOne,
+				A2($elm$core$List$range, 0, n - 1)));
+	};
+	return A2(
+		$elm$json$Json$Decode$andThen,
+		decodeN,
+		A2($elm$json$Json$Decode$field, 'length', $elm$json$Json$Decode$int));
+};
+var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$fileListDecoder = $mpizenberg$elm_pointer_events$Internal$Decode$dynamicListOf;
+var $elm$json$Json$Decode$list = _Json_decodeList;
+var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$dataTransferDecoder = A4(
+	$elm$json$Json$Decode$map3,
+	$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$DataTransfer,
+	A2(
+		$elm$json$Json$Decode$field,
+		'files',
+		$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$fileListDecoder($elm$file$File$decoder)),
+	A2(
+		$elm$json$Json$Decode$field,
+		'types',
+		$elm$json$Json$Decode$list($elm$json$Json$Decode$string)),
+	A2($elm$json$Json$Decode$field, 'dropEffect', $elm$json$Json$Decode$string));
+var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$eventDecoder = A3(
+	$elm$json$Json$Decode$map2,
+	$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$Event,
+	A2($elm$json$Json$Decode$field, 'dataTransfer', $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$dataTransferDecoder),
+	$mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$eventDecoder);
+var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$on = F2(
+	function (event, tag) {
+		return A2(
+			$elm$html$Html$Events$custom,
+			event,
+			A2(
+				$elm$json$Json$Decode$map,
+				function (ev) {
+					return {
+						message: tag(ev),
+						preventDefault: true,
+						stopPropagation: true
+					};
+				},
+				$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$eventDecoder));
+	});
+var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$valuePreventedOn = F2(
+	function (event, tag) {
+		return A2(
+			$elm$html$Html$Events$custom,
+			event,
+			A2(
+				$elm$json$Json$Decode$map,
+				function (value) {
+					return {
+						message: tag(value),
+						preventDefault: true,
+						stopPropagation: true
+					};
+				},
+				$elm$json$Json$Decode$value));
+	});
+var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$onDropTarget = function (config) {
+	return A2(
+		$elm$core$List$filterMap,
+		$elm$core$Basics$identity,
+		_List_fromArray(
+			[
+				$elm$core$Maybe$Just(
+				A2(
+					$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$valuePreventedOn,
+					'dragover',
+					config.onOver(config.dropEffect))),
+				$elm$core$Maybe$Just(
+				A2($mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$on, 'drop', config.onDrop)),
+				A2(
+				$elm$core$Maybe$map,
+				$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$on('dragenter'),
+				config.onEnter),
+				A2(
+				$elm$core$Maybe$map,
+				$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$on('dragleave'),
+				config.onLeave)
+			]));
+};
+var $elm$html$Html$Events$onFocus = function (msg) {
+	return A2(
+		$elm$html$Html$Events$on,
+		'focus',
 		$elm$json$Json$Decode$succeed(msg));
 };
 var $elm$html$Html$Events$alwaysStop = function (x) {
@@ -11360,18 +11513,25 @@ var $author$project$Components$App$PatternAutoComplete$patternInputAutoComplete 
 	return _Utils_Tuple2(
 		A2(
 			$elm$html$Html$div,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$class('autocomplete_container'),
-					A2(
-					$elm$html$Html$Attributes$style,
-					'left',
-					$elm$core$String$fromInt(model.ui.patternInputLocation.a) + 'px'),
-					A2(
-					$elm$html$Html$Attributes$style,
-					'top',
-					$elm$core$String$fromInt(model.ui.patternInputLocation.b) + 'px')
-				]),
+			_Utils_ap(
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('autocomplete_container'),
+						A2(
+						$elm$html$Html$Attributes$style,
+						'left',
+						$elm$core$String$fromInt(model.ui.patternInputLocation.a) + 'px'),
+						A2(
+						$elm$html$Html$Attributes$style,
+						'top',
+						$elm$core$String$fromInt(model.ui.patternInputLocation.b) + 'px')
+					]),
+				(_Utils_eq(
+					model.ui.patternInputLocation,
+					_Utils_Tuple2(0, 0)) || (model.ui.selectedInputID === '')) ? _List_fromArray(
+					[
+						A2($elm$html$Html$Attributes$style, 'display', 'none')
+					]) : _List_Nil),
 			A2(
 				$elm$core$List$indexedMap,
 				constructOption,
@@ -11405,34 +11565,12 @@ var $author$project$Logic$App$Msg$DragStart = F3(
 	function (a, b, c) {
 		return {$: 'DragStart', a: a, b: b, c: c};
 	});
-var $elm$core$Basics$always = F2(
-	function (a, _v0) {
-		return a;
-	});
 var $author$project$Components$App$Panels$PatternPanel$draggedSourceConfig = function (id) {
 	return {
 		effectAllowed: {copy: false, link: false, move: true},
 		onDrag: $elm$core$Maybe$Nothing,
 		onEnd: $elm$core$Basics$always($author$project$Logic$App$Msg$DragEnd),
 		onStart: $author$project$Logic$App$Msg$DragStart(id)
-	};
-};
-var $author$project$Logic$App$Msg$DragOver = F3(
-	function (a, b, c) {
-		return {$: 'DragOver', a: a, b: b, c: c};
-	});
-var $author$project$Logic$App$Msg$Drop = function (a) {
-	return {$: 'Drop', a: a};
-};
-var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$MoveOnDrop = {$: 'MoveOnDrop'};
-var $author$project$Components$App$Panels$PatternPanel$dropTargetConfig = function (index) {
-	return {
-		dropEffect: $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$MoveOnDrop,
-		onDrop: $elm$core$Basics$always(
-			$author$project$Logic$App$Msg$Drop(index)),
-		onEnter: $elm$core$Maybe$Nothing,
-		onLeave: $elm$core$Maybe$Nothing,
-		onOver: $author$project$Logic$App$Msg$DragOver(index)
 	};
 };
 var $author$project$Components$Icon$MoveButton$moveButton = A2(
@@ -11492,112 +11630,6 @@ var $author$project$Components$Icon$MoveButton$moveButton = A2(
 					_List_Nil)
 				]))
 		]));
-var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$Event = F2(
-	function (dataTransfer, mouseEvent) {
-		return {dataTransfer: dataTransfer, mouseEvent: mouseEvent};
-	});
-var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$DataTransfer = F3(
-	function (files, types, dropEffect) {
-		return {dropEffect: dropEffect, files: files, types: types};
-	});
-var $elm$file$File$decoder = _File_decoder;
-var $mpizenberg$elm_pointer_events$Internal$Decode$all = A2(
-	$elm$core$List$foldr,
-	$elm$json$Json$Decode$map2($elm$core$List$cons),
-	$elm$json$Json$Decode$succeed(_List_Nil));
-var $mpizenberg$elm_pointer_events$Internal$Decode$dynamicListOf = function (itemDecoder) {
-	var decodeOne = function (n) {
-		return A2(
-			$elm$json$Json$Decode$field,
-			$elm$core$String$fromInt(n),
-			itemDecoder);
-	};
-	var decodeN = function (n) {
-		return $mpizenberg$elm_pointer_events$Internal$Decode$all(
-			A2(
-				$elm$core$List$map,
-				decodeOne,
-				A2($elm$core$List$range, 0, n - 1)));
-	};
-	return A2(
-		$elm$json$Json$Decode$andThen,
-		decodeN,
-		A2($elm$json$Json$Decode$field, 'length', $elm$json$Json$Decode$int));
-};
-var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$fileListDecoder = $mpizenberg$elm_pointer_events$Internal$Decode$dynamicListOf;
-var $elm$json$Json$Decode$list = _Json_decodeList;
-var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$dataTransferDecoder = A4(
-	$elm$json$Json$Decode$map3,
-	$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$DataTransfer,
-	A2(
-		$elm$json$Json$Decode$field,
-		'files',
-		$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$fileListDecoder($elm$file$File$decoder)),
-	A2(
-		$elm$json$Json$Decode$field,
-		'types',
-		$elm$json$Json$Decode$list($elm$json$Json$Decode$string)),
-	A2($elm$json$Json$Decode$field, 'dropEffect', $elm$json$Json$Decode$string));
-var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$eventDecoder = A3(
-	$elm$json$Json$Decode$map2,
-	$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$Event,
-	A2($elm$json$Json$Decode$field, 'dataTransfer', $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$dataTransferDecoder),
-	$mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$eventDecoder);
-var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$on = F2(
-	function (event, tag) {
-		return A2(
-			$elm$html$Html$Events$custom,
-			event,
-			A2(
-				$elm$json$Json$Decode$map,
-				function (ev) {
-					return {
-						message: tag(ev),
-						preventDefault: true,
-						stopPropagation: true
-					};
-				},
-				$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$eventDecoder));
-	});
-var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$valuePreventedOn = F2(
-	function (event, tag) {
-		return A2(
-			$elm$html$Html$Events$custom,
-			event,
-			A2(
-				$elm$json$Json$Decode$map,
-				function (value) {
-					return {
-						message: tag(value),
-						preventDefault: true,
-						stopPropagation: true
-					};
-				},
-				$elm$json$Json$Decode$value));
-	});
-var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$onDropTarget = function (config) {
-	return A2(
-		$elm$core$List$filterMap,
-		$elm$core$Basics$identity,
-		_List_fromArray(
-			[
-				$elm$core$Maybe$Just(
-				A2(
-					$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$valuePreventedOn,
-					'dragover',
-					config.onOver(config.dropEffect))),
-				$elm$core$Maybe$Just(
-				A2($mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$on, 'drop', config.onDrop)),
-				A2(
-				$elm$core$Maybe$map,
-				$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$on('dragenter'),
-				config.onEnter),
-				A2(
-				$elm$core$Maybe$map,
-				$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$on('dragleave'),
-				config.onLeave)
-			]));
-};
 var $elm$html$Html$Attributes$draggable = _VirtualDom_attribute('draggable');
 var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$valueOn = F2(
 	function (event, tag) {
@@ -11835,10 +11867,11 @@ var $author$project$Components$App$Panels$PatternPanel$patternPanel = function (
 					])),
 				A2(
 				$elm$html$Html$div,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$id('pattern_draggable_container')
-					]),
+				A2(
+					$elm$core$List$cons,
+					$elm$html$Html$Attributes$id('pattern_draggable_container'),
+					$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$onDropTarget(
+						$author$project$Components$App$Panels$PatternPanel$dropTargetConfig(model.ui.mouseOverElementIndex))),
 				$elm$core$List$reverse(
 					A3($author$project$Components$App$Panels$PatternPanel$renderPatternList, model.patternArray, model.ui.mouseOverElementIndex, model.ui.dragging.b))),
 				A2(
@@ -11875,6 +11908,10 @@ var $author$project$Components$App$Panels$PatternPanel$patternPanel = function (
 												$elm$html$Html$Attributes$placeholder('Add a pattern'),
 												A2($elm$html$Html$Attributes$attribute, 'autocomplete', 'off'),
 												$elm$html$Html$Events$onInput($author$project$Logic$App$Msg$UpdatePatternInputField),
+												$elm$html$Html$Events$onFocus(
+												$author$project$Logic$App$Msg$SetFocus('add_pattern_input')),
+												$elm$html$Html$Events$onBlur(
+												$author$project$Logic$App$Msg$SetFocus('')),
 												$elm$html$Html$Attributes$value(model.ui.patternInputField),
 												A2(
 												$elm$html$Html$Events$preventDefaultOn,
