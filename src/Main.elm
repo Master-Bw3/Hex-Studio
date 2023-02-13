@@ -18,6 +18,7 @@ import Logic.App.Stack.Stack exposing (applyPatternsToStack)
 import Logic.App.Types exposing (..)
 import Logic.App.Utils.GetAngleSignature exposing (getAngleSignature)
 import Logic.App.Utils.Utils exposing (removeFromArray)
+import Ports.CheckMouseOverDragHandle as CheckMouseOverDragHandle
 import Ports.GetElementBoundingBoxById as GetElementBoundingBoxById
 import Ports.HexNumGen as HexNumGen
 import Settings.Theme exposing (..)
@@ -48,6 +49,7 @@ init _ =
             , mouseOverElementIndex = -1
             , dragging = ( False, -1 )
             , patternElementMiddleLocations = []
+            , overDragHandle = False
             }
       , grid =
             { height = 0
@@ -236,6 +238,7 @@ update msg model =
               }
             , Cmd.batch
                 [ GetElementBoundingBoxById.requestBoundingBox "#add_pattern_input"
+                , CheckMouseOverDragHandle.requestCheckMouseOverDragHandle ()
                 , Array.indexedMap (\index _ -> "[data-index=\"" ++ fromInt index ++ "\"]") model.patternArray
                     |> Array.toList
                     |> GetElementBoundingBoxById.requestBoundingBoxes
@@ -372,8 +375,7 @@ update msg model =
                             )
                         |> List.head
                         |> Maybe.withDefault ( List.length model.ui.patternElementMiddleLocations, 0 )
-                        |> Tuple.first 
-                        |> Debug.log "index"
+                        |> Tuple.first
             in
             ( { model
                 | mousePos = mousePos
@@ -428,6 +430,9 @@ update msg model =
         SetFocus id ->
             ( { model | ui = { ui | selectedInputID = id } }, Cmd.none )
 
+        RecieveMouseOverHandle bool ->
+            ( { model | ui = { ui | overDragHandle = bool } }, Cmd.none )
+
 
 
 -- argg : List (List (GridPoint)) -> (Float, Float) -> List (List (GridPoint))
@@ -444,6 +449,7 @@ subscriptions _ =
         , HexNumGen.recieveNumber RecieveGeneratedNumberLiteral
         , GetElementBoundingBoxById.recieveBoundingBox (Json.Decode.decodeValue locationDecoder >> RecieveInputBoundingBox)
         , GetElementBoundingBoxById.recieveBoundingBoxes (List.map (Json.Decode.decodeValue locationDecoder) >> RecieveInputBoundingBoxes)
+        , CheckMouseOverDragHandle.recieveCheckMouseOverDragHandle RecieveMouseOverHandle
         ]
 
 

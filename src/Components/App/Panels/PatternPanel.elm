@@ -61,7 +61,13 @@ patternPanel model =
             [ text "Pattern Order ∨" ]
         , div
             (id "pattern_draggable_container" :: onDropTarget dropTargetConfig)
-            (List.reverse (renderPatternList model.patternArray model.ui.mouseOverElementIndex (Tuple.second model.ui.dragging)))
+            (List.reverse
+                (renderPatternList model.patternArray
+                    model.ui.mouseOverElementIndex
+                    (Tuple.second model.ui.dragging)
+                    model.ui.overDragHandle
+                )
+            )
         , div
             [ id "add_pattern"
             , class "outer_box"
@@ -115,8 +121,8 @@ draggedSourceConfig id =
     }
 
 
-renderPatternList : Array ( PatternType, List GridPoint ) -> Int -> Int -> List (Html Msg)
-renderPatternList patternList dragoverIndex dragstartIndex =
+renderPatternList : Array ( PatternType, List GridPoint ) -> Int -> Int -> Bool -> List (Html Msg)
+renderPatternList patternList dragoverIndex dragstartIndex overDragHandle =
     let
         patterns : List PatternType
         patterns =
@@ -124,7 +130,7 @@ renderPatternList patternList dragoverIndex dragstartIndex =
 
         renderPattern : Int -> PatternType -> List (Html Msg)
         renderPattern index pattern =
-            (if dragoverIndex == index && index /= dragstartIndex then
+            (if dragoverIndex == index then
                 [ div [ class "seperator" ] [] ]
 
              else
@@ -133,20 +139,24 @@ renderPatternList patternList dragoverIndex dragstartIndex =
                 ++ [ div
                         ([ class "outer_box"
                          , attribute "data-index" <| fromInt index
-                         , attribute "draggable" "true"
                          ]
-                            ++ onSourceDrag (draggedSourceConfig index)
-                            ++ (if index == dragstartIndex then
-                                    [ style "opacity" "40%" ]
-
-                                else
-                                    [ style "opacity" "100%" ]
-                               )
-                            ++ (if dragoverIndex == index && index /= dragstartIndex then
-                                    [ class "dragover" ]
+                            ++ (if overDragHandle then
+                                    onSourceDrag (draggedSourceConfig index)
 
                                 else
                                     []
+                                        ++ (if index == dragstartIndex then
+                                                [ style "opacity" "40%" ]
+
+                                            else
+                                                [ style "opacity" "100%" ]
+                                           )
+                                        ++ (if dragoverIndex == index then
+                                                [ class "dragover" ]
+
+                                            else
+                                                []
+                                           )
                                )
                         )
                         [ div [ class "inner_box" ]

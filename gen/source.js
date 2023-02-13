@@ -5460,6 +5460,7 @@ var $author$project$Main$init = function (_v0) {
 				mouseOverElementIndex: -1,
 				openPanels: _List_fromArray(
 					[$author$project$Logic$App$Types$PatternPanel]),
+				overDragHandle: false,
 				patternElementMiddleLocations: _List_Nil,
 				patternInputField: '',
 				patternInputLocation: _Utils_Tuple2(0, 0),
@@ -5489,6 +5490,9 @@ var $author$project$Logic$App$Msg$RecieveInputBoundingBox = function (a) {
 };
 var $author$project$Logic$App$Msg$RecieveInputBoundingBoxes = function (a) {
 	return {$: 'RecieveInputBoundingBoxes', a: a};
+};
+var $author$project$Logic$App$Msg$RecieveMouseOverHandle = function (a) {
+	return {$: 'RecieveMouseOverHandle', a: a};
 };
 var $author$project$Logic$App$Msg$Tick = function (a) {
 	return {$: 'Tick', a: a};
@@ -6148,6 +6152,8 @@ var $elm$json$Json$Decode$list = _Json_decodeList;
 var $author$project$Ports$GetElementBoundingBoxById$recieveBoundingBoxes = _Platform_incomingPort(
 	'recieveBoundingBoxes',
 	$elm$json$Json$Decode$list($elm$json$Json$Decode$value));
+var $elm$json$Json$Decode$bool = _Json_decodeBool;
+var $author$project$Ports$CheckMouseOverDragHandle$recieveCheckMouseOverDragHandle = _Platform_incomingPort('recieveCheckMouseOverDragHandle', $elm$json$Json$Decode$bool);
 var $author$project$Ports$HexNumGen$recieveNumber = _Platform_incomingPort('recieveNumber', $elm$json$Json$Decode$string);
 var $author$project$Main$subscriptions = function (_v0) {
 	return $elm$core$Platform$Sub$batch(
@@ -6170,7 +6176,8 @@ var $author$project$Main$subscriptions = function (_v0) {
 					$elm$core$Basics$composeR,
 					$elm$core$List$map(
 						$elm$json$Json$Decode$decodeValue($author$project$Main$locationDecoder)),
-					$author$project$Logic$App$Msg$RecieveInputBoundingBoxes))
+					$author$project$Logic$App$Msg$RecieveInputBoundingBoxes)),
+				$author$project$Ports$CheckMouseOverDragHandle$recieveCheckMouseOverDragHandle($author$project$Logic$App$Msg$RecieveMouseOverHandle)
 			]));
 };
 var $author$project$Settings$Theme$accent5 = '#E0E3B8';
@@ -9533,7 +9540,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _List_f
 		{action: $author$project$Logic$App$Patterns$Stack$duplicate, color: $author$project$Settings$Theme$accent1, displayName: 'Gemini Decomposition', internalName: 'duplicate', signature: 'aadaa'},
 		{action: $author$project$Logic$App$Patterns$Stack$over, color: $author$project$Settings$Theme$accent1, displayName: 'Prospector\'s Gambit', internalName: 'over', signature: 'aaedd'},
 		{action: $author$project$Logic$App$Patterns$Stack$tuck, color: $author$project$Settings$Theme$accent1, displayName: 'Undertaker\'s Gambit', internalName: 'tuck', signature: 'ddqaa'},
-		{action: $author$project$Logic$App$Patterns$Stack$dup2, color: $author$project$Settings$Theme$accent1, displayName: 'Dioscuri Gambi', internalName: '2dup', signature: 'aadadaaw'},
+		{action: $author$project$Logic$App$Patterns$Stack$dup2, color: $author$project$Settings$Theme$accent1, displayName: 'Dioscuri Gambi', internalName: 'two_dup', signature: 'aadadaaw'},
 		{action: $author$project$Logic$App$Patterns$Stack$stackLength, color: $author$project$Settings$Theme$accent1, displayName: 'Flock\'s Reflection', internalName: 'stack_len', signature: 'qwaeawqaeaqa'},
 		{action: $author$project$Logic$App$Patterns$Stack$duplicateN, color: $author$project$Settings$Theme$accent1, displayName: 'Gemini Gambit', internalName: 'duplicate_n', signature: 'aadaadaa'},
 		{action: $author$project$Logic$App$Patterns$Stack$fisherman, color: $author$project$Settings$Theme$accent1, displayName: 'Fisherman\'s Gambit', internalName: 'fisherman', signature: 'ddad'},
@@ -9923,7 +9930,6 @@ var $elm_community$array_extra$Array$Extra$insertAt = F2(
 			}
 		};
 	});
-var $elm$core$Debug$log = _Debug_log;
 var $elm$core$Basics$min = F2(
 	function (x, y) {
 		return (_Utils_cmp(x, y) < 0) ? x : y;
@@ -9980,6 +9986,12 @@ var $elm$json$Json$Encode$list = F2(
 var $author$project$Ports$GetElementBoundingBoxById$requestBoundingBoxes = _Platform_outgoingPort(
 	'requestBoundingBoxes',
 	$elm$json$Json$Encode$list($elm$json$Json$Encode$string));
+var $elm$json$Json$Encode$null = _Json_encodeNull;
+var $author$project$Ports$CheckMouseOverDragHandle$requestCheckMouseOverDragHandle = _Platform_outgoingPort(
+	'requestCheckMouseOverDragHandle',
+	function ($) {
+		return $elm$json$Json$Encode$null;
+	});
 var $author$project$Components$App$Grid$verticalSpacing = function (scale) {
 	return ($author$project$Components$App$Grid$spacing(scale) * $elm$core$Basics$sqrt(3.0)) / 2;
 };
@@ -10454,6 +10466,7 @@ var $author$project$Main$update = F2(
 						_List_fromArray(
 							[
 								$author$project$Ports$GetElementBoundingBoxById$requestBoundingBox('#add_pattern_input'),
+								$author$project$Ports$CheckMouseOverDragHandle$requestCheckMouseOverDragHandle(_Utils_Tuple0),
 								$author$project$Ports$GetElementBoundingBoxById$requestBoundingBoxes(
 								$elm$core$Array$toList(
 									A2(
@@ -10651,40 +10664,37 @@ var $author$project$Main$update = F2(
 					}
 				}();
 				var closestElementToMouseY = A2(
-					$elm$core$Debug$log,
-					'index',
-					A2(
-						$elm$core$Maybe$withDefault,
-						_Utils_Tuple2(
-							$elm$core$List$length(model.ui.patternElementMiddleLocations),
-							0),
-						$elm$core$List$head(
+					$elm$core$Maybe$withDefault,
+					_Utils_Tuple2(
+						$elm$core$List$length(model.ui.patternElementMiddleLocations),
+						0),
+					$elm$core$List$head(
+						A2(
+							$elm$core$List$sortWith,
+							F2(
+								function (a, b) {
+									var _v6 = A2($elm$core$Basics$compare, a.b, b.b);
+									switch (_v6.$) {
+										case 'LT':
+											return $elm$core$Basics$LT;
+										case 'EQ':
+											return $elm$core$Basics$EQ;
+										default:
+											return $elm$core$Basics$GT;
+									}
+								}),
 							A2(
-								$elm$core$List$sortWith,
-								F2(
-									function (a, b) {
-										var _v6 = A2($elm$core$Basics$compare, a.b, b.b);
-										switch (_v6.$) {
-											case 'LT':
-												return $elm$core$Basics$LT;
-											case 'EQ':
-												return $elm$core$Basics$EQ;
-											default:
-												return $elm$core$Basics$GT;
-										}
-									}),
+								$elm$core$List$filter,
+								function (element) {
+									return element.b > 0;
+								},
 								A2(
-									$elm$core$List$filter,
-									function (element) {
-										return element.b > 0;
-									},
-									A2(
-										$elm$core$List$indexedMap,
-										F2(
-											function (index, yPos) {
-												return _Utils_Tuple2(index, mousePos.b - yPos);
-											}),
-										model.ui.patternElementMiddleLocations))))).a);
+									$elm$core$List$indexedMap,
+									F2(
+										function (index, yPos) {
+											return _Utils_Tuple2(index, mousePos.b - yPos);
+										}),
+									model.ui.patternElementMiddleLocations))))).a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
@@ -10745,7 +10755,7 @@ var $author$project$Main$update = F2(
 								})
 						}),
 					$elm$core$Platform$Cmd$none);
-			default:
+			case 'SetFocus':
 				var id = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
@@ -10754,6 +10764,17 @@ var $author$project$Main$update = F2(
 							ui: _Utils_update(
 								ui,
 								{selectedInputID: id})
+						}),
+					$elm$core$Platform$Cmd$none);
+			default:
+				var bool = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							ui: _Utils_update(
+								ui,
+								{overDragHandle: bool})
 						}),
 					$elm$core$Platform$Cmd$none);
 		}
@@ -10872,7 +10893,6 @@ var $mpizenberg$elm_pointer_events$Internal$Decode$Keys = F3(
 	function (alt, ctrl, shift) {
 		return {alt: alt, ctrl: ctrl, shift: shift};
 	});
-var $elm$json$Json$Decode$bool = _Json_decodeBool;
 var $elm$json$Json$Decode$map3 = _Json_map3;
 var $mpizenberg$elm_pointer_events$Internal$Decode$keys = A4(
 	$elm$json$Json$Decode$map3,
@@ -11917,12 +11937,12 @@ var $author$project$Components$Icon$XButton$xButton = A2(
 						]))
 				]))
 		]));
-var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F3(
-	function (patternList, dragoverIndex, dragstartIndex) {
+var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F4(
+	function (patternList, dragoverIndex, dragstartIndex, overDragHandle) {
 		var renderPattern = F2(
 			function (index, pattern) {
 				return _Utils_ap(
-					(_Utils_eq(dragoverIndex, index) && (!_Utils_eq(index, dragstartIndex))) ? _List_fromArray(
+					_Utils_eq(dragoverIndex, index) ? _List_fromArray(
 						[
 							A2(
 							$elm$html$Html$div,
@@ -11943,12 +11963,11 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F3(
 										A2(
 										$elm$html$Html$Attributes$attribute,
 										'data-index',
-										$elm$core$String$fromInt(index)),
-										A2($elm$html$Html$Attributes$attribute, 'draggable', 'true')
+										$elm$core$String$fromInt(index))
 									]),
-								_Utils_ap(
-									$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$onSourceDrag(
-										$author$project$Components$App$Panels$PatternPanel$draggedSourceConfig(index)),
+								overDragHandle ? $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$onSourceDrag(
+									$author$project$Components$App$Panels$PatternPanel$draggedSourceConfig(index)) : _Utils_ap(
+									_List_Nil,
 									_Utils_ap(
 										_Utils_eq(index, dragstartIndex) ? _List_fromArray(
 											[
@@ -11957,7 +11976,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F3(
 											[
 												A2($elm$html$Html$Attributes$style, 'opacity', '100%')
 											]),
-										(_Utils_eq(dragoverIndex, index) && (!_Utils_eq(index, dragstartIndex))) ? _List_fromArray(
+										_Utils_eq(dragoverIndex, index) ? _List_fromArray(
 											[
 												$elm$html$Html$Attributes$class('dragover')
 											]) : _List_Nil))),
@@ -12072,7 +12091,7 @@ var $author$project$Components$App$Panels$PatternPanel$patternPanel = function (
 					$elm$html$Html$Attributes$id('pattern_draggable_container'),
 					$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$onDropTarget($author$project$Components$App$Panels$PatternPanel$dropTargetConfig)),
 				$elm$core$List$reverse(
-					A3($author$project$Components$App$Panels$PatternPanel$renderPatternList, model.patternArray, model.ui.mouseOverElementIndex, model.ui.dragging.b))),
+					A4($author$project$Components$App$Panels$PatternPanel$renderPatternList, model.patternArray, model.ui.mouseOverElementIndex, model.ui.dragging.b, model.ui.overDragHandle))),
 				A2(
 				$elm$html$Html$div,
 				_List_fromArray(

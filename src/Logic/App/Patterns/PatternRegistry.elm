@@ -82,7 +82,7 @@ patternRegistry =
     , { signature = "aadaa", internalName = "duplicate", action = duplicate, displayName = "Gemini Decomposition", color = accent1 }
     , { signature = "aaedd", internalName = "over", action = over, displayName = "Prospector's Gambit", color = accent1 }
     , { signature = "ddqaa", internalName = "tuck", action = tuck, displayName = "Undertaker's Gambit", color = accent1 }
-    , { signature = "aadadaaw", internalName = "2dup", action = dup2, displayName = "Dioscuri Gambi", color = accent1 }
+    , { signature = "aadadaaw", internalName = "two_dup", action = dup2, displayName = "Dioscuri Gambi", color = accent1 }
     , { signature = "qwaeawqaeaqa", internalName = "stack_len", action = stackLength, displayName = "Flock's Reflection", color = accent1 }
     , { signature = "aadaadaa", internalName = "duplicate_n", action = duplicateN, displayName = "Gemini Gambit", color = accent1 }
     , { signature = "ddad", internalName = "fisherman", action = fisherman, displayName = "Fisherman's Gambit", color = accent1 }

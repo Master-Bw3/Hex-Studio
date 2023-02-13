@@ -15,6 +15,7 @@ type alias Model =
         , patternInputLocation : (Int, Int)
         , mouseOverElementIndex : Int
         , dragging : (Bool, Int)
+        , overDragHandle : Bool
         , patternElementMiddleLocations : List (Float)
         }
     , grid :

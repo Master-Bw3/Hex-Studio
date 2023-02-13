@@ -49,12 +49,21 @@
                 return result;
             }
 
+            function checkMouseOverDragHandle() {
+                let hoveredElements = document.querySelectorAll('.move_button:hover');
+                return hoveredElements.length > 0 
+            }
+
             app.ports.requestBoundingBox.subscribe(function (input) {
                 app.ports.recieveBoundingBox.send(getElmentBoundingBoxById(input));
             });
 
             app.ports.requestBoundingBoxes.subscribe(function (input) {
                 app.ports.recieveBoundingBoxes.send(getElmentBoundingBoxes(input));
+            });
+
+            app.ports.requestCheckMouseOverDragHandle.subscribe(function (input) {
+                app.ports.recieveCheckMouseOverDragHandle.send(checkMouseOverDragHandle(input));
             });
         </script>
     </body>
