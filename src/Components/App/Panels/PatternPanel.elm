@@ -2,6 +2,7 @@ module Components.App.Panels.PatternPanel exposing (patternPanel)
 
 import Array exposing (Array)
 import Components.App.Panels.Utils exposing (visibilityToDisplayStyle)
+import Components.App.PatternAutoComplete exposing (..)
 import Components.Icon.MoveButton exposing (moveButton)
 import Components.Icon.ParagraphDropdown exposing (paragraphDropdown)
 import Components.Icon.XButton exposing (xButton)
@@ -12,14 +13,17 @@ import FontAwesome.Layering as Icon
 import FontAwesome.Solid as Icon
 import FontAwesome.Styles as Icon
 import Html exposing (..)
-import Html.Attributes exposing (attribute, class, id, placeholder, value)
+import Html.Attributes exposing (attribute, class, id, placeholder, style, value)
 import Html.Events exposing (keyCode, onClick, onInput, preventDefaultOn)
+import Html.Events.Extra.Drag exposing (DraggedSourceConfig, DropTargetConfig, onDropTarget, onSourceDrag)
+import Html.Events.Extra.Mouse exposing (onOver, onWithOptions)
 import Json.Decode as Json
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (Msg(..))
 import Logic.App.Patterns.PatternRegistry exposing (patternRegistry)
 import Logic.App.Types exposing (GridPoint, Panel(..), PatternType)
-import Components.App.PatternAutoComplete exposing (..)
+import String exposing (fromInt)
+
 
 patternPanel : Model -> Html Msg
 patternPanel model =
@@ -37,7 +41,7 @@ patternPanel model =
         visibility =
             List.member PatternPanel model.ui.openPanels
 
-        detectKey code =                
+        detectKey code =
             if code == 13 || code == 9 then
                 Json.succeed ( InputPattern valueToSend, True )
 
@@ -56,9 +60,8 @@ patternPanel model =
             ]
             [ text "Pattern Order ∨" ]
         , div
-            [ id "pattern_draggable_container"
-            ]
-            (List.reverse (renderPatternList model.patternArray))
+            [ id "pattern_draggable_container" ]
+            (List.reverse (renderPatternList model.patternArray model.ui.mouseOverElementIndex (Tuple.second model.ui.dragging)))
         , div
             [ id "add_pattern"
             , class "outer_box"
@@ -91,8 +94,27 @@ patternPanel model =
         ]
 
 
-renderPatternList : Array ( PatternType, List GridPoint ) -> List (Html Msg)
-renderPatternList patternList =
+dropTargetConfig : Int -> DropTargetConfig Msg
+dropTargetConfig index =
+    { dropEffect = Html.Events.Extra.Drag.MoveOnDrop
+    , onOver = DragOver index
+    , onDrop = always (Drop index)
+    , onEnter = Nothing
+    , onLeave = Nothing
+    }
+
+
+draggedSourceConfig : Int -> DraggedSourceConfig Msg
+draggedSourceConfig id =
+    { effectAllowed = { move = True, copy = False, link = False }
+    , onStart = DragStart id
+    , onEnd = always DragEnd
+    , onDrag = Nothing
+    }
+
+
+renderPatternList : Array ( PatternType, List GridPoint ) -> Int -> Int -> List (Html Msg)
+renderPatternList patternList dragoverIndex dragstartIndex =
     let
         patterns : List PatternType
         patterns =
@@ -100,7 +122,26 @@ renderPatternList patternList =
 
         renderPattern : Int -> PatternType -> Html Msg
         renderPattern index pattern =
-            div [ class "outer_box" ]
+            div
+                ([ class "outer_box"
+                 , attribute "data-index" <| fromInt index
+                 , attribute "draggable" "true"
+                 ]
+                    ++ onSourceDrag (draggedSourceConfig index)
+                    ++ onDropTarget (dropTargetConfig index)
+                    ++ (if index == dragstartIndex then
+                            [ style "opacity" "40%" ]
+
+                        else
+                            [ style "opacity" "100%" ]
+                       )
+                    ++ (if dragoverIndex == index && index /= dragstartIndex  then
+                            [ class "dragover" ]
+
+                        else
+                            []
+                       )
+                )
                 [ div [ class "inner_box" ]
                     [ button [ class "x_button", onClick (RemoveFromPatternArray index (index + 1)) ] [ xButton ]
                     , div [ class "text" ] [ text pattern.displayName ]
@@ -109,5 +150,3 @@ renderPatternList patternList =
                 ]
     in
     List.indexedMap renderPattern patterns
-
-

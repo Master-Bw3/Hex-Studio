@@ -167,8 +167,21 @@ body {
     width: 100%;
     min-height: 2em;
     height: fit-content;
-    margin-bottom: 2px;
     background-color: var(--primary_lightest);
+}
+
+.outer_box::before {
+    content: "";
+    height: 2px;
+    width: 100%;
+    background-color: var(--primary_medium);
+}
+
+.dragover::after {
+    content: "";
+    height: 2em;
+    width: 100%;
+    background-color: var(--primary_medium);
 }
 
 .outer_box > .inner_box {

@@ -12,6 +12,8 @@ type alias Model =
         , patternInputField : String
         , suggestionIndex : Int
         , patternInputLocation : (Int, Int)
+        , mouseOverElementIndex : Int
+        , dragging : (Bool, Int)
         }
     , grid :
         { width : Float

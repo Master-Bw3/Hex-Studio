@@ -17,8 +17,8 @@ content : Model -> Html Msg
 content model =
     div
         [ id "content"
-        , MouseEvent.onMove (.clientPos >> MouseMove)
-        , TouchEvent.onMove (touchCoordinates >> MouseMove)
+        , MouseEvent.onWithOptions "mousemove" {stopPropagation = False, preventDefault = False} (.clientPos >> MouseMove)
+        , TouchEvent.onWithOptions "touchmove"  {stopPropagation = False, preventDefault = False} (touchCoordinates >> MouseMove)
         , onMouseUp MouseUp
         ]
         [ leftBox model

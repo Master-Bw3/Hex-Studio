@@ -5,6 +5,8 @@ import Browser.Dom
 import Time
 import Json.Decode
 import Logic.App.Types exposing (ElementLocation)
+import Html.Events.Extra.Drag as Drag
+import Json.Decode exposing (Value)
 
 type Msg
     = NoOp
@@ -27,6 +29,10 @@ type Msg
     | SelectFirstSuggestion
     | RequestInputBoundingBox String
     | RecieveInputBoundingBox (Result Json.Decode.Error ElementLocation)
+    | DragStart Int Drag.EffectAllowed Value
+    | DragEnd
+    | DragOver Int Drag.DropEffect Value
+    | Drop Int
 
 type alias MouseMoveData =
     { pageX : Int

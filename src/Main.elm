@@ -1,19 +1,20 @@
 module Main exposing (main)
 
 import Array
+import Array.Extra as Array
 import Browser
 import Browser.Dom exposing (getElement)
 import Browser.Events
 import Components.App.Content exposing (content)
 import Components.App.Grid exposing (..)
-import FontAwesome.Solid exposing (j)
+import FontAwesome.Solid
 import Html exposing (..)
 import Json.Decode
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (..)
 import Logic.App.PatternList.PatternArray exposing (addToPatternArray, updateDrawingColors)
 import Logic.App.Patterns.PatternRegistry exposing (..)
-import Logic.App.Stack.Stack exposing (applyPatternToStack, applyPatternsToStack)
+import Logic.App.Stack.Stack exposing (applyPatternsToStack)
 import Logic.App.Types exposing (..)
 import Logic.App.Utils.GetAngleSignature exposing (getAngleSignature)
 import Logic.App.Utils.Utils exposing (removeFromArray)
@@ -42,6 +43,8 @@ init _ =
             , patternInputField = ""
             , suggestionIndex = 0
             , patternInputLocation = ( 0, 0 )
+            , mouseOverElementIndex = -1
+            , dragging = ( False, -1 )
             }
       , grid =
             { height = 0
@@ -80,6 +83,9 @@ update msg model =
 
         settings =
             model.settings
+
+        patternArray =
+            model.patternArray
     in
     case msg of
         NoOp ->
@@ -301,14 +307,45 @@ update msg model =
         RecieveInputBoundingBox result ->
             case result of
                 Ok value ->
-                    let
-                        owo =
-                            Debug.log "owo" value
-                    in
                     ( { model | ui = { ui | patternInputLocation = ( value.left, value.bottom ) } }, Cmd.none )
 
                 Err _ ->
                     ( model, Cmd.none )
+
+        DragStart index _ _ ->
+            ( { model | ui = { ui | mouseOverElementIndex = index, dragging = ( True, index ) } }, Cmd.none )
+
+        DragEnd ->
+            ( { model | ui = { ui | mouseOverElementIndex = -1, dragging = ( False, -1 ) } }, Cmd.none )
+
+        DragOver index _ _ ->
+            let
+                _ =
+                    Debug.log "index" index
+            in
+            ( { model | ui = { ui | mouseOverElementIndex = index } }, Cmd.none )
+
+        Drop index ->
+            let
+                originIndex =
+                    Tuple.second model.ui.dragging
+
+                newPatternArray =
+                    case Array.get originIndex patternArray of
+                        Just element ->
+                            Array.insertAt index element (removeFromArray originIndex (originIndex + 1) model.patternArray)
+
+                        Nothing ->
+                            patternArray
+            in
+            ( { model
+                | ui = { ui | mouseOverElementIndex = -1, dragging = ( False, -1 ) }
+                , patternArray = newPatternArray
+                , grid = { grid | points = updateGridPoints grid.width grid.height newPatternArray [] settings.gridScale }
+                , stack = applyPatternsToStack Array.empty (List.reverse <| Tuple.first <| List.unzip <| Array.toList newPatternArray) False
+              }
+            , Cmd.none
+            )
 
 
 
@@ -319,7 +356,7 @@ update msg model =
 
 
 subscriptions : Model -> Sub Msg
-subscriptions model =
+subscriptions _ =
     Sub.batch
         [ Browser.Events.onResize (\_ _ -> WindowResize)
         , Time.every 50 Tick
