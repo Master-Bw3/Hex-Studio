@@ -6953,7 +6953,7 @@ var $author$project$Logic$App$Stack$Stack$applyPatternToStack = F2(
 					},
 					stack),
 				$author$project$Logic$App$Types$Succeeded,
-				false) : _Utils_Tuple3(addToIntroList, $author$project$Logic$App$Types$Succeeded, false)) : ((pattern.internalName === 'open_paren') ? _Utils_Tuple3(addToIntroList, $author$project$Logic$App$Types$Succeeded, false) : _Utils_Tuple3(addToIntroList, $author$project$Logic$App$Types$Considered, false)));
+				false) : _Utils_Tuple3(addToIntroList, $author$project$Logic$App$Types$Considered, false)) : ((pattern.internalName === 'open_paren') ? _Utils_Tuple3(addToIntroList, $author$project$Logic$App$Types$Considered, false) : _Utils_Tuple3(addToIntroList, $author$project$Logic$App$Types$Considered, false)));
 		} else {
 			return (pattern.internalName === 'escape') ? _Utils_Tuple3(stack, $author$project$Logic$App$Types$Succeeded, true) : ((pattern.internalName === 'close_paren') ? _Utils_Tuple3(
 				A2(

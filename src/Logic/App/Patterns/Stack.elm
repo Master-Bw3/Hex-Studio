@@ -6,7 +6,6 @@ import Html.Attributes exposing (action)
 import Logic.App.Patterns.OperatorUtils exposing (action1Input, action2Inputs, action3Inputs, getAny, getInteger)
 import Logic.App.Types exposing (Iota(..), Mishap(..))
 import Logic.App.Utils.Utils exposing (removeFromArray, unshift)
-import Settings.Theme exposing (accent1)
 
 
 swap : Array Iota -> Array Iota

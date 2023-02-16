@@ -96,10 +96,10 @@ applyPatternToStack stack pattern =
                     )
 
                 else
-                    ( addToIntroList, Succeeded, False )
+                    ( addToIntroList, Considered, False )
 
             else if pattern.internalName == "open_paren" then
-                ( addToIntroList, Succeeded, False )
+                ( addToIntroList, Considered, False )
 
             else
                 ( addToIntroList, Considered, False )
