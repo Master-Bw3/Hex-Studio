@@ -18,7 +18,7 @@ actionNoInput stack action =
     Array.append action stack
 
 
-action1Input : Array Iota -> (Iota -> Iota) -> (Iota -> Array Iota) -> Array Iota
+action1Input : Array Iota -> (Iota -> Maybe Iota) -> (Iota -> Array Iota) -> Array Iota
 action1Input stack inputGetter action =
     let
         maybeIota =
@@ -32,15 +32,15 @@ action1Input stack inputGetter action =
             unshift (Garbage NotEnoughIotas) newStack
 
         Just iota ->
-            case inputGetter <| iota of
-                Garbage IncorrectIota ->
+            case inputGetter iota of
+                Nothing ->
                     unshift (Garbage IncorrectIota) newStack
 
-                _ ->
+                Just _ ->
                     Array.append (action iota) newStack
 
 
-action2Inputs : Array Iota -> (Iota -> Iota) -> (Iota -> Iota) -> (Iota -> Iota -> Array Iota) -> Array Iota
+action2Inputs : Array Iota -> (Iota -> Maybe Iota) -> (Iota -> Maybe Iota) -> (Iota -> Iota -> Array Iota) -> Array Iota
 action2Inputs stack inputGetter1 inputGetter2 action =
     let
         maybeIota1 =
@@ -58,18 +58,29 @@ action2Inputs stack inputGetter1 inputGetter2 action =
     else
         case ( Maybe.map inputGetter1 maybeIota1, Maybe.map inputGetter2 maybeIota2 ) of
             ( Just iota1, Just iota2 ) ->
-                if iota1 == Garbage IncorrectIota || iota2 == Garbage IncorrectIota then
-                    Array.append (Array.fromList [ iota1, iota2 ]) newStack
+                if iota1 == Nothing || iota2 == Nothing then
+                    Array.append
+                        (Array.fromList
+                            [ Maybe.withDefault (Garbage IncorrectIota) iota1
+                            , Maybe.withDefault (Garbage IncorrectIota) iota2
+                            ]
+                        )
+                        newStack
 
                 else
-                    Array.append (action iota1 iota2) newStack
+                    Array.append
+                        (action
+                            (Maybe.withDefault (Garbage IncorrectIota) iota1)
+                            (Maybe.withDefault (Garbage IncorrectIota) iota2)
+                        )
+                        newStack
 
             _ ->
                 -- this should never happen
                 unshift (Garbage CatastrophicFailure) newStack
 
 
-action3Inputs : Array Iota -> (Iota -> Iota) -> (Iota -> Iota) -> (Iota -> Iota) -> (Iota -> Iota -> Iota -> Array Iota) -> Array Iota
+action3Inputs : Array Iota -> (Iota -> Maybe Iota) -> (Iota -> Maybe Iota) -> (Iota -> Maybe Iota) -> (Iota -> Iota -> Iota -> Array Iota) -> Array Iota
 action3Inputs stack inputGetter1 inputGetter2 inputGetter3 action =
     let
         maybeIota1 =
@@ -90,22 +101,35 @@ action3Inputs stack inputGetter1 inputGetter2 inputGetter3 action =
     else
         case ( Maybe.map inputGetter1 maybeIota1, Maybe.map inputGetter2 maybeIota2, Maybe.map inputGetter3 maybeIota3 ) of
             ( Just iota1, Just iota2, Just iota3 ) ->
-                if iota1 == Garbage IncorrectIota || iota2 == Garbage IncorrectIota || iota3 == Garbage IncorrectIota then
-                    Array.append (Array.fromList [ iota1, iota2, iota3 ]) newStack
+                if iota1 == Nothing || iota2 == Nothing || iota3 == Nothing then
+                    Array.append
+                        (Array.fromList
+                            [ Maybe.withDefault (Garbage IncorrectIota) iota1
+                            , Maybe.withDefault (Garbage IncorrectIota) iota2
+                            , Maybe.withDefault (Garbage IncorrectIota) iota3
+                            ]
+                        )
+                        newStack
 
                 else
-                    Array.append (action iota1 iota2 iota3) newStack
+                    Array.append
+                        (action
+                            (Maybe.withDefault (Garbage IncorrectIota) iota1)
+                            (Maybe.withDefault (Garbage IncorrectIota) iota2)
+                            (Maybe.withDefault (Garbage IncorrectIota) iota3)
+                        )
+                        newStack
 
             _ ->
                 -- this should never happen
                 unshift (Garbage CatastrophicFailure) newStack
 
 
-getPatternOrPatternList : Iota -> Iota
+getPatternOrPatternList : Iota -> Maybe Iota
 getPatternOrPatternList iota =
     case iota of
         Pattern _ _ ->
-            iota
+            Just iota
 
         IotaList list ->
             if
@@ -121,122 +145,126 @@ getPatternOrPatternList iota =
                 <|
                     Array.toList list
             then
-                iota
+                Just iota
 
             else
-                Garbage IncorrectIota
+                Nothing
 
         _ ->
-            Garbage IncorrectIota
+            Nothing
 
 
-getNumberOrVector : Iota -> Iota
+getNumberOrVector : Iota -> Maybe Iota
 getNumberOrVector iota =
     case iota of
         Vector _ ->
-            iota
+            Just iota
 
         Number _ ->
-            iota
+            Just iota
 
         _ ->
-            Garbage IncorrectIota
+            Nothing
 
 
-getInteger : Iota -> Iota
+getInteger : Iota -> Maybe Iota
 getInteger iota =
     case iota of
         Number number ->
             if toFloat (round number) == number then
-                iota
+                Just iota
 
             else
-                Garbage IncorrectIota
+                Nothing
 
         _ ->
-            Garbage IncorrectIota
+            Nothing
 
 
-getNumber : Iota -> Iota
+getNumber : Iota -> Maybe Iota
 getNumber iota =
     case iota of
         Number _ ->
-            iota
+            Just iota
 
         _ ->
-            Garbage IncorrectIota
+            Nothing
 
 
-getVector : Iota -> Iota
+getVector : Iota -> Maybe Iota
 getVector iota =
     case iota of
         Vector _ ->
-            iota
+            Just iota
 
         _ ->
-            Garbage IncorrectIota
+            Nothing
 
 
-getEntity : Iota -> Iota
+getEntity : Iota -> Maybe Iota
 getEntity iota =
     case iota of
         Entity _ ->
-            iota
+            Just iota
 
         _ ->
-            Garbage IncorrectIota
+            Nothing
 
 
-getIotaList : Iota -> Iota
+getIotaList : Iota -> Maybe Iota
 getIotaList iota =
     case iota of
         IotaList _ ->
-            iota
+            Just iota
 
         _ ->
-            Garbage IncorrectIota
+            Nothing
 
 
-getBoolean : Iota -> Iota
+getBoolean : Iota -> Maybe Iota
 getBoolean iota =
     case iota of
         Boolean _ ->
-            iota
+            Just iota
 
         _ ->
-            Garbage IncorrectIota
+            Nothing
 
 
-getAny : Iota -> Iota
+getAny : Iota -> Maybe Iota
 getAny iota =
-    iota
+    Just iota
 
-getNumberOrList : Iota -> Iota
+
+getNumberOrList : Iota -> Maybe Iota
 getNumberOrList iota =
     case iota of
         Number _ ->
-            iota
+            Just iota
 
         IotaList _ ->
-            iota
+            Just iota
 
         _ ->
-            Garbage IncorrectIota
+            Nothing
 
-getIntegerOrList : Iota -> Iota
+
+getIntegerOrList : Iota -> Maybe Iota
 getIntegerOrList iota =
     case iota of
         Number number ->
             if toFloat (round number) == number then
-                iota
+                Just iota
+
             else
-                Garbage IncorrectIota
+                Nothing
 
         IotaList _ ->
-            iota
+            Just iota
 
         _ ->
-            Garbage IncorrectIota
+            Nothing
+
 
 checkNotGarbage : Iota -> Bool
 checkNotGarbage iota =

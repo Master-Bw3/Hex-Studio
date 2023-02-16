@@ -238,7 +238,7 @@ eval stack =
 
         Just iota ->
             case getPatternOrPatternList <| iota of
-                Garbage IncorrectIota ->
+                Nothing ->
                     unshift (Garbage IncorrectIota) newStack
 
                 _ ->

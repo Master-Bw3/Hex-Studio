@@ -133,7 +133,7 @@ fisherman stack =
 
         Just iota ->
             case getInteger <| iota of
-                Garbage IncorrectIota ->
+                Nothing ->
                     unshift (Garbage IncorrectIota) newStack
 
                 _ ->
@@ -172,7 +172,7 @@ fishermanCopy stack =
 
         Just iota ->
             case getInteger <| iota of
-                Garbage IncorrectIota ->
+                Nothing ->
                     unshift (Garbage IncorrectIota) newStack
 
                 _ ->

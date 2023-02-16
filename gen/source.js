@@ -7439,8 +7439,7 @@ var $author$project$Logic$App$Patterns$OperatorUtils$action1Input = F3(
 		} else {
 			var iota = maybeIota.a;
 			var _v1 = inputGetter(iota);
-			if ((_v1.$ === 'Garbage') && (_v1.a.$ === 'IncorrectIota')) {
-				var _v2 = _v1.a;
+			if (_v1.$ === 'Nothing') {
 				return A2(
 					$author$project$Logic$App$Utils$Utils$unshift,
 					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
@@ -7478,11 +7477,11 @@ var $ianmackenzie$elm_geometry$Vector3d$fromTuple = F2(
 var $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector = function (iota) {
 	switch (iota.$) {
 		case 'Vector':
-			return iota;
+			return $elm$core$Maybe$Just(iota);
 		case 'Number':
-			return iota;
+			return $elm$core$Maybe$Just(iota);
 		default:
-			return $author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota);
+			return $elm$core$Maybe$Nothing;
 	}
 };
 var $ianmackenzie$elm_units$Quantity$Quantity = function (a) {
@@ -7622,18 +7621,32 @@ var $author$project$Logic$App$Patterns$OperatorUtils$action2Inputs = F4(
 			if ((_v0.a.$ === 'Just') && (_v0.b.$ === 'Just')) {
 				var iota1 = _v0.a.a;
 				var iota2 = _v0.b.a;
-				return (_Utils_eq(
-					iota1,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota)) || _Utils_eq(
-					iota2,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota))) ? A2(
+				return (_Utils_eq(iota1, $elm$core$Maybe$Nothing) || _Utils_eq(iota2, $elm$core$Maybe$Nothing)) ? A2(
 					$elm$core$Array$append,
 					$elm$core$Array$fromList(
 						_List_fromArray(
-							[iota1, iota2])),
+							[
+								A2(
+								$elm$core$Maybe$withDefault,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+								iota1),
+								A2(
+								$elm$core$Maybe$withDefault,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+								iota2)
+							])),
 					newStack) : A2(
 					$elm$core$Array$append,
-					A2(action, iota1, iota2),
+					A2(
+						action,
+						A2(
+							$elm$core$Maybe$withDefault,
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+							iota1),
+						A2(
+							$elm$core$Maybe$withDefault,
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+							iota2)),
 					newStack);
 			} else {
 				return A2(
@@ -7827,11 +7840,11 @@ var $author$project$Logic$App$Patterns$OperatorUtils$getIntegerOrList = function
 			var number = iota.a;
 			return _Utils_eq(
 				$elm$core$Basics$round(number),
-				number) ? iota : $author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota);
+				number) ? $elm$core$Maybe$Just(iota) : $elm$core$Maybe$Nothing;
 		case 'IotaList':
-			return iota;
+			return $elm$core$Maybe$Just(iota);
 		default:
-			return $author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota);
+			return $elm$core$Maybe$Nothing;
 	}
 };
 var $author$project$Logic$App$Patterns$Math$andBit = function (stack) {
@@ -7886,9 +7899,9 @@ var $author$project$Logic$App$Patterns$Math$andBit = function (stack) {
 };
 var $author$project$Logic$App$Patterns$OperatorUtils$getBoolean = function (iota) {
 	if (iota.$ === 'Boolean') {
-		return iota;
+		return $elm$core$Maybe$Just(iota);
 	} else {
-		return $author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota);
+		return $elm$core$Maybe$Nothing;
 	}
 };
 var $author$project$Logic$App$Patterns$Math$andBool = function (stack) {
@@ -7912,13 +7925,13 @@ var $author$project$Logic$App$Patterns$Math$andBool = function (stack) {
 	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getBoolean, $author$project$Logic$App$Patterns$OperatorUtils$getBoolean, action);
 };
 var $author$project$Logic$App$Patterns$OperatorUtils$getAny = function (iota) {
-	return iota;
+	return $elm$core$Maybe$Just(iota);
 };
 var $author$project$Logic$App$Patterns$OperatorUtils$getIotaList = function (iota) {
 	if (iota.$ === 'IotaList') {
-		return iota;
+		return $elm$core$Maybe$Just(iota);
 	} else {
-		return $author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota);
+		return $elm$core$Maybe$Nothing;
 	}
 };
 var $author$project$Logic$App$Patterns$Lists$append = function (stack) {
@@ -7943,9 +7956,9 @@ var $author$project$Logic$App$Patterns$Lists$append = function (stack) {
 var $elm$core$Basics$acos = _Basics_acos;
 var $author$project$Logic$App$Patterns$OperatorUtils$getNumber = function (iota) {
 	if (iota.$ === 'Number') {
-		return iota;
+		return $elm$core$Maybe$Just(iota);
 	} else {
-		return $author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota);
+		return $elm$core$Maybe$Nothing;
 	}
 };
 var $author$project$Logic$App$Patterns$Math$arccos = function (stack) {
@@ -8090,9 +8103,9 @@ var $author$project$Logic$App$Patterns$Circles$circleImpetusDirection = function
 var $elm$core$Basics$cos = _Basics_cos;
 var $author$project$Logic$App$Patterns$OperatorUtils$getVector = function (iota) {
 	if (iota.$ === 'Vector') {
-		return iota;
+		return $elm$core$Maybe$Just(iota);
 	} else {
-		return $author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota);
+		return $elm$core$Maybe$Nothing;
 	}
 };
 var $elm$core$Basics$pi = _Basics_pi;
@@ -8160,20 +8173,40 @@ var $author$project$Logic$App$Patterns$OperatorUtils$action3Inputs = F5(
 				var iota1 = _v0.a.a;
 				var iota2 = _v0.b.a;
 				var iota3 = _v0.c.a;
-				return (_Utils_eq(
-					iota1,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota)) || (_Utils_eq(
-					iota2,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota)) || _Utils_eq(
-					iota3,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota)))) ? A2(
+				return (_Utils_eq(iota1, $elm$core$Maybe$Nothing) || (_Utils_eq(iota2, $elm$core$Maybe$Nothing) || _Utils_eq(iota3, $elm$core$Maybe$Nothing))) ? A2(
 					$elm$core$Array$append,
 					$elm$core$Array$fromList(
 						_List_fromArray(
-							[iota1, iota2, iota3])),
+							[
+								A2(
+								$elm$core$Maybe$withDefault,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+								iota1),
+								A2(
+								$elm$core$Maybe$withDefault,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+								iota2),
+								A2(
+								$elm$core$Maybe$withDefault,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+								iota3)
+							])),
 					newStack) : A2(
 					$elm$core$Array$append,
-					A3(action, iota1, iota2, iota3),
+					A3(
+						action,
+						A2(
+							$elm$core$Maybe$withDefault,
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+							iota1),
+						A2(
+							$elm$core$Maybe$withDefault,
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+							iota2),
+						A2(
+							$elm$core$Maybe$withDefault,
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+							iota3)),
 					newStack);
 			} else {
 				return A2(
@@ -8371,9 +8404,9 @@ var $author$project$Logic$App$Patterns$OperatorUtils$getInteger = function (iota
 		var number = iota.a;
 		return _Utils_eq(
 			$elm$core$Basics$round(number),
-			number) ? iota : $author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota);
+			number) ? $elm$core$Maybe$Just(iota) : $elm$core$Maybe$Nothing;
 	} else {
-		return $author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota);
+		return $elm$core$Maybe$Nothing;
 	}
 };
 var $elm$core$List$repeatHelp = F3(
@@ -8420,9 +8453,9 @@ var $author$project$Logic$App$Patterns$Stack$duplicateN = function (stack) {
 var $elm$core$Basics$e = _Basics_e;
 var $author$project$Logic$App$Patterns$OperatorUtils$getEntity = function (iota) {
 	if (iota.$ === 'Entity') {
-		return iota;
+		return $elm$core$Maybe$Just(iota);
 	} else {
-		return $author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota);
+		return $elm$core$Maybe$Nothing;
 	}
 };
 var $author$project$Logic$App$Patterns$Misc$entityPos = function (stack) {
@@ -8456,7 +8489,7 @@ var $elm$core$List$all = F2(
 var $author$project$Logic$App$Patterns$OperatorUtils$getPatternOrPatternList = function (iota) {
 	switch (iota.$) {
 		case 'Pattern':
-			return iota;
+			return $elm$core$Maybe$Just(iota);
 		case 'IotaList':
 			var list = iota.a;
 			return A2(
@@ -8468,9 +8501,9 @@ var $author$project$Logic$App$Patterns$OperatorUtils$getPatternOrPatternList = f
 						return false;
 					}
 				},
-				$elm$core$Array$toList(list)) ? iota : $author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota);
+				$elm$core$Array$toList(list)) ? $elm$core$Maybe$Just(iota) : $elm$core$Maybe$Nothing;
 		default:
-			return $author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota);
+			return $elm$core$Maybe$Nothing;
 	}
 };
 var $author$project$Logic$App$Types$InvalidPattern = {$: 'InvalidPattern'};
@@ -8502,8 +8535,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$eval = function (stack) {
 	} else {
 		var iota = maybeIota.a;
 		var _v1 = $author$project$Logic$App$Patterns$OperatorUtils$getPatternOrPatternList(iota);
-		if ((_v1.$ === 'Garbage') && (_v1.a.$ === 'IncorrectIota')) {
-			var _v2 = _v1.a;
+		if (_v1.$ === 'Nothing') {
 			return A2(
 				$author$project$Logic$App$Utils$Utils$unshift,
 				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
@@ -8616,8 +8648,7 @@ var $author$project$Logic$App$Patterns$Stack$fisherman = function (stack) {
 	} else {
 		var iota = maybeIota.a;
 		var _v1 = $author$project$Logic$App$Patterns$OperatorUtils$getInteger(iota);
-		if ((_v1.$ === 'Garbage') && (_v1.a.$ === 'IncorrectIota')) {
-			var _v2 = _v1.a;
+		if (_v1.$ === 'Nothing') {
 			return A2(
 				$author$project$Logic$App$Utils$Utils$unshift,
 				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
@@ -8673,8 +8704,7 @@ var $author$project$Logic$App$Patterns$Stack$fishermanCopy = function (stack) {
 	} else {
 		var iota = maybeIota.a;
 		var _v1 = $author$project$Logic$App$Patterns$OperatorUtils$getInteger(iota);
-		if ((_v1.$ === 'Garbage') && (_v1.a.$ === 'IncorrectIota')) {
-			var _v2 = _v1.a;
+		if (_v1.$ === 'Nothing') {
 			return A2(
 				$author$project$Logic$App$Utils$Utils$unshift,
 				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
