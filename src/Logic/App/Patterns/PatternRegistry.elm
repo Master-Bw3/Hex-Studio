@@ -13,6 +13,7 @@ import Logic.App.Types exposing (Iota(..), Mishap(..), PatternType)
 import Logic.App.Utils.Utils exposing (unshift)
 import Ports.HexNumGen as HexNumGen
 import Settings.Theme exposing (..)
+import Logic.App.Types exposing (ApplyToStackResult(..))
 
 
 noAction : Array Iota -> Array Iota
@@ -111,7 +112,7 @@ patternRegistry =
     , { signature = "dw", internalName = "not", action = invertBool, displayName = "Negation Purification", color = accent1 }
     , { signature = "aw", internalName = "bool_coerce", action = boolCoerce, displayName = "Augur's Purification", color = accent1 }
     , { signature = "awdd", internalName = "if", action = ifBool, displayName = "Augur's Exaltation", color = accent1 }
-    , { signature = "eqqq", internalName = "random", action = makeConstant(Number 0.5), displayName = "Entropy Reflection", color = accent1 }
+    , { signature = "eqqq", internalName = "random", action = makeConstant (Number 0.5), displayName = "Entropy Reflection", color = accent1 }
     , { signature = "qqqqqaa", internalName = "sin", action = sine, displayName = "Sine Purification", color = accent1 }
     , { signature = "qqqqqad", internalName = "cos", action = cosine, displayName = "Cosine Purification", color = accent1 }
     , { signature = "wqqqqqadq", internalName = "tan", action = tangent, displayName = "Tangent Purification", color = accent1 }
@@ -243,24 +244,25 @@ eval stack =
                 _ ->
                     case iota of
                         IotaList list ->
-                            applyPatternsToStack newStack
-                                (List.reverse <|
-                                    Array.toList <|
-                                        Array.map
-                                            (\i ->
-                                                case i of
-                                                    Pattern pattern _ ->
-                                                        pattern
+                            Tuple.first <|
+                                applyPatternsToStack ( newStack, Array.empty )
+                                    (List.reverse <|
+                                        Array.toList <|
+                                            Array.map
+                                                (\i ->
+                                                    case i of
+                                                        Pattern pattern _ ->
+                                                            pattern
 
-                                                    _ ->
-                                                        unknownPattern
-                                            )
-                                            list
-                                )
-                                False
+                                                        _ ->
+                                                            unknownPattern
+                                                )
+                                                list
+                                    ) False
+                                    
 
                         Pattern pattern _ ->
-                            applyPatternsToStack newStack [ pattern ] False
+                            Tuple.first <| applyPatternsToStack ( newStack, Array.empty ) [ pattern ] False
 
                         _ ->
                             Array.fromList [ Garbage CatastrophicFailure ]

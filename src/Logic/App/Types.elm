@@ -96,3 +96,9 @@ type alias ElementLocation =
     , top : Int
     , right : Int
     }
+
+
+type ApplyToStackResult
+    = Succeeded
+    | Failed
+    | Considered

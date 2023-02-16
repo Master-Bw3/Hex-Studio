@@ -2,7 +2,7 @@ module Logic.App.Stack.Stack exposing (..)
 
 import Array exposing (Array)
 import List.Extra as List
-import Logic.App.Types exposing (Iota(..), Mishap(..), PatternType)
+import Logic.App.Types exposing (ApplyToStackResult(..), Iota(..), Mishap(..), PatternType)
 import Logic.App.Utils.Utils exposing (unshift)
 
 
@@ -10,31 +10,36 @@ import Logic.App.Utils.Utils exposing (unshift)
 -- untested; might not work properly
 
 
-applyPatternsToStack : Array Iota -> List PatternType -> Bool -> Array Iota
-applyPatternsToStack stack patterns escapeThis =
+applyPatternsToStack : ( Array Iota, Array ApplyToStackResult ) -> List PatternType -> Bool -> ( Array Iota, Array ApplyToStackResult )
+applyPatternsToStack stackResultTuple patterns considerThis =
+    let
+        stack =
+            Tuple.first stackResultTuple
+
+        resultArray =
+            Tuple.second stackResultTuple
+    in
     case List.head patterns of
         Nothing ->
-            stack
+            stackResultTuple
 
         Just pattern ->
-            if escapeThis then
-                applyPatternsToStack (addEscapedPatternIotaToStack stack pattern) (Maybe.withDefault [] <| List.tail patterns) False
+            if considerThis then
+                applyPatternsToStack
+                    ( addEscapedPatternIotaToStack stack pattern, unshift Considered resultArray )
+                    (Maybe.withDefault [] <| List.tail patterns)
+                    False
 
             else
-                let
-                    stackEscapeTuple =
-                        applyPatternToStack stack pattern
-
-                    newStack =
-                        Tuple.first <| stackEscapeTuple
-
-                    escapeNext =
-                        Tuple.second <| stackEscapeTuple
-                in
-                applyPatternsToStack newStack (Maybe.withDefault [] <| List.tail patterns) escapeNext
+                case applyPatternToStack stack pattern of
+                    ( newStack, result, considerNext ) ->
+                        applyPatternsToStack
+                            ( newStack, unshift result resultArray )
+                            (Maybe.withDefault [] <| List.tail patterns)
+                            considerNext
 
 
-applyPatternToStack : Array Iota -> PatternType -> ( Array Iota, Bool )
+applyPatternToStack : Array Iota -> PatternType -> ( Array Iota, ApplyToStackResult, Bool )
 applyPatternToStack stack pattern =
     case Array.get 0 stack of
         Just (OpenParenthesis list) ->
@@ -72,7 +77,7 @@ applyPatternToStack stack pattern =
                     Array.set 0 (OpenParenthesis (unshift (Pattern pattern False) list)) stack
             in
             if pattern.internalName == "escape" then
-                ( stack, True )
+                ( stack, Succeeded, True )
 
             else if pattern.internalName == "close_paren" then
                 if pattern.internalName == "close_paren" && (numberOfCloseParen + 1) >= numberOfOpenParen then
@@ -86,25 +91,29 @@ applyPatternToStack stack pattern =
                                     otherIota
                         )
                         stack
+                    , Succeeded
                     , False
                     )
 
                 else
-                    ( addToIntroList, False )
+                    ( addToIntroList, Succeeded, False )
+
+            else if pattern.internalName == "open_paren" then
+                ( addToIntroList, Succeeded, False )
 
             else
-                ( addToIntroList, False )
+                ( addToIntroList, Considered, False )
 
         _ ->
             if pattern.internalName == "escape" then
-                ( stack, True )
+                ( stack, Succeeded, True )
 
             else if pattern.internalName == "close_paren" then
-                ( unshift (Garbage CatastrophicFailure) stack, False )
+                ( unshift (Garbage CatastrophicFailure) stack, Failed, False )
                 --temporary
 
             else
-                ( pattern.action stack, False )
+                ( pattern.action stack, Succeeded, False )
 
 
 addEscapedPatternIotaToStack : Array Iota -> PatternType -> Array Iota

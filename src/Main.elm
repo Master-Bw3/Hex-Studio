@@ -12,7 +12,7 @@ import Html exposing (..)
 import Json.Decode exposing (Decoder)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (..)
-import Logic.App.PatternList.PatternArray exposing (addToPatternArray, updateDrawingColors)
+import Logic.App.PatternList.PatternArray exposing (addToPatternArray, applyColorToPatternFromResult, updateDrawingColors)
 import Logic.App.Patterns.PatternRegistry exposing (..)
 import Logic.App.Stack.Stack exposing (applyPatternsToStack)
 import Logic.App.Types exposing (..)
@@ -154,31 +154,20 @@ update msg model =
             if drawing.drawingMode == True then
                 if List.length drawing.activePath > 1 then
                     let
-                        precedingEscapeCount =
-                            let
-                                countEscapes patternTuple accumulator =
-                                    if Tuple.second accumulator == True then
-                                        if (Tuple.first patternTuple).internalName == "escape" then
-                                            ( Tuple.first accumulator + 1, True )
+                        stackResultTuple =
+                            applyPatternsToStack ( Array.empty, Array.empty ) (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newUncoloredPattern)) False
 
-                                        else
-                                            ( Tuple.first accumulator, False )
+                        newStack =
+                            Tuple.first stackResultTuple
 
-                                    else
-                                        ( Tuple.first accumulator, False )
-                            in
-                            Tuple.first <| Array.foldl countEscapes ( 0, True ) model.patternArray
+                        resultArray =
+                            Tuple.second stackResultTuple
+
+                        newUncoloredPattern =
+                            getPatternFromSignature <| getAngleSignature drawing.activePath
 
                         newPattern =
-                            let
-                                uncoloredPattern =
-                                    getPatternFromSignature <| getAngleSignature drawing.activePath
-                            in
-                            if modBy 2 precedingEscapeCount == 1 then
-                                { uncoloredPattern | color = accent5 }
-
-                            else
-                                uncoloredPattern
+                            applyColorToPatternFromResult newUncoloredPattern (Maybe.withDefault Failed (Array.get 0 resultArray))
 
                         newGrid =
                             { grid
@@ -189,7 +178,7 @@ update msg model =
                     ( { model
                         | patternArray = addToPatternArray model newPattern
                         , grid = newGrid
-                        , stack = applyPatternsToStack Array.empty (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern)) False
+                        , stack = newStack
                       }
                     , Cmd.none
                     )
@@ -202,13 +191,30 @@ update msg model =
 
         RemoveFromPatternArray startIndex endIndex ->
             let
-                newPatternArray =
+                newUncoloredPatternArray =
                     removeFromArray startIndex endIndex model.patternArray
+
+                stackResultTuple =
+                    applyPatternsToStack ( Array.empty, Array.empty ) (List.reverse <| Tuple.first <| List.unzip <| Array.toList newUncoloredPatternArray) False
+
+                newStack =
+                    Tuple.first stackResultTuple
+
+                resultArray =
+                    Tuple.second stackResultTuple
+
+                newPatternArray =
+                        Array.map2
+                            (\patternTuple result ->
+                                updateDrawingColors ( applyColorToPatternFromResult (Tuple.first patternTuple) result, Tuple.second patternTuple )
+                            )
+                            newUncoloredPatternArray
+                            resultArray
             in
             ( { model
                 | patternArray = newPatternArray
                 , grid = { grid | points = updateGridPoints grid.width grid.height newPatternArray [] settings.gridScale }
-                , stack = applyPatternsToStack Array.empty (List.reverse <| Tuple.first <| List.unzip <| Array.toList newPatternArray) False
+                , stack = newStack
               }
             , Cmd.none
             )
@@ -263,7 +269,7 @@ update msg model =
                 ( { model
                     | patternArray = addToPatternArray model newPattern
                     , ui = { ui | patternInputField = "" }
-                    , stack = applyPatternsToStack Array.empty (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern)) False
+                    , stack = Tuple.first <| applyPatternsToStack ( Array.empty, Array.empty ) (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern)) False
                   }
                 , Cmd.none
                 )
@@ -282,7 +288,7 @@ update msg model =
             ( { model
                 | patternArray = addToPatternArray model newPattern
                 , ui = { ui | patternInputField = "" }
-                , stack = applyPatternsToStack Array.empty (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern)) False
+                , stack = Tuple.first <| applyPatternsToStack ( Array.empty, Array.empty ) (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern)) False
               }
             , Cmd.none
             )
@@ -410,19 +416,39 @@ update msg model =
                 originIndex =
                     Tuple.second model.ui.dragging
 
-                newPatternArray =
+                stackResultTuple =
+                    applyPatternsToStack
+                        ( Array.empty, Array.empty )
+                        (List.reverse <| Tuple.first <| List.unzip <| Array.toList newUncoloredPatternArray)
+                        False
+
+                newStack =
+                    Tuple.first stackResultTuple
+
+                resultArray =
+                    Tuple.second stackResultTuple
+
+                newUncoloredPatternArray =
                     case Array.get originIndex patternArray of
                         Just element ->
                             Array.insertAt index element (removeFromArray originIndex (originIndex + 1) model.patternArray)
 
                         Nothing ->
                             patternArray
+
+                newPatternArray =
+                        Array.map2
+                            (\patternTuple result ->
+                                updateDrawingColors ( applyColorToPatternFromResult (Tuple.first patternTuple) result, Tuple.second patternTuple )
+                            )
+                            newUncoloredPatternArray
+                            resultArray
             in
             ( { model
                 | ui = { ui | mouseOverElementIndex = -1, dragging = ( False, -1 ) }
                 , patternArray = newPatternArray
                 , grid = { grid | points = updateGridPoints grid.width grid.height newPatternArray [] settings.gridScale }
-                , stack = applyPatternsToStack Array.empty (List.reverse <| Tuple.first <| List.unzip <| Array.toList newPatternArray) False
+                , stack = newStack
               }
             , Cmd.none
             )
