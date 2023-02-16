@@ -5,7 +5,7 @@ import Logic.App.Patterns.OperatorUtils exposing (actionNoInput)
 import Logic.App.Types exposing (Iota(..))
 
 
-circleImpetusDirection : Array Iota -> Array Iota
+circleImpetusDirection : Array Iota -> ( Array Iota, Bool )
 circleImpetusDirection stack =
     let
         action =
@@ -15,7 +15,7 @@ circleImpetusDirection stack =
     actionNoInput stack action
 
 
-circleBoundsMin : Array Iota -> Array Iota
+circleBoundsMin : Array Iota -> ( Array Iota, Bool )
 circleBoundsMin stack =
     let
         action =
@@ -25,7 +25,7 @@ circleBoundsMin stack =
     actionNoInput stack action
 
 
-circleBoundsMax : Array Iota -> Array Iota
+circleBoundsMax : Array Iota -> ( Array Iota, Bool )
 circleBoundsMax stack =
     let
         action =

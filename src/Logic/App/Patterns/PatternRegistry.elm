@@ -9,16 +9,15 @@ import Logic.App.Patterns.OperatorUtils exposing (action1Input, getPatternOrPatt
 import Logic.App.Patterns.Selectors exposing (..)
 import Logic.App.Patterns.Stack exposing (..)
 import Logic.App.Stack.Stack exposing (applyPatternToStack, applyPatternsToStack)
-import Logic.App.Types exposing (Iota(..), Mishap(..), PatternType)
+import Logic.App.Types exposing (ApplyToStackResult(..), Iota(..), Mishap(..), PatternType)
 import Logic.App.Utils.Utils exposing (unshift)
 import Ports.HexNumGen as HexNumGen
 import Settings.Theme exposing (..)
-import Logic.App.Types exposing (ApplyToStackResult(..))
 
 
-noAction : Array Iota -> Array Iota
+noAction : Array Iota -> ( Array Iota, Bool )
 noAction stack =
-    stack
+    ( stack, True )
 
 
 unknownPattern : PatternType
@@ -223,7 +222,7 @@ patternRegistry =
     ]
 
 
-eval : Array Iota -> Array Iota
+eval : Array Iota -> ( Array Iota, Bool )
 eval stack =
     let
         maybeIota =
@@ -234,17 +233,17 @@ eval stack =
     in
     case maybeIota of
         Nothing ->
-            unshift (Garbage NotEnoughIotas) newStack
+            ( unshift (Garbage NotEnoughIotas) newStack, False )
 
         Just iota ->
             case getPatternOrPatternList <| iota of
                 Nothing ->
-                    unshift (Garbage IncorrectIota) newStack
+                    ( unshift (Garbage IncorrectIota) newStack, False )
 
                 _ ->
                     case iota of
                         IotaList list ->
-                            Tuple.first <|
+                            ( Tuple.first <|
                                 applyPatternsToStack ( newStack, Array.empty )
                                     (List.reverse <|
                                         Array.toList <|
@@ -258,14 +257,16 @@ eval stack =
                                                             unknownPattern
                                                 )
                                                 list
-                                    ) False
-                                    
+                                    )
+                                    False
+                            , True
+                            )
 
                         Pattern pattern _ ->
-                            Tuple.first <| applyPatternsToStack ( newStack, Array.empty ) [ pattern ] False
+                            ( Tuple.first <| applyPatternsToStack ( newStack, Array.empty ) [ pattern ] False, True )
 
                         _ ->
-                            Array.fromList [ Garbage CatastrophicFailure ]
+                            ( Array.fromList [ Garbage CatastrophicFailure ], True )
 
 
 numberLiteralGenerator : String -> Bool -> PatternType

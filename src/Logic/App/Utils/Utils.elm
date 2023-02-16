@@ -16,7 +16,6 @@ unshift item array =
 removeFromArray : Int -> Int -> Array a -> Array a
 removeFromArray start end array =
     let
-
         rangeToRemove =
             List.range start (end - 1)
 
@@ -31,3 +30,13 @@ touchCoordinates touchEvent =
     List.head touchEvent.changedTouches
         |> Maybe.map .clientPos
         |> Maybe.withDefault ( 0, 0 )
+
+
+isJust : Maybe a -> Bool
+isJust maybe =
+    case maybe of
+        Just _ ->
+            True
+
+        Nothing ->
+            False

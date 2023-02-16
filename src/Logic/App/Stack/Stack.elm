@@ -113,7 +113,12 @@ applyPatternToStack stack pattern =
                 --temporary
 
             else
-                ( pattern.action stack, Succeeded, False )
+                case pattern.action stack of
+                    ( newStack, True ) ->
+                        ( newStack, Succeeded, False )
+
+                    ( newStack, False ) ->
+                        ( newStack, Failed, False )
 
 
 addEscapedPatternIotaToStack : Array Iota -> PatternType -> Array Iota

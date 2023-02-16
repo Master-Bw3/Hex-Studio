@@ -6,7 +6,7 @@ import Logic.App.Types exposing (EntityType(..), Iota(..))
 import Logic.App.Utils.Utils exposing (unshift)
 
 
-getCaster : Array Iota -> Array Iota
+getCaster : Array Iota -> ( Array Iota, Bool )
 getCaster stack =
     let
         action =

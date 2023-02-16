@@ -8,17 +8,17 @@ import Quantity exposing (Quantity(..))
 import Vector3d as Vec3d
 
 
-makeConstant : Iota -> Array Iota -> Array Iota
+makeConstant : Iota -> Array Iota -> ( Array Iota, Bool )
 makeConstant iota stack =
-    unshift iota stack
+    (unshift iota stack, True)
 
 
-actionNoInput : Array Iota -> Array Iota -> Array Iota
+actionNoInput : Array Iota -> Array Iota -> ( Array Iota, Bool )
 actionNoInput stack action =
-    Array.append action stack
+    (Array.append action stack, True)
 
 
-action1Input : Array Iota -> (Iota -> Maybe Iota) -> (Iota -> Array Iota) -> Array Iota
+action1Input : Array Iota -> (Iota -> Maybe Iota) -> (Iota -> Array Iota) -> ( Array Iota, Bool )
 action1Input stack inputGetter action =
     let
         maybeIota =
@@ -29,18 +29,18 @@ action1Input stack inputGetter action =
     in
     case maybeIota of
         Nothing ->
-            unshift (Garbage NotEnoughIotas) newStack
+            ( unshift (Garbage NotEnoughIotas) newStack, False )
 
         Just iota ->
             case inputGetter iota of
                 Nothing ->
-                    unshift (Garbage IncorrectIota) newStack
+                    ( unshift (Garbage IncorrectIota) newStack, False )
 
                 Just _ ->
-                    Array.append (action iota) newStack
+                    ( Array.append (action iota) newStack, True )
 
 
-action2Inputs : Array Iota -> (Iota -> Maybe Iota) -> (Iota -> Maybe Iota) -> (Iota -> Iota -> Array Iota) -> Array Iota
+action2Inputs : Array Iota -> (Iota -> Maybe Iota) -> (Iota -> Maybe Iota) -> (Iota -> Iota -> Array Iota) -> ( Array Iota, Bool )
 action2Inputs stack inputGetter1 inputGetter2 action =
     let
         maybeIota1 =
@@ -53,34 +53,38 @@ action2Inputs stack inputGetter1 inputGetter2 action =
             Array.slice 2 (Array.length stack) stack
     in
     if maybeIota1 == Nothing || maybeIota2 == Nothing then
-        Array.append (Array.map mapNothingToMissingIota <| Array.fromList <| moveNothingsToFront [ maybeIota1, maybeIota2 ]) newStack
+        ( Array.append (Array.map mapNothingToMissingIota <| Array.fromList <| moveNothingsToFront [ maybeIota1, maybeIota2 ]) newStack, False )
 
     else
         case ( Maybe.map inputGetter1 maybeIota1, Maybe.map inputGetter2 maybeIota2 ) of
             ( Just iota1, Just iota2 ) ->
                 if iota1 == Nothing || iota2 == Nothing then
-                    Array.append
+                    ( Array.append
                         (Array.fromList
                             [ Maybe.withDefault (Garbage IncorrectIota) iota1
                             , Maybe.withDefault (Garbage IncorrectIota) iota2
                             ]
                         )
                         newStack
+                    , False
+                    )
 
                 else
-                    Array.append
+                    ( Array.append
                         (action
                             (Maybe.withDefault (Garbage IncorrectIota) iota1)
                             (Maybe.withDefault (Garbage IncorrectIota) iota2)
                         )
                         newStack
+                    , True
+                    )
 
             _ ->
                 -- this should never happen
-                unshift (Garbage CatastrophicFailure) newStack
+                ( unshift (Garbage CatastrophicFailure) newStack, False )
 
 
-action3Inputs : Array Iota -> (Iota -> Maybe Iota) -> (Iota -> Maybe Iota) -> (Iota -> Maybe Iota) -> (Iota -> Iota -> Iota -> Array Iota) -> Array Iota
+action3Inputs : Array Iota -> (Iota -> Maybe Iota) -> (Iota -> Maybe Iota) -> (Iota -> Maybe Iota) -> (Iota -> Iota -> Iota -> Array Iota) -> ( Array Iota, Bool )
 action3Inputs stack inputGetter1 inputGetter2 inputGetter3 action =
     let
         maybeIota1 =
@@ -96,33 +100,33 @@ action3Inputs stack inputGetter1 inputGetter2 inputGetter3 action =
             Array.slice 3 (Array.length stack) stack
     in
     if maybeIota1 == Nothing || maybeIota2 == Nothing || maybeIota3 == Nothing then
-        Array.append (Array.map mapNothingToMissingIota <| Array.fromList <| moveNothingsToFront [ maybeIota1, maybeIota2, maybeIota3 ]) newStack
+        (Array.append (Array.map mapNothingToMissingIota <| Array.fromList <| moveNothingsToFront [ maybeIota1, maybeIota2, maybeIota3 ]) newStack, False)
 
     else
         case ( Maybe.map inputGetter1 maybeIota1, Maybe.map inputGetter2 maybeIota2, Maybe.map inputGetter3 maybeIota3 ) of
             ( Just iota1, Just iota2, Just iota3 ) ->
                 if iota1 == Nothing || iota2 == Nothing || iota3 == Nothing then
-                    Array.append
+                    (Array.append
                         (Array.fromList
                             [ Maybe.withDefault (Garbage IncorrectIota) iota1
                             , Maybe.withDefault (Garbage IncorrectIota) iota2
                             , Maybe.withDefault (Garbage IncorrectIota) iota3
                             ]
                         )
-                        newStack
+                        newStack, False)
 
                 else
-                    Array.append
+                    (Array.append
                         (action
                             (Maybe.withDefault (Garbage IncorrectIota) iota1)
                             (Maybe.withDefault (Garbage IncorrectIota) iota2)
                             (Maybe.withDefault (Garbage IncorrectIota) iota3)
                         )
-                        newStack
+                        newStack, True)
 
             _ ->
                 -- this should never happen
-                unshift (Garbage CatastrophicFailure) newStack
+                (unshift (Garbage CatastrophicFailure) newStack, False)
 
 
 getPatternOrPatternList : Iota -> Maybe Iota

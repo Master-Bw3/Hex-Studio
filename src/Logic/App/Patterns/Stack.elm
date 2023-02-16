@@ -8,7 +8,7 @@ import Logic.App.Types exposing (Iota(..), Mishap(..))
 import Logic.App.Utils.Utils exposing (removeFromArray, unshift)
 
 
-swap : Array Iota -> Array Iota
+swap : Array Iota -> ( Array Iota, Bool )
 swap stack =
     let
         action iota1 iota2 =
@@ -20,7 +20,7 @@ swap stack =
     action2Inputs stack getAny getAny action
 
 
-rotate : Array Iota -> Array Iota
+rotate : Array Iota -> ( Array Iota, Bool )
 rotate stack =
     let
         action iota1 iota2 iota3 =
@@ -33,7 +33,7 @@ rotate stack =
     action3Inputs stack getAny getAny getAny action
 
 
-rotateReverse : Array Iota -> Array Iota
+rotateReverse : Array Iota -> ( Array Iota, Bool )
 rotateReverse stack =
     let
         action iota1 iota2 iota3 =
@@ -46,7 +46,7 @@ rotateReverse stack =
     action3Inputs stack getAny getAny getAny action
 
 
-duplicate : Array Iota -> Array Iota
+duplicate : Array Iota -> ( Array Iota, Bool )
 duplicate stack =
     let
         action iota =
@@ -58,7 +58,7 @@ duplicate stack =
     action1Input stack getAny action
 
 
-over : Array Iota -> Array Iota
+over : Array Iota -> ( Array Iota, Bool )
 over stack =
     let
         action iota1 iota2 =
@@ -71,7 +71,7 @@ over stack =
     action2Inputs stack getAny getAny action
 
 
-tuck : Array Iota -> Array Iota
+tuck : Array Iota -> ( Array Iota, Bool )
 tuck stack =
     let
         action iota1 iota2 =
@@ -84,7 +84,7 @@ tuck stack =
     action2Inputs stack getAny getAny action
 
 
-dup2 : Array Iota -> Array Iota
+dup2 : Array Iota -> ( Array Iota, Bool )
 dup2 stack =
     let
         action iota1 iota2 =
@@ -98,12 +98,12 @@ dup2 stack =
     action2Inputs stack getAny getAny action
 
 
-stackLength : Array Iota -> Array Iota
+stackLength : Array Iota -> ( Array Iota, Bool )
 stackLength stack =
-    unshift (Number (toFloat <| Array.length stack)) stack
+    (unshift (Number (toFloat <| Array.length stack)) stack, True)
 
 
-duplicateN : Array Iota -> Array Iota
+duplicateN : Array Iota -> ( Array Iota, Bool )
 duplicateN stack =
     let
         action iota1 iota2 =
@@ -117,7 +117,7 @@ duplicateN stack =
     action2Inputs stack getAny getInteger action
 
 
-fisherman : Array Iota -> Array Iota
+fisherman : Array Iota -> ( Array Iota, Bool )
 fisherman stack =
     let
         maybeIota =
@@ -128,12 +128,12 @@ fisherman stack =
     in
     case maybeIota of
         Nothing ->
-            Array.append (Array.fromList [ Garbage NotEnoughIotas, Garbage NotEnoughIotas ]) newStack
+            (Array.append (Array.fromList [ Garbage NotEnoughIotas, Garbage NotEnoughIotas ]) newStack, False)
 
         Just iota ->
             case getInteger <| iota of
                 Nothing ->
-                    unshift (Garbage IncorrectIota) newStack
+                    (unshift (Garbage IncorrectIota) newStack, False)
 
                 _ ->
                     case iota of
@@ -147,16 +147,16 @@ fisherman stack =
                             in
                             case maybeCaughtIota of
                                 Nothing ->
-                                    unshift (Garbage NotEnoughIotas) stack
+                                    (unshift (Garbage NotEnoughIotas) stack, False)
 
                                 Just caughtIota ->
-                                    unshift caughtIota newNewStack
+                                    (unshift caughtIota newNewStack, True)
 
                         _ ->
-                            Array.fromList [ Garbage CatastrophicFailure ]
+                            (Array.fromList [ Garbage CatastrophicFailure ], False)
 
 
-fishermanCopy : Array Iota -> Array Iota
+fishermanCopy : Array Iota -> ( Array Iota, Bool )
 fishermanCopy stack =
     let
         maybeIota =
@@ -167,12 +167,12 @@ fishermanCopy stack =
     in
     case maybeIota of
         Nothing ->
-            Array.append (Array.fromList [ Garbage NotEnoughIotas, Garbage NotEnoughIotas ]) newStack
+            (Array.append (Array.fromList [ Garbage NotEnoughIotas, Garbage NotEnoughIotas ]) newStack, False)
 
         Just iota ->
             case getInteger <| iota of
                 Nothing ->
-                    unshift (Garbage IncorrectIota) newStack
+                    (unshift (Garbage IncorrectIota) newStack, False)
 
                 _ ->
                     case iota of
@@ -183,12 +183,12 @@ fishermanCopy stack =
                             in
                             case maybeCaughtIota of
                                 Nothing ->
-                                    unshift (Garbage NotEnoughIotas) stack
+                                    (unshift (Garbage NotEnoughIotas) stack, False)
 
                                 Just caughtIota ->
-                                    unshift caughtIota newStack
+                                    (unshift caughtIota newStack, True)
 
                         _ ->
-                            Array.fromList [ Garbage CatastrophicFailure ]
+                            (Array.fromList [ Garbage CatastrophicFailure ], False)
 
 

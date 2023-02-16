@@ -6955,16 +6955,28 @@ var $author$project$Logic$App$Stack$Stack$applyPatternToStack = F2(
 				$author$project$Logic$App$Types$Succeeded,
 				false) : _Utils_Tuple3(addToIntroList, $author$project$Logic$App$Types$Considered, false)) : ((pattern.internalName === 'open_paren') ? _Utils_Tuple3(addToIntroList, $author$project$Logic$App$Types$Considered, false) : _Utils_Tuple3(addToIntroList, $author$project$Logic$App$Types$Considered, false)));
 		} else {
-			return (pattern.internalName === 'escape') ? _Utils_Tuple3(stack, $author$project$Logic$App$Types$Succeeded, true) : ((pattern.internalName === 'close_paren') ? _Utils_Tuple3(
-				A2(
-					$author$project$Logic$App$Utils$Utils$unshift,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure),
-					stack),
-				$author$project$Logic$App$Types$Failed,
-				false) : _Utils_Tuple3(
-				pattern.action(stack),
-				$author$project$Logic$App$Types$Succeeded,
-				false));
+			if (pattern.internalName === 'escape') {
+				return _Utils_Tuple3(stack, $author$project$Logic$App$Types$Succeeded, true);
+			} else {
+				if (pattern.internalName === 'close_paren') {
+					return _Utils_Tuple3(
+						A2(
+							$author$project$Logic$App$Utils$Utils$unshift,
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure),
+							stack),
+						$author$project$Logic$App$Types$Failed,
+						false);
+				} else {
+					var _v4 = pattern.action(stack);
+					if (_v4.b) {
+						var newStack = _v4.a;
+						return _Utils_Tuple3(newStack, $author$project$Logic$App$Types$Succeeded, false);
+					} else {
+						var newStack = _v4.a;
+						return _Utils_Tuple3(newStack, $author$project$Logic$App$Types$Failed, false);
+					}
+				}
+			}
 		}
 	});
 var $author$project$Logic$App$Stack$Stack$applyPatternsToStack = F3(
@@ -7432,23 +7444,29 @@ var $author$project$Logic$App$Patterns$OperatorUtils$action1Input = F3(
 			stack);
 		var maybeIota = A2($elm$core$Array$get, 0, stack);
 		if (maybeIota.$ === 'Nothing') {
-			return A2(
-				$author$project$Logic$App$Utils$Utils$unshift,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
-				newStack);
+			return _Utils_Tuple2(
+				A2(
+					$author$project$Logic$App$Utils$Utils$unshift,
+					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
+					newStack),
+				false);
 		} else {
 			var iota = maybeIota.a;
 			var _v1 = inputGetter(iota);
 			if (_v1.$ === 'Nothing') {
-				return A2(
-					$author$project$Logic$App$Utils$Utils$unshift,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
-					newStack);
+				return _Utils_Tuple2(
+					A2(
+						$author$project$Logic$App$Utils$Utils$unshift,
+						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+						newStack),
+					false);
 			} else {
-				return A2(
-					$elm$core$Array$append,
-					action(iota),
-					newStack);
+				return _Utils_Tuple2(
+					A2(
+						$elm$core$Array$append,
+						action(iota),
+						newStack),
+					true);
 			}
 		}
 	});
@@ -7604,16 +7622,18 @@ var $author$project$Logic$App$Patterns$OperatorUtils$action2Inputs = F4(
 		var maybeIota2 = A2($elm$core$Array$get, 0, stack);
 		var maybeIota1 = A2($elm$core$Array$get, 1, stack);
 		if (_Utils_eq(maybeIota1, $elm$core$Maybe$Nothing) || _Utils_eq(maybeIota2, $elm$core$Maybe$Nothing)) {
-			return A2(
-				$elm$core$Array$append,
+			return _Utils_Tuple2(
 				A2(
-					$elm$core$Array$map,
-					$author$project$Logic$App$Patterns$OperatorUtils$mapNothingToMissingIota,
-					$elm$core$Array$fromList(
-						$author$project$Logic$App$Patterns$OperatorUtils$moveNothingsToFront(
-							_List_fromArray(
-								[maybeIota1, maybeIota2])))),
-				newStack);
+					$elm$core$Array$append,
+					A2(
+						$elm$core$Array$map,
+						$author$project$Logic$App$Patterns$OperatorUtils$mapNothingToMissingIota,
+						$elm$core$Array$fromList(
+							$author$project$Logic$App$Patterns$OperatorUtils$moveNothingsToFront(
+								_List_fromArray(
+									[maybeIota1, maybeIota2])))),
+					newStack),
+				false);
 		} else {
 			var _v0 = _Utils_Tuple2(
 				A2($elm$core$Maybe$map, inputGetter1, maybeIota1),
@@ -7621,38 +7641,44 @@ var $author$project$Logic$App$Patterns$OperatorUtils$action2Inputs = F4(
 			if ((_v0.a.$ === 'Just') && (_v0.b.$ === 'Just')) {
 				var iota1 = _v0.a.a;
 				var iota2 = _v0.b.a;
-				return (_Utils_eq(iota1, $elm$core$Maybe$Nothing) || _Utils_eq(iota2, $elm$core$Maybe$Nothing)) ? A2(
-					$elm$core$Array$append,
-					$elm$core$Array$fromList(
-						_List_fromArray(
-							[
-								A2(
+				return (_Utils_eq(iota1, $elm$core$Maybe$Nothing) || _Utils_eq(iota2, $elm$core$Maybe$Nothing)) ? _Utils_Tuple2(
+					A2(
+						$elm$core$Array$append,
+						$elm$core$Array$fromList(
+							_List_fromArray(
+								[
+									A2(
+									$elm$core$Maybe$withDefault,
+									$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+									iota1),
+									A2(
+									$elm$core$Maybe$withDefault,
+									$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+									iota2)
+								])),
+						newStack),
+					false) : _Utils_Tuple2(
+					A2(
+						$elm$core$Array$append,
+						A2(
+							action,
+							A2(
 								$elm$core$Maybe$withDefault,
 								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
 								iota1),
-								A2(
+							A2(
 								$elm$core$Maybe$withDefault,
 								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
-								iota2)
-							])),
-					newStack) : A2(
-					$elm$core$Array$append,
-					A2(
-						action,
-						A2(
-							$elm$core$Maybe$withDefault,
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
-							iota1),
-						A2(
-							$elm$core$Maybe$withDefault,
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
-							iota2)),
-					newStack);
+								iota2)),
+						newStack),
+					true);
 			} else {
-				return A2(
-					$author$project$Logic$App$Utils$Utils$unshift,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure),
-					newStack);
+				return _Utils_Tuple2(
+					A2(
+						$author$project$Logic$App$Utils$Utils$unshift,
+						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure),
+						newStack),
+					false);
 			}
 		}
 	});
@@ -8074,7 +8100,9 @@ var $author$project$Logic$App$Patterns$Math$ceilAction = function (stack) {
 };
 var $author$project$Logic$App$Patterns$OperatorUtils$actionNoInput = F2(
 	function (stack, action) {
-		return A2($elm$core$Array$append, action, stack);
+		return _Utils_Tuple2(
+			A2($elm$core$Array$append, action, stack),
+			true);
 	});
 var $author$project$Logic$App$Patterns$Circles$circleBoundsMax = function (stack) {
 	var action = A2(
@@ -8154,16 +8182,18 @@ var $author$project$Logic$App$Patterns$OperatorUtils$action3Inputs = F5(
 		var maybeIota2 = A2($elm$core$Array$get, 1, stack);
 		var maybeIota1 = A2($elm$core$Array$get, 2, stack);
 		if (_Utils_eq(maybeIota1, $elm$core$Maybe$Nothing) || (_Utils_eq(maybeIota2, $elm$core$Maybe$Nothing) || _Utils_eq(maybeIota3, $elm$core$Maybe$Nothing))) {
-			return A2(
-				$elm$core$Array$append,
+			return _Utils_Tuple2(
 				A2(
-					$elm$core$Array$map,
-					$author$project$Logic$App$Patterns$OperatorUtils$mapNothingToMissingIota,
-					$elm$core$Array$fromList(
-						$author$project$Logic$App$Patterns$OperatorUtils$moveNothingsToFront(
-							_List_fromArray(
-								[maybeIota1, maybeIota2, maybeIota3])))),
-				newStack);
+					$elm$core$Array$append,
+					A2(
+						$elm$core$Array$map,
+						$author$project$Logic$App$Patterns$OperatorUtils$mapNothingToMissingIota,
+						$elm$core$Array$fromList(
+							$author$project$Logic$App$Patterns$OperatorUtils$moveNothingsToFront(
+								_List_fromArray(
+									[maybeIota1, maybeIota2, maybeIota3])))),
+					newStack),
+				false);
 		} else {
 			var _v0 = _Utils_Tuple3(
 				A2($elm$core$Maybe$map, inputGetter1, maybeIota1),
@@ -8173,46 +8203,52 @@ var $author$project$Logic$App$Patterns$OperatorUtils$action3Inputs = F5(
 				var iota1 = _v0.a.a;
 				var iota2 = _v0.b.a;
 				var iota3 = _v0.c.a;
-				return (_Utils_eq(iota1, $elm$core$Maybe$Nothing) || (_Utils_eq(iota2, $elm$core$Maybe$Nothing) || _Utils_eq(iota3, $elm$core$Maybe$Nothing))) ? A2(
-					$elm$core$Array$append,
-					$elm$core$Array$fromList(
-						_List_fromArray(
-							[
-								A2(
+				return (_Utils_eq(iota1, $elm$core$Maybe$Nothing) || (_Utils_eq(iota2, $elm$core$Maybe$Nothing) || _Utils_eq(iota3, $elm$core$Maybe$Nothing))) ? _Utils_Tuple2(
+					A2(
+						$elm$core$Array$append,
+						$elm$core$Array$fromList(
+							_List_fromArray(
+								[
+									A2(
+									$elm$core$Maybe$withDefault,
+									$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+									iota1),
+									A2(
+									$elm$core$Maybe$withDefault,
+									$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+									iota2),
+									A2(
+									$elm$core$Maybe$withDefault,
+									$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+									iota3)
+								])),
+						newStack),
+					false) : _Utils_Tuple2(
+					A2(
+						$elm$core$Array$append,
+						A3(
+							action,
+							A2(
 								$elm$core$Maybe$withDefault,
 								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
 								iota1),
-								A2(
+							A2(
 								$elm$core$Maybe$withDefault,
 								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
 								iota2),
-								A2(
+							A2(
 								$elm$core$Maybe$withDefault,
 								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
-								iota3)
-							])),
-					newStack) : A2(
-					$elm$core$Array$append,
-					A3(
-						action,
-						A2(
-							$elm$core$Maybe$withDefault,
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
-							iota1),
-						A2(
-							$elm$core$Maybe$withDefault,
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
-							iota2),
-						A2(
-							$elm$core$Maybe$withDefault,
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
-							iota3)),
-					newStack);
+								iota3)),
+						newStack),
+					true);
 			} else {
-				return A2(
-					$author$project$Logic$App$Utils$Utils$unshift,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure),
-					newStack);
+				return _Utils_Tuple2(
+					A2(
+						$author$project$Logic$App$Utils$Utils$unshift,
+						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure),
+						newStack),
+					false);
 			}
 		}
 	});
@@ -8510,7 +8546,9 @@ var $author$project$Logic$App$Types$InvalidPattern = {$: 'InvalidPattern'};
 var $author$project$Settings$Theme$accent3 = '#e0b8b8';
 var $author$project$Logic$App$Patterns$OperatorUtils$makeConstant = F2(
 	function (iota, stack) {
-		return A2($author$project$Logic$App$Utils$Utils$unshift, iota, stack);
+		return _Utils_Tuple2(
+			A2($author$project$Logic$App$Utils$Utils$unshift, iota, stack),
+			true);
 	});
 var $author$project$Logic$App$Patterns$PatternRegistry$unknownPattern = {
 	action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
@@ -8528,53 +8566,63 @@ var $author$project$Logic$App$Patterns$PatternRegistry$eval = function (stack) {
 		stack);
 	var maybeIota = A2($elm$core$Array$get, 0, stack);
 	if (maybeIota.$ === 'Nothing') {
-		return A2(
-			$author$project$Logic$App$Utils$Utils$unshift,
-			$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
-			newStack);
+		return _Utils_Tuple2(
+			A2(
+				$author$project$Logic$App$Utils$Utils$unshift,
+				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
+				newStack),
+			false);
 	} else {
 		var iota = maybeIota.a;
 		var _v1 = $author$project$Logic$App$Patterns$OperatorUtils$getPatternOrPatternList(iota);
 		if (_v1.$ === 'Nothing') {
-			return A2(
-				$author$project$Logic$App$Utils$Utils$unshift,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
-				newStack);
+			return _Utils_Tuple2(
+				A2(
+					$author$project$Logic$App$Utils$Utils$unshift,
+					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+					newStack),
+				false);
 		} else {
 			switch (iota.$) {
 				case 'IotaList':
 					var list = iota.a;
-					return A3(
-						$author$project$Logic$App$Stack$Stack$applyPatternsToStack,
-						_Utils_Tuple2(newStack, $elm$core$Array$empty),
-						$elm$core$List$reverse(
-							$elm$core$Array$toList(
-								A2(
-									$elm$core$Array$map,
-									function (i) {
-										if (i.$ === 'Pattern') {
-											var pattern = i.a;
-											return pattern;
-										} else {
-											return $author$project$Logic$App$Patterns$PatternRegistry$unknownPattern;
-										}
-									},
-									list))),
-						false).a;
+					return _Utils_Tuple2(
+						A3(
+							$author$project$Logic$App$Stack$Stack$applyPatternsToStack,
+							_Utils_Tuple2(newStack, $elm$core$Array$empty),
+							$elm$core$List$reverse(
+								$elm$core$Array$toList(
+									A2(
+										$elm$core$Array$map,
+										function (i) {
+											if (i.$ === 'Pattern') {
+												var pattern = i.a;
+												return pattern;
+											} else {
+												return $author$project$Logic$App$Patterns$PatternRegistry$unknownPattern;
+											}
+										},
+										list))),
+							false).a,
+						true);
 				case 'Pattern':
 					var pattern = iota.a;
-					return A3(
-						$author$project$Logic$App$Stack$Stack$applyPatternsToStack,
-						_Utils_Tuple2(newStack, $elm$core$Array$empty),
-						_List_fromArray(
-							[pattern]),
-						false).a;
+					return _Utils_Tuple2(
+						A3(
+							$author$project$Logic$App$Stack$Stack$applyPatternsToStack,
+							_Utils_Tuple2(newStack, $elm$core$Array$empty),
+							_List_fromArray(
+								[pattern]),
+							false).a,
+						true);
 				default:
-					return $elm$core$Array$fromList(
-						_List_fromArray(
-							[
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure)
-							]));
+					return _Utils_Tuple2(
+						$elm$core$Array$fromList(
+							_List_fromArray(
+								[
+									$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure)
+								])),
+						true);
 			}
 		}
 	}
@@ -8636,23 +8684,27 @@ var $author$project$Logic$App$Patterns$Stack$fisherman = function (stack) {
 		stack);
 	var maybeIota = A2($elm$core$Array$get, 0, stack);
 	if (maybeIota.$ === 'Nothing') {
-		return A2(
-			$elm$core$Array$append,
-			$elm$core$Array$fromList(
-				_List_fromArray(
-					[
-						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
-						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas)
-					])),
-			newStack);
+		return _Utils_Tuple2(
+			A2(
+				$elm$core$Array$append,
+				$elm$core$Array$fromList(
+					_List_fromArray(
+						[
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas)
+						])),
+				newStack),
+			false);
 	} else {
 		var iota = maybeIota.a;
 		var _v1 = $author$project$Logic$App$Patterns$OperatorUtils$getInteger(iota);
 		if (_v1.$ === 'Nothing') {
-			return A2(
-				$author$project$Logic$App$Utils$Utils$unshift,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
-				newStack);
+			return _Utils_Tuple2(
+				A2(
+					$author$project$Logic$App$Utils$Utils$unshift,
+					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+					newStack),
+				false);
 		} else {
 			if (iota.$ === 'Number') {
 				var number = iota.a;
@@ -8666,20 +8718,26 @@ var $author$project$Logic$App$Patterns$Stack$fisherman = function (stack) {
 					$elm$core$Basics$round(number) - 1,
 					newStack);
 				if (maybeCaughtIota.$ === 'Nothing') {
-					return A2(
-						$author$project$Logic$App$Utils$Utils$unshift,
-						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
-						stack);
+					return _Utils_Tuple2(
+						A2(
+							$author$project$Logic$App$Utils$Utils$unshift,
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
+							stack),
+						false);
 				} else {
 					var caughtIota = maybeCaughtIota.a;
-					return A2($author$project$Logic$App$Utils$Utils$unshift, caughtIota, newNewStack);
+					return _Utils_Tuple2(
+						A2($author$project$Logic$App$Utils$Utils$unshift, caughtIota, newNewStack),
+						true);
 				}
 			} else {
-				return $elm$core$Array$fromList(
-					_List_fromArray(
-						[
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure)
-						]));
+				return _Utils_Tuple2(
+					$elm$core$Array$fromList(
+						_List_fromArray(
+							[
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure)
+							])),
+					false);
 			}
 		}
 	}
@@ -8692,23 +8750,27 @@ var $author$project$Logic$App$Patterns$Stack$fishermanCopy = function (stack) {
 		stack);
 	var maybeIota = A2($elm$core$Array$get, 0, stack);
 	if (maybeIota.$ === 'Nothing') {
-		return A2(
-			$elm$core$Array$append,
-			$elm$core$Array$fromList(
-				_List_fromArray(
-					[
-						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
-						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas)
-					])),
-			newStack);
+		return _Utils_Tuple2(
+			A2(
+				$elm$core$Array$append,
+				$elm$core$Array$fromList(
+					_List_fromArray(
+						[
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas)
+						])),
+				newStack),
+			false);
 	} else {
 		var iota = maybeIota.a;
 		var _v1 = $author$project$Logic$App$Patterns$OperatorUtils$getInteger(iota);
 		if (_v1.$ === 'Nothing') {
-			return A2(
-				$author$project$Logic$App$Utils$Utils$unshift,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
-				newStack);
+			return _Utils_Tuple2(
+				A2(
+					$author$project$Logic$App$Utils$Utils$unshift,
+					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+					newStack),
+				false);
 		} else {
 			if (iota.$ === 'Number') {
 				var number = iota.a;
@@ -8717,20 +8779,26 @@ var $author$project$Logic$App$Patterns$Stack$fishermanCopy = function (stack) {
 					$elm$core$Basics$round(number),
 					newStack);
 				if (maybeCaughtIota.$ === 'Nothing') {
-					return A2(
-						$author$project$Logic$App$Utils$Utils$unshift,
-						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
-						stack);
+					return _Utils_Tuple2(
+						A2(
+							$author$project$Logic$App$Utils$Utils$unshift,
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
+							stack),
+						false);
 				} else {
 					var caughtIota = maybeCaughtIota.a;
-					return A2($author$project$Logic$App$Utils$Utils$unshift, caughtIota, newStack);
+					return _Utils_Tuple2(
+						A2($author$project$Logic$App$Utils$Utils$unshift, caughtIota, newStack),
+						true);
 				}
 			} else {
-				return $elm$core$Array$fromList(
-					_List_fromArray(
-						[
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure)
-						]));
+				return _Utils_Tuple2(
+					$elm$core$Array$fromList(
+						_List_fromArray(
+							[
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure)
+							])),
+					false);
 			}
 		}
 	}
@@ -9043,7 +9111,7 @@ var $author$project$Logic$App$Patterns$Math$mulDot = function (stack) {
 	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, action);
 };
 var $author$project$Logic$App$Patterns$PatternRegistry$noAction = function (stack) {
-	return stack;
+	return _Utils_Tuple2(stack, true);
 };
 var $elm$core$Bitwise$complement = _Bitwise_complement;
 var $author$project$Logic$App$Patterns$Math$notBit = function (stack) {
@@ -9323,11 +9391,13 @@ var $author$project$Logic$App$Patterns$Lists$singleton = function (stack) {
 	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
 };
 var $author$project$Logic$App$Patterns$Stack$stackLength = function (stack) {
-	return A2(
-		$author$project$Logic$App$Utils$Utils$unshift,
-		$author$project$Logic$App$Types$Number(
-			$elm$core$Array$length(stack)),
-		stack);
+	return _Utils_Tuple2(
+		A2(
+			$author$project$Logic$App$Utils$Utils$unshift,
+			$author$project$Logic$App$Types$Number(
+				$elm$core$Array$length(stack)),
+			stack),
+		true);
 };
 var $author$project$Logic$App$Patterns$Math$subtract = function (stack) {
 	var action = F2(
@@ -9879,10 +9949,12 @@ var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName = func
 var $elm$core$String$fromFloat = _String_fromNumber;
 var $author$project$Logic$App$Patterns$Misc$numberLiteral = F2(
 	function (number, stack) {
-		return A2(
-			$author$project$Logic$App$Utils$Utils$unshift,
-			$author$project$Logic$App$Types$Number(number),
-			stack);
+		return _Utils_Tuple2(
+			A2(
+				$author$project$Logic$App$Utils$Utils$unshift,
+				$author$project$Logic$App$Types$Number(number),
+				stack),
+			true);
 	});
 var $elm$core$String$foldr = _String_foldr;
 var $elm$core$String$toList = function (string) {

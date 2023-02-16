@@ -12,7 +12,7 @@ import Svg.Attributes exposing (azimuth)
 import Vector3d as Vec3d
 
 
-add : Array Iota -> Array Iota
+add : Array Iota -> ( Array Iota, Bool )
 add stack =
     let
         action iota1 iota2 =
@@ -58,7 +58,7 @@ add stack =
     action2Inputs stack getNumberOrVector getNumberOrVector action
 
 
-subtract : Array Iota -> Array Iota
+subtract : Array Iota -> ( Array Iota, Bool )
 subtract stack =
     let
         action iota1 iota2 =
@@ -104,7 +104,7 @@ subtract stack =
     action2Inputs stack getNumberOrVector getNumberOrVector action
 
 
-mulDot : Array Iota -> Array Iota
+mulDot : Array Iota -> ( Array Iota, Bool )
 mulDot stack =
     let
         action iota1 iota2 =
@@ -154,7 +154,7 @@ mulDot stack =
     action2Inputs stack getNumberOrVector getNumberOrVector action
 
 
-divCross : Array Iota -> Array Iota
+divCross : Array Iota -> ( Array Iota, Bool )
 divCross stack =
     let
         action iota1 iota2 =
@@ -204,7 +204,7 @@ divCross stack =
     action2Inputs stack getNumberOrVector getNumberOrVector action
 
 
-absLen : Array Iota -> Array Iota
+absLen : Array Iota -> ( Array Iota, Bool )
 absLen stack =
     let
         action iota =
@@ -230,7 +230,7 @@ absLen stack =
     action1Input stack getNumberOrVector action
 
 
-powProj : Array Iota -> Array Iota
+powProj : Array Iota -> ( Array Iota, Bool )
 powProj stack =
     let
         action iota1 iota2 =
@@ -283,7 +283,7 @@ powProj stack =
     action2Inputs stack getNumberOrVector getNumberOrVector action
 
 
-floorAction : Array Iota -> Array Iota
+floorAction : Array Iota -> ( Array Iota, Bool )
 floorAction stack =
     let
         action iota =
@@ -299,7 +299,7 @@ floorAction stack =
     action1Input stack getNumber action
 
 
-ceilAction : Array Iota -> Array Iota
+ceilAction : Array Iota -> ( Array Iota, Bool )
 ceilAction stack =
     let
         action iota =
@@ -315,7 +315,7 @@ ceilAction stack =
     action1Input stack getNumber action
 
 
-coerceAxial : Array Iota -> Array Iota
+coerceAxial : Array Iota -> ( Array Iota, Bool )
 coerceAxial stack =
     let
         action iota =
@@ -353,7 +353,7 @@ coerceAxial stack =
     action1Input stack getVector action
 
 
-sine : Array Iota -> Array Iota
+sine : Array Iota -> ( Array Iota, Bool )
 sine stack =
     let
         action iota =
@@ -369,7 +369,7 @@ sine stack =
     action1Input stack getNumber action
 
 
-cosine : Array Iota -> Array Iota
+cosine : Array Iota -> ( Array Iota, Bool )
 cosine stack =
     let
         action iota =
@@ -385,7 +385,7 @@ cosine stack =
     action1Input stack getNumber action
 
 
-tangent : Array Iota -> Array Iota
+tangent : Array Iota -> ( Array Iota, Bool )
 tangent stack =
     let
         action iota =
@@ -401,7 +401,7 @@ tangent stack =
     action1Input stack getNumber action
 
 
-arcsin : Array Iota -> Array Iota
+arcsin : Array Iota -> ( Array Iota, Bool )
 arcsin stack =
     let
         action iota =
@@ -417,7 +417,7 @@ arcsin stack =
     action1Input stack getNumber action
 
 
-arccos : Array Iota -> Array Iota
+arccos : Array Iota -> ( Array Iota, Bool )
 arccos stack =
     let
         action iota =
@@ -433,7 +433,7 @@ arccos stack =
     action1Input stack getNumber action
 
 
-arctan : Array Iota -> Array Iota
+arctan : Array Iota -> ( Array Iota, Bool )
 arctan stack =
     let
         action iota =
@@ -449,7 +449,7 @@ arctan stack =
     action1Input stack getNumber action
 
 
-logarithm : Array Iota -> Array Iota
+logarithm : Array Iota -> ( Array Iota, Bool )
 logarithm stack =
     let
         action iota1 iota2 =
@@ -465,7 +465,7 @@ logarithm stack =
     action2Inputs stack getNumber getNumber action
 
 
-modulo : Array Iota -> Array Iota
+modulo : Array Iota -> ( Array Iota, Bool )
 modulo stack =
     let
         action iota1 iota2 =
@@ -481,7 +481,7 @@ modulo stack =
     action2Inputs stack getNumber getNumber action
 
 
-andBit : Array Iota -> Array Iota
+andBit : Array Iota -> ( Array Iota, Bool )
 andBit stack =
     let
         action iota1 iota2 =
@@ -502,7 +502,7 @@ andBit stack =
     action2Inputs stack getIntegerOrList getIntegerOrList action
 
 
-orBit : Array Iota -> Array Iota
+orBit : Array Iota -> ( Array Iota, Bool )
 orBit stack =
     let
         action iota1 iota2 =
@@ -524,7 +524,7 @@ orBit stack =
     action2Inputs stack getIntegerOrList getIntegerOrList action
 
 
-xorBit : Array Iota -> Array Iota
+xorBit : Array Iota -> ( Array Iota, Bool )
 xorBit stack =
     let
         action iota1 iota2 =
@@ -546,7 +546,7 @@ xorBit stack =
     action2Inputs stack getIntegerOrList getIntegerOrList action
 
 
-notBit : Array Iota -> Array Iota
+notBit : Array Iota -> ( Array Iota, Bool )
 notBit stack =
     let
         action iota =
@@ -562,7 +562,7 @@ notBit stack =
     action1Input stack getInteger action
 
 
-toSet : Array Iota -> Array Iota
+toSet : Array Iota -> ( Array Iota, Bool )
 toSet stack =
     let
         constructSet iota out = 
@@ -586,7 +586,7 @@ toSet stack =
     action1Input stack getIotaList action
 
 
-constructVector : Array Iota -> Array Iota
+constructVector : Array Iota -> ( Array Iota, Bool )
 constructVector stack =
     let
         action iota1 iota2 iota3 =
@@ -602,7 +602,7 @@ constructVector stack =
     action3Inputs stack getNumber getNumber getNumber action
 
 
-deconstructVector : Array Iota -> Array Iota
+deconstructVector : Array Iota -> ( Array Iota, Bool )
 deconstructVector stack =
     let
         action iota =
@@ -621,7 +621,7 @@ deconstructVector stack =
     action1Input stack getVector action
 
 
-andBool : Array Iota -> Array Iota
+andBool : Array Iota -> ( Array Iota, Bool )
 andBool stack =
     let
         action iota1 iota2 =
@@ -637,7 +637,7 @@ andBool stack =
     action2Inputs stack getBoolean getBoolean action
 
 
-orBool : Array Iota -> Array Iota
+orBool : Array Iota -> ( Array Iota, Bool )
 orBool stack =
     let
         action iota1 iota2 =
@@ -653,7 +653,7 @@ orBool stack =
     action2Inputs stack getBoolean getBoolean action
 
 
-xorBool : Array Iota -> Array Iota
+xorBool : Array Iota -> ( Array Iota, Bool )
 xorBool stack =
     let
         action iota1 iota2 =
@@ -669,7 +669,7 @@ xorBool stack =
     action2Inputs stack getBoolean getBoolean action
 
 
-greaterThan : Array Iota -> Array Iota
+greaterThan : Array Iota -> ( Array Iota, Bool )
 greaterThan stack =
     let
         action iota1 iota2 =
@@ -685,7 +685,7 @@ greaterThan stack =
     action2Inputs stack getNumber getNumber action
 
 
-lessThan : Array Iota -> Array Iota
+lessThan : Array Iota -> ( Array Iota, Bool )
 lessThan stack =
     let
         action iota1 iota2 =
@@ -701,7 +701,7 @@ lessThan stack =
     action2Inputs stack getNumber getNumber action
 
 
-greaterThanOrEqualTo : Array Iota -> Array Iota
+greaterThanOrEqualTo : Array Iota -> ( Array Iota, Bool )
 greaterThanOrEqualTo stack =
     let
         action iota1 iota2 =
@@ -717,7 +717,7 @@ greaterThanOrEqualTo stack =
     action2Inputs stack getNumber getNumber action
 
 
-lessThanOrEqualTo : Array Iota -> Array Iota
+lessThanOrEqualTo : Array Iota -> ( Array Iota, Bool )
 lessThanOrEqualTo stack =
     let
         action iota1 iota2 =
@@ -733,7 +733,7 @@ lessThanOrEqualTo stack =
     action2Inputs stack getNumber getNumber action
 
 
-equalTo : Array Iota -> Array Iota
+equalTo : Array Iota -> ( Array Iota, Bool )
 equalTo stack =
     let
         action iota1 iota2 =
@@ -743,7 +743,7 @@ equalTo stack =
     action2Inputs stack getAny getAny action
 
 
-notEqualTo : Array Iota -> Array Iota
+notEqualTo : Array Iota -> ( Array Iota, Bool )
 notEqualTo stack =
     let
         action iota1 iota2 =
@@ -753,7 +753,7 @@ notEqualTo stack =
     action2Inputs stack getAny getAny action
 
 
-invertBool : Array Iota -> Array Iota
+invertBool : Array Iota -> ( Array Iota, Bool )
 invertBool stack =
     let
         action iota =
@@ -773,7 +773,7 @@ invertBool stack =
     action1Input stack getBoolean action
 
 
-boolCoerce : Array Iota -> Array Iota
+boolCoerce : Array Iota -> ( Array Iota, Bool )
 boolCoerce stack =
     let
         action iota =
@@ -807,7 +807,7 @@ boolCoerce stack =
     action1Input stack getAny action
 
 
-ifBool : Array Iota -> Array Iota
+ifBool : Array Iota -> ( Array Iota, Bool )
 ifBool stack =
     let
         action iota1 iota2 iota3 =

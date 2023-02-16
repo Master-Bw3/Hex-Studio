@@ -6,7 +6,7 @@ import Logic.App.Types exposing (Iota(..), Mishap(..))
 import Logic.App.Utils.Utils exposing (unshift)
 
 
-singleton : Array Iota -> Array Iota
+singleton : Array Iota -> ( Array Iota, Bool )
 singleton stack =
     let
         action iota =
@@ -16,7 +16,7 @@ singleton stack =
     action1Input stack getAny action
 
 
-append : Array Iota -> Array Iota
+append : Array Iota -> ( Array Iota, Bool )
 append stack =
     let
         action listIota iota =

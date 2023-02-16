@@ -6,12 +6,12 @@ import Logic.App.Types exposing (EntityType(..), Iota(..))
 import Logic.App.Utils.Utils exposing (unshift)
 
 
-numberLiteral : Float -> Array Iota -> Array Iota
+numberLiteral : Float -> Array Iota -> ( Array Iota, Bool )
 numberLiteral number stack =
-    unshift (Number number) stack
+    (unshift (Number number) stack, True)
 
 
-entityPos : Array Iota -> Array Iota
+entityPos : Array Iota -> ( Array Iota, Bool )
 entityPos stack =
     let
         action _ =
@@ -21,7 +21,7 @@ entityPos stack =
     action1Input stack getEntity action
 
 
-raycast : Array Iota -> Array Iota
+raycast : Array Iota -> ( Array Iota, Bool )
 raycast stack =
     let
         action _ _ =
@@ -31,7 +31,7 @@ raycast stack =
     action2Inputs stack getVector getVector action
 
 
-raycastAxis : Array Iota -> Array Iota
+raycastAxis : Array Iota -> ( Array Iota, Bool )
 raycastAxis stack =
     let
         action _ _ =
@@ -41,7 +41,7 @@ raycastAxis stack =
     action2Inputs stack getVector getVector action
 
 
-raycastEntity : Array Iota -> Array Iota
+raycastEntity : Array Iota -> ( Array Iota, Bool )
 raycastEntity stack =
     let
         action _ _ =
@@ -51,7 +51,7 @@ raycastEntity stack =
     action2Inputs stack getVector getVector action
 
 
-getEntityLook : Array Iota -> Array Iota
+getEntityLook : Array Iota -> ( Array Iota, Bool )
 getEntityLook stack =
     let
         action _ =
@@ -61,7 +61,7 @@ getEntityLook stack =
     action1Input stack getEntity action
 
 
-getEntityHeight : Array Iota -> Array Iota
+getEntityHeight : Array Iota -> ( Array Iota, Bool )
 getEntityHeight stack =
     let
         action _ =
@@ -71,7 +71,7 @@ getEntityHeight stack =
     action1Input stack getEntity action
 
 
-getEntityVelocity : Array Iota -> Array Iota
+getEntityVelocity : Array Iota -> ( Array Iota, Bool )
 getEntityVelocity stack =
     let
         action _ =
