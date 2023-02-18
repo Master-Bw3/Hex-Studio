@@ -22,7 +22,12 @@ noAction stack =
 
 unknownPattern : PatternType
 unknownPattern =
-    { signature = "", action = makeConstant (Garbage InvalidPattern), displayName = "Unknown Pattern", internalName = "", color = accent3 }
+    { signature = ""
+    , action = \stack -> ( unshift (Garbage InvalidPattern) stack, False )
+    , displayName = "Unknown Pattern"
+    , internalName = ""
+    , color = accent3
+    }
 
 
 getPatternFromSignature : String -> PatternType

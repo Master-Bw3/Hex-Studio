@@ -8544,15 +8544,15 @@ var $author$project$Logic$App$Patterns$OperatorUtils$getPatternOrPatternList = f
 };
 var $author$project$Logic$App$Types$InvalidPattern = {$: 'InvalidPattern'};
 var $author$project$Settings$Theme$accent3 = '#e0b8b8';
-var $author$project$Logic$App$Patterns$OperatorUtils$makeConstant = F2(
-	function (iota, stack) {
-		return _Utils_Tuple2(
-			A2($author$project$Logic$App$Utils$Utils$unshift, iota, stack),
-			true);
-	});
 var $author$project$Logic$App$Patterns$PatternRegistry$unknownPattern = {
-	action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
-		$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$InvalidPattern)),
+	action: function (stack) {
+		return _Utils_Tuple2(
+			A2(
+				$author$project$Logic$App$Utils$Utils$unshift,
+				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$InvalidPattern),
+				stack),
+			false);
+	},
 	color: $author$project$Settings$Theme$accent3,
 	displayName: 'Unknown Pattern',
 	internalName: '',
@@ -9004,6 +9004,12 @@ var $author$project$Logic$App$Patterns$Math$logarithm = function (stack) {
 		});
 	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
 };
+var $author$project$Logic$App$Patterns$OperatorUtils$makeConstant = F2(
+	function (iota, stack) {
+		return _Utils_Tuple2(
+			A2($author$project$Logic$App$Utils$Utils$unshift, iota, stack),
+			true);
+	});
 var $elm$core$Basics$truncate = _Basics_truncate;
 var $ianmackenzie$elm_units$Quantity$fractionalRemainderBy = F2(
 	function (_v0, _v1) {
