@@ -6,12 +6,20 @@ import Logic.App.Types exposing (ApplyToStackResult(..), Iota(..), Mishap(..), P
 import Logic.App.Utils.Utils exposing (unshift)
 
 
+applyPatternsToStackStopAtError : Array Iota -> List PatternType -> ( Array Iota, Array ApplyToStackResult, Bool )
+applyPatternsToStackStopAtError stack patterns =
+    applyPatternsToStackLoop ( stack, Array.empty ) patterns False True
 
--- untested; might not work properly
+
+applyPatternsToStack : Array Iota -> List PatternType -> ( Array Iota, Array ApplyToStackResult )
+applyPatternsToStack stack patterns =
+    case applyPatternsToStackLoop ( stack, Array.empty ) patterns False False of
+        ( newStack, resultArray, _ ) ->
+            ( newStack, resultArray )
 
 
-applyPatternsToStack : ( Array Iota, Array ApplyToStackResult ) -> List PatternType -> Bool -> ( Array Iota, Array ApplyToStackResult )
-applyPatternsToStack stackResultTuple patterns considerThis =
+applyPatternsToStackLoop : ( Array Iota, Array ApplyToStackResult ) -> List PatternType -> Bool -> Bool -> ( Array Iota, Array ApplyToStackResult, Bool )
+applyPatternsToStackLoop stackResultTuple patterns considerThis stopAtError =
     let
         stack =
             Tuple.first stackResultTuple
@@ -21,22 +29,29 @@ applyPatternsToStack stackResultTuple patterns considerThis =
     in
     case List.head patterns of
         Nothing ->
-            stackResultTuple
+            ( stack, resultArray, False )
 
         Just pattern ->
             if considerThis then
-                applyPatternsToStack
+                applyPatternsToStackLoop
                     ( addEscapedPatternIotaToStack stack pattern, unshift Considered resultArray )
                     (Maybe.withDefault [] <| List.tail patterns)
                     False
+                    stopAtError
 
             else
                 case applyPatternToStack stack pattern of
                     ( newStack, result, considerNext ) ->
-                        applyPatternsToStack
-                            ( newStack, unshift result resultArray )
-                            (Maybe.withDefault [] <| List.tail patterns)
-                            considerNext
+                        if not stopAtError || (stopAtError && result /= Failed) then
+                            applyPatternsToStackLoop
+                                ( newStack, unshift result resultArray )
+                                (Maybe.withDefault [] <| List.tail patterns)
+                                considerNext
+                                stopAtError
+
+                        else
+                            ( newStack, unshift result resultArray, True )
+
 
 
 applyPatternToStack : Array Iota -> PatternType -> ( Array Iota, ApplyToStackResult, Bool )

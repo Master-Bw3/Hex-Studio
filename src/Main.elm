@@ -155,7 +155,7 @@ update msg model =
                 if List.length drawing.activePath > 1 then
                     let
                         stackResultTuple =
-                            applyPatternsToStack ( Array.empty, Array.empty ) (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newUncoloredPattern)) False
+                            applyPatternsToStack Array.empty (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newUncoloredPattern)) 
 
                         newStack =
                             Tuple.first stackResultTuple
@@ -195,7 +195,7 @@ update msg model =
                     removeFromArray startIndex endIndex model.patternArray
 
                 stackResultTuple =
-                    applyPatternsToStack ( Array.empty, Array.empty ) (List.reverse <| Tuple.first <| List.unzip <| Array.toList newUncoloredPatternArray) False
+                    applyPatternsToStack Array.empty (List.reverse <| Tuple.first <| List.unzip <| Array.toList newUncoloredPatternArray) 
 
                 newStack =
                     Tuple.first stackResultTuple
@@ -269,7 +269,7 @@ update msg model =
                 ( { model
                     | patternArray = addToPatternArray model newPattern
                     , ui = { ui | patternInputField = "" }
-                    , stack = Tuple.first <| applyPatternsToStack ( Array.empty, Array.empty ) (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern)) False
+                    , stack = Tuple.first <| applyPatternsToStack Array.empty (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern)) 
                   }
                 , Cmd.none
                 )
@@ -288,7 +288,7 @@ update msg model =
             ( { model
                 | patternArray = addToPatternArray model newPattern
                 , ui = { ui | patternInputField = "" }
-                , stack = Tuple.first <| applyPatternsToStack ( Array.empty, Array.empty ) (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern)) False
+                , stack = Tuple.first <| applyPatternsToStack Array.empty (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern)) 
               }
             , Cmd.none
             )
@@ -418,9 +418,9 @@ update msg model =
 
                 stackResultTuple =
                     applyPatternsToStack
-                        ( Array.empty, Array.empty )
+                        Array.empty
                         (List.reverse <| Tuple.first <| List.unzip <| Array.toList newUncoloredPatternArray)
-                        False
+                        
 
                 newStack =
                     Tuple.first stackResultTuple

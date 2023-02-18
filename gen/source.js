@@ -6979,15 +6979,15 @@ var $author$project$Logic$App$Stack$Stack$applyPatternToStack = F2(
 			}
 		}
 	});
-var $author$project$Logic$App$Stack$Stack$applyPatternsToStack = F3(
-	function (stackResultTuple, patterns, considerThis) {
-		applyPatternsToStack:
+var $author$project$Logic$App$Stack$Stack$applyPatternsToStackLoop = F4(
+	function (stackResultTuple, patterns, considerThis, stopAtError) {
+		applyPatternsToStackLoop:
 		while (true) {
 			var stack = stackResultTuple.a;
 			var resultArray = stackResultTuple.b;
 			var _v0 = $elm$core$List$head(patterns);
 			if (_v0.$ === 'Nothing') {
-				return stackResultTuple;
+				return _Utils_Tuple3(stack, resultArray, false);
 			} else {
 				var pattern = _v0.a;
 				if (considerThis) {
@@ -6998,31 +6998,54 @@ var $author$project$Logic$App$Stack$Stack$applyPatternsToStack = F3(
 						$elm$core$Maybe$withDefault,
 						_List_Nil,
 						$elm$core$List$tail(patterns)),
-						$temp$considerThis = false;
+						$temp$considerThis = false,
+						$temp$stopAtError = stopAtError;
 					stackResultTuple = $temp$stackResultTuple;
 					patterns = $temp$patterns;
 					considerThis = $temp$considerThis;
-					continue applyPatternsToStack;
+					stopAtError = $temp$stopAtError;
+					continue applyPatternsToStackLoop;
 				} else {
 					var _v1 = A2($author$project$Logic$App$Stack$Stack$applyPatternToStack, stack, pattern);
 					var newStack = _v1.a;
 					var result = _v1.b;
 					var considerNext = _v1.c;
-					var $temp$stackResultTuple = _Utils_Tuple2(
-						newStack,
-						A2($author$project$Logic$App$Utils$Utils$unshift, result, resultArray)),
-						$temp$patterns = A2(
-						$elm$core$Maybe$withDefault,
-						_List_Nil,
-						$elm$core$List$tail(patterns)),
-						$temp$considerThis = considerNext;
-					stackResultTuple = $temp$stackResultTuple;
-					patterns = $temp$patterns;
-					considerThis = $temp$considerThis;
-					continue applyPatternsToStack;
+					if ((!stopAtError) || (stopAtError && (!_Utils_eq(result, $author$project$Logic$App$Types$Failed)))) {
+						var $temp$stackResultTuple = _Utils_Tuple2(
+							newStack,
+							A2($author$project$Logic$App$Utils$Utils$unshift, result, resultArray)),
+							$temp$patterns = A2(
+							$elm$core$Maybe$withDefault,
+							_List_Nil,
+							$elm$core$List$tail(patterns)),
+							$temp$considerThis = considerNext,
+							$temp$stopAtError = stopAtError;
+						stackResultTuple = $temp$stackResultTuple;
+						patterns = $temp$patterns;
+						considerThis = $temp$considerThis;
+						stopAtError = $temp$stopAtError;
+						continue applyPatternsToStackLoop;
+					} else {
+						return _Utils_Tuple3(
+							newStack,
+							A2($author$project$Logic$App$Utils$Utils$unshift, result, resultArray),
+							true);
+					}
 				}
 			}
 		}
+	});
+var $author$project$Logic$App$Stack$Stack$applyPatternsToStack = F2(
+	function (stack, patterns) {
+		var _v0 = A4(
+			$author$project$Logic$App$Stack$Stack$applyPatternsToStackLoop,
+			_Utils_Tuple2(stack, $elm$core$Array$empty),
+			patterns,
+			false,
+			false);
+		var newStack = _v0.a;
+		var resultArray = _v0.b;
+		return _Utils_Tuple2(newStack, resultArray);
 	});
 var $author$project$Logic$App$Utils$GetAngleSignature$East = {$: 'East'};
 var $author$project$Logic$App$Utils$GetAngleSignature$Error = {$: 'Error'};
@@ -8515,6 +8538,15 @@ var $author$project$Logic$App$Patterns$Math$equalTo = function (stack) {
 		});
 	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
 };
+var $author$project$Logic$App$Stack$Stack$applyPatternsToStackStopAtError = F2(
+	function (stack, patterns) {
+		return A4(
+			$author$project$Logic$App$Stack$Stack$applyPatternsToStackLoop,
+			_Utils_Tuple2(stack, $elm$core$Array$empty),
+			patterns,
+			false,
+			true);
+	});
 var $elm$core$List$all = F2(
 	function (isOkay, list) {
 		return !A2(
@@ -8586,35 +8618,35 @@ var $author$project$Logic$App$Patterns$PatternRegistry$eval = function (stack) {
 			switch (iota.$) {
 				case 'IotaList':
 					var list = iota.a;
-					return _Utils_Tuple2(
-						A3(
-							$author$project$Logic$App$Stack$Stack$applyPatternsToStack,
-							_Utils_Tuple2(newStack, $elm$core$Array$empty),
-							$elm$core$List$reverse(
-								$elm$core$Array$toList(
-									A2(
-										$elm$core$Array$map,
-										function (i) {
-											if (i.$ === 'Pattern') {
-												var pattern = i.a;
-												return pattern;
-											} else {
-												return $author$project$Logic$App$Patterns$PatternRegistry$unknownPattern;
-											}
-										},
-										list))),
-							false).a,
-						true);
+					var _v3 = A2(
+						$author$project$Logic$App$Stack$Stack$applyPatternsToStackStopAtError,
+						newStack,
+						$elm$core$List$reverse(
+							$elm$core$Array$toList(
+								A2(
+									$elm$core$Array$map,
+									function (i) {
+										if (i.$ === 'Pattern') {
+											var pattern = i.a;
+											return pattern;
+										} else {
+											return $author$project$Logic$App$Patterns$PatternRegistry$unknownPattern;
+										}
+									},
+									list))));
+					var newNewStack = _v3.a;
+					var error = _v3.c;
+					return _Utils_Tuple2(newNewStack, !error);
 				case 'Pattern':
 					var pattern = iota.a;
-					return _Utils_Tuple2(
-						A3(
-							$author$project$Logic$App$Stack$Stack$applyPatternsToStack,
-							_Utils_Tuple2(newStack, $elm$core$Array$empty),
-							_List_fromArray(
-								[pattern]),
-							false).a,
-						true);
+					var _v5 = A2(
+						$author$project$Logic$App$Stack$Stack$applyPatternsToStackStopAtError,
+						newStack,
+						_List_fromArray(
+							[pattern]));
+					var newNewStack = _v5.a;
+					var error = _v5.c;
+					return _Utils_Tuple2(newNewStack, !error);
 				default:
 					return _Utils_Tuple2(
 						$elm$core$Array$fromList(
@@ -8622,7 +8654,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$eval = function (stack) {
 								[
 									$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure)
 								])),
-						true);
+						false);
 			}
 		}
 	}
@@ -10469,9 +10501,9 @@ var $author$project$Main$update = F2(
 					if ($elm$core$List$length(drawing.activePath) > 1) {
 						var newUncoloredPattern = $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature(
 							$author$project$Logic$App$Utils$GetAngleSignature$getAngleSignature(drawing.activePath));
-						var stackResultTuple = A3(
+						var stackResultTuple = A2(
 							$author$project$Logic$App$Stack$Stack$applyPatternsToStack,
-							_Utils_Tuple2($elm$core$Array$empty, $elm$core$Array$empty),
+							$elm$core$Array$empty,
 							$elm$core$List$reverse(
 								A2(
 									$elm$core$List$map,
@@ -10479,8 +10511,7 @@ var $author$project$Main$update = F2(
 										return x.a;
 									},
 									$elm$core$Array$toList(
-										A2($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newUncoloredPattern)))),
-							false);
+										A2($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newUncoloredPattern)))));
 						var resultArray = stackResultTuple.b;
 						var newStack = stackResultTuple.a;
 						var newPattern = A2(
@@ -10533,13 +10564,12 @@ var $author$project$Main$update = F2(
 				var startIndex = msg.a;
 				var endIndex = msg.b;
 				var newUncoloredPatternArray = A3($author$project$Logic$App$Utils$Utils$removeFromArray, startIndex, endIndex, model.patternArray);
-				var stackResultTuple = A3(
+				var stackResultTuple = A2(
 					$author$project$Logic$App$Stack$Stack$applyPatternsToStack,
-					_Utils_Tuple2($elm$core$Array$empty, $elm$core$Array$empty),
+					$elm$core$Array$empty,
 					$elm$core$List$reverse(
 						$elm$core$List$unzip(
-							$elm$core$Array$toList(newUncoloredPatternArray)).a),
-					false);
+							$elm$core$Array$toList(newUncoloredPatternArray)).a));
 				var resultArray = stackResultTuple.b;
 				var newStack = stackResultTuple.a;
 				var newPatternArray = A3(
@@ -10654,9 +10684,9 @@ var $author$project$Main$update = F2(
 						model,
 						{
 							patternArray: A2($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern),
-							stack: A3(
+							stack: A2(
 								$author$project$Logic$App$Stack$Stack$applyPatternsToStack,
-								_Utils_Tuple2($elm$core$Array$empty, $elm$core$Array$empty),
+								$elm$core$Array$empty,
 								$elm$core$List$reverse(
 									A2(
 										$elm$core$List$map,
@@ -10664,8 +10694,7 @@ var $author$project$Main$update = F2(
 											return x.a;
 										},
 										$elm$core$Array$toList(
-											A2($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern)))),
-								false).a,
+											A2($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern))))).a,
 							ui: _Utils_update(
 								ui,
 								{patternInputField: ''})
@@ -10684,9 +10713,9 @@ var $author$project$Main$update = F2(
 						model,
 						{
 							patternArray: A2($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern),
-							stack: A3(
+							stack: A2(
 								$author$project$Logic$App$Stack$Stack$applyPatternsToStack,
-								_Utils_Tuple2($elm$core$Array$empty, $elm$core$Array$empty),
+								$elm$core$Array$empty,
 								$elm$core$List$reverse(
 									A2(
 										$elm$core$List$map,
@@ -10694,8 +10723,7 @@ var $author$project$Main$update = F2(
 											return x.a;
 										},
 										$elm$core$Array$toList(
-											A2($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern)))),
-								false).a,
+											A2($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern))))).a,
 							ui: _Utils_update(
 								ui,
 								{patternInputField: ''})
@@ -10886,13 +10914,12 @@ var $author$project$Main$update = F2(
 						return patternArray;
 					}
 				}();
-				var stackResultTuple = A3(
+				var stackResultTuple = A2(
 					$author$project$Logic$App$Stack$Stack$applyPatternsToStack,
-					_Utils_Tuple2($elm$core$Array$empty, $elm$core$Array$empty),
+					$elm$core$Array$empty,
 					$elm$core$List$reverse(
 						$elm$core$List$unzip(
-							$elm$core$Array$toList(newUncoloredPatternArray)).a),
-					false);
+							$elm$core$Array$toList(newUncoloredPatternArray)).a));
 				var newStack = stackResultTuple.a;
 				var resultArray = stackResultTuple.b;
 				var newPatternArray = A3(

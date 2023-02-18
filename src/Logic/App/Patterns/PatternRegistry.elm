@@ -8,7 +8,7 @@ import Logic.App.Patterns.Misc exposing (..)
 import Logic.App.Patterns.OperatorUtils exposing (action1Input, getPatternOrPatternList, makeConstant)
 import Logic.App.Patterns.Selectors exposing (..)
 import Logic.App.Patterns.Stack exposing (..)
-import Logic.App.Stack.Stack exposing (applyPatternToStack, applyPatternsToStack)
+import Logic.App.Stack.Stack exposing (applyPatternToStack, applyPatternsToStack, applyPatternsToStackStopAtError)
 import Logic.App.Types exposing (ApplyToStackResult(..), Iota(..), Mishap(..), PatternType)
 import Logic.App.Utils.Utils exposing (unshift)
 import Ports.HexNumGen as HexNumGen
@@ -248,8 +248,8 @@ eval stack =
                 _ ->
                     case iota of
                         IotaList list ->
-                            ( Tuple.first <|
-                                applyPatternsToStack ( newStack, Array.empty )
+                            case
+                                applyPatternsToStackStopAtError newStack
                                     (List.reverse <|
                                         Array.toList <|
                                             Array.map
@@ -263,15 +263,17 @@ eval stack =
                                                 )
                                                 list
                                     )
-                                    False
-                            , True
-                            )
+                            of
+                                ( newNewStack, _, error ) ->
+                                    ( newNewStack, not error )
 
                         Pattern pattern _ ->
-                            ( Tuple.first <| applyPatternsToStack ( newStack, Array.empty ) [ pattern ] False, True )
+                            case applyPatternsToStackStopAtError newStack [ pattern ] of
+                                ( newNewStack, _, error ) ->
+                                    ( newNewStack, not error )
 
                         _ ->
-                            ( Array.fromList [ Garbage CatastrophicFailure ], True )
+                            ( Array.fromList [ Garbage CatastrophicFailure ], False )
 
 
 numberLiteralGenerator : String -> Bool -> PatternType

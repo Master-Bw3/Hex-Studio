@@ -1,6 +1,7 @@
 module Logic.App.Utils.Utils exposing (..)
 
 import Array exposing (Array)
+import Html exposing (a)
 import Html.Events.Extra.Touch as Touch
 
 
@@ -40,3 +41,13 @@ isJust maybe =
 
         Nothing ->
             False
+
+
+unwrapResult : Result a a -> a
+unwrapResult result =
+    case result of
+        Ok value ->
+            value
+
+        Err value ->
+            value
