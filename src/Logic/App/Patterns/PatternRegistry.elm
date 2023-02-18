@@ -5,7 +5,7 @@ import Logic.App.Patterns.Circles exposing (..)
 import Logic.App.Patterns.Lists exposing (..)
 import Logic.App.Patterns.Math exposing (..)
 import Logic.App.Patterns.Misc exposing (..)
-import Logic.App.Patterns.OperatorUtils exposing (action1Input, getPatternOrPatternList, makeConstant)
+import Logic.App.Patterns.OperatorUtils exposing (action1Input, getAny, getPatternOrPatternList, makeConstant)
 import Logic.App.Patterns.Selectors exposing (..)
 import Logic.App.Patterns.Stack exposing (..)
 import Logic.App.Stack.Stack exposing (applyPatternToStack, applyPatternsToStack, applyPatternsToStackStopAtError)
@@ -130,7 +130,7 @@ patternRegistry =
     , { signature = "dwaeaqa", internalName = "xor_bit", action = xorBit, displayName = "Exclusionary Distillation", color = accent1 }
     , { signature = "dweaqa", internalName = "not_bit", action = notBit, displayName = "Inversion Purification", color = accent1 }
     , { signature = "aweaqa", internalName = "to_set", action = toSet, displayName = "Uniqueness Purification", color = accent1 }
-    , { signature = "de", internalName = "print", action = noAction, displayName = "Reveal", color = accent1 }
+    , { signature = "de", internalName = "print", action = print, displayName = "Reveal", color = accent1 }
     , { signature = "aawaawaa", internalName = "explode", action = noAction, displayName = "", color = accent1 }
     , { signature = "ddwddwdd", internalName = "explode/fire", action = noAction, displayName = "", color = accent1 }
     , { signature = "awqqqwaqw", internalName = "add_motion", action = noAction, displayName = "", color = accent1 }
@@ -265,7 +265,12 @@ eval stack =
                                     )
                             of
                                 ( newNewStack, _, error ) ->
-                                    ( newNewStack, not error )
+                                    case Array.get 0 newNewStack of
+                                        Just (OpenParenthesis _) ->
+                                            ( newStack, not error )
+
+                                        _ ->
+                                            ( newNewStack, not error )
 
                         Pattern pattern _ ->
                             case applyPatternsToStackStopAtError newStack [ pattern ] of
@@ -274,6 +279,11 @@ eval stack =
 
                         _ ->
                             ( Array.fromList [ Garbage CatastrophicFailure ], False )
+
+
+print : Array Iota -> ( Array Iota, Bool )
+print stack =
+    action1Input stack getAny (\iota -> Array.fromList [ iota ])
 
 
 numberLiteralGenerator : String -> Bool -> PatternType

@@ -8636,16 +8636,21 @@ var $author$project$Logic$App$Patterns$PatternRegistry$eval = function (stack) {
 									list))));
 					var newNewStack = _v3.a;
 					var error = _v3.c;
-					return _Utils_Tuple2(newNewStack, !error);
+					var _v5 = A2($elm$core$Array$get, 0, newNewStack);
+					if ((_v5.$ === 'Just') && (_v5.a.$ === 'OpenParenthesis')) {
+						return _Utils_Tuple2(newStack, !error);
+					} else {
+						return _Utils_Tuple2(newNewStack, !error);
+					}
 				case 'Pattern':
 					var pattern = iota.a;
-					var _v5 = A2(
+					var _v6 = A2(
 						$author$project$Logic$App$Stack$Stack$applyPatternsToStackStopAtError,
 						newStack,
 						_List_fromArray(
 							[pattern]));
-					var newNewStack = _v5.a;
-					var error = _v5.c;
+					var newNewStack = _v6.a;
+					var error = _v6.c;
 					return _Utils_Tuple2(newNewStack, !error);
 				default:
 					return _Utils_Tuple2(
@@ -9349,6 +9354,17 @@ var $author$project$Logic$App$Patterns$Math$powProj = function (stack) {
 		});
 	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, action);
 };
+var $author$project$Logic$App$Patterns$PatternRegistry$print = function (stack) {
+	return A3(
+		$author$project$Logic$App$Patterns$OperatorUtils$action1Input,
+		stack,
+		$author$project$Logic$App$Patterns$OperatorUtils$getAny,
+		function (iota) {
+			return $elm$core$Array$fromList(
+				_List_fromArray(
+					[iota]));
+		});
+};
 var $author$project$Logic$App$Patterns$Misc$raycast = function (stack) {
 	var action = F2(
 		function (_v0, _v1) {
@@ -9759,7 +9775,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _List_f
 		{action: $author$project$Logic$App$Patterns$Math$xorBit, color: $author$project$Settings$Theme$accent1, displayName: 'Exclusionary Distillation', internalName: 'xor_bit', signature: 'dwaeaqa'},
 		{action: $author$project$Logic$App$Patterns$Math$notBit, color: $author$project$Settings$Theme$accent1, displayName: 'Inversion Purification', internalName: 'not_bit', signature: 'dweaqa'},
 		{action: $author$project$Logic$App$Patterns$Math$toSet, color: $author$project$Settings$Theme$accent1, displayName: 'Uniqueness Purification', internalName: 'to_set', signature: 'aweaqa'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: 'Reveal', internalName: 'print', signature: 'de'},
+		{action: $author$project$Logic$App$Patterns$PatternRegistry$print, color: $author$project$Settings$Theme$accent1, displayName: 'Reveal', internalName: 'print', signature: 'de'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'explode', signature: 'aawaawaa'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'explode/fire', signature: 'ddwddwdd'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'add_motion', signature: 'awqqqwaqw'},
