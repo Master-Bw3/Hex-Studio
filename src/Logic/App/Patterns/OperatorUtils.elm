@@ -10,12 +10,12 @@ import Vector3d as Vec3d
 
 makeConstant : Iota -> Array Iota -> ( Array Iota, Bool )
 makeConstant iota stack =
-    (unshift iota stack, True)
+    ( unshift iota stack, True )
 
 
 actionNoInput : Array Iota -> Array Iota -> ( Array Iota, Bool )
 actionNoInput stack action =
-    (Array.append action stack, True)
+    ( Array.append action stack, True )
 
 
 action1Input : Array Iota -> (Iota -> Maybe Iota) -> (Iota -> Array Iota) -> ( Array Iota, Bool )
@@ -100,33 +100,83 @@ action3Inputs stack inputGetter1 inputGetter2 inputGetter3 action =
             Array.slice 3 (Array.length stack) stack
     in
     if maybeIota1 == Nothing || maybeIota2 == Nothing || maybeIota3 == Nothing then
-        (Array.append (Array.map mapNothingToMissingIota <| Array.fromList <| moveNothingsToFront [ maybeIota1, maybeIota2, maybeIota3 ]) newStack, False)
+        ( Array.append (Array.map mapNothingToMissingIota <| Array.fromList <| moveNothingsToFront [ maybeIota1, maybeIota2, maybeIota3 ]) newStack, False )
 
     else
         case ( Maybe.map inputGetter1 maybeIota1, Maybe.map inputGetter2 maybeIota2, Maybe.map inputGetter3 maybeIota3 ) of
             ( Just iota1, Just iota2, Just iota3 ) ->
                 if iota1 == Nothing || iota2 == Nothing || iota3 == Nothing then
-                    (Array.append
+                    ( Array.append
                         (Array.fromList
                             [ Maybe.withDefault (Garbage IncorrectIota) iota1
                             , Maybe.withDefault (Garbage IncorrectIota) iota2
                             , Maybe.withDefault (Garbage IncorrectIota) iota3
                             ]
                         )
-                        newStack, False)
+                        newStack
+                    , False
+                    )
 
                 else
-                    (Array.append
+                    ( Array.append
                         (action
                             (Maybe.withDefault (Garbage IncorrectIota) iota1)
                             (Maybe.withDefault (Garbage IncorrectIota) iota2)
                             (Maybe.withDefault (Garbage IncorrectIota) iota3)
                         )
-                        newStack, True)
+                        newStack
+                    , True
+                    )
 
             _ ->
                 -- this should never happen
-                (unshift (Garbage CatastrophicFailure) newStack, False)
+                ( unshift (Garbage CatastrophicFailure) newStack, False )
+
+
+spellNoInput : Array Iota -> ( Array Iota, Bool )
+spellNoInput stack =
+    actionNoInput stack Array.empty
+
+
+spell1Input : Array Iota -> (Iota -> Maybe Iota) -> ( Array Iota, Bool )
+spell1Input stack inputGetter =
+    action1Input stack inputGetter (\_ -> Array.empty)
+
+
+spell2Inputs : Array Iota -> (Iota -> Maybe Iota) -> (Iota -> Maybe Iota) -> ( Array Iota, Bool )
+spell2Inputs stack inputGetter1 inputGetter2 =
+    action2Inputs stack inputGetter1 inputGetter2 (\_ _ -> Array.empty)
+
+
+spell3Inputs : Array Iota -> (Iota -> Maybe Iota) -> (Iota -> Maybe Iota) -> (Iota -> Maybe Iota) -> ( Array Iota, Bool )
+spell3Inputs stack inputGetter1 inputGetter2 inputGetter3 =
+    action3Inputs stack inputGetter1 inputGetter2 inputGetter3 (\_ _ _ -> Array.empty)
+
+
+getPatternList : Iota -> Maybe Iota
+getPatternList iota =
+    case iota of
+        IotaList list ->
+            if
+                List.all
+                    (\i ->
+                        case i of
+                            Pattern _ _ ->
+                                True
+
+                            _ ->
+                                False
+                    )
+                <|
+                    Array.toList list
+            then
+                Just iota
+
+            else
+                Nothing
+
+        _ ->
+            Nothing
 
 
 getPatternOrPatternList : Iota -> Maybe Iota

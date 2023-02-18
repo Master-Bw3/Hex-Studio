@@ -7,8 +7,9 @@ import Logic.App.Patterns.Math exposing (..)
 import Logic.App.Patterns.Misc exposing (..)
 import Logic.App.Patterns.OperatorUtils exposing (action1Input, getAny, getPatternOrPatternList, makeConstant)
 import Logic.App.Patterns.Selectors exposing (..)
+import Logic.App.Patterns.Spells exposing (..)
 import Logic.App.Patterns.Stack exposing (..)
-import Logic.App.Stack.Stack exposing (applyPatternToStack, applyPatternsToStack, applyPatternsToStackStopAtError)
+import Logic.App.Stack.Stack exposing (applyPatternToStack, applyPatternsToStack, applyPatternsToStackStopAtErrorOrHalt)
 import Logic.App.Types exposing (ApplyToStackResult(..), Iota(..), Mishap(..), PatternType)
 import Logic.App.Utils.Utils exposing (unshift)
 import Ports.HexNumGen as HexNumGen
@@ -131,39 +132,39 @@ patternRegistry =
     , { signature = "dweaqa", internalName = "not_bit", action = notBit, displayName = "Inversion Purification", color = accent1 }
     , { signature = "aweaqa", internalName = "to_set", action = toSet, displayName = "Uniqueness Purification", color = accent1 }
     , { signature = "de", internalName = "print", action = print, displayName = "Reveal", color = accent1 }
-    , { signature = "aawaawaa", internalName = "explode", action = noAction, displayName = "", color = accent1 }
-    , { signature = "ddwddwdd", internalName = "explode/fire", action = noAction, displayName = "", color = accent1 }
-    , { signature = "awqqqwaqw", internalName = "add_motion", action = noAction, displayName = "", color = accent1 }
-    , { signature = "awqqqwaq", internalName = "blink", action = noAction, displayName = "", color = accent1 }
-    , { signature = "qaqqqqq", internalName = "break_block", action = noAction, displayName = "", color = accent1 }
-    , { signature = "eeeeede", internalName = "place_block", action = noAction, displayName = "", color = accent1 }
-    , { signature = "awddwqawqwawq", internalName = "colorize", action = noAction, displayName = "", color = accent1 }
-    , { signature = "aqawqadaq", internalName = "create_water", action = noAction, displayName = "", color = accent1 }
-    , { signature = "dedwedade", internalName = "destroy_water", action = noAction, displayName = "", color = accent1 }
-    , { signature = "aaqawawa", internalName = "ignite", action = noAction, displayName = "", color = accent1 }
-    , { signature = "ddedwdwd", internalName = "extinguish", action = noAction, displayName = "", color = accent1 }
-    , { signature = "qqa", internalName = "conjure_block", action = noAction, displayName = "", color = accent1 }
-    , { signature = "qqd", internalName = "conjure_light", action = noAction, displayName = "", color = accent1 }
-    , { signature = "wqaqwawqaqw", internalName = "bonemeal", action = noAction, displayName = "", color = accent1 }
-    , { signature = "qqqqqwaeaeaeaeaea", internalName = "recharge", action = noAction, displayName = "", color = accent1 }
-    , { signature = "qdqawwaww", internalName = "erase", action = noAction, displayName = "", color = accent1 }
-    , { signature = "wqaqwd", internalName = "edify", action = noAction, displayName = "", color = accent1 }
-    , { signature = "adaa", internalName = "beep", action = noAction, displayName = "", color = accent1 }
-    , { signature = "waqqqqq", internalName = "craft/cypher", action = noAction, displayName = "", color = accent1 }
-    , { signature = "wwaqqqqqeaqeaeqqqeaeq", internalName = "craft/trinket", action = noAction, displayName = "", color = accent1 }
-    , { signature = "wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq", internalName = "craft/artifact", action = noAction, displayName = "", color = accent1 }
-    , { signature = "qqqqqaqwawaw", internalName = "potion/weakness", action = noAction, displayName = "", color = accent1 }
-    , { signature = "qqqqqawwawawd", internalName = "potion/levitation", action = noAction, displayName = "", color = accent1 }
-    , { signature = "qqqqqaewawawe", internalName = "potion/wither", action = noAction, displayName = "", color = accent1 }
-    , { signature = "qqqqqadwawaww", internalName = "potion/poison", action = noAction, displayName = "", color = accent1 }
-    , { signature = "qqqqqadwawaw", internalName = "potion/slowness", action = noAction, displayName = "", color = accent1 }
-    , { signature = "waeawae", internalName = "sentinel/create", action = noAction, displayName = "", color = accent1 }
-    , { signature = "qdwdqdw", internalName = "sentinel/destroy", action = noAction, displayName = "", color = accent1 }
-    , { signature = "waeawaede", internalName = "sentinel/get_pos", action = noAction, displayName = "", color = accent1 }
-    , { signature = "waeawaedwa", internalName = "sentinel/wayfind", action = noAction, displayName = "", color = accent1 }
+    , { signature = "aawaawaa", internalName = "explode", action = explode, displayName = "Explosion", color = accent1 }
+    , { signature = "ddwddwdd", internalName = "explode/fire", action = explodeFire, displayName = "Fireball", color = accent1 }
+    , { signature = "awqqqwaqw", internalName = "add_motion", action = addMotion, displayName = "Impulse", color = accent1 }
+    , { signature = "awqqqwaq", internalName = "blink", action = blink, displayName = "Blink", color = accent1 }
+    , { signature = "qaqqqqq", internalName = "break_block", action = breakBlock, displayName = "Break Block", color = accent1 }
+    , { signature = "eeeeede", internalName = "place_block", action = placeBlock, displayName = "Place Block", color = accent1 }
+    , { signature = "awddwqawqwawq", internalName = "colorize", action = colorize, displayName = "Internalize Pigment", color = accent1 }
+    , { signature = "aqawqadaq", internalName = "create_water", action = createWater, displayName = "Create Water", color = accent1 }
+    , { signature = "dedwedade", internalName = "destroy_water", action = destroyWater, displayName = "Destroy Liquid", color = accent1 }
+    , { signature = "aaqawawa", internalName = "ignite", action = ignite, displayName = "Ignite Block", color = accent1 }
+    , { signature = "ddedwdwd", internalName = "extinguish", action = extinguish, displayName = "Extinguish Area", color = accent1 }
+    , { signature = "qqa", internalName = "conjure_block", action = conjureBlock, displayName = "Conjure Block", color = accent1 }
+    , { signature = "qqd", internalName = "conjure_light", action = conjureLight, displayName = "Conjure Light", color = accent1 }
+    , { signature = "wqaqwawqaqw", internalName = "bonemeal", action = bonemeal, displayName = "Overgrow", color = accent1 }
+    , { signature = "qqqqqwaeaeaeaeaea", internalName = "recharge", action = recharge, displayName = "Recharge Item", color = accent1 }
+    , { signature = "qdqawwaww", internalName = "erase", action = erase, displayName = "Erase Item", color = accent1 }
+    , { signature = "wqaqwd", internalName = "edify", action = edify, displayName = "Edify Sapling", color = accent1 }
+    , { signature = "adaa", internalName = "beep", action = beep, displayName = "Make Note", color = accent1 }
+    , { signature = "waqqqqq", internalName = "craft/cypher", action = craftArtifact, displayName = "Craft Cypher", color = accent1 }
+    , { signature = "wwaqqqqqeaqeaeqqqeaeq", internalName = "craft/trinket", action = craftArtifact, displayName = "Craft Trinket", color = accent1 }
+    , { signature = "wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq", internalName = "craft/artifact", action = craftArtifact, displayName = "Craft Artifact", color = accent1 }
+    , { signature = "qqqqqaqwawaw", internalName = "potion/weakness", action = potion, displayName = "White Sun's Nadir", color = accent1 }
+    , { signature = "qqqqqawwawawd", internalName = "potion/levitation", action = potionFixedPotency, displayName = "Blue Sun's Nadir", color = accent1 }
+    , { signature = "qqqqqaewawawe", internalName = "potion/wither", action = potion, displayName = "Black Sun's Nadir", color = accent1 }
+    , { signature = "qqqqqadwawaww", internalName = "potion/poison", action = potion, displayName = "Red Sun's Nadir", color = accent1 }
+    , { signature = "qqqqqadwawaw", internalName = "potion/slowness", action = potion, displayName = "Green Sun's Nadir", color = accent1 }
+    , { signature = "waeawae", internalName = "sentinel/create", action = sentinelCreate, displayName = "Summon Sentinel", color = accent1 }
+    , { signature = "qdwdqdw", internalName = "sentinel/destroy", action = sentinelDestroy, displayName = "Banish Sentinel", color = accent1 }
+    , { signature = "waeawaede", internalName = "sentinel/get_pos", action = sentinelGetPos, displayName = "Locate Sentinel", color = accent1 }
+    , { signature = "waeawaedwa", internalName = "sentinel/wayfind", action = sentinelWayfind, displayName = "Wayfind Sentinel", color = accent1 }
     , { signature = "qqqwqqqqqaq", internalName = "akashic/read", action = noAction, displayName = "", color = accent1 }
     , { signature = "eeeweeeeede", internalName = "akashic/write", action = noAction, displayName = "", color = accent1 }
-    , { signature = "aqdee", internalName = "halt", action = noAction, displayName = "", color = accent1 }
+    , { signature = "aqdee", internalName = "halt", action = \x -> ( x, True ), displayName = "Charon's Gambit", color = accent1 }
     , { signature = "aqqqqq", internalName = "read", action = noAction, displayName = "", color = accent1 }
     , { signature = "wawqwqwqwqwqw", internalName = "read/entity", action = noAction, displayName = "", color = accent1 }
     , { signature = "deeeee", internalName = "write", action = noAction, displayName = "", color = accent1 }
@@ -249,7 +250,7 @@ eval stack =
                     case iota of
                         IotaList list ->
                             case
-                                applyPatternsToStackStopAtError newStack
+                                applyPatternsToStackStopAtErrorOrHalt newStack
                                     (List.reverse <|
                                         Array.toList <|
                                             Array.map
@@ -279,7 +280,7 @@ eval stack =
                                     )
 
                         Pattern pattern _ ->
-                            case applyPatternsToStackStopAtError newStack [ pattern ] of
+                            case applyPatternsToStackStopAtErrorOrHalt newStack [ pattern ] of
                                 ( newNewStack, _, error ) ->
                                     ( newNewStack, not error )
 

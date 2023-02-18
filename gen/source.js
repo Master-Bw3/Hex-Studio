@@ -6976,7 +6976,7 @@ var $author$project$Logic$App$Stack$Stack$applyPatternToStack = F2(
 		}
 	});
 var $author$project$Logic$App$Stack$Stack$applyPatternsToStackLoop = F4(
-	function (stackResultTuple, patterns, considerThis, stopAtError) {
+	function (stackResultTuple, patterns, considerThis, stopAtErrorOrHalt) {
 		applyPatternsToStackLoop:
 		while (true) {
 			var stack = stackResultTuple.a;
@@ -6995,37 +6995,41 @@ var $author$project$Logic$App$Stack$Stack$applyPatternsToStackLoop = F4(
 						_List_Nil,
 						$elm$core$List$tail(patterns)),
 						$temp$considerThis = false,
-						$temp$stopAtError = stopAtError;
+						$temp$stopAtErrorOrHalt = stopAtErrorOrHalt;
 					stackResultTuple = $temp$stackResultTuple;
 					patterns = $temp$patterns;
 					considerThis = $temp$considerThis;
-					stopAtError = $temp$stopAtError;
+					stopAtErrorOrHalt = $temp$stopAtErrorOrHalt;
 					continue applyPatternsToStackLoop;
 				} else {
-					var _v1 = A2($author$project$Logic$App$Stack$Stack$applyPatternToStack, stack, pattern);
-					var newStack = _v1.a;
-					var result = _v1.b;
-					var considerNext = _v1.c;
-					if ((!stopAtError) || (stopAtError && (!_Utils_eq(result, $author$project$Logic$App$Types$Failed)))) {
-						var $temp$stackResultTuple = _Utils_Tuple2(
-							newStack,
-							A2($author$project$Logic$App$Utils$Utils$unshift, result, resultArray)),
-							$temp$patterns = A2(
-							$elm$core$Maybe$withDefault,
-							_List_Nil,
-							$elm$core$List$tail(patterns)),
-							$temp$considerThis = considerNext,
-							$temp$stopAtError = stopAtError;
-						stackResultTuple = $temp$stackResultTuple;
-						patterns = $temp$patterns;
-						considerThis = $temp$considerThis;
-						stopAtError = $temp$stopAtError;
-						continue applyPatternsToStackLoop;
+					if ((pattern.internalName === 'halt') && stopAtErrorOrHalt) {
+						return _Utils_Tuple3(stack, resultArray, false);
 					} else {
-						return _Utils_Tuple3(
-							newStack,
-							A2($author$project$Logic$App$Utils$Utils$unshift, result, resultArray),
-							true);
+						var _v1 = A2($author$project$Logic$App$Stack$Stack$applyPatternToStack, stack, pattern);
+						var newStack = _v1.a;
+						var result = _v1.b;
+						var considerNext = _v1.c;
+						if ((!stopAtErrorOrHalt) || (stopAtErrorOrHalt && (!_Utils_eq(result, $author$project$Logic$App$Types$Failed)))) {
+							var $temp$stackResultTuple = _Utils_Tuple2(
+								newStack,
+								A2($author$project$Logic$App$Utils$Utils$unshift, result, resultArray)),
+								$temp$patterns = A2(
+								$elm$core$Maybe$withDefault,
+								_List_Nil,
+								$elm$core$List$tail(patterns)),
+								$temp$considerThis = considerNext,
+								$temp$stopAtErrorOrHalt = stopAtErrorOrHalt;
+							stackResultTuple = $temp$stackResultTuple;
+							patterns = $temp$patterns;
+							considerThis = $temp$considerThis;
+							stopAtErrorOrHalt = $temp$stopAtErrorOrHalt;
+							continue applyPatternsToStackLoop;
+						} else {
+							return _Utils_Tuple3(
+								newStack,
+								A2($author$project$Logic$App$Utils$Utils$unshift, result, resultArray),
+								true);
+						}
 					}
 				}
 			}
@@ -7779,6 +7783,35 @@ var $author$project$Logic$App$Patterns$Math$add = function (stack) {
 		});
 	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, action);
 };
+var $author$project$Logic$App$Patterns$OperatorUtils$getEntity = function (iota) {
+	if (iota.$ === 'Entity') {
+		return $elm$core$Maybe$Just(iota);
+	} else {
+		return $elm$core$Maybe$Nothing;
+	}
+};
+var $author$project$Logic$App$Patterns$OperatorUtils$getVector = function (iota) {
+	if (iota.$ === 'Vector') {
+		return $elm$core$Maybe$Just(iota);
+	} else {
+		return $elm$core$Maybe$Nothing;
+	}
+};
+var $author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs = F3(
+	function (stack, inputGetter1, inputGetter2) {
+		return A4(
+			$author$project$Logic$App$Patterns$OperatorUtils$action2Inputs,
+			stack,
+			inputGetter1,
+			inputGetter2,
+			F2(
+				function (_v0, _v1) {
+					return $elm$core$Array$empty;
+				}));
+	});
+var $author$project$Logic$App$Patterns$Spells$addMotion = function (stack) {
+	return A3($author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
+};
 var $ianmackenzie$elm_units$Quantity$lessThanOrEqualTo = F2(
 	function (_v0, _v1) {
 		var y = _v0.a;
@@ -8066,134 +8099,6 @@ var $author$project$Logic$App$Patterns$Math$arctan = function (stack) {
 	};
 	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
 };
-var $author$project$Logic$App$Patterns$Math$boolCoerce = function (stack) {
-	var action = function (iota) {
-		switch (iota.$) {
-			case 'Number':
-				return A2(
-					$author$project$Logic$App$Patterns$OperatorUtils$checkEquality,
-					iota,
-					$author$project$Logic$App$Types$Number(0.0)) ? A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Boolean(false)) : A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Boolean(true));
-			case 'Null':
-				return A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Boolean(false));
-			case 'IotaList':
-				var x = iota.a;
-				return _Utils_eq(x, $elm$core$Array$empty) ? A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Boolean(false)) : A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Boolean(true));
-			default:
-				return A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Boolean(true));
-		}
-	};
-	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
-};
-var $author$project$Logic$App$Patterns$Math$ceilAction = function (stack) {
-	var action = function (iota) {
-		if (iota.$ === 'Number') {
-			var number = iota.a;
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Number(
-					$elm$core$Basics$ceiling(number)));
-		} else {
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-		}
-	};
-	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
-};
-var $author$project$Logic$App$Patterns$OperatorUtils$actionNoInput = F2(
-	function (stack, action) {
-		return _Utils_Tuple2(
-			A2($elm$core$Array$append, action, stack),
-			true);
-	});
-var $author$project$Logic$App$Patterns$Circles$circleBoundsMax = function (stack) {
-	var action = A2(
-		$elm$core$Array$repeat,
-		1,
-		$author$project$Logic$App$Types$Vector(
-			_Utils_Tuple3(0.0, 0.0, 0.0)));
-	return A2($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, action);
-};
-var $author$project$Logic$App$Patterns$Circles$circleBoundsMin = function (stack) {
-	var action = A2(
-		$elm$core$Array$repeat,
-		1,
-		$author$project$Logic$App$Types$Vector(
-			_Utils_Tuple3(0.0, 0.0, 0.0)));
-	return A2($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, action);
-};
-var $author$project$Logic$App$Patterns$Circles$circleImpetusDirection = function (stack) {
-	var action = A2(
-		$elm$core$Array$repeat,
-		1,
-		$author$project$Logic$App$Types$Vector(
-			_Utils_Tuple3(1.0, 0.0, 0.0)));
-	return A2($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, action);
-};
-var $elm$core$Basics$cos = _Basics_cos;
-var $author$project$Logic$App$Patterns$OperatorUtils$getVector = function (iota) {
-	if (iota.$ === 'Vector') {
-		return $elm$core$Maybe$Just(iota);
-	} else {
-		return $elm$core$Maybe$Nothing;
-	}
-};
-var $elm$core$Basics$pi = _Basics_pi;
-var $elm$core$Basics$sin = _Basics_sin;
-var $author$project$Logic$App$Patterns$Math$coerceAxial = function (stack) {
-	var action = function (iota) {
-		if (iota.$ === 'Vector') {
-			var vector = iota.a;
-			var x = vector.a;
-			var y = vector.b;
-			var z = vector.c;
-			var theta = $elm$core$Basics$atan(y / x);
-			var snapped_theta = ($elm$core$Basics$pi / 2) * $elm$core$Basics$round(theta / ($elm$core$Basics$pi / 2));
-			var magnitude = $elm$core$Basics$sqrt(
-				(A2($elm$core$Basics$pow, x, 2) + A2($elm$core$Basics$pow, y, 2)) + A2($elm$core$Basics$pow, z, 2));
-			var azimuth = $elm$core$Basics$acos(z / magnitude);
-			var snapped_azimuth = ($elm$core$Basics$pi / 2) * $elm$core$Basics$round(azimuth / ($elm$core$Basics$pi / 2));
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Vector(
-					_Utils_Tuple3(
-						$elm$core$Basics$round(
-							$elm$core$Basics$sin(snapped_azimuth) * $elm$core$Basics$cos(snapped_theta)),
-						$elm$core$Basics$round(
-							$elm$core$Basics$sin(snapped_azimuth) * $elm$core$Basics$sin(snapped_theta)),
-						$elm$core$Basics$round(
-							$elm$core$Basics$cos(snapped_azimuth)))));
-		} else {
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-		}
-	};
-	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector, action);
-};
 var $author$project$Logic$App$Patterns$OperatorUtils$action3Inputs = F5(
 	function (stack, inputGetter1, inputGetter2, inputGetter3, action) {
 		var newStack = A3(
@@ -8275,6 +8180,174 @@ var $author$project$Logic$App$Patterns$OperatorUtils$action3Inputs = F5(
 			}
 		}
 	});
+var $author$project$Logic$App$Patterns$OperatorUtils$spell3Inputs = F4(
+	function (stack, inputGetter1, inputGetter2, inputGetter3) {
+		return A5(
+			$author$project$Logic$App$Patterns$OperatorUtils$action3Inputs,
+			stack,
+			inputGetter1,
+			inputGetter2,
+			inputGetter3,
+			F3(
+				function (_v0, _v1, _v2) {
+					return $elm$core$Array$empty;
+				}));
+	});
+var $author$project$Logic$App$Patterns$Spells$beep = function (stack) {
+	return A4($author$project$Logic$App$Patterns$OperatorUtils$spell3Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber);
+};
+var $author$project$Logic$App$Patterns$Spells$blink = function (stack) {
+	return A3($author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, $author$project$Logic$App$Patterns$OperatorUtils$getNumber);
+};
+var $author$project$Logic$App$Patterns$OperatorUtils$spell1Input = F2(
+	function (stack, inputGetter) {
+		return A3(
+			$author$project$Logic$App$Patterns$OperatorUtils$action1Input,
+			stack,
+			inputGetter,
+			function (_v0) {
+				return $elm$core$Array$empty;
+			});
+	});
+var $author$project$Logic$App$Patterns$Spells$bonemeal = function (stack) {
+	return A2($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
+};
+var $author$project$Logic$App$Patterns$Math$boolCoerce = function (stack) {
+	var action = function (iota) {
+		switch (iota.$) {
+			case 'Number':
+				return A2(
+					$author$project$Logic$App$Patterns$OperatorUtils$checkEquality,
+					iota,
+					$author$project$Logic$App$Types$Number(0.0)) ? A2(
+					$elm$core$Array$repeat,
+					1,
+					$author$project$Logic$App$Types$Boolean(false)) : A2(
+					$elm$core$Array$repeat,
+					1,
+					$author$project$Logic$App$Types$Boolean(true));
+			case 'Null':
+				return A2(
+					$elm$core$Array$repeat,
+					1,
+					$author$project$Logic$App$Types$Boolean(false));
+			case 'IotaList':
+				var x = iota.a;
+				return _Utils_eq(x, $elm$core$Array$empty) ? A2(
+					$elm$core$Array$repeat,
+					1,
+					$author$project$Logic$App$Types$Boolean(false)) : A2(
+					$elm$core$Array$repeat,
+					1,
+					$author$project$Logic$App$Types$Boolean(true));
+			default:
+				return A2(
+					$elm$core$Array$repeat,
+					1,
+					$author$project$Logic$App$Types$Boolean(true));
+		}
+	};
+	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
+};
+var $author$project$Logic$App$Patterns$Spells$breakBlock = function (stack) {
+	return A2($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
+};
+var $author$project$Logic$App$Patterns$Math$ceilAction = function (stack) {
+	var action = function (iota) {
+		if (iota.$ === 'Number') {
+			var number = iota.a;
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Number(
+					$elm$core$Basics$ceiling(number)));
+		} else {
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+		}
+	};
+	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
+};
+var $author$project$Logic$App$Patterns$OperatorUtils$actionNoInput = F2(
+	function (stack, action) {
+		return _Utils_Tuple2(
+			A2($elm$core$Array$append, action, stack),
+			true);
+	});
+var $author$project$Logic$App$Patterns$Circles$circleBoundsMax = function (stack) {
+	var action = A2(
+		$elm$core$Array$repeat,
+		1,
+		$author$project$Logic$App$Types$Vector(
+			_Utils_Tuple3(0.0, 0.0, 0.0)));
+	return A2($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, action);
+};
+var $author$project$Logic$App$Patterns$Circles$circleBoundsMin = function (stack) {
+	var action = A2(
+		$elm$core$Array$repeat,
+		1,
+		$author$project$Logic$App$Types$Vector(
+			_Utils_Tuple3(0.0, 0.0, 0.0)));
+	return A2($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, action);
+};
+var $author$project$Logic$App$Patterns$Circles$circleImpetusDirection = function (stack) {
+	var action = A2(
+		$elm$core$Array$repeat,
+		1,
+		$author$project$Logic$App$Types$Vector(
+			_Utils_Tuple3(1.0, 0.0, 0.0)));
+	return A2($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, action);
+};
+var $elm$core$Basics$cos = _Basics_cos;
+var $elm$core$Basics$pi = _Basics_pi;
+var $elm$core$Basics$sin = _Basics_sin;
+var $author$project$Logic$App$Patterns$Math$coerceAxial = function (stack) {
+	var action = function (iota) {
+		if (iota.$ === 'Vector') {
+			var vector = iota.a;
+			var x = vector.a;
+			var y = vector.b;
+			var z = vector.c;
+			var theta = $elm$core$Basics$atan(y / x);
+			var snapped_theta = ($elm$core$Basics$pi / 2) * $elm$core$Basics$round(theta / ($elm$core$Basics$pi / 2));
+			var magnitude = $elm$core$Basics$sqrt(
+				(A2($elm$core$Basics$pow, x, 2) + A2($elm$core$Basics$pow, y, 2)) + A2($elm$core$Basics$pow, z, 2));
+			var azimuth = $elm$core$Basics$acos(z / magnitude);
+			var snapped_azimuth = ($elm$core$Basics$pi / 2) * $elm$core$Basics$round(azimuth / ($elm$core$Basics$pi / 2));
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Vector(
+					_Utils_Tuple3(
+						$elm$core$Basics$round(
+							$elm$core$Basics$sin(snapped_azimuth) * $elm$core$Basics$cos(snapped_theta)),
+						$elm$core$Basics$round(
+							$elm$core$Basics$sin(snapped_azimuth) * $elm$core$Basics$sin(snapped_theta)),
+						$elm$core$Basics$round(
+							$elm$core$Basics$cos(snapped_azimuth)))));
+		} else {
+			return A2(
+				$elm$core$Array$repeat,
+				1,
+				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+		}
+	};
+	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector, action);
+};
+var $author$project$Logic$App$Patterns$OperatorUtils$spellNoInput = function (stack) {
+	return A2($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, $elm$core$Array$empty);
+};
+var $author$project$Logic$App$Patterns$Spells$colorize = function (stack) {
+	return $author$project$Logic$App$Patterns$OperatorUtils$spellNoInput(stack);
+};
+var $author$project$Logic$App$Patterns$Spells$conjureBlock = function (stack) {
+	return A2($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
+};
+var $author$project$Logic$App$Patterns$Spells$conjureLight = function (stack) {
+	return A2($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
+};
 var $author$project$Logic$App$Patterns$Math$constructVector = function (stack) {
 	var action = F3(
 		function (iota1, iota2, iota3) {
@@ -8315,6 +8388,36 @@ var $author$project$Logic$App$Patterns$Math$cosine = function (stack) {
 	};
 	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
 };
+var $elm$core$List$all = F2(
+	function (isOkay, list) {
+		return !A2(
+			$elm$core$List$any,
+			A2($elm$core$Basics$composeL, $elm$core$Basics$not, isOkay),
+			list);
+	});
+var $author$project$Logic$App$Patterns$OperatorUtils$getPatternList = function (iota) {
+	if (iota.$ === 'IotaList') {
+		var list = iota.a;
+		return A2(
+			$elm$core$List$all,
+			function (i) {
+				if (i.$ === 'Pattern') {
+					return true;
+				} else {
+					return false;
+				}
+			},
+			$elm$core$Array$toList(list)) ? $elm$core$Maybe$Just(iota) : $elm$core$Maybe$Nothing;
+	} else {
+		return $elm$core$Maybe$Nothing;
+	}
+};
+var $author$project$Logic$App$Patterns$Spells$craftArtifact = function (stack) {
+	return A3($author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, $author$project$Logic$App$Patterns$OperatorUtils$getPatternList);
+};
+var $author$project$Logic$App$Patterns$Spells$createWater = function (stack) {
+	return A2($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
+};
 var $author$project$Logic$App$Patterns$Math$deconstructVector = function (stack) {
 	var action = function (iota) {
 		if (iota.$ === 'Vector') {
@@ -8337,6 +8440,9 @@ var $author$project$Logic$App$Patterns$Math$deconstructVector = function (stack)
 		}
 	};
 	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector, action);
+};
+var $author$project$Logic$App$Patterns$Spells$destroyWater = function (stack) {
+	return A2($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
 };
 var $ianmackenzie$elm_geometry$Vector3d$cross = F2(
 	function (_v0, _v1) {
@@ -8510,12 +8616,8 @@ var $author$project$Logic$App$Patterns$Stack$duplicateN = function (stack) {
 	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getInteger, action);
 };
 var $elm$core$Basics$e = _Basics_e;
-var $author$project$Logic$App$Patterns$OperatorUtils$getEntity = function (iota) {
-	if (iota.$ === 'Entity') {
-		return $elm$core$Maybe$Just(iota);
-	} else {
-		return $elm$core$Maybe$Nothing;
-	}
+var $author$project$Logic$App$Patterns$Spells$edify = function (stack) {
+	return A2($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
 };
 var $author$project$Logic$App$Patterns$Misc$entityPos = function (stack) {
 	var action = function (_v0) {
@@ -8538,7 +8640,10 @@ var $author$project$Logic$App$Patterns$Math$equalTo = function (stack) {
 		});
 	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
 };
-var $author$project$Logic$App$Stack$Stack$applyPatternsToStackStopAtError = F2(
+var $author$project$Logic$App$Patterns$Spells$erase = function (stack) {
+	return $author$project$Logic$App$Patterns$OperatorUtils$spellNoInput(stack);
+};
+var $author$project$Logic$App$Stack$Stack$applyPatternsToStackStopAtErrorOrHalt = F2(
 	function (stack, patterns) {
 		return A4(
 			$author$project$Logic$App$Stack$Stack$applyPatternsToStackLoop,
@@ -8546,13 +8651,6 @@ var $author$project$Logic$App$Stack$Stack$applyPatternsToStackStopAtError = F2(
 			patterns,
 			false,
 			true);
-	});
-var $elm$core$List$all = F2(
-	function (isOkay, list) {
-		return !A2(
-			$elm$core$List$any,
-			A2($elm$core$Basics$composeL, $elm$core$Basics$not, isOkay),
-			list);
 	});
 var $author$project$Logic$App$Patterns$OperatorUtils$getPatternOrPatternList = function (iota) {
 	switch (iota.$) {
@@ -8619,7 +8717,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$eval = function (stack) {
 				case 'IotaList':
 					var list = iota.a;
 					var _v3 = A2(
-						$author$project$Logic$App$Stack$Stack$applyPatternsToStackStopAtError,
+						$author$project$Logic$App$Stack$Stack$applyPatternsToStackStopAtErrorOrHalt,
 						newStack,
 						$elm$core$List$reverse(
 							$elm$core$Array$toList(
@@ -8651,7 +8749,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$eval = function (stack) {
 				case 'Pattern':
 					var pattern = iota.a;
 					var _v6 = A2(
-						$author$project$Logic$App$Stack$Stack$applyPatternsToStackStopAtError,
+						$author$project$Logic$App$Stack$Stack$applyPatternsToStackStopAtErrorOrHalt,
 						newStack,
 						_List_fromArray(
 							[pattern]));
@@ -8669,6 +8767,15 @@ var $author$project$Logic$App$Patterns$PatternRegistry$eval = function (stack) {
 			}
 		}
 	}
+};
+var $author$project$Logic$App$Patterns$Spells$explode = function (stack) {
+	return A3($author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector, $author$project$Logic$App$Patterns$OperatorUtils$getNumber);
+};
+var $author$project$Logic$App$Patterns$Spells$explodeFire = function (stack) {
+	return A3($author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector, $author$project$Logic$App$Patterns$OperatorUtils$getNumber);
+};
+var $author$project$Logic$App$Patterns$Spells$extinguish = function (stack) {
+	return A2($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
 };
 var $elm$core$Array$toIndexedList = function (array) {
 	var len = array.a;
@@ -8960,6 +9067,9 @@ var $author$project$Logic$App$Patterns$Math$ifBool = function (stack) {
 			}
 		});
 	return A5($author$project$Logic$App$Patterns$OperatorUtils$action3Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getBoolean, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
+};
+var $author$project$Logic$App$Patterns$Spells$ignite = function (stack) {
+	return A2($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
 };
 var $author$project$Logic$App$Patterns$Math$invertBool = function (stack) {
 	var action = function (iota) {
@@ -9275,6 +9385,15 @@ var $author$project$Logic$App$Patterns$Stack$over = function (stack) {
 		});
 	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
 };
+var $author$project$Logic$App$Patterns$Spells$placeBlock = function (stack) {
+	return A2($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
+};
+var $author$project$Logic$App$Patterns$Spells$potion = function (stack) {
+	return A4($author$project$Logic$App$Patterns$OperatorUtils$spell3Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber);
+};
+var $author$project$Logic$App$Patterns$Spells$potionFixedPotency = function (stack) {
+	return A3($author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, $author$project$Logic$App$Patterns$OperatorUtils$getNumber);
+};
 var $author$project$Logic$App$Patterns$Math$powProj = function (stack) {
 	var action = F2(
 		function (iota1, iota2) {
@@ -9404,6 +9523,9 @@ var $author$project$Logic$App$Patterns$Misc$raycastEntity = function (stack) {
 		});
 	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector, $author$project$Logic$App$Patterns$OperatorUtils$getVector, action);
 };
+var $author$project$Logic$App$Patterns$Spells$recharge = function (stack) {
+	return A2($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getEntity);
+};
 var $author$project$Logic$App$Patterns$Stack$rotate = function (stack) {
 	var action = F3(
 		function (iota1, iota2, iota3) {
@@ -9421,6 +9543,37 @@ var $author$project$Logic$App$Patterns$Stack$rotateReverse = function (stack) {
 					[iota2, iota1, iota3]));
 		});
 	return A5($author$project$Logic$App$Patterns$OperatorUtils$action3Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
+};
+var $author$project$Logic$App$Patterns$Spells$sentinelCreate = function (stack) {
+	return A2($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
+};
+var $author$project$Logic$App$Patterns$Spells$sentinelDestroy = function (stack) {
+	return $author$project$Logic$App$Patterns$OperatorUtils$spellNoInput(stack);
+};
+var $author$project$Logic$App$Patterns$Spells$sentinelGetPos = function (stack) {
+	return A2(
+		$author$project$Logic$App$Patterns$OperatorUtils$actionNoInput,
+		stack,
+		$elm$core$Array$fromList(
+			_List_fromArray(
+				[
+					$author$project$Logic$App$Types$Vector(
+					_Utils_Tuple3(0, 0, 0))
+				])));
+};
+var $author$project$Logic$App$Patterns$Spells$sentinelWayfind = function (stack) {
+	return A3(
+		$author$project$Logic$App$Patterns$OperatorUtils$action1Input,
+		stack,
+		$author$project$Logic$App$Patterns$OperatorUtils$getVector,
+		function (_v0) {
+			return $elm$core$Array$fromList(
+				_List_fromArray(
+					[
+						$author$project$Logic$App$Types$Vector(
+						_Utils_Tuple3(0, 0, 0))
+					]));
+		});
 };
 var $author$project$Logic$App$Patterns$Math$sine = function (stack) {
 	var action = function (iota) {
@@ -9782,39 +9935,47 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _List_f
 		{action: $author$project$Logic$App$Patterns$Math$notBit, color: $author$project$Settings$Theme$accent1, displayName: 'Inversion Purification', internalName: 'not_bit', signature: 'dweaqa'},
 		{action: $author$project$Logic$App$Patterns$Math$toSet, color: $author$project$Settings$Theme$accent1, displayName: 'Uniqueness Purification', internalName: 'to_set', signature: 'aweaqa'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$print, color: $author$project$Settings$Theme$accent1, displayName: 'Reveal', internalName: 'print', signature: 'de'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'explode', signature: 'aawaawaa'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'explode/fire', signature: 'ddwddwdd'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'add_motion', signature: 'awqqqwaqw'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'blink', signature: 'awqqqwaq'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'break_block', signature: 'qaqqqqq'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'place_block', signature: 'eeeeede'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'colorize', signature: 'awddwqawqwawq'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'create_water', signature: 'aqawqadaq'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'destroy_water', signature: 'dedwedade'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'ignite', signature: 'aaqawawa'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'extinguish', signature: 'ddedwdwd'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'conjure_block', signature: 'qqa'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'conjure_light', signature: 'qqd'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'bonemeal', signature: 'wqaqwawqaqw'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'recharge', signature: 'qqqqqwaeaeaeaeaea'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'erase', signature: 'qdqawwaww'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'edify', signature: 'wqaqwd'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'beep', signature: 'adaa'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'craft/cypher', signature: 'waqqqqq'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'craft/trinket', signature: 'wwaqqqqqeaqeaeqqqeaeq'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'craft/artifact', signature: 'wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'potion/weakness', signature: 'qqqqqaqwawaw'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'potion/levitation', signature: 'qqqqqawwawawd'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'potion/wither', signature: 'qqqqqaewawawe'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'potion/poison', signature: 'qqqqqadwawaww'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'potion/slowness', signature: 'qqqqqadwawaw'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'sentinel/create', signature: 'waeawae'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'sentinel/destroy', signature: 'qdwdqdw'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'sentinel/get_pos', signature: 'waeawaede'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'sentinel/wayfind', signature: 'waeawaedwa'},
+		{action: $author$project$Logic$App$Patterns$Spells$explode, color: $author$project$Settings$Theme$accent1, displayName: 'Explosion', internalName: 'explode', signature: 'aawaawaa'},
+		{action: $author$project$Logic$App$Patterns$Spells$explodeFire, color: $author$project$Settings$Theme$accent1, displayName: 'Fireball', internalName: 'explode/fire', signature: 'ddwddwdd'},
+		{action: $author$project$Logic$App$Patterns$Spells$addMotion, color: $author$project$Settings$Theme$accent1, displayName: 'Impulse', internalName: 'add_motion', signature: 'awqqqwaqw'},
+		{action: $author$project$Logic$App$Patterns$Spells$blink, color: $author$project$Settings$Theme$accent1, displayName: 'Blink', internalName: 'blink', signature: 'awqqqwaq'},
+		{action: $author$project$Logic$App$Patterns$Spells$breakBlock, color: $author$project$Settings$Theme$accent1, displayName: 'Break Block', internalName: 'break_block', signature: 'qaqqqqq'},
+		{action: $author$project$Logic$App$Patterns$Spells$placeBlock, color: $author$project$Settings$Theme$accent1, displayName: 'Place Block', internalName: 'place_block', signature: 'eeeeede'},
+		{action: $author$project$Logic$App$Patterns$Spells$colorize, color: $author$project$Settings$Theme$accent1, displayName: 'Internalize Pigment', internalName: 'colorize', signature: 'awddwqawqwawq'},
+		{action: $author$project$Logic$App$Patterns$Spells$createWater, color: $author$project$Settings$Theme$accent1, displayName: 'Create Water', internalName: 'create_water', signature: 'aqawqadaq'},
+		{action: $author$project$Logic$App$Patterns$Spells$destroyWater, color: $author$project$Settings$Theme$accent1, displayName: 'Destroy Liquid', internalName: 'destroy_water', signature: 'dedwedade'},
+		{action: $author$project$Logic$App$Patterns$Spells$ignite, color: $author$project$Settings$Theme$accent1, displayName: 'Ignite Block', internalName: 'ignite', signature: 'aaqawawa'},
+		{action: $author$project$Logic$App$Patterns$Spells$extinguish, color: $author$project$Settings$Theme$accent1, displayName: 'Extinguish Area', internalName: 'extinguish', signature: 'ddedwdwd'},
+		{action: $author$project$Logic$App$Patterns$Spells$conjureBlock, color: $author$project$Settings$Theme$accent1, displayName: 'Conjure Block', internalName: 'conjure_block', signature: 'qqa'},
+		{action: $author$project$Logic$App$Patterns$Spells$conjureLight, color: $author$project$Settings$Theme$accent1, displayName: 'Conjure Light', internalName: 'conjure_light', signature: 'qqd'},
+		{action: $author$project$Logic$App$Patterns$Spells$bonemeal, color: $author$project$Settings$Theme$accent1, displayName: 'Overgrow', internalName: 'bonemeal', signature: 'wqaqwawqaqw'},
+		{action: $author$project$Logic$App$Patterns$Spells$recharge, color: $author$project$Settings$Theme$accent1, displayName: 'Recharge Item', internalName: 'recharge', signature: 'qqqqqwaeaeaeaeaea'},
+		{action: $author$project$Logic$App$Patterns$Spells$erase, color: $author$project$Settings$Theme$accent1, displayName: 'Erase Item', internalName: 'erase', signature: 'qdqawwaww'},
+		{action: $author$project$Logic$App$Patterns$Spells$edify, color: $author$project$Settings$Theme$accent1, displayName: 'Edify Sapling', internalName: 'edify', signature: 'wqaqwd'},
+		{action: $author$project$Logic$App$Patterns$Spells$beep, color: $author$project$Settings$Theme$accent1, displayName: 'Make Note', internalName: 'beep', signature: 'adaa'},
+		{action: $author$project$Logic$App$Patterns$Spells$craftArtifact, color: $author$project$Settings$Theme$accent1, displayName: 'Craft Cypher', internalName: 'craft/cypher', signature: 'waqqqqq'},
+		{action: $author$project$Logic$App$Patterns$Spells$craftArtifact, color: $author$project$Settings$Theme$accent1, displayName: 'Craft Trinket', internalName: 'craft/trinket', signature: 'wwaqqqqqeaqeaeqqqeaeq'},
+		{action: $author$project$Logic$App$Patterns$Spells$craftArtifact, color: $author$project$Settings$Theme$accent1, displayName: 'Craft Artifact', internalName: 'craft/artifact', signature: 'wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq'},
+		{action: $author$project$Logic$App$Patterns$Spells$potion, color: $author$project$Settings$Theme$accent1, displayName: 'White Sun\'s Nadir', internalName: 'potion/weakness', signature: 'qqqqqaqwawaw'},
+		{action: $author$project$Logic$App$Patterns$Spells$potionFixedPotency, color: $author$project$Settings$Theme$accent1, displayName: 'Blue Sun\'s Nadir', internalName: 'potion/levitation', signature: 'qqqqqawwawawd'},
+		{action: $author$project$Logic$App$Patterns$Spells$potion, color: $author$project$Settings$Theme$accent1, displayName: 'Black Sun\'s Nadir', internalName: 'potion/wither', signature: 'qqqqqaewawawe'},
+		{action: $author$project$Logic$App$Patterns$Spells$potion, color: $author$project$Settings$Theme$accent1, displayName: 'Red Sun\'s Nadir', internalName: 'potion/poison', signature: 'qqqqqadwawaww'},
+		{action: $author$project$Logic$App$Patterns$Spells$potion, color: $author$project$Settings$Theme$accent1, displayName: 'Green Sun\'s Nadir', internalName: 'potion/slowness', signature: 'qqqqqadwawaw'},
+		{action: $author$project$Logic$App$Patterns$Spells$sentinelCreate, color: $author$project$Settings$Theme$accent1, displayName: 'Summon Sentinel', internalName: 'sentinel/create', signature: 'waeawae'},
+		{action: $author$project$Logic$App$Patterns$Spells$sentinelDestroy, color: $author$project$Settings$Theme$accent1, displayName: 'Banish Sentinel', internalName: 'sentinel/destroy', signature: 'qdwdqdw'},
+		{action: $author$project$Logic$App$Patterns$Spells$sentinelGetPos, color: $author$project$Settings$Theme$accent1, displayName: 'Locate Sentinel', internalName: 'sentinel/get_pos', signature: 'waeawaede'},
+		{action: $author$project$Logic$App$Patterns$Spells$sentinelWayfind, color: $author$project$Settings$Theme$accent1, displayName: 'Wayfind Sentinel', internalName: 'sentinel/wayfind', signature: 'waeawaedwa'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'akashic/read', signature: 'qqqwqqqqqaq'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'akashic/write', signature: 'eeeweeeeede'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'halt', signature: 'aqdee'},
+		{
+		action: function (x) {
+			return _Utils_Tuple2(x, true);
+		},
+		color: $author$project$Settings$Theme$accent1,
+		displayName: 'Charon\'s Gambit',
+		internalName: 'halt',
+		signature: 'aqdee'
+	},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'read', signature: 'aqqqqq'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'read/entity', signature: 'wawqwqwqwqwqw'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'write', signature: 'deeeee'},
