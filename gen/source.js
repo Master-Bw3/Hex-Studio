@@ -6852,10 +6852,6 @@ var $author$project$Logic$App$Stack$Stack$addEscapedPatternIotaToStack = F2(
 				stack);
 		}
 	});
-var $author$project$Logic$App$Types$CatastrophicFailure = {$: 'CatastrophicFailure'};
-var $author$project$Logic$App$Types$Garbage = function (a) {
-	return {$: 'Garbage', a: a};
-};
 var $author$project$Logic$App$Types$IotaList = function (a) {
 	return {$: 'IotaList', a: a};
 };
@@ -6962,7 +6958,7 @@ var $author$project$Logic$App$Stack$Stack$applyPatternToStack = F2(
 					return _Utils_Tuple3(
 						A2(
 							$author$project$Logic$App$Utils$Utils$unshift,
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure),
+							A2($author$project$Logic$App$Types$Pattern, pattern, false),
 							stack),
 						$author$project$Logic$App$Types$Failed,
 						false);
@@ -7252,6 +7248,10 @@ var $author$project$Logic$App$Types$Number = function (a) {
 };
 var $author$project$Logic$App$Types$Vector = function (a) {
 	return {$: 'Vector', a: a};
+};
+var $author$project$Logic$App$Types$CatastrophicFailure = {$: 'CatastrophicFailure'};
+var $author$project$Logic$App$Types$Garbage = function (a) {
+	return {$: 'Garbage', a: a};
 };
 var $elm$core$Basics$abs = function (n) {
 	return (n < 0) ? (-n) : n;

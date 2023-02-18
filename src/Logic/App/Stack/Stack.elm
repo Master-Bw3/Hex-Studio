@@ -124,7 +124,7 @@ applyPatternToStack stack pattern =
                 ( stack, Succeeded, True )
 
             else if pattern.internalName == "close_paren" then
-                ( unshift (Garbage CatastrophicFailure) stack, Failed, False )
+                ( unshift (Pattern pattern False) stack, Failed, False )
                 --temporary
 
             else
