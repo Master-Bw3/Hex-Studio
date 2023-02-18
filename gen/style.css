@@ -2,6 +2,7 @@
     font-family: fira;
     font-variant-ligatures: none;
     src: url('./fonts/FiraCode-Light.ttf');
+    font-variant-ligatures: none;
 }
 
 @font-face {
