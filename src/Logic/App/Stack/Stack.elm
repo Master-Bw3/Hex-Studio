@@ -6,8 +6,8 @@ import Logic.App.Types exposing (ApplyToStackResult(..), Iota(..), Mishap(..), P
 import Logic.App.Utils.Utils exposing (unshift)
 
 
-applyPatternsToStackStopAtError : Array Iota -> List PatternType -> ( Array Iota, Array ApplyToStackResult, Bool )
-applyPatternsToStackStopAtError stack patterns =
+applyPatternsToStackStopAtErrorOrHalt : Array Iota -> List PatternType -> ( Array Iota, Array ApplyToStackResult, Bool )
+applyPatternsToStackStopAtErrorOrHalt stack patterns =
     applyPatternsToStackLoop ( stack, Array.empty ) patterns False True
 
 
@@ -19,7 +19,7 @@ applyPatternsToStack stack patterns =
 
 
 applyPatternsToStackLoop : ( Array Iota, Array ApplyToStackResult ) -> List PatternType -> Bool -> Bool -> ( Array Iota, Array ApplyToStackResult, Bool )
-applyPatternsToStackLoop stackResultTuple patterns considerThis stopAtError =
+applyPatternsToStackLoop stackResultTuple patterns considerThis stopAtErrorOrHalt =
     let
         stack =
             Tuple.first stackResultTuple
@@ -37,21 +37,23 @@ applyPatternsToStackLoop stackResultTuple patterns considerThis stopAtError =
                     ( addEscapedPatternIotaToStack stack pattern, unshift Considered resultArray )
                     (Maybe.withDefault [] <| List.tail patterns)
                     False
-                    stopAtError
+                    stopAtErrorOrHalt
+
+            else if pattern.internalName == "halt" && stopAtErrorOrHalt then
+                ( stack, resultArray, False )
 
             else
                 case applyPatternToStack stack pattern of
                     ( newStack, result, considerNext ) ->
-                        if not stopAtError || (stopAtError && result /= Failed) then
+                        if not stopAtErrorOrHalt || (stopAtErrorOrHalt && result /= Failed) then
                             applyPatternsToStackLoop
                                 ( newStack, unshift result resultArray )
                                 (Maybe.withDefault [] <| List.tail patterns)
                                 considerNext
-                                stopAtError
+                                stopAtErrorOrHalt
 
                         else
                             ( newStack, unshift result resultArray, True )
-
 
 
 applyPatternToStack : Array Iota -> PatternType -> ( Array Iota, ApplyToStackResult, Bool )
