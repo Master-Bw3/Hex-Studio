@@ -8636,12 +8636,18 @@ var $author$project$Logic$App$Patterns$PatternRegistry$eval = function (stack) {
 									list))));
 					var newNewStack = _v3.a;
 					var error = _v3.c;
-					var _v5 = A2($elm$core$Array$get, 0, newNewStack);
-					if ((_v5.$ === 'Just') && (_v5.a.$ === 'OpenParenthesis')) {
-						return _Utils_Tuple2(newStack, !error);
-					} else {
-						return _Utils_Tuple2(newNewStack, !error);
-					}
+					return _Utils_Tuple2(
+						A2(
+							$elm$core$Array$filter,
+							function (i) {
+								if (i.$ === 'OpenParenthesis') {
+									return false;
+								} else {
+									return true;
+								}
+							},
+							newNewStack),
+						!error);
 				case 'Pattern':
 					var pattern = iota.a;
 					var _v6 = A2(

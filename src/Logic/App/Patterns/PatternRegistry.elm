@@ -265,12 +265,18 @@ eval stack =
                                     )
                             of
                                 ( newNewStack, _, error ) ->
-                                    case Array.get 0 newNewStack of
-                                        Just (OpenParenthesis _) ->
-                                            ( newStack, not error )
+                                    ( Array.filter
+                                        (\i ->
+                                            case i of
+                                                OpenParenthesis _ ->
+                                                    False
 
-                                        _ ->
-                                            ( newNewStack, not error )
+                                                _ ->
+                                                    True
+                                        )
+                                        newNewStack
+                                    , not error
+                                    )
 
                         Pattern pattern _ ->
                             case applyPatternsToStackStopAtError newStack [ pattern ] of
