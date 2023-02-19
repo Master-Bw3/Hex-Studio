@@ -9523,6 +9523,14 @@ var $author$project$Logic$App$Patterns$Misc$raycastEntity = function (stack) {
 		});
 	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector, $author$project$Logic$App$Patterns$OperatorUtils$getVector, action);
 };
+var $author$project$Logic$App$Patterns$ReadWrite$read = function (stack) {
+	return A2(
+		$author$project$Logic$App$Patterns$OperatorUtils$actionNoInput,
+		stack,
+		$elm$core$Array$fromList(
+			_List_fromArray(
+				[$author$project$Logic$App$Types$Null])));
+};
 var $author$project$Logic$App$Patterns$Spells$recharge = function (stack) {
 	return A2($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getEntity);
 };
@@ -9976,7 +9984,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _List_f
 		internalName: 'halt',
 		signature: 'aqdee'
 	},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'read', signature: 'aqqqqq'},
+		{action: $author$project$Logic$App$Patterns$ReadWrite$read, color: $author$project$Settings$Theme$accent1, displayName: 'Scribe\'s Reflection', internalName: 'read', signature: 'aqqqqq'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'read/entity', signature: 'wawqwqwqwqwqw'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'write', signature: 'deeeee'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'write/entity', signature: 'wdwewewewewew'},
@@ -11172,6 +11180,7 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 			$elm$json$Json$Encode$string(string));
 	});
 var $elm$html$Html$Attributes$id = $elm$html$Html$Attributes$stringProperty('id');
+var $author$project$Logic$App$Types$ConfigHexPanel = {$: 'ConfigHexPanel'};
 var $author$project$Logic$App$Types$StackPanel = {$: 'StackPanel'};
 var $author$project$Logic$App$Msg$ViewPanel = F2(
 	function (a, b) {
@@ -11323,6 +11332,13 @@ var $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$onWithOptions = F3(
 				$mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$eventDecoder));
 	});
 var $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$onClick = A2($mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$onWithOptions, 'click', $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$defaultOptions);
+var $lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$sliders = A4(
+	$lattyware$elm_fontawesome$FontAwesome$IconDef,
+	'fas',
+	'sliders',
+	_Utils_Tuple2(512, 512),
+	_Utils_Tuple2('M0 416C0 398.3 14.33 384 32 384H86.66C99 355.7 127.2 336 160 336C192.8 336 220.1 355.7 233.3 384H480C497.7 384 512 398.3 512 416C512 433.7 497.7 448 480 448H233.3C220.1 476.3 192.8 496 160 496C127.2 496 99 476.3 86.66 448H32C14.33 448 0 433.7 0 416V416zM192 416C192 398.3 177.7 384 160 384C142.3 384 128 398.3 128 416C128 433.7 142.3 448 160 448C177.7 448 192 433.7 192 416zM352 176C384.8 176 412.1 195.7 425.3 224H480C497.7 224 512 238.3 512 256C512 273.7 497.7 288 480 288H425.3C412.1 316.3 384.8 336 352 336C319.2 336 291 316.3 278.7 288H32C14.33 288 0 273.7 0 256C0 238.3 14.33 224 32 224H278.7C291 195.7 319.2 176 352 176zM384 256C384 238.3 369.7 224 352 224C334.3 224 320 238.3 320 256C320 273.7 334.3 288 352 288C369.7 288 384 273.7 384 256zM480 64C497.7 64 512 78.33 512 96C512 113.7 497.7 128 480 128H265.3C252.1 156.3 224.8 176 192 176C159.2 176 131 156.3 118.7 128H32C14.33 128 0 113.7 0 96C0 78.33 14.33 64 32 64H118.7C131 35.75 159.2 16 192 16C224.8 16 252.1 35.75 265.3 64H480zM160 96C160 113.7 174.3 128 192 128C209.7 128 224 113.7 224 96C224 78.33 209.7 64 192 64C174.3 64 160 78.33 160 96z', $elm$core$Maybe$Nothing));
+var $lattyware$elm_fontawesome$FontAwesome$Solid$sliders = $lattyware$elm_fontawesome$FontAwesome$present($lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$sliders);
 var $elm$svg$Svg$Attributes$class = _VirtualDom_attribute('class');
 var $lattyware$elm_fontawesome$FontAwesome$Attributes$sm = $elm$svg$Svg$Attributes$class('fa-sm');
 var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
@@ -11743,6 +11759,57 @@ var $author$project$Components$App$Menu$menu = function (model) {
 							_List_fromArray(
 								[$lattyware$elm_fontawesome$FontAwesome$Attributes$sm]),
 							$lattyware$elm_fontawesome$FontAwesome$Solid$layerGroup))
+					])),
+				A2(
+				$elm$html$Html$button,
+				_Utils_ap(
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$id('library_menu_button'),
+							$elm$html$Html$Attributes$class('menu_button'),
+							$mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$onClick(
+							function (event) {
+								return A2($author$project$Logic$App$Msg$ViewPanel, $author$project$Logic$App$Types$ConfigHexPanel, event.keys);
+							})
+						]),
+					highlightIfActive($author$project$Logic$App$Types$ConfigHexPanel)),
+				_List_fromArray(
+					[
+						$lattyware$elm_fontawesome$FontAwesome$Styles$css,
+						$lattyware$elm_fontawesome$FontAwesome$view(
+						A2(
+							$lattyware$elm_fontawesome$FontAwesome$styled,
+							_List_fromArray(
+								[$lattyware$elm_fontawesome$FontAwesome$Attributes$sm]),
+							$lattyware$elm_fontawesome$FontAwesome$Solid$sliders))
+					]))
+			]));
+};
+var $elm$html$Html$h1 = _VirtualDom_node('h1');
+var $author$project$Components$App$Panels$Utils$visibilityToDisplayStyle = function (visibility) {
+	return visibility ? A2($elm$html$Html$Attributes$style, 'display', 'flex') : A2($elm$html$Html$Attributes$style, 'display', 'none');
+};
+var $author$project$Components$App$Panels$ConfigHexPanel$configHexPanel = function (model) {
+	var visibility = A2($elm$core$List$member, $author$project$Logic$App$Types$ConfigHexPanel, model.ui.openPanels);
+	return A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$id('pattern_panel'),
+				$elm$html$Html$Attributes$class('panel'),
+				$author$project$Components$App$Panels$Utils$visibilityToDisplayStyle(visibility)
+			]),
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$h1,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('panel_title')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Configure Defaults')
 					]))
 			]));
 };
@@ -11780,7 +11847,6 @@ var $author$project$Components$App$Panels$PatternPanel$dropTargetConfig = {
 	onOver: $author$project$Logic$App$Msg$DragOver
 };
 var $elm$json$Json$Decode$fail = _Json_fail;
-var $elm$html$Html$h1 = _VirtualDom_node('h1');
 var $elm$html$Html$input = _VirtualDom_node('input');
 var $elm$html$Html$Events$keyCode = A2($elm$json$Json$Decode$field, 'keyCode', $elm$json$Json$Decode$int);
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
@@ -12421,9 +12487,6 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F4(
 				]) : _List_Nil);
 	});
 var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
-var $author$project$Components$App$Panels$Utils$visibilityToDisplayStyle = function (visibility) {
-	return visibility ? A2($elm$html$Html$Attributes$style, 'display', 'flex') : A2($elm$html$Html$Attributes$style, 'display', 'none');
-};
 var $author$project$Components$App$Panels$PatternPanel$patternPanel = function (model) {
 	var visibility = A2($elm$core$List$member, $author$project$Logic$App$Types$PatternPanel, model.ui.openPanels);
 	var autocompleteTuple = $author$project$Components$App$PatternAutoComplete$patternInputAutoComplete(model);
@@ -12803,7 +12866,8 @@ var $author$project$Components$App$Panels$Panels$panels = function (model) {
 		_List_fromArray(
 			[
 				$author$project$Components$App$Panels$PatternPanel$patternPanel(model),
-				$author$project$Components$App$Panels$StackPanel$stackPanel(model)
+				$author$project$Components$App$Panels$StackPanel$stackPanel(model),
+				$author$project$Components$App$Panels$ConfigHexPanel$configHexPanel(model)
 			]));
 };
 var $author$project$Components$App$LeftBox$leftBox = function (model) {

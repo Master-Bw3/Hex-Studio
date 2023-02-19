@@ -19,7 +19,7 @@ menu model =
     let
         highlightIfActive panel =
             if List.member panel model.ui.openPanels then
-                [ style "background-color"  "var(--primary_medium)"]
+                [ style "background-color" "var(--primary_medium)" ]
 
             else
                 []
@@ -46,5 +46,15 @@ menu model =
             )
             [ Icon.css
             , Icon.layerGroup |> Icon.styled [ Icon.sm ] |> Icon.view
+            ]
+        , button
+            ([ id "library_menu_button"
+             , class "menu_button"
+             , onClick (\event -> ViewPanel ConfigHexPanel event.keys)
+             ]
+                ++ highlightIfActive ConfigHexPanel
+            )
+            [ Icon.css
+            , Icon.sliders |> Icon.styled [ Icon.sm ] |> Icon.view
             ]
         ]

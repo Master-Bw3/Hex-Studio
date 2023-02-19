@@ -14,7 +14,7 @@ import Logic.App.Types exposing (ApplyToStackResult(..), Iota(..), Mishap(..), P
 import Logic.App.Utils.Utils exposing (unshift)
 import Ports.HexNumGen as HexNumGen
 import Settings.Theme exposing (..)
-
+import Logic.App.Patterns.ReadWrite exposing (..)
 
 noAction : Array Iota -> ( Array Iota, Bool )
 noAction stack =
@@ -165,7 +165,7 @@ patternRegistry =
     , { signature = "qqqwqqqqqaq", internalName = "akashic/read", action = noAction, displayName = "", color = accent1 }
     , { signature = "eeeweeeeede", internalName = "akashic/write", action = noAction, displayName = "", color = accent1 }
     , { signature = "aqdee", internalName = "halt", action = \x -> ( x, True ), displayName = "Charon's Gambit", color = accent1 }
-    , { signature = "aqqqqq", internalName = "read", action = noAction, displayName = "", color = accent1 }
+    , { signature = "aqqqqq", internalName = "read", action = read, displayName = "Scribe's Reflection", color = accent1 }
     , { signature = "wawqwqwqwqwqw", internalName = "read/entity", action = noAction, displayName = "", color = accent1 }
     , { signature = "deeeee", internalName = "write", action = noAction, displayName = "", color = accent1 }
     , { signature = "wdwewewewewew", internalName = "write/entity", action = noAction, displayName = "", color = accent1 }

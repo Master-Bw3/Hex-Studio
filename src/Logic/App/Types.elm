@@ -6,6 +6,7 @@ import Array exposing (Array)
 type Panel
     = StackPanel
     | PatternPanel
+    | ConfigHexPanel
 
 
 type EntityType
