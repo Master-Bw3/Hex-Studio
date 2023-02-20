@@ -68,6 +68,8 @@ init _ =
       , settings =
             { gridScale = 1.0
             }
+      , heldItem = NoItem
+      , heldItemContent = Just Null
       , time = 0
       }
     , Cmd.batch [ Task.attempt GetGrid (getElement "hex_grid"), Task.attempt GetContentSize (getElement "content") ]
@@ -155,7 +157,7 @@ update msg model =
                 if List.length drawing.activePath > 1 then
                     let
                         stackResultTuple =
-                            applyPatternsToStack Array.empty (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newUncoloredPattern)) 
+                            applyPatternsToStack Array.empty (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newUncoloredPattern))
 
                         newStack =
                             Tuple.first stackResultTuple
@@ -195,7 +197,7 @@ update msg model =
                     removeFromArray startIndex endIndex model.patternArray
 
                 stackResultTuple =
-                    applyPatternsToStack Array.empty (List.reverse <| Tuple.first <| List.unzip <| Array.toList newUncoloredPatternArray) 
+                    applyPatternsToStack Array.empty (List.reverse <| Tuple.first <| List.unzip <| Array.toList newUncoloredPatternArray)
 
                 newStack =
                     Tuple.first stackResultTuple
@@ -204,12 +206,12 @@ update msg model =
                     Tuple.second stackResultTuple
 
                 newPatternArray =
-                        Array.map2
-                            (\patternTuple result ->
-                                updateDrawingColors ( applyColorToPatternFromResult (Tuple.first patternTuple) result, Tuple.second patternTuple )
-                            )
-                            newUncoloredPatternArray
-                            resultArray
+                    Array.map2
+                        (\patternTuple result ->
+                            updateDrawingColors ( applyColorToPatternFromResult (Tuple.first patternTuple) result, Tuple.second patternTuple )
+                        )
+                        newUncoloredPatternArray
+                        resultArray
             in
             ( { model
                 | patternArray = newPatternArray
@@ -269,7 +271,7 @@ update msg model =
                 ( { model
                     | patternArray = addToPatternArray model newPattern
                     , ui = { ui | patternInputField = "" }
-                    , stack = Tuple.first <| applyPatternsToStack Array.empty (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern)) 
+                    , stack = Tuple.first <| applyPatternsToStack Array.empty (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern))
                   }
                 , Cmd.none
                 )
@@ -288,7 +290,7 @@ update msg model =
             ( { model
                 | patternArray = addToPatternArray model newPattern
                 , ui = { ui | patternInputField = "" }
-                , stack = Tuple.first <| applyPatternsToStack Array.empty (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern)) 
+                , stack = Tuple.first <| applyPatternsToStack Array.empty (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern))
               }
             , Cmd.none
             )
@@ -420,7 +422,6 @@ update msg model =
                     applyPatternsToStack
                         Array.empty
                         (List.reverse <| Tuple.first <| List.unzip <| Array.toList newUncoloredPatternArray)
-                        
 
                 newStack =
                     Tuple.first stackResultTuple
@@ -437,12 +438,12 @@ update msg model =
                             patternArray
 
                 newPatternArray =
-                        Array.map2
-                            (\patternTuple result ->
-                                updateDrawingColors ( applyColorToPatternFromResult (Tuple.first patternTuple) result, Tuple.second patternTuple )
-                            )
-                            newUncoloredPatternArray
-                            resultArray
+                    Array.map2
+                        (\patternTuple result ->
+                            updateDrawingColors ( applyColorToPatternFromResult (Tuple.first patternTuple) result, Tuple.second patternTuple )
+                        )
+                        newUncoloredPatternArray
+                        resultArray
             in
             ( { model
                 | ui = { ui | mouseOverElementIndex = -1, dragging = ( False, -1 ) }
@@ -458,6 +459,27 @@ update msg model =
 
         RecieveMouseOverHandle bool ->
             ( { model | ui = { ui | overDragHandle = bool } }, Cmd.none )
+
+        ChangeHeldItem itemString ->
+            let
+                item =
+                    case itemString of
+                        "Trinket" ->
+                            Trinket
+
+                        "Spellbook" ->
+                            Spellbook
+
+                        "Focus" ->
+                            Focus
+
+                        "Pie" ->
+                            Pie
+
+                        _ ->
+                            NoItem
+            in
+            ( { model | heldItem = item, heldItemContent = Nothing }, Cmd.none )
 
 
 

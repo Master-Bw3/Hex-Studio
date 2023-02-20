@@ -5411,6 +5411,8 @@ var $author$project$Logic$App$Msg$GetContentSize = function (a) {
 var $author$project$Logic$App$Msg$GetGrid = function (a) {
 	return {$: 'GetGrid', a: a};
 };
+var $author$project$Logic$App$Types$NoItem = {$: 'NoItem'};
+var $author$project$Logic$App$Types$Null = {$: 'Null'};
 var $author$project$Logic$App$Types$PatternPanel = {$: 'PatternPanel'};
 var $elm$core$Basics$composeL = F3(
 	function (g, f, x) {
@@ -5450,6 +5452,8 @@ var $author$project$Main$init = function (_v0) {
 				points: _List_Nil,
 				width: 0
 			},
+			heldItem: $author$project$Logic$App$Types$NoItem,
+			heldItemContent: $elm$core$Maybe$Just($author$project$Logic$App$Types$Null),
 			mousePos: _Utils_Tuple2(0.0, 0.0),
 			patternArray: $elm$core$Array$empty,
 			settings: {gridScale: 1.0},
@@ -6181,6 +6185,10 @@ var $author$project$Main$subscriptions = function (_v0) {
 			]));
 };
 var $author$project$Logic$App$Types$Failed = {$: 'Failed'};
+var $author$project$Logic$App$Types$Focus = {$: 'Focus'};
+var $author$project$Logic$App$Types$Pie = {$: 'Pie'};
+var $author$project$Logic$App$Types$Spellbook = {$: 'Spellbook'};
+var $author$project$Logic$App$Types$Trinket = {$: 'Trinket'};
 var $author$project$Settings$Theme$accent2 = '#D8B8E0';
 var $elm$core$List$any = F2(
 	function (isOkay, list) {
@@ -7246,7 +7254,6 @@ var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Logic$App$Types$Boolean = function (a) {
 	return {$: 'Boolean', a: a};
 };
-var $author$project$Logic$App$Types$Null = {$: 'Null'};
 var $author$project$Logic$App$Types$Number = function (a) {
 	return {$: 'Number', a: a};
 };
@@ -11154,7 +11161,7 @@ var $author$project$Main$update = F2(
 								{selectedInputID: id})
 						}),
 					$elm$core$Platform$Cmd$none);
-			default:
+			case 'RecieveMouseOverHandle':
 				var bool = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
@@ -11164,6 +11171,27 @@ var $author$project$Main$update = F2(
 								ui,
 								{overDragHandle: bool})
 						}),
+					$elm$core$Platform$Cmd$none);
+			default:
+				var itemString = msg.a;
+				var item = function () {
+					switch (itemString) {
+						case 'Trinket':
+							return $author$project$Logic$App$Types$Trinket;
+						case 'Spellbook':
+							return $author$project$Logic$App$Types$Spellbook;
+						case 'Focus':
+							return $author$project$Logic$App$Types$Focus;
+						case 'Pie':
+							return $author$project$Logic$App$Types$Pie;
+						default:
+							return $author$project$Logic$App$Types$NoItem;
+					}
+				}();
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{heldItem: item, heldItemContent: $elm$core$Maybe$Nothing}),
 					$elm$core$Platform$Cmd$none);
 		}
 	});
@@ -11786,6 +11814,349 @@ var $author$project$Components$App$Menu$menu = function (model) {
 			]));
 };
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
+var $author$project$Logic$App$Msg$ChangeHeldItem = function (a) {
+	return {$: 'ChangeHeldItem', a: a};
+};
+var $elm$html$Html$label = _VirtualDom_node('label');
+var $elm$html$Html$Events$alwaysStop = function (x) {
+	return _Utils_Tuple2(x, true);
+};
+var $elm$virtual_dom$VirtualDom$MayStopPropagation = function (a) {
+	return {$: 'MayStopPropagation', a: a};
+};
+var $elm$html$Html$Events$stopPropagationOn = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
+	});
+var $elm$html$Html$Events$targetValue = A2(
+	$elm$json$Json$Decode$at,
+	_List_fromArray(
+		['target', 'value']),
+	$elm$json$Json$Decode$string);
+var $elm$html$Html$Events$onInput = function (tagger) {
+	return A2(
+		$elm$html$Html$Events$stopPropagationOn,
+		'input',
+		A2(
+			$elm$json$Json$Decode$map,
+			$elm$html$Html$Events$alwaysStop,
+			A2($elm$json$Json$Decode$map, tagger, $elm$html$Html$Events$targetValue)));
+};
+var $elm$html$Html$option = _VirtualDom_node('option');
+var $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString = function (iota) {
+	switch (iota.$) {
+		case 'Null':
+			return 'Null';
+		case 'Number':
+			var number = iota.a;
+			return $elm$core$String$fromFloat(number);
+		case 'Vector':
+			var _v1 = iota.a;
+			var x = _v1.a;
+			var y = _v1.b;
+			var z = _v1.c;
+			return 'Vector [' + ($elm$core$String$fromFloat(x) + (', ' + ($elm$core$String$fromFloat(y) + (', ' + ($elm$core$String$fromFloat(z) + ']')))));
+		case 'Boolean':
+			var bool = iota.a;
+			return bool ? 'True' : 'False';
+		case 'Entity':
+			return 'Entity';
+		case 'IotaList':
+			var list = iota.a;
+			return 'List: ' + A2(
+				$elm$core$String$join,
+				'| ',
+				$elm$core$List$reverse(
+					A2(
+						$elm$core$List$map,
+						function (item) {
+							if (item.$ === 'Pattern') {
+								var pattern = item.a;
+								return pattern.displayName;
+							} else {
+								var x = item;
+								return $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString(x);
+							}
+						},
+						$elm$core$Array$toList(list))));
+		case 'Pattern':
+			var pattern = iota.a;
+			return pattern.displayName;
+		case 'Garbage':
+			var mishap = iota.a;
+			var mishapMessage = function () {
+				switch (mishap.$) {
+					case 'InvalidPattern':
+						return 'Invalid Pattern';
+					case 'NotEnoughIotas':
+						return 'Not Enough Iotas';
+					case 'IncorrectIota':
+						return 'Incorrect Iota';
+					case 'VectorOutOfAmbit':
+						return 'Vector Out of Ambit';
+					case 'EntityOutOfAmbit':
+						return 'Entity Out of Ambit';
+					case 'EntityIsImmune':
+						return 'Entity is Immune';
+					case 'MathematicalError':
+						return 'Mathematical Error';
+					case 'IncorrectItem':
+						return 'Incorrect Item';
+					case 'IncorrectBlock':
+						return 'Incorrect Block';
+					case 'DelveTooDeep':
+						return 'Delve Too Deep';
+					case 'TransgressOther':
+						return 'Transgress Other';
+					case 'DisallowedAction':
+						return 'Disallowed Action';
+					default:
+						return 'Catastrophic Failure';
+				}
+			}();
+			return 'Garbage (' + (mishapMessage + ')');
+		default:
+			var list = iota.a;
+			return 'List: ' + A2(
+				$elm$core$String$join,
+				'| ',
+				$elm$core$List$reverse(
+					A2(
+						$elm$core$List$map,
+						function (item) {
+							if (item.$ === 'Pattern') {
+								var pattern = item.a;
+								return pattern.displayName;
+							} else {
+								return '';
+							}
+						},
+						$elm$core$Array$toList(list))));
+	}
+};
+var $elm$html$Html$li = _VirtualDom_node('li');
+var $elm$html$Html$ol = _VirtualDom_node('ol');
+var $elm$html$Html$p = _VirtualDom_node('p');
+var $elm$core$List$singleton = function (value) {
+	return _List_fromArray(
+		[value]);
+};
+var $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsHtmlMsg = function (iota) {
+	var string = $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString(iota);
+	return A2($elm$core$String$startsWith, 'List: ', string) ? ((string === 'List: ') ? _List_fromArray(
+		[
+			A2(
+			$elm$html$Html$p,
+			_List_Nil,
+			_List_fromArray(
+				[
+					$elm$html$Html$text('List:')
+				]))
+		]) : A2(
+		$elm$core$List$cons,
+		A2(
+			$elm$html$Html$p,
+			_List_Nil,
+			_List_fromArray(
+				[
+					$elm$html$Html$text('List:')
+				])),
+		$elm$core$List$singleton(
+			A2(
+				$elm$html$Html$ol,
+				_List_Nil,
+				A2(
+					$elm$core$List$map,
+					function (str) {
+						return A2(
+							$elm$html$Html$li,
+							_List_Nil,
+							_List_fromArray(
+								[
+									$elm$html$Html$text(str)
+								]));
+					},
+					A2(
+						$elm$core$String$split,
+						'| ',
+						A2($elm$core$String$dropLeft, 6, string))))))) : _List_fromArray(
+		[
+			A2(
+			$elm$html$Html$p,
+			_List_Nil,
+			_List_fromArray(
+				[
+					$elm$html$Html$text(string)
+				]))
+		]);
+};
+var $author$project$Settings$Theme$iotaColorMap = function (iota) {
+	switch (iota.$) {
+		case 'Null':
+			return '#354C3F';
+		case 'Number':
+			return '#4C3541';
+		case 'Vector':
+			return '#4C3541';
+		case 'Boolean':
+			return '#4B4C35';
+		case 'Entity':
+			return '#354B4C';
+		case 'IotaList':
+			return '#354C3F';
+		case 'Pattern':
+			return '#354C3F';
+		case 'Garbage':
+			return '#4F3737';
+		default:
+			return '#4B4845';
+	}
+};
+var $author$project$Components$App$Panels$ConfigHexPanel$renderHeldItemContent = function (heldItemContent) {
+	var renderIota = function (iota) {
+		return A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('outer_box'),
+					A2(
+					$elm$html$Html$Attributes$style,
+					'background-color',
+					$author$project$Settings$Theme$iotaColorMap(iota))
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('inner_box')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('text')
+								]),
+							_List_fromArray(
+								[
+									A2(
+									$elm$html$Html$div,
+									_List_Nil,
+									$author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsHtmlMsg(iota))
+								]))
+						]))
+				]));
+	};
+	return renderIota(heldItemContent);
+};
+var $elm$html$Html$select = _VirtualDom_node('select');
+var $author$project$Components$App$Panels$ConfigHexPanel$heldItemSection = function (model) {
+	return A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$id('held_item_section')
+			]),
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('input_label_box')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$label,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$elm$html$Html$text('Held Item:')
+							])),
+						A2(
+						$elm$html$Html$select,
+						_List_fromArray(
+							[
+								$elm$html$Html$Events$onInput($author$project$Logic$App$Msg$ChangeHeldItem)
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$option,
+								_List_Nil,
+								_List_fromArray(
+									[
+										$elm$html$Html$text('Nothing')
+									])),
+								A2(
+								$elm$html$Html$option,
+								_List_Nil,
+								_List_fromArray(
+									[
+										$elm$html$Html$text('Trinket')
+									])),
+								A2(
+								$elm$html$Html$option,
+								_List_Nil,
+								_List_fromArray(
+									[
+										$elm$html$Html$text('Spellbook')
+									])),
+								A2(
+								$elm$html$Html$option,
+								_List_Nil,
+								_List_fromArray(
+									[
+										$elm$html$Html$text('Focus')
+									])),
+								A2(
+								$elm$html$Html$option,
+								_List_Nil,
+								_List_fromArray(
+									[
+										$elm$html$Html$text('Pie')
+									]))
+							]))
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('stored_iota_container')
+					]),
+				A2(
+					$elm$core$List$cons,
+					A2(
+						$elm$html$Html$label,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('stored_iota_label')
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('Content:')
+							])),
+					function () {
+						var _v0 = model.heldItemContent;
+						if (_v0.$ === 'Just') {
+							var iota = _v0.a;
+							return _List_fromArray(
+								[
+									$author$project$Components$App$Panels$ConfigHexPanel$renderHeldItemContent(iota)
+								]);
+						} else {
+							return _List_Nil;
+						}
+					}()))
+			]));
+};
 var $author$project$Components$App$Panels$Utils$visibilityToDisplayStyle = function (visibility) {
 	return visibility ? A2($elm$html$Html$Attributes$style, 'display', 'flex') : A2($elm$html$Html$Attributes$style, 'display', 'none');
 };
@@ -11795,7 +12166,7 @@ var $author$project$Components$App$Panels$ConfigHexPanel$configHexPanel = functi
 		$elm$html$Html$div,
 		_List_fromArray(
 			[
-				$elm$html$Html$Attributes$id('pattern_panel'),
+				$elm$html$Html$Attributes$id('config_hex_panel'),
 				$elm$html$Html$Attributes$class('panel'),
 				$author$project$Components$App$Panels$Utils$visibilityToDisplayStyle(visibility)
 			]),
@@ -11809,8 +12180,9 @@ var $author$project$Components$App$Panels$ConfigHexPanel$configHexPanel = functi
 					]),
 				_List_fromArray(
 					[
-						$elm$html$Html$text('Configure Defaults')
-					]))
+						$elm$html$Html$text('Configure World')
+					])),
+				$author$project$Components$App$Panels$ConfigHexPanel$heldItemSection(model)
 			]));
 };
 var $author$project$Logic$App$Msg$InputPattern = function (a) {
@@ -11982,33 +12354,6 @@ var $elm$html$Html$Events$onFocus = function (msg) {
 		'focus',
 		$elm$json$Json$Decode$succeed(msg));
 };
-var $elm$html$Html$Events$alwaysStop = function (x) {
-	return _Utils_Tuple2(x, true);
-};
-var $elm$virtual_dom$VirtualDom$MayStopPropagation = function (a) {
-	return {$: 'MayStopPropagation', a: a};
-};
-var $elm$html$Html$Events$stopPropagationOn = F2(
-	function (event, decoder) {
-		return A2(
-			$elm$virtual_dom$VirtualDom$on,
-			event,
-			$elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
-	});
-var $elm$html$Html$Events$targetValue = A2(
-	$elm$json$Json$Decode$at,
-	_List_fromArray(
-		['target', 'value']),
-	$elm$json$Json$Decode$string);
-var $elm$html$Html$Events$onInput = function (tagger) {
-	return A2(
-		$elm$html$Html$Events$stopPropagationOn,
-		'input',
-		A2(
-			$elm$json$Json$Decode$map,
-			$elm$html$Html$Events$alwaysStop,
-			A2($elm$json$Json$Decode$map, tagger, $elm$html$Html$Events$targetValue)));
-};
 var $elm$svg$Svg$line = $elm$svg$Svg$trustedNode('line');
 var $elm$svg$Svg$Attributes$opacity = _VirtualDom_attribute('opacity');
 var $elm$svg$Svg$Attributes$points = _VirtualDom_attribute('points');
@@ -12095,7 +12440,6 @@ var $author$project$Components$Icon$ParagraphDropdown$paragraphDropdown = A2(
 						]))
 				]))
 		]));
-var $elm$html$Html$li = _VirtualDom_node('li');
 var $author$project$Components$App$PatternAutoComplete$autocompleteList = A2(
 	$elm$core$List$map,
 	function (pat) {
@@ -12603,174 +12947,6 @@ var $author$project$Components$App$Panels$PatternPanel$patternPanel = function (
 							]))
 					]))
 			]));
-};
-var $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString = function (iota) {
-	switch (iota.$) {
-		case 'Null':
-			return 'Null';
-		case 'Number':
-			var number = iota.a;
-			return $elm$core$String$fromFloat(number);
-		case 'Vector':
-			var _v1 = iota.a;
-			var x = _v1.a;
-			var y = _v1.b;
-			var z = _v1.c;
-			return 'Vector [' + ($elm$core$String$fromFloat(x) + (', ' + ($elm$core$String$fromFloat(y) + (', ' + ($elm$core$String$fromFloat(z) + ']')))));
-		case 'Boolean':
-			var bool = iota.a;
-			return bool ? 'True' : 'False';
-		case 'Entity':
-			return 'Entity';
-		case 'IotaList':
-			var list = iota.a;
-			return 'List: ' + A2(
-				$elm$core$String$join,
-				'| ',
-				$elm$core$List$reverse(
-					A2(
-						$elm$core$List$map,
-						function (item) {
-							if (item.$ === 'Pattern') {
-								var pattern = item.a;
-								return pattern.displayName;
-							} else {
-								var x = item;
-								return $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString(x);
-							}
-						},
-						$elm$core$Array$toList(list))));
-		case 'Pattern':
-			var pattern = iota.a;
-			return pattern.displayName;
-		case 'Garbage':
-			var mishap = iota.a;
-			var mishapMessage = function () {
-				switch (mishap.$) {
-					case 'InvalidPattern':
-						return 'Invalid Pattern';
-					case 'NotEnoughIotas':
-						return 'Not Enough Iotas';
-					case 'IncorrectIota':
-						return 'Incorrect Iota';
-					case 'VectorOutOfAmbit':
-						return 'Vector Out of Ambit';
-					case 'EntityOutOfAmbit':
-						return 'Entity Out of Ambit';
-					case 'EntityIsImmune':
-						return 'Entity is Immune';
-					case 'MathematicalError':
-						return 'Mathematical Error';
-					case 'IncorrectItem':
-						return 'Incorrect Item';
-					case 'IncorrectBlock':
-						return 'Incorrect Block';
-					case 'DelveTooDeep':
-						return 'Delve Too Deep';
-					case 'TransgressOther':
-						return 'Transgress Other';
-					case 'DisallowedAction':
-						return 'Disallowed Action';
-					default:
-						return 'Catastrophic Failure';
-				}
-			}();
-			return 'Garbage (' + (mishapMessage + ')');
-		default:
-			var list = iota.a;
-			return 'List: ' + A2(
-				$elm$core$String$join,
-				'| ',
-				$elm$core$List$reverse(
-					A2(
-						$elm$core$List$map,
-						function (item) {
-							if (item.$ === 'Pattern') {
-								var pattern = item.a;
-								return pattern.displayName;
-							} else {
-								return '';
-							}
-						},
-						$elm$core$Array$toList(list))));
-	}
-};
-var $elm$html$Html$ol = _VirtualDom_node('ol');
-var $elm$html$Html$p = _VirtualDom_node('p');
-var $elm$core$List$singleton = function (value) {
-	return _List_fromArray(
-		[value]);
-};
-var $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsHtmlMsg = function (iota) {
-	var string = $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString(iota);
-	return A2($elm$core$String$startsWith, 'List: ', string) ? ((string === 'List: ') ? _List_fromArray(
-		[
-			A2(
-			$elm$html$Html$p,
-			_List_Nil,
-			_List_fromArray(
-				[
-					$elm$html$Html$text('List:')
-				]))
-		]) : A2(
-		$elm$core$List$cons,
-		A2(
-			$elm$html$Html$p,
-			_List_Nil,
-			_List_fromArray(
-				[
-					$elm$html$Html$text('List:')
-				])),
-		$elm$core$List$singleton(
-			A2(
-				$elm$html$Html$ol,
-				_List_Nil,
-				A2(
-					$elm$core$List$map,
-					function (str) {
-						return A2(
-							$elm$html$Html$li,
-							_List_Nil,
-							_List_fromArray(
-								[
-									$elm$html$Html$text(str)
-								]));
-					},
-					A2(
-						$elm$core$String$split,
-						'| ',
-						A2($elm$core$String$dropLeft, 6, string))))))) : _List_fromArray(
-		[
-			A2(
-			$elm$html$Html$p,
-			_List_Nil,
-			_List_fromArray(
-				[
-					$elm$html$Html$text(string)
-				]))
-		]);
-};
-var $author$project$Settings$Theme$iotaColorMap = function (iota) {
-	switch (iota.$) {
-		case 'Null':
-			return '#354C3F';
-		case 'Number':
-			return '#4C3541';
-		case 'Vector':
-			return '#4C3541';
-		case 'Boolean':
-			return '#4B4C35';
-		case 'Entity':
-			return '#354B4C';
-		case 'IotaList':
-			return '#354C3F';
-		case 'Pattern':
-			return '#354C3F';
-		case 'Garbage':
-			return '#4F3737';
-		default:
-			return '#4B4845';
-	}
 };
 var $author$project$Components$App$Panels$StackPanel$renderStack = function (stack) {
 	var renderIota = F2(

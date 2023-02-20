@@ -37,6 +37,7 @@ type Msg
     | Drop
     | SetFocus String
     | RecieveMouseOverHandle Bool
+    | ChangeHeldItem String
 
 type alias MouseMoveData =
     { pageX : Int

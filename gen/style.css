@@ -23,6 +23,7 @@
     --primary_dark: #1e1e1e;
     --primary_medium: #242526;
     --primary_light: #292a2b;
+    --primary_lighter: #3d3e3f;
     --primary_lightest: #4f5051;
     --accent1: #bac5e2;
     --accent2: #d8b8e0;
@@ -106,12 +107,10 @@ body {
     transform: scale(286%);
 }
 
-#stack_menu_button svg, #library_menu_button svg {
+#stack_menu_button svg,
+#library_menu_button svg {
     transform: scaleY(286%) scaleX(316%);
 }
-
-
-
 
 .menu_button:hover svg {
     color: rgba(255, 255, 255, 0.85);
@@ -133,7 +132,7 @@ body {
     font-family: 'Cascadia Code';
     font-weight: normal;
     font-size: 1.3em;
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(255, 255, 255, 0.65);
     background-color: var(--primary_medium);
     padding: 3%;
     width: 100%;
@@ -163,7 +162,8 @@ body {
     opacity: 1;
 }
 
-.outer_box {
+.outer_box,
+.input_label_box {
     display: flex;
     flex-direction: column-reverse;
     align-items: center;
@@ -212,8 +212,9 @@ body {
     min-width: fit-content;
 }
 
-.outer_box input,
-.outer_box .mutliline_input {
+input,
+.mutliline_input,
+select {
     padding-top: 0.125em;
     padding-bottom: 0.07em;
     border-width: 1px;
@@ -231,8 +232,9 @@ body {
     width: 100%;
 }
 
-.outer_box input:focus,
-.outer_box .mutliline_input:focus {
+input:focus,
+.mutliline_input:focus,
+select:focus {
     outline: none !important;
     border-color: rgba(255, 255, 255, 0.4);
 }
@@ -297,7 +299,7 @@ button {
 }
 
 .outer_box .index_display {
-    margin-top: 0.1em;
+    margin-top: 0.2em;
     margin-left: 0.3em;
     margin-right: 0.3em;
     color: rgba(255, 255, 255, 0.8);
@@ -305,7 +307,8 @@ button {
     font-size: 1.25em;
 }
 
-#stack_panel .text {
+#stack_panel .text,
+#held_item_section .text {
     margin-right: 0.5em;
 }
 
@@ -484,4 +487,40 @@ button {
 .highlighted_suggestion {
     background-color: var(--primary_light);
     font-weight: bold;
+}
+
+.input_label_box {
+    flex-direction: row;
+    min-width: fit-content;
+    background-color: var(--primary_medium);
+}
+
+.input_label_box > label,
+.stored_iota_label {
+    color: rgba(255, 255, 255, 0.6);
+    font-family: 'fira';
+    font-weight: bold;
+    font-size: 0.9em;
+    white-space: nowrap;
+    margin-left: 0.5em;
+}
+
+.input_label_box > input,
+.input_label_box > select {
+    margin-right: 0.5em;
+    margin-left: 0.25em;
+    border-color: var(--primary_lighter);
+    background-color: var(--primary_dark);
+    border-radius: 5px;
+}
+
+#held_item_section .text {
+    margin-left: 0.5em;
+}
+
+
+.stored_iota_container {
+    display: grid;
+    grid-template-columns: 28% auto;
+    align-items: center;
 }

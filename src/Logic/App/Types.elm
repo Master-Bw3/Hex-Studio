@@ -9,6 +9,15 @@ type Panel
     | ConfigHexPanel
 
 
+type HeldItem
+    = Trinket
+    | Artifact
+    | Focus
+    | Spellbook
+    | Pie
+    | NoItem
+
+
 type EntityType
     = Unset
     | Player
@@ -18,7 +27,7 @@ type EntityType
 
 type alias PatternType =
     { signature : String
-    , action : Array Iota -> (Array Iota, Bool)
+    , action : Array Iota -> ( Array Iota, Bool )
     , displayName : String
     , internalName : String
     , color : String

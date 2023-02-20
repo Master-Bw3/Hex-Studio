@@ -2,6 +2,7 @@ module Logic.App.Model exposing (..)
 
 import Array exposing (Array)
 import Logic.App.Types exposing (GridPoint, Iota, Panel, PatternType)
+import Logic.App.Types exposing (HeldItem)
 
 
 type alias Model =
@@ -34,5 +35,7 @@ type alias Model =
         }
     , settings :
         { gridScale : Float }
+    , heldItem : HeldItem
+    , heldItemContent : Maybe Iota
     , time : Int
     }
