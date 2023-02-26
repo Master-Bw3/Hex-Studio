@@ -6907,8 +6907,8 @@ var $elm$core$Array$map = F2(
 			A2($elm$core$Elm$JsArray$map, helper, tree),
 			A2($elm$core$Elm$JsArray$map, func, tail));
 	});
-var $author$project$Logic$App$Stack$Stack$applyPatternToStack = F2(
-	function (stack, pattern) {
+var $author$project$Logic$App$Stack$Stack$applyPatternToStack = F3(
+	function (stack, ctx, pattern) {
 		var _v0 = A2($elm$core$Array$get, 0, stack);
 		if ((_v0.$ === 'Just') && (_v0.a.$ === 'OpenParenthesis')) {
 			var list = _v0.a.a;
@@ -6945,8 +6945,11 @@ var $author$project$Logic$App$Stack$Stack$applyPatternToStack = F2(
 						A2($author$project$Logic$App$Types$Pattern, pattern, false),
 						list)),
 				stack);
-			return (pattern.internalName === 'escape') ? _Utils_Tuple3(stack, $author$project$Logic$App$Types$Succeeded, true) : ((pattern.internalName === 'close_paren') ? (((pattern.internalName === 'close_paren') && (_Utils_cmp(numberOfCloseParen + 1, numberOfOpenParen) > -1)) ? _Utils_Tuple3(
-				A2(
+			return (pattern.internalName === 'escape') ? {considerNext: true, ctx: ctx, result: $author$project$Logic$App$Types$Succeeded, stack: stack} : ((pattern.internalName === 'close_paren') ? (((pattern.internalName === 'close_paren') && (_Utils_cmp(numberOfCloseParen + 1, numberOfOpenParen) > -1)) ? {
+				considerNext: false,
+				ctx: ctx,
+				result: $author$project$Logic$App$Types$Succeeded,
+				stack: A2(
 					$elm$core$Array$map,
 					function (iota) {
 						if (iota.$ === 'OpenParenthesis') {
@@ -6957,49 +6960,45 @@ var $author$project$Logic$App$Stack$Stack$applyPatternToStack = F2(
 							return otherIota;
 						}
 					},
-					stack),
-				$author$project$Logic$App$Types$Succeeded,
-				false) : _Utils_Tuple3(addToIntroList, $author$project$Logic$App$Types$Considered, false)) : ((pattern.internalName === 'open_paren') ? _Utils_Tuple3(addToIntroList, $author$project$Logic$App$Types$Considered, false) : _Utils_Tuple3(addToIntroList, $author$project$Logic$App$Types$Considered, false)));
+					stack)
+			} : {considerNext: false, ctx: ctx, result: $author$project$Logic$App$Types$Considered, stack: addToIntroList}) : ((pattern.internalName === 'open_paren') ? {considerNext: false, ctx: ctx, result: $author$project$Logic$App$Types$Considered, stack: addToIntroList} : {considerNext: false, ctx: ctx, result: $author$project$Logic$App$Types$Considered, stack: addToIntroList}));
 		} else {
 			if (pattern.internalName === 'escape') {
-				return _Utils_Tuple3(stack, $author$project$Logic$App$Types$Succeeded, true);
+				return {considerNext: true, ctx: ctx, result: $author$project$Logic$App$Types$Succeeded, stack: stack};
 			} else {
 				if (pattern.internalName === 'close_paren') {
-					return _Utils_Tuple3(
-						A2(
+					return {
+						considerNext: false,
+						ctx: ctx,
+						result: $author$project$Logic$App$Types$Failed,
+						stack: A2(
 							$author$project$Logic$App$Utils$Utils$unshift,
 							A2($author$project$Logic$App$Types$Pattern, pattern, false),
-							stack),
-						$author$project$Logic$App$Types$Failed,
-						false);
+							stack)
+					};
 				} else {
-					var _v4 = pattern.action(stack);
-					if (_v4.b) {
-						var newStack = _v4.a;
-						return _Utils_Tuple3(newStack, $author$project$Logic$App$Types$Succeeded, false);
-					} else {
-						var newStack = _v4.a;
-						return _Utils_Tuple3(newStack, $author$project$Logic$App$Types$Failed, false);
-					}
+					var actionresult = A2(pattern.action, stack, ctx);
+					return actionresult.success ? {considerNext: false, ctx: actionresult.ctx, result: $author$project$Logic$App$Types$Succeeded, stack: actionresult.stack} : {considerNext: false, ctx: actionresult.ctx, result: $author$project$Logic$App$Types$Failed, stack: actionresult.stack};
 				}
 			}
 		}
 	});
-var $author$project$Logic$App$Stack$Stack$applyPatternsToStackLoop = F4(
-	function (stackResultTuple, patterns, considerThis, stopAtErrorOrHalt) {
+var $author$project$Logic$App$Stack$Stack$applyPatternsToStackLoop = F5(
+	function (stackResultTuple, ctx, patterns, considerThis, stopAtErrorOrHalt) {
 		applyPatternsToStackLoop:
 		while (true) {
 			var stack = stackResultTuple.a;
 			var resultArray = stackResultTuple.b;
 			var _v0 = $elm$core$List$head(patterns);
 			if (_v0.$ === 'Nothing') {
-				return _Utils_Tuple3(stack, resultArray, false);
+				return {ctx: ctx, error: false, resultArray: resultArray, stack: stack};
 			} else {
 				var pattern = _v0.a;
 				if (considerThis) {
 					var $temp$stackResultTuple = _Utils_Tuple2(
 						A2($author$project$Logic$App$Stack$Stack$addEscapedPatternIotaToStack, stack, pattern),
 						A2($author$project$Logic$App$Utils$Utils$unshift, $author$project$Logic$App$Types$Considered, resultArray)),
+						$temp$ctx = ctx,
 						$temp$patterns = A2(
 						$elm$core$Maybe$withDefault,
 						_List_Nil,
@@ -7007,55 +7006,55 @@ var $author$project$Logic$App$Stack$Stack$applyPatternsToStackLoop = F4(
 						$temp$considerThis = false,
 						$temp$stopAtErrorOrHalt = stopAtErrorOrHalt;
 					stackResultTuple = $temp$stackResultTuple;
+					ctx = $temp$ctx;
 					patterns = $temp$patterns;
 					considerThis = $temp$considerThis;
 					stopAtErrorOrHalt = $temp$stopAtErrorOrHalt;
 					continue applyPatternsToStackLoop;
 				} else {
 					if ((pattern.internalName === 'halt') && stopAtErrorOrHalt) {
-						return _Utils_Tuple3(stack, resultArray, false);
+						return {ctx: ctx, error: false, resultArray: resultArray, stack: stack};
 					} else {
-						var _v1 = A2($author$project$Logic$App$Stack$Stack$applyPatternToStack, stack, pattern);
-						var newStack = _v1.a;
-						var result = _v1.b;
-						var considerNext = _v1.c;
-						if ((!stopAtErrorOrHalt) || (stopAtErrorOrHalt && (!_Utils_eq(result, $author$project$Logic$App$Types$Failed)))) {
+						var applyResult = A3($author$project$Logic$App$Stack$Stack$applyPatternToStack, stack, ctx, pattern);
+						if ((!stopAtErrorOrHalt) || (stopAtErrorOrHalt && (!_Utils_eq(applyResult.result, $author$project$Logic$App$Types$Failed)))) {
 							var $temp$stackResultTuple = _Utils_Tuple2(
-								newStack,
-								A2($author$project$Logic$App$Utils$Utils$unshift, result, resultArray)),
+								applyResult.stack,
+								A2($author$project$Logic$App$Utils$Utils$unshift, applyResult.result, resultArray)),
+								$temp$ctx = applyResult.ctx,
 								$temp$patterns = A2(
 								$elm$core$Maybe$withDefault,
 								_List_Nil,
 								$elm$core$List$tail(patterns)),
-								$temp$considerThis = considerNext,
+								$temp$considerThis = applyResult.considerNext,
 								$temp$stopAtErrorOrHalt = stopAtErrorOrHalt;
 							stackResultTuple = $temp$stackResultTuple;
+							ctx = $temp$ctx;
 							patterns = $temp$patterns;
 							considerThis = $temp$considerThis;
 							stopAtErrorOrHalt = $temp$stopAtErrorOrHalt;
 							continue applyPatternsToStackLoop;
 						} else {
-							return _Utils_Tuple3(
-								newStack,
-								A2($author$project$Logic$App$Utils$Utils$unshift, result, resultArray),
-								true);
+							return {
+								ctx: applyResult.ctx,
+								error: true,
+								resultArray: A2($author$project$Logic$App$Utils$Utils$unshift, applyResult.result, resultArray),
+								stack: applyResult.stack
+							};
 						}
 					}
 				}
 			}
 		}
 	});
-var $author$project$Logic$App$Stack$Stack$applyPatternsToStack = F2(
-	function (stack, patterns) {
-		var _v0 = A4(
+var $author$project$Logic$App$Stack$Stack$applyPatternsToStack = F3(
+	function (stack, ctx, patterns) {
+		return A5(
 			$author$project$Logic$App$Stack$Stack$applyPatternsToStackLoop,
 			_Utils_Tuple2(stack, $elm$core$Array$empty),
+			ctx,
 			patterns,
 			false,
 			false);
-		var newStack = _v0.a;
-		var resultArray = _v0.b;
-		return _Utils_Tuple2(newStack, resultArray);
 	});
 var $author$project$Logic$App$Utils$GetAngleSignature$East = {$: 'East'};
 var $author$project$Logic$App$Utils$GetAngleSignature$Error = {$: 'Error'};
@@ -7269,7 +7268,6 @@ var $author$project$Logic$App$Types$Garbage = function (a) {
 var $elm$core$Basics$abs = function (n) {
 	return (n < 0) ? (-n) : n;
 };
-var $author$project$Logic$App$Types$IncorrectIota = {$: 'IncorrectIota'};
 var $author$project$Logic$App$Types$NotEnoughIotas = {$: 'NotEnoughIotas'};
 var $elm$core$List$drop = F2(
 	function (n, list) {
@@ -7471,8 +7469,8 @@ var $elm$core$Array$slice = F3(
 			correctFrom,
 			A2($elm$core$Array$sliceRight, correctTo, array));
 	});
-var $author$project$Logic$App$Patterns$OperatorUtils$action1Input = F3(
-	function (stack, inputGetter, action) {
+var $author$project$Logic$App$Patterns$OperatorUtils$action1Input = F4(
+	function (stack, ctx, inputGetter, action) {
 		var newStack = A3(
 			$elm$core$Array$slice,
 			1,
@@ -7480,29 +7478,33 @@ var $author$project$Logic$App$Patterns$OperatorUtils$action1Input = F3(
 			stack);
 		var maybeIota = A2($elm$core$Array$get, 0, stack);
 		if (maybeIota.$ === 'Nothing') {
-			return _Utils_Tuple2(
-				A2(
+			return {
+				ctx: ctx,
+				stack: A2(
 					$author$project$Logic$App$Utils$Utils$unshift,
 					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
 					newStack),
-				false);
+				success: false
+			};
 		} else {
 			var iota = maybeIota.a;
 			var _v1 = inputGetter(iota);
 			if (_v1.$ === 'Nothing') {
-				return _Utils_Tuple2(
-					A2(
+				return {
+					ctx: ctx,
+					stack: A2(
 						$author$project$Logic$App$Utils$Utils$unshift,
-						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
 						newStack),
-					false);
+					success: false
+				};
 			} else {
-				return _Utils_Tuple2(
-					A2(
-						$elm$core$Array$append,
-						action(iota),
-						newStack),
-					true);
+				var actionResult = A2(action, iota, ctx);
+				return {
+					ctx: actionResult.b,
+					stack: A2($elm$core$Array$append, actionResult.a, newStack),
+					success: true
+				};
 			}
 		}
 	});
@@ -7577,34 +7579,41 @@ var $ianmackenzie$elm_units$Quantity$unwrap = function (_v0) {
 	var value = _v0.a;
 	return value;
 };
-var $author$project$Logic$App$Patterns$Math$absLen = function (stack) {
-	var action = function (iota) {
-		switch (iota.$) {
-			case 'Number':
-				var number = iota.a;
-				return A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Number(
-						$elm$core$Basics$abs(number)));
-			case 'Vector':
-				var vector = iota.a;
-				var length = $ianmackenzie$elm_units$Quantity$unwrap(
-					$ianmackenzie$elm_geometry$Vector3d$length(
-						A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector)));
-				return A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Number(length));
-			default:
-				return A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-		}
-	};
-	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, action);
-};
+var $author$project$Logic$App$Patterns$Math$absLen = F2(
+	function (stack, ctx) {
+		var action = F2(
+			function (iota, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						switch (iota.$) {
+							case 'Number':
+								var number = iota.a;
+								return A2(
+									$elm$core$Array$repeat,
+									1,
+									$author$project$Logic$App$Types$Number(
+										$elm$core$Basics$abs(number)));
+							case 'Vector':
+								var vector = iota.a;
+								var length = $ianmackenzie$elm_units$Quantity$unwrap(
+									$ianmackenzie$elm_geometry$Vector3d$length(
+										A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector)));
+								return A2(
+									$elm$core$Array$repeat,
+									1,
+									$author$project$Logic$App$Types$Number(length));
+							default:
+								return A2(
+									$elm$core$Array$repeat,
+									1,
+									$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, action);
+	});
+var $author$project$Logic$App$Types$IncorrectIota = {$: 'IncorrectIota'};
 var $elm$core$Maybe$map = F2(
 	function (f, maybe) {
 		if (maybe.$ === 'Just') {
@@ -7648,8 +7657,8 @@ var $author$project$Logic$App$Patterns$OperatorUtils$moveNothingsToFront = funct
 		});
 	return A2($elm$core$List$sortWith, comparison, list);
 };
-var $author$project$Logic$App$Patterns$OperatorUtils$action2Inputs = F4(
-	function (stack, inputGetter1, inputGetter2, action) {
+var $author$project$Logic$App$Patterns$OperatorUtils$action2Inputs = F5(
+	function (stack, ctx, inputGetter1, inputGetter2, action) {
 		var newStack = A3(
 			$elm$core$Array$slice,
 			2,
@@ -7658,8 +7667,9 @@ var $author$project$Logic$App$Patterns$OperatorUtils$action2Inputs = F4(
 		var maybeIota2 = A2($elm$core$Array$get, 0, stack);
 		var maybeIota1 = A2($elm$core$Array$get, 1, stack);
 		if (_Utils_eq(maybeIota1, $elm$core$Maybe$Nothing) || _Utils_eq(maybeIota2, $elm$core$Maybe$Nothing)) {
-			return _Utils_Tuple2(
-				A2(
+			return {
+				ctx: ctx,
+				stack: A2(
 					$elm$core$Array$append,
 					A2(
 						$elm$core$Array$map,
@@ -7669,7 +7679,8 @@ var $author$project$Logic$App$Patterns$OperatorUtils$action2Inputs = F4(
 								_List_fromArray(
 									[maybeIota1, maybeIota2])))),
 					newStack),
-				false);
+				success: false
+			};
 		} else {
 			var _v0 = _Utils_Tuple2(
 				A2($elm$core$Maybe$map, inputGetter1, maybeIota1),
@@ -7677,121 +7688,135 @@ var $author$project$Logic$App$Patterns$OperatorUtils$action2Inputs = F4(
 			if ((_v0.a.$ === 'Just') && (_v0.b.$ === 'Just')) {
 				var iota1 = _v0.a.a;
 				var iota2 = _v0.b.a;
-				return (_Utils_eq(iota1, $elm$core$Maybe$Nothing) || _Utils_eq(iota2, $elm$core$Maybe$Nothing)) ? _Utils_Tuple2(
-					A2(
-						$elm$core$Array$append,
-						$elm$core$Array$fromList(
-							_List_fromArray(
-								[
-									A2(
-									$elm$core$Maybe$withDefault,
-									$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
-									iota1),
-									A2(
-									$elm$core$Maybe$withDefault,
-									$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
-									iota2)
-								])),
-						newStack),
-					false) : _Utils_Tuple2(
-					A2(
-						$elm$core$Array$append,
+				if (_Utils_eq(iota1, $elm$core$Maybe$Nothing) || _Utils_eq(iota2, $elm$core$Maybe$Nothing)) {
+					return {
+						ctx: ctx,
+						stack: A2(
+							$elm$core$Array$append,
+							$elm$core$Array$fromList(
+								_List_fromArray(
+									[
+										A2(
+										$elm$core$Maybe$withDefault,
+										$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+										iota1),
+										A2(
+										$elm$core$Maybe$withDefault,
+										$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+										iota2)
+									])),
+							newStack),
+						success: false
+					};
+				} else {
+					var actionResult = A3(
+						action,
 						A2(
-							action,
-							A2(
-								$elm$core$Maybe$withDefault,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
-								iota1),
-							A2(
-								$elm$core$Maybe$withDefault,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
-								iota2)),
-						newStack),
-					true);
+							$elm$core$Maybe$withDefault,
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+							iota1),
+						A2(
+							$elm$core$Maybe$withDefault,
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+							iota2),
+						ctx);
+					return {
+						ctx: actionResult.b,
+						stack: A2($elm$core$Array$append, actionResult.a, newStack),
+						success: true
+					};
+				}
 			} else {
-				return _Utils_Tuple2(
-					A2(
+				return {
+					ctx: ctx,
+					stack: A2(
 						$author$project$Logic$App$Utils$Utils$unshift,
 						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure),
 						newStack),
-					false);
+					success: false
+				};
 			}
 		}
 	});
-var $author$project$Logic$App$Patterns$Math$add = function (stack) {
-	var action = F2(
-		function (iota1, iota2) {
-			var _v0 = _Utils_Tuple2(iota1, iota2);
-			_v0$4:
-			while (true) {
-				switch (_v0.a.$) {
-					case 'Number':
-						switch (_v0.b.$) {
-							case 'Number':
-								var number1 = _v0.a.a;
-								var number2 = _v0.b.a;
-								return A2(
-									$elm$core$Array$repeat,
-									1,
-									$author$project$Logic$App$Types$Number(number1 + number2));
-							case 'Vector':
-								var number = _v0.a.a;
-								var vector = _v0.b.a;
-								var x = vector.a;
-								var y = vector.b;
-								var z = vector.c;
-								return A2(
-									$elm$core$Array$repeat,
-									1,
-									$author$project$Logic$App$Types$Vector(
-										_Utils_Tuple3(number + x, number + y, number + z)));
-							default:
-								break _v0$4;
+var $author$project$Logic$App$Patterns$Math$add = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (iota1, iota2, _v6) {
+				return _Utils_Tuple2(
+					function () {
+						var _v0 = _Utils_Tuple2(iota1, iota2);
+						_v0$4:
+						while (true) {
+							switch (_v0.a.$) {
+								case 'Number':
+									switch (_v0.b.$) {
+										case 'Number':
+											var number1 = _v0.a.a;
+											var number2 = _v0.b.a;
+											return A2(
+												$elm$core$Array$repeat,
+												1,
+												$author$project$Logic$App$Types$Number(number1 + number2));
+										case 'Vector':
+											var number = _v0.a.a;
+											var vector = _v0.b.a;
+											var x = vector.a;
+											var y = vector.b;
+											var z = vector.c;
+											return A2(
+												$elm$core$Array$repeat,
+												1,
+												$author$project$Logic$App$Types$Vector(
+													_Utils_Tuple3(number + x, number + y, number + z)));
+										default:
+											break _v0$4;
+									}
+								case 'Vector':
+									switch (_v0.b.$) {
+										case 'Number':
+											var vector = _v0.a.a;
+											var number = _v0.b.a;
+											var x = vector.a;
+											var y = vector.b;
+											var z = vector.c;
+											return A2(
+												$elm$core$Array$repeat,
+												1,
+												$author$project$Logic$App$Types$Vector(
+													_Utils_Tuple3(x + number, y + number, z + number)));
+										case 'Vector':
+											var vector1 = _v0.a.a;
+											var vector2 = _v0.b.a;
+											var _v3 = _Utils_Tuple2(vector1, vector2);
+											var _v4 = _v3.a;
+											var x1 = _v4.a;
+											var y1 = _v4.b;
+											var z1 = _v4.c;
+											var _v5 = _v3.b;
+											var x2 = _v5.a;
+											var y2 = _v5.b;
+											var z2 = _v5.c;
+											return A2(
+												$elm$core$Array$repeat,
+												1,
+												$author$project$Logic$App$Types$Vector(
+													_Utils_Tuple3(x1 + x2, y1 + y2, z1 + z2)));
+										default:
+											break _v0$4;
+									}
+								default:
+									break _v0$4;
+							}
 						}
-					case 'Vector':
-						switch (_v0.b.$) {
-							case 'Number':
-								var vector = _v0.a.a;
-								var number = _v0.b.a;
-								var x = vector.a;
-								var y = vector.b;
-								var z = vector.c;
-								return A2(
-									$elm$core$Array$repeat,
-									1,
-									$author$project$Logic$App$Types$Vector(
-										_Utils_Tuple3(x + number, y + number, z + number)));
-							case 'Vector':
-								var vector1 = _v0.a.a;
-								var vector2 = _v0.b.a;
-								var _v3 = _Utils_Tuple2(vector1, vector2);
-								var _v4 = _v3.a;
-								var x1 = _v4.a;
-								var y1 = _v4.b;
-								var z1 = _v4.c;
-								var _v5 = _v3.b;
-								var x2 = _v5.a;
-								var y2 = _v5.b;
-								var z2 = _v5.c;
-								return A2(
-									$elm$core$Array$repeat,
-									1,
-									$author$project$Logic$App$Types$Vector(
-										_Utils_Tuple3(x1 + x2, y1 + y2, z1 + z2)));
-							default:
-								break _v0$4;
-						}
-					default:
-						break _v0$4;
-				}
-			}
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-		});
-	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, action);
-};
+						return A2(
+							$elm$core$Array$repeat,
+							1,
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+					}(),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, action);
+	});
 var $author$project$Logic$App$Patterns$OperatorUtils$getEntity = function (iota) {
 	if (iota.$ === 'Entity') {
 		return $elm$core$Maybe$Just(iota);
@@ -7806,21 +7831,23 @@ var $author$project$Logic$App$Patterns$OperatorUtils$getVector = function (iota)
 		return $elm$core$Maybe$Nothing;
 	}
 };
-var $author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs = F3(
-	function (stack, inputGetter1, inputGetter2) {
-		return A4(
+var $author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs = F4(
+	function (stack, ctx, inputGetter1, inputGetter2) {
+		return A5(
 			$author$project$Logic$App$Patterns$OperatorUtils$action2Inputs,
 			stack,
+			ctx,
 			inputGetter1,
 			inputGetter2,
-			F2(
-				function (_v0, _v1) {
-					return $elm$core$Array$empty;
+			F3(
+				function (_v0, _v1, _v2) {
+					return _Utils_Tuple2($elm$core$Array$empty, ctx);
 				}));
 	});
-var $author$project$Logic$App$Patterns$Spells$addMotion = function (stack) {
-	return A3($author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
-};
+var $author$project$Logic$App$Patterns$Spells$addMotion = F2(
+	function (stack, ctx) {
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
+	});
 var $ianmackenzie$elm_units$Quantity$lessThanOrEqualTo = F2(
 	function (_v0, _v1) {
 		var y = _v0.a;
@@ -7938,56 +7965,61 @@ var $author$project$Logic$App$Patterns$OperatorUtils$getIntegerOrList = function
 			return $elm$core$Maybe$Nothing;
 	}
 };
-var $author$project$Logic$App$Patterns$Math$andBit = function (stack) {
-	var action = F2(
-		function (iota1, iota2) {
-			var _v0 = _Utils_Tuple2(iota1, iota2);
-			_v0$2:
-			while (true) {
-				switch (_v0.a.$) {
-					case 'Number':
-						if (_v0.b.$ === 'Number') {
-							var number1 = _v0.a.a;
-							var number2 = _v0.b.a;
-							return A2(
-								$elm$core$Array$repeat,
-								1,
-								$author$project$Logic$App$Types$Number(
-									$elm$core$Basics$round(number1) & $elm$core$Basics$round(number2)));
-						} else {
-							break _v0$2;
+var $author$project$Logic$App$Patterns$Math$andBit = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (iota1, iota2, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						var _v0 = _Utils_Tuple2(iota1, iota2);
+						_v0$2:
+						while (true) {
+							switch (_v0.a.$) {
+								case 'Number':
+									if (_v0.b.$ === 'Number') {
+										var number1 = _v0.a.a;
+										var number2 = _v0.b.a;
+										return A2(
+											$elm$core$Array$repeat,
+											1,
+											$author$project$Logic$App$Types$Number(
+												$elm$core$Basics$round(number1) & $elm$core$Basics$round(number2)));
+									} else {
+										break _v0$2;
+									}
+								case 'IotaList':
+									if (_v0.b.$ === 'IotaList') {
+										var list1 = _v0.a.a;
+										var list2 = _v0.b.a;
+										return A2(
+											$elm$core$Array$repeat,
+											1,
+											$author$project$Logic$App$Types$IotaList(
+												A2(
+													$elm$core$Array$filter,
+													function (iota) {
+														return A2(
+															$elm$core$List$any,
+															$author$project$Logic$App$Patterns$OperatorUtils$checkEquality(iota),
+															$elm$core$Array$toList(list2));
+													},
+													list1)));
+									} else {
+										break _v0$2;
+									}
+								default:
+									break _v0$2;
+							}
 						}
-					case 'IotaList':
-						if (_v0.b.$ === 'IotaList') {
-							var list1 = _v0.a.a;
-							var list2 = _v0.b.a;
-							return A2(
-								$elm$core$Array$repeat,
-								1,
-								$author$project$Logic$App$Types$IotaList(
-									A2(
-										$elm$core$Array$filter,
-										function (iota) {
-											return A2(
-												$elm$core$List$any,
-												$author$project$Logic$App$Patterns$OperatorUtils$checkEquality(iota),
-												$elm$core$Array$toList(list2));
-										},
-										list1)));
-						} else {
-							break _v0$2;
-						}
-					default:
-						break _v0$2;
-				}
-			}
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-		});
-	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getIntegerOrList, $author$project$Logic$App$Patterns$OperatorUtils$getIntegerOrList, action);
-};
+						return A2(
+							$elm$core$Array$repeat,
+							1,
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+					}(),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getIntegerOrList, $author$project$Logic$App$Patterns$OperatorUtils$getIntegerOrList, action);
+	});
 var $author$project$Logic$App$Patterns$OperatorUtils$getBoolean = function (iota) {
 	if (iota.$ === 'Boolean') {
 		return $elm$core$Maybe$Just(iota);
@@ -7995,26 +8027,31 @@ var $author$project$Logic$App$Patterns$OperatorUtils$getBoolean = function (iota
 		return $elm$core$Maybe$Nothing;
 	}
 };
-var $author$project$Logic$App$Patterns$Math$andBool = function (stack) {
-	var action = F2(
-		function (iota1, iota2) {
-			var _v0 = _Utils_Tuple2(iota1, iota2);
-			if ((_v0.a.$ === 'Boolean') && (_v0.b.$ === 'Boolean')) {
-				var bool1 = _v0.a.a;
-				var bool2 = _v0.b.a;
-				return A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Boolean(bool1 && bool2));
-			} else {
-				return A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-			}
-		});
-	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getBoolean, $author$project$Logic$App$Patterns$OperatorUtils$getBoolean, action);
-};
+var $author$project$Logic$App$Patterns$Math$andBool = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (iota1, iota2, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						var _v0 = _Utils_Tuple2(iota1, iota2);
+						if ((_v0.a.$ === 'Boolean') && (_v0.b.$ === 'Boolean')) {
+							var bool1 = _v0.a.a;
+							var bool2 = _v0.b.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Boolean(bool1 && bool2));
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getBoolean, $author$project$Logic$App$Patterns$OperatorUtils$getBoolean, action);
+	});
 var $author$project$Logic$App$Patterns$OperatorUtils$getAny = function (iota) {
 	return $elm$core$Maybe$Just(iota);
 };
@@ -8025,25 +8062,30 @@ var $author$project$Logic$App$Patterns$OperatorUtils$getIotaList = function (iot
 		return $elm$core$Maybe$Nothing;
 	}
 };
-var $author$project$Logic$App$Patterns$Lists$append = function (stack) {
-	var action = F2(
-		function (listIota, iota) {
-			if (listIota.$ === 'IotaList') {
-				var list = listIota.a;
-				return A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$IotaList(
-						A2($author$project$Logic$App$Utils$Utils$unshift, iota, list)));
-			} else {
-				return A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-			}
-		});
-	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getIotaList, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
-};
+var $author$project$Logic$App$Patterns$Lists$append = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (listIota, iota, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						if (listIota.$ === 'IotaList') {
+							var list = listIota.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$IotaList(
+									A2($author$project$Logic$App$Utils$Utils$unshift, iota, list)));
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getIotaList, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
+	});
 var $elm$core$Basics$acos = _Basics_acos;
 var $author$project$Logic$App$Patterns$OperatorUtils$getNumber = function (iota) {
 	if (iota.$ === 'Number') {
@@ -8052,64 +8094,82 @@ var $author$project$Logic$App$Patterns$OperatorUtils$getNumber = function (iota)
 		return $elm$core$Maybe$Nothing;
 	}
 };
-var $author$project$Logic$App$Patterns$Math$arccos = function (stack) {
-	var action = function (iota) {
-		if (iota.$ === 'Number') {
-			var number = iota.a;
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Number(
-					$elm$core$Basics$acos(number)));
-		} else {
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-		}
-	};
-	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
-};
+var $author$project$Logic$App$Patterns$Math$arccos = F2(
+	function (stack, ctx) {
+		var action = F2(
+			function (iota, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						if (iota.$ === 'Number') {
+							var number = iota.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Number(
+									$elm$core$Basics$acos(number)));
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
+	});
 var $elm$core$Basics$asin = _Basics_asin;
-var $author$project$Logic$App$Patterns$Math$arcsin = function (stack) {
-	var action = function (iota) {
-		if (iota.$ === 'Number') {
-			var number = iota.a;
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Number(
-					$elm$core$Basics$asin(number)));
-		} else {
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-		}
-	};
-	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
-};
+var $author$project$Logic$App$Patterns$Math$arcsin = F2(
+	function (stack, ctx) {
+		var action = F2(
+			function (iota, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						if (iota.$ === 'Number') {
+							var number = iota.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Number(
+									$elm$core$Basics$asin(number)));
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
+	});
 var $elm$core$Basics$atan = _Basics_atan;
-var $author$project$Logic$App$Patterns$Math$arctan = function (stack) {
-	var action = function (iota) {
-		if (iota.$ === 'Number') {
-			var number = iota.a;
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Number(
-					$elm$core$Basics$atan(number)));
-		} else {
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-		}
-	};
-	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
-};
-var $author$project$Logic$App$Patterns$OperatorUtils$action3Inputs = F5(
-	function (stack, inputGetter1, inputGetter2, inputGetter3, action) {
+var $author$project$Logic$App$Patterns$Math$arctan = F2(
+	function (stack, ctx) {
+		var action = F2(
+			function (iota, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						if (iota.$ === 'Number') {
+							var number = iota.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Number(
+									$elm$core$Basics$atan(number)));
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
+	});
+var $author$project$Logic$App$Patterns$OperatorUtils$action3Inputs = F6(
+	function (stack, ctx, inputGetter1, inputGetter2, inputGetter3, action) {
 		var newStack = A3(
 			$elm$core$Array$slice,
 			3,
@@ -8119,8 +8179,9 @@ var $author$project$Logic$App$Patterns$OperatorUtils$action3Inputs = F5(
 		var maybeIota2 = A2($elm$core$Array$get, 1, stack);
 		var maybeIota1 = A2($elm$core$Array$get, 2, stack);
 		if (_Utils_eq(maybeIota1, $elm$core$Maybe$Nothing) || (_Utils_eq(maybeIota2, $elm$core$Maybe$Nothing) || _Utils_eq(maybeIota3, $elm$core$Maybe$Nothing))) {
-			return _Utils_Tuple2(
-				A2(
+			return {
+				ctx: ctx,
+				stack: A2(
 					$elm$core$Array$append,
 					A2(
 						$elm$core$Array$map,
@@ -8130,7 +8191,8 @@ var $author$project$Logic$App$Patterns$OperatorUtils$action3Inputs = F5(
 								_List_fromArray(
 									[maybeIota1, maybeIota2, maybeIota3])))),
 					newStack),
-				false);
+				success: false
+			};
 		} else {
 			var _v0 = _Utils_Tuple3(
 				A2($elm$core$Maybe$map, inputGetter1, maybeIota1),
@@ -8140,263 +8202,336 @@ var $author$project$Logic$App$Patterns$OperatorUtils$action3Inputs = F5(
 				var iota1 = _v0.a.a;
 				var iota2 = _v0.b.a;
 				var iota3 = _v0.c.a;
-				return (_Utils_eq(iota1, $elm$core$Maybe$Nothing) || (_Utils_eq(iota2, $elm$core$Maybe$Nothing) || _Utils_eq(iota3, $elm$core$Maybe$Nothing))) ? _Utils_Tuple2(
-					A2(
-						$elm$core$Array$append,
-						$elm$core$Array$fromList(
-							_List_fromArray(
-								[
-									A2(
-									$elm$core$Maybe$withDefault,
-									$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
-									iota1),
-									A2(
-									$elm$core$Maybe$withDefault,
-									$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
-									iota2),
-									A2(
-									$elm$core$Maybe$withDefault,
-									$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
-									iota3)
-								])),
-						newStack),
-					false) : _Utils_Tuple2(
-					A2(
-						$elm$core$Array$append,
-						A3(
-							action,
-							A2(
-								$elm$core$Maybe$withDefault,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
-								iota1),
-							A2(
-								$elm$core$Maybe$withDefault,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
-								iota2),
-							A2(
-								$elm$core$Maybe$withDefault,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
-								iota3)),
-						newStack),
-					true);
+				if (_Utils_eq(iota1, $elm$core$Maybe$Nothing) || (_Utils_eq(iota2, $elm$core$Maybe$Nothing) || _Utils_eq(iota3, $elm$core$Maybe$Nothing))) {
+					return {
+						ctx: ctx,
+						stack: A2(
+							$elm$core$Array$append,
+							$elm$core$Array$fromList(
+								_List_fromArray(
+									[
+										A2(
+										$elm$core$Maybe$withDefault,
+										$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+										iota1),
+										A2(
+										$elm$core$Maybe$withDefault,
+										$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+										iota2),
+										A2(
+										$elm$core$Maybe$withDefault,
+										$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+										iota3)
+									])),
+							newStack),
+						success: false
+					};
+				} else {
+					var actionResult = A4(
+						action,
+						A2(
+							$elm$core$Maybe$withDefault,
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+							iota1),
+						A2(
+							$elm$core$Maybe$withDefault,
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+							iota2),
+						A2(
+							$elm$core$Maybe$withDefault,
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+							iota3),
+						ctx);
+					return {
+						ctx: actionResult.b,
+						stack: A2($elm$core$Array$append, actionResult.a, newStack),
+						success: true
+					};
+				}
 			} else {
-				return _Utils_Tuple2(
-					A2(
+				return {
+					ctx: ctx,
+					stack: A2(
 						$author$project$Logic$App$Utils$Utils$unshift,
 						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure),
 						newStack),
-					false);
+					success: false
+				};
 			}
 		}
 	});
-var $author$project$Logic$App$Patterns$OperatorUtils$spell3Inputs = F4(
-	function (stack, inputGetter1, inputGetter2, inputGetter3) {
-		return A5(
+var $author$project$Logic$App$Patterns$OperatorUtils$spell3Inputs = F5(
+	function (stack, ctx, inputGetter1, inputGetter2, inputGetter3) {
+		return A6(
 			$author$project$Logic$App$Patterns$OperatorUtils$action3Inputs,
 			stack,
+			ctx,
 			inputGetter1,
 			inputGetter2,
 			inputGetter3,
-			F3(
-				function (_v0, _v1, _v2) {
-					return $elm$core$Array$empty;
+			F4(
+				function (_v0, _v1, _v2, _v3) {
+					return _Utils_Tuple2($elm$core$Array$empty, ctx);
 				}));
 	});
-var $author$project$Logic$App$Patterns$Spells$beep = function (stack) {
-	return A4($author$project$Logic$App$Patterns$OperatorUtils$spell3Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber);
-};
-var $author$project$Logic$App$Patterns$Spells$blink = function (stack) {
-	return A3($author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, $author$project$Logic$App$Patterns$OperatorUtils$getNumber);
-};
-var $author$project$Logic$App$Patterns$OperatorUtils$spell1Input = F2(
-	function (stack, inputGetter) {
-		return A3(
+var $author$project$Logic$App$Patterns$Spells$beep = F2(
+	function (stack, ctx) {
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$spell3Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber);
+	});
+var $author$project$Logic$App$Patterns$Spells$blink = F2(
+	function (stack, ctx) {
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, $author$project$Logic$App$Patterns$OperatorUtils$getNumber);
+	});
+var $author$project$Logic$App$Patterns$OperatorUtils$spell1Input = F3(
+	function (stack, ctx, inputGetter) {
+		return A4(
 			$author$project$Logic$App$Patterns$OperatorUtils$action1Input,
 			stack,
+			ctx,
 			inputGetter,
-			function (_v0) {
-				return $elm$core$Array$empty;
+			F2(
+				function (_v0, _v1) {
+					return _Utils_Tuple2($elm$core$Array$empty, ctx);
+				}));
+	});
+var $author$project$Logic$App$Patterns$Spells$bonemeal = F2(
+	function (stack, ctx) {
+		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
+	});
+var $author$project$Logic$App$Patterns$Math$boolCoerce = F2(
+	function (stack, ctx) {
+		var action = F2(
+			function (iota, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						switch (iota.$) {
+							case 'Number':
+								return A2(
+									$author$project$Logic$App$Patterns$OperatorUtils$checkEquality,
+									iota,
+									$author$project$Logic$App$Types$Number(0.0)) ? A2(
+									$elm$core$Array$repeat,
+									1,
+									$author$project$Logic$App$Types$Boolean(false)) : A2(
+									$elm$core$Array$repeat,
+									1,
+									$author$project$Logic$App$Types$Boolean(true));
+							case 'Null':
+								return A2(
+									$elm$core$Array$repeat,
+									1,
+									$author$project$Logic$App$Types$Boolean(false));
+							case 'IotaList':
+								var x = iota.a;
+								return _Utils_eq(x, $elm$core$Array$empty) ? A2(
+									$elm$core$Array$repeat,
+									1,
+									$author$project$Logic$App$Types$Boolean(false)) : A2(
+									$elm$core$Array$repeat,
+									1,
+									$author$project$Logic$App$Types$Boolean(true));
+							default:
+								return A2(
+									$elm$core$Array$repeat,
+									1,
+									$author$project$Logic$App$Types$Boolean(true));
+						}
+					}(),
+					ctx);
 			});
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
 	});
-var $author$project$Logic$App$Patterns$Spells$bonemeal = function (stack) {
-	return A2($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
-};
-var $author$project$Logic$App$Patterns$Math$boolCoerce = function (stack) {
-	var action = function (iota) {
-		switch (iota.$) {
-			case 'Number':
-				return A2(
-					$author$project$Logic$App$Patterns$OperatorUtils$checkEquality,
-					iota,
-					$author$project$Logic$App$Types$Number(0.0)) ? A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Boolean(false)) : A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Boolean(true));
-			case 'Null':
-				return A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Boolean(false));
-			case 'IotaList':
-				var x = iota.a;
-				return _Utils_eq(x, $elm$core$Array$empty) ? A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Boolean(false)) : A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Boolean(true));
-			default:
-				return A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Boolean(true));
-		}
-	};
-	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
-};
-var $author$project$Logic$App$Patterns$Spells$breakBlock = function (stack) {
-	return A2($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
-};
-var $author$project$Logic$App$Patterns$Math$ceilAction = function (stack) {
-	var action = function (iota) {
-		if (iota.$ === 'Number') {
-			var number = iota.a;
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Number(
-					$elm$core$Basics$ceiling(number)));
-		} else {
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-		}
-	};
-	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
-};
-var $author$project$Logic$App$Patterns$OperatorUtils$actionNoInput = F2(
-	function (stack, action) {
-		return _Utils_Tuple2(
-			A2($elm$core$Array$append, action, stack),
-			true);
+var $author$project$Logic$App$Patterns$Spells$breakBlock = F2(
+	function (stack, ctx) {
+		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
 	});
-var $author$project$Logic$App$Patterns$Circles$circleBoundsMax = function (stack) {
-	var action = A2(
-		$elm$core$Array$repeat,
-		1,
-		$author$project$Logic$App$Types$Vector(
-			_Utils_Tuple3(0.0, 0.0, 0.0)));
-	return A2($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, action);
-};
-var $author$project$Logic$App$Patterns$Circles$circleBoundsMin = function (stack) {
-	var action = A2(
-		$elm$core$Array$repeat,
-		1,
-		$author$project$Logic$App$Types$Vector(
-			_Utils_Tuple3(0.0, 0.0, 0.0)));
-	return A2($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, action);
-};
-var $author$project$Logic$App$Patterns$Circles$circleImpetusDirection = function (stack) {
-	var action = A2(
-		$elm$core$Array$repeat,
-		1,
-		$author$project$Logic$App$Types$Vector(
-			_Utils_Tuple3(1.0, 0.0, 0.0)));
-	return A2($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, action);
-};
-var $elm$core$Basics$cos = _Basics_cos;
-var $elm$core$Basics$pi = _Basics_pi;
-var $elm$core$Basics$sin = _Basics_sin;
-var $author$project$Logic$App$Patterns$Math$coerceAxial = function (stack) {
-	var action = function (iota) {
-		if (iota.$ === 'Vector') {
-			var vector = iota.a;
-			var x = vector.a;
-			var y = vector.b;
-			var z = vector.c;
-			var theta = $elm$core$Basics$atan(y / x);
-			var snapped_theta = ($elm$core$Basics$pi / 2) * $elm$core$Basics$round(theta / ($elm$core$Basics$pi / 2));
-			var magnitude = $elm$core$Basics$sqrt(
-				(A2($elm$core$Basics$pow, x, 2) + A2($elm$core$Basics$pow, y, 2)) + A2($elm$core$Basics$pow, z, 2));
-			var azimuth = $elm$core$Basics$acos(z / magnitude);
-			var snapped_azimuth = ($elm$core$Basics$pi / 2) * $elm$core$Basics$round(azimuth / ($elm$core$Basics$pi / 2));
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Vector(
-					_Utils_Tuple3(
-						$elm$core$Basics$round(
-							$elm$core$Basics$sin(snapped_azimuth) * $elm$core$Basics$cos(snapped_theta)),
-						$elm$core$Basics$round(
-							$elm$core$Basics$sin(snapped_azimuth) * $elm$core$Basics$sin(snapped_theta)),
-						$elm$core$Basics$round(
-							$elm$core$Basics$cos(snapped_azimuth)))));
-		} else {
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-		}
-	};
-	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector, action);
-};
-var $author$project$Logic$App$Patterns$OperatorUtils$spellNoInput = function (stack) {
-	return A2($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, $elm$core$Array$empty);
-};
-var $author$project$Logic$App$Patterns$Spells$colorize = function (stack) {
-	return $author$project$Logic$App$Patterns$OperatorUtils$spellNoInput(stack);
-};
-var $author$project$Logic$App$Patterns$Spells$conjureBlock = function (stack) {
-	return A2($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
-};
-var $author$project$Logic$App$Patterns$Spells$conjureLight = function (stack) {
-	return A2($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
-};
-var $author$project$Logic$App$Patterns$Math$constructVector = function (stack) {
-	var action = F3(
-		function (iota1, iota2, iota3) {
-			var _v0 = _Utils_Tuple3(iota1, iota2, iota3);
-			if (((_v0.a.$ === 'Number') && (_v0.b.$ === 'Number')) && (_v0.c.$ === 'Number')) {
-				var number1 = _v0.a.a;
-				var number2 = _v0.b.a;
-				var number3 = _v0.c.a;
-				return A2(
+var $author$project$Logic$App$Patterns$Math$ceilAction = F2(
+	function (stack, ctx) {
+		var action = F2(
+			function (iota, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						if (iota.$ === 'Number') {
+							var number = iota.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Number(
+									$elm$core$Basics$ceiling(number)));
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
+	});
+var $author$project$Logic$App$Patterns$OperatorUtils$actionNoInput = F3(
+	function (stack, ctx, action) {
+		var actionResult = action(ctx);
+		return {
+			ctx: actionResult.b,
+			stack: A2($elm$core$Array$append, actionResult.a, stack),
+			success: true
+		};
+	});
+var $author$project$Logic$App$Patterns$Circles$circleBoundsMax = F2(
+	function (stack, ctx) {
+		var action = function (_v0) {
+			return _Utils_Tuple2(
+				A2(
 					$elm$core$Array$repeat,
 					1,
 					$author$project$Logic$App$Types$Vector(
-						_Utils_Tuple3(number1, number2, number3)));
-			} else {
-				return A2(
+						_Utils_Tuple3(0.0, 0.0, 0.0))),
+				ctx);
+		};
+		return A3($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, ctx, action);
+	});
+var $author$project$Logic$App$Patterns$Circles$circleBoundsMin = F2(
+	function (stack, ctx) {
+		var action = function (_v0) {
+			return _Utils_Tuple2(
+				A2(
 					$elm$core$Array$repeat,
 					1,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-			}
-		});
-	return A5($author$project$Logic$App$Patterns$OperatorUtils$action3Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
-};
-var $author$project$Logic$App$Patterns$Math$cosine = function (stack) {
-	var action = function (iota) {
-		if (iota.$ === 'Number') {
-			var number = iota.a;
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Number(
-					$elm$core$Basics$cos(number)));
-		} else {
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-		}
-	};
-	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
-};
+					$author$project$Logic$App$Types$Vector(
+						_Utils_Tuple3(0.0, 0.0, 0.0))),
+				ctx);
+		};
+		return A3($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, ctx, action);
+	});
+var $author$project$Logic$App$Patterns$Circles$circleImpetusDirection = F2(
+	function (stack, ctx) {
+		var action = function (_v0) {
+			return _Utils_Tuple2(
+				A2(
+					$elm$core$Array$repeat,
+					1,
+					$author$project$Logic$App$Types$Vector(
+						_Utils_Tuple3(1.0, 0.0, 0.0))),
+				ctx);
+		};
+		return A3($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, ctx, action);
+	});
+var $elm$core$Basics$cos = _Basics_cos;
+var $elm$core$Basics$pi = _Basics_pi;
+var $elm$core$Basics$sin = _Basics_sin;
+var $author$project$Logic$App$Patterns$Math$coerceAxial = F2(
+	function (stack, ctx) {
+		var action = F2(
+			function (iota, _v2) {
+				return _Utils_Tuple2(
+					function () {
+						if (iota.$ === 'Vector') {
+							var vector = iota.a;
+							var x = vector.a;
+							var y = vector.b;
+							var z = vector.c;
+							var theta = $elm$core$Basics$atan(y / x);
+							var snapped_theta = ($elm$core$Basics$pi / 2) * $elm$core$Basics$round(theta / ($elm$core$Basics$pi / 2));
+							var magnitude = $elm$core$Basics$sqrt(
+								(A2($elm$core$Basics$pow, x, 2) + A2($elm$core$Basics$pow, y, 2)) + A2($elm$core$Basics$pow, z, 2));
+							var azimuth = $elm$core$Basics$acos(z / magnitude);
+							var snapped_azimuth = ($elm$core$Basics$pi / 2) * $elm$core$Basics$round(azimuth / ($elm$core$Basics$pi / 2));
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Vector(
+									_Utils_Tuple3(
+										$elm$core$Basics$round(
+											$elm$core$Basics$sin(snapped_azimuth) * $elm$core$Basics$cos(snapped_theta)),
+										$elm$core$Basics$round(
+											$elm$core$Basics$sin(snapped_azimuth) * $elm$core$Basics$sin(snapped_theta)),
+										$elm$core$Basics$round(
+											$elm$core$Basics$cos(snapped_azimuth)))));
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector, action);
+	});
+var $author$project$Logic$App$Patterns$OperatorUtils$spellNoInput = F2(
+	function (stack, ctx) {
+		return A3(
+			$author$project$Logic$App$Patterns$OperatorUtils$actionNoInput,
+			stack,
+			ctx,
+			function (_v0) {
+				return _Utils_Tuple2($elm$core$Array$empty, ctx);
+			});
+	});
+var $author$project$Logic$App$Patterns$Spells$colorize = F2(
+	function (stack, ctx) {
+		return A2($author$project$Logic$App$Patterns$OperatorUtils$spellNoInput, stack, ctx);
+	});
+var $author$project$Logic$App$Patterns$Spells$conjureBlock = F2(
+	function (stack, ctx) {
+		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
+	});
+var $author$project$Logic$App$Patterns$Spells$conjureLight = F2(
+	function (stack, ctx) {
+		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
+	});
+var $author$project$Logic$App$Patterns$Math$constructVector = F2(
+	function (stack, ctx) {
+		var action = F4(
+			function (iota1, iota2, iota3, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						var _v0 = _Utils_Tuple3(iota1, iota2, iota3);
+						if (((_v0.a.$ === 'Number') && (_v0.b.$ === 'Number')) && (_v0.c.$ === 'Number')) {
+							var number1 = _v0.a.a;
+							var number2 = _v0.b.a;
+							var number3 = _v0.c.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Vector(
+									_Utils_Tuple3(number1, number2, number3)));
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A6($author$project$Logic$App$Patterns$OperatorUtils$action3Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
+	});
+var $author$project$Logic$App$Patterns$Math$cosine = F2(
+	function (stack, ctx) {
+		var action = F2(
+			function (iota, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						if (iota.$ === 'Number') {
+							var number = iota.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Number(
+									$elm$core$Basics$cos(number)));
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
+	});
 var $elm$core$List$all = F2(
 	function (isOkay, list) {
 		return !A2(
@@ -8421,38 +8556,47 @@ var $author$project$Logic$App$Patterns$OperatorUtils$getPatternList = function (
 		return $elm$core$Maybe$Nothing;
 	}
 };
-var $author$project$Logic$App$Patterns$Spells$craftArtifact = function (stack) {
-	return A3($author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, $author$project$Logic$App$Patterns$OperatorUtils$getPatternList);
-};
-var $author$project$Logic$App$Patterns$Spells$createWater = function (stack) {
-	return A2($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
-};
-var $author$project$Logic$App$Patterns$Math$deconstructVector = function (stack) {
-	var action = function (iota) {
-		if (iota.$ === 'Vector') {
-			var _v1 = iota.a;
-			var x = _v1.a;
-			var y = _v1.b;
-			var z = _v1.c;
-			return $elm$core$Array$fromList(
-				_List_fromArray(
-					[
-						$author$project$Logic$App$Types$Number(z),
-						$author$project$Logic$App$Types$Number(y),
-						$author$project$Logic$App$Types$Number(x)
-					]));
-		} else {
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-		}
-	};
-	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector, action);
-};
-var $author$project$Logic$App$Patterns$Spells$destroyWater = function (stack) {
-	return A2($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
-};
+var $author$project$Logic$App$Patterns$Spells$craftArtifact = F2(
+	function (stack, ctx) {
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, $author$project$Logic$App$Patterns$OperatorUtils$getPatternList);
+	});
+var $author$project$Logic$App$Patterns$Spells$createWater = F2(
+	function (stack, ctx) {
+		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
+	});
+var $author$project$Logic$App$Patterns$Math$deconstructVector = F2(
+	function (stack, ctx) {
+		var action = F2(
+			function (iota, _v2) {
+				return _Utils_Tuple2(
+					function () {
+						if (iota.$ === 'Vector') {
+							var _v1 = iota.a;
+							var x = _v1.a;
+							var y = _v1.b;
+							var z = _v1.c;
+							return $elm$core$Array$fromList(
+								_List_fromArray(
+									[
+										$author$project$Logic$App$Types$Number(z),
+										$author$project$Logic$App$Types$Number(y),
+										$author$project$Logic$App$Types$Number(x)
+									]));
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector, action);
+	});
+var $author$project$Logic$App$Patterns$Spells$destroyWater = F2(
+	function (stack, ctx) {
+		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
+	});
 var $ianmackenzie$elm_geometry$Vector3d$cross = F2(
 	function (_v0, _v1) {
 		var v2 = _v0.a;
@@ -8486,93 +8630,105 @@ var $ianmackenzie$elm_geometry$Vector3d$toTuple = F2(
 			fromQuantity(
 				$ianmackenzie$elm_geometry$Vector3d$zComponent(vector)));
 	});
-var $author$project$Logic$App$Patterns$Math$divCross = function (stack) {
-	var action = F2(
-		function (iota1, iota2) {
-			var _v0 = _Utils_Tuple2(iota1, iota2);
-			_v0$4:
-			while (true) {
-				switch (_v0.a.$) {
-					case 'Number':
-						switch (_v0.b.$) {
-							case 'Number':
-								var number1 = _v0.a.a;
-								var number2 = _v0.b.a;
-								return A2(
-									$elm$core$Array$repeat,
-									1,
-									$author$project$Logic$App$Types$Number(number1 / number2));
-							case 'Vector':
-								var number = _v0.a.a;
-								var vector = _v0.b.a;
-								var x = vector.a;
-								var y = vector.b;
-								var z = vector.c;
-								return A2(
-									$elm$core$Array$repeat,
-									1,
-									$author$project$Logic$App$Types$Vector(
-										_Utils_Tuple3(number / x, number / y, number / z)));
-							default:
-								break _v0$4;
+var $author$project$Logic$App$Patterns$Math$divCross = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (iota1, iota2, _v3) {
+				return _Utils_Tuple2(
+					function () {
+						var _v0 = _Utils_Tuple2(iota1, iota2);
+						_v0$4:
+						while (true) {
+							switch (_v0.a.$) {
+								case 'Number':
+									switch (_v0.b.$) {
+										case 'Number':
+											var number1 = _v0.a.a;
+											var number2 = _v0.b.a;
+											return A2(
+												$elm$core$Array$repeat,
+												1,
+												$author$project$Logic$App$Types$Number(number1 / number2));
+										case 'Vector':
+											var number = _v0.a.a;
+											var vector = _v0.b.a;
+											var x = vector.a;
+											var y = vector.b;
+											var z = vector.c;
+											return A2(
+												$elm$core$Array$repeat,
+												1,
+												$author$project$Logic$App$Types$Vector(
+													_Utils_Tuple3(number / x, number / y, number / z)));
+										default:
+											break _v0$4;
+									}
+								case 'Vector':
+									switch (_v0.b.$) {
+										case 'Number':
+											var vector = _v0.a.a;
+											var number = _v0.b.a;
+											var x = vector.a;
+											var y = vector.b;
+											var z = vector.c;
+											return A2(
+												$elm$core$Array$repeat,
+												1,
+												$author$project$Logic$App$Types$Vector(
+													_Utils_Tuple3(x / number, y / number, z / number)));
+										case 'Vector':
+											var vector1 = _v0.a.a;
+											var vector2 = _v0.b.a;
+											var vec2 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector2);
+											var vec1 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector1);
+											var newVec = A2(
+												$ianmackenzie$elm_geometry$Vector3d$toTuple,
+												$ianmackenzie$elm_units$Area$inSquareMeters,
+												A2($ianmackenzie$elm_geometry$Vector3d$cross, vec2, vec1));
+											return A2(
+												$elm$core$Array$repeat,
+												1,
+												$author$project$Logic$App$Types$Vector(newVec));
+										default:
+											break _v0$4;
+									}
+								default:
+									break _v0$4;
+							}
 						}
-					case 'Vector':
-						switch (_v0.b.$) {
-							case 'Number':
-								var vector = _v0.a.a;
-								var number = _v0.b.a;
-								var x = vector.a;
-								var y = vector.b;
-								var z = vector.c;
-								return A2(
-									$elm$core$Array$repeat,
-									1,
-									$author$project$Logic$App$Types$Vector(
-										_Utils_Tuple3(x / number, y / number, z / number)));
-							case 'Vector':
-								var vector1 = _v0.a.a;
-								var vector2 = _v0.b.a;
-								var vec2 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector2);
-								var vec1 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector1);
-								var newVec = A2(
-									$ianmackenzie$elm_geometry$Vector3d$toTuple,
-									$ianmackenzie$elm_units$Area$inSquareMeters,
-									A2($ianmackenzie$elm_geometry$Vector3d$cross, vec2, vec1));
-								return A2(
-									$elm$core$Array$repeat,
-									1,
-									$author$project$Logic$App$Types$Vector(newVec));
-							default:
-								break _v0$4;
-						}
-					default:
-						break _v0$4;
-				}
-			}
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-		});
-	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, action);
-};
-var $author$project$Logic$App$Patterns$Stack$dup2 = function (stack) {
-	var action = F2(
-		function (iota1, iota2) {
-			return $elm$core$Array$fromList(
-				_List_fromArray(
-					[iota2, iota1, iota2, iota1]));
-		});
-	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
-};
-var $author$project$Logic$App$Patterns$Stack$duplicate = function (stack) {
-	var action = function (iota) {
-		return $elm$core$Array$fromList(
-			_List_fromArray(
-				[iota, iota]));
-	};
-	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
-};
+						return A2(
+							$elm$core$Array$repeat,
+							1,
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+					}(),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, action);
+	});
+var $author$project$Logic$App$Patterns$Stack$dup2 = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (iota1, iota2, _v0) {
+				return _Utils_Tuple2(
+					$elm$core$Array$fromList(
+						_List_fromArray(
+							[iota2, iota1, iota2, iota1])),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
+	});
+var $author$project$Logic$App$Patterns$Stack$duplicate = F2(
+	function (stack, ctx) {
+		var action = F2(
+			function (iota, _v0) {
+				return _Utils_Tuple2(
+					$elm$core$Array$fromList(
+						_List_fromArray(
+							[iota, iota])),
+					ctx);
+			});
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
+	});
 var $author$project$Logic$App$Patterns$OperatorUtils$getInteger = function (iota) {
 	if (iota.$ === 'Number') {
 		var number = iota.a;
@@ -8604,59 +8760,74 @@ var $elm$core$List$repeat = F2(
 	function (n, value) {
 		return A3($elm$core$List$repeatHelp, _List_Nil, n, value);
 	});
-var $author$project$Logic$App$Patterns$Stack$duplicateN = function (stack) {
-	var action = F2(
-		function (iota1, iota2) {
-			if (iota2.$ === 'Number') {
-				var number = iota2.a;
-				return $elm$core$Array$fromList(
-					A2(
-						$elm$core$List$repeat,
-						$elm$core$Basics$round(number),
-						iota1));
-			} else {
-				return $elm$core$Array$fromList(
-					_List_fromArray(
-						[
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure)
-						]));
-			}
-		});
-	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getInteger, action);
-};
+var $author$project$Logic$App$Patterns$Stack$duplicateN = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (iota1, iota2, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						if (iota2.$ === 'Number') {
+							var number = iota2.a;
+							return $elm$core$Array$fromList(
+								A2(
+									$elm$core$List$repeat,
+									$elm$core$Basics$round(number),
+									iota1));
+						} else {
+							return $elm$core$Array$fromList(
+								_List_fromArray(
+									[
+										$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure)
+									]));
+						}
+					}(),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getInteger, action);
+	});
 var $elm$core$Basics$e = _Basics_e;
-var $author$project$Logic$App$Patterns$Spells$edify = function (stack) {
-	return A2($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
-};
-var $author$project$Logic$App$Patterns$Misc$entityPos = function (stack) {
-	var action = function (_v0) {
-		return A2(
-			$elm$core$Array$repeat,
-			1,
-			$author$project$Logic$App$Types$Vector(
-				_Utils_Tuple3(0.0, 0.0, 0.0)));
-	};
-	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, action);
-};
-var $author$project$Logic$App$Patterns$Math$equalTo = function (stack) {
-	var action = F2(
-		function (iota1, iota2) {
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Boolean(
-					A2($author$project$Logic$App$Patterns$OperatorUtils$checkEquality, iota1, iota2)));
-		});
-	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
-};
-var $author$project$Logic$App$Patterns$Spells$erase = function (stack) {
-	return $author$project$Logic$App$Patterns$OperatorUtils$spellNoInput(stack);
-};
-var $author$project$Logic$App$Stack$Stack$applyPatternsToStackStopAtErrorOrHalt = F2(
-	function (stack, patterns) {
-		return A4(
+var $author$project$Logic$App$Patterns$Spells$edify = F2(
+	function (stack, ctx) {
+		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
+	});
+var $author$project$Logic$App$Patterns$Misc$entityPos = F2(
+	function (stack, ctx) {
+		var action = F2(
+			function (_v0, _v1) {
+				return _Utils_Tuple2(
+					A2(
+						$elm$core$Array$repeat,
+						1,
+						$author$project$Logic$App$Types$Vector(
+							_Utils_Tuple3(0.0, 0.0, 0.0))),
+					ctx);
+			});
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, action);
+	});
+var $author$project$Logic$App$Patterns$Math$equalTo = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (iota1, iota2, _v0) {
+				return _Utils_Tuple2(
+					A2(
+						$elm$core$Array$repeat,
+						1,
+						$author$project$Logic$App$Types$Boolean(
+							A2($author$project$Logic$App$Patterns$OperatorUtils$checkEquality, iota1, iota2))),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
+	});
+var $author$project$Logic$App$Patterns$Spells$erase = F2(
+	function (stack, ctx) {
+		return A2($author$project$Logic$App$Patterns$OperatorUtils$spellNoInput, stack, ctx);
+	});
+var $author$project$Logic$App$Stack$Stack$applyPatternsToStackStopAtErrorOrHalt = F3(
+	function (stack, ctx, patterns) {
+		return A5(
 			$author$project$Logic$App$Stack$Stack$applyPatternsToStackLoop,
 			_Utils_Tuple2(stack, $elm$core$Array$empty),
+			ctx,
 			patterns,
 			false,
 			true);
@@ -8684,108 +8855,121 @@ var $author$project$Logic$App$Patterns$OperatorUtils$getPatternOrPatternList = f
 var $author$project$Logic$App$Types$InvalidPattern = {$: 'InvalidPattern'};
 var $author$project$Settings$Theme$accent3 = '#e0b8b8';
 var $author$project$Logic$App$Patterns$PatternRegistry$unknownPattern = {
-	action: function (stack) {
-		return _Utils_Tuple2(
-			A2(
-				$author$project$Logic$App$Utils$Utils$unshift,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$InvalidPattern),
-				stack),
-			false);
-	},
+	action: F2(
+		function (stack, ctx) {
+			return {
+				ctx: ctx,
+				stack: A2(
+					$author$project$Logic$App$Utils$Utils$unshift,
+					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$InvalidPattern),
+					stack),
+				success: false
+			};
+		}),
 	color: $author$project$Settings$Theme$accent3,
 	displayName: 'Unknown Pattern',
 	internalName: '',
 	signature: ''
 };
-var $author$project$Logic$App$Patterns$PatternRegistry$eval = function (stack) {
-	var newStack = A3(
-		$elm$core$Array$slice,
-		1,
-		$elm$core$Array$length(stack),
-		stack);
-	var maybeIota = A2($elm$core$Array$get, 0, stack);
-	if (maybeIota.$ === 'Nothing') {
-		return _Utils_Tuple2(
-			A2(
-				$author$project$Logic$App$Utils$Utils$unshift,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
-				newStack),
-			false);
-	} else {
-		var iota = maybeIota.a;
-		var _v1 = $author$project$Logic$App$Patterns$OperatorUtils$getPatternOrPatternList(iota);
-		if (_v1.$ === 'Nothing') {
-			return _Utils_Tuple2(
-				A2(
+var $author$project$Logic$App$Patterns$PatternRegistry$eval = F2(
+	function (stack, ctx) {
+		var newStack = A3(
+			$elm$core$Array$slice,
+			1,
+			$elm$core$Array$length(stack),
+			stack);
+		var maybeIota = A2($elm$core$Array$get, 0, stack);
+		if (maybeIota.$ === 'Nothing') {
+			return {
+				ctx: ctx,
+				stack: A2(
 					$author$project$Logic$App$Utils$Utils$unshift,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
 					newStack),
-				false);
+				success: false
+			};
 		} else {
-			switch (iota.$) {
-				case 'IotaList':
-					var list = iota.a;
-					var _v3 = A2(
-						$author$project$Logic$App$Stack$Stack$applyPatternsToStackStopAtErrorOrHalt,
-						newStack,
-						$elm$core$List$reverse(
-							$elm$core$Array$toList(
-								A2(
-									$elm$core$Array$map,
-									function (i) {
-										if (i.$ === 'Pattern') {
-											var pattern = i.a;
-											return pattern;
-										} else {
-											return $author$project$Logic$App$Patterns$PatternRegistry$unknownPattern;
-										}
-									},
-									list))));
-					var newNewStack = _v3.a;
-					var error = _v3.c;
-					return _Utils_Tuple2(
-						A2(
-							$elm$core$Array$filter,
-							function (i) {
-								if (i.$ === 'OpenParenthesis') {
-									return false;
-								} else {
-									return true;
-								}
-							},
-							newNewStack),
-						!error);
-				case 'Pattern':
-					var pattern = iota.a;
-					var _v6 = A2(
-						$author$project$Logic$App$Stack$Stack$applyPatternsToStackStopAtErrorOrHalt,
-						newStack,
-						_List_fromArray(
-							[pattern]));
-					var newNewStack = _v6.a;
-					var error = _v6.c;
-					return _Utils_Tuple2(newNewStack, !error);
-				default:
-					return _Utils_Tuple2(
-						$elm$core$Array$fromList(
+			var iota = maybeIota.a;
+			var _v1 = $author$project$Logic$App$Patterns$OperatorUtils$getPatternOrPatternList(iota);
+			if (_v1.$ === 'Nothing') {
+				return {
+					ctx: ctx,
+					stack: A2(
+						$author$project$Logic$App$Utils$Utils$unshift,
+						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+						newStack),
+					success: false
+				};
+			} else {
+				switch (iota.$) {
+					case 'IotaList':
+						var list = iota.a;
+						var applyResult = A3(
+							$author$project$Logic$App$Stack$Stack$applyPatternsToStackStopAtErrorOrHalt,
+							newStack,
+							ctx,
+							$elm$core$List$reverse(
+								$elm$core$Array$toList(
+									A2(
+										$elm$core$Array$map,
+										function (i) {
+											if (i.$ === 'Pattern') {
+												var pattern = i.a;
+												return pattern;
+											} else {
+												return $author$project$Logic$App$Patterns$PatternRegistry$unknownPattern;
+											}
+										},
+										list))));
+						return {
+							ctx: applyResult.ctx,
+							stack: A2(
+								$elm$core$Array$filter,
+								function (i) {
+									if (i.$ === 'OpenParenthesis') {
+										return false;
+									} else {
+										return true;
+									}
+								},
+								applyResult.stack),
+							success: !applyResult.error
+						};
+					case 'Pattern':
+						var pattern = iota.a;
+						var applyResult = A3(
+							$author$project$Logic$App$Stack$Stack$applyPatternsToStackStopAtErrorOrHalt,
+							newStack,
+							ctx,
 							_List_fromArray(
-								[
-									$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure)
-								])),
-						false);
+								[pattern]));
+						return {ctx: applyResult.ctx, stack: applyResult.stack, success: !applyResult.error};
+					default:
+						return {
+							ctx: ctx,
+							stack: $elm$core$Array$fromList(
+								_List_fromArray(
+									[
+										$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure)
+									])),
+							success: false
+						};
+				}
 			}
 		}
-	}
-};
-var $author$project$Logic$App$Patterns$Spells$explode = function (stack) {
-	return A3($author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector, $author$project$Logic$App$Patterns$OperatorUtils$getNumber);
-};
-var $author$project$Logic$App$Patterns$Spells$explodeFire = function (stack) {
-	return A3($author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector, $author$project$Logic$App$Patterns$OperatorUtils$getNumber);
-};
-var $author$project$Logic$App$Patterns$Spells$extinguish = function (stack) {
-	return A2($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
-};
+	});
+var $author$project$Logic$App$Patterns$Spells$explode = F2(
+	function (stack, ctx) {
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector, $author$project$Logic$App$Patterns$OperatorUtils$getNumber);
+	});
+var $author$project$Logic$App$Patterns$Spells$explodeFire = F2(
+	function (stack, ctx) {
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector, $author$project$Logic$App$Patterns$OperatorUtils$getNumber);
+	});
+var $author$project$Logic$App$Patterns$Spells$extinguish = F2(
+	function (stack, ctx) {
+		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
+	});
 var $elm$core$Array$toIndexedList = function (array) {
 	var len = array.a;
 	var helper = F2(
@@ -8835,342 +9019,426 @@ var $author$project$Logic$App$Utils$Utils$removeFromArray = F3(
 					removeRange,
 					$elm$core$Array$toIndexedList(array))).b);
 	});
-var $author$project$Logic$App$Patterns$Stack$fisherman = function (stack) {
-	var newStack = A3(
-		$elm$core$Array$slice,
-		1,
-		$elm$core$Array$length(stack),
-		stack);
-	var maybeIota = A2($elm$core$Array$get, 0, stack);
-	if (maybeIota.$ === 'Nothing') {
-		return _Utils_Tuple2(
-			A2(
-				$elm$core$Array$append,
-				$elm$core$Array$fromList(
-					_List_fromArray(
-						[
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas)
-						])),
-				newStack),
-			false);
-	} else {
-		var iota = maybeIota.a;
-		var _v1 = $author$project$Logic$App$Patterns$OperatorUtils$getInteger(iota);
-		if (_v1.$ === 'Nothing') {
-			return _Utils_Tuple2(
-				A2(
-					$author$project$Logic$App$Utils$Utils$unshift,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
-					newStack),
-				false);
-		} else {
-			if (iota.$ === 'Number') {
-				var number = iota.a;
-				var newNewStack = A3(
-					$author$project$Logic$App$Utils$Utils$removeFromArray,
-					$elm$core$Basics$round(number) - 1,
-					$elm$core$Basics$round(number),
-					newStack);
-				var maybeCaughtIota = A2(
-					$elm$core$Array$get,
-					$elm$core$Basics$round(number) - 1,
-					newStack);
-				if (maybeCaughtIota.$ === 'Nothing') {
-					return _Utils_Tuple2(
-						A2(
-							$author$project$Logic$App$Utils$Utils$unshift,
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
-							stack),
-						false);
-				} else {
-					var caughtIota = maybeCaughtIota.a;
-					return _Utils_Tuple2(
-						A2($author$project$Logic$App$Utils$Utils$unshift, caughtIota, newNewStack),
-						true);
-				}
-			} else {
-				return _Utils_Tuple2(
+var $author$project$Logic$App$Patterns$Stack$fisherman = F2(
+	function (stack, ctx) {
+		var newStack = A3(
+			$elm$core$Array$slice,
+			1,
+			$elm$core$Array$length(stack),
+			stack);
+		var maybeIota = A2($elm$core$Array$get, 0, stack);
+		if (maybeIota.$ === 'Nothing') {
+			return {
+				ctx: ctx,
+				stack: A2(
+					$elm$core$Array$append,
 					$elm$core$Array$fromList(
 						_List_fromArray(
 							[
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure)
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas)
 							])),
-					false);
+					newStack),
+				success: false
+			};
+		} else {
+			var iota = maybeIota.a;
+			var _v1 = $author$project$Logic$App$Patterns$OperatorUtils$getInteger(iota);
+			if (_v1.$ === 'Nothing') {
+				return {
+					ctx: ctx,
+					stack: A2(
+						$author$project$Logic$App$Utils$Utils$unshift,
+						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+						newStack),
+					success: false
+				};
+			} else {
+				if (iota.$ === 'Number') {
+					var number = iota.a;
+					var newNewStack = A3(
+						$author$project$Logic$App$Utils$Utils$removeFromArray,
+						$elm$core$Basics$round(number) - 1,
+						$elm$core$Basics$round(number),
+						newStack);
+					var maybeCaughtIota = A2(
+						$elm$core$Array$get,
+						$elm$core$Basics$round(number) - 1,
+						newStack);
+					if (maybeCaughtIota.$ === 'Nothing') {
+						return {
+							ctx: ctx,
+							stack: A2(
+								$author$project$Logic$App$Utils$Utils$unshift,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
+								stack),
+							success: false
+						};
+					} else {
+						var caughtIota = maybeCaughtIota.a;
+						return {
+							ctx: ctx,
+							stack: A2($author$project$Logic$App$Utils$Utils$unshift, caughtIota, newNewStack),
+							success: true
+						};
+					}
+				} else {
+					return {
+						ctx: ctx,
+						stack: $elm$core$Array$fromList(
+							_List_fromArray(
+								[
+									$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure)
+								])),
+						success: false
+					};
+				}
 			}
 		}
-	}
-};
-var $author$project$Logic$App$Patterns$Stack$fishermanCopy = function (stack) {
-	var newStack = A3(
-		$elm$core$Array$slice,
-		1,
-		$elm$core$Array$length(stack),
-		stack);
-	var maybeIota = A2($elm$core$Array$get, 0, stack);
-	if (maybeIota.$ === 'Nothing') {
-		return _Utils_Tuple2(
-			A2(
-				$elm$core$Array$append,
-				$elm$core$Array$fromList(
-					_List_fromArray(
-						[
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas)
-						])),
-				newStack),
-			false);
-	} else {
-		var iota = maybeIota.a;
-		var _v1 = $author$project$Logic$App$Patterns$OperatorUtils$getInteger(iota);
-		if (_v1.$ === 'Nothing') {
-			return _Utils_Tuple2(
-				A2(
-					$author$project$Logic$App$Utils$Utils$unshift,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
-					newStack),
-				false);
-		} else {
-			if (iota.$ === 'Number') {
-				var number = iota.a;
-				var maybeCaughtIota = A2(
-					$elm$core$Array$get,
-					$elm$core$Basics$round(number),
-					newStack);
-				if (maybeCaughtIota.$ === 'Nothing') {
-					return _Utils_Tuple2(
-						A2(
-							$author$project$Logic$App$Utils$Utils$unshift,
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
-							stack),
-						false);
-				} else {
-					var caughtIota = maybeCaughtIota.a;
-					return _Utils_Tuple2(
-						A2($author$project$Logic$App$Utils$Utils$unshift, caughtIota, newStack),
-						true);
-				}
-			} else {
-				return _Utils_Tuple2(
+	});
+var $author$project$Logic$App$Patterns$Stack$fishermanCopy = F2(
+	function (stack, ctx) {
+		var newStack = A3(
+			$elm$core$Array$slice,
+			1,
+			$elm$core$Array$length(stack),
+			stack);
+		var maybeIota = A2($elm$core$Array$get, 0, stack);
+		if (maybeIota.$ === 'Nothing') {
+			return {
+				ctx: ctx,
+				stack: A2(
+					$elm$core$Array$append,
 					$elm$core$Array$fromList(
 						_List_fromArray(
 							[
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure)
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas)
 							])),
-					false);
+					newStack),
+				success: false
+			};
+		} else {
+			var iota = maybeIota.a;
+			var _v1 = $author$project$Logic$App$Patterns$OperatorUtils$getInteger(iota);
+			if (_v1.$ === 'Nothing') {
+				return {
+					ctx: ctx,
+					stack: A2(
+						$author$project$Logic$App$Utils$Utils$unshift,
+						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+						newStack),
+					success: false
+				};
+			} else {
+				if (iota.$ === 'Number') {
+					var number = iota.a;
+					var maybeCaughtIota = A2(
+						$elm$core$Array$get,
+						$elm$core$Basics$round(number),
+						newStack);
+					if (maybeCaughtIota.$ === 'Nothing') {
+						return {
+							ctx: ctx,
+							stack: A2(
+								$author$project$Logic$App$Utils$Utils$unshift,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
+								stack),
+							success: false
+						};
+					} else {
+						var caughtIota = maybeCaughtIota.a;
+						return {
+							ctx: ctx,
+							stack: A2($author$project$Logic$App$Utils$Utils$unshift, caughtIota, newStack),
+							success: true
+						};
+					}
+				} else {
+					return {
+						ctx: ctx,
+						stack: $elm$core$Array$fromList(
+							_List_fromArray(
+								[
+									$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure)
+								])),
+						success: false
+					};
+				}
 			}
 		}
-	}
-};
-var $author$project$Logic$App$Patterns$Math$floorAction = function (stack) {
-	var action = function (iota) {
-		if (iota.$ === 'Number') {
-			var number = iota.a;
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Number(
-					$elm$core$Basics$floor(number)));
-		} else {
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-		}
-	};
-	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
-};
+	});
+var $author$project$Logic$App$Patterns$Math$floorAction = F2(
+	function (stack, ctx) {
+		var action = F2(
+			function (iota, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						if (iota.$ === 'Number') {
+							var number = iota.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Number(
+									$elm$core$Basics$floor(number)));
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
+	});
 var $author$project$Logic$App$Types$Entity = function (a) {
 	return {$: 'Entity', a: a};
 };
 var $author$project$Logic$App$Types$Player = {$: 'Player'};
-var $author$project$Logic$App$Patterns$Selectors$getCaster = function (stack) {
-	var action = A2(
-		$elm$core$Array$repeat,
-		1,
-		$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Player));
-	return A2($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, action);
-};
-var $author$project$Logic$App$Patterns$Misc$getEntityHeight = function (stack) {
-	var action = function (_v0) {
-		return A2(
-			$elm$core$Array$repeat,
-			1,
-			$author$project$Logic$App$Types$Number(0));
-	};
-	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, action);
-};
-var $author$project$Logic$App$Patterns$Misc$getEntityLook = function (stack) {
-	var action = function (_v0) {
-		return A2(
-			$elm$core$Array$repeat,
-			1,
-			$author$project$Logic$App$Types$Vector(
-				_Utils_Tuple3(0.0, 0.0, 0.0)));
-	};
-	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, action);
-};
-var $author$project$Logic$App$Patterns$Misc$getEntityVelocity = function (stack) {
-	var action = function (_v0) {
-		return A2(
-			$elm$core$Array$repeat,
-			1,
-			$author$project$Logic$App$Types$Vector(
-				_Utils_Tuple3(0.0, 0.0, 0.0)));
-	};
-	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, action);
-};
-var $author$project$Logic$App$Patterns$Math$greaterThan = function (stack) {
-	var action = F2(
-		function (iota1, iota2) {
-			var _v0 = _Utils_Tuple2(iota1, iota2);
-			if ((_v0.a.$ === 'Number') && (_v0.b.$ === 'Number')) {
-				var number1 = _v0.a.a;
-				var number2 = _v0.b.a;
-				return A2(
+var $author$project$Logic$App$Patterns$Selectors$getCaster = F2(
+	function (stack, ctx) {
+		var action = function (_v0) {
+			return _Utils_Tuple2(
+				A2(
 					$elm$core$Array$repeat,
 					1,
-					$author$project$Logic$App$Types$Boolean(
-						_Utils_cmp(number1, number2) > 0));
-			} else {
-				return A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-			}
-		});
-	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
-};
-var $author$project$Logic$App$Patterns$Math$greaterThanOrEqualTo = function (stack) {
-	var action = F2(
-		function (iota1, iota2) {
-			var _v0 = _Utils_Tuple2(iota1, iota2);
-			if ((_v0.a.$ === 'Number') && (_v0.b.$ === 'Number')) {
-				var number1 = _v0.a.a;
-				var number2 = _v0.b.a;
-				return A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Boolean(
-						_Utils_cmp(number1, number2) > -1));
-			} else {
-				return A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-			}
-		});
-	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
-};
-var $author$project$Logic$App$Patterns$Math$ifBool = function (stack) {
-	var action = F3(
-		function (iota1, iota2, iota3) {
-			if (iota1.$ === 'Boolean') {
-				var bool = iota1.a;
-				return bool ? A2($elm$core$Array$repeat, 1, iota2) : A2($elm$core$Array$repeat, 1, iota3);
-			} else {
-				return A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-			}
-		});
-	return A5($author$project$Logic$App$Patterns$OperatorUtils$action3Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getBoolean, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
-};
-var $author$project$Logic$App$Patterns$Spells$ignite = function (stack) {
-	return A2($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
-};
-var $author$project$Logic$App$Patterns$Math$invertBool = function (stack) {
-	var action = function (iota) {
-		if (iota.$ === 'Boolean') {
-			if (iota.a) {
-				return A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Boolean(false));
-			} else {
-				return A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Boolean(true));
-			}
-		} else {
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-		}
-	};
-	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getBoolean, action);
-};
-var $author$project$Logic$App$Patterns$Math$lessThan = function (stack) {
-	var action = F2(
-		function (iota1, iota2) {
-			var _v0 = _Utils_Tuple2(iota1, iota2);
-			if ((_v0.a.$ === 'Number') && (_v0.b.$ === 'Number')) {
-				var number1 = _v0.a.a;
-				var number2 = _v0.b.a;
-				return A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Boolean(
-						_Utils_cmp(number1, number2) < 0));
-			} else {
-				return A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-			}
-		});
-	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
-};
-var $author$project$Logic$App$Patterns$Math$lessThanOrEqualTo = function (stack) {
-	var action = F2(
-		function (iota1, iota2) {
-			var _v0 = _Utils_Tuple2(iota1, iota2);
-			if ((_v0.a.$ === 'Number') && (_v0.b.$ === 'Number')) {
-				var number1 = _v0.a.a;
-				var number2 = _v0.b.a;
-				return A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Boolean(
-						_Utils_cmp(number1, number2) < 1));
-			} else {
-				return A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-			}
-		});
-	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
-};
-var $author$project$Logic$App$Patterns$Math$logarithm = function (stack) {
-	var action = F2(
-		function (iota1, iota2) {
-			var _v0 = _Utils_Tuple2(iota1, iota2);
-			if ((_v0.a.$ === 'Number') && (_v0.b.$ === 'Number')) {
-				var number1 = _v0.a.a;
-				var number2 = _v0.b.a;
-				return A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Number(
-						A2($elm$core$Basics$logBase, number2, number1)));
-			} else {
-				return A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-			}
-		});
-	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
-};
-var $author$project$Logic$App$Patterns$OperatorUtils$makeConstant = F2(
-	function (iota, stack) {
-		return _Utils_Tuple2(
-			A2($author$project$Logic$App$Utils$Utils$unshift, iota, stack),
-			true);
+					$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Player)),
+				ctx);
+		};
+		return A3($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, ctx, action);
+	});
+var $author$project$Logic$App$Patterns$Misc$getEntityHeight = F2(
+	function (stack, ctx) {
+		var action = F2(
+			function (_v0, _v1) {
+				return _Utils_Tuple2(
+					A2(
+						$elm$core$Array$repeat,
+						1,
+						$author$project$Logic$App$Types$Number(0)),
+					ctx);
+			});
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, action);
+	});
+var $author$project$Logic$App$Patterns$Misc$getEntityLook = F2(
+	function (stack, ctx) {
+		var action = F2(
+			function (_v0, _v1) {
+				return _Utils_Tuple2(
+					A2(
+						$elm$core$Array$repeat,
+						1,
+						$author$project$Logic$App$Types$Vector(
+							_Utils_Tuple3(0.0, 0.0, 0.0))),
+					ctx);
+			});
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, action);
+	});
+var $author$project$Logic$App$Patterns$Misc$getEntityVelocity = F2(
+	function (stack, ctx) {
+		var action = F2(
+			function (_v0, _v1) {
+				return _Utils_Tuple2(
+					A2(
+						$elm$core$Array$repeat,
+						1,
+						$author$project$Logic$App$Types$Vector(
+							_Utils_Tuple3(0.0, 0.0, 0.0))),
+					ctx);
+			});
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, action);
+	});
+var $author$project$Logic$App$Patterns$Math$greaterThan = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (iota1, iota2, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						var _v0 = _Utils_Tuple2(iota1, iota2);
+						if ((_v0.a.$ === 'Number') && (_v0.b.$ === 'Number')) {
+							var number1 = _v0.a.a;
+							var number2 = _v0.b.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Boolean(
+									_Utils_cmp(number1, number2) > 0));
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
+	});
+var $author$project$Logic$App$Patterns$Math$greaterThanOrEqualTo = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (iota1, iota2, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						var _v0 = _Utils_Tuple2(iota1, iota2);
+						if ((_v0.a.$ === 'Number') && (_v0.b.$ === 'Number')) {
+							var number1 = _v0.a.a;
+							var number2 = _v0.b.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Boolean(
+									_Utils_cmp(number1, number2) > -1));
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
+	});
+var $author$project$Logic$App$Patterns$Math$ifBool = F2(
+	function (stack, ctx) {
+		var action = F4(
+			function (iota1, iota2, iota3, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						if (iota1.$ === 'Boolean') {
+							var bool = iota1.a;
+							return bool ? A2($elm$core$Array$repeat, 1, iota2) : A2($elm$core$Array$repeat, 1, iota3);
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A6($author$project$Logic$App$Patterns$OperatorUtils$action3Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getBoolean, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
+	});
+var $author$project$Logic$App$Patterns$Spells$ignite = F2(
+	function (stack, ctx) {
+		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
+	});
+var $author$project$Logic$App$Patterns$Math$invertBool = F2(
+	function (stack, ctx) {
+		var action = F2(
+			function (iota, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						if (iota.$ === 'Boolean') {
+							if (iota.a) {
+								return A2(
+									$elm$core$Array$repeat,
+									1,
+									$author$project$Logic$App$Types$Boolean(false));
+							} else {
+								return A2(
+									$elm$core$Array$repeat,
+									1,
+									$author$project$Logic$App$Types$Boolean(true));
+							}
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getBoolean, action);
+	});
+var $author$project$Logic$App$Patterns$Math$lessThan = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (iota1, iota2, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						var _v0 = _Utils_Tuple2(iota1, iota2);
+						if ((_v0.a.$ === 'Number') && (_v0.b.$ === 'Number')) {
+							var number1 = _v0.a.a;
+							var number2 = _v0.b.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Boolean(
+									_Utils_cmp(number1, number2) < 0));
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
+	});
+var $author$project$Logic$App$Patterns$Math$lessThanOrEqualTo = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (iota1, iota2, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						var _v0 = _Utils_Tuple2(iota1, iota2);
+						if ((_v0.a.$ === 'Number') && (_v0.b.$ === 'Number')) {
+							var number1 = _v0.a.a;
+							var number2 = _v0.b.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Boolean(
+									_Utils_cmp(number1, number2) < 1));
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
+	});
+var $author$project$Logic$App$Patterns$Math$logarithm = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (iota1, iota2, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						var _v0 = _Utils_Tuple2(iota1, iota2);
+						if ((_v0.a.$ === 'Number') && (_v0.b.$ === 'Number')) {
+							var number1 = _v0.a.a;
+							var number2 = _v0.b.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Number(
+									A2($elm$core$Basics$logBase, number2, number1)));
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
+	});
+var $author$project$Logic$App$Patterns$OperatorUtils$makeConstant = F3(
+	function (iota, stack, ctx) {
+		return {
+			ctx: ctx,
+			stack: A2($author$project$Logic$App$Utils$Utils$unshift, iota, stack),
+			success: true
+		};
 	});
 var $elm$core$Basics$truncate = _Basics_truncate;
 var $ianmackenzie$elm_units$Quantity$fractionalRemainderBy = F2(
@@ -9179,558 +9447,670 @@ var $ianmackenzie$elm_units$Quantity$fractionalRemainderBy = F2(
 		var value = _v1.a;
 		return $ianmackenzie$elm_units$Quantity$Quantity(value - (modulus * ((value / modulus) | 0)));
 	});
-var $author$project$Logic$App$Patterns$Math$modulo = function (stack) {
-	var action = F2(
-		function (iota1, iota2) {
-			var _v0 = _Utils_Tuple2(iota1, iota2);
-			if ((_v0.a.$ === 'Number') && (_v0.b.$ === 'Number')) {
-				var number1 = _v0.a.a;
-				var number2 = _v0.b.a;
-				return A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Number(
-						$ianmackenzie$elm_units$Quantity$unwrap(
-							A2(
-								$ianmackenzie$elm_units$Quantity$fractionalRemainderBy,
-								$ianmackenzie$elm_units$Quantity$Quantity(number2),
-								$ianmackenzie$elm_units$Quantity$Quantity(number1)))));
-			} else {
-				return A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-			}
-		});
-	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
-};
-var $ianmackenzie$elm_geometry$Vector3d$dot = F2(
-	function (_v0, _v1) {
-		var v2 = _v0.a;
-		var v1 = _v1.a;
-		return $ianmackenzie$elm_units$Quantity$Quantity(((v1.x * v2.x) + (v1.y * v2.y)) + (v1.z * v2.z));
-	});
-var $author$project$Logic$App$Patterns$Math$mulDot = function (stack) {
-	var action = F2(
-		function (iota1, iota2) {
-			var _v0 = _Utils_Tuple2(iota1, iota2);
-			_v0$4:
-			while (true) {
-				switch (_v0.a.$) {
-					case 'Number':
-						switch (_v0.b.$) {
-							case 'Number':
-								var number1 = _v0.a.a;
-								var number2 = _v0.b.a;
-								return A2(
-									$elm$core$Array$repeat,
-									1,
-									$author$project$Logic$App$Types$Number(number1 * number2));
-							case 'Vector':
-								var number = _v0.a.a;
-								var vector = _v0.b.a;
-								var x = vector.a;
-								var y = vector.b;
-								var z = vector.c;
-								return A2(
-									$elm$core$Array$repeat,
-									1,
-									$author$project$Logic$App$Types$Vector(
-										_Utils_Tuple3(number * x, number * y, number * z)));
-							default:
-								break _v0$4;
-						}
-					case 'Vector':
-						switch (_v0.b.$) {
-							case 'Number':
-								var vector = _v0.a.a;
-								var number = _v0.b.a;
-								var x = vector.a;
-								var y = vector.b;
-								var z = vector.c;
-								return A2(
-									$elm$core$Array$repeat,
-									1,
-									$author$project$Logic$App$Types$Vector(
-										_Utils_Tuple3(x * number, y * number, z * number)));
-							case 'Vector':
-								var vector1 = _v0.a.a;
-								var vector2 = _v0.b.a;
-								var vec2 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector2);
-								var vec1 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector1);
-								return A2(
-									$elm$core$Array$repeat,
-									1,
-									$author$project$Logic$App$Types$Number(
-										$ianmackenzie$elm_units$Quantity$unwrap(
-											A2($ianmackenzie$elm_geometry$Vector3d$dot, vec2, vec1))));
-							default:
-								break _v0$4;
-						}
-					default:
-						break _v0$4;
-				}
-			}
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-		});
-	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, action);
-};
-var $author$project$Logic$App$Patterns$PatternRegistry$noAction = function (stack) {
-	return _Utils_Tuple2(stack, true);
-};
-var $elm$core$Bitwise$complement = _Bitwise_complement;
-var $author$project$Logic$App$Patterns$Math$notBit = function (stack) {
-	var action = function (iota) {
-		if (iota.$ === 'Number') {
-			var number = iota.a;
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Number(
-					~$elm$core$Basics$round(number)));
-		} else {
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-		}
-	};
-	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getInteger, action);
-};
-var $author$project$Logic$App$Patterns$Math$notEqualTo = function (stack) {
-	var action = F2(
-		function (iota1, iota2) {
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Boolean(
-					!A2($author$project$Logic$App$Patterns$OperatorUtils$checkEquality, iota1, iota2)));
-		});
-	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
-};
-var $elm$core$Bitwise$or = _Bitwise_or;
-var $author$project$Logic$App$Patterns$Math$orBit = function (stack) {
-	var action = F2(
-		function (iota1, iota2) {
-			var _v0 = _Utils_Tuple2(iota1, iota2);
-			_v0$2:
-			while (true) {
-				switch (_v0.a.$) {
-					case 'Number':
-						if (_v0.b.$ === 'Number') {
+var $author$project$Logic$App$Patterns$Math$modulo = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (iota1, iota2, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						var _v0 = _Utils_Tuple2(iota1, iota2);
+						if ((_v0.a.$ === 'Number') && (_v0.b.$ === 'Number')) {
 							var number1 = _v0.a.a;
 							var number2 = _v0.b.a;
 							return A2(
 								$elm$core$Array$repeat,
 								1,
 								$author$project$Logic$App$Types$Number(
-									$elm$core$Basics$round(number1) | $elm$core$Basics$round(number2)));
+									$ianmackenzie$elm_units$Quantity$unwrap(
+										A2(
+											$ianmackenzie$elm_units$Quantity$fractionalRemainderBy,
+											$ianmackenzie$elm_units$Quantity$Quantity(number2),
+											$ianmackenzie$elm_units$Quantity$Quantity(number1)))));
 						} else {
-							break _v0$2;
-						}
-					case 'IotaList':
-						if (_v0.b.$ === 'IotaList') {
-							var list1 = _v0.a.a;
-							var list2 = _v0.b.a;
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$IotaList(
-									A2(
-										$elm$core$Array$append,
-										list1,
-										A2(
-											$elm$core$Array$filter,
-											function (iota) {
-												return !A2(
-													$elm$core$List$any,
-													$author$project$Logic$App$Patterns$OperatorUtils$checkEquality(iota),
-													$elm$core$Array$toList(list1));
-											},
-											list2))));
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
+	});
+var $ianmackenzie$elm_geometry$Vector3d$dot = F2(
+	function (_v0, _v1) {
+		var v2 = _v0.a;
+		var v1 = _v1.a;
+		return $ianmackenzie$elm_units$Quantity$Quantity(((v1.x * v2.x) + (v1.y * v2.y)) + (v1.z * v2.z));
+	});
+var $author$project$Logic$App$Patterns$Math$mulDot = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (iota1, iota2, _v3) {
+				return _Utils_Tuple2(
+					function () {
+						var _v0 = _Utils_Tuple2(iota1, iota2);
+						_v0$4:
+						while (true) {
+							switch (_v0.a.$) {
+								case 'Number':
+									switch (_v0.b.$) {
+										case 'Number':
+											var number1 = _v0.a.a;
+											var number2 = _v0.b.a;
+											return A2(
+												$elm$core$Array$repeat,
+												1,
+												$author$project$Logic$App$Types$Number(number1 * number2));
+										case 'Vector':
+											var number = _v0.a.a;
+											var vector = _v0.b.a;
+											var x = vector.a;
+											var y = vector.b;
+											var z = vector.c;
+											return A2(
+												$elm$core$Array$repeat,
+												1,
+												$author$project$Logic$App$Types$Vector(
+													_Utils_Tuple3(number * x, number * y, number * z)));
+										default:
+											break _v0$4;
+									}
+								case 'Vector':
+									switch (_v0.b.$) {
+										case 'Number':
+											var vector = _v0.a.a;
+											var number = _v0.b.a;
+											var x = vector.a;
+											var y = vector.b;
+											var z = vector.c;
+											return A2(
+												$elm$core$Array$repeat,
+												1,
+												$author$project$Logic$App$Types$Vector(
+													_Utils_Tuple3(x * number, y * number, z * number)));
+										case 'Vector':
+											var vector1 = _v0.a.a;
+											var vector2 = _v0.b.a;
+											var vec2 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector2);
+											var vec1 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector1);
+											return A2(
+												$elm$core$Array$repeat,
+												1,
+												$author$project$Logic$App$Types$Number(
+													$ianmackenzie$elm_units$Quantity$unwrap(
+														A2($ianmackenzie$elm_geometry$Vector3d$dot, vec2, vec1))));
+										default:
+											break _v0$4;
+									}
+								default:
+									break _v0$4;
+							}
+						}
+						return A2(
+							$elm$core$Array$repeat,
+							1,
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+					}(),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, action);
+	});
+var $author$project$Logic$App$Patterns$PatternRegistry$noAction = F2(
+	function (stack, ctx) {
+		return {ctx: ctx, stack: stack, success: true};
+	});
+var $elm$core$Bitwise$complement = _Bitwise_complement;
+var $author$project$Logic$App$Patterns$Math$notBit = F2(
+	function (stack, ctx) {
+		var action = F2(
+			function (iota, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						if (iota.$ === 'Number') {
+							var number = iota.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Number(
+									~$elm$core$Basics$round(number)));
 						} else {
-							break _v0$2;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
 						}
-					default:
-						break _v0$2;
-				}
-			}
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-		});
-	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getIntegerOrList, $author$project$Logic$App$Patterns$OperatorUtils$getIntegerOrList, action);
-};
-var $author$project$Logic$App$Patterns$Math$orBool = function (stack) {
-	var action = F2(
-		function (iota1, iota2) {
-			var _v0 = _Utils_Tuple2(iota1, iota2);
-			if ((_v0.a.$ === 'Boolean') && (_v0.b.$ === 'Boolean')) {
-				var bool1 = _v0.a.a;
-				var bool2 = _v0.b.a;
-				return A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Boolean(bool1 || bool2));
-			} else {
-				return A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-			}
-		});
-	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getBoolean, $author$project$Logic$App$Patterns$OperatorUtils$getBoolean, action);
-};
-var $author$project$Logic$App$Patterns$Stack$over = function (stack) {
-	var action = F2(
-		function (iota1, iota2) {
-			return $elm$core$Array$fromList(
-				_List_fromArray(
-					[iota1, iota2, iota1]));
-		});
-	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
-};
-var $author$project$Logic$App$Patterns$Spells$placeBlock = function (stack) {
-	return A2($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
-};
-var $author$project$Logic$App$Patterns$Spells$potion = function (stack) {
-	return A4($author$project$Logic$App$Patterns$OperatorUtils$spell3Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber);
-};
-var $author$project$Logic$App$Patterns$Spells$potionFixedPotency = function (stack) {
-	return A3($author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, $author$project$Logic$App$Patterns$OperatorUtils$getNumber);
-};
-var $author$project$Logic$App$Patterns$Math$powProj = function (stack) {
-	var action = F2(
-		function (iota1, iota2) {
-			var _v0 = _Utils_Tuple2(iota1, iota2);
-			_v0$4:
-			while (true) {
-				switch (_v0.a.$) {
-					case 'Number':
-						switch (_v0.b.$) {
-							case 'Number':
-								var number1 = _v0.a.a;
-								var number2 = _v0.b.a;
-								return A2(
-									$elm$core$Array$repeat,
-									1,
-									$author$project$Logic$App$Types$Number(
-										A2($elm$core$Basics$pow, number1, number2)));
-							case 'Vector':
-								var number = _v0.a.a;
-								var vector = _v0.b.a;
-								var x = vector.a;
-								var y = vector.b;
-								var z = vector.c;
-								return A2(
-									$elm$core$Array$repeat,
-									1,
-									$author$project$Logic$App$Types$Vector(
-										_Utils_Tuple3(
-											A2($elm$core$Basics$pow, number, x),
-											A2($elm$core$Basics$pow, number, y),
-											A2($elm$core$Basics$pow, number, z))));
-							default:
-								break _v0$4;
+					}(),
+					ctx);
+			});
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getInteger, action);
+	});
+var $author$project$Logic$App$Patterns$Math$notEqualTo = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (iota1, iota2, _v0) {
+				return _Utils_Tuple2(
+					A2(
+						$elm$core$Array$repeat,
+						1,
+						$author$project$Logic$App$Types$Boolean(
+							!A2($author$project$Logic$App$Patterns$OperatorUtils$checkEquality, iota1, iota2))),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
+	});
+var $elm$core$Bitwise$or = _Bitwise_or;
+var $author$project$Logic$App$Patterns$Math$orBit = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (iota1, iota2, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						var _v0 = _Utils_Tuple2(iota1, iota2);
+						_v0$2:
+						while (true) {
+							switch (_v0.a.$) {
+								case 'Number':
+									if (_v0.b.$ === 'Number') {
+										var number1 = _v0.a.a;
+										var number2 = _v0.b.a;
+										return A2(
+											$elm$core$Array$repeat,
+											1,
+											$author$project$Logic$App$Types$Number(
+												$elm$core$Basics$round(number1) | $elm$core$Basics$round(number2)));
+									} else {
+										break _v0$2;
+									}
+								case 'IotaList':
+									if (_v0.b.$ === 'IotaList') {
+										var list1 = _v0.a.a;
+										var list2 = _v0.b.a;
+										return A2(
+											$elm$core$Array$repeat,
+											1,
+											$author$project$Logic$App$Types$IotaList(
+												A2(
+													$elm$core$Array$append,
+													list1,
+													A2(
+														$elm$core$Array$filter,
+														function (iota) {
+															return !A2(
+																$elm$core$List$any,
+																$author$project$Logic$App$Patterns$OperatorUtils$checkEquality(iota),
+																$elm$core$Array$toList(list1));
+														},
+														list2))));
+									} else {
+										break _v0$2;
+									}
+								default:
+									break _v0$2;
+							}
 						}
-					case 'Vector':
-						switch (_v0.b.$) {
-							case 'Number':
-								var vector = _v0.a.a;
-								var number = _v0.b.a;
-								var x = vector.a;
-								var y = vector.b;
-								var z = vector.c;
-								return A2(
-									$elm$core$Array$repeat,
-									1,
-									$author$project$Logic$App$Types$Vector(
-										_Utils_Tuple3(
-											A2($elm$core$Basics$pow, x, number),
-											A2($elm$core$Basics$pow, y, number),
-											A2($elm$core$Basics$pow, z, number))));
-							case 'Vector':
-								var vector1Tuple = _v0.a.a;
-								var vector2Tuple = _v0.b.a;
-								var vector2 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector2Tuple);
-								var vector1 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector1Tuple);
-								var mapFunction = function (number) {
-									return (number * $ianmackenzie$elm_units$Quantity$unwrap(
-										A2($ianmackenzie$elm_geometry$Vector3d$dot, vector1, vector2))) / $ianmackenzie$elm_units$Quantity$unwrap(
-										A2($ianmackenzie$elm_geometry$Vector3d$dot, vector1, vector1));
-								};
-								var x = vector1Tuple.a;
-								var y = vector1Tuple.b;
-								var z = vector1Tuple.c;
-								return A2(
-									$elm$core$Array$repeat,
-									1,
-									$author$project$Logic$App$Types$Vector(
-										_Utils_Tuple3(
-											mapFunction(x),
-											mapFunction(y),
-											mapFunction(z))));
-							default:
-								break _v0$4;
+						return A2(
+							$elm$core$Array$repeat,
+							1,
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+					}(),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getIntegerOrList, $author$project$Logic$App$Patterns$OperatorUtils$getIntegerOrList, action);
+	});
+var $author$project$Logic$App$Patterns$Math$orBool = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (iota1, iota2, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						var _v0 = _Utils_Tuple2(iota1, iota2);
+						if ((_v0.a.$ === 'Boolean') && (_v0.b.$ === 'Boolean')) {
+							var bool1 = _v0.a.a;
+							var bool2 = _v0.b.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Boolean(bool1 || bool2));
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
 						}
-					default:
-						break _v0$4;
-				}
-			}
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-		});
-	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, action);
-};
-var $author$project$Logic$App$Patterns$PatternRegistry$print = function (stack) {
-	return A3(
-		$author$project$Logic$App$Patterns$OperatorUtils$action1Input,
-		stack,
-		$author$project$Logic$App$Patterns$OperatorUtils$getAny,
-		function (iota) {
-			return $elm$core$Array$fromList(
-				_List_fromArray(
-					[iota]));
-		});
-};
-var $author$project$Logic$App$Patterns$Misc$raycast = function (stack) {
-	var action = F2(
-		function (_v0, _v1) {
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Vector(
-					_Utils_Tuple3(0.0, 0.0, 0.0)));
-		});
-	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector, $author$project$Logic$App$Patterns$OperatorUtils$getVector, action);
-};
-var $author$project$Logic$App$Patterns$Misc$raycastAxis = function (stack) {
-	var action = F2(
-		function (_v0, _v1) {
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Vector(
-					_Utils_Tuple3(0.0, 0.0, 0.0)));
-		});
-	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector, $author$project$Logic$App$Patterns$OperatorUtils$getVector, action);
-};
-var $author$project$Logic$App$Types$Chicken = {$: 'Chicken'};
-var $author$project$Logic$App$Patterns$Misc$raycastEntity = function (stack) {
-	var action = F2(
-		function (_v0, _v1) {
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Chicken));
-		});
-	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector, $author$project$Logic$App$Patterns$OperatorUtils$getVector, action);
-};
-var $author$project$Logic$App$Patterns$ReadWrite$read = function (stack) {
-	return A2(
-		$author$project$Logic$App$Patterns$OperatorUtils$actionNoInput,
-		stack,
-		$elm$core$Array$fromList(
-			_List_fromArray(
-				[$author$project$Logic$App$Types$Null])));
-};
-var $author$project$Logic$App$Patterns$Spells$recharge = function (stack) {
-	return A2($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getEntity);
-};
-var $author$project$Logic$App$Patterns$Stack$rotate = function (stack) {
-	var action = F3(
-		function (iota1, iota2, iota3) {
-			return $elm$core$Array$fromList(
-				_List_fromArray(
-					[iota1, iota3, iota2]));
-		});
-	return A5($author$project$Logic$App$Patterns$OperatorUtils$action3Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
-};
-var $author$project$Logic$App$Patterns$Stack$rotateReverse = function (stack) {
-	var action = F3(
-		function (iota1, iota2, iota3) {
-			return $elm$core$Array$fromList(
-				_List_fromArray(
-					[iota2, iota1, iota3]));
-		});
-	return A5($author$project$Logic$App$Patterns$OperatorUtils$action3Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
-};
-var $author$project$Logic$App$Patterns$Spells$sentinelCreate = function (stack) {
-	return A2($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
-};
-var $author$project$Logic$App$Patterns$Spells$sentinelDestroy = function (stack) {
-	return $author$project$Logic$App$Patterns$OperatorUtils$spellNoInput(stack);
-};
-var $author$project$Logic$App$Patterns$Spells$sentinelGetPos = function (stack) {
-	return A2(
-		$author$project$Logic$App$Patterns$OperatorUtils$actionNoInput,
-		stack,
-		$elm$core$Array$fromList(
-			_List_fromArray(
-				[
-					$author$project$Logic$App$Types$Vector(
-					_Utils_Tuple3(0, 0, 0))
-				])));
-};
-var $author$project$Logic$App$Patterns$Spells$sentinelWayfind = function (stack) {
-	return A3(
-		$author$project$Logic$App$Patterns$OperatorUtils$action1Input,
-		stack,
-		$author$project$Logic$App$Patterns$OperatorUtils$getVector,
-		function (_v0) {
-			return $elm$core$Array$fromList(
-				_List_fromArray(
-					[
+					}(),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getBoolean, $author$project$Logic$App$Patterns$OperatorUtils$getBoolean, action);
+	});
+var $author$project$Logic$App$Patterns$Stack$over = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (iota1, iota2, _v0) {
+				return _Utils_Tuple2(
+					$elm$core$Array$fromList(
+						_List_fromArray(
+							[iota1, iota2, iota1])),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
+	});
+var $author$project$Logic$App$Patterns$Spells$placeBlock = F2(
+	function (stack, ctx) {
+		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
+	});
+var $author$project$Logic$App$Patterns$Spells$potion = F2(
+	function (stack, ctx) {
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$spell3Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber);
+	});
+var $author$project$Logic$App$Patterns$Spells$potionFixedPotency = F2(
+	function (stack, ctx) {
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, $author$project$Logic$App$Patterns$OperatorUtils$getNumber);
+	});
+var $author$project$Logic$App$Patterns$Math$powProj = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (iota1, iota2, _v4) {
+				return _Utils_Tuple2(
+					function () {
+						var _v0 = _Utils_Tuple2(iota1, iota2);
+						_v0$4:
+						while (true) {
+							switch (_v0.a.$) {
+								case 'Number':
+									switch (_v0.b.$) {
+										case 'Number':
+											var number1 = _v0.a.a;
+											var number2 = _v0.b.a;
+											return A2(
+												$elm$core$Array$repeat,
+												1,
+												$author$project$Logic$App$Types$Number(
+													A2($elm$core$Basics$pow, number1, number2)));
+										case 'Vector':
+											var number = _v0.a.a;
+											var vector = _v0.b.a;
+											var x = vector.a;
+											var y = vector.b;
+											var z = vector.c;
+											return A2(
+												$elm$core$Array$repeat,
+												1,
+												$author$project$Logic$App$Types$Vector(
+													_Utils_Tuple3(
+														A2($elm$core$Basics$pow, number, x),
+														A2($elm$core$Basics$pow, number, y),
+														A2($elm$core$Basics$pow, number, z))));
+										default:
+											break _v0$4;
+									}
+								case 'Vector':
+									switch (_v0.b.$) {
+										case 'Number':
+											var vector = _v0.a.a;
+											var number = _v0.b.a;
+											var x = vector.a;
+											var y = vector.b;
+											var z = vector.c;
+											return A2(
+												$elm$core$Array$repeat,
+												1,
+												$author$project$Logic$App$Types$Vector(
+													_Utils_Tuple3(
+														A2($elm$core$Basics$pow, x, number),
+														A2($elm$core$Basics$pow, y, number),
+														A2($elm$core$Basics$pow, z, number))));
+										case 'Vector':
+											var vector1Tuple = _v0.a.a;
+											var vector2Tuple = _v0.b.a;
+											var vector2 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector2Tuple);
+											var vector1 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector1Tuple);
+											var mapFunction = function (number) {
+												return (number * $ianmackenzie$elm_units$Quantity$unwrap(
+													A2($ianmackenzie$elm_geometry$Vector3d$dot, vector1, vector2))) / $ianmackenzie$elm_units$Quantity$unwrap(
+													A2($ianmackenzie$elm_geometry$Vector3d$dot, vector1, vector1));
+											};
+											var x = vector1Tuple.a;
+											var y = vector1Tuple.b;
+											var z = vector1Tuple.c;
+											return A2(
+												$elm$core$Array$repeat,
+												1,
+												$author$project$Logic$App$Types$Vector(
+													_Utils_Tuple3(
+														mapFunction(x),
+														mapFunction(y),
+														mapFunction(z))));
+										default:
+											break _v0$4;
+									}
+								default:
+									break _v0$4;
+							}
+						}
+						return A2(
+							$elm$core$Array$repeat,
+							1,
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+					}(),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, action);
+	});
+var $author$project$Logic$App$Patterns$PatternRegistry$print = F2(
+	function (stack, ctx) {
+		return A4(
+			$author$project$Logic$App$Patterns$OperatorUtils$action1Input,
+			stack,
+			ctx,
+			$author$project$Logic$App$Patterns$OperatorUtils$getAny,
+			F2(
+				function (iota, _v0) {
+					return _Utils_Tuple2(
+						$elm$core$Array$fromList(
+							_List_fromArray(
+								[iota])),
+						ctx);
+				}));
+	});
+var $author$project$Logic$App$Patterns$Misc$raycast = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (_v0, _v1, _v2) {
+				return _Utils_Tuple2(
+					A2(
+						$elm$core$Array$repeat,
+						1,
 						$author$project$Logic$App$Types$Vector(
-						_Utils_Tuple3(0, 0, 0))
-					]));
-		});
-};
-var $author$project$Logic$App$Patterns$Math$sine = function (stack) {
-	var action = function (iota) {
-		if (iota.$ === 'Number') {
-			var number = iota.a;
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Number(
-					$elm$core$Basics$sin(number)));
-		} else {
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-		}
-	};
-	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
-};
-var $author$project$Logic$App$Patterns$Lists$singleton = function (stack) {
-	var action = function (iota) {
-		return A2(
-			$elm$core$Array$repeat,
-			1,
-			$author$project$Logic$App$Types$IotaList(
-				A2($elm$core$Array$repeat, 1, iota)));
-	};
-	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
-};
-var $author$project$Logic$App$Patterns$Stack$stackLength = function (stack) {
-	return _Utils_Tuple2(
-		A2(
-			$author$project$Logic$App$Utils$Utils$unshift,
-			$author$project$Logic$App$Types$Number(
-				$elm$core$Array$length(stack)),
-			stack),
-		true);
-};
-var $author$project$Logic$App$Patterns$Math$subtract = function (stack) {
-	var action = F2(
-		function (iota1, iota2) {
-			var _v0 = _Utils_Tuple2(iota1, iota2);
-			_v0$4:
-			while (true) {
-				switch (_v0.a.$) {
-					case 'Number':
-						switch (_v0.b.$) {
-							case 'Number':
-								var number1 = _v0.a.a;
-								var number2 = _v0.b.a;
-								return A2(
-									$elm$core$Array$repeat,
-									1,
-									$author$project$Logic$App$Types$Number(number1 - number2));
-							case 'Vector':
-								var number = _v0.a.a;
-								var vector = _v0.b.a;
-								var x = vector.a;
-								var y = vector.b;
-								var z = vector.c;
-								return A2(
-									$elm$core$Array$repeat,
-									1,
+							_Utils_Tuple3(0.0, 0.0, 0.0))),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector, $author$project$Logic$App$Patterns$OperatorUtils$getVector, action);
+	});
+var $author$project$Logic$App$Patterns$Misc$raycastAxis = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (_v0, _v1, _v2) {
+				return _Utils_Tuple2(
+					A2(
+						$elm$core$Array$repeat,
+						1,
+						$author$project$Logic$App$Types$Vector(
+							_Utils_Tuple3(0.0, 0.0, 0.0))),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector, $author$project$Logic$App$Patterns$OperatorUtils$getVector, action);
+	});
+var $author$project$Logic$App$Types$Chicken = {$: 'Chicken'};
+var $author$project$Logic$App$Patterns$Misc$raycastEntity = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (_v0, _v1, _v2) {
+				return _Utils_Tuple2(
+					A2(
+						$elm$core$Array$repeat,
+						1,
+						$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Chicken)),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector, $author$project$Logic$App$Patterns$OperatorUtils$getVector, action);
+	});
+var $author$project$Logic$App$Patterns$ReadWrite$read = F2(
+	function (stack, ctx) {
+		return A3(
+			$author$project$Logic$App$Patterns$OperatorUtils$actionNoInput,
+			stack,
+			ctx,
+			function (_v0) {
+				return _Utils_Tuple2(
+					$elm$core$Array$fromList(
+						_List_fromArray(
+							[$author$project$Logic$App$Types$Null])),
+					ctx);
+			});
+	});
+var $author$project$Logic$App$Patterns$Spells$recharge = F2(
+	function (stack, ctx) {
+		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity);
+	});
+var $author$project$Logic$App$Patterns$Stack$rotate = F2(
+	function (stack, ctx) {
+		var action = F4(
+			function (iota1, iota2, iota3, _v0) {
+				return _Utils_Tuple2(
+					$elm$core$Array$fromList(
+						_List_fromArray(
+							[iota1, iota3, iota2])),
+					ctx);
+			});
+		return A6($author$project$Logic$App$Patterns$OperatorUtils$action3Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
+	});
+var $author$project$Logic$App$Patterns$Stack$rotateReverse = F2(
+	function (stack, ctx) {
+		var action = F4(
+			function (iota1, iota2, iota3, _v0) {
+				return _Utils_Tuple2(
+					$elm$core$Array$fromList(
+						_List_fromArray(
+							[iota2, iota1, iota3])),
+					ctx);
+			});
+		return A6($author$project$Logic$App$Patterns$OperatorUtils$action3Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
+	});
+var $author$project$Logic$App$Patterns$Spells$sentinelCreate = F2(
+	function (stack, ctx) {
+		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
+	});
+var $author$project$Logic$App$Patterns$Spells$sentinelDestroy = F2(
+	function (stack, ctx) {
+		return A2($author$project$Logic$App$Patterns$OperatorUtils$spellNoInput, stack, ctx);
+	});
+var $author$project$Logic$App$Patterns$Spells$sentinelGetPos = F2(
+	function (stack, ctx) {
+		return A3(
+			$author$project$Logic$App$Patterns$OperatorUtils$actionNoInput,
+			stack,
+			ctx,
+			function (_v0) {
+				return _Utils_Tuple2(
+					$elm$core$Array$fromList(
+						_List_fromArray(
+							[
+								$author$project$Logic$App$Types$Vector(
+								_Utils_Tuple3(0, 0, 0))
+							])),
+					ctx);
+			});
+	});
+var $author$project$Logic$App$Patterns$Spells$sentinelWayfind = F2(
+	function (stack, ctx) {
+		return A4(
+			$author$project$Logic$App$Patterns$OperatorUtils$action1Input,
+			stack,
+			ctx,
+			$author$project$Logic$App$Patterns$OperatorUtils$getVector,
+			F2(
+				function (_v0, _v1) {
+					return _Utils_Tuple2(
+						$elm$core$Array$fromList(
+							_List_fromArray(
+								[
 									$author$project$Logic$App$Types$Vector(
-										_Utils_Tuple3(number - x, number - y, number - z)));
-							default:
-								break _v0$4;
+									_Utils_Tuple3(0, 0, 0))
+								])),
+						ctx);
+				}));
+	});
+var $author$project$Logic$App$Patterns$Math$sine = F2(
+	function (stack, ctx) {
+		var action = F2(
+			function (iota, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						if (iota.$ === 'Number') {
+							var number = iota.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Number(
+									$elm$core$Basics$sin(number)));
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
 						}
-					case 'Vector':
-						switch (_v0.b.$) {
-							case 'Number':
-								var vector = _v0.a.a;
-								var number = _v0.b.a;
-								var x = vector.a;
-								var y = vector.b;
-								var z = vector.c;
-								return A2(
-									$elm$core$Array$repeat,
-									1,
-									$author$project$Logic$App$Types$Vector(
-										_Utils_Tuple3(x - number, y - number, z - number)));
-							case 'Vector':
-								var vector1 = _v0.a.a;
-								var vector2 = _v0.b.a;
-								var _v3 = _Utils_Tuple2(vector1, vector2);
-								var _v4 = _v3.a;
-								var x1 = _v4.a;
-								var y1 = _v4.b;
-								var z1 = _v4.c;
-								var _v5 = _v3.b;
-								var x2 = _v5.a;
-								var y2 = _v5.b;
-								var z2 = _v5.c;
-								return A2(
-									$elm$core$Array$repeat,
-									1,
-									$author$project$Logic$App$Types$Vector(
-										_Utils_Tuple3(x1 - x2, y1 - y2, z1 - z2)));
-							default:
-								break _v0$4;
+					}(),
+					ctx);
+			});
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
+	});
+var $author$project$Logic$App$Patterns$Lists$singleton = F2(
+	function (stack, ctx) {
+		var action = F2(
+			function (iota, _v0) {
+				return _Utils_Tuple2(
+					A2(
+						$elm$core$Array$repeat,
+						1,
+						$author$project$Logic$App$Types$IotaList(
+							A2($elm$core$Array$repeat, 1, iota))),
+					ctx);
+			});
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
+	});
+var $author$project$Logic$App$Patterns$Stack$stackLength = F2(
+	function (stack, ctx) {
+		return A3(
+			$author$project$Logic$App$Patterns$OperatorUtils$actionNoInput,
+			stack,
+			ctx,
+			function (_v0) {
+				return _Utils_Tuple2(
+					A2(
+						$author$project$Logic$App$Utils$Utils$unshift,
+						$author$project$Logic$App$Types$Number(
+							$elm$core$Array$length(stack)),
+						stack),
+					ctx);
+			});
+	});
+var $author$project$Logic$App$Patterns$Math$subtract = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (iota1, iota2, _v6) {
+				return _Utils_Tuple2(
+					function () {
+						var _v0 = _Utils_Tuple2(iota1, iota2);
+						_v0$4:
+						while (true) {
+							switch (_v0.a.$) {
+								case 'Number':
+									switch (_v0.b.$) {
+										case 'Number':
+											var number1 = _v0.a.a;
+											var number2 = _v0.b.a;
+											return A2(
+												$elm$core$Array$repeat,
+												1,
+												$author$project$Logic$App$Types$Number(number1 - number2));
+										case 'Vector':
+											var number = _v0.a.a;
+											var vector = _v0.b.a;
+											var x = vector.a;
+											var y = vector.b;
+											var z = vector.c;
+											return A2(
+												$elm$core$Array$repeat,
+												1,
+												$author$project$Logic$App$Types$Vector(
+													_Utils_Tuple3(number - x, number - y, number - z)));
+										default:
+											break _v0$4;
+									}
+								case 'Vector':
+									switch (_v0.b.$) {
+										case 'Number':
+											var vector = _v0.a.a;
+											var number = _v0.b.a;
+											var x = vector.a;
+											var y = vector.b;
+											var z = vector.c;
+											return A2(
+												$elm$core$Array$repeat,
+												1,
+												$author$project$Logic$App$Types$Vector(
+													_Utils_Tuple3(x - number, y - number, z - number)));
+										case 'Vector':
+											var vector1 = _v0.a.a;
+											var vector2 = _v0.b.a;
+											var _v3 = _Utils_Tuple2(vector1, vector2);
+											var _v4 = _v3.a;
+											var x1 = _v4.a;
+											var y1 = _v4.b;
+											var z1 = _v4.c;
+											var _v5 = _v3.b;
+											var x2 = _v5.a;
+											var y2 = _v5.b;
+											var z2 = _v5.c;
+											return A2(
+												$elm$core$Array$repeat,
+												1,
+												$author$project$Logic$App$Types$Vector(
+													_Utils_Tuple3(x1 - x2, y1 - y2, z1 - z2)));
+										default:
+											break _v0$4;
+									}
+								default:
+									break _v0$4;
+							}
 						}
-					default:
-						break _v0$4;
-				}
-			}
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-		});
-	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, action);
-};
-var $author$project$Logic$App$Patterns$Stack$swap = function (stack) {
-	var action = F2(
-		function (iota1, iota2) {
-			return $elm$core$Array$fromList(
-				_List_fromArray(
-					[iota1, iota2]));
-		});
-	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
-};
+						return A2(
+							$elm$core$Array$repeat,
+							1,
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+					}(),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, action);
+	});
+var $author$project$Logic$App$Patterns$Stack$swap = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (iota1, iota2, _v0) {
+				return _Utils_Tuple2(
+					$elm$core$Array$fromList(
+						_List_fromArray(
+							[iota1, iota2])),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
+	});
 var $elm$core$Basics$tan = _Basics_tan;
-var $author$project$Logic$App$Patterns$Math$tangent = function (stack) {
-	var action = function (iota) {
-		if (iota.$ === 'Number') {
-			var number = iota.a;
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Number(
-					$elm$core$Basics$tan(number)));
-		} else {
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-		}
-	};
-	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
-};
+var $author$project$Logic$App$Patterns$Math$tangent = F2(
+	function (stack, ctx) {
+		var action = F2(
+			function (iota, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						if (iota.$ === 'Number') {
+							var number = iota.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Number(
+									$elm$core$Basics$tan(number)));
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
+	});
 var $elm$core$Array$foldl = F3(
 	function (func, baseCase, _v0) {
 		var tree = _v0.c;
@@ -9759,123 +10139,142 @@ var $elm$core$Array$push = F2(
 			A2($elm$core$Elm$JsArray$push, a, tail),
 			array);
 	});
-var $author$project$Logic$App$Patterns$Math$toSet = function (stack) {
-	var constructSet = F2(
-		function (iota, out) {
-			return A2(
-				$elm$core$List$any,
-				$author$project$Logic$App$Patterns$OperatorUtils$checkEquality(iota),
-				$elm$core$Array$toList(out)) ? out : A2($elm$core$Array$push, iota, out);
-		});
-	var action = function (iota) {
-		if (iota.$ === 'IotaList') {
-			var list = iota.a;
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$IotaList(
-					A3($elm$core$Array$foldl, constructSet, $elm$core$Array$empty, list)));
-		} else {
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-		}
-	};
-	return A3($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, $author$project$Logic$App$Patterns$OperatorUtils$getIotaList, action);
-};
-var $author$project$Logic$App$Patterns$Stack$tuck = function (stack) {
-	var action = F2(
-		function (iota1, iota2) {
-			return $elm$core$Array$fromList(
-				_List_fromArray(
-					[iota2, iota1, iota2]));
-		});
-	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
-};
-var $elm$core$Bitwise$xor = _Bitwise_xor;
-var $author$project$Logic$App$Patterns$Math$xorBit = function (stack) {
-	var action = F2(
-		function (iota1, iota2) {
-			var _v0 = _Utils_Tuple2(iota1, iota2);
-			_v0$2:
-			while (true) {
-				switch (_v0.a.$) {
-					case 'Number':
-						if (_v0.b.$ === 'Number') {
-							var number1 = _v0.a.a;
-							var number2 = _v0.b.a;
-							return A2(
-								$elm$core$Array$repeat,
-								1,
-								$author$project$Logic$App$Types$Number(
-									$elm$core$Basics$round(number1) ^ $elm$core$Basics$round(number2)));
-						} else {
-							break _v0$2;
-						}
-					case 'IotaList':
-						if (_v0.b.$ === 'IotaList') {
-							var list1 = _v0.a.a;
-							var list2 = _v0.b.a;
+var $author$project$Logic$App$Patterns$Math$toSet = F2(
+	function (stack, ctx) {
+		var constructSet = F2(
+			function (iota, out) {
+				return A2(
+					$elm$core$List$any,
+					$author$project$Logic$App$Patterns$OperatorUtils$checkEquality(iota),
+					$elm$core$Array$toList(out)) ? out : A2($elm$core$Array$push, iota, out);
+			});
+		var action = F2(
+			function (iota, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						if (iota.$ === 'IotaList') {
+							var list = iota.a;
 							return A2(
 								$elm$core$Array$repeat,
 								1,
 								$author$project$Logic$App$Types$IotaList(
-									A2(
-										$elm$core$Array$append,
-										A2(
-											$elm$core$Array$filter,
-											function (iota) {
-												return !A2(
-													$elm$core$List$any,
-													$author$project$Logic$App$Patterns$OperatorUtils$checkEquality(iota),
-													$elm$core$Array$toList(list1));
-											},
-											list2),
-										A2(
-											$elm$core$Array$filter,
-											function (iota) {
-												return !A2(
-													$elm$core$List$any,
-													$author$project$Logic$App$Patterns$OperatorUtils$checkEquality(iota),
-													$elm$core$Array$toList(list2));
-											},
-											list1))));
+									A3($elm$core$Array$foldl, constructSet, $elm$core$Array$empty, list)));
 						} else {
-							break _v0$2;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
 						}
-					default:
-						break _v0$2;
-				}
-			}
-			return A2(
-				$elm$core$Array$repeat,
-				1,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-		});
-	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getIntegerOrList, $author$project$Logic$App$Patterns$OperatorUtils$getIntegerOrList, action);
-};
+					}(),
+					ctx);
+			});
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getIotaList, action);
+	});
+var $author$project$Logic$App$Patterns$Stack$tuck = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (iota1, iota2, _v0) {
+				return _Utils_Tuple2(
+					$elm$core$Array$fromList(
+						_List_fromArray(
+							[iota2, iota1, iota2])),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
+	});
+var $elm$core$Bitwise$xor = _Bitwise_xor;
+var $author$project$Logic$App$Patterns$Math$xorBit = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (iota1, iota2, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						var _v0 = _Utils_Tuple2(iota1, iota2);
+						_v0$2:
+						while (true) {
+							switch (_v0.a.$) {
+								case 'Number':
+									if (_v0.b.$ === 'Number') {
+										var number1 = _v0.a.a;
+										var number2 = _v0.b.a;
+										return A2(
+											$elm$core$Array$repeat,
+											1,
+											$author$project$Logic$App$Types$Number(
+												$elm$core$Basics$round(number1) ^ $elm$core$Basics$round(number2)));
+									} else {
+										break _v0$2;
+									}
+								case 'IotaList':
+									if (_v0.b.$ === 'IotaList') {
+										var list1 = _v0.a.a;
+										var list2 = _v0.b.a;
+										return A2(
+											$elm$core$Array$repeat,
+											1,
+											$author$project$Logic$App$Types$IotaList(
+												A2(
+													$elm$core$Array$append,
+													A2(
+														$elm$core$Array$filter,
+														function (iota) {
+															return !A2(
+																$elm$core$List$any,
+																$author$project$Logic$App$Patterns$OperatorUtils$checkEquality(iota),
+																$elm$core$Array$toList(list1));
+														},
+														list2),
+													A2(
+														$elm$core$Array$filter,
+														function (iota) {
+															return !A2(
+																$elm$core$List$any,
+																$author$project$Logic$App$Patterns$OperatorUtils$checkEquality(iota),
+																$elm$core$Array$toList(list2));
+														},
+														list1))));
+									} else {
+										break _v0$2;
+									}
+								default:
+									break _v0$2;
+							}
+						}
+						return A2(
+							$elm$core$Array$repeat,
+							1,
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+					}(),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getIntegerOrList, $author$project$Logic$App$Patterns$OperatorUtils$getIntegerOrList, action);
+	});
 var $elm$core$Basics$xor = _Basics_xor;
-var $author$project$Logic$App$Patterns$Math$xorBool = function (stack) {
-	var action = F2(
-		function (iota1, iota2) {
-			var _v0 = _Utils_Tuple2(iota1, iota2);
-			if ((_v0.a.$ === 'Boolean') && (_v0.b.$ === 'Boolean')) {
-				var bool1 = _v0.a.a;
-				var bool2 = _v0.b.a;
-				return A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Boolean(bool1 !== bool2));
-			} else {
-				return A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
-			}
-		});
-	return A4($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, $author$project$Logic$App$Patterns$OperatorUtils$getBoolean, $author$project$Logic$App$Patterns$OperatorUtils$getBoolean, action);
-};
+var $author$project$Logic$App$Patterns$Math$xorBool = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (iota1, iota2, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						var _v0 = _Utils_Tuple2(iota1, iota2);
+						if ((_v0.a.$ === 'Boolean') && (_v0.b.$ === 'Boolean')) {
+							var bool1 = _v0.a.a;
+							var bool2 = _v0.b.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Boolean(bool1 !== bool2));
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getBoolean, $author$project$Logic$App$Patterns$OperatorUtils$getBoolean, action);
+	});
 var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _List_fromArray(
 	[
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'interop/gravity/get', signature: 'wawawddew'},
@@ -9984,15 +10383,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _List_f
 		{action: $author$project$Logic$App$Patterns$Spells$sentinelWayfind, color: $author$project$Settings$Theme$accent1, displayName: 'Wayfind Sentinel', internalName: 'sentinel/wayfind', signature: 'waeawaedwa'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'akashic/read', signature: 'qqqwqqqqqaq'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'akashic/write', signature: 'eeeweeeeede'},
-		{
-		action: function (x) {
-			return _Utils_Tuple2(x, true);
-		},
-		color: $author$project$Settings$Theme$accent1,
-		displayName: 'Charon\'s Gambit',
-		internalName: 'halt',
-		signature: 'aqdee'
-	},
+		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: 'Charon\'s Gambit', internalName: 'halt', signature: 'aqdee'},
 		{action: $author$project$Logic$App$Patterns$ReadWrite$read, color: $author$project$Settings$Theme$accent1, displayName: 'Scribe\'s Reflection', internalName: 'read', signature: 'aqqqqq'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'read/entity', signature: 'wawqwqwqwqwqw'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'write', signature: 'deeeee'},
@@ -10185,14 +10576,16 @@ var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName = func
 	}
 };
 var $elm$core$String$fromFloat = _String_fromNumber;
-var $author$project$Logic$App$Patterns$Misc$numberLiteral = F2(
-	function (number, stack) {
-		return _Utils_Tuple2(
-			A2(
+var $author$project$Logic$App$Patterns$Misc$numberLiteral = F3(
+	function (number, stack, ctx) {
+		return {
+			ctx: ctx,
+			stack: A2(
 				$author$project$Logic$App$Utils$Utils$unshift,
 				$author$project$Logic$App$Types$Number(number),
 				stack),
-			true);
+			success: true
+		};
 	});
 var $elm$core$String$foldr = _String_foldr;
 var $elm$core$String$toList = function (string) {
@@ -10702,9 +11095,10 @@ var $author$project$Main$update = F2(
 					if ($elm$core$List$length(drawing.activePath) > 1) {
 						var newUncoloredPattern = $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature(
 							$author$project$Logic$App$Utils$GetAngleSignature$getAngleSignature(drawing.activePath));
-						var stackResultTuple = A2(
+						var stackResult = A3(
 							$author$project$Logic$App$Stack$Stack$applyPatternsToStack,
 							$elm$core$Array$empty,
+							castingContext,
 							$elm$core$List$reverse(
 								A2(
 									$elm$core$List$map,
@@ -10713,8 +11107,8 @@ var $author$project$Main$update = F2(
 									},
 									$elm$core$Array$toList(
 										A2($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newUncoloredPattern)))));
-						var resultArray = stackResultTuple.b;
-						var newStack = stackResultTuple.a;
+						var resultArray = stackResult.resultArray;
+						var newStack = stackResult.stack;
 						var newPattern = A2(
 							$author$project$Logic$App$PatternList$PatternArray$applyColorToPatternFromResult,
 							newUncoloredPattern,
@@ -10738,6 +11132,7 @@ var $author$project$Main$update = F2(
 							_Utils_update(
 								model,
 								{
+									castingContext: stackResult.ctx,
 									grid: newGrid,
 									patternArray: A2($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern),
 									stack: newStack
@@ -10765,14 +11160,15 @@ var $author$project$Main$update = F2(
 				var startIndex = msg.a;
 				var endIndex = msg.b;
 				var newUncoloredPatternArray = A3($author$project$Logic$App$Utils$Utils$removeFromArray, startIndex, endIndex, model.patternArray);
-				var stackResultTuple = A2(
+				var stackResult = A3(
 					$author$project$Logic$App$Stack$Stack$applyPatternsToStack,
 					$elm$core$Array$empty,
+					castingContext,
 					$elm$core$List$reverse(
 						$elm$core$List$unzip(
 							$elm$core$Array$toList(newUncoloredPatternArray)).a));
-				var resultArray = stackResultTuple.b;
-				var newStack = stackResultTuple.a;
+				var resultArray = stackResult.resultArray;
+				var newStack = stackResult.stack;
 				var newPatternArray = A3(
 					$elm_community$array_extra$Array$Extra$map2,
 					F2(
@@ -10788,6 +11184,7 @@ var $author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{
+							castingContext: stackResult.ctx,
 							grid: _Utils_update(
 								grid,
 								{
@@ -10879,23 +11276,26 @@ var $author$project$Main$update = F2(
 				var name = msg.a;
 				var getPattern = $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName(name);
 				var newPattern = getPattern.a;
+				var stackResult = A3(
+					$author$project$Logic$App$Stack$Stack$applyPatternsToStack,
+					$elm$core$Array$empty,
+					castingContext,
+					$elm$core$List$reverse(
+						A2(
+							$elm$core$List$map,
+							function (x) {
+								return x.a;
+							},
+							$elm$core$Array$toList(
+								A2($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern)))));
 				var command = getPattern.b;
 				return _Utils_eq(command, $elm$core$Platform$Cmd$none) ? _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
+							castingContext: stackResult.ctx,
 							patternArray: A2($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern),
-							stack: A2(
-								$author$project$Logic$App$Stack$Stack$applyPatternsToStack,
-								$elm$core$Array$empty,
-								$elm$core$List$reverse(
-									A2(
-										$elm$core$List$map,
-										function (x) {
-											return x.a;
-										},
-										$elm$core$Array$toList(
-											A2($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern))))).a,
+							stack: stackResult.stack,
 							ui: _Utils_update(
 								ui,
 								{patternInputField: ''})
@@ -10909,22 +11309,25 @@ var $author$project$Main$update = F2(
 			case 'RecieveGeneratedNumberLiteral':
 				var signature = msg.a;
 				var newPattern = $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature(signature);
+				var stackResult = A3(
+					$author$project$Logic$App$Stack$Stack$applyPatternsToStack,
+					$elm$core$Array$empty,
+					castingContext,
+					$elm$core$List$reverse(
+						A2(
+							$elm$core$List$map,
+							function (x) {
+								return x.a;
+							},
+							$elm$core$Array$toList(
+								A2($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern)))));
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
+							castingContext: stackResult.ctx,
 							patternArray: A2($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern),
-							stack: A2(
-								$author$project$Logic$App$Stack$Stack$applyPatternsToStack,
-								$elm$core$Array$empty,
-								$elm$core$List$reverse(
-									A2(
-										$elm$core$List$map,
-										function (x) {
-											return x.a;
-										},
-										$elm$core$Array$toList(
-											A2($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern))))).a,
+							stack: stackResult.stack,
 							ui: _Utils_update(
 								ui,
 								{patternInputField: ''})
@@ -11115,14 +11518,15 @@ var $author$project$Main$update = F2(
 						return patternArray;
 					}
 				}();
-				var stackResultTuple = A2(
+				var stackResult = A3(
 					$author$project$Logic$App$Stack$Stack$applyPatternsToStack,
 					$elm$core$Array$empty,
+					castingContext,
 					$elm$core$List$reverse(
 						$elm$core$List$unzip(
 							$elm$core$Array$toList(newUncoloredPatternArray)).a));
-				var newStack = stackResultTuple.a;
-				var resultArray = stackResultTuple.b;
+				var newStack = stackResult.stack;
+				var resultArray = stackResult.resultArray;
 				var newPatternArray = A3(
 					$elm_community$array_extra$Array$Extra$map2,
 					F2(
@@ -11138,6 +11542,7 @@ var $author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{
+							castingContext: stackResult.ctx,
 							grid: _Utils_update(
 								grid,
 								{

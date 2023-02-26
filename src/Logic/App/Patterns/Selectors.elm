@@ -3,13 +3,17 @@ module Logic.App.Patterns.Selectors exposing (..)
 import Array exposing (Array)
 import Logic.App.Patterns.OperatorUtils exposing (actionNoInput)
 import Logic.App.Types exposing (EntityType(..), Iota(..))
+import Logic.App.Types exposing (CastingContext)
+import Logic.App.Types exposing (ActionResult)
 
 
-getCaster : Array Iota -> ( Array Iota, Bool )
-getCaster stack =
+getCaster : Array Iota -> CastingContext -> ActionResult
+getCaster stack ctx =
     let
-        action =
-            Entity Player
+        action _ =
+            ( Entity Player
                 |> Array.repeat 1
+            , ctx
+            )
     in
-    actionNoInput stack action
+    actionNoInput stack ctx action

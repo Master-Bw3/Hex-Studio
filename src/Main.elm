@@ -158,14 +158,14 @@ update msg model =
             if drawing.drawingMode == True then
                 if List.length drawing.activePath > 1 then
                     let
-                        stackResultTuple =
-                            applyPatternsToStack Array.empty (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newUncoloredPattern))
+                        stackResult =
+                            applyPatternsToStack Array.empty castingContext (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newUncoloredPattern))
 
                         newStack =
-                            Tuple.first stackResultTuple
+                            stackResult.stack
 
                         resultArray =
-                            Tuple.second stackResultTuple
+                            stackResult.resultArray
 
                         newUncoloredPattern =
                             getPatternFromSignature <| getAngleSignature drawing.activePath
@@ -183,6 +183,7 @@ update msg model =
                         | patternArray = addToPatternArray model newPattern
                         , grid = newGrid
                         , stack = newStack
+                        , castingContext = stackResult.ctx
                       }
                     , Cmd.none
                     )
@@ -198,14 +199,14 @@ update msg model =
                 newUncoloredPatternArray =
                     removeFromArray startIndex endIndex model.patternArray
 
-                stackResultTuple =
-                    applyPatternsToStack Array.empty (List.reverse <| Tuple.first <| List.unzip <| Array.toList newUncoloredPatternArray)
+                stackResult =
+                    applyPatternsToStack Array.empty castingContext (List.reverse <| Tuple.first <| List.unzip <| Array.toList newUncoloredPatternArray)
 
                 newStack =
-                    Tuple.first stackResultTuple
+                    stackResult.stack
 
                 resultArray =
-                    Tuple.second stackResultTuple
+                    stackResult.resultArray
 
                 newPatternArray =
                     Array.map2
@@ -219,6 +220,7 @@ update msg model =
                 | patternArray = newPatternArray
                 , grid = { grid | points = updateGridPoints grid.width grid.height newPatternArray [] settings.gridScale }
                 , stack = newStack
+                , castingContext = stackResult.ctx
               }
             , Cmd.none
             )
@@ -260,6 +262,9 @@ update msg model =
 
         InputPattern name ->
             let
+                stackResult =  
+                    applyPatternsToStack Array.empty castingContext (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern))
+                
                 getPattern =
                     getPatternFromName name
 
@@ -273,7 +278,8 @@ update msg model =
                 ( { model
                     | patternArray = addToPatternArray model newPattern
                     , ui = { ui | patternInputField = "" }
-                    , stack = Tuple.first <| applyPatternsToStack Array.empty (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern))
+                    , stack = stackResult.stack
+                    , castingContext = stackResult.ctx
                   }
                 , Cmd.none
                 )
@@ -286,13 +292,15 @@ update msg model =
 
         RecieveGeneratedNumberLiteral signature ->
             let
+                stackResult =  applyPatternsToStack Array.empty castingContext (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern))
                 newPattern =
                     getPatternFromSignature signature
             in
             ( { model
                 | patternArray = addToPatternArray model newPattern
                 , ui = { ui | patternInputField = "" }
-                , stack = Tuple.first <| applyPatternsToStack Array.empty (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern))
+                , stack = stackResult.stack 
+                , castingContext = stackResult.ctx
               }
             , Cmd.none
             )
@@ -420,16 +428,17 @@ update msg model =
                 originIndex =
                     Tuple.second model.ui.dragging
 
-                stackResultTuple =
+                stackResult =
                     applyPatternsToStack
                         Array.empty
+                        castingContext
                         (List.reverse <| Tuple.first <| List.unzip <| Array.toList newUncoloredPatternArray)
 
                 newStack =
-                    Tuple.first stackResultTuple
+                    stackResult.stack
 
                 resultArray =
-                    Tuple.second stackResultTuple
+                    stackResult.resultArray
 
                 newUncoloredPatternArray =
                     case Array.get originIndex patternArray of
@@ -452,6 +461,7 @@ update msg model =
                 , patternArray = newPatternArray
                 , grid = { grid | points = updateGridPoints grid.width grid.height newPatternArray [] settings.gridScale }
                 , stack = newStack
+                , castingContext = stackResult.ctx
               }
             , Cmd.none
             )

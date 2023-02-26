@@ -2,24 +2,21 @@ module Logic.App.Stack.Stack exposing (..)
 
 import Array exposing (Array)
 import List.Extra as List
-import Logic.App.Types exposing (ApplyToStackResult(..), Iota(..), Mishap(..), PatternType)
+import Logic.App.Types exposing (ActionResult, ApplyToStackResult(..), CastingContext, Iota(..), Mishap(..), PatternType)
 import Logic.App.Utils.Utils exposing (unshift)
 
 
-applyPatternsToStackStopAtErrorOrHalt : Array Iota -> List PatternType -> ( Array Iota, Array ApplyToStackResult, Bool )
-applyPatternsToStackStopAtErrorOrHalt stack patterns =
-    applyPatternsToStackLoop ( stack, Array.empty ) patterns False True
+applyPatternsToStackStopAtErrorOrHalt : Array Iota -> CastingContext -> List PatternType -> {stack : Array Iota, resultArray : Array ApplyToStackResult, ctx : CastingContext, error : Bool }
+applyPatternsToStackStopAtErrorOrHalt stack ctx patterns =
+    applyPatternsToStackLoop ( stack, Array.empty ) ctx patterns False True
 
 
-applyPatternsToStack : Array Iota -> List PatternType -> ( Array Iota, Array ApplyToStackResult )
-applyPatternsToStack stack patterns =
-    case applyPatternsToStackLoop ( stack, Array.empty ) patterns False False of
-        ( newStack, resultArray, _ ) ->
-            ( newStack, resultArray )
+applyPatternsToStack : Array Iota -> CastingContext -> List PatternType -> {stack : Array Iota, resultArray : Array ApplyToStackResult, ctx : CastingContext, error : Bool }
+applyPatternsToStack stack ctx patterns =
+    applyPatternsToStackLoop ( stack, Array.empty ) ctx patterns False False
 
-
-applyPatternsToStackLoop : ( Array Iota, Array ApplyToStackResult ) -> List PatternType -> Bool -> Bool -> ( Array Iota, Array ApplyToStackResult, Bool )
-applyPatternsToStackLoop stackResultTuple patterns considerThis stopAtErrorOrHalt =
+applyPatternsToStackLoop : ( Array Iota, Array ApplyToStackResult ) -> CastingContext -> List PatternType -> Bool -> Bool -> {stack : Array Iota, resultArray : Array ApplyToStackResult, ctx : CastingContext, error : Bool }
+applyPatternsToStackLoop stackResultTuple ctx patterns considerThis stopAtErrorOrHalt =
     let
         stack =
             Tuple.first stackResultTuple
@@ -29,35 +26,39 @@ applyPatternsToStackLoop stackResultTuple patterns considerThis stopAtErrorOrHal
     in
     case List.head patterns of
         Nothing ->
-            ( stack, resultArray, False )
+            {stack = stack, resultArray = resultArray, ctx = ctx, error = False }
 
         Just pattern ->
             if considerThis then
                 applyPatternsToStackLoop
                     ( addEscapedPatternIotaToStack stack pattern, unshift Considered resultArray )
+                    ctx
                     (Maybe.withDefault [] <| List.tail patterns)
                     False
                     stopAtErrorOrHalt
 
             else if pattern.internalName == "halt" && stopAtErrorOrHalt then
-                ( stack, resultArray, False )
+                {stack = stack, resultArray = resultArray, ctx = ctx, error = False }
 
             else
-                case applyPatternToStack stack pattern of
-                    ( newStack, result, considerNext ) ->
-                        if not stopAtErrorOrHalt || (stopAtErrorOrHalt && result /= Failed) then
-                            applyPatternsToStackLoop
-                                ( newStack, unshift result resultArray )
-                                (Maybe.withDefault [] <| List.tail patterns)
-                                considerNext
-                                stopAtErrorOrHalt
+                let
+                    applyResult =
+                        applyPatternToStack stack ctx pattern
+                in
+                if not stopAtErrorOrHalt || (stopAtErrorOrHalt && applyResult.result /= Failed) then
+                    applyPatternsToStackLoop
+                        ( applyResult.stack, unshift applyResult.result resultArray )
+                        applyResult.ctx
+                        (Maybe.withDefault [] <| List.tail patterns)
+                        applyResult.considerNext
+                        stopAtErrorOrHalt
 
-                        else
-                            ( newStack, unshift result resultArray, True )
+                else
+                {stack = applyResult.stack, resultArray = unshift applyResult.result resultArray, ctx = applyResult.ctx, error = True }
 
 
-applyPatternToStack : Array Iota -> PatternType -> ( Array Iota, ApplyToStackResult, Bool )
-applyPatternToStack stack pattern =
+applyPatternToStack : Array Iota -> CastingContext -> PatternType -> { stack : Array Iota, result : ApplyToStackResult, ctx : CastingContext, considerNext : Bool }
+applyPatternToStack stack ctx pattern =
     case Array.get 0 stack of
         Just (OpenParenthesis list) ->
             let
@@ -94,48 +95,52 @@ applyPatternToStack stack pattern =
                     Array.set 0 (OpenParenthesis (unshift (Pattern pattern False) list)) stack
             in
             if pattern.internalName == "escape" then
-                ( stack, Succeeded, True )
+                { stack = stack, result = Succeeded, ctx = ctx, considerNext = True }
 
             else if pattern.internalName == "close_paren" then
                 if pattern.internalName == "close_paren" && (numberOfCloseParen + 1) >= numberOfOpenParen then
-                    ( Array.map
-                        (\iota ->
-                            case iota of
-                                OpenParenthesis l ->
-                                    IotaList l
+                    { stack =
+                        Array.map
+                            (\iota ->
+                                case iota of
+                                    OpenParenthesis l ->
+                                        IotaList l
 
-                                otherIota ->
-                                    otherIota
-                        )
-                        stack
-                    , Succeeded
-                    , False
-                    )
+                                    otherIota ->
+                                        otherIota
+                            )
+                            stack
+                    , result = Succeeded
+                    , ctx = ctx
+                    , considerNext = False
+                    }
 
                 else
-                    ( addToIntroList, Considered, False )
+                    { stack = addToIntroList, result = Considered, ctx = ctx, considerNext = False }
 
             else if pattern.internalName == "open_paren" then
-                ( addToIntroList, Considered, False )
+                { stack = addToIntroList, result = Considered, ctx = ctx, considerNext = False }
 
             else
-                ( addToIntroList, Considered, False )
+                { stack = addToIntroList, result = Considered, ctx = ctx, considerNext = False }
 
         _ ->
             if pattern.internalName == "escape" then
-                ( stack, Succeeded, True )
+                { stack = stack, result = Succeeded, ctx = ctx, considerNext = True }
 
             else if pattern.internalName == "close_paren" then
-                ( unshift (Pattern pattern False) stack, Failed, False )
-                --temporary
+                { stack = unshift (Pattern pattern False) stack, result = Failed, ctx = ctx, considerNext = False }
 
             else
-                case pattern.action stack of
-                    ( newStack, True ) ->
-                        ( newStack, Succeeded, False )
+                let
+                    actionresult =
+                        pattern.action stack ctx
+                in
+                if actionresult.success == True then
+                    { stack = actionresult.stack, result = Succeeded, ctx = actionresult.ctx, considerNext = False }
 
-                    ( newStack, False ) ->
-                        ( newStack, Failed, False )
+                else
+                    { stack = actionresult.stack, result = Failed, ctx = actionresult.ctx, considerNext = False }
 
 
 addEscapedPatternIotaToStack : Array Iota -> PatternType -> Array Iota

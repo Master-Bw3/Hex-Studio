@@ -27,7 +27,7 @@ type EntityType
 
 type alias PatternType =
     { signature : String
-    , action : Array Iota -> CastingContext -> ( Array Iota, Bool )
+    , action : Array Iota -> CastingContext -> ActionResult
     , displayName : String
     , internalName : String
     , color : String

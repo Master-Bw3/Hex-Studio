@@ -61,10 +61,10 @@ add stack ctx =
 
 
 subtract : Array Iota -> CastingContext -> ActionResult
-subtract stack =
+subtract stack ctx =
     let
-        action iota1 iota2 =
-            case ( iota1, iota2 ) of
+        action iota1 iota2 _ =
+            ( case ( iota1, iota2 ) of
                 ( Number number1, Number number2 ) ->
                     Number (number1 - number2)
                         |> Array.repeat 1
@@ -102,15 +102,17 @@ subtract stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action2Inputs stack getNumberOrVector getNumberOrVector action
+    action2Inputs stack ctx getNumberOrVector getNumberOrVector action
 
 
 mulDot : Array Iota -> CastingContext -> ActionResult
-mulDot stack =
+mulDot stack ctx =
     let
-        action iota1 iota2 =
-            case ( iota1, iota2 ) of
+        action iota1 iota2 _ =
+            ( case ( iota1, iota2 ) of
                 ( Number number1, Number number2 ) ->
                     Number (number1 * number2)
                         |> Array.repeat 1
@@ -152,15 +154,17 @@ mulDot stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action2Inputs stack getNumberOrVector getNumberOrVector action
+    action2Inputs stack ctx getNumberOrVector getNumberOrVector action
 
 
 divCross : Array Iota -> CastingContext -> ActionResult
-divCross stack =
+divCross stack ctx =
     let
-        action iota1 iota2 =
-            case ( iota1, iota2 ) of
+        action iota1 iota2 _ =
+            ( case ( iota1, iota2 ) of
                 ( Number number1, Number number2 ) ->
                     Number (number1 / number2)
                         |> Array.repeat 1
@@ -202,15 +206,17 @@ divCross stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action2Inputs stack getNumberOrVector getNumberOrVector action
+    action2Inputs stack ctx getNumberOrVector getNumberOrVector action
 
 
 absLen : Array Iota -> CastingContext -> ActionResult
-absLen stack =
+absLen stack ctx =
     let
-        action iota =
-            case iota of
+        action iota _ =
+            ( case iota of
                 Number number ->
                     Number (abs number)
                         |> Array.repeat 1
@@ -228,15 +234,17 @@ absLen stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action1Input stack getNumberOrVector action
+    action1Input stack ctx getNumberOrVector action
 
 
 powProj : Array Iota -> CastingContext -> ActionResult
-powProj stack =
+powProj stack ctx =
     let
-        action iota1 iota2 =
-            case ( iota1, iota2 ) of
+        action iota1 iota2 _ =
+            ( case ( iota1, iota2 ) of
                 ( Number number1, Number number2 ) ->
                     Number (number1 ^ number2)
                         |> Array.repeat 1
@@ -281,15 +289,17 @@ powProj stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action2Inputs stack getNumberOrVector getNumberOrVector action
+    action2Inputs stack ctx getNumberOrVector getNumberOrVector action
 
 
 floorAction : Array Iota -> CastingContext -> ActionResult
-floorAction stack =
+floorAction stack ctx =
     let
-        action iota =
-            case iota of
+        action iota _ =
+            ( case iota of
                 Number number ->
                     Number (toFloat (floor number))
                         |> Array.repeat 1
@@ -297,15 +307,17 @@ floorAction stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action1Input stack getNumber action
+    action1Input stack ctx getNumber action
 
 
 ceilAction : Array Iota -> CastingContext -> ActionResult
-ceilAction stack =
+ceilAction stack ctx =
     let
-        action iota =
-            case iota of
+        action iota _ =
+            ( case iota of
                 Number number ->
                     Number (toFloat (ceiling number))
                         |> Array.repeat 1
@@ -313,15 +325,17 @@ ceilAction stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action1Input stack getNumber action
+    action1Input stack ctx getNumber action
 
 
 coerceAxial : Array Iota -> CastingContext -> ActionResult
-coerceAxial stack =
+coerceAxial stack ctx =
     let
-        action iota =
-            case iota of
+        action iota _ =
+            ( case iota of
                 Vector vector ->
                     case vector of
                         ( x, y, z ) ->
@@ -351,15 +365,17 @@ coerceAxial stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action1Input stack getVector action
+    action1Input stack ctx getVector action
 
 
 sine : Array Iota -> CastingContext -> ActionResult
-sine stack =
+sine stack ctx =
     let
-        action iota =
-            case iota of
+        action iota _ =
+            ( case iota of
                 Number number ->
                     Number (sin number)
                         |> Array.repeat 1
@@ -367,15 +383,17 @@ sine stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action1Input stack getNumber action
+    action1Input stack ctx getNumber action
 
 
 cosine : Array Iota -> CastingContext -> ActionResult
-cosine stack =
+cosine stack ctx =
     let
-        action iota =
-            case iota of
+        action iota _ =
+            ( case iota of
                 Number number ->
                     Number (cos number)
                         |> Array.repeat 1
@@ -383,15 +401,17 @@ cosine stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action1Input stack getNumber action
+    action1Input stack ctx getNumber action
 
 
 tangent : Array Iota -> CastingContext -> ActionResult
-tangent stack =
+tangent stack ctx =
     let
-        action iota =
-            case iota of
+        action iota _ =
+            ( case iota of
                 Number number ->
                     Number (tan number)
                         |> Array.repeat 1
@@ -399,15 +419,17 @@ tangent stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action1Input stack getNumber action
+    action1Input stack ctx getNumber action
 
 
 arcsin : Array Iota -> CastingContext -> ActionResult
-arcsin stack =
+arcsin stack ctx =
     let
-        action iota =
-            case iota of
+        action iota _ =
+            ( case iota of
                 Number number ->
                     Number (asin number)
                         |> Array.repeat 1
@@ -415,15 +437,17 @@ arcsin stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action1Input stack getNumber action
+    action1Input stack ctx getNumber action
 
 
 arccos : Array Iota -> CastingContext -> ActionResult
-arccos stack =
+arccos stack ctx =
     let
-        action iota =
-            case iota of
+        action iota _ =
+            ( case iota of
                 Number number ->
                     Number (acos number)
                         |> Array.repeat 1
@@ -431,15 +455,17 @@ arccos stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action1Input stack getNumber action
+    action1Input stack ctx getNumber action
 
 
 arctan : Array Iota -> CastingContext -> ActionResult
-arctan stack =
+arctan stack ctx =
     let
-        action iota =
-            case iota of
+        action iota _ =
+            ( case iota of
                 Number number ->
                     Number (atan number)
                         |> Array.repeat 1
@@ -447,15 +473,17 @@ arctan stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action1Input stack getNumber action
+    action1Input stack ctx getNumber action
 
 
 logarithm : Array Iota -> CastingContext -> ActionResult
-logarithm stack =
+logarithm stack ctx =
     let
-        action iota1 iota2 =
-            case ( iota1, iota2 ) of
+        action iota1 iota2 _ =
+            ( case ( iota1, iota2 ) of
                 ( Number number1, Number number2 ) ->
                     Number (logBase number2 number1)
                         |> Array.repeat 1
@@ -463,15 +491,17 @@ logarithm stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action2Inputs stack getNumber getNumber action
+    action2Inputs stack ctx getNumber getNumber action
 
 
 modulo : Array Iota -> CastingContext -> ActionResult
-modulo stack =
+modulo stack ctx =
     let
-        action iota1 iota2 =
-            case ( iota1, iota2 ) of
+        action iota1 iota2 _ =
+            ( case ( iota1, iota2 ) of
                 ( Number number1, Number number2 ) ->
                     Number (Quantity.unwrap <| Quantity.fractionalRemainderBy (Quantity number2) (Quantity number1))
                         |> Array.repeat 1
@@ -479,15 +509,17 @@ modulo stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action2Inputs stack getNumber getNumber action
+    action2Inputs stack ctx getNumber getNumber action
 
 
 andBit : Array Iota -> CastingContext -> ActionResult
-andBit stack =
+andBit stack ctx =
     let
-        action iota1 iota2 =
-            case ( iota1, iota2 ) of
+        action iota1 iota2 _ =
+            ( case ( iota1, iota2 ) of
                 ( Number number1, Number number2 ) ->
                     Number (toFloat <| Bitwise.and (round number1) (round number2))
                         |> Array.repeat 1
@@ -500,15 +532,17 @@ andBit stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action2Inputs stack getIntegerOrList getIntegerOrList action
+    action2Inputs stack ctx getIntegerOrList getIntegerOrList action
 
 
 orBit : Array Iota -> CastingContext -> ActionResult
-orBit stack =
+orBit stack ctx =
     let
-        action iota1 iota2 =
-            case ( iota1, iota2 ) of
+        action iota1 iota2 _ =
+            ( case ( iota1, iota2 ) of
                 ( Number number1, Number number2 ) ->
                     Number (toFloat <| Bitwise.or (round number1) (round number2))
                         |> Array.repeat 1
@@ -522,15 +556,17 @@ orBit stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action2Inputs stack getIntegerOrList getIntegerOrList action
+    action2Inputs stack ctx getIntegerOrList getIntegerOrList action
 
 
 xorBit : Array Iota -> CastingContext -> ActionResult
-xorBit stack =
+xorBit stack ctx =
     let
-        action iota1 iota2 =
-            case ( iota1, iota2 ) of
+        action iota1 iota2 _ =
+            ( case ( iota1, iota2 ) of
                 ( Number number1, Number number2 ) ->
                     Number (toFloat <| Bitwise.xor (round number1) (round number2))
                         |> Array.repeat 1
@@ -544,15 +580,17 @@ xorBit stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action2Inputs stack getIntegerOrList getIntegerOrList action
+    action2Inputs stack ctx getIntegerOrList getIntegerOrList action
 
 
 notBit : Array Iota -> CastingContext -> ActionResult
-notBit stack =
+notBit stack ctx =
     let
-        action iota =
-            case iota of
+        action iota _ =
+            ( case iota of
                 Number number ->
                     Number (toFloat <| Bitwise.complement <| round number)
                         |> Array.repeat 1
@@ -560,12 +598,14 @@ notBit stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action1Input stack getInteger action
+    action1Input stack ctx getInteger action
 
 
 toSet : Array Iota -> CastingContext -> ActionResult
-toSet stack =
+toSet stack ctx =
     let
         constructSet iota out =
             if List.any (checkEquality iota) (Array.toList out) then
@@ -574,8 +614,8 @@ toSet stack =
             else
                 Array.push iota out
 
-        action iota =
-            case iota of
+        action iota _ =
+            ( case iota of
                 IotaList list ->
                     IotaList (Array.foldl constructSet Array.empty list)
                         |> Array.repeat 1
@@ -583,15 +623,17 @@ toSet stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action1Input stack getIotaList action
+    action1Input stack ctx getIotaList action
 
 
 constructVector : Array Iota -> CastingContext -> ActionResult
-constructVector stack =
+constructVector stack ctx =
     let
-        action iota1 iota2 iota3 =
-            case ( iota1, iota2, iota3 ) of
+        action iota1 iota2 iota3 _ =
+            ( case ( iota1, iota2, iota3 ) of
                 ( Number number1, Number number2, Number number3 ) ->
                     Vector ( number1, number2, number3 )
                         |> Array.repeat 1
@@ -599,15 +641,17 @@ constructVector stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action3Inputs stack getNumber getNumber getNumber action
+    action3Inputs stack ctx getNumber getNumber getNumber action
 
 
 deconstructVector : Array Iota -> CastingContext -> ActionResult
-deconstructVector stack =
+deconstructVector stack ctx =
     let
-        action iota =
-            case iota of
+        action iota _ =
+            ( case iota of
                 Vector ( x, y, z ) ->
                     Array.fromList
                         [ Number z
@@ -618,15 +662,17 @@ deconstructVector stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action1Input stack getVector action
+    action1Input stack ctx getVector action
 
 
 andBool : Array Iota -> CastingContext -> ActionResult
-andBool stack =
+andBool stack ctx =
     let
-        action iota1 iota2 =
-            case ( iota1, iota2 ) of
+        action iota1 iota2 _ =
+            ( case ( iota1, iota2 ) of
                 ( Boolean bool1, Boolean bool2 ) ->
                     Boolean (bool1 && bool2)
                         |> Array.repeat 1
@@ -634,15 +680,17 @@ andBool stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action2Inputs stack getBoolean getBoolean action
+    action2Inputs stack ctx getBoolean getBoolean action
 
 
 orBool : Array Iota -> CastingContext -> ActionResult
-orBool stack =
+orBool stack ctx =
     let
-        action iota1 iota2 =
-            case ( iota1, iota2 ) of
+        action iota1 iota2 _ =
+            ( case ( iota1, iota2 ) of
                 ( Boolean bool1, Boolean bool2 ) ->
                     Boolean (bool1 || bool2)
                         |> Array.repeat 1
@@ -650,15 +698,17 @@ orBool stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action2Inputs stack getBoolean getBoolean action
+    action2Inputs stack ctx getBoolean getBoolean action
 
 
 xorBool : Array Iota -> CastingContext -> ActionResult
-xorBool stack =
+xorBool stack ctx =
     let
-        action iota1 iota2 =
-            case ( iota1, iota2 ) of
+        action iota1 iota2 _ =
+            ( case ( iota1, iota2 ) of
                 ( Boolean bool1, Boolean bool2 ) ->
                     Boolean (xor bool1 bool2)
                         |> Array.repeat 1
@@ -666,15 +716,17 @@ xorBool stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action2Inputs stack getBoolean getBoolean action
+    action2Inputs stack ctx getBoolean getBoolean action
 
 
 greaterThan : Array Iota -> CastingContext -> ActionResult
-greaterThan stack =
+greaterThan stack ctx =
     let
-        action iota1 iota2 =
-            case ( iota1, iota2 ) of
+        action iota1 iota2 _ =
+            ( case ( iota1, iota2 ) of
                 ( Number number1, Number number2 ) ->
                     Boolean (number1 > number2)
                         |> Array.repeat 1
@@ -682,15 +734,17 @@ greaterThan stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action2Inputs stack getNumber getNumber action
+    action2Inputs stack ctx getNumber getNumber action
 
 
 lessThan : Array Iota -> CastingContext -> ActionResult
-lessThan stack =
+lessThan stack ctx =
     let
-        action iota1 iota2 =
-            case ( iota1, iota2 ) of
+        action iota1 iota2 _ =
+            ( case ( iota1, iota2 ) of
                 ( Number number1, Number number2 ) ->
                     Boolean (number1 < number2)
                         |> Array.repeat 1
@@ -698,15 +752,17 @@ lessThan stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action2Inputs stack getNumber getNumber action
+    action2Inputs stack ctx getNumber getNumber action
 
 
 greaterThanOrEqualTo : Array Iota -> CastingContext -> ActionResult
-greaterThanOrEqualTo stack =
+greaterThanOrEqualTo stack ctx =
     let
-        action iota1 iota2 =
-            case ( iota1, iota2 ) of
+        action iota1 iota2 _ =
+            ( case ( iota1, iota2 ) of
                 ( Number number1, Number number2 ) ->
                     Boolean (number1 >= number2)
                         |> Array.repeat 1
@@ -714,15 +770,17 @@ greaterThanOrEqualTo stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action2Inputs stack getNumber getNumber action
+    action2Inputs stack ctx getNumber getNumber action
 
 
 lessThanOrEqualTo : Array Iota -> CastingContext -> ActionResult
-lessThanOrEqualTo stack =
+lessThanOrEqualTo stack ctx =
     let
-        action iota1 iota2 =
-            case ( iota1, iota2 ) of
+        action iota1 iota2 _ =
+            ( case ( iota1, iota2 ) of
                 ( Number number1, Number number2 ) ->
                     Boolean (number1 <= number2)
                         |> Array.repeat 1
@@ -730,35 +788,41 @@ lessThanOrEqualTo stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action2Inputs stack getNumber getNumber action
+    action2Inputs stack ctx getNumber getNumber action
 
 
 equalTo : Array Iota -> CastingContext -> ActionResult
-equalTo stack =
+equalTo stack ctx =
     let
-        action iota1 iota2 =
-            Boolean (checkEquality iota1 iota2)
+        action iota1 iota2 _ =
+            ( Boolean (checkEquality iota1 iota2)
                 |> Array.repeat 1
+            , ctx
+            )
     in
-    action2Inputs stack getAny getAny action
+    action2Inputs stack ctx getAny getAny action
 
 
 notEqualTo : Array Iota -> CastingContext -> ActionResult
-notEqualTo stack =
+notEqualTo stack ctx =
     let
-        action iota1 iota2 =
-            Boolean (not (checkEquality iota1 iota2))
+        action iota1 iota2 _ =
+            ( Boolean (not (checkEquality iota1 iota2))
                 |> Array.repeat 1
+            , ctx
+            )
     in
-    action2Inputs stack getAny getAny action
+    action2Inputs stack ctx getAny getAny action
 
 
 invertBool : Array Iota -> CastingContext -> ActionResult
-invertBool stack =
+invertBool stack ctx =
     let
-        action iota =
-            case iota of
+        action iota _ =
+            ( case iota of
                 Boolean True ->
                     Boolean False
                         |> Array.repeat 1
@@ -770,15 +834,17 @@ invertBool stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action1Input stack getBoolean action
+    action1Input stack ctx getBoolean action
 
 
 boolCoerce : Array Iota -> CastingContext -> ActionResult
-boolCoerce stack =
+boolCoerce stack ctx =
     let
-        action iota =
-            case iota of
+        action iota _ =
+            ( case iota of
                 Number _ ->
                     if checkEquality iota (Number 0.0) then
                         Boolean False
@@ -804,15 +870,17 @@ boolCoerce stack =
                 _ ->
                     Boolean True
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action1Input stack getAny action
+    action1Input stack ctx getAny action
 
 
 ifBool : Array Iota -> CastingContext -> ActionResult
-ifBool stack =
+ifBool stack ctx =
     let
-        action iota1 iota2 iota3 =
-            case iota1 of
+        action iota1 iota2 iota3 _ =
+            ( case iota1 of
                 Boolean bool ->
                     if bool == True then
                         iota2
@@ -825,5 +893,7 @@ ifBool stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action3Inputs stack getBoolean getAny getAny action
+    action3Inputs stack ctx getBoolean getAny getAny action

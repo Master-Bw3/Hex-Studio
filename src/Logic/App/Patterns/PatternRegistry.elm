@@ -6,25 +6,26 @@ import Logic.App.Patterns.Lists exposing (..)
 import Logic.App.Patterns.Math exposing (..)
 import Logic.App.Patterns.Misc exposing (..)
 import Logic.App.Patterns.OperatorUtils exposing (action1Input, getAny, getPatternOrPatternList, makeConstant)
+import Logic.App.Patterns.ReadWrite exposing (..)
 import Logic.App.Patterns.Selectors exposing (..)
 import Logic.App.Patterns.Spells exposing (..)
 import Logic.App.Patterns.Stack exposing (..)
 import Logic.App.Stack.Stack exposing (applyPatternToStack, applyPatternsToStack, applyPatternsToStackStopAtErrorOrHalt)
-import Logic.App.Types exposing (ApplyToStackResult(..), Iota(..), Mishap(..), PatternType)
+import Logic.App.Types exposing (ActionResult, ApplyToStackResult(..), CastingContext, Iota(..), Mishap(..), PatternType)
 import Logic.App.Utils.Utils exposing (unshift)
 import Ports.HexNumGen as HexNumGen
 import Settings.Theme exposing (..)
-import Logic.App.Patterns.ReadWrite exposing (..)
 
-noAction : Array Iota -> ( Array Iota, Bool )
-noAction stack =
-    ( stack, True )
+
+noAction : Array Iota -> CastingContext -> ActionResult
+noAction stack ctx =
+    { stack = stack, ctx = ctx, success = True }
 
 
 unknownPattern : PatternType
 unknownPattern =
     { signature = ""
-    , action = \stack _ -> ( unshift (Garbage InvalidPattern) stack, False )
+    , action = \stack ctx -> { stack = unshift (Garbage InvalidPattern) stack, ctx = ctx, success = False }
     , displayName = "Unknown Pattern"
     , internalName = ""
     , color = accent3
@@ -164,7 +165,7 @@ patternRegistry =
     , { signature = "waeawaedwa", internalName = "sentinel/wayfind", action = sentinelWayfind, displayName = "Wayfind Sentinel", color = accent1 }
     , { signature = "qqqwqqqqqaq", internalName = "akashic/read", action = noAction, displayName = "", color = accent1 }
     , { signature = "eeeweeeeede", internalName = "akashic/write", action = noAction, displayName = "", color = accent1 }
-    , { signature = "aqdee", internalName = "halt", action = \x -> ( x, True ), displayName = "Charon's Gambit", color = accent1 }
+    , { signature = "aqdee", internalName = "halt", action = noAction, displayName = "Charon's Gambit", color = accent1 }
     , { signature = "aqqqqq", internalName = "read", action = read, displayName = "Scribe's Reflection", color = accent1 }
     , { signature = "wawqwqwqwqwqw", internalName = "read/entity", action = noAction, displayName = "", color = accent1 }
     , { signature = "deeeee", internalName = "write", action = noAction, displayName = "", color = accent1 }
@@ -228,8 +229,8 @@ patternRegistry =
     ]
 
 
-eval : Array Iota -> ( Array Iota, Bool )
-eval stack =
+eval : Array Iota -> CastingContext -> ActionResult
+eval stack ctx =
     let
         maybeIota =
             Array.get 0 stack
@@ -239,58 +240,64 @@ eval stack =
     in
     case maybeIota of
         Nothing ->
-            ( unshift (Garbage NotEnoughIotas) newStack, False )
+            { stack = unshift (Garbage NotEnoughIotas) newStack, ctx = ctx, success = False }
 
         Just iota ->
             case getPatternOrPatternList <| iota of
                 Nothing ->
-                    ( unshift (Garbage IncorrectIota) newStack, False )
+                    { stack = unshift (Garbage IncorrectIota) newStack, ctx = ctx, success = False }
 
                 _ ->
                     case iota of
                         IotaList list ->
-                            case
-                                applyPatternsToStackStopAtErrorOrHalt newStack
-                                    (List.reverse <|
-                                        Array.toList <|
-                                            Array.map
-                                                (\i ->
-                                                    case i of
-                                                        Pattern pattern _ ->
-                                                            pattern
+                            let
+                                applyResult =
+                                    applyPatternsToStackStopAtErrorOrHalt
+                                        newStack
+                                        ctx
+                                        (List.reverse <|
+                                            Array.toList <|
+                                                Array.map
+                                                    (\i ->
+                                                        case i of
+                                                            Pattern pattern _ ->
+                                                                pattern
 
-                                                        _ ->
-                                                            unknownPattern
-                                                )
-                                                list
-                                    )
-                            of
-                                ( newNewStack, _, error ) ->
-                                    ( Array.filter
-                                        (\i ->
-                                            case i of
-                                                OpenParenthesis _ ->
-                                                    False
-
-                                                _ ->
-                                                    True
+                                                            _ ->
+                                                                unknownPattern
+                                                    )
+                                                    list
                                         )
-                                        newNewStack
-                                    , not error
+                            in
+                            { stack =
+                                Array.filter
+                                    (\i ->
+                                        case i of
+                                            OpenParenthesis _ ->
+                                                False
+
+                                            _ ->
+                                                True
                                     )
+                                    applyResult.stack
+                            , ctx = applyResult.ctx
+                            , success = not applyResult.error
+                            }
 
                         Pattern pattern _ ->
-                            case applyPatternsToStackStopAtErrorOrHalt newStack [ pattern ] of
-                                ( newNewStack, _, error ) ->
-                                    ( newNewStack, not error )
+                            let
+                                applyResult =
+                                    applyPatternsToStackStopAtErrorOrHalt newStack ctx [ pattern ]
+                            in
+                            { stack = applyResult.stack, ctx = applyResult.ctx, success = not applyResult.error }
 
                         _ ->
-                            ( Array.fromList [ Garbage CatastrophicFailure ], False )
+                            { stack = Array.fromList [ Garbage CatastrophicFailure ], ctx = ctx, success = False }
 
 
-print : Array Iota -> ( Array Iota, Bool )
-print stack =
-    action1Input stack getAny (\iota -> Array.fromList [ iota ])
+print : Array Iota -> CastingContext -> ActionResult
+print stack ctx =
+    action1Input stack ctx getAny (\iota _ -> ( Array.fromList [ iota ], ctx ))
 
 
 numberLiteralGenerator : String -> Bool -> PatternType
