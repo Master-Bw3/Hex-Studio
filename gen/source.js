@@ -5412,7 +5412,6 @@ var $author$project$Logic$App$Msg$GetGrid = function (a) {
 	return {$: 'GetGrid', a: a};
 };
 var $author$project$Logic$App$Types$NoItem = {$: 'NoItem'};
-var $author$project$Logic$App$Types$Null = {$: 'Null'};
 var $author$project$Logic$App$Types$PatternPanel = {$: 'PatternPanel'};
 var $elm$core$Basics$composeL = F3(
 	function (g, f, x) {
@@ -5446,10 +5445,7 @@ var $elm$core$Basics$negate = function (n) {
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
 		{
-			castingContext: {
-				heldItem: $author$project$Logic$App$Types$NoItem,
-				heldItemContent: $elm$core$Maybe$Just($author$project$Logic$App$Types$Null)
-			},
+			castingContext: {heldItem: $author$project$Logic$App$Types$NoItem, heldItemContent: $elm$core$Maybe$Nothing},
 			grid: {
 				drawing: {activePath: _List_Nil, drawingMode: false},
 				height: 0,
@@ -7255,6 +7251,7 @@ var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Logic$App$Types$Boolean = function (a) {
 	return {$: 'Boolean', a: a};
 };
+var $author$project$Logic$App$Types$Null = {$: 'Null'};
 var $author$project$Logic$App$Types$Number = function (a) {
 	return {$: 'Number', a: a};
 };
@@ -9857,17 +9854,42 @@ var $author$project$Logic$App$Patterns$Misc$raycastEntity = F2(
 	});
 var $author$project$Logic$App$Patterns$ReadWrite$read = F2(
 	function (stack, ctx) {
-		return A3(
-			$author$project$Logic$App$Patterns$OperatorUtils$actionNoInput,
-			stack,
-			ctx,
-			function (_v0) {
-				return _Utils_Tuple2(
-					$elm$core$Array$fromList(
-						_List_fromArray(
-							[$author$project$Logic$App$Types$Null])),
-					ctx);
-			});
+		var action = function (context) {
+			return _Utils_Tuple2(
+				function () {
+					var _v0 = context.heldItem;
+					switch (_v0.$) {
+						case 'NoItem':
+							return $elm$core$Array$empty;
+						case 'Trinket':
+							return $elm$core$Array$empty;
+						case 'Cypher':
+							return $elm$core$Array$empty;
+						case 'Artifact':
+							return $elm$core$Array$empty;
+						case 'Focus':
+							return $elm$core$Array$fromList(
+								_List_fromArray(
+									[
+										A2($elm$core$Maybe$withDefault, $author$project$Logic$App$Types$Null, context.heldItemContent)
+									]));
+						case 'Spellbook':
+							return $elm$core$Array$fromList(
+								_List_fromArray(
+									[
+										A2($elm$core$Maybe$withDefault, $author$project$Logic$App$Types$Null, context.heldItemContent)
+									]));
+						default:
+							return $elm$core$Array$fromList(
+								_List_fromArray(
+									[
+										$author$project$Logic$App$Types$Number($elm$core$Basics$pi)
+									]));
+					}
+				}(),
+				context);
+		};
+		return A3($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, ctx, action);
 	});
 var $author$project$Logic$App$Patterns$Spells$recharge = F2(
 	function (stack, ctx) {
@@ -10182,6 +10204,20 @@ var $author$project$Logic$App$Patterns$Stack$tuck = F2(
 			});
 		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
 	});
+var $author$project$Logic$App$Patterns$ReadWrite$write = F2(
+	function (stack, ctx) {
+		var action = F2(
+			function (iota, context) {
+				return _Utils_Tuple2(
+					$elm$core$Array$empty,
+					_Utils_update(
+						context,
+						{
+							heldItemContent: $elm$core$Maybe$Just(iota)
+						}));
+			});
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
+	});
 var $elm$core$Bitwise$xor = _Bitwise_xor;
 var $author$project$Logic$App$Patterns$Math$xorBit = F2(
 	function (stack, ctx) {
@@ -10386,7 +10422,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _List_f
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: 'Charon\'s Gambit', internalName: 'halt', signature: 'aqdee'},
 		{action: $author$project$Logic$App$Patterns$ReadWrite$read, color: $author$project$Settings$Theme$accent1, displayName: 'Scribe\'s Reflection', internalName: 'read', signature: 'aqqqqq'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'read/entity', signature: 'wawqwqwqwqwqw'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'write', signature: 'deeeee'},
+		{action: $author$project$Logic$App$Patterns$ReadWrite$write, color: $author$project$Settings$Theme$accent1, displayName: 'Scribe\'s Gambit', internalName: 'write', signature: 'deeeee'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'write/entity', signature: 'wdwewewewewew'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'readable', signature: 'aqqqqqe'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'readable/entity', signature: 'wawqwqwqwqwqwew'},

@@ -168,7 +168,7 @@ patternRegistry =
     , { signature = "aqdee", internalName = "halt", action = noAction, displayName = "Charon's Gambit", color = accent1 }
     , { signature = "aqqqqq", internalName = "read", action = read, displayName = "Scribe's Reflection", color = accent1 }
     , { signature = "wawqwqwqwqwqw", internalName = "read/entity", action = noAction, displayName = "", color = accent1 }
-    , { signature = "deeeee", internalName = "write", action = noAction, displayName = "", color = accent1 }
+    , { signature = "deeeee", internalName = "write", action = write, displayName = "Scribe's Gambit", color = accent1 }
     , { signature = "wdwewewewewew", internalName = "write/entity", action = noAction, displayName = "", color = accent1 }
     , { signature = "aqqqqqe", internalName = "readable", action = noAction, displayName = "", color = accent1 }
     , { signature = "wawqwqwqwqwqwew", internalName = "readable/entity", action = noAction, displayName = "", color = accent1 }

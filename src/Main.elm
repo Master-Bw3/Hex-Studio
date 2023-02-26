@@ -68,7 +68,7 @@ init _ =
       , settings =
             { gridScale = 1.0
             }
-      , castingContext = { heldItem = NoItem, heldItemContent = Just Null }
+      , castingContext = { heldItem = NoItem, heldItemContent = Nothing }
       , time = 0
       }
     , Cmd.batch [ Task.attempt GetGrid (getElement "hex_grid"), Task.attempt GetContentSize (getElement "content") ]

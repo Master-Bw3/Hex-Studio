@@ -12,6 +12,7 @@ type Panel
 type HeldItem
     = Trinket
     | Artifact
+    | Cypher
     | Focus
     | Spellbook
     | Pie
