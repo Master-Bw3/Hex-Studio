@@ -68,8 +68,7 @@ init _ =
       , settings =
             { gridScale = 1.0
             }
-      , heldItem = NoItem
-      , heldItemContent = Just Null
+      , castingContext = { heldItem = NoItem, heldItemContent = Just Null }
       , time = 0
       }
     , Cmd.batch [ Task.attempt GetGrid (getElement "hex_grid"), Task.attempt GetContentSize (getElement "content") ]
@@ -93,6 +92,9 @@ update msg model =
 
         patternArray =
             model.patternArray
+
+        castingContext =
+            model.castingContext
     in
     case msg of
         NoOp ->
@@ -479,7 +481,7 @@ update msg model =
                         _ ->
                             NoItem
             in
-            ( { model | heldItem = item, heldItemContent = Nothing }, Cmd.none )
+            ( { model | castingContext = { castingContext | heldItem = item, heldItemContent = Nothing } }, Cmd.none )
 
 
 

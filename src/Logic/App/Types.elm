@@ -27,7 +27,7 @@ type EntityType
 
 type alias PatternType =
     { signature : String
-    , action : Array Iota -> ( Array Iota, Bool )
+    , action : Array Iota -> CastingContext -> ( Array Iota, Bool )
     , displayName : String
     , internalName : String
     , color : String
@@ -112,3 +112,13 @@ type ApplyToStackResult
     = Succeeded
     | Failed
     | Considered
+
+
+type alias CastingContext =
+    { heldItem : HeldItem
+    , heldItemContent : Maybe Iota
+    }
+
+
+type alias ActionResult =
+    { stack : Array Iota, ctx : CastingContext, success : Bool }

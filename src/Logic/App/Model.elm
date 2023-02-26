@@ -1,8 +1,7 @@
 module Logic.App.Model exposing (..)
 
 import Array exposing (Array)
-import Logic.App.Types exposing (GridPoint, Iota, Panel, PatternType)
-import Logic.App.Types exposing (HeldItem)
+import Logic.App.Types exposing (CastingContext, GridPoint, HeldItem, Iota, Panel, PatternType)
 
 
 type alias Model =
@@ -13,11 +12,11 @@ type alias Model =
         , patternInputField : String
         , selectedInputID : String
         , suggestionIndex : Int
-        , patternInputLocation : (Int, Int)
+        , patternInputLocation : ( Int, Int )
         , mouseOverElementIndex : Int
-        , dragging : (Bool, Int)
+        , dragging : ( Bool, Int )
         , overDragHandle : Bool
-        , patternElementMiddleLocations : List (Float)
+        , patternElementMiddleLocations : List Float
         }
     , grid :
         { width : Float
@@ -35,7 +34,6 @@ type alias Model =
         }
     , settings :
         { gridScale : Float }
-    , heldItem : HeldItem
-    , heldItemContent : Maybe Iota
+    , castingContext : CastingContext
     , time : Int
     }

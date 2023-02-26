@@ -46,7 +46,7 @@ heldItemSection model =
             ]
         , div [class "stored_iota_container"]
             (label [class "stored_iota_label"] [ text "Content:" ]
-                :: (case model.heldItemContent of
+                :: (case model.castingContext.heldItemContent of
                         Just iota ->
                             [ renderHeldItemContent iota ]
 

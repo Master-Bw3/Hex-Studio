@@ -24,7 +24,7 @@ noAction stack =
 unknownPattern : PatternType
 unknownPattern =
     { signature = ""
-    , action = \stack -> ( unshift (Garbage InvalidPattern) stack, False )
+    , action = \stack _ -> ( unshift (Garbage InvalidPattern) stack, False )
     , displayName = "Unknown Pattern"
     , internalName = ""
     , color = accent3

@@ -6,17 +6,17 @@ import Bitwise
 import Json.Decode exposing (array)
 import Length exposing (Meters)
 import Logic.App.Patterns.OperatorUtils exposing (action1Input, action2Inputs, action3Inputs, checkEquality, getAny, getBoolean, getInteger, getIntegerOrList, getIotaList, getNumber, getNumberOrList, getNumberOrVector, getVector)
-import Logic.App.Types exposing (Iota(..), Mishap(..))
+import Logic.App.Types exposing (ActionResult, CastingContext, Iota(..), Mishap(..))
 import Quantity exposing (Quantity(..))
 import Svg.Attributes exposing (azimuth)
 import Vector3d as Vec3d
 
 
-add : Array Iota -> ( Array Iota, Bool )
-add stack =
+add : Array Iota -> CastingContext -> ActionResult
+add stack ctx =
     let
-        action iota1 iota2 =
-            case ( iota1, iota2 ) of
+        action iota1 iota2 _ =
+            ( case ( iota1, iota2 ) of
                 ( Number number1, Number number2 ) ->
                     Number (number1 + number2)
                         |> Array.repeat 1
@@ -54,11 +54,13 @@ add stack =
                 _ ->
                     Garbage CatastrophicFailure
                         |> Array.repeat 1
+            , ctx
+            )
     in
-    action2Inputs stack getNumberOrVector getNumberOrVector action
+    action2Inputs stack ctx getNumberOrVector getNumberOrVector action
 
 
-subtract : Array Iota -> ( Array Iota, Bool )
+subtract : Array Iota -> CastingContext -> ActionResult
 subtract stack =
     let
         action iota1 iota2 =
@@ -104,7 +106,7 @@ subtract stack =
     action2Inputs stack getNumberOrVector getNumberOrVector action
 
 
-mulDot : Array Iota -> ( Array Iota, Bool )
+mulDot : Array Iota -> CastingContext -> ActionResult
 mulDot stack =
     let
         action iota1 iota2 =
@@ -154,7 +156,7 @@ mulDot stack =
     action2Inputs stack getNumberOrVector getNumberOrVector action
 
 
-divCross : Array Iota -> ( Array Iota, Bool )
+divCross : Array Iota -> CastingContext -> ActionResult
 divCross stack =
     let
         action iota1 iota2 =
@@ -204,7 +206,7 @@ divCross stack =
     action2Inputs stack getNumberOrVector getNumberOrVector action
 
 
-absLen : Array Iota -> ( Array Iota, Bool )
+absLen : Array Iota -> CastingContext -> ActionResult
 absLen stack =
     let
         action iota =
@@ -230,7 +232,7 @@ absLen stack =
     action1Input stack getNumberOrVector action
 
 
-powProj : Array Iota -> ( Array Iota, Bool )
+powProj : Array Iota -> CastingContext -> ActionResult
 powProj stack =
     let
         action iota1 iota2 =
@@ -283,7 +285,7 @@ powProj stack =
     action2Inputs stack getNumberOrVector getNumberOrVector action
 
 
-floorAction : Array Iota -> ( Array Iota, Bool )
+floorAction : Array Iota -> CastingContext -> ActionResult
 floorAction stack =
     let
         action iota =
@@ -299,7 +301,7 @@ floorAction stack =
     action1Input stack getNumber action
 
 
-ceilAction : Array Iota -> ( Array Iota, Bool )
+ceilAction : Array Iota -> CastingContext -> ActionResult
 ceilAction stack =
     let
         action iota =
@@ -315,7 +317,7 @@ ceilAction stack =
     action1Input stack getNumber action
 
 
-coerceAxial : Array Iota -> ( Array Iota, Bool )
+coerceAxial : Array Iota -> CastingContext -> ActionResult
 coerceAxial stack =
     let
         action iota =
@@ -353,7 +355,7 @@ coerceAxial stack =
     action1Input stack getVector action
 
 
-sine : Array Iota -> ( Array Iota, Bool )
+sine : Array Iota -> CastingContext -> ActionResult
 sine stack =
     let
         action iota =
@@ -369,7 +371,7 @@ sine stack =
     action1Input stack getNumber action
 
 
-cosine : Array Iota -> ( Array Iota, Bool )
+cosine : Array Iota -> CastingContext -> ActionResult
 cosine stack =
     let
         action iota =
@@ -385,7 +387,7 @@ cosine stack =
     action1Input stack getNumber action
 
 
-tangent : Array Iota -> ( Array Iota, Bool )
+tangent : Array Iota -> CastingContext -> ActionResult
 tangent stack =
     let
         action iota =
@@ -401,7 +403,7 @@ tangent stack =
     action1Input stack getNumber action
 
 
-arcsin : Array Iota -> ( Array Iota, Bool )
+arcsin : Array Iota -> CastingContext -> ActionResult
 arcsin stack =
     let
         action iota =
@@ -417,7 +419,7 @@ arcsin stack =
     action1Input stack getNumber action
 
 
-arccos : Array Iota -> ( Array Iota, Bool )
+arccos : Array Iota -> CastingContext -> ActionResult
 arccos stack =
     let
         action iota =
@@ -433,7 +435,7 @@ arccos stack =
     action1Input stack getNumber action
 
 
-arctan : Array Iota -> ( Array Iota, Bool )
+arctan : Array Iota -> CastingContext -> ActionResult
 arctan stack =
     let
         action iota =
@@ -449,7 +451,7 @@ arctan stack =
     action1Input stack getNumber action
 
 
-logarithm : Array Iota -> ( Array Iota, Bool )
+logarithm : Array Iota -> CastingContext -> ActionResult
 logarithm stack =
     let
         action iota1 iota2 =
@@ -465,7 +467,7 @@ logarithm stack =
     action2Inputs stack getNumber getNumber action
 
 
-modulo : Array Iota -> ( Array Iota, Bool )
+modulo : Array Iota -> CastingContext -> ActionResult
 modulo stack =
     let
         action iota1 iota2 =
@@ -481,7 +483,7 @@ modulo stack =
     action2Inputs stack getNumber getNumber action
 
 
-andBit : Array Iota -> ( Array Iota, Bool )
+andBit : Array Iota -> CastingContext -> ActionResult
 andBit stack =
     let
         action iota1 iota2 =
@@ -502,7 +504,7 @@ andBit stack =
     action2Inputs stack getIntegerOrList getIntegerOrList action
 
 
-orBit : Array Iota -> ( Array Iota, Bool )
+orBit : Array Iota -> CastingContext -> ActionResult
 orBit stack =
     let
         action iota1 iota2 =
@@ -524,7 +526,7 @@ orBit stack =
     action2Inputs stack getIntegerOrList getIntegerOrList action
 
 
-xorBit : Array Iota -> ( Array Iota, Bool )
+xorBit : Array Iota -> CastingContext -> ActionResult
 xorBit stack =
     let
         action iota1 iota2 =
@@ -546,7 +548,7 @@ xorBit stack =
     action2Inputs stack getIntegerOrList getIntegerOrList action
 
 
-notBit : Array Iota -> ( Array Iota, Bool )
+notBit : Array Iota -> CastingContext -> ActionResult
 notBit stack =
     let
         action iota =
@@ -562,21 +564,20 @@ notBit stack =
     action1Input stack getInteger action
 
 
-toSet : Array Iota -> ( Array Iota, Bool )
+toSet : Array Iota -> CastingContext -> ActionResult
 toSet stack =
     let
-        constructSet iota out = 
+        constructSet iota out =
             if List.any (checkEquality iota) (Array.toList out) then
                 out
+
             else
                 Array.push iota out
-
 
         action iota =
             case iota of
                 IotaList list ->
-                        
-                        IotaList (Array.foldl constructSet Array.empty list)
+                    IotaList (Array.foldl constructSet Array.empty list)
                         |> Array.repeat 1
 
                 _ ->
@@ -586,7 +587,7 @@ toSet stack =
     action1Input stack getIotaList action
 
 
-constructVector : Array Iota -> ( Array Iota, Bool )
+constructVector : Array Iota -> CastingContext -> ActionResult
 constructVector stack =
     let
         action iota1 iota2 iota3 =
@@ -602,7 +603,7 @@ constructVector stack =
     action3Inputs stack getNumber getNumber getNumber action
 
 
-deconstructVector : Array Iota -> ( Array Iota, Bool )
+deconstructVector : Array Iota -> CastingContext -> ActionResult
 deconstructVector stack =
     let
         action iota =
@@ -621,7 +622,7 @@ deconstructVector stack =
     action1Input stack getVector action
 
 
-andBool : Array Iota -> ( Array Iota, Bool )
+andBool : Array Iota -> CastingContext -> ActionResult
 andBool stack =
     let
         action iota1 iota2 =
@@ -637,7 +638,7 @@ andBool stack =
     action2Inputs stack getBoolean getBoolean action
 
 
-orBool : Array Iota -> ( Array Iota, Bool )
+orBool : Array Iota -> CastingContext -> ActionResult
 orBool stack =
     let
         action iota1 iota2 =
@@ -653,7 +654,7 @@ orBool stack =
     action2Inputs stack getBoolean getBoolean action
 
 
-xorBool : Array Iota -> ( Array Iota, Bool )
+xorBool : Array Iota -> CastingContext -> ActionResult
 xorBool stack =
     let
         action iota1 iota2 =
@@ -669,7 +670,7 @@ xorBool stack =
     action2Inputs stack getBoolean getBoolean action
 
 
-greaterThan : Array Iota -> ( Array Iota, Bool )
+greaterThan : Array Iota -> CastingContext -> ActionResult
 greaterThan stack =
     let
         action iota1 iota2 =
@@ -685,7 +686,7 @@ greaterThan stack =
     action2Inputs stack getNumber getNumber action
 
 
-lessThan : Array Iota -> ( Array Iota, Bool )
+lessThan : Array Iota -> CastingContext -> ActionResult
 lessThan stack =
     let
         action iota1 iota2 =
@@ -701,7 +702,7 @@ lessThan stack =
     action2Inputs stack getNumber getNumber action
 
 
-greaterThanOrEqualTo : Array Iota -> ( Array Iota, Bool )
+greaterThanOrEqualTo : Array Iota -> CastingContext -> ActionResult
 greaterThanOrEqualTo stack =
     let
         action iota1 iota2 =
@@ -717,7 +718,7 @@ greaterThanOrEqualTo stack =
     action2Inputs stack getNumber getNumber action
 
 
-lessThanOrEqualTo : Array Iota -> ( Array Iota, Bool )
+lessThanOrEqualTo : Array Iota -> CastingContext -> ActionResult
 lessThanOrEqualTo stack =
     let
         action iota1 iota2 =
@@ -733,7 +734,7 @@ lessThanOrEqualTo stack =
     action2Inputs stack getNumber getNumber action
 
 
-equalTo : Array Iota -> ( Array Iota, Bool )
+equalTo : Array Iota -> CastingContext -> ActionResult
 equalTo stack =
     let
         action iota1 iota2 =
@@ -743,7 +744,7 @@ equalTo stack =
     action2Inputs stack getAny getAny action
 
 
-notEqualTo : Array Iota -> ( Array Iota, Bool )
+notEqualTo : Array Iota -> CastingContext -> ActionResult
 notEqualTo stack =
     let
         action iota1 iota2 =
@@ -753,7 +754,7 @@ notEqualTo stack =
     action2Inputs stack getAny getAny action
 
 
-invertBool : Array Iota -> ( Array Iota, Bool )
+invertBool : Array Iota -> CastingContext -> ActionResult
 invertBool stack =
     let
         action iota =
@@ -773,7 +774,7 @@ invertBool stack =
     action1Input stack getBoolean action
 
 
-boolCoerce : Array Iota -> ( Array Iota, Bool )
+boolCoerce : Array Iota -> CastingContext -> ActionResult
 boolCoerce stack =
     let
         action iota =
@@ -807,7 +808,7 @@ boolCoerce stack =
     action1Input stack getAny action
 
 
-ifBool : Array Iota -> ( Array Iota, Bool )
+ifBool : Array Iota -> CastingContext -> ActionResult
 ifBool stack =
     let
         action iota1 iota2 iota3 =

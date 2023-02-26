@@ -5446,14 +5446,16 @@ var $elm$core$Basics$negate = function (n) {
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
 		{
+			castingContext: {
+				heldItem: $author$project$Logic$App$Types$NoItem,
+				heldItemContent: $elm$core$Maybe$Just($author$project$Logic$App$Types$Null)
+			},
 			grid: {
 				drawing: {activePath: _List_Nil, drawingMode: false},
 				height: 0,
 				points: _List_Nil,
 				width: 0
 			},
-			heldItem: $author$project$Logic$App$Types$NoItem,
-			heldItemContent: $elm$core$Maybe$Just($author$project$Logic$App$Types$Null),
 			mousePos: _Utils_Tuple2(0.0, 0.0),
 			patternArray: $elm$core$Array$empty,
 			settings: {gridScale: 1.0},
@@ -10581,6 +10583,7 @@ var $author$project$Main$update = F2(
 		var patternArray = model.patternArray;
 		var grid = model.grid;
 		var drawing = model.grid.drawing;
+		var castingContext = model.castingContext;
 		switch (msg.$) {
 			case 'NoOp':
 				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
@@ -11191,7 +11194,11 @@ var $author$project$Main$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{heldItem: item, heldItemContent: $elm$core$Maybe$Nothing}),
+						{
+							castingContext: _Utils_update(
+								castingContext,
+								{heldItem: item, heldItemContent: $elm$core$Maybe$Nothing})
+						}),
 					$elm$core$Platform$Cmd$none);
 		}
 	});
@@ -12144,7 +12151,7 @@ var $author$project$Components$App$Panels$ConfigHexPanel$heldItemSection = funct
 								$elm$html$Html$text('Content:')
 							])),
 					function () {
-						var _v0 = model.heldItemContent;
+						var _v0 = model.castingContext.heldItemContent;
 						if (_v0.$ === 'Just') {
 							var iota = _v0.a;
 							return _List_fromArray(

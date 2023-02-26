@@ -2,24 +2,32 @@ module Logic.App.Patterns.OperatorUtils exposing (..)
 
 import Array exposing (Array)
 import Length
-import Logic.App.Types exposing (Iota(..), Mishap(..))
+import Logic.App.Types exposing (ActionResult, CastingContext, Iota(..), Mishap(..))
 import Logic.App.Utils.Utils exposing (unshift)
 import Quantity exposing (Quantity(..))
 import Vector3d as Vec3d
 
 
-makeConstant : Iota -> Array Iota -> ( Array Iota, Bool )
-makeConstant iota stack =
-    ( unshift iota stack, True )
+makeConstant : Iota -> Array Iota -> CastingContext -> ActionResult
+makeConstant iota stack ctx =
+    { stack = unshift iota stack, ctx = ctx, success = True }
 
 
-actionNoInput : Array Iota -> Array Iota -> ( Array Iota, Bool )
-actionNoInput stack action =
-    ( Array.append action stack, True )
+actionNoInput : Array Iota -> CastingContext -> (CastingContext -> ( Array Iota, CastingContext )) -> ActionResult
+actionNoInput stack ctx action =
+    let
+        actionResult =
+            action
+                ctx
+    in
+    { stack = Array.append (Tuple.first actionResult) stack
+    , ctx = Tuple.second actionResult
+    , success = True
+    }
 
 
-action1Input : Array Iota -> (Iota -> Maybe Iota) -> (Iota -> Array Iota) -> ( Array Iota, Bool )
-action1Input stack inputGetter action =
+action1Input : Array Iota -> CastingContext -> (Iota -> Maybe Iota) -> (Iota -> CastingContext -> ( Array Iota, CastingContext )) -> ActionResult
+action1Input stack ctx inputGetter action =
     let
         maybeIota =
             Array.get 0 stack
@@ -29,19 +37,23 @@ action1Input stack inputGetter action =
     in
     case maybeIota of
         Nothing ->
-            ( unshift (Garbage NotEnoughIotas) newStack, False )
+            { stack = unshift (Garbage NotEnoughIotas) newStack, ctx = ctx, success = False }
 
         Just iota ->
             case inputGetter iota of
                 Nothing ->
-                    ( unshift (Garbage IncorrectIota) newStack, False )
+                    { stack = unshift (Garbage NotEnoughIotas) newStack, ctx = ctx, success = False }
 
                 Just _ ->
-                    ( Array.append (action iota) newStack, True )
+                    let
+                        actionResult =
+                            action iota ctx
+                    in
+                    { stack = Array.append (Tuple.first actionResult) newStack, ctx = Tuple.second actionResult, success = True }
 
 
-action2Inputs : Array Iota -> (Iota -> Maybe Iota) -> (Iota -> Maybe Iota) -> (Iota -> Iota -> Array Iota) -> ( Array Iota, Bool )
-action2Inputs stack inputGetter1 inputGetter2 action =
+action2Inputs : Array Iota -> CastingContext -> (Iota -> Maybe Iota) -> (Iota -> Maybe Iota) -> (Iota -> Iota -> CastingContext -> ( Array Iota, CastingContext )) -> ActionResult
+action2Inputs stack ctx inputGetter1 inputGetter2 action =
     let
         maybeIota1 =
             Array.get 1 stack
@@ -53,39 +65,53 @@ action2Inputs stack inputGetter1 inputGetter2 action =
             Array.slice 2 (Array.length stack) stack
     in
     if maybeIota1 == Nothing || maybeIota2 == Nothing then
-        ( Array.append (Array.map mapNothingToMissingIota <| Array.fromList <| moveNothingsToFront [ maybeIota1, maybeIota2 ]) newStack, False )
+        { stack = Array.append (Array.map mapNothingToMissingIota <| Array.fromList <| moveNothingsToFront [ maybeIota1, maybeIota2 ]) newStack
+        , ctx = ctx
+        , success = False
+        }
 
     else
         case ( Maybe.map inputGetter1 maybeIota1, Maybe.map inputGetter2 maybeIota2 ) of
             ( Just iota1, Just iota2 ) ->
                 if iota1 == Nothing || iota2 == Nothing then
-                    ( Array.append
-                        (Array.fromList
-                            [ Maybe.withDefault (Garbage IncorrectIota) iota1
-                            , Maybe.withDefault (Garbage IncorrectIota) iota2
-                            ]
-                        )
-                        newStack
-                    , False
-                    )
+                    { stack =
+                        Array.append
+                            (Array.fromList
+                                [ Maybe.withDefault (Garbage IncorrectIota) iota1
+                                , Maybe.withDefault (Garbage IncorrectIota) iota2
+                                ]
+                            )
+                            newStack
+                    , ctx = ctx
+                    , success = False
+                    }
 
                 else
-                    ( Array.append
-                        (action
-                            (Maybe.withDefault (Garbage IncorrectIota) iota1)
-                            (Maybe.withDefault (Garbage IncorrectIota) iota2)
-                        )
-                        newStack
-                    , True
-                    )
+                    let
+                        actionResult =
+                            action
+                                (Maybe.withDefault (Garbage IncorrectIota) iota1)
+                                (Maybe.withDefault (Garbage IncorrectIota) iota2)
+                                ctx
+                    in
+                            { stack =
+                                Array.append
+                                    (Tuple.first actionResult)
+                                    newStack
+                            , ctx = Tuple.second actionResult
+                            , success = True
+                            }
 
             _ ->
                 -- this should never happen
-                ( unshift (Garbage CatastrophicFailure) newStack, False )
+                { stack = unshift (Garbage CatastrophicFailure) newStack
+                , ctx = ctx
+                , success = False
+                }
 
 
-action3Inputs : Array Iota -> (Iota -> Maybe Iota) -> (Iota -> Maybe Iota) -> (Iota -> Maybe Iota) -> (Iota -> Iota -> Iota -> Array Iota) -> ( Array Iota, Bool )
-action3Inputs stack inputGetter1 inputGetter2 inputGetter3 action =
+action3Inputs : Array Iota -> CastingContext -> (Iota -> Maybe Iota) -> (Iota -> Maybe Iota) -> (Iota -> Maybe Iota) -> (Iota -> Iota -> Iota -> CastingContext -> ( Array Iota, CastingContext )) -> ActionResult
+action3Inputs stack ctx inputGetter1 inputGetter2 inputGetter3 action =
     let
         maybeIota1 =
             Array.get 2 stack
@@ -100,57 +126,71 @@ action3Inputs stack inputGetter1 inputGetter2 inputGetter3 action =
             Array.slice 3 (Array.length stack) stack
     in
     if maybeIota1 == Nothing || maybeIota2 == Nothing || maybeIota3 == Nothing then
-        ( Array.append (Array.map mapNothingToMissingIota <| Array.fromList <| moveNothingsToFront [ maybeIota1, maybeIota2, maybeIota3 ]) newStack, False )
+        { stack = Array.append (Array.map mapNothingToMissingIota <| Array.fromList <| moveNothingsToFront [ maybeIota1, maybeIota2, maybeIota3 ]) newStack
+        , ctx = ctx
+        , success = False
+        }
 
     else
         case ( Maybe.map inputGetter1 maybeIota1, Maybe.map inputGetter2 maybeIota2, Maybe.map inputGetter3 maybeIota3 ) of
             ( Just iota1, Just iota2, Just iota3 ) ->
                 if iota1 == Nothing || iota2 == Nothing || iota3 == Nothing then
-                    ( Array.append
-                        (Array.fromList
-                            [ Maybe.withDefault (Garbage IncorrectIota) iota1
-                            , Maybe.withDefault (Garbage IncorrectIota) iota2
-                            , Maybe.withDefault (Garbage IncorrectIota) iota3
-                            ]
-                        )
-                        newStack
-                    , False
-                    )
+                    { stack =
+                        Array.append
+                            (Array.fromList
+                                [ Maybe.withDefault (Garbage IncorrectIota) iota1
+                                , Maybe.withDefault (Garbage IncorrectIota) iota2
+                                , Maybe.withDefault (Garbage IncorrectIota) iota3
+                                ]
+                            )
+                            newStack
+                    , ctx = ctx
+                    , success = False
+                    }
 
                 else
-                    ( Array.append
-                        (action
-                            (Maybe.withDefault (Garbage IncorrectIota) iota1)
-                            (Maybe.withDefault (Garbage IncorrectIota) iota2)
-                            (Maybe.withDefault (Garbage IncorrectIota) iota3)
-                        )
-                        newStack
-                    , True
-                    )
+                    let
+                        actionResult =
+                            action
+                                (Maybe.withDefault (Garbage IncorrectIota) iota1)
+                                (Maybe.withDefault (Garbage IncorrectIota) iota2)
+                                (Maybe.withDefault (Garbage IncorrectIota) iota3)
+                                ctx
+                    in
+                    { stack =
+                        Array.append
+                            (Tuple.first actionResult)
+                            newStack
+                    , ctx = Tuple.second actionResult
+                    , success = True
+                    }
 
             _ ->
                 -- this should never happen
-                ( unshift (Garbage CatastrophicFailure) newStack, False )
+                { stack = unshift (Garbage CatastrophicFailure) newStack
+                , ctx = ctx
+                , success = False
+                }
 
 
-spellNoInput : Array Iota -> ( Array Iota, Bool )
-spellNoInput stack =
-    actionNoInput stack Array.empty
+spellNoInput : Array Iota -> CastingContext -> ActionResult
+spellNoInput stack ctx =
+    actionNoInput stack ctx (\_ -> ( Array.empty, ctx ))
 
 
-spell1Input : Array Iota -> (Iota -> Maybe Iota) -> ( Array Iota, Bool )
-spell1Input stack inputGetter =
-    action1Input stack inputGetter (\_ -> Array.empty)
+spell1Input : Array Iota -> CastingContext -> (Iota -> Maybe Iota) -> ActionResult
+spell1Input stack ctx inputGetter =
+    action1Input stack ctx inputGetter (\_ _ -> ( Array.empty, ctx ))
 
 
-spell2Inputs : Array Iota -> (Iota -> Maybe Iota) -> (Iota -> Maybe Iota) -> ( Array Iota, Bool )
-spell2Inputs stack inputGetter1 inputGetter2 =
-    action2Inputs stack inputGetter1 inputGetter2 (\_ _ -> Array.empty)
+spell2Inputs : Array Iota -> CastingContext -> (Iota -> Maybe Iota) -> (Iota -> Maybe Iota) -> ActionResult
+spell2Inputs stack ctx inputGetter1 inputGetter2 =
+    action2Inputs stack ctx inputGetter1 inputGetter2 (\_ _ _ -> ( Array.empty, ctx ))
 
 
-spell3Inputs : Array Iota -> (Iota -> Maybe Iota) -> (Iota -> Maybe Iota) -> (Iota -> Maybe Iota) -> ( Array Iota, Bool )
-spell3Inputs stack inputGetter1 inputGetter2 inputGetter3 =
-    action3Inputs stack inputGetter1 inputGetter2 inputGetter3 (\_ _ _ -> Array.empty)
+spell3Inputs : Array Iota -> CastingContext -> (Iota -> Maybe Iota) -> (Iota -> Maybe Iota) -> (Iota -> Maybe Iota) -> ActionResult
+spell3Inputs stack ctx inputGetter1 inputGetter2 inputGetter3 =
+    action3Inputs stack ctx inputGetter1 inputGetter2 inputGetter3 (\_ _ _ _ -> ( Array.empty, ctx ))
 
 
 getPatternList : Iota -> Maybe Iota

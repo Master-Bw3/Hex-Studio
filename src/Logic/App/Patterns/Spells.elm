@@ -4,128 +4,130 @@ import Array exposing (Array)
 import Logic.App.Patterns.OperatorUtils exposing (actionNoInput, getEntity, getNumber, getPatternList, getVector, spell1Input, spell2Inputs, spell3Inputs, spellNoInput)
 import Logic.App.Types exposing (Iota(..))
 import Logic.App.Patterns.OperatorUtils exposing (action1Input)
+import Logic.App.Types exposing (CastingContext)
+import Logic.App.Types exposing (ActionResult)
 
 
-explode : Array Iota -> ( Array Iota, Bool )
-explode stack =
-    spell2Inputs stack getVector getNumber
+explode : Array Iota -> CastingContext -> ActionResult
+explode stack ctx =
+    spell2Inputs stack ctx getVector getNumber
 
 
-explodeFire : Array Iota -> ( Array Iota, Bool )
-explodeFire stack =
-    spell2Inputs stack getVector getNumber
+explodeFire  : Array Iota -> CastingContext -> ActionResult
+explodeFire stack ctx =
+    spell2Inputs stack ctx getVector getNumber
 
 
-addMotion : Array Iota -> ( Array Iota, Bool )
-addMotion stack =
-    spell2Inputs stack getEntity getVector
+addMotion  : Array Iota -> CastingContext -> ActionResult
+addMotion stack ctx =
+    spell2Inputs stack ctx getEntity getVector
 
 
-blink : Array Iota -> ( Array Iota, Bool )
-blink stack =
-    spell2Inputs stack getEntity getNumber
+blink  : Array Iota -> CastingContext -> ActionResult
+blink stack ctx =
+    spell2Inputs stack ctx getEntity getNumber
 
 
-breakBlock : Array Iota -> ( Array Iota, Bool )
-breakBlock stack =
-    spell1Input stack getVector
+breakBlock  : Array Iota -> CastingContext -> ActionResult
+breakBlock stack ctx =
+    spell1Input stack ctx getVector
 
 
-placeBlock : Array Iota -> ( Array Iota, Bool )
-placeBlock stack =
-    spell1Input stack getVector
+placeBlock  : Array Iota -> CastingContext -> ActionResult
+placeBlock stack ctx =
+    spell1Input stack ctx getVector
 
 
-colorize : Array Iota -> ( Array Iota, Bool )
-colorize stack =
-    spellNoInput stack
+colorize  : Array Iota -> CastingContext -> ActionResult
+colorize stack ctx =
+    spellNoInput stack ctx
 
 
-createWater : Array Iota -> ( Array Iota, Bool )
-createWater stack =
-    spell1Input stack getVector
+createWater  : Array Iota -> CastingContext -> ActionResult
+createWater stack ctx =
+    spell1Input stack ctx getVector
 
 
-destroyWater : Array Iota -> ( Array Iota, Bool )
-destroyWater stack =
-    spell1Input stack getVector
+destroyWater  : Array Iota -> CastingContext -> ActionResult
+destroyWater stack ctx =
+    spell1Input stack ctx getVector
 
 
-ignite : Array Iota -> ( Array Iota, Bool )
-ignite stack =
-    spell1Input stack getVector
+ignite  : Array Iota -> CastingContext -> ActionResult
+ignite stack ctx =
+    spell1Input stack ctx getVector
 
 
-extinguish : Array Iota -> ( Array Iota, Bool )
-extinguish stack =
-    spell1Input stack getVector
+extinguish  : Array Iota -> CastingContext -> ActionResult
+extinguish stack ctx =
+    spell1Input stack ctx getVector
 
 
-conjureBlock : Array Iota -> ( Array Iota, Bool )
-conjureBlock stack =
-    spell1Input stack getVector
+conjureBlock  : Array Iota -> CastingContext -> ActionResult
+conjureBlock stack ctx =
+    spell1Input stack ctx getVector
 
 
-conjureLight : Array Iota -> ( Array Iota, Bool )
-conjureLight stack =
-    spell1Input stack getVector
+conjureLight  : Array Iota -> CastingContext -> ActionResult
+conjureLight stack ctx =
+    spell1Input stack ctx getVector
 
 
-bonemeal : Array Iota -> ( Array Iota, Bool )
-bonemeal stack =
-    spell1Input stack getVector
+bonemeal  : Array Iota -> CastingContext -> ActionResult
+bonemeal stack ctx =
+    spell1Input stack ctx getVector
 
 
-recharge : Array Iota -> ( Array Iota, Bool )
-recharge stack =
-    spell1Input stack getEntity
+recharge  : Array Iota -> CastingContext -> ActionResult
+recharge stack ctx =
+    spell1Input stack ctx getEntity
 
 
-erase : Array Iota -> ( Array Iota, Bool )
-erase stack =
-    spellNoInput stack
+erase  : Array Iota -> CastingContext -> ActionResult
+erase stack ctx =
+    spellNoInput stack ctx
 
 
-edify : Array Iota -> ( Array Iota, Bool )
-edify stack =
-    spell1Input stack getVector
+edify  : Array Iota -> CastingContext -> ActionResult
+edify stack ctx =
+    spell1Input stack ctx getVector
 
 
-beep : Array Iota -> ( Array Iota, Bool )
-beep stack =
-    spell3Inputs stack getVector getNumber getNumber
+beep  : Array Iota -> CastingContext -> ActionResult
+beep stack ctx =
+    spell3Inputs stack ctx getVector getNumber getNumber
 
 
-craftArtifact : Array Iota -> ( Array Iota, Bool )
-craftArtifact stack =
-    spell2Inputs stack getEntity getPatternList
+craftArtifact  : Array Iota -> CastingContext -> ActionResult
+craftArtifact stack ctx =
+    spell2Inputs stack ctx getEntity getPatternList
 
 
-potion : Array Iota -> ( Array Iota, Bool )
-potion stack =
-    spell3Inputs stack getEntity getNumber getNumber
+potion  : Array Iota -> CastingContext -> ActionResult
+potion stack ctx =
+    spell3Inputs stack ctx getEntity getNumber getNumber
 
 
-potionFixedPotency : Array Iota -> ( Array Iota, Bool )
-potionFixedPotency stack =
-    spell2Inputs stack getEntity getNumber
+potionFixedPotency  : Array Iota -> CastingContext -> ActionResult
+potionFixedPotency stack ctx =
+    spell2Inputs stack ctx getEntity getNumber
 
 
-sentinelCreate : Array Iota -> ( Array Iota, Bool )
-sentinelCreate stack =
-    spell1Input stack getVector
+sentinelCreate  : Array Iota -> CastingContext -> ActionResult
+sentinelCreate stack ctx =
+    spell1Input stack ctx getVector
 
 
-sentinelDestroy : Array Iota -> ( Array Iota, Bool )
-sentinelDestroy stack =
-    spellNoInput stack
+sentinelDestroy  : Array Iota -> CastingContext -> ActionResult
+sentinelDestroy stack ctx =
+    spellNoInput stack ctx
 
 
-sentinelGetPos : Array Iota -> ( Array Iota, Bool )
-sentinelGetPos stack =
-    actionNoInput stack (Array.fromList [ Vector ( 0, 0, 0 ) ])
+sentinelGetPos  : Array Iota -> CastingContext -> ActionResult
+sentinelGetPos stack ctx =
+    actionNoInput stack ctx (\_ -> (Array.fromList [ Vector ( 0, 0, 0 ) ], ctx))
 
 
-sentinelWayfind : Array Iota -> ( Array Iota, Bool )
-sentinelWayfind stack =
-    action1Input stack getVector (\_ -> (Array.fromList [ Vector ( 0, 0, 0 ) ]))
+sentinelWayfind  : Array Iota -> CastingContext -> ActionResult
+sentinelWayfind stack ctx =
+    action1Input stack ctx getVector (\_ _ -> ((Array.fromList [ Vector ( 0, 0, 0 ) ]), ctx))
