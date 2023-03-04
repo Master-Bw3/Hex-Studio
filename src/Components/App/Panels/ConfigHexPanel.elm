@@ -24,8 +24,10 @@ configHexPanel model =
         , visibilityToDisplayStyle visibility
         ]
         [ h1 [ class "panel_title" ]
-            [ text "Configure World" ]
+            [ text "Casting Context" ]
         , heldItemSection model
+        , div [ class "divider" ] []
+        , ravenmindSection model
         ]
 
 
@@ -46,11 +48,11 @@ heldItemSection model =
                 , option [] [ text "Pie" ]
                 ]
             ]
-        , div [class "stored_iota_container"]
-            (label [class "stored_iota_label"] [ text "Content:" ]
+        , div [ class "stored_iota_container" ]
+            (label [ class "stored_iota_label" ] [ text "Content:" ]
                 :: (case model.castingContext.heldItemContent of
                         Just iota ->
-                            [ renderHeldItemContent iota ]
+                            [ renderIotaBox iota ]
 
                         Nothing ->
                             []
@@ -59,14 +61,25 @@ heldItemSection model =
         ]
 
 
-renderHeldItemContent : Iota -> Html msg
-renderHeldItemContent heldItemContent =
-    let
-        renderIota : Iota -> Html msg
-        renderIota iota =
-            div [ class "outer_box", style "background-color" (iotaColorMap iota) ]
-                [ div [ class "inner_box" ]
-                    [ div [ class "text" ] [ div [] (getIotaValueAsHtmlMsg iota) ] ]
-                ]
-    in
-    renderIota heldItemContent
+renderIotaBox : Iota -> Html msg
+renderIotaBox iota =
+    div [ class "outer_box", class "iota_outer_box", style "background-color" (iotaColorMap iota) ]
+        [ div [ class "inner_box" ]
+            [ div [ class "text" ] [ div [] (getIotaValueAsHtmlMsg iota) ] ]
+        ]
+
+
+ravenmindSection : Model -> Html Msg
+ravenmindSection model =
+    div [ id "ravenmind_section" ]
+        [ div [ class "stored_iota_container" ]
+            (label [ class "stored_iota_label" ] [ text "Ravenmind:" ]
+                :: (case model.castingContext.ravenmind of
+                        Just iota ->
+                            [ renderIotaBox iota ]
+
+                        Nothing ->
+                            []
+                   )
+            )
+        ]

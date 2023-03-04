@@ -121,3 +121,26 @@ writable stack ctx =
                     ( Array.repeat 1 (Boolean False), context )
     in
     actionNoInput stack ctx action
+
+
+readLocal : Array Iota -> CastingContext -> ActionResult
+readLocal stack ctx =
+    let
+        action context =
+            case context.ravenmind of
+                Nothing ->
+                    ( Array.repeat 1 Null, context )
+
+                Just iota ->
+                    ( Array.repeat 1 iota, context )
+    in
+    actionNoInput stack ctx action
+
+
+writeLocal : Array Iota -> CastingContext -> ActionResult
+writeLocal stack ctx =
+    let
+        action iota context =
+            ( Array.empty, { context | ravenmind = Just iota } )
+    in
+    action1Input stack ctx getAny action

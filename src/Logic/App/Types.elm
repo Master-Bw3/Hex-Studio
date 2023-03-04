@@ -119,6 +119,7 @@ type ApplyToStackResult
 type alias CastingContext =
     { heldItem : HeldItem
     , heldItemContent : Maybe Iota
+    , ravenmind : Maybe Iota
     }
 
 

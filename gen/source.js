@@ -5445,7 +5445,7 @@ var $elm$core$Basics$negate = function (n) {
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
 		{
-			castingContext: {heldItem: $author$project$Logic$App$Types$NoItem, heldItemContent: $elm$core$Maybe$Nothing},
+			castingContext: {heldItem: $author$project$Logic$App$Types$NoItem, heldItemContent: $elm$core$Maybe$Nothing, ravenmind: $elm$core$Maybe$Nothing},
 			grid: {
 				drawing: {activePath: _List_Nil, drawingMode: false},
 				height: 0,
@@ -9913,6 +9913,23 @@ var $author$project$Logic$App$Patterns$ReadWrite$read = F2(
 		};
 		return A3($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, ctx, action);
 	});
+var $author$project$Logic$App$Patterns$ReadWrite$readLocal = F2(
+	function (stack, ctx) {
+		var action = function (context) {
+			var _v0 = context.ravenmind;
+			if (_v0.$ === 'Nothing') {
+				return _Utils_Tuple2(
+					A2($elm$core$Array$repeat, 1, $author$project$Logic$App$Types$Null),
+					context);
+			} else {
+				var iota = _v0.a;
+				return _Utils_Tuple2(
+					A2($elm$core$Array$repeat, 1, iota),
+					context);
+			}
+		};
+		return A3($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, ctx, action);
+	});
 var $author$project$Logic$App$Patterns$ReadWrite$readable = F2(
 	function (stack, ctx) {
 		var action = function (context) {
@@ -10398,6 +10415,20 @@ var $author$project$Logic$App$Patterns$ReadWrite$write = F2(
 			});
 		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
 	});
+var $author$project$Logic$App$Patterns$ReadWrite$writeLocal = F2(
+	function (stack, ctx) {
+		var action = F2(
+			function (iota, context) {
+				return _Utils_Tuple2(
+					$elm$core$Array$empty,
+					_Utils_update(
+						context,
+						{
+							ravenmind: $elm$core$Maybe$Just(iota)
+						}));
+			});
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
+	});
 var $elm$core$Bitwise$xor = _Bitwise_xor;
 var $author$project$Logic$App$Patterns$Math$xorBit = F2(
 	function (stack, ctx) {
@@ -10640,8 +10671,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _List_f
 		internalName: 'writable/entity',
 		signature: 'wdwewewewewewqw'
 	},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'read/local', signature: 'qeewdweddw'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'write/local', signature: 'eqqwawqaaw'},
+		{action: $author$project$Logic$App$Patterns$ReadWrite$readLocal, color: $author$project$Settings$Theme$accent1, displayName: 'Muninn\'s Reflection', internalName: 'read/local', signature: 'qeewdweddw'},
+		{action: $author$project$Logic$App$Patterns$ReadWrite$writeLocal, color: $author$project$Settings$Theme$accent1, displayName: 'Huginn\'s Gambit', internalName: 'write/local', signature: 'eqqwawqaaw'},
 		{
 		action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant($author$project$Logic$App$Types$Null),
 		color: $author$project$Settings$Theme$accent1,
@@ -12732,45 +12763,43 @@ var $author$project$Settings$Theme$iotaColorMap = function (iota) {
 			return '#4B4845';
 	}
 };
-var $author$project$Components$App$Panels$ConfigHexPanel$renderHeldItemContent = function (heldItemContent) {
-	var renderIota = function (iota) {
-		return A2(
-			$elm$html$Html$div,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$class('outer_box'),
-					A2(
-					$elm$html$Html$Attributes$style,
-					'background-color',
-					$author$project$Settings$Theme$iotaColorMap(iota))
-				]),
-			_List_fromArray(
-				[
-					A2(
-					$elm$html$Html$div,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('inner_box')
-						]),
-					_List_fromArray(
-						[
-							A2(
-							$elm$html$Html$div,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$class('text')
-								]),
-							_List_fromArray(
-								[
-									A2(
-									$elm$html$Html$div,
-									_List_Nil,
-									$author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsHtmlMsg(iota))
-								]))
-						]))
-				]));
-	};
-	return renderIota(heldItemContent);
+var $author$project$Components$App$Panels$ConfigHexPanel$renderIotaBox = function (iota) {
+	return A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('outer_box'),
+				$elm$html$Html$Attributes$class('iota_outer_box'),
+				A2(
+				$elm$html$Html$Attributes$style,
+				'background-color',
+				$author$project$Settings$Theme$iotaColorMap(iota))
+			]),
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('inner_box')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('text')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$div,
+								_List_Nil,
+								$author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsHtmlMsg(iota))
+							]))
+					]))
+			]));
 };
 var $elm$html$Html$select = _VirtualDom_node('select');
 var $author$project$Components$App$Panels$ConfigHexPanel$heldItemSection = function (model) {
@@ -12880,7 +12909,48 @@ var $author$project$Components$App$Panels$ConfigHexPanel$heldItemSection = funct
 							var iota = _v0.a;
 							return _List_fromArray(
 								[
-									$author$project$Components$App$Panels$ConfigHexPanel$renderHeldItemContent(iota)
+									$author$project$Components$App$Panels$ConfigHexPanel$renderIotaBox(iota)
+								]);
+						} else {
+							return _List_Nil;
+						}
+					}()))
+			]));
+};
+var $author$project$Components$App$Panels$ConfigHexPanel$ravenmindSection = function (model) {
+	return A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$id('ravenmind_section')
+			]),
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('stored_iota_container')
+					]),
+				A2(
+					$elm$core$List$cons,
+					A2(
+						$elm$html$Html$label,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('stored_iota_label')
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('Ravenmind:')
+							])),
+					function () {
+						var _v0 = model.castingContext.ravenmind;
+						if (_v0.$ === 'Just') {
+							var iota = _v0.a;
+							return _List_fromArray(
+								[
+									$author$project$Components$App$Panels$ConfigHexPanel$renderIotaBox(iota)
 								]);
 						} else {
 							return _List_Nil;
@@ -12911,9 +12981,17 @@ var $author$project$Components$App$Panels$ConfigHexPanel$configHexPanel = functi
 					]),
 				_List_fromArray(
 					[
-						$elm$html$Html$text('Configure World')
+						$elm$html$Html$text('Casting Context')
 					])),
-				$author$project$Components$App$Panels$ConfigHexPanel$heldItemSection(model)
+				$author$project$Components$App$Panels$ConfigHexPanel$heldItemSection(model),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('divider')
+					]),
+				_List_Nil),
+				$author$project$Components$App$Panels$ConfigHexPanel$ravenmindSection(model)
 			]));
 };
 var $author$project$Logic$App$Msg$InputPattern = function (a) {

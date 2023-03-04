@@ -176,6 +176,11 @@ body {
     background-color: var(--primary_lightest);
 }
 
+.iota_outer_box .text {
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}
+
 .seperator {
     height: 2em;
     width: 100%;
@@ -515,16 +520,27 @@ button {
     border-radius: 5px;
 }
 
-#held_item_section .text {
-    margin-left: 0.5em;
-}
-
-
 .stored_iota_container {
     display: grid;
+}
+
+#held_item_section .stored_iota_container {
     grid-template-columns: 28% auto;
+}
+
+#ravenmind_section .stored_iota_container {
+    grid-template-columns: 34% auto;
 }
 
 .stored_iota_container label {
     margin-top: 0.5em;
+}
+
+.divider {
+    background-color: var(--primary_lighter);
+    width: 95%;
+    height: 0.1em;
+    align-self: center;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
 }

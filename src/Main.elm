@@ -68,7 +68,11 @@ init _ =
       , settings =
             { gridScale = 1.0
             }
-      , castingContext = { heldItem = NoItem, heldItemContent = Nothing }
+      , castingContext =
+            { heldItem = NoItem
+            , heldItemContent = Nothing
+            , ravenmind = Nothing
+            }
       , time = 0
       , gridGifSrc = ""
       }

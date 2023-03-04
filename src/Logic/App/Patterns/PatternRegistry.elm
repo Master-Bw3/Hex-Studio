@@ -175,8 +175,8 @@ patternRegistry =
     , { signature = "wawqwqwqwqwqwew", internalName = "readable/entity", action = makeConstant (Boolean False), displayName = "Auditor's Purification", color = accent1 }
     , { signature = "deeeeeq", internalName = "writable", action = writable, displayName = "Assessor's Reflection", color = accent1 }
     , { signature = "wdwewewewewewqw", internalName = "writable/entity", action = makeConstant (Boolean False), displayName = "Assessor's Purification", color = accent1 }
-    , { signature = "qeewdweddw", internalName = "read/local", action = noAction, displayName = "", color = accent1 }
-    , { signature = "eqqwawqaaw", internalName = "write/local", action = noAction, displayName = "", color = accent1 }
+    , { signature = "qeewdweddw", internalName = "read/local", action = readLocal, displayName = "Muninn's Reflection", color = accent1 }
+    , { signature = "eqqwawqaaw", internalName = "write/local", action = writeLocal, displayName = "Huginn's Gambit", color = accent1 }
     , { signature = "d", internalName = "const/null", action = makeConstant Null, displayName = "Nullary Reflection", color = accent1 }
     , { signature = "aqae", internalName = "const/true", action = makeConstant (Boolean True), displayName = "True Reflection", color = accent1 }
     , { signature = "dedq", internalName = "const/false", action = makeConstant (Boolean False), displayName = "False Reflection", color = accent1 }
