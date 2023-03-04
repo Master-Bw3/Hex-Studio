@@ -13758,6 +13758,16 @@ var $author$project$Components$App$Panels$PatternPanel$patternPanel = function (
 			]));
 };
 var $author$project$Logic$App$Msg$RequestGridDrawingAsGIF = {$: 'RequestGridDrawingAsGIF'};
+var $elm$html$Html$a = _VirtualDom_node('a');
+var $elm$html$Html$Attributes$download = function (fileName) {
+	return A2($elm$html$Html$Attributes$stringProperty, 'download', fileName);
+};
+var $elm$html$Html$Attributes$href = function (url) {
+	return A2(
+		$elm$html$Html$Attributes$stringProperty,
+		'href',
+		_VirtualDom_noJavaScriptUri(url));
+};
 var $elm$html$Html$img = _VirtualDom_node('img');
 var $elm$html$Html$Attributes$src = function (url) {
 	return A2(
@@ -13788,31 +13798,71 @@ var $author$project$Components$App$Panels$SaveExportPanel$saveExportPanel = func
 						$elm$html$Html$text('Save / Export')
 					])),
 				A2(
-				$elm$html$Html$img,
-				_Utils_ap(
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$src(
-							(model.gridGifSrc === 'loading') ? './gen/resources/loading.gif' : model.gridGifSrc),
-							A2($elm$html$Html$Attributes$style, 'width', '100%'),
-							A2($elm$html$Html$Attributes$style, 'max-height', '300px'),
-							A2($elm$html$Html$Attributes$style, 'object-fit', 'scale-down')
-						]),
-					(model.gridGifSrc === '') ? _List_fromArray(
-						[
-							A2($elm$html$Html$Attributes$style, 'opacity', '0')
-						]) : _List_Nil),
-				_List_Nil),
-				A2(
-				$elm$html$Html$button,
+				$elm$html$Html$div,
 				_List_fromArray(
 					[
-						A2($elm$html$Html$Attributes$style, 'color', 'white'),
-						$elm$html$Html$Events$onClick($author$project$Logic$App$Msg$RequestGridDrawingAsGIF)
+						A2($elm$html$Html$Attributes$style, 'height', '300px'),
+						A2($elm$html$Html$Attributes$style, 'align-content', 'center')
 					]),
 				_List_fromArray(
 					[
-						$elm$html$Html$text('generate gif')
+						A2(
+						$elm$html$Html$img,
+						_Utils_ap(
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$src(
+									(model.gridGifSrc === 'loading') ? './gen/resources/loading.gif' : model.gridGifSrc),
+									A2($elm$html$Html$Attributes$style, 'width', '100%'),
+									A2($elm$html$Html$Attributes$style, 'max-height', '300px'),
+									A2($elm$html$Html$Attributes$style, 'object-fit', 'cover')
+								]),
+							(model.gridGifSrc === '') ? _List_fromArray(
+								[
+									A2($elm$html$Html$Attributes$style, 'opacity', '0')
+								]) : _List_Nil),
+						_List_Nil)
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						A2($elm$html$Html$Attributes$style, 'align-self', 'center')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$button,
+						_List_fromArray(
+							[
+								A2($elm$html$Html$Attributes$style, 'color', 'white'),
+								$elm$html$Html$Events$onClick($author$project$Logic$App$Msg$RequestGridDrawingAsGIF)
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('generate gif')
+							])),
+						A2(
+						$elm$html$Html$a,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$href(model.gridGifSrc),
+								$elm$html$Html$Attributes$download('hex.gif'),
+								A2($elm$html$Html$Attributes$style, 'padding-left', '2em')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$button,
+								_List_fromArray(
+									[
+										A2($elm$html$Html$Attributes$style, 'color', 'white')
+									]),
+								_List_fromArray(
+									[
+										$elm$html$Html$text('download gif')
+									]))
+							]))
 					]))
 			]));
 };
