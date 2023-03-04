@@ -7,7 +7,6 @@ import Browser.Dom exposing (getElement)
 import Browser.Events
 import Components.App.Content exposing (content)
 import Components.App.Grid exposing (..)
-import FontAwesome.Solid
 import Html exposing (..)
 import Json.Decode exposing (Decoder)
 import Logic.App.Model exposing (Model)
@@ -496,7 +495,7 @@ update msg model =
             ( { model | castingContext = { castingContext | heldItem = item, heldItemContent = Nothing } }, Cmd.none )
 
         RequestGridDrawingAsGIF ->
-            (model, GetGridDrawingAsGif.requestGIF ())
+            ({model | gridGifSrc = "loading"}, GetGridDrawingAsGif.requestGIF ())
 
         RecieveGridDrawingAsGIF src ->
             ({model | gridGifSrc = src}, Cmd.none)

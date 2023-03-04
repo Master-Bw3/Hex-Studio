@@ -24,13 +24,19 @@ saveExportPanel model =
         [ h1 [ class "panel_title" ]
             [ text "Save / Export" ]
         , img
-            ([ src model.gridGifSrc
+            ([ src
+                (if model.gridGifSrc == "loading" then
+                    "./gen/resources/loading.gif"
+
+                 else
+                    model.gridGifSrc
+                )
              , style "width" "100%"
              , style "max-height" "300px"
              , style "object-fit" "scale-down"
              ]
                 ++ (if model.gridGifSrc == "" then
-                        [style "opacity" "0"]
+                        [ style "opacity" "0" ]
 
                     else
                         []

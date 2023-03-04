@@ -11696,7 +11696,9 @@ var $author$project$Main$update = F2(
 					$elm$core$Platform$Cmd$none);
 			case 'RequestGridDrawingAsGIF':
 				return _Utils_Tuple2(
-					model,
+					_Utils_update(
+						model,
+						{gridGifSrc: 'loading'}),
 					$author$project$Ports$GetGridDrawingAsGif$requestGIF(_Utils_Tuple0));
 			default:
 				var src = msg.a;
@@ -13526,7 +13528,8 @@ var $author$project$Components$App$Panels$SaveExportPanel$saveExportPanel = func
 				_Utils_ap(
 					_List_fromArray(
 						[
-							$elm$html$Html$Attributes$src(model.gridGifSrc),
+							$elm$html$Html$Attributes$src(
+							(model.gridGifSrc === 'loading') ? './gen/resources/loading.gif' : model.gridGifSrc),
 							A2($elm$html$Html$Attributes$style, 'width', '100%'),
 							A2($elm$html$Html$Attributes$style, 'max-height', '300px'),
 							A2($elm$html$Html$Attributes$style, 'object-fit', 'scale-down')
