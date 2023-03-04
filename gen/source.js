@@ -9794,7 +9794,7 @@ var $author$project$Logic$App$Patterns$Math$powProj = F2(
 			});
 		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, action);
 	});
-var $author$project$Logic$App$Patterns$PatternRegistry$print = F2(
+var $author$project$Logic$App$Patterns$Misc$print = F2(
 	function (stack, ctx) {
 		return A4(
 			$author$project$Logic$App$Patterns$OperatorUtils$action1Input,
@@ -10208,13 +10208,55 @@ var $author$project$Logic$App$Patterns$ReadWrite$write = F2(
 	function (stack, ctx) {
 		var action = F2(
 			function (iota, context) {
-				return _Utils_Tuple2(
-					$elm$core$Array$empty,
-					_Utils_update(
-						context,
-						{
-							heldItemContent: $elm$core$Maybe$Just(iota)
-						}));
+				var _v0 = context.heldItem;
+				switch (_v0.$) {
+					case 'NoItem':
+						return _Utils_Tuple2(
+							$elm$core$Array$fromList(
+								_List_fromArray(
+									[iota])),
+							context);
+					case 'Trinket':
+						return _Utils_Tuple2(
+							$elm$core$Array$fromList(
+								_List_fromArray(
+									[iota])),
+							context);
+					case 'Cypher':
+						return _Utils_Tuple2(
+							$elm$core$Array$fromList(
+								_List_fromArray(
+									[iota])),
+							context);
+					case 'Artifact':
+						return _Utils_Tuple2(
+							$elm$core$Array$fromList(
+								_List_fromArray(
+									[iota])),
+							context);
+					case 'Focus':
+						return _Utils_Tuple2(
+							$elm$core$Array$empty,
+							_Utils_update(
+								context,
+								{
+									heldItemContent: $elm$core$Maybe$Just(iota)
+								}));
+					case 'Spellbook':
+						return _Utils_Tuple2(
+							$elm$core$Array$empty,
+							_Utils_update(
+								context,
+								{
+									heldItemContent: $elm$core$Maybe$Just(iota)
+								}));
+					default:
+						return _Utils_Tuple2(
+							$elm$core$Array$fromList(
+								_List_fromArray(
+									[iota])),
+							context);
+				}
 			});
 		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
 	});
@@ -10386,7 +10428,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _List_f
 		{action: $author$project$Logic$App$Patterns$Math$xorBit, color: $author$project$Settings$Theme$accent1, displayName: 'Exclusionary Distillation', internalName: 'xor_bit', signature: 'dwaeaqa'},
 		{action: $author$project$Logic$App$Patterns$Math$notBit, color: $author$project$Settings$Theme$accent1, displayName: 'Inversion Purification', internalName: 'not_bit', signature: 'dweaqa'},
 		{action: $author$project$Logic$App$Patterns$Math$toSet, color: $author$project$Settings$Theme$accent1, displayName: 'Uniqueness Purification', internalName: 'to_set', signature: 'aweaqa'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$print, color: $author$project$Settings$Theme$accent1, displayName: 'Reveal', internalName: 'print', signature: 'de'},
+		{action: $author$project$Logic$App$Patterns$Misc$print, color: $author$project$Settings$Theme$accent1, displayName: 'Reveal', internalName: 'print', signature: 'de'},
 		{action: $author$project$Logic$App$Patterns$Spells$explode, color: $author$project$Settings$Theme$accent1, displayName: 'Explosion', internalName: 'explode', signature: 'aawaawaa'},
 		{action: $author$project$Logic$App$Patterns$Spells$explodeFire, color: $author$project$Settings$Theme$accent1, displayName: 'Fireball', internalName: 'explode/fire', signature: 'ddwddwdd'},
 		{action: $author$project$Logic$App$Patterns$Spells$addMotion, color: $author$project$Settings$Theme$accent1, displayName: 'Impulse', internalName: 'add_motion', signature: 'awqqqwaqw'},
@@ -10421,9 +10463,9 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _List_f
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'akashic/write', signature: 'eeeweeeeede'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: 'Charon\'s Gambit', internalName: 'halt', signature: 'aqdee'},
 		{action: $author$project$Logic$App$Patterns$ReadWrite$read, color: $author$project$Settings$Theme$accent1, displayName: 'Scribe\'s Reflection', internalName: 'read', signature: 'aqqqqq'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'read/entity', signature: 'wawqwqwqwqwqw'},
+		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: 'Chronicler\'s Purification', internalName: 'read/entity', signature: 'wawqwqwqwqwqw'},
 		{action: $author$project$Logic$App$Patterns$ReadWrite$write, color: $author$project$Settings$Theme$accent1, displayName: 'Scribe\'s Gambit', internalName: 'write', signature: 'deeeee'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'write/entity', signature: 'wdwewewewewew'},
+		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: 'Chronicler\'s Gambit', internalName: 'write/entity', signature: 'wdwewewewewew'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'readable', signature: 'aqqqqqe'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'readable/entity', signature: 'wawqwqwqwqwqwew'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'writable', signature: 'deeeeeq'},

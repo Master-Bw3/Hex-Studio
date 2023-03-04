@@ -167,9 +167,9 @@ patternRegistry =
     , { signature = "eeeweeeeede", internalName = "akashic/write", action = noAction, displayName = "", color = accent1 }
     , { signature = "aqdee", internalName = "halt", action = noAction, displayName = "Charon's Gambit", color = accent1 }
     , { signature = "aqqqqq", internalName = "read", action = read, displayName = "Scribe's Reflection", color = accent1 }
-    , { signature = "wawqwqwqwqwqw", internalName = "read/entity", action = noAction, displayName = "", color = accent1 }
+    , { signature = "wawqwqwqwqwqw", internalName = "read/entity", action = noAction, displayName = "Chronicler's Purification", color = accent1 }
     , { signature = "deeeee", internalName = "write", action = write, displayName = "Scribe's Gambit", color = accent1 }
-    , { signature = "wdwewewewewew", internalName = "write/entity", action = noAction, displayName = "", color = accent1 }
+    , { signature = "wdwewewewewew", internalName = "write/entity", action = noAction, displayName = "Chronicler's Gambit", color = accent1 }
     , { signature = "aqqqqqe", internalName = "readable", action = noAction, displayName = "", color = accent1 }
     , { signature = "wawqwqwqwqwqwew", internalName = "readable/entity", action = noAction, displayName = "", color = accent1 }
     , { signature = "deeeeeq", internalName = "writable", action = noAction, displayName = "", color = accent1 }
@@ -228,7 +228,7 @@ patternRegistry =
     , { signature = "deaqq", internalName = "eval", action = eval, displayName = "Hermes' Gambit", color = accent1 }
     ]
 
-
+-- eval patterns
 eval : Array Iota -> CastingContext -> ActionResult
 eval stack ctx =
     let
@@ -294,10 +294,6 @@ eval stack ctx =
                         _ ->
                             { stack = Array.fromList [ Garbage CatastrophicFailure ], ctx = ctx, success = False }
 
-
-print : Array Iota -> CastingContext -> ActionResult
-print stack ctx =
-    action1Input stack ctx getAny (\iota _ -> ( Array.fromList [ iota ], ctx ))
 
 
 numberLiteralGenerator : String -> Bool -> PatternType

@@ -4,6 +4,7 @@ import Array exposing (Array)
 import Logic.App.Patterns.OperatorUtils exposing (action1Input, action2Inputs, getEntity, getVector)
 import Logic.App.Types exposing (ActionResult, CastingContext, EntityType(..), Iota(..))
 import Logic.App.Utils.Utils exposing (unshift)
+import Logic.App.Patterns.OperatorUtils exposing (getAny)
 
 
 numberLiteral : Float -> Array Iota -> CastingContext -> ActionResult
@@ -93,3 +94,7 @@ getEntityVelocity stack ctx =
             )
     in
     action1Input stack ctx getEntity action
+
+print : Array Iota -> CastingContext -> ActionResult
+print stack ctx =
+    action1Input stack ctx getAny (\iota _ -> ( Array.fromList [ iota ], ctx ))

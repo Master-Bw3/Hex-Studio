@@ -40,8 +40,27 @@ write : Array Iota -> CastingContext -> ActionResult
 write stack ctx =
     let
         action iota context =
-            ( Array.empty
-            , { context | heldItemContent = Just iota }
-            )
+            case context.heldItem of
+                NoItem ->
+                    (Array.fromList [iota], context)
+
+                Trinket ->
+                    (Array.fromList [iota], context)
+
+                Cypher ->
+                    (Array.fromList [iota], context)
+
+                Artifact ->
+                    (Array.fromList [iota], context)
+
+                Focus ->
+                    (Array.empty, { context | heldItemContent = Just iota })
+
+                Spellbook ->
+                    (Array.empty, { context | heldItemContent = Just iota })
+
+                Pie ->
+                    (Array.fromList [iota], context)
+
     in
     action1Input stack ctx getAny action
