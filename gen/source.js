@@ -13528,7 +13528,7 @@ var $author$project$Components$App$Panels$SaveExportPanel$saveExportPanel = func
 						[
 							$elm$html$Html$Attributes$src(model.gridGifSrc),
 							A2($elm$html$Html$Attributes$style, 'width', '100%'),
-							A2($elm$html$Html$Attributes$style, 'height', '300px'),
+							A2($elm$html$Html$Attributes$style, 'max-height', '300px'),
 							A2($elm$html$Html$Attributes$style, 'object-fit', 'scale-down')
 						]),
 					(model.gridGifSrc === '') ? _List_fromArray(

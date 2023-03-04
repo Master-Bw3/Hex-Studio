@@ -26,7 +26,7 @@ saveExportPanel model =
         , img
             ([ src model.gridGifSrc
              , style "width" "100%"
-             , style "height" "300px"
+             , style "max-height" "300px"
              , style "object-fit" "scale-down"
              ]
                 ++ (if model.gridGifSrc == "" then

@@ -1,6 +1,14 @@
 //TODO: generate an animated gif instead of an image
-// MIT http://rem.mit-license.org
-function trimCanvas(c) {
+
+var gif_encoder = window.gif_encoder;
+
+const sleep = (milliseconds) => {
+    return new Promise((resolve) => setTimeout(resolve, milliseconds));
+};
+
+let 
+
+function get_trim_bounds(c) {
     var ctx = c.getContext('2d'),
         copy = document.createElement('canvas').getContext('2d'),
         pixels = ctx.getImageData(0, 0, c.width, c.height),
@@ -45,14 +53,22 @@ function trimCanvas(c) {
             }
         }
     }
+    bound.left -= 10
+    bound.top -= 10
 
-    // Calculate the height and width of the content
+    return bound
+}
 
-    var trimHeight = bound.bottom - bound.top;
-    var trimWidth = bound.right - bound.left;
+function trim_canvas(c, bound) {
+    var ctx = c.getContext('2d'),
+        copy = document.createElement('canvas').getContext('2d')
+
+    var trimHeight = bound.bottom - bound.top + 10;
+    var trimWidth = bound.right - bound.left + 10;
     if (trimHeight == 0) {
         return c;
     }
+
     var trimmed = ctx.getImageData(bound.left, bound.top, trimWidth, trimHeight);
 
     copy.canvas.width = trimWidth;
@@ -64,59 +80,60 @@ function trimCanvas(c) {
 }
 
 async function grid_to_gif() {
-    const input = document.querySelector('#grid_drawing');
-    const output = document.querySelector('#grid_drawing_gif');
-    function get_svg_height_width() {
-        const paths = Array.from(document.querySelectorAll('#grid_drawing > path'));
+    let encoder;
 
-        const path_points = paths
-            .map((path) => {
-                let CoordsList = path
-                    .getAttribute('d')
-                    .slice(1)
-                    .split(' ')
-                    .map((point) => parseFloat(point));
+    n = 20;
+    let bounds;
 
-                let YCoordsList = CoordsList;
-                CoordsList.forEach((_, index) => {
-                    if (index % 2 == 0) {
-                        YCoordsList.splice(index, 1);
-                    }
-                });
+    for (let i = 0; i < n; i++) {
+        const input = document.querySelector('#grid_drawing');
 
-                return YCoordsList;
-            })
-            .flat();
-    }
-    get_svg_height_width();
+        const svgData = new XMLSerializer().serializeToString(input);
+        const svgDataBase64 = btoa(svgData);
+        const svgDataUrl = `data:image/svg+xml;charset=utf-8;base64,${svgDataBase64}`;
+        let dataUrl;
 
-    const svgData = new XMLSerializer().serializeToString(input);
-    const svgDataBase64 = btoa(svgData);
-    const svgDataUrl = `data:image/svg+xml;charset=utf-8;base64,${svgDataBase64}`;
-    let dataUrl;
+        await sleep(50);
+        const image = new Image();
+        image.src = svgDataUrl;
 
-    // console.log(svgData)
-    // console.log(encodeURIComponent(svgData))
-    // console.log(decodeURIComponent(encodeURIComponent(svgData)))
-    // console.log(btoa(decodeURIComponent(encodeURIComponent(svgData))))
+        await new Promise(function (resolve, reject) {
+            image.addEventListener('load', () => {
+                const width = input.getAttribute('width');
+                const height = input.getAttribute('height');
+                let canvas = document.createElement('canvas');
 
-    const image = new Image();
-    image.src = svgDataUrl;
+                canvas.setAttribute('width', width);
+                canvas.setAttribute('height', height);
+                const context = canvas.getContext('2d');
 
-    await new Promise(function (resolve, reject) {
-        image.addEventListener('load', () => {
-            const width = input.getAttribute('width');
-            const height = input.getAttribute('height');
-            const canvas = document.createElement('canvas');
+                context.drawImage(image, 10, 10, width, height);
 
-            canvas.setAttribute('width', width);
-            canvas.setAttribute('height', height);
-            const context = canvas.getContext('2d');
-            context.drawImage(image, 0, 0, width, height);
+                if (typeof bounds === 'undefined') {
+                    bounds = get_trim_bounds(canvas)
+                }
 
-            dataUrl = trimCanvas(canvas).toDataURL('image/png');
-            resolve();
+                const trimmedCanvas = trim_canvas(canvas, bounds);
+                const tc_context = trimmedCanvas.getContext('2d');
+
+                if (typeof encoder === 'undefined') {
+                    encoder = new gif_encoder(trimmedCanvas.width, trimmedCanvas.height, "octree");
+                    encoder.setDelay(100);
+                    encoder.setTransparent(true);
+                    encoder.setQuality(30)
+                    encoder.start();
+                }
+
+                encoder.addFrame(tc_context);
+
+                resolve();
+            });
         });
-    });
-    return dataUrl;
+    }
+    encoder.finish();
+
+    var blob = new Blob([encoder.out.getData()], {'type': 'image/gif'});
+    var url = URL.createObjectURL(blob)
+    console.log(url)
+    return url;
 }
