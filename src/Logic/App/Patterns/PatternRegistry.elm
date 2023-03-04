@@ -15,6 +15,7 @@ import Logic.App.Types exposing (ActionResult, ApplyToStackResult(..), CastingCo
 import Logic.App.Utils.Utils exposing (unshift)
 import Ports.HexNumGen as HexNumGen
 import Settings.Theme exposing (..)
+import Logic.App.Types exposing (HeldItem(..))
 
 
 noAction : Array Iota -> CastingContext -> ActionResult
@@ -151,9 +152,9 @@ patternRegistry =
     , { signature = "qdqawwaww", internalName = "erase", action = erase, displayName = "Erase Item", color = accent1 }
     , { signature = "wqaqwd", internalName = "edify", action = edify, displayName = "Edify Sapling", color = accent1 }
     , { signature = "adaa", internalName = "beep", action = beep, displayName = "Make Note", color = accent1 }
-    , { signature = "waqqqqq", internalName = "craft/cypher", action = craftArtifact, displayName = "Craft Cypher", color = accent1 }
-    , { signature = "wwaqqqqqeaqeaeqqqeaeq", internalName = "craft/trinket", action = craftArtifact, displayName = "Craft Trinket", color = accent1 }
-    , { signature = "wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq", internalName = "craft/artifact", action = craftArtifact, displayName = "Craft Artifact", color = accent1 }
+    , { signature = "waqqqqq", internalName = "craft/cypher", action = craftArtifact Cypher, displayName = "Craft Cypher", color = accent1 }
+    , { signature = "wwaqqqqqeaqeaeqqqeaeq", internalName = "craft/trinket", action = craftArtifact Trinket, displayName = "Craft Trinket", color = accent1 }
+    , { signature = "wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq", internalName = "craft/artifact", action = craftArtifact Artifact, displayName = "Craft Artifact", color = accent1 }
     , { signature = "qqqqqaqwawaw", internalName = "potion/weakness", action = potion, displayName = "White Sun's Nadir", color = accent1 }
     , { signature = "qqqqqawwawawd", internalName = "potion/levitation", action = potionFixedPotency, displayName = "Blue Sun's Nadir", color = accent1 }
     , { signature = "qqqqqaewawawe", internalName = "potion/wither", action = potion, displayName = "Black Sun's Nadir", color = accent1 }
@@ -170,10 +171,10 @@ patternRegistry =
     , { signature = "wawqwqwqwqwqw", internalName = "read/entity", action = noAction, displayName = "Chronicler's Purification", color = accent1 }
     , { signature = "deeeee", internalName = "write", action = write, displayName = "Scribe's Gambit", color = accent1 }
     , { signature = "wdwewewewewew", internalName = "write/entity", action = noAction, displayName = "Chronicler's Gambit", color = accent1 }
-    , { signature = "aqqqqqe", internalName = "readable", action = noAction, displayName = "", color = accent1 }
-    , { signature = "wawqwqwqwqwqwew", internalName = "readable/entity", action = noAction, displayName = "", color = accent1 }
-    , { signature = "deeeeeq", internalName = "writable", action = noAction, displayName = "", color = accent1 }
-    , { signature = "wdwewewewewewqw", internalName = "writable/entity", action = noAction, displayName = "", color = accent1 }
+    , { signature = "aqqqqqe", internalName = "readable", action = readable, displayName = "Auditor's Reflection", color = accent1 }
+    , { signature = "wawqwqwqwqwqwew", internalName = "readable/entity", action = makeConstant (Boolean False), displayName = "Auditor's Purification", color = accent1 }
+    , { signature = "deeeeeq", internalName = "writable", action = writable, displayName = "Assessor's Reflection", color = accent1 }
+    , { signature = "wdwewewewewewqw", internalName = "writable/entity", action = makeConstant (Boolean False), displayName = "Assessor's Purification", color = accent1 }
     , { signature = "qeewdweddw", internalName = "read/local", action = noAction, displayName = "", color = accent1 }
     , { signature = "eqqwawqaaw", internalName = "write/local", action = noAction, displayName = "", color = accent1 }
     , { signature = "d", internalName = "const/null", action = makeConstant Null, displayName = "Nullary Reflection", color = accent1 }

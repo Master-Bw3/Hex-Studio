@@ -19,8 +19,8 @@ import Logic.App.Utils.GetAngleSignature exposing (getAngleSignature)
 import Logic.App.Utils.Utils exposing (removeFromArray)
 import Ports.CheckMouseOverDragHandle as CheckMouseOverDragHandle
 import Ports.GetElementBoundingBoxById as GetElementBoundingBoxById
-import Ports.HexNumGen as HexNumGen
 import Ports.GetGridDrawingAsGif as GetGridDrawingAsGif
+import Ports.HexNumGen as HexNumGen
 import Settings.Theme exposing (..)
 import String exposing (fromInt)
 import Task
@@ -263,9 +263,9 @@ update msg model =
 
         InputPattern name ->
             let
-                stackResult =  
+                stackResult =
                     applyPatternsToStack Array.empty castingContext (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern))
-                
+
                 getPattern =
                     getPatternFromName name
 
@@ -293,14 +293,16 @@ update msg model =
 
         RecieveGeneratedNumberLiteral signature ->
             let
-                stackResult =  applyPatternsToStack Array.empty castingContext (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern))
+                stackResult =
+                    applyPatternsToStack Array.empty castingContext (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern))
+
                 newPattern =
                     getPatternFromSignature signature
             in
             ( { model
                 | patternArray = addToPatternArray model newPattern
                 , ui = { ui | patternInputField = "" }
-                , stack = stackResult.stack 
+                , stack = stackResult.stack
                 , castingContext = stackResult.ctx
               }
             , Cmd.none
@@ -480,6 +482,12 @@ update msg model =
                         "Trinket" ->
                             Trinket
 
+                        "Cypher" ->
+                            Cypher
+
+                        "Artifact" ->
+                            Artifact
+
                         "Spellbook" ->
                             Spellbook
 
@@ -492,13 +500,13 @@ update msg model =
                         _ ->
                             NoItem
             in
-            ( { model | castingContext = { castingContext | heldItem = item, heldItemContent = Nothing } }, Cmd.none )
+            ( { model | castingContext = { castingContext | heldItem = Debug.log "item" item, heldItemContent = Nothing } }, Cmd.none )
 
         RequestGridDrawingAsGIF ->
-            ({model | gridGifSrc = "loading"}, GetGridDrawingAsGif.requestGIF ())
+            ( { model | gridGifSrc = "loading" }, GetGridDrawingAsGif.requestGIF () )
 
         RecieveGridDrawingAsGIF src ->
-            ({model | gridGifSrc = src}, Cmd.none)
+            ( { model | gridGifSrc = src }, Cmd.none )
 
 
 

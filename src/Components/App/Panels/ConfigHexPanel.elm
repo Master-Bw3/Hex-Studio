@@ -39,6 +39,8 @@ heldItemSection model =
             , select [ onInput ChangeHeldItem ]
                 [ option [] [ text "Nothing" ]
                 , option [] [ text "Trinket" ]
+                , option [] [ text "Cypher" ]
+                , option [] [ text "Artifact" ]
                 , option [] [ text "Spellbook" ]
                 , option [] [ text "Focus" ]
                 , option [] [ text "Pie" ]

@@ -523,5 +523,8 @@ button {
 .stored_iota_container {
     display: grid;
     grid-template-columns: 28% auto;
-    align-items: center;
+}
+
+.stored_iota_container label {
+    margin-top: 0.5em;
 }
