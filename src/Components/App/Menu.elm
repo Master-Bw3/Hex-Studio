@@ -48,7 +48,7 @@ menu model =
             , Icon.layerGroup |> Icon.styled [ Icon.sm ] |> Icon.view
             ]
         , button
-            ([ id "library_menu_button"
+            ([ id "config_hex_menu_button"
              , class "menu_button"
              , onClick (\event -> ViewPanel ConfigHexPanel event.keys)
              ]
@@ -56,5 +56,15 @@ menu model =
             )
             [ Icon.css
             , Icon.sliders |> Icon.styled [ Icon.sm ] |> Icon.view
+            ]
+        , button
+            ([ id "save_export_menu_button"
+             , class "menu_button"
+             , onClick (\event -> ViewPanel SaveExportPanel event.keys)
+             ]
+                ++ highlightIfActive SaveExportPanel
+            )
+            [ Icon.css
+            , Icon.download |> Icon.styled [ Icon.sm ] |> Icon.view
             ]
         ]

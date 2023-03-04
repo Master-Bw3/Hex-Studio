@@ -21,6 +21,7 @@ import Logic.App.Utils.Utils exposing (removeFromArray)
 import Ports.CheckMouseOverDragHandle as CheckMouseOverDragHandle
 import Ports.GetElementBoundingBoxById as GetElementBoundingBoxById
 import Ports.HexNumGen as HexNumGen
+import Ports.GetGridDrawingAsGif as GetGridDrawingAsGif
 import Settings.Theme exposing (..)
 import String exposing (fromInt)
 import Task
@@ -70,6 +71,7 @@ init _ =
             }
       , castingContext = { heldItem = NoItem, heldItemContent = Nothing }
       , time = 0
+      , gridGifSrc = ""
       }
     , Cmd.batch [ Task.attempt GetGrid (getElement "hex_grid"), Task.attempt GetContentSize (getElement "content") ]
     )
@@ -493,6 +495,12 @@ update msg model =
             in
             ( { model | castingContext = { castingContext | heldItem = item, heldItemContent = Nothing } }, Cmd.none )
 
+        RequestGridDrawingAsGIF ->
+            (model, GetGridDrawingAsGif.requestGIF ())
+
+        RecieveGridDrawingAsGIF src ->
+            ({model | gridGifSrc = src}, Cmd.none)
+
 
 
 -- argg : List (List (GridPoint)) -> (Float, Float) -> List (List (GridPoint))
@@ -510,6 +518,7 @@ subscriptions _ =
         , GetElementBoundingBoxById.recieveBoundingBox (Json.Decode.decodeValue locationDecoder >> RecieveInputBoundingBox)
         , GetElementBoundingBoxById.recieveBoundingBoxes (List.map (Json.Decode.decodeValue locationDecoder) >> RecieveInputBoundingBoxes)
         , CheckMouseOverDragHandle.recieveCheckMouseOverDragHandle RecieveMouseOverHandle
+        , GetGridDrawingAsGif.recieveGIF RecieveGridDrawingAsGIF
         ]
 
 

@@ -38,6 +38,8 @@ type Msg
     | SetFocus String
     | RecieveMouseOverHandle Bool
     | ChangeHeldItem String
+    | RequestGridDrawingAsGIF
+    | RecieveGridDrawingAsGIF String
 
 type alias MouseMoveData =
     { pageX : Int

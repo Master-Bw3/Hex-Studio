@@ -7,6 +7,7 @@ type Panel
     = StackPanel
     | PatternPanel
     | ConfigHexPanel
+    | SaveExportPanel
 
 
 type HeldItem

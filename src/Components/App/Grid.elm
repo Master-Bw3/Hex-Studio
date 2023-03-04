@@ -22,6 +22,7 @@ import Logic.App.Types exposing (CoordinatePair, GridPoint, PatternType, PointCo
 import Logic.App.Utils.Utils exposing (touchCoordinates)
 import Random
 import Settings.Theme exposing (..)
+import String exposing (fromFloat)
 import Svg exposing (Svg, polygon, svg)
 import Svg.Attributes exposing (..)
 
@@ -52,6 +53,13 @@ emptyGridpoint =
 
 grid : Model -> Html Msg
 grid model =
+    let
+        scale =
+            model.settings.gridScale
+
+        gridHeight =
+            model.grid.height
+    in
     div
         [ Attr.id "hex_grid"
         , MouseEvent.onDown (.clientPos >> GridDown)
@@ -62,10 +70,29 @@ grid model =
             ++ [ svg
                     [ height (String.fromFloat model.grid.height)
                     , width (String.fromFloat model.grid.width)
+                    , id "grid_drawing"
                     ]
                     (renderDrawingLine model ++ renderActivePath model ++ renderLines model)
                ]
         )
+
+
+getlowestUsedPoint : List (List GridPoint) -> GridPoint
+getlowestUsedPoint points =
+    let
+        distanceComparison : GridPoint -> GridPoint -> Order
+        distanceComparison a b =
+            case compare b.offsetY a.offsetY of
+                LT ->
+                    LT
+
+                EQ ->
+                    EQ
+
+                GT ->
+                    GT
+    in
+    Maybe.withDefault emptyGridpoint (List.head (List.sortWith distanceComparison <| List.filter (\x -> x.used) (List.concat points)))
 
 
 renderDrawingLine : Model -> List (Svg msg)

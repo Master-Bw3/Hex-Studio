@@ -108,7 +108,8 @@ body {
 }
 
 #stack_menu_button svg,
-#library_menu_button svg {
+#config_hex_menu_button svg,
+#save_export_menu_button svg {
     transform: scaleY(286%) scaleX(316%);
 }
 

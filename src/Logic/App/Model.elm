@@ -36,4 +36,5 @@ type alias Model =
         { gridScale : Float }
     , castingContext : CastingContext
     , time : Int
+    , gridGifSrc : String
     }

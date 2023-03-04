@@ -9,6 +9,8 @@
         <div id="elm-app-is-loaded-here"></div>
         <script src="./gen/Ports.js"></script>
         <script src="./gen/source.js"></script>
+        <script src="./gen/grid_to_gif.js"></script>
+
         <script type="module">
             var app = Elm.Main.init({
                 node: document.getElementById('elm-app-is-loaded-here'),
@@ -51,7 +53,7 @@
 
             function checkMouseOverDragHandle() {
                 let hoveredElements = document.querySelectorAll('.move_button:hover');
-                return hoveredElements.length > 0 
+                return hoveredElements.length > 0;
             }
 
             app.ports.requestBoundingBox.subscribe(function (input) {
@@ -64,6 +66,9 @@
 
             app.ports.requestCheckMouseOverDragHandle.subscribe(function (input) {
                 app.ports.recieveCheckMouseOverDragHandle.send(checkMouseOverDragHandle(input));
+            });
+            app.ports.requestGIF.subscribe(async function (a) {
+                app.ports.recieveGIF.send(await grid_to_gif());
             });
         </script>
     </body>
