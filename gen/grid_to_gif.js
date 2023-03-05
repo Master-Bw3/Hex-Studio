@@ -6,8 +6,6 @@ const sleep = (milliseconds) => {
     return new Promise((resolve) => setTimeout(resolve, milliseconds));
 };
 
-let 
-
 function get_trim_bounds(c) {
     var ctx = c.getContext('2d'),
         copy = document.createElement('canvas').getContext('2d'),

@@ -9027,7 +9027,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$unknownPattern = {
 		}),
 	color: $author$project$Settings$Theme$accent3,
 	displayName: 'Unknown Pattern',
-	internalName: '',
+	internalName: 'unknown',
 	outputOptions: _List_Nil,
 	selectedOutput: $elm$core$Maybe$Nothing,
 	signature: ''
@@ -9245,11 +9245,10 @@ var $author$project$Logic$App$Patterns$Stack$fisherman = F2(
 				} else {
 					return {
 						ctx: ctx,
-						stack: $elm$core$Array$fromList(
-							_List_fromArray(
-								[
-									$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure)
-								])),
+						stack: A2(
+							$author$project$Logic$App$Utils$Utils$unshift,
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure),
+							stack),
 						success: false
 					};
 				}
@@ -9317,11 +9316,10 @@ var $author$project$Logic$App$Patterns$Stack$fishermanCopy = F2(
 				} else {
 					return {
 						ctx: ctx,
-						stack: $elm$core$Array$fromList(
-							_List_fromArray(
-								[
-									$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure)
-								])),
+						stack: A2(
+							$author$project$Logic$App$Utils$Utils$unshift,
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure),
+							stack),
 						success: false
 					};
 				}
@@ -11683,6 +11681,128 @@ var $author$project$Logic$App$Patterns$PatternRegistry$numberLiteralGenerator = 
 			signature: angleSignature
 		};
 	});
+var $author$project$Logic$App$Patterns$Misc$mask = F3(
+	function (maskCode, stack, ctx) {
+		return (_Utils_cmp(
+			$elm$core$Array$length(stack),
+			$elm$core$List$length(maskCode)) > -1) ? {ctx: ctx, stack: $elm$core$Array$empty, success: true} : {
+			ctx: ctx,
+			stack: A2(
+				$elm$core$Array$append,
+				stack,
+				A2(
+					$elm$core$Array$repeat,
+					$elm$core$List$length(maskCode) - $elm$core$Array$length(stack),
+					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas))),
+			success: false
+		};
+	});
+var $author$project$Logic$App$Patterns$PatternRegistry$parseBookkeeper = function (signature) {
+	if (signature === '') {
+		return {
+			action: $author$project$Logic$App$Patterns$Misc$mask(
+				_List_fromArray(
+					['-'])),
+			color: $author$project$Settings$Theme$accent1,
+			displayName: 'Bookkeeper\'s -',
+			internalName: 'mask',
+			outputOptions: _List_Nil,
+			selectedOutput: $elm$core$Maybe$Nothing,
+			signature: signature
+		};
+	} else {
+		var parseSignature = F2(
+			function (angle, accumulatorResult) {
+				if (accumulatorResult.$ === 'Ok') {
+					var accumulator = accumulatorResult.a;
+					if (!$elm$core$List$length(accumulator)) {
+						return (angle === 'e') ? $elm$core$Result$Ok(
+							_Utils_ap(
+								_List_fromArray(
+									['\\', '-']),
+								accumulator)) : ((angle === 'w') ? $elm$core$Result$Ok(
+							_Utils_ap(
+								_List_fromArray(
+									['-', '-']),
+								accumulator)) : ((angle === 'a') ? $elm$core$Result$Ok(
+							A2($elm$core$List$cons, 'v', accumulator)) : $elm$core$Result$Err(accumulator)));
+					} else {
+						var _v3 = A2(
+							$elm$core$Maybe$withDefault,
+							'',
+							$elm$core$List$head(accumulator));
+						switch (_v3) {
+							case '\\':
+								return (angle === 'a') ? $elm$core$Result$Ok(
+									A2(
+										$elm$core$List$cons,
+										'v',
+										A2(
+											$elm$core$Maybe$withDefault,
+											_List_Nil,
+											$elm$core$List$tail(accumulator)))) : $elm$core$Result$Err(accumulator);
+							case 'v':
+								return (angle === 'e') ? $elm$core$Result$Ok(
+									A2($elm$core$List$cons, '-', accumulator)) : ((angle === 'd') ? $elm$core$Result$Ok(
+									A2($elm$core$List$cons, '\\', accumulator)) : $elm$core$Result$Err(accumulator));
+							case '-':
+								return (angle === 'w') ? $elm$core$Result$Ok(
+									_Utils_ap(
+										_List_fromArray(
+											['-', '-']),
+										accumulator)) : ((angle === 'e') ? $elm$core$Result$Ok(
+									_Utils_ap(
+										_List_fromArray(
+											['\\', '-']),
+										A2(
+											$elm$core$Maybe$withDefault,
+											_List_Nil,
+											$elm$core$List$tail(accumulator)))) : $elm$core$Result$Err(accumulator));
+							default:
+								return $elm$core$Result$Err(accumulator);
+						}
+					}
+				} else {
+					return accumulatorResult;
+				}
+			});
+		var angleList = A2($elm$core$String$split, '', signature);
+		var maskCodeResult = function () {
+			var _v1 = A3(
+				$elm$core$List$foldl,
+				parseSignature,
+				$elm$core$Result$Ok(_List_Nil),
+				angleList);
+			if (_v1.$ === 'Ok') {
+				var maskCode = _v1.a;
+				return (A2(
+					$elm$core$Maybe$withDefault,
+					'',
+					$elm$core$List$head(maskCode)) === '\\') ? $elm$core$Result$Err(
+					$elm$core$List$reverse(maskCode)) : $elm$core$Result$Ok(
+					$elm$core$List$reverse(maskCode));
+			} else {
+				var maskCode = _v1.a;
+				return $elm$core$Result$Err(
+					$elm$core$List$reverse(maskCode));
+			}
+		}();
+		if (maskCodeResult.$ === 'Ok') {
+			var maskCode = maskCodeResult.a;
+			return {
+				action: $author$project$Logic$App$Patterns$Misc$mask(maskCode),
+				color: $author$project$Settings$Theme$accent1,
+				displayName: 'Bookkeeper\'s ' + $elm$core$String$concat(maskCode),
+				internalName: 'mask',
+				outputOptions: _List_Nil,
+				selectedOutput: $elm$core$Maybe$Nothing,
+				signature: signature
+			};
+		} else {
+			return $author$project$Logic$App$Patterns$PatternRegistry$unknownPattern;
+		}
+	}
+};
 var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature = function (signature) {
 	var _v0 = $elm$core$List$head(
 		A2(
@@ -11695,9 +11815,18 @@ var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature =
 		var a = _v0.a;
 		return a;
 	} else {
-		return A2($elm$core$String$startsWith, 'aqaa', signature) ? A2($author$project$Logic$App$Patterns$PatternRegistry$numberLiteralGenerator, signature, false) : (A2($elm$core$String$startsWith, 'dedd', signature) ? A2($author$project$Logic$App$Patterns$PatternRegistry$numberLiteralGenerator, signature, true) : _Utils_update(
-			$author$project$Logic$App$Patterns$PatternRegistry$unknownPattern,
-			{displayName: 'Pattern ' + ('\"' + (signature + '\"')), signature: signature}));
+		if (A2($elm$core$String$startsWith, 'aqaa', signature)) {
+			return A2($author$project$Logic$App$Patterns$PatternRegistry$numberLiteralGenerator, signature, false);
+		} else {
+			if (A2($elm$core$String$startsWith, 'dedd', signature)) {
+				return A2($author$project$Logic$App$Patterns$PatternRegistry$numberLiteralGenerator, signature, true);
+			} else {
+				var parseBookkeeperResult = $author$project$Logic$App$Patterns$PatternRegistry$parseBookkeeper(signature);
+				return (parseBookkeeperResult.internalName !== 'unknown') ? parseBookkeeperResult : _Utils_update(
+					$author$project$Logic$App$Patterns$PatternRegistry$unknownPattern,
+					{displayName: 'Pattern ' + ('\"' + (signature + '\"')), signature: signature});
+			}
+		}
 	}
 };
 var $elm$core$Elm$JsArray$indexedMap = _JsArray_indexedMap;

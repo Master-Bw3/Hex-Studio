@@ -2,6 +2,7 @@ module Logic.App.Patterns.PatternRegistry exposing (getPatternFromName, getPatte
 
 import Array exposing (Array)
 import Array.Extra as Array
+import FontAwesome.Solid exposing (signature)
 import Html exposing (i)
 import Logic.App.Patterns.Circles exposing (..)
 import Logic.App.Patterns.Lists exposing (..)
@@ -29,7 +30,7 @@ unknownPattern =
     { signature = ""
     , action = \stack ctx -> { stack = unshift (Garbage InvalidPattern) stack, ctx = ctx, success = False }
     , displayName = "Unknown Pattern"
-    , internalName = ""
+    , internalName = "unknown"
     , color = accent3
     , outputOptions = []
     , selectedOutput = Nothing
@@ -48,8 +49,17 @@ getPatternFromSignature signature =
 
             else if String.startsWith "dedd" signature then
                 numberLiteralGenerator signature True
+
             else
-                { unknownPattern | signature = signature, displayName = "Pattern " ++ "\"" ++ signature ++ "\"" }
+                let
+                    parseBookkeeperResult =
+                        parseBookkeeper signature
+                in
+                if parseBookkeeperResult.internalName /= "unknown" then
+                    parseBookkeeperResult
+
+                else
+                    { unknownPattern | signature = signature, displayName = "Pattern " ++ "\"" ++ signature ++ "\"" }
 
 
 getPatternFromName : String -> ( PatternType, Cmd msg )
@@ -65,6 +75,94 @@ getPatternFromName name =
 
                 Nothing ->
                     ( unknownPattern, Cmd.none )
+
+
+parseBookkeeper : String -> PatternType
+parseBookkeeper signature =
+    if signature == "" then
+        { signature = signature, internalName = "mask", action = mask [ "-" ], displayName = "Bookkeeper's -", color = accent1, outputOptions = [], selectedOutput = Nothing }
+
+    else
+        let
+            angleList =
+                String.split "" signature
+
+            parseSignature angle accumulatorResult =
+                case accumulatorResult of
+                    Ok accumulator ->
+                        if List.length accumulator == 0 then
+                            if angle == "e" then
+                                Ok <| [ "\\", "-" ] ++ accumulator
+
+                            else if angle == "w" then
+                                Ok <| [ "-", "-" ] ++ accumulator
+
+                            else if angle == "a" then
+                                Ok <| "v" :: accumulator
+
+                            else
+                                Err accumulator
+
+                        else
+                            case Maybe.withDefault "" (List.head accumulator) of
+                                "\\" ->
+                                    if angle == "a" then
+                                        Ok <| "v" :: Maybe.withDefault [] (List.tail accumulator)
+
+                                    else
+                                        Err accumulator
+
+                                "v" ->
+                                    if angle == "e" then
+                                        Ok <| "-" :: accumulator
+
+                                    else if angle == "d" then
+                                        Ok <| "\\" :: accumulator
+
+                                    else
+                                        Err accumulator
+
+                                "-" ->
+                                    if angle == "w" then
+                                        Ok <| [ "-", "-" ] ++ accumulator
+
+                                    else if angle == "e" then
+                                        Ok <| [ "\\", "-" ] ++ Maybe.withDefault [] (List.tail accumulator)
+
+                                    else
+                                        Err accumulator
+
+                                _ ->
+                                    Err accumulator
+
+                    Err _ ->
+                        accumulatorResult
+
+            maskCodeResult =
+                case List.foldl parseSignature (Ok []) angleList of
+                    Ok maskCode ->
+                        if Maybe.withDefault "" (List.head maskCode) == "\\" then
+                            Err <| List.reverse maskCode
+
+                        else
+                            Ok <| List.reverse maskCode
+
+                    Err maskCode ->
+                        Err <| List.reverse maskCode
+        in
+        case maskCodeResult of
+            Ok maskCode ->
+                { signature = signature
+                , internalName = "mask"
+                , action = mask maskCode
+                , displayName = "Bookkeeper's " ++ String.concat maskCode
+                , color = accent1
+                , outputOptions = []
+                , selectedOutput = Nothing
+                }
+
+            Err _ ->
+                unknownPattern
 
 
 patternRegistry : List PatternType

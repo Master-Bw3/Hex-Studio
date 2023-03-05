@@ -1,10 +1,9 @@
 module Logic.App.Patterns.Misc exposing (..)
 
 import Array exposing (Array)
-import Logic.App.Patterns.OperatorUtils exposing (action1Input, action2Inputs, getAny, getEntity, getVector, spell2Inputs)
-import Logic.App.Types exposing (ActionResult, CastingContext, EntityType(..), Iota(..))
+import Logic.App.Patterns.OperatorUtils exposing (action1Input, action2Inputs, getAny, getEntity, getVector, spell1Input, spell2Inputs, spellNoInput)
+import Logic.App.Types exposing (ActionResult, CastingContext, EntityType(..), Iota(..), Mishap(..))
 import Logic.App.Utils.Utils exposing (unshift)
-import Logic.App.Patterns.OperatorUtils exposing (spell1Input)
 
 
 numberLiteral : Float -> Array Iota -> CastingContext -> ActionResult
@@ -50,3 +49,15 @@ getEntityVelocity stack ctx =
 print : Array Iota -> CastingContext -> ActionResult
 print stack ctx =
     action1Input stack ctx getAny (\iota _ -> ( Array.fromList [ iota ], ctx ))
+
+
+mask : List String -> Array Iota -> CastingContext -> ActionResult
+mask maskCode stack ctx =
+    if Array.length stack >= List.length maskCode then
+        { stack = Array.empty, ctx = ctx, success = True }
+
+    else
+        { stack = Array.append stack <| Array.repeat (List.length maskCode - Array.length stack) (Garbage NotEnoughIotas)
+        , ctx = ctx
+        , success = False
+        }

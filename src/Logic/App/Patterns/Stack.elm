@@ -169,7 +169,7 @@ fisherman stack ctx =
                                     { stack = unshift caughtIota newNewStack, ctx = ctx, success = True }
 
                         _ ->
-                            { stack = Array.fromList [ Garbage CatastrophicFailure ], ctx = ctx, success = False }
+                            { stack = unshift (Garbage CatastrophicFailure) stack, ctx = ctx, success = False }
 
 
 fishermanCopy : Array Iota -> CastingContext -> ActionResult
@@ -205,4 +205,4 @@ fishermanCopy stack ctx =
                                     { stack = unshift caughtIota newStack, ctx = ctx, success = True }
 
                         _ ->
-                            { stack = Array.fromList [ Garbage CatastrophicFailure ], ctx = ctx, success = False }
+                            { stack = unshift (Garbage CatastrophicFailure) stack, ctx = ctx, success = False }
