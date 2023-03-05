@@ -181,42 +181,55 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle =
                                                             [ div [ class "output_option_box", style "grid-template-columns" "2.1fr 3fr" ]
                                                                 [ label [] [ text "X Value:" ]
                                                                 , input
-                                                                    [ value <| String.fromFloat x
+                                                                    [ placeholder "0"
                                                                     , onInput
                                                                         (\str ->
                                                                             UpdatePatternOuptut index
                                                                                 { pattern | selectedOutput = Just (Vector ( Maybe.withDefault 0 <| String.toFloat str, y, z )) }
                                                                         )
                                                                     ]
-                                                                    (List.map (\iota -> option [] [ text <| getIotaValueAsString iota ]) pattern.outputOptions)
+                                                                    []
                                                                 ]
                                                             , div [ class "output_option_box", style "grid-template-columns" "2.1fr 3fr" ]
                                                                 [ label [] [ text "Y Value:" ]
                                                                 , input
-                                                                    [ value <| String.fromFloat y
-
+                                                                    [ placeholder "0"
                                                                     , onInput
                                                                         (\str ->
                                                                             UpdatePatternOuptut index
                                                                                 { pattern | selectedOutput = Just (Vector ( x, Maybe.withDefault 0 <| String.toFloat str, z )) }
                                                                         )
                                                                     ]
-                                                                    (List.map (\iota -> option [] [ text <| getIotaValueAsString iota ]) pattern.outputOptions)
+                                                                    []
                                                                 ]
                                                             , div [ class "output_option_box", style "grid-template-columns" "2.1fr 3fr" ]
                                                                 [ label [] [ text "Z Value:" ]
                                                                 , input
-                                                                    [ value <| String.fromFloat z
-
+                                                                    [ placeholder "0"
                                                                     , onInput
                                                                         (\str ->
                                                                             UpdatePatternOuptut index
-                                                                                { pattern | selectedOutput = Just (Vector (x, y, Maybe.withDefault 0 <| String.toFloat str)) }
+                                                                                { pattern | selectedOutput = Just (Vector ( x, y, Maybe.withDefault 0 <| String.toFloat str )) }
                                                                         )
                                                                     ]
-                                                                    (List.map (\iota -> option [] [ text <| getIotaValueAsString iota ]) pattern.outputOptions)
+                                                                    []
                                                                 ]
                                                             ]
+
+                                                Just (Number number) ->
+                                                    [ div [ class "output_option_box", style "grid-template-columns" "2.1fr 3fr" ]
+                                                        [ label [] [ text "Number:" ]
+                                                        , input
+                                                            [ placeholder "0"
+                                                            , onInput
+                                                                (\str ->
+                                                                    UpdatePatternOuptut index
+                                                                        { pattern | selectedOutput = Just (Number <| Maybe.withDefault 0 <| String.toFloat str) }
+                                                                )
+                                                            ]
+                                                            (List.map (\iota -> option [] [ text <| getIotaValueAsString iota ]) pattern.outputOptions)
+                                                        ]
+                                                    ]
 
                                                 _ ->
                                                     []

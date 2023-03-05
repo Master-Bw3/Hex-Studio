@@ -39,26 +39,12 @@ getEntityLook stack ctx =
 
 getEntityHeight : Array Iota -> CastingContext -> ActionResult
 getEntityHeight stack ctx =
-    let
-        action _ _ =
-            ( Number 0
-                |> Array.repeat 1
-            , ctx
-            )
-    in
-    action1Input stack ctx getEntity action
+    spell1Input stack ctx getEntity
 
 
 getEntityVelocity : Array Iota -> CastingContext -> ActionResult
 getEntityVelocity stack ctx =
-    let
-        action _ _ =
-            ( Vector ( 0.0, 0.0, 0.0 )
-                |> Array.repeat 1
-            , ctx
-            )
-    in
-    action1Input stack ctx getEntity action
+    spell1Input stack ctx getEntity
 
 
 print : Array Iota -> CastingContext -> ActionResult

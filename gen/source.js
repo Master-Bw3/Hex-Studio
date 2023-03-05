@@ -9269,16 +9269,7 @@ var $author$project$Logic$App$Patterns$Selectors$getEntity = F2(
 	});
 var $author$project$Logic$App$Patterns$Misc$getEntityHeight = F2(
 	function (stack, ctx) {
-		var action = F2(
-			function (_v0, _v1) {
-				return _Utils_Tuple2(
-					A2(
-						$elm$core$Array$repeat,
-						1,
-						$author$project$Logic$App$Types$Number(0)),
-					ctx);
-			});
-		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, action);
+		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity);
 	});
 var $author$project$Logic$App$Patterns$Misc$getEntityLook = F2(
 	function (stack, ctx) {
@@ -9286,17 +9277,7 @@ var $author$project$Logic$App$Patterns$Misc$getEntityLook = F2(
 	});
 var $author$project$Logic$App$Patterns$Misc$getEntityVelocity = F2(
 	function (stack, ctx) {
-		var action = F2(
-			function (_v0, _v1) {
-				return _Utils_Tuple2(
-					A2(
-						$elm$core$Array$repeat,
-						1,
-						$author$project$Logic$App$Types$Vector(
-							_Utils_Tuple3(0.0, 0.0, 0.0))),
-					ctx);
-			});
-		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, action);
+		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity);
 	});
 var $author$project$Logic$App$Patterns$Math$greaterThan = F2(
 	function (stack, ctx) {
@@ -10574,8 +10555,34 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _List_f
 				_Utils_Tuple3(0, 0, 0))),
 		signature: 'wa'
 	},
-		{action: $author$project$Logic$App$Patterns$Misc$getEntityHeight, color: $author$project$Settings$Theme$accent1, displayName: 'Stadiometer\'s Purification', internalName: 'get_entity_height', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'awq'},
-		{action: $author$project$Logic$App$Patterns$Misc$getEntityVelocity, color: $author$project$Settings$Theme$accent1, displayName: 'Pace Purification', internalName: 'get_entity_velocity', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wq'},
+		{
+		action: $author$project$Logic$App$Patterns$Misc$getEntityHeight,
+		color: $author$project$Settings$Theme$accent1,
+		displayName: 'Stadiometer\'s Purification',
+		internalName: 'get_entity_height',
+		outputOptions: _List_fromArray(
+			[
+				$author$project$Logic$App$Types$Number(0)
+			]),
+		selectedOutput: $elm$core$Maybe$Just(
+			$author$project$Logic$App$Types$Number(0)),
+		signature: 'awq'
+	},
+		{
+		action: $author$project$Logic$App$Patterns$Misc$getEntityVelocity,
+		color: $author$project$Settings$Theme$accent1,
+		displayName: 'Pace Purification',
+		internalName: 'get_entity_velocity',
+		outputOptions: _List_fromArray(
+			[
+				$author$project$Logic$App$Types$Vector(
+				_Utils_Tuple3(0, 0, 0))
+			]),
+		selectedOutput: $elm$core$Maybe$Just(
+			$author$project$Logic$App$Types$Vector(
+				_Utils_Tuple3(0, 0, 0))),
+		signature: 'wq'
+	},
 		{
 		action: $author$project$Logic$App$Patterns$Misc$raycast,
 		color: $author$project$Settings$Theme$accent1,
@@ -13638,13 +13645,14 @@ var $author$project$Components$App$Panels$PatternPanel$draggedSourceConfig = fun
 	};
 };
 var $author$project$Logic$App$Utils$GetIotaValue$getIotaFromString = function (string) {
-	return (string === 'Null') ? $author$project$Logic$App$Types$Null : ((string === 'Entity') ? $author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset) : ((!_Utils_eq(
+	return (string === 'Null') ? $author$project$Logic$App$Types$Null : ((string === 'Entity') ? $author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset) : ((string === 'Vector') ? $author$project$Logic$App$Types$Vector(
+		_Utils_Tuple3(0, 0, 0)) : ((!_Utils_eq(
 		$elm$core$String$toFloat(string),
 		$elm$core$Maybe$Nothing)) ? $author$project$Logic$App$Types$Number(
 		A2(
 			$elm$core$Maybe$withDefault,
 			0,
-			$elm$core$String$toFloat(string))) : $author$project$Logic$App$Types$Null));
+			$elm$core$String$toFloat(string))) : $author$project$Logic$App$Types$Null)));
 };
 var $author$project$Logic$App$Utils$GetIotaValue$getIotaTypeAsString = function (iota) {
 	switch (iota.$) {
@@ -13974,185 +13982,212 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F4(
 											])),
 									function () {
 										var _v0 = pattern.selectedOutput;
-										if ((_v0.$ === 'Just') && (_v0.a.$ === 'Vector')) {
-											var vector = _v0.a.a;
-											var x = vector.a;
-											var y = vector.b;
-											var z = vector.c;
-											return _List_fromArray(
-												[
-													A2(
-													$elm$html$Html$div,
-													_List_fromArray(
-														[
-															$elm$html$Html$Attributes$class('output_option_box'),
-															A2($elm$html$Html$Attributes$style, 'grid-template-columns', '2.1fr 3fr')
-														]),
-													_List_fromArray(
-														[
-															A2(
-															$elm$html$Html$label,
-															_List_Nil,
-															_List_fromArray(
-																[
-																	$elm$html$Html$text('X Value:')
-																])),
-															A2(
-															$elm$html$Html$input,
-															_List_fromArray(
-																[
-																	$elm$html$Html$Attributes$value(
-																	$elm$core$String$fromFloat(x)),
-																	$elm$html$Html$Events$onInput(
-																	function (str) {
-																		return A2(
-																			$author$project$Logic$App$Msg$UpdatePatternOuptut,
-																			index,
-																			_Utils_update(
-																				pattern,
-																				{
-																					selectedOutput: $elm$core$Maybe$Just(
-																						$author$project$Logic$App$Types$Vector(
-																							_Utils_Tuple3(
-																								A2(
-																									$elm$core$Maybe$withDefault,
-																									0,
-																									$elm$core$String$toFloat(str)),
-																								y,
-																								z)))
-																				}));
-																	})
-																]),
-															A2(
-																$elm$core$List$map,
-																function (iota) {
-																	return A2(
-																		$elm$html$Html$option,
+										_v0$2:
+										while (true) {
+											if (_v0.$ === 'Just') {
+												switch (_v0.a.$) {
+													case 'Vector':
+														var vector = _v0.a.a;
+														var x = vector.a;
+														var y = vector.b;
+														var z = vector.c;
+														return _List_fromArray(
+															[
+																A2(
+																$elm$html$Html$div,
+																_List_fromArray(
+																	[
+																		$elm$html$Html$Attributes$class('output_option_box'),
+																		A2($elm$html$Html$Attributes$style, 'grid-template-columns', '2.1fr 3fr')
+																	]),
+																_List_fromArray(
+																	[
+																		A2(
+																		$elm$html$Html$label,
 																		_List_Nil,
 																		_List_fromArray(
 																			[
-																				$elm$html$Html$text(
-																				$author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString(iota))
-																			]));
-																},
-																pattern.outputOptions))
-														])),
-													A2(
-													$elm$html$Html$div,
-													_List_fromArray(
-														[
-															$elm$html$Html$Attributes$class('output_option_box'),
-															A2($elm$html$Html$Attributes$style, 'grid-template-columns', '2.1fr 3fr')
-														]),
-													_List_fromArray(
-														[
-															A2(
-															$elm$html$Html$label,
-															_List_Nil,
-															_List_fromArray(
-																[
-																	$elm$html$Html$text('Y Value:')
-																])),
-															A2(
-															$elm$html$Html$input,
-															_List_fromArray(
-																[
-																	$elm$html$Html$Attributes$value(
-																	$elm$core$String$fromFloat(y)),
-																	$elm$html$Html$Events$onInput(
-																	function (str) {
-																		return A2(
-																			$author$project$Logic$App$Msg$UpdatePatternOuptut,
-																			index,
-																			_Utils_update(
-																				pattern,
-																				{
-																					selectedOutput: $elm$core$Maybe$Just(
-																						$author$project$Logic$App$Types$Vector(
-																							_Utils_Tuple3(
-																								x,
-																								A2(
-																									$elm$core$Maybe$withDefault,
-																									0,
-																									$elm$core$String$toFloat(str)),
-																								z)))
-																				}));
-																	})
-																]),
-															A2(
-																$elm$core$List$map,
-																function (iota) {
-																	return A2(
-																		$elm$html$Html$option,
+																				$elm$html$Html$text('X Value:')
+																			])),
+																		A2(
+																		$elm$html$Html$input,
+																		_List_fromArray(
+																			[
+																				$elm$html$Html$Attributes$placeholder('0'),
+																				$elm$html$Html$Events$onInput(
+																				function (str) {
+																					return A2(
+																						$author$project$Logic$App$Msg$UpdatePatternOuptut,
+																						index,
+																						_Utils_update(
+																							pattern,
+																							{
+																								selectedOutput: $elm$core$Maybe$Just(
+																									$author$project$Logic$App$Types$Vector(
+																										_Utils_Tuple3(
+																											A2(
+																												$elm$core$Maybe$withDefault,
+																												0,
+																												$elm$core$String$toFloat(str)),
+																											y,
+																											z)))
+																							}));
+																				})
+																			]),
+																		_List_Nil)
+																	])),
+																A2(
+																$elm$html$Html$div,
+																_List_fromArray(
+																	[
+																		$elm$html$Html$Attributes$class('output_option_box'),
+																		A2($elm$html$Html$Attributes$style, 'grid-template-columns', '2.1fr 3fr')
+																	]),
+																_List_fromArray(
+																	[
+																		A2(
+																		$elm$html$Html$label,
 																		_List_Nil,
 																		_List_fromArray(
 																			[
-																				$elm$html$Html$text(
-																				$author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString(iota))
-																			]));
-																},
-																pattern.outputOptions))
-														])),
-													A2(
-													$elm$html$Html$div,
-													_List_fromArray(
-														[
-															$elm$html$Html$Attributes$class('output_option_box'),
-															A2($elm$html$Html$Attributes$style, 'grid-template-columns', '2.1fr 3fr')
-														]),
-													_List_fromArray(
-														[
-															A2(
-															$elm$html$Html$label,
-															_List_Nil,
-															_List_fromArray(
-																[
-																	$elm$html$Html$text('Z Value:')
-																])),
-															A2(
-															$elm$html$Html$input,
-															_List_fromArray(
-																[
-																	$elm$html$Html$Attributes$value(
-																	$elm$core$String$fromFloat(z)),
-																	$elm$html$Html$Events$onInput(
-																	function (str) {
-																		return A2(
-																			$author$project$Logic$App$Msg$UpdatePatternOuptut,
-																			index,
-																			_Utils_update(
-																				pattern,
-																				{
-																					selectedOutput: $elm$core$Maybe$Just(
-																						$author$project$Logic$App$Types$Vector(
-																							_Utils_Tuple3(
-																								x,
-																								y,
-																								A2(
-																									$elm$core$Maybe$withDefault,
-																									0,
-																									$elm$core$String$toFloat(str)))))
-																				}));
-																	})
-																]),
-															A2(
-																$elm$core$List$map,
-																function (iota) {
-																	return A2(
-																		$elm$html$Html$option,
+																				$elm$html$Html$text('Y Value:')
+																			])),
+																		A2(
+																		$elm$html$Html$input,
+																		_List_fromArray(
+																			[
+																				$elm$html$Html$Attributes$placeholder('0'),
+																				$elm$html$Html$Events$onInput(
+																				function (str) {
+																					return A2(
+																						$author$project$Logic$App$Msg$UpdatePatternOuptut,
+																						index,
+																						_Utils_update(
+																							pattern,
+																							{
+																								selectedOutput: $elm$core$Maybe$Just(
+																									$author$project$Logic$App$Types$Vector(
+																										_Utils_Tuple3(
+																											x,
+																											A2(
+																												$elm$core$Maybe$withDefault,
+																												0,
+																												$elm$core$String$toFloat(str)),
+																											z)))
+																							}));
+																				})
+																			]),
+																		_List_Nil)
+																	])),
+																A2(
+																$elm$html$Html$div,
+																_List_fromArray(
+																	[
+																		$elm$html$Html$Attributes$class('output_option_box'),
+																		A2($elm$html$Html$Attributes$style, 'grid-template-columns', '2.1fr 3fr')
+																	]),
+																_List_fromArray(
+																	[
+																		A2(
+																		$elm$html$Html$label,
 																		_List_Nil,
 																		_List_fromArray(
 																			[
-																				$elm$html$Html$text(
-																				$author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString(iota))
-																			]));
-																},
-																pattern.outputOptions))
-														]))
-												]);
-										} else {
-											return _List_Nil;
+																				$elm$html$Html$text('Z Value:')
+																			])),
+																		A2(
+																		$elm$html$Html$input,
+																		_List_fromArray(
+																			[
+																				$elm$html$Html$Attributes$placeholder('0'),
+																				$elm$html$Html$Events$onInput(
+																				function (str) {
+																					return A2(
+																						$author$project$Logic$App$Msg$UpdatePatternOuptut,
+																						index,
+																						_Utils_update(
+																							pattern,
+																							{
+																								selectedOutput: $elm$core$Maybe$Just(
+																									$author$project$Logic$App$Types$Vector(
+																										_Utils_Tuple3(
+																											x,
+																											y,
+																											A2(
+																												$elm$core$Maybe$withDefault,
+																												0,
+																												$elm$core$String$toFloat(str)))))
+																							}));
+																				})
+																			]),
+																		_List_Nil)
+																	]))
+															]);
+													case 'Number':
+														var number = _v0.a.a;
+														return _List_fromArray(
+															[
+																A2(
+																$elm$html$Html$div,
+																_List_fromArray(
+																	[
+																		$elm$html$Html$Attributes$class('output_option_box'),
+																		A2($elm$html$Html$Attributes$style, 'grid-template-columns', '2.1fr 3fr')
+																	]),
+																_List_fromArray(
+																	[
+																		A2(
+																		$elm$html$Html$label,
+																		_List_Nil,
+																		_List_fromArray(
+																			[
+																				$elm$html$Html$text('Number:')
+																			])),
+																		A2(
+																		$elm$html$Html$input,
+																		_List_fromArray(
+																			[
+																				$elm$html$Html$Attributes$placeholder('0'),
+																				$elm$html$Html$Events$onInput(
+																				function (str) {
+																					return A2(
+																						$author$project$Logic$App$Msg$UpdatePatternOuptut,
+																						index,
+																						_Utils_update(
+																							pattern,
+																							{
+																								selectedOutput: $elm$core$Maybe$Just(
+																									$author$project$Logic$App$Types$Number(
+																										A2(
+																											$elm$core$Maybe$withDefault,
+																											0,
+																											$elm$core$String$toFloat(str))))
+																							}));
+																				})
+																			]),
+																		A2(
+																			$elm$core$List$map,
+																			function (iota) {
+																				return A2(
+																					$elm$html$Html$option,
+																					_List_Nil,
+																					_List_fromArray(
+																						[
+																							$elm$html$Html$text(
+																							$author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString(iota))
+																						]));
+																			},
+																			pattern.outputOptions))
+																	]))
+															]);
+													default:
+														break _v0$2;
+												}
+											} else {
+												break _v0$2;
+											}
 										}
+										return _List_Nil;
 									}()) : _List_Nil))
 						]));
 			});

@@ -27,6 +27,7 @@ getIotaValueAsHtmlMsg iota =
     else
         [ p [] [ text string ] ]
 
+
 getIotaTypeAsString : Iota -> String
 getIotaTypeAsString iota =
     case iota of
@@ -60,6 +61,7 @@ getIotaTypeAsString iota =
 
         OpenParenthesis _ ->
             "List"
+
 
 getIotaValueAsString : Iota -> String
 getIotaValueAsString iota =
@@ -178,6 +180,9 @@ getIotaFromString string =
 
     else if string == "Entity" then
         Entity Unset
+
+    else if string == "Vector" then
+        Vector ( 0, 0, 0 )
 
     else if String.toFloat string /= Nothing then
         Number <| Maybe.withDefault 0 <| String.toFloat string
