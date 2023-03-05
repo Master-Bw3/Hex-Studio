@@ -124,7 +124,7 @@ parseBookkeeper signature =
 
                                 "-" ->
                                     if angle == "w" then
-                                        Ok <| [ "-", "-" ] ++ accumulator
+                                        Ok <| "-" :: accumulator
 
                                     else if angle == "e" then
                                         Ok <| [ "\\", "-" ] ++ Maybe.withDefault [] (List.tail accumulator)

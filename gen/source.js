@@ -11681,21 +11681,68 @@ var $author$project$Logic$App$Patterns$PatternRegistry$numberLiteralGenerator = 
 			signature: angleSignature
 		};
 	});
+var $elm_community$array_extra$Array$Extra$map2 = F3(
+	function (combineAb, aArray, bArray) {
+		return $elm$core$Array$fromList(
+			A3(
+				$elm$core$List$map2,
+				combineAb,
+				$elm$core$Array$toList(aArray),
+				$elm$core$Array$toList(bArray)));
+	});
 var $author$project$Logic$App$Patterns$Misc$mask = F3(
 	function (maskCode, stack, ctx) {
-		return (_Utils_cmp(
+		var action = F2(
+			function (code, iota) {
+				if (code === 'v') {
+					return $elm$core$Maybe$Nothing;
+				} else {
+					return $elm$core$Maybe$Just(iota);
+				}
+			});
+		if (_Utils_cmp(
 			$elm$core$Array$length(stack),
-			$elm$core$List$length(maskCode)) > -1) ? {ctx: ctx, stack: $elm$core$Array$empty, success: true} : {
-			ctx: ctx,
-			stack: A2(
+			$elm$core$List$length(maskCode)) > -1) {
+			var newStack = A2(
 				$elm$core$Array$append,
-				stack,
 				A2(
-					$elm$core$Array$repeat,
-					$elm$core$List$length(maskCode) - $elm$core$Array$length(stack),
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas))),
-			success: false
-		};
+					$elm$core$Array$map,
+					function (x) {
+						return A2(
+							$elm$core$Maybe$withDefault,
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure),
+							x);
+					},
+					A2(
+						$elm$core$Array$filter,
+						function (x) {
+							return $author$project$Logic$App$Utils$Utils$isJust(x);
+						},
+						A3(
+							$elm_community$array_extra$Array$Extra$map2,
+							action,
+							$elm$core$Array$fromList(
+								$elm$core$List$reverse(maskCode)),
+							stack))),
+				A3(
+					$elm$core$Array$slice,
+					$elm$core$List$length(maskCode),
+					$elm$core$Array$length(stack),
+					stack));
+			return {ctx: ctx, stack: newStack, success: true};
+		} else {
+			return {
+				ctx: ctx,
+				stack: A2(
+					$elm$core$Array$append,
+					stack,
+					A2(
+						$elm$core$Array$repeat,
+						$elm$core$List$length(maskCode) - $elm$core$Array$length(stack),
+						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas))),
+				success: false
+			};
+		}
 	});
 var $author$project$Logic$App$Patterns$PatternRegistry$parseBookkeeper = function (signature) {
 	if (signature === '') {
@@ -11747,10 +11794,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$parseBookkeeper = functio
 									A2($elm$core$List$cons, '\\', accumulator)) : $elm$core$Result$Err(accumulator));
 							case '-':
 								return (angle === 'w') ? $elm$core$Result$Ok(
-									_Utils_ap(
-										_List_fromArray(
-											['-', '-']),
-										accumulator)) : ((angle === 'e') ? $elm$core$Result$Ok(
+									A2($elm$core$List$cons, '-', accumulator)) : ((angle === 'e') ? $elm$core$Result$Ok(
 									_Utils_ap(
 										_List_fromArray(
 											['\\', '-']),
@@ -11883,15 +11927,6 @@ var $elm_community$array_extra$Array$Extra$insertAt = F2(
 		};
 	});
 var $elm$core$Debug$log = _Debug_log;
-var $elm_community$array_extra$Array$Extra$map2 = F3(
-	function (combineAb, aArray, bArray) {
-		return $elm$core$Array$fromList(
-			A3(
-				$elm$core$List$map2,
-				combineAb,
-				$elm$core$Array$toList(aArray),
-				$elm$core$Array$toList(bArray)));
-	});
 var $elm$core$Basics$min = F2(
 	function (x, y) {
 		return (_Utils_cmp(x, y) < 0) ? x : y;
