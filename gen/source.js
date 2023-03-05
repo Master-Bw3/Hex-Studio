@@ -15518,7 +15518,7 @@ var $author$project$Components$App$Grid$renderPoint = F4(
 				$author$project$Components$App$Grid$distanceBetweenCoordinates,
 				mousePos,
 				_Utils_Tuple2(point.x + gridOffset, point.y)) / 30)) * scale) : 0;
-		return (pointScale > 0.1) ? _List_fromArray(
+		return (pointScale > 0.01) ? _List_fromArray(
 			[
 				A2(
 				$elm$svg$Svg$svg,
