@@ -274,6 +274,18 @@ getInteger iota =
         _ ->
             Nothing
 
+getPositiveInteger : Iota -> Maybe Iota
+getPositiveInteger iota =
+    case iota of
+        Number number ->
+            if toFloat (round number) == number && (round number) >= 0 then
+                Just iota
+
+            else
+                Nothing
+
+        _ ->
+            Nothing
 
 getNumber : Iota -> Maybe Iota
 getNumber iota =

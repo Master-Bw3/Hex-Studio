@@ -8542,6 +8542,30 @@ var $author$project$Logic$App$Patterns$Spells$conjureLight = F2(
 	function (stack, ctx) {
 		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
 	});
+var $author$project$Logic$App$Patterns$Lists$construct = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (listIota, iota, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						if (listIota.$ === 'IotaList') {
+							var list = listIota.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$IotaList(
+									A2($author$project$Logic$App$Utils$Utils$unshift, iota, list)));
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getIotaList, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
+	});
 var $author$project$Logic$App$Patterns$Math$constructVector = F2(
 	function (stack, ctx) {
 		var action = F4(
@@ -8638,6 +8662,76 @@ var $author$project$Logic$App$Patterns$Spells$craftArtifact = F3(
 var $author$project$Logic$App$Patterns$Spells$createWater = F2(
 	function (stack, ctx) {
 		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
+	});
+var $elm_community$array_extra$Array$Extra$sliceFrom = function (lengthDropped) {
+	return function (array) {
+		return A3(
+			$elm$core$Array$slice,
+			lengthDropped,
+			$elm$core$Array$length(array),
+			array);
+	};
+};
+var $elm_community$array_extra$Array$Extra$sliceUntil = function (lengthNew) {
+	return function (array) {
+		return A3(
+			$elm$core$Array$slice,
+			0,
+			(lengthNew >= 0) ? lengthNew : ($elm$core$Array$length(array) + lengthNew),
+			array);
+	};
+};
+var $elm_community$array_extra$Array$Extra$splitAt = function (index) {
+	return function (array) {
+		return (index > 0) ? _Utils_Tuple2(
+			A2($elm_community$array_extra$Array$Extra$sliceUntil, index, array),
+			A2($elm_community$array_extra$Array$Extra$sliceFrom, index, array)) : _Utils_Tuple2($elm$core$Array$empty, array);
+	};
+};
+var $elm_community$array_extra$Array$Extra$removeAt = function (index) {
+	return function (array) {
+		if (index >= 0) {
+			var _v0 = A2($elm_community$array_extra$Array$Extra$splitAt, index, array);
+			var beforeIndex = _v0.a;
+			var startingAtIndex = _v0.b;
+			var lengthStartingAtIndex = $elm$core$Array$length(startingAtIndex);
+			return (!lengthStartingAtIndex) ? beforeIndex : A2(
+				$elm$core$Array$append,
+				beforeIndex,
+				A3($elm$core$Array$slice, 1, lengthStartingAtIndex, startingAtIndex));
+		} else {
+			return array;
+		}
+	};
+};
+var $author$project$Logic$App$Patterns$Lists$deconstruct = F2(
+	function (stack, ctx) {
+		var action = F2(
+			function (iota, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						if (iota.$ === 'IotaList') {
+							var list = iota.a;
+							return $elm$core$Array$fromList(
+								_List_fromArray(
+									[
+										A2(
+										$elm$core$Maybe$withDefault,
+										$author$project$Logic$App$Types$Null,
+										A2($elm$core$Array$get, 0, list)),
+										$author$project$Logic$App$Types$IotaList(
+										A2($elm_community$array_extra$Array$Extra$removeAt, 0, list))
+									]));
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getIotaList, action);
 	});
 var $author$project$Logic$App$Patterns$Math$deconstructVector = F2(
 	function (stack, ctx) {
@@ -9278,7 +9372,6 @@ var $elm$core$Array$foldl = F3(
 			A3($elm$core$Elm$JsArray$foldl, helper, baseCase, tree),
 			tail);
 	});
-var $elm$core$Debug$log = _Debug_log;
 var $elm_community$array_extra$Array$Extra$reverseToList = A2($elm$core$Array$foldl, $elm$core$List$cons, _List_Nil);
 var $elm_community$array_extra$Array$Extra$reverse = A2($elm$core$Basics$composeR, $elm_community$array_extra$Array$Extra$reverseToList, $elm$core$Array$fromList);
 var $author$project$Logic$App$Patterns$PatternRegistry$forEach = F2(
@@ -9372,7 +9465,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$forEach = F2(
 										var success = (accumulator.success && subApplyResult.error) ? false : accumulator.success;
 										return {
 											_continue: ((!success) || subApplyResult.halted) ? false : true,
-											ctx: A2($elm$core$Debug$log, 'ctx', subApplyResult.ctx),
+											ctx: subApplyResult.ctx,
 											stack: A3(
 												$elm$core$Array$set,
 												0,
@@ -9570,6 +9663,39 @@ var $author$project$Logic$App$Patterns$Lists$index = F2(
 			});
 		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getIotaList, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
 	});
+var $author$project$Logic$App$Patterns$Lists$indexOf = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (iota1, iota2, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						if (iota1.$ === 'IotaList') {
+							var list = iota1.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Number(
+									A2(
+										$elm$core$Maybe$withDefault,
+										_Utils_Tuple2(-1, $author$project$Logic$App$Types$Null),
+										$elm$core$List$head(
+											A2(
+												$elm$core$List$filter,
+												function (elm) {
+													return A2($author$project$Logic$App$Patterns$OperatorUtils$checkEquality, elm.b, iota2);
+												},
+												$elm$core$Array$toIndexedList(list)))).a));
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getIotaList, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
+	});
 var $author$project$Logic$App$Patterns$Math$invertBool = F2(
 	function (stack, ctx) {
 		var action = F2(
@@ -9598,6 +9724,84 @@ var $author$project$Logic$App$Patterns$Math$invertBool = F2(
 					ctx);
 			});
 		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getBoolean, action);
+	});
+var $author$project$Logic$App$Patterns$Lists$lastNList = F2(
+	function (stack, ctx) {
+		var newStack = A3(
+			$elm$core$Array$slice,
+			1,
+			$elm$core$Array$length(stack),
+			stack);
+		var maybeIota = A2($elm$core$Array$get, 0, stack);
+		if (maybeIota.$ === 'Nothing') {
+			return {
+				ctx: ctx,
+				stack: A2(
+					$elm$core$Array$append,
+					$elm$core$Array$fromList(
+						_List_fromArray(
+							[
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas)
+							])),
+					newStack),
+				success: false
+			};
+		} else {
+			var iota = maybeIota.a;
+			var _v1 = $author$project$Logic$App$Patterns$OperatorUtils$getInteger(iota);
+			if (_v1.$ === 'Nothing') {
+				return {
+					ctx: ctx,
+					stack: A2(
+						$author$project$Logic$App$Utils$Utils$unshift,
+						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+						newStack),
+					success: false
+				};
+			} else {
+				if (iota.$ === 'Number') {
+					var number = iota.a;
+					var selectedIotas = $elm_community$array_extra$Array$Extra$reverse(
+						A3(
+							$elm$core$Array$slice,
+							0,
+							$elm$core$Basics$round(number),
+							newStack));
+					var newNewStack = A3(
+						$author$project$Logic$App$Utils$Utils$removeFromArray,
+						0,
+						$elm$core$Basics$round(number),
+						newStack);
+					return (_Utils_cmp(
+						$elm$core$Basics$round(number),
+						$elm$core$Array$length(newStack)) > 0) ? {
+						ctx: ctx,
+						stack: A2(
+							$author$project$Logic$App$Utils$Utils$unshift,
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
+							newStack),
+						success: false
+					} : {
+						ctx: ctx,
+						stack: A2(
+							$author$project$Logic$App$Utils$Utils$unshift,
+							$author$project$Logic$App$Types$IotaList(selectedIotas),
+							newNewStack),
+						success: true
+					};
+				} else {
+					return {
+						ctx: ctx,
+						stack: $elm$core$Array$fromList(
+							_List_fromArray(
+								[
+									$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure)
+								])),
+						success: false
+					};
+				}
+			}
+		}
 	});
 var $author$project$Logic$App$Patterns$Math$lessThan = F2(
 	function (stack, ctx) {
@@ -9651,6 +9855,59 @@ var $author$project$Logic$App$Patterns$Math$lessThanOrEqualTo = F2(
 			});
 		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
 	});
+var $author$project$Logic$App$Patterns$Lists$listRemove = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (iota1, iota2, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						var _v0 = _Utils_Tuple2(iota1, iota2);
+						if ((_v0.a.$ === 'IotaList') && (_v0.b.$ === 'Number')) {
+							var list1 = _v0.a.a;
+							var number = _v0.b.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$IotaList(
+									A2(
+										$elm_community$array_extra$Array$Extra$removeAt,
+										$elm$core$Basics$round(number),
+										list1)));
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getIotaList, $author$project$Logic$App$Patterns$OperatorUtils$getInteger, action);
+	});
+var $author$project$Logic$App$Patterns$Lists$listSize = F2(
+	function (stack, ctx) {
+		var action = F2(
+			function (iota, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						if (iota.$ === 'IotaList') {
+							var list = iota.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Number(
+									$elm$core$Array$length(list)));
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getIotaList, action);
+	});
 var $author$project$Logic$App$Patterns$Math$logarithm = F2(
 	function (stack, ctx) {
 		var action = F3(
@@ -9684,6 +9941,46 @@ var $author$project$Logic$App$Patterns$OperatorUtils$makeConstant = F3(
 			stack: A2($author$project$Logic$App$Utils$Utils$unshift, iota, stack),
 			success: true
 		};
+	});
+var $author$project$Logic$App$Patterns$OperatorUtils$getPositiveInteger = function (iota) {
+	if (iota.$ === 'Number') {
+		var number = iota.a;
+		return (_Utils_eq(
+			$elm$core$Basics$round(number),
+			number) && ($elm$core$Basics$round(number) >= 0)) ? $elm$core$Maybe$Just(iota) : $elm$core$Maybe$Nothing;
+	} else {
+		return $elm$core$Maybe$Nothing;
+	}
+};
+var $author$project$Logic$App$Patterns$Lists$modifyinPlace = F2(
+	function (stack, ctx) {
+		var action = F4(
+			function (iota1, iota2, iota3, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						var _v0 = _Utils_Tuple2(iota1, iota2);
+						if ((_v0.a.$ === 'IotaList') && (_v0.b.$ === 'Number')) {
+							var list = _v0.a.a;
+							var number = _v0.b.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$IotaList(
+									A3(
+										$elm$core$Array$set,
+										$elm$core$Basics$round(number),
+										iota3,
+										list)));
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A6($author$project$Logic$App$Patterns$OperatorUtils$action3Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getIotaList, $author$project$Logic$App$Patterns$OperatorUtils$getPositiveInteger, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
 	});
 var $elm$core$Basics$truncate = _Basics_truncate;
 var $ianmackenzie$elm_units$Quantity$fractionalRemainderBy = F2(
@@ -10188,6 +10485,30 @@ var $author$project$Logic$App$Patterns$Spells$recharge = F2(
 	function (stack, ctx) {
 		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity);
 	});
+var $author$project$Logic$App$Patterns$Lists$reverseList = F2(
+	function (stack, ctx) {
+		var action = F2(
+			function (iota, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						if (iota.$ === 'IotaList') {
+							var list = iota.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$IotaList(
+									$elm_community$array_extra$Array$Extra$reverse(list)));
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getIotaList, action);
+	});
 var $author$project$Logic$App$Patterns$Stack$rotate = F2(
 	function (stack, ctx) {
 		var action = F4(
@@ -10293,6 +10614,57 @@ var $author$project$Logic$App$Patterns$Lists$singleton = F2(
 					ctx);
 			});
 		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
+	});
+var $author$project$Logic$App$Patterns$Lists$slice = F2(
+	function (stack, ctx) {
+		var action = F4(
+			function (iota1, iota2, iota3, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						var _v0 = _Utils_Tuple3(iota1, iota2, iota3);
+						if (((_v0.a.$ === 'IotaList') && (_v0.b.$ === 'Number')) && (_v0.c.$ === 'Number')) {
+							var list = _v0.a.a;
+							var number1 = _v0.b.a;
+							var number2 = _v0.c.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$IotaList(
+									A3(
+										$elm$core$Array$slice,
+										$elm$core$Basics$round(number1),
+										$elm$core$Basics$round(number2),
+										list)));
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A6($author$project$Logic$App$Patterns$OperatorUtils$action3Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getIotaList, $author$project$Logic$App$Patterns$OperatorUtils$getPositiveInteger, $author$project$Logic$App$Patterns$OperatorUtils$getPositiveInteger, action);
+	});
+var $author$project$Logic$App$Patterns$Lists$splat = F2(
+	function (stack, ctx) {
+		var action = F2(
+			function (iota, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						if (iota.$ === 'IotaList') {
+							var list = iota.a;
+							return $elm_community$array_extra$Array$Extra$reverse(list);
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getIotaList, action);
 	});
 var $author$project$Logic$App$Patterns$Stack$stackLength = F2(
 	function (stack, ctx) {
@@ -11199,18 +11571,27 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _List_f
 		{action: $author$project$Logic$App$Patterns$Lists$concat, color: $author$project$Settings$Theme$accent1, displayName: 'Combination Distillation', internalName: 'concat', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaeaq'},
 		{action: $author$project$Logic$App$Patterns$Lists$index, color: $author$project$Settings$Theme$accent1, displayName: 'Selection Distillation', internalName: 'index', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'deeed'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$forEach, color: $author$project$Settings$Theme$accent1, displayName: 'Thoth\'s Gambit', internalName: 'for_each', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dadad'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'list_size', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqaeaq'},
+		{action: $author$project$Logic$App$Patterns$Lists$listSize, color: $author$project$Settings$Theme$accent1, displayName: 'Abacus Purification', internalName: 'list_size', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqaeaq'},
 		{action: $author$project$Logic$App$Patterns$Lists$singleton, color: $author$project$Settings$Theme$accent1, displayName: 'Single\'s Purification', internalName: 'singleton', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'adeeed'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'empty_list', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqaeaae'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'reverse_list', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqaede'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'last_n_list', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ewdqdwe'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'splat', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qwaeawq'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'index_of', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dedqde'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'list_remove', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'edqdewaqa'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'slice', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaeaqwded'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'modify_in_place', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wqaeaqw'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'construct', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddewedd'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'deconstruct', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aaqwqaa'},
+		{
+		action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
+			$author$project$Logic$App$Types$IotaList($elm$core$Array$empty)),
+		color: $author$project$Settings$Theme$accent1,
+		displayName: 'Vacant Reflection',
+		internalName: 'empty_list',
+		outputOptions: _List_Nil,
+		selectedOutput: $elm$core$Maybe$Nothing,
+		signature: 'qqaeaae'
+	},
+		{action: $author$project$Logic$App$Patterns$Lists$reverseList, color: $author$project$Settings$Theme$accent1, displayName: 'Retrograde Purification', internalName: 'reverse_list', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqaede'},
+		{action: $author$project$Logic$App$Patterns$Lists$lastNList, color: $author$project$Settings$Theme$accent1, displayName: 'Flock\'s Gambit', internalName: 'last_n_list', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ewdqdwe'},
+		{action: $author$project$Logic$App$Patterns$Lists$splat, color: $author$project$Settings$Theme$accent1, displayName: 'Flock\'s Disintegration', internalName: 'splat', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qwaeawq'},
+		{action: $author$project$Logic$App$Patterns$Lists$indexOf, color: $author$project$Settings$Theme$accent1, displayName: 'Locator\'s Distillation', internalName: 'index_of', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dedqde'},
+		{action: $author$project$Logic$App$Patterns$Lists$listRemove, color: $author$project$Settings$Theme$accent1, displayName: 'Excisor\'s Distillation', internalName: 'list_remove', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'edqdewaqa'},
+		{action: $author$project$Logic$App$Patterns$Lists$slice, color: $author$project$Settings$Theme$accent1, displayName: 'Selection Exaltation', internalName: 'slice', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaeaqwded'},
+		{action: $author$project$Logic$App$Patterns$Lists$modifyinPlace, color: $author$project$Settings$Theme$accent1, displayName: 'Surgeon\'s Exaltation', internalName: 'modify_in_place', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wqaeaqw'},
+		{action: $author$project$Logic$App$Patterns$Lists$construct, color: $author$project$Settings$Theme$accent1, displayName: 'Speaker\'s Distillation', internalName: 'construct', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddewedd'},
+		{action: $author$project$Logic$App$Patterns$Lists$deconstruct, color: $author$project$Settings$Theme$accent1, displayName: 'Speaker\'s Decomposition', internalName: 'deconstruct', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aaqwqaa'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: 'Consideration', internalName: 'escape', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqaw'},
 		{
 		action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
@@ -11372,6 +11753,7 @@ var $elm_community$array_extra$Array$Extra$insertAt = F2(
 			}
 		};
 	});
+var $elm$core$Debug$log = _Debug_log;
 var $elm_community$array_extra$Array$Extra$map2 = F3(
 	function (combineAb, aArray, bArray) {
 		return $elm$core$Array$fromList(

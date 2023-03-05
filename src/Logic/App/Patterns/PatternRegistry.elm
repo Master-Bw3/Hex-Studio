@@ -214,18 +214,18 @@ patternRegistry =
     , { signature = "qaeaq", internalName = "concat", action = concat, displayName = "Combination Distillation", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "deeed", internalName = "index", action = index, displayName = "Selection Distillation", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "dadad", internalName = "for_each", action = forEach, displayName = "Thoth's Gambit", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "aqaeaq", internalName = "list_size", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
+    , { signature = "aqaeaq", internalName = "list_size", action = listSize, displayName = "Abacus Purification", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "adeeed", internalName = "singleton", action = singleton, displayName = "Single's Purification", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "qqaeaae", internalName = "empty_list", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "qqqaede", internalName = "reverse_list", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "ewdqdwe", internalName = "last_n_list", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "qwaeawq", internalName = "splat", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "dedqde", internalName = "index_of", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "edqdewaqa", internalName = "list_remove", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "qaeaqwded", internalName = "slice", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "wqaeaqw", internalName = "modify_in_place", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "ddewedd", internalName = "construct", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "aaqwqaa", internalName = "deconstruct", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
+    , { signature = "qqaeaae", internalName = "empty_list", action = makeConstant (IotaList Array.empty), displayName = "Vacant Reflection", color = accent1, outputOptions = [], selectedOutput = Nothing }
+    , { signature = "qqqaede", internalName = "reverse_list", action = reverseList, displayName = "Retrograde Purification", color = accent1, outputOptions = [], selectedOutput = Nothing }
+    , { signature = "ewdqdwe", internalName = "last_n_list", action = lastNList, displayName = "Flock's Gambit", color = accent1, outputOptions = [], selectedOutput = Nothing }
+    , { signature = "qwaeawq", internalName = "splat", action = splat, displayName = "Flock's Disintegration", color = accent1, outputOptions = [], selectedOutput = Nothing }
+    , { signature = "dedqde", internalName = "index_of", action = indexOf, displayName = "Locator's Distillation", color = accent1, outputOptions = [], selectedOutput = Nothing }
+    , { signature = "edqdewaqa", internalName = "list_remove", action = listRemove, displayName = "Excisor's Distillation", color = accent1, outputOptions = [], selectedOutput = Nothing }
+    , { signature = "qaeaqwded", internalName = "slice", action = slice, displayName = "Selection Exaltation", color = accent1, outputOptions = [], selectedOutput = Nothing }
+    , { signature = "wqaeaqw", internalName = "modify_in_place", action = modifyinPlace, displayName = "Surgeon's Exaltation", color = accent1, outputOptions = [], selectedOutput = Nothing }
+    , { signature = "ddewedd", internalName = "construct", action = construct, displayName = "Speaker's Distillation", color = accent1, outputOptions = [], selectedOutput = Nothing }
+    , { signature = "aaqwqaa", internalName = "deconstruct", action = deconstruct, displayName = "Speaker's Decomposition", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "qqqaw", internalName = "escape", action = noAction, displayName = "Consideration", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "qqq", internalName = "open_paren", action = makeConstant (OpenParenthesis Array.empty), displayName = "Introspection", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "eee", internalName = "close_paren", action = noAction, displayName = "Retrospection", color = accent1, outputOptions = [], selectedOutput = Nothing }
@@ -381,7 +381,7 @@ forEach stack ctx =
                                                             accumulator.success
                                                 in
                                                 { stack = Array.set 0 (IotaList (Array.append thothList (Array.reverse subApplyResult.stack))) accumulator.stack
-                                                , ctx = Debug.log "ctx" subApplyResult.ctx
+                                                , ctx = subApplyResult.ctx
                                                 , success = success
                                                 , continue =
                                                     if not success || subApplyResult.halted then
