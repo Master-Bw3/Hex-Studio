@@ -8499,6 +8499,32 @@ var $author$project$Logic$App$Patterns$Spells$colorize = F2(
 	function (stack, ctx) {
 		return A2($author$project$Logic$App$Patterns$OperatorUtils$spellNoInput, stack, ctx);
 	});
+var $author$project$Logic$App$Patterns$Lists$concat = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (iota1, iota2, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						var _v0 = _Utils_Tuple2(iota1, iota2);
+						if ((_v0.a.$ === 'IotaList') && (_v0.b.$ === 'IotaList')) {
+							var list1 = _v0.a.a;
+							var list2 = _v0.b.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$IotaList(
+									A2($elm$core$Array$append, list2, list1)));
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getIotaList, $author$project$Logic$App$Patterns$OperatorUtils$getIotaList, action);
+	});
 var $author$project$Logic$App$Patterns$Spells$conjureBlock = F2(
 	function (stack, ctx) {
 		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
@@ -8832,17 +8858,7 @@ var $author$project$Logic$App$Patterns$Spells$edify = F2(
 	});
 var $author$project$Logic$App$Patterns$Misc$entityPos = F2(
 	function (stack, ctx) {
-		var action = F2(
-			function (_v0, _v1) {
-				return _Utils_Tuple2(
-					A2(
-						$elm$core$Array$repeat,
-						1,
-						$author$project$Logic$App$Types$Vector(
-							_Utils_Tuple3(0.0, 0.0, 0.0))),
-					ctx);
-			});
-		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, action);
+		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity);
 	});
 var $author$project$Logic$App$Patterns$Math$equalTo = F2(
 	function (stack, ctx) {
@@ -9266,17 +9282,7 @@ var $author$project$Logic$App$Patterns$Misc$getEntityHeight = F2(
 	});
 var $author$project$Logic$App$Patterns$Misc$getEntityLook = F2(
 	function (stack, ctx) {
-		var action = F2(
-			function (_v0, _v1) {
-				return _Utils_Tuple2(
-					A2(
-						$elm$core$Array$repeat,
-						1,
-						$author$project$Logic$App$Types$Vector(
-							_Utils_Tuple3(0.0, 0.0, 0.0))),
-					ctx);
-			});
-		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, action);
+		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity);
 	});
 var $author$project$Logic$App$Patterns$Misc$getEntityVelocity = F2(
 	function (stack, ctx) {
@@ -10523,9 +10529,51 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _List_f
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'interop/pehkui/get', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aawawwawwa'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'interop/pehkui/set', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddwdwwdwwd'},
 		{action: $author$project$Logic$App$Patterns$Selectors$getCaster, color: $author$project$Settings$Theme$accent1, displayName: 'Mind\'s Reflection', internalName: 'get_caster', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaq'},
-		{action: $author$project$Logic$App$Patterns$Misc$entityPos, color: $author$project$Settings$Theme$accent1, displayName: 'Compass\' Purification', internalName: 'entity_pos/eye', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aa'},
-		{action: $author$project$Logic$App$Patterns$Misc$entityPos, color: $author$project$Settings$Theme$accent1, displayName: 'Compass\' Purification II', internalName: 'entity_pos/foot', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dd'},
-		{action: $author$project$Logic$App$Patterns$Misc$getEntityLook, color: $author$project$Settings$Theme$accent1, displayName: 'Alidade\'s Purification', internalName: 'get_entity_look', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wa'},
+		{
+		action: $author$project$Logic$App$Patterns$Misc$entityPos,
+		color: $author$project$Settings$Theme$accent1,
+		displayName: 'Compass\' Purification',
+		internalName: 'entity_pos/eye',
+		outputOptions: _List_fromArray(
+			[
+				$author$project$Logic$App$Types$Vector(
+				_Utils_Tuple3(0, 0, 0))
+			]),
+		selectedOutput: $elm$core$Maybe$Just(
+			$author$project$Logic$App$Types$Vector(
+				_Utils_Tuple3(0, 0, 0))),
+		signature: 'aa'
+	},
+		{
+		action: $author$project$Logic$App$Patterns$Misc$entityPos,
+		color: $author$project$Settings$Theme$accent1,
+		displayName: 'Compass\' Purification II',
+		internalName: 'entity_pos/foot',
+		outputOptions: _List_fromArray(
+			[
+				$author$project$Logic$App$Types$Vector(
+				_Utils_Tuple3(0, 0, 0))
+			]),
+		selectedOutput: $elm$core$Maybe$Just(
+			$author$project$Logic$App$Types$Vector(
+				_Utils_Tuple3(0, 0, 0))),
+		signature: 'dd'
+	},
+		{
+		action: $author$project$Logic$App$Patterns$Misc$getEntityLook,
+		color: $author$project$Settings$Theme$accent1,
+		displayName: 'Alidade\'s Purification',
+		internalName: 'get_entity_look',
+		outputOptions: _List_fromArray(
+			[
+				$author$project$Logic$App$Types$Vector(
+				_Utils_Tuple3(0, 0, 0))
+			]),
+		selectedOutput: $elm$core$Maybe$Just(
+			$author$project$Logic$App$Types$Vector(
+				_Utils_Tuple3(0, 0, 0))),
+		signature: 'wa'
+	},
 		{action: $author$project$Logic$App$Patterns$Misc$getEntityHeight, color: $author$project$Settings$Theme$accent1, displayName: 'Stadiometer\'s Purification', internalName: 'get_entity_height', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'awq'},
 		{action: $author$project$Logic$App$Patterns$Misc$getEntityVelocity, color: $author$project$Settings$Theme$accent1, displayName: 'Pace Purification', internalName: 'get_entity_velocity', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wq'},
 		{
@@ -10954,7 +11002,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _List_f
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'zone_entity/living', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqwdeddwd'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'zone_entity/not_living', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eeeeewaqaawd'},
 		{action: $author$project$Logic$App$Patterns$Lists$append, color: $author$project$Settings$Theme$accent1, displayName: 'Integration Distillation', internalName: 'append', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'edqde'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'concat', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaeaq'},
+		{action: $author$project$Logic$App$Patterns$Lists$concat, color: $author$project$Settings$Theme$accent1, displayName: 'Combination Distillation', internalName: 'concat', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaeaq'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'index', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'deeed'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'for_each', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dadad'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'list_size', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqaeaq'},

@@ -4,6 +4,7 @@ import Array exposing (Array)
 import Logic.App.Patterns.OperatorUtils exposing (action1Input, action2Inputs, getAny, getEntity, getVector, spell2Inputs)
 import Logic.App.Types exposing (ActionResult, CastingContext, EntityType(..), Iota(..))
 import Logic.App.Utils.Utils exposing (unshift)
+import Logic.App.Patterns.OperatorUtils exposing (spell1Input)
 
 
 numberLiteral : Float -> Array Iota -> CastingContext -> ActionResult
@@ -13,14 +14,7 @@ numberLiteral number stack ctx =
 
 entityPos : Array Iota -> CastingContext -> ActionResult
 entityPos stack ctx =
-    let
-        action _ _ =
-            ( Vector ( 0.0, 0.0, 0.0 )
-                |> Array.repeat 1
-            , ctx
-            )
-    in
-    action1Input stack ctx getEntity action
+    spell1Input stack ctx getEntity
 
 
 raycast : Array Iota -> CastingContext -> ActionResult
@@ -40,14 +34,7 @@ raycastEntity stack ctx =
 
 getEntityLook : Array Iota -> CastingContext -> ActionResult
 getEntityLook stack ctx =
-    let
-        action _ _ =
-            ( Vector ( 0.0, 0.0, 0.0 )
-                |> Array.repeat 1
-            , ctx
-            )
-    in
-    action1Input stack ctx getEntity action
+    spell1Input stack ctx getEntity
 
 
 getEntityHeight : Array Iota -> CastingContext -> ActionResult

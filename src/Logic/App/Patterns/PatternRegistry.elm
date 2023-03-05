@@ -73,9 +73,9 @@ patternRegistry =
     , { signature = "aawawwawwa", internalName = "interop/pehkui/get", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "ddwdwwdwwd", internalName = "interop/pehkui/set", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "qaq", internalName = "get_caster", action = getCaster, displayName = "Mind's Reflection", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "aa", internalName = "entity_pos/eye", action = entityPos, displayName = "Compass' Purification", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "dd", internalName = "entity_pos/foot", action = entityPos, displayName = "Compass' Purification II", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "wa", internalName = "get_entity_look", action = getEntityLook, displayName = "Alidade's Purification", color = accent1, outputOptions = [], selectedOutput = Nothing }
+    , { signature = "aa", internalName = "entity_pos/eye", action = entityPos, displayName = "Compass' Purification", color = accent1, outputOptions = [Vector ( 0, 0, 0 )], selectedOutput = Just (Vector ( 0, 0, 0 )) }
+    , { signature = "dd", internalName = "entity_pos/foot", action = entityPos, displayName = "Compass' Purification II", color = accent1, outputOptions = [Vector ( 0, 0, 0 )], selectedOutput = Just (Vector ( 0, 0, 0 )) }
+    , { signature = "wa", internalName = "get_entity_look", action = getEntityLook, displayName = "Alidade's Purification", color = accent1, outputOptions = [Vector ( 0, 0, 0 )], selectedOutput = Just (Vector ( 0, 0, 0 )) }
     , { signature = "awq", internalName = "get_entity_height", action = getEntityHeight, displayName = "Stadiometer's Purification", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "wq", internalName = "get_entity_velocity", action = getEntityVelocity, displayName = "Pace Purification", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "wqaawdd", internalName = "raycast", action = raycast, displayName = "Archer's Distillation", color = accent1, outputOptions = [ Vector ( 0, 0, 0 ), Null ], selectedOutput = Just (Vector ( 0, 0, 0 )) }
@@ -209,7 +209,7 @@ patternRegistry =
     , { signature = "qqqqqwdeddwd", internalName = "zone_entity/living", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "eeeeewaqaawd", internalName = "zone_entity/not_living", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "edqde", internalName = "append", action = append, displayName = "Integration Distillation", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "qaeaq", internalName = "concat", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
+    , { signature = "qaeaq", internalName = "concat", action = concat, displayName = "Combination Distillation", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "deeed", internalName = "index", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "dadad", internalName = "for_each", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "aqaeaq", internalName = "list_size", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }

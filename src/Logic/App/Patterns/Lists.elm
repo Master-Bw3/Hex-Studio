@@ -2,10 +2,8 @@ module Logic.App.Patterns.Lists exposing (..)
 
 import Array exposing (Array)
 import Logic.App.Patterns.OperatorUtils exposing (action1Input, action2Inputs, getAny, getIotaList)
-import Logic.App.Types exposing (Iota(..), Mishap(..))
+import Logic.App.Types exposing (ActionResult, CastingContext, Iota(..), Mishap(..))
 import Logic.App.Utils.Utils exposing (unshift)
-import Logic.App.Types exposing (CastingContext)
-import Logic.App.Types exposing (ActionResult)
 
 
 singleton : Array Iota -> CastingContext -> ActionResult
@@ -36,3 +34,21 @@ append stack ctx =
             )
     in
     action2Inputs stack ctx getIotaList getAny action
+
+
+concat : Array Iota -> CastingContext -> ActionResult
+concat stack ctx =
+    let
+        action iota1 iota2 _ =
+            ( case ( iota1, iota2 ) of
+                ( IotaList list1, IotaList list2 ) ->
+                    IotaList (Array.append list2 list1)
+                        |> Array.repeat 1
+
+                _ ->
+                    Garbage CatastrophicFailure
+                        |> Array.repeat 1
+            , ctx
+            )
+    in
+    action2Inputs stack ctx getIotaList getIotaList action
