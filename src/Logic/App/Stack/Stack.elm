@@ -93,7 +93,7 @@ applyPatternToStack stack ctx pattern =
                             )
 
                 addToIntroList =
-                    Array.set 0 (OpenParenthesis (unshift (Pattern pattern False) list)) stack
+                    Array.set 0 (OpenParenthesis (Array.push (Pattern pattern False) list)) stack
             in
             if pattern.internalName == "escape" then
                 { stack = stack, result = Succeeded, ctx = ctx, considerNext = True }
@@ -156,7 +156,7 @@ addEscapedPatternIotaToStack : Array Iota -> PatternType -> Array Iota
 addEscapedPatternIotaToStack stack pattern =
     case Array.get 0 stack of
         Just (OpenParenthesis list) ->
-            Array.set 0 (OpenParenthesis (unshift (Pattern pattern True) list)) stack
+            Array.set 0 (OpenParenthesis (Array.push (Pattern pattern True) list)) stack
 
         _ ->
             unshift (Pattern pattern True) stack

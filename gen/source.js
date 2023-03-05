@@ -6794,6 +6794,14 @@ var $elm$core$Array$get = F2(
 			A2($elm$core$Elm$JsArray$unsafeGet, $elm$core$Array$bitMask & index, tail)) : $elm$core$Maybe$Just(
 			A3($elm$core$Array$getHelp, startShift, index, tree)));
 	});
+var $elm$core$Array$push = F2(
+	function (a, array) {
+		var tail = array.d;
+		return A2(
+			$elm$core$Array$unsafeReplaceTail,
+			A2($elm$core$Elm$JsArray$push, a, tail),
+			array);
+	});
 var $elm$core$Array$setHelp = F4(
 	function (shift, index, value, tree) {
 		var pos = $elm$core$Array$bitMask & (index >>> shift);
@@ -6855,7 +6863,7 @@ var $author$project$Logic$App$Stack$Stack$addEscapedPatternIotaToStack = F2(
 				0,
 				$author$project$Logic$App$Types$OpenParenthesis(
 					A2(
-						$author$project$Logic$App$Utils$Utils$unshift,
+						$elm$core$Array$push,
 						A2($author$project$Logic$App$Types$Pattern, pattern, true),
 						list)),
 				stack);
@@ -6953,7 +6961,7 @@ var $author$project$Logic$App$Stack$Stack$applyPatternToStack = F3(
 				0,
 				$author$project$Logic$App$Types$OpenParenthesis(
 					A2(
-						$author$project$Logic$App$Utils$Utils$unshift,
+						$elm$core$Array$push,
 						A2($author$project$Logic$App$Types$Pattern, pattern, false),
 						list)),
 				stack);
@@ -8100,7 +8108,7 @@ var $author$project$Logic$App$Patterns$Lists$append = F2(
 								$elm$core$Array$repeat,
 								1,
 								$author$project$Logic$App$Types$IotaList(
-									A2($author$project$Logic$App$Utils$Utils$unshift, iota, list)));
+									A2($elm$core$Array$push, iota, list)));
 						} else {
 							return A2(
 								$elm$core$Array$repeat,
@@ -8966,19 +8974,18 @@ var $author$project$Logic$App$Patterns$PatternRegistry$eval = F2(
 							$author$project$Logic$App$Stack$Stack$applyPatternsToStackStopAtErrorOrHalt,
 							newStack,
 							ctx,
-							$elm$core$List$reverse(
-								$elm$core$Array$toList(
-									A2(
-										$elm$core$Array$map,
-										function (i) {
-											if (i.$ === 'Pattern') {
-												var pattern = i.a;
-												return pattern;
-											} else {
-												return $author$project$Logic$App$Patterns$PatternRegistry$unknownPattern;
-											}
-										},
-										list))));
+							$elm$core$Array$toList(
+								A2(
+									$elm$core$Array$map,
+									function (i) {
+										if (i.$ === 'Pattern') {
+											var pattern = i.a;
+											return pattern;
+										} else {
+											return $author$project$Logic$App$Patterns$PatternRegistry$unknownPattern;
+										}
+									},
+									list)));
 						return {
 							ctx: applyResult.ctx,
 							stack: A2(
@@ -9374,9 +9381,7 @@ var $author$project$Logic$App$Patterns$Lists$index = F2(
 									A2(
 										$elm$core$Array$get,
 										$elm$core$Basics$round(number),
-										$elm$core$Array$fromList(
-											$elm$core$List$reverse(
-												$elm$core$Array$toList(list1))))));
+										list1)));
 						} else {
 							return A2(
 								$elm$core$Array$repeat,
@@ -10263,14 +10268,6 @@ var $elm$core$Array$foldl = F3(
 			func,
 			A3($elm$core$Elm$JsArray$foldl, helper, baseCase, tree),
 			tail);
-	});
-var $elm$core$Array$push = F2(
-	function (a, array) {
-		var tail = array.d;
-		return A2(
-			$elm$core$Array$unsafeReplaceTail,
-			A2($elm$core$Elm$JsArray$push, a, tail),
-			array);
 	});
 var $author$project$Logic$App$Patterns$Math$toSet = F2(
 	function (stack, ctx) {
@@ -12923,19 +12920,18 @@ var $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString = function
 			return 'List: ' + A2(
 				$elm$core$String$join,
 				'| ',
-				$elm$core$List$reverse(
-					A2(
-						$elm$core$List$map,
-						function (item) {
-							if (item.$ === 'Pattern') {
-								var pattern = item.a;
-								return pattern.displayName;
-							} else {
-								var x = item;
-								return $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString(x);
-							}
-						},
-						$elm$core$Array$toList(list))));
+				A2(
+					$elm$core$List$map,
+					function (item) {
+						if (item.$ === 'Pattern') {
+							var pattern = item.a;
+							return pattern.displayName;
+						} else {
+							var x = item;
+							return $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString(x);
+						}
+					},
+					$elm$core$Array$toList(list)));
 		case 'Pattern':
 			var pattern = iota.a;
 			return pattern.displayName;
@@ -12977,18 +12973,17 @@ var $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString = function
 			return 'List: ' + A2(
 				$elm$core$String$join,
 				'| ',
-				$elm$core$List$reverse(
-					A2(
-						$elm$core$List$map,
-						function (item) {
-							if (item.$ === 'Pattern') {
-								var pattern = item.a;
-								return pattern.displayName;
-							} else {
-								return '';
-							}
-						},
-						$elm$core$Array$toList(list))));
+				A2(
+					$elm$core$List$map,
+					function (item) {
+						if (item.$ === 'Pattern') {
+							var pattern = item.a;
+							return pattern.displayName;
+						} else {
+							return '';
+						}
+					},
+					$elm$core$Array$toList(list)));
 	}
 };
 var $elm$html$Html$li = _VirtualDom_node('li');

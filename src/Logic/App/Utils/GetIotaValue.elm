@@ -96,7 +96,6 @@ getIotaValueAsString iota =
         IotaList list ->
             (++) "List: " <|
                 String.join "| " <|
-                    List.reverse <|
                         List.map
                             (\item ->
                                 case item of
@@ -160,7 +159,6 @@ getIotaValueAsString iota =
         OpenParenthesis list ->
             (++) "List: " <|
                 String.join "| " <|
-                    List.reverse <|
                         List.map
                             (\item ->
                                 case item of

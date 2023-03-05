@@ -24,7 +24,7 @@ append stack ctx =
         action listIota iota _ =
             ( case listIota of
                 IotaList list ->
-                    IotaList (unshift iota list)
+                    IotaList (Array.push iota list)
                         |> Array.repeat 1
 
                 _ ->
@@ -60,7 +60,7 @@ index stack ctx =
         action iota1 iota2 _ =
             ( case ( iota1, iota2 ) of
                 ( IotaList list1, Number number ) ->
-                    Maybe.withDefault Null (Array.get (round number) (Array.fromList <| List.reverse <| Array.toList list1))
+                    Maybe.withDefault Null (Array.get (round number) list1)
                         |> Array.repeat 1
 
                 _ ->

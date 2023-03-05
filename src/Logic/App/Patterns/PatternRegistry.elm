@@ -73,11 +73,11 @@ patternRegistry =
     , { signature = "aawawwawwa", internalName = "interop/pehkui/get", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "ddwdwwdwwd", internalName = "interop/pehkui/set", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "qaq", internalName = "get_caster", action = getCaster, displayName = "Mind's Reflection", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "aa", internalName = "entity_pos/eye", action = entityPos, displayName = "Compass' Purification", color = accent1, outputOptions = [Vector ( 0, 0, 0 )], selectedOutput = Just (Vector ( 0, 0, 0 )) }
-    , { signature = "dd", internalName = "entity_pos/foot", action = entityPos, displayName = "Compass' Purification II", color = accent1, outputOptions = [Vector ( 0, 0, 0 )], selectedOutput = Just (Vector ( 0, 0, 0 )) }
-    , { signature = "wa", internalName = "get_entity_look", action = getEntityLook, displayName = "Alidade's Purification", color = accent1, outputOptions = [Vector ( 0, 0, 0 )], selectedOutput = Just (Vector ( 0, 0, 0 )) }
-    , { signature = "awq", internalName = "get_entity_height", action = getEntityHeight, displayName = "Stadiometer's Purification", color = accent1, outputOptions = [Number 0], selectedOutput = Just (Number 0) }
-    , { signature = "wq", internalName = "get_entity_velocity", action = getEntityVelocity, displayName = "Pace Purification", color = accent1, outputOptions = [Vector ( 0, 0, 0 )], selectedOutput = Just (Vector ( 0, 0, 0 )) }
+    , { signature = "aa", internalName = "entity_pos/eye", action = entityPos, displayName = "Compass' Purification", color = accent1, outputOptions = [ Vector ( 0, 0, 0 ) ], selectedOutput = Just (Vector ( 0, 0, 0 )) }
+    , { signature = "dd", internalName = "entity_pos/foot", action = entityPos, displayName = "Compass' Purification II", color = accent1, outputOptions = [ Vector ( 0, 0, 0 ) ], selectedOutput = Just (Vector ( 0, 0, 0 )) }
+    , { signature = "wa", internalName = "get_entity_look", action = getEntityLook, displayName = "Alidade's Purification", color = accent1, outputOptions = [ Vector ( 0, 0, 0 ) ], selectedOutput = Just (Vector ( 0, 0, 0 )) }
+    , { signature = "awq", internalName = "get_entity_height", action = getEntityHeight, displayName = "Stadiometer's Purification", color = accent1, outputOptions = [ Number 0 ], selectedOutput = Just (Number 0) }
+    , { signature = "wq", internalName = "get_entity_velocity", action = getEntityVelocity, displayName = "Pace Purification", color = accent1, outputOptions = [ Vector ( 0, 0, 0 ) ], selectedOutput = Just (Vector ( 0, 0, 0 )) }
     , { signature = "wqaawdd", internalName = "raycast", action = raycast, displayName = "Archer's Distillation", color = accent1, outputOptions = [ Vector ( 0, 0, 0 ), Null ], selectedOutput = Just (Vector ( 0, 0, 0 )) }
     , { signature = "weddwaa", internalName = "raycast/axis", action = raycastAxis, displayName = "Architect's Distillation", color = accent1, outputOptions = [ Vector ( 0, 0, 0 ), Null ], selectedOutput = Just (Vector ( 0, 0, 0 )) }
     , { signature = "weaqa", internalName = "raycast/entity", action = raycastEntity, displayName = "Scout's Distillation", color = accent1, outputOptions = [ Entity Unset, Null ], selectedOutput = Just (Entity Unset) }
@@ -191,12 +191,12 @@ patternRegistry =
     , { signature = "qdwdq", internalName = "const/double/pi", action = makeConstant (Number pi), displayName = "Arc's Reflection", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "eawae", internalName = "const/double/tau", action = makeConstant (Number (pi * 2)), displayName = "Circle's Reflection", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "aaq", internalName = "const/double/e", action = makeConstant (Number e), displayName = "Euler's Reflection", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "qqqqqdaqa", internalName = "get_entity", action = getEntity, displayName = "Entity Purification", color = accent1, outputOptions = [Entity Unset, Null], selectedOutput = Just (Entity Unset) }
-    , { signature = "qqqqqdaqaawa", internalName = "get_entity/animal", action = getEntity, displayName = "Entity Purification: Animal", color = accent1, outputOptions = [Entity Unset, Null], selectedOutput = Just (Entity Unset) }
-    , { signature = "qqqqqdaqaawq", internalName = "get_entity/monster", action = getEntity, displayName = "Entity Purification: Monster", color = accent1, outputOptions = [Entity Unset, Null], selectedOutput = Just (Entity Unset) }
-    , { signature = "qqqqqdaqaaww", internalName = "get_entity/item", action = getEntity, displayName = "Entity Purification: Item", color = accent1, outputOptions = [Entity Unset, Null], selectedOutput = Just (Entity Unset) }
-    , { signature = "qqqqqdaqaawe", internalName = "get_entity/player", action = getEntity, displayName = "Entity Purification: Player", color = accent1, outputOptions = [Entity Unset, Null], selectedOutput = Just (Entity Unset) }
-    , { signature = "qqqqqdaqaawd", internalName = "get_entity/living", action = getEntity, displayName = "Entity Purification: Living", color = accent1, outputOptions = [Entity Unset, Null], selectedOutput = Just (Entity Unset) }
+    , { signature = "qqqqqdaqa", internalName = "get_entity", action = getEntity, displayName = "Entity Purification", color = accent1, outputOptions = [ Entity Unset, Null ], selectedOutput = Just (Entity Unset) }
+    , { signature = "qqqqqdaqaawa", internalName = "get_entity/animal", action = getEntity, displayName = "Entity Purification: Animal", color = accent1, outputOptions = [ Entity Unset, Null ], selectedOutput = Just (Entity Unset) }
+    , { signature = "qqqqqdaqaawq", internalName = "get_entity/monster", action = getEntity, displayName = "Entity Purification: Monster", color = accent1, outputOptions = [ Entity Unset, Null ], selectedOutput = Just (Entity Unset) }
+    , { signature = "qqqqqdaqaaww", internalName = "get_entity/item", action = getEntity, displayName = "Entity Purification: Item", color = accent1, outputOptions = [ Entity Unset, Null ], selectedOutput = Just (Entity Unset) }
+    , { signature = "qqqqqdaqaawe", internalName = "get_entity/player", action = getEntity, displayName = "Entity Purification: Player", color = accent1, outputOptions = [ Entity Unset, Null ], selectedOutput = Just (Entity Unset) }
+    , { signature = "qqqqqdaqaawd", internalName = "get_entity/living", action = getEntity, displayName = "Entity Purification: Living", color = accent1, outputOptions = [ Entity Unset, Null ], selectedOutput = Just (Entity Unset) }
     , { signature = "qqqqqwded", internalName = "zone_entity", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "qqqqqwdeddwa", internalName = "zone_entity/animal", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "eeeeewaqaawa", internalName = "zone_entity/not_animal", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
@@ -261,18 +261,17 @@ eval stack ctx =
                                     applyPatternsToStackStopAtErrorOrHalt
                                         newStack
                                         ctx
-                                        (List.reverse <|
-                                            Array.toList <|
-                                                Array.map
-                                                    (\i ->
-                                                        case i of
-                                                            Pattern pattern _ ->
-                                                                pattern
+                                        (Array.toList <|
+                                            Array.map
+                                                (\i ->
+                                                    case i of
+                                                        Pattern pattern _ ->
+                                                            pattern
 
-                                                            _ ->
-                                                                unknownPattern
-                                                    )
-                                                    list
+                                                        _ ->
+                                                            unknownPattern
+                                                )
+                                                list
                                         )
                             in
                             { stack =
