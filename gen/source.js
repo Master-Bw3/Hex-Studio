@@ -15511,45 +15511,50 @@ var $author$project$Components$App$Grid$renderLines = function (model) {
 };
 var $author$project$Components$App$Grid$renderPoint = F4(
 	function (mousePos, gridOffset, scale, point) {
-		var pointScale = (!point.used) ? $elm$core$String$fromFloat(
-			A2(
-				$elm$core$Basics$min,
-				1,
-				1 / (A2(
-					$author$project$Components$App$Grid$distanceBetweenCoordinates,
-					mousePos,
-					_Utils_Tuple2(point.x + gridOffset, point.y)) / 30))) : $elm$core$String$fromFloat(0);
-		return A2(
-			$elm$svg$Svg$svg,
-			_List_fromArray(
-				[
-					$elm$svg$Svg$Attributes$width(
-					$elm$core$String$fromFloat(point.radius * 2)),
-					$elm$svg$Svg$Attributes$height(
-					$elm$core$String$fromFloat(point.radius * 2)),
-					$elm$svg$Svg$Attributes$viewBox('0 0 300 280'),
-					A2($elm$html$Html$Attributes$style, 'position', 'absolute'),
-					A2(
-					$elm$html$Html$Attributes$style,
-					'left',
-					$elm$core$String$fromFloat(point.x - (8 * scale)) + 'px'),
-					A2(
-					$elm$html$Html$Attributes$style,
-					'top',
-					$elm$core$String$fromFloat(point.y - (8 * scale))),
-					A2($elm$html$Html$Attributes$style, 'transform', 'scale(' + (pointScale + ')')),
-					$elm$svg$Svg$Attributes$fill(point.color)
-				]),
-			_List_fromArray(
-				[
-					A2(
-					$elm$svg$Svg$polygon,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$points('300,150 225,280 75,280 0,150 75,20 225,20')
-						]),
-					_List_Nil)
-				]));
+		var pointScale = (!point.used) ? (A2(
+			$elm$core$Basics$min,
+			1,
+			1 / (A2(
+				$author$project$Components$App$Grid$distanceBetweenCoordinates,
+				mousePos,
+				_Utils_Tuple2(point.x + gridOffset, point.y)) / 30)) * scale) : 0;
+		return (pointScale > 0.1) ? _List_fromArray(
+			[
+				A2(
+				$elm$svg$Svg$svg,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$width(
+						$elm$core$String$fromFloat(point.radius * 2)),
+						$elm$svg$Svg$Attributes$height(
+						$elm$core$String$fromFloat(point.radius * 2)),
+						$elm$svg$Svg$Attributes$viewBox('0 0 300 280'),
+						A2($elm$html$Html$Attributes$style, 'position', 'absolute'),
+						A2(
+						$elm$html$Html$Attributes$style,
+						'left',
+						$elm$core$String$fromFloat(point.x - (8 * scale)) + 'px'),
+						A2(
+						$elm$html$Html$Attributes$style,
+						'top',
+						$elm$core$String$fromFloat(point.y - (8 * scale))),
+						A2(
+						$elm$html$Html$Attributes$style,
+						'transform',
+						'scale(' + ($elm$core$String$fromFloat(pointScale) + ')')),
+						$elm$svg$Svg$Attributes$fill(point.color)
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$svg$Svg$polygon,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$points('300,150 225,280 75,280 0,150 75,20 225,20')
+							]),
+						_List_Nil)
+					]))
+			]) : _List_Nil;
 	});
 var $author$project$Components$App$Grid$renderPoints = function (model) {
 	var scale = model.settings.gridScale;
@@ -15558,7 +15563,7 @@ var $author$project$Components$App$Grid$renderPoints = function (model) {
 	var gridWidth = model.grid.width;
 	var gridOffset = model.window.width - gridWidth;
 	return A2(
-		$elm$core$List$map,
+		$elm$core$List$concatMap,
 		A3($author$project$Components$App$Grid$renderPoint, mousePos, gridOffset, scale),
 		$elm$core$List$concat(points));
 };

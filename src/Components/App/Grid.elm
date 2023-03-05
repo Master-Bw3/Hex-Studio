@@ -243,7 +243,7 @@ renderPoints model =
             model.settings.gridScale
     in
     List.concat points
-        |> List.map (renderPoint mousePos gridOffset scale)
+        |> List.concatMap (renderPoint mousePos gridOffset scale)
 
 
 applyActivePathToGrid : List (List GridPoint) -> List GridPoint -> List (List GridPoint)
@@ -273,28 +273,33 @@ applyPathToGrid gridPoints pointsToAdd =
     List.map (\row -> List.map replace row) gridPoints
 
 
-renderPoint : ( Float, Float ) -> Float -> Float -> GridPoint -> Html msg
+renderPoint : ( Float, Float ) -> Float -> Float -> GridPoint -> List (Html msg)
 renderPoint mousePos gridOffset scale point =
     let
         pointScale =
             if point.used == False then
-                String.fromFloat (Basics.min 1 (1 / (distanceBetweenCoordinates mousePos ( point.x + gridOffset, point.y ) / 30)))
+                Basics.min 1 (1 / (distanceBetweenCoordinates mousePos ( point.x + gridOffset, point.y ) / 30)) * scale
 
             else
-                String.fromFloat 0
+                0
     in
-    svg
-        [ width <| String.fromFloat <| point.radius * 2
-        , height <| String.fromFloat <| point.radius * 2
-        , viewBox "0 0 300 280"
-        , Attr.style "position" "absolute"
-        , Attr.style "left" (String.fromFloat (point.x - (8 * scale)) ++ "px")
-        , Attr.style "top" (String.fromFloat (point.y - (8 * scale)))
-        , Attr.style "transform" ("scale(" ++ pointScale ++ ")")
-        , fill point.color
+    if pointScale > 0.1 then
+        [ svg
+            [ width <| String.fromFloat <| point.radius * 2
+            , height <| String.fromFloat <| point.radius * 2
+            , viewBox "0 0 300 280"
+            , Attr.style "position" "absolute"
+            , Attr.style "left" (String.fromFloat (point.x - (8 * scale)) ++ "px")
+            , Attr.style "top" (String.fromFloat (point.y - (8 * scale)))
+            , Attr.style "transform" ("scale(" ++ String.fromFloat pointScale ++ ")")
+            , fill point.color
+            ]
+            [ polygon [ points "300,150 225,280 75,280 0,150 75,20 225,20" ] []
+            ]
         ]
-        [ polygon [ points "300,150 225,280 75,280 0,150 75,20 225,20" ] []
-        ]
+
+    else
+        []
 
 
 addNearbyPoint : Model -> List GridPoint
