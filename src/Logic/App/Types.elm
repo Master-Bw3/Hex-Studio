@@ -33,6 +33,8 @@ type alias PatternType =
     , displayName : String
     , internalName : String
     , color : String
+    , outputOptions : List Iota
+    , selectedOutput : Maybe Iota
     }
 
 

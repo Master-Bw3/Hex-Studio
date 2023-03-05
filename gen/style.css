@@ -166,7 +166,7 @@ body {
 .outer_box,
 .input_label_box {
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
@@ -520,7 +520,7 @@ button {
     border-radius: 5px;
 }
 
-.stored_iota_container {
+.stored_iota_container, .output_option_box {
     display: grid;
 }
 
@@ -530,6 +530,12 @@ button {
 
 #ravenmind_section .stored_iota_container {
     grid-template-columns: 34% auto;
+}
+
+.output_option_box {
+    width: 270px;
+    align-self: baseline;
+    grid-template-columns: 1fr 2fr;
 }
 
 .stored_iota_container label {

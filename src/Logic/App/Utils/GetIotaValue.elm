@@ -3,7 +3,7 @@ module Logic.App.Utils.GetIotaValue exposing (..)
 import Array
 import Html exposing (br, li, ol, p, text)
 import Html.Attributes exposing (style)
-import Logic.App.Types exposing (Iota(..), Mishap(..))
+import Logic.App.Types exposing (EntityType(..), Iota(..), Mishap(..))
 
 
 getIotaValueAsHtmlMsg : Iota -> List (Html.Html msg)
@@ -136,3 +136,18 @@ getIotaValueAsString iota =
                             )
                         <|
                             Array.toList list
+
+
+getIotaFromString : String -> Iota
+getIotaFromString string =
+    if string == "Null" then
+        Null
+
+    else if string == "Entity" then
+        Entity Unset
+
+    else if String.toFloat string /= Nothing then
+        Number <| Maybe.withDefault 0 <| String.toFloat string
+
+    else
+        Null

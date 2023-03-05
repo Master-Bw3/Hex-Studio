@@ -16,6 +16,7 @@ import Logic.App.Patterns.PatternRegistry exposing (..)
 import Logic.App.Stack.Stack exposing (applyPatternsToStack)
 import Logic.App.Types exposing (..)
 import Logic.App.Utils.GetAngleSignature exposing (getAngleSignature)
+import Logic.App.Utils.GetIotaValue exposing (getIotaFromString)
 import Logic.App.Utils.Utils exposing (removeFromArray)
 import Ports.CheckMouseOverDragHandle as CheckMouseOverDragHandle
 import Ports.GetElementBoundingBoxById as GetElementBoundingBoxById
@@ -511,6 +512,46 @@ update msg model =
 
         RecieveGridDrawingAsGIF src ->
             ( { model | gridGifSrc = src }, Cmd.none )
+
+        UpdatePatternOuptut index iotaString ->
+            let
+                outputIota =
+                    getIotaFromString iotaString
+
+                newUncoloredPatternArray =
+                    Array.update index
+                        (\patternTuple ->
+                            case patternTuple of
+                                ( pattern, d ) ->
+                                    ( { pattern | selectedOutput = Just outputIota }, d )
+                        )
+                        model.patternArray
+
+                stackResult =
+                    applyPatternsToStack Array.empty castingContext (List.reverse <| Tuple.first <| List.unzip <| Array.toList newUncoloredPatternArray)
+
+                newStack =
+                    stackResult.stack
+
+                resultArray =
+                    stackResult.resultArray
+
+                newPatternArray =
+                    Array.map2
+                        (\patternTuple result ->
+                            updateDrawingColors ( applyColorToPatternFromResult (Tuple.first patternTuple) result, Tuple.second patternTuple )
+                        )
+                        newUncoloredPatternArray
+                        resultArray
+            in
+            ( { model
+                | patternArray = newPatternArray
+                , grid = { grid | points = updateGridPoints grid.width grid.height newPatternArray [] settings.gridScale }
+                , stack = newStack
+                , castingContext = stackResult.ctx
+              }
+            , Cmd.none
+            )
 
 
 

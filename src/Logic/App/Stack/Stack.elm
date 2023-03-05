@@ -3,19 +3,20 @@ module Logic.App.Stack.Stack exposing (..)
 import Array exposing (Array)
 import List.Extra as List
 import Logic.App.Types exposing (ActionResult, ApplyToStackResult(..), CastingContext, Iota(..), Mishap(..), PatternType)
-import Logic.App.Utils.Utils exposing (unshift)
+import Logic.App.Utils.Utils exposing (isJust, unshift)
 
 
-applyPatternsToStackStopAtErrorOrHalt : Array Iota -> CastingContext -> List PatternType -> {stack : Array Iota, resultArray : Array ApplyToStackResult, ctx : CastingContext, error : Bool }
+applyPatternsToStackStopAtErrorOrHalt : Array Iota -> CastingContext -> List PatternType -> { stack : Array Iota, resultArray : Array ApplyToStackResult, ctx : CastingContext, error : Bool }
 applyPatternsToStackStopAtErrorOrHalt stack ctx patterns =
     applyPatternsToStackLoop ( stack, Array.empty ) ctx patterns False True
 
 
-applyPatternsToStack : Array Iota -> CastingContext -> List PatternType -> {stack : Array Iota, resultArray : Array ApplyToStackResult, ctx : CastingContext, error : Bool }
+applyPatternsToStack : Array Iota -> CastingContext -> List PatternType -> { stack : Array Iota, resultArray : Array ApplyToStackResult, ctx : CastingContext, error : Bool }
 applyPatternsToStack stack ctx patterns =
     applyPatternsToStackLoop ( stack, Array.empty ) ctx patterns False False
 
-applyPatternsToStackLoop : ( Array Iota, Array ApplyToStackResult ) -> CastingContext -> List PatternType -> Bool -> Bool -> {stack : Array Iota, resultArray : Array ApplyToStackResult, ctx : CastingContext, error : Bool }
+
+applyPatternsToStackLoop : ( Array Iota, Array ApplyToStackResult ) -> CastingContext -> List PatternType -> Bool -> Bool -> { stack : Array Iota, resultArray : Array ApplyToStackResult, ctx : CastingContext, error : Bool }
 applyPatternsToStackLoop stackResultTuple ctx patterns considerThis stopAtErrorOrHalt =
     let
         stack =
@@ -26,7 +27,7 @@ applyPatternsToStackLoop stackResultTuple ctx patterns considerThis stopAtErrorO
     in
     case List.head patterns of
         Nothing ->
-            {stack = stack, resultArray = resultArray, ctx = ctx, error = False }
+            { stack = stack, resultArray = resultArray, ctx = ctx, error = False }
 
         Just pattern ->
             if considerThis then
@@ -38,7 +39,7 @@ applyPatternsToStackLoop stackResultTuple ctx patterns considerThis stopAtErrorO
                     stopAtErrorOrHalt
 
             else if pattern.internalName == "halt" && stopAtErrorOrHalt then
-                {stack = stack, resultArray = resultArray, ctx = ctx, error = False }
+                { stack = stack, resultArray = resultArray, ctx = ctx, error = False }
 
             else
                 let
@@ -54,7 +55,7 @@ applyPatternsToStackLoop stackResultTuple ctx patterns considerThis stopAtErrorO
                         stopAtErrorOrHalt
 
                 else
-                {stack = applyResult.stack, resultArray = unshift applyResult.result resultArray, ctx = applyResult.ctx, error = True }
+                    { stack = applyResult.stack, resultArray = unshift applyResult.result resultArray, ctx = applyResult.ctx, error = True }
 
 
 applyPatternToStack : Array Iota -> CastingContext -> PatternType -> { stack : Array Iota, result : ApplyToStackResult, ctx : CastingContext, considerNext : Bool }
@@ -133,14 +134,22 @@ applyPatternToStack stack ctx pattern =
 
             else
                 let
-                    actionresult =
-                        pattern.action stack ctx
+                    actionResult =
+                        let
+                            preActionResult =
+                                pattern.action stack ctx
+                        in
+                        if preActionResult.success == True && isJust pattern.selectedOutput then
+                            { preActionResult | stack = unshift (Maybe.withDefault Null pattern.selectedOutput) preActionResult.stack }
+
+                        else
+                            preActionResult
                 in
-                if actionresult.success == True then
-                    { stack = actionresult.stack, result = Succeeded, ctx = actionresult.ctx, considerNext = False }
+                if actionResult.success == True then
+                    { stack = actionResult.stack, result = Succeeded, ctx = actionResult.ctx, considerNext = False }
 
                 else
-                    { stack = actionresult.stack, result = Failed, ctx = actionresult.ctx, considerNext = False }
+                    { stack = actionResult.stack, result = Failed, ctx = actionResult.ctx, considerNext = False }
 
 
 addEscapedPatternIotaToStack : Array Iota -> PatternType -> Array Iota

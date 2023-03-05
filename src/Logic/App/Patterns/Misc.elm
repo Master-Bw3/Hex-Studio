@@ -52,8 +52,7 @@ raycastEntity : Array Iota -> CastingContext -> ActionResult
 raycastEntity stack ctx =
     let
         action _ _ _ =
-            ( Entity Chicken
-                |> Array.repeat 1
+            ( Array.empty
             , ctx
             )
     in

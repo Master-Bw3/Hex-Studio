@@ -21,7 +21,8 @@ import Json.Decode as Json exposing (Decoder, at, float, int, map4)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (MouseMoveData, Msg(..))
 import Logic.App.Patterns.PatternRegistry exposing (patternRegistry)
-import Logic.App.Types exposing (GridPoint, Panel(..), PatternType)
+import Logic.App.Types exposing (GridPoint, Iota(..), Panel(..), PatternType)
+import Logic.App.Utils.GetIotaValue exposing (getIotaValueAsString)
 import String exposing (fromInt)
 
 
@@ -159,12 +160,26 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle =
                                            )
                                )
                         )
-                        [ div [ class "inner_box" ]
+                        (div [ class "inner_box" ]
                             [ button [ class "x_button", onClick (RemoveFromPatternArray index (index + 1)) ] [ xButton ]
                             , div [ class "text" ] [ text pattern.displayName ]
                             , div [ class "move_button" ] [ moveButton ]
                             ]
-                        ]
+                            :: (if List.length pattern.outputOptions > 0 then
+                                    [ div [ class "output_option_box" ]
+                                        [ label [] [ text "Output:" ]
+                                        , select
+                                            [ value <| getIotaValueAsString (Maybe.withDefault Null pattern.selectedOutput)
+                                            , onInput (UpdatePatternOuptut index)
+                                            ]
+                                            (List.map (\iota -> option [] [ text <| getIotaValueAsString iota ]) pattern.outputOptions)
+                                        ]
+                                    ]
+
+                                else
+                                    []
+                               )
+                        )
                    ]
     in
     List.concat (List.indexedMap renderPattern patterns)

@@ -7,6 +7,7 @@ import Json.Decode
 import Logic.App.Types exposing (ElementLocation)
 import Html.Events.Extra.Drag as Drag
 import Json.Decode exposing (Value)
+import Logic.App.Types exposing (PatternType)
 
 type Msg
     = NoOp
@@ -40,6 +41,7 @@ type Msg
     | ChangeHeldItem String
     | RequestGridDrawingAsGIF
     | RecieveGridDrawingAsGIF String
+    | UpdatePatternOuptut Int String
 
 type alias MouseMoveData =
     { pageX : Int
