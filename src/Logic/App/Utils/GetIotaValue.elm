@@ -4,6 +4,7 @@ import Array
 import Html exposing (br, li, ol, p, text)
 import Html.Attributes exposing (style)
 import Logic.App.Types exposing (EntityType(..), Iota(..), Mishap(..))
+import Html.Attributes exposing (start)
 
 
 getIotaValueAsHtmlMsg : Iota -> List (Html.Html msg)
@@ -20,7 +21,7 @@ getIotaValueAsHtmlMsg iota =
             String.dropLeft 6 string
                 |> String.split "| "
                 |> List.map (\str -> li [] [ text str ])
-                |> ol []
+                |> ol [start 0]
                 |> List.singleton
                 |> (::) (p [] [ text "List:" ])
 

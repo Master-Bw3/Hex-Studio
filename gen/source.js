@@ -9355,6 +9355,39 @@ var $author$project$Logic$App$Patterns$Spells$ignite = F2(
 	function (stack, ctx) {
 		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
 	});
+var $author$project$Logic$App$Patterns$Lists$index = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (iota1, iota2, _v1) {
+				return _Utils_Tuple2(
+					function () {
+						var _v0 = _Utils_Tuple2(iota1, iota2);
+						if ((_v0.a.$ === 'IotaList') && (_v0.b.$ === 'Number')) {
+							var list1 = _v0.a.a;
+							var number = _v0.b.a;
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								A2(
+									$elm$core$Maybe$withDefault,
+									$author$project$Logic$App$Types$Null,
+									A2(
+										$elm$core$Array$get,
+										$elm$core$Basics$round(number),
+										$elm$core$Array$fromList(
+											$elm$core$List$reverse(
+												$elm$core$Array$toList(list1))))));
+						} else {
+							return A2(
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+						}
+					}(),
+					ctx);
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getIotaList, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
+	});
 var $author$project$Logic$App$Patterns$Math$invertBool = F2(
 	function (stack, ctx) {
 		var action = F2(
@@ -11010,7 +11043,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _List_f
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'zone_entity/not_living', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eeeeewaqaawd'},
 		{action: $author$project$Logic$App$Patterns$Lists$append, color: $author$project$Settings$Theme$accent1, displayName: 'Integration Distillation', internalName: 'append', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'edqde'},
 		{action: $author$project$Logic$App$Patterns$Lists$concat, color: $author$project$Settings$Theme$accent1, displayName: 'Combination Distillation', internalName: 'concat', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaeaq'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'index', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'deeed'},
+		{action: $author$project$Logic$App$Patterns$Lists$index, color: $author$project$Settings$Theme$accent1, displayName: 'Selection Distillation', internalName: 'index', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'deeed'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'for_each', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dadad'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'list_size', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqaeaq'},
 		{action: $author$project$Logic$App$Patterns$Lists$singleton, color: $author$project$Settings$Theme$accent1, displayName: 'Single\'s Purification', internalName: 'singleton', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'adeeed'},
@@ -12965,6 +12998,12 @@ var $elm$core$List$singleton = function (value) {
 	return _List_fromArray(
 		[value]);
 };
+var $elm$html$Html$Attributes$start = function (n) {
+	return A2(
+		$elm$html$Html$Attributes$stringProperty,
+		'start',
+		$elm$core$String$fromInt(n));
+};
 var $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsHtmlMsg = function (iota) {
 	var string = $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString(iota);
 	return A2($elm$core$String$startsWith, 'List: ', string) ? ((string === 'List: ') ? _List_fromArray(
@@ -12988,7 +13027,10 @@ var $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsHtmlMsg = functio
 		$elm$core$List$singleton(
 			A2(
 				$elm$html$Html$ol,
-				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$start(0)
+					]),
 				A2(
 					$elm$core$List$map,
 					function (str) {

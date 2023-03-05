@@ -210,7 +210,7 @@ patternRegistry =
     , { signature = "eeeeewaqaawd", internalName = "zone_entity/not_living", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "edqde", internalName = "append", action = append, displayName = "Integration Distillation", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "qaeaq", internalName = "concat", action = concat, displayName = "Combination Distillation", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "deeed", internalName = "index", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
+    , { signature = "deeed", internalName = "index", action = index, displayName = "Selection Distillation", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "dadad", internalName = "for_each", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "aqaeaq", internalName = "list_size", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "adeeed", internalName = "singleton", action = singleton, displayName = "Single's Purification", color = accent1, outputOptions = [], selectedOutput = Nothing }

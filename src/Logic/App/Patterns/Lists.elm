@@ -1,7 +1,7 @@
 module Logic.App.Patterns.Lists exposing (..)
 
 import Array exposing (Array)
-import Logic.App.Patterns.OperatorUtils exposing (action1Input, action2Inputs, getAny, getIotaList)
+import Logic.App.Patterns.OperatorUtils exposing (action1Input, action2Inputs, getAny, getIotaList, getNumber)
 import Logic.App.Types exposing (ActionResult, CastingContext, Iota(..), Mishap(..))
 import Logic.App.Utils.Utils exposing (unshift)
 
@@ -52,3 +52,21 @@ concat stack ctx =
             )
     in
     action2Inputs stack ctx getIotaList getIotaList action
+
+
+index : Array Iota -> CastingContext -> ActionResult
+index stack ctx =
+    let
+        action iota1 iota2 _ =
+            ( case ( iota1, iota2 ) of
+                ( IotaList list1, Number number ) ->
+                    Maybe.withDefault Null (Array.get (round number) (Array.fromList <| List.reverse <| Array.toList list1))
+                        |> Array.repeat 1
+
+                _ ->
+                    Garbage CatastrophicFailure
+                        |> Array.repeat 1
+            , ctx
+            )
+    in
+    action2Inputs stack ctx getIotaList getNumber action
