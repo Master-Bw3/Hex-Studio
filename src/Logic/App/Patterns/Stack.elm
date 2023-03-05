@@ -114,7 +114,7 @@ dup2 stack ctx =
 
 stackLength : Array Iota -> CastingContext -> ActionResult
 stackLength stack ctx =
-    actionNoInput stack ctx (\_ -> ( unshift (Number (toFloat <| Array.length stack)) stack, ctx ))
+    actionNoInput stack ctx (\_ -> ( Array.repeat 1 (Number (toFloat <| Array.length stack)), ctx ))
 
 
 duplicateN : Array Iota -> CastingContext -> ActionResult

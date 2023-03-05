@@ -10673,10 +10673,10 @@ var $author$project$Logic$App$Patterns$Stack$stackLength = F2(
 			function (_v0) {
 				return _Utils_Tuple2(
 					A2(
-						$author$project$Logic$App$Utils$Utils$unshift,
+						$elm$core$Array$repeat,
+						1,
 						$author$project$Logic$App$Types$Number(
-							$elm$core$Array$length(stack)),
-						stack),
+							$elm$core$Array$length(stack))),
 					ctx);
 			});
 	});
