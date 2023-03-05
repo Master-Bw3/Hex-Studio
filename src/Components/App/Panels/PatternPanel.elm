@@ -22,7 +22,7 @@ import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (MouseMoveData, Msg(..))
 import Logic.App.Patterns.PatternRegistry exposing (patternRegistry)
 import Logic.App.Types exposing (GridPoint, Iota(..), Panel(..), PatternType)
-import Logic.App.Utils.GetIotaValue exposing (getIotaValueAsString)
+import Logic.App.Utils.GetIotaValue exposing (getIotaFromString, getIotaTypeAsString, getIotaValueAsString)
 import String exposing (fromInt)
 
 
@@ -166,15 +166,61 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle =
                             , div [ class "move_button" ] [ moveButton ]
                             ]
                             :: (if List.length pattern.outputOptions > 0 then
-                                    [ div [ class "output_option_box" ]
+                                    div [ class "output_option_box" ]
                                         [ label [] [ text "Output:" ]
                                         , select
-                                            [ value <| getIotaValueAsString (Maybe.withDefault Null pattern.selectedOutput)
-                                            , onInput (UpdatePatternOuptut index)
+                                            [ value <| getIotaTypeAsString (Maybe.withDefault Null pattern.selectedOutput)
+                                            , onInput (\str -> UpdatePatternOuptut index { pattern | selectedOutput = Just <| getIotaFromString str })
                                             ]
-                                            (List.map (\iota -> option [] [ text <| getIotaValueAsString iota ]) pattern.outputOptions)
+                                            (List.map (\iota -> option [] [ text <| getIotaTypeAsString iota ]) pattern.outputOptions)
                                         ]
-                                    ]
+                                        :: (case pattern.selectedOutput of
+                                                Just (Vector vector) ->
+                                                    case vector of
+                                                        ( x, y, z ) ->
+                                                            [ div [ class "output_option_box", style "grid-template-columns" "2.1fr 3fr" ]
+                                                                [ label [] [ text "X Value:" ]
+                                                                , input
+                                                                    [ value <| String.fromFloat x
+                                                                    , onInput
+                                                                        (\str ->
+                                                                            UpdatePatternOuptut index
+                                                                                { pattern | selectedOutput = Just (Vector ( Maybe.withDefault 0 <| String.toFloat str, y, z )) }
+                                                                        )
+                                                                    ]
+                                                                    (List.map (\iota -> option [] [ text <| getIotaValueAsString iota ]) pattern.outputOptions)
+                                                                ]
+                                                            , div [ class "output_option_box", style "grid-template-columns" "2.1fr 3fr" ]
+                                                                [ label [] [ text "Y Value:" ]
+                                                                , input
+                                                                    [ value <| String.fromFloat y
+
+                                                                    , onInput
+                                                                        (\str ->
+                                                                            UpdatePatternOuptut index
+                                                                                { pattern | selectedOutput = Just (Vector ( x, Maybe.withDefault 0 <| String.toFloat str, z )) }
+                                                                        )
+                                                                    ]
+                                                                    (List.map (\iota -> option [] [ text <| getIotaValueAsString iota ]) pattern.outputOptions)
+                                                                ]
+                                                            , div [ class "output_option_box", style "grid-template-columns" "2.1fr 3fr" ]
+                                                                [ label [] [ text "Z Value:" ]
+                                                                , input
+                                                                    [ value <| String.fromFloat z
+
+                                                                    , onInput
+                                                                        (\str ->
+                                                                            UpdatePatternOuptut index
+                                                                                { pattern | selectedOutput = Just (Vector (x, y, Maybe.withDefault 0 <| String.toFloat str)) }
+                                                                        )
+                                                                    ]
+                                                                    (List.map (\iota -> option [] [ text <| getIotaValueAsString iota ]) pattern.outputOptions)
+                                                                ]
+                                                            ]
+
+                                                _ ->
+                                                    []
+                                           )
 
                                 else
                                     []

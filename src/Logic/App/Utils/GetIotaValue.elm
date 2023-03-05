@@ -27,6 +27,39 @@ getIotaValueAsHtmlMsg iota =
     else
         [ p [] [ text string ] ]
 
+getIotaTypeAsString : Iota -> String
+getIotaTypeAsString iota =
+    case iota of
+        Null ->
+            "Null"
+
+        Number _ ->
+            "Number"
+
+        Vector _ ->
+            "Vector"
+
+        Boolean bool ->
+            if bool == True then
+                "True"
+
+            else
+                "False"
+
+        Entity _ ->
+            "Entity"
+
+        IotaList _ ->
+            "List"
+
+        Pattern _ _ ->
+            "Pattern"
+
+        Garbage _ ->
+            "Garbage"
+
+        OpenParenthesis _ ->
+            "List"
 
 getIotaValueAsString : Iota -> String
 getIotaValueAsString iota =

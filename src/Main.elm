@@ -513,17 +513,15 @@ update msg model =
         RecieveGridDrawingAsGIF src ->
             ( { model | gridGifSrc = src }, Cmd.none )
 
-        UpdatePatternOuptut index iotaString ->
+        UpdatePatternOuptut index replacementPattern ->
             let
-                outputIota =
-                    getIotaFromString iotaString
 
                 newUncoloredPatternArray =
                     Array.update index
                         (\patternTuple ->
                             case patternTuple of
-                                ( pattern, d ) ->
-                                    ( { pattern | selectedOutput = Just outputIota }, d )
+                                ( _, d ) ->
+                                    ( replacementPattern, d )
                         )
                         model.patternArray
 

@@ -29,7 +29,7 @@ patternInputAutoComplete model =
                 ]
                 [ text
                     (if name == "" then
-                        "owo"
+                        "[pattern not implemented]"
 
                      else
                         name

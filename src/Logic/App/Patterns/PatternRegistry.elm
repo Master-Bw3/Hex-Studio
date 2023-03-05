@@ -11,12 +11,10 @@ import Logic.App.Patterns.Selectors exposing (..)
 import Logic.App.Patterns.Spells exposing (..)
 import Logic.App.Patterns.Stack exposing (..)
 import Logic.App.Stack.Stack exposing (applyPatternToStack, applyPatternsToStack, applyPatternsToStackStopAtErrorOrHalt)
-import Logic.App.Types exposing (ActionResult, ApplyToStackResult(..), CastingContext, Iota(..), Mishap(..), PatternType)
+import Logic.App.Types exposing (ActionResult, ApplyToStackResult(..), CastingContext, EntityType(..), HeldItem(..), Iota(..), Mishap(..), PatternType)
 import Logic.App.Utils.Utils exposing (unshift)
 import Ports.HexNumGen as HexNumGen
 import Settings.Theme exposing (..)
-import Logic.App.Types exposing (HeldItem(..))
-import Logic.App.Types exposing (EntityType(..))
 
 
 noAction : Array Iota -> CastingContext -> ActionResult
@@ -31,7 +29,8 @@ unknownPattern =
     , displayName = "Unknown Pattern"
     , internalName = ""
     , color = accent3
-    , outputOptions = [], selectedOutput = Nothing
+    , outputOptions = []
+    , selectedOutput = Nothing
     }
 
 
@@ -79,9 +78,9 @@ patternRegistry =
     , { signature = "wa", internalName = "get_entity_look", action = getEntityLook, displayName = "Alidade's Purification", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "awq", internalName = "get_entity_height", action = getEntityHeight, displayName = "Stadiometer's Purification", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "wq", internalName = "get_entity_velocity", action = getEntityVelocity, displayName = "Pace Purification", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "wqaawdd", internalName = "raycast", action = raycast, displayName = "Archer's Distillation", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "weddwaa", internalName = "raycast/axis", action = raycastAxis, displayName = "Architect's Distillation", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "weaqa", internalName = "raycast/entity", action = raycastEntity, displayName = "Scout's Distillation", color = accent1, outputOptions = [Entity Unset, Null], selectedOutput = Just (Entity Unset) }
+    , { signature = "wqaawdd", internalName = "raycast", action = raycast, displayName = "Archer's Distillation", color = accent1, outputOptions = [ Vector ( 0, 0, 0 ), Null ], selectedOutput = Just (Vector ( 0, 0, 0 )) }
+    , { signature = "weddwaa", internalName = "raycast/axis", action = raycastAxis, displayName = "Architect's Distillation", color = accent1, outputOptions = [ Vector ( 0, 0, 0 ), Null ], selectedOutput = Just (Vector ( 0, 0, 0 )) }
+    , { signature = "weaqa", internalName = "raycast/entity", action = raycastEntity, displayName = "Scout's Distillation", color = accent1, outputOptions = [ Entity Unset, Null ], selectedOutput = Just (Entity Unset) }
     , { signature = "eaqwqae", internalName = "circle/impetus_pos", action = noAction, displayName = "Waystone Reflection", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "eaqwqaewede", internalName = "circle/impetus_dir", action = circleImpetusDirection, displayName = "Lodestone Reflection", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "eaqwqaewdd", internalName = "circle/bounds/min", action = circleBoundsMin, displayName = "Lesser Fold Reflection", color = accent1, outputOptions = [], selectedOutput = Nothing }
@@ -231,7 +230,11 @@ patternRegistry =
     , { signature = "deaqq", internalName = "eval", action = eval, displayName = "Hermes' Gambit", color = accent1, outputOptions = [], selectedOutput = Nothing }
     ]
 
+
+
 -- eval patterns
+
+
 eval : Array Iota -> CastingContext -> ActionResult
 eval stack ctx =
     let
@@ -298,7 +301,6 @@ eval stack ctx =
                             { stack = Array.fromList [ Garbage CatastrophicFailure ], ctx = ctx, success = False }
 
 
-
 numberLiteralGenerator : String -> Bool -> PatternType
 numberLiteralGenerator angleSignature isNegative =
     let
@@ -337,5 +339,7 @@ numberLiteralGenerator angleSignature isNegative =
     , action = numberLiteral number
     , displayName = "Numerical Reflection: " ++ String.fromFloat number
     , internalName = String.fromFloat number
-    , color = accent1, outputOptions = [], selectedOutput = Nothing
+    , color = accent1
+    , outputOptions = []
+    , selectedOutput = Nothing
     }

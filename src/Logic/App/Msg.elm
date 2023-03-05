@@ -41,7 +41,7 @@ type Msg
     | ChangeHeldItem String
     | RequestGridDrawingAsGIF
     | RecieveGridDrawingAsGIF String
-    | UpdatePatternOuptut Int String
+    | UpdatePatternOuptut Int PatternType
 
 type alias MouseMoveData =
     { pageX : Int

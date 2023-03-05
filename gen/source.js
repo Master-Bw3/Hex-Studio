@@ -7273,6 +7273,10 @@ var $author$project$Logic$App$Utils$GetAngleSignature$getAngleSignature = functi
 				_List_Nil,
 				$elm$core$List$tail(directionList))));
 };
+var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
+var $author$project$Logic$App$Types$Boolean = function (a) {
+	return {$: 'Boolean', a: a};
+};
 var $author$project$Logic$App$Types$Entity = function (a) {
 	return {$: 'Entity', a: a};
 };
@@ -7280,20 +7284,6 @@ var $author$project$Logic$App$Types$Number = function (a) {
 	return {$: 'Number', a: a};
 };
 var $author$project$Logic$App$Types$Unset = {$: 'Unset'};
-var $elm$core$String$toFloat = _String_toFloat;
-var $author$project$Logic$App$Utils$GetIotaValue$getIotaFromString = function (string) {
-	return (string === 'Null') ? $author$project$Logic$App$Types$Null : ((string === 'Entity') ? $author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset) : ((!_Utils_eq(
-		$elm$core$String$toFloat(string),
-		$elm$core$Maybe$Nothing)) ? $author$project$Logic$App$Types$Number(
-		A2(
-			$elm$core$Maybe$withDefault,
-			0,
-			$elm$core$String$toFloat(string))) : $author$project$Logic$App$Types$Null));
-};
-var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
-var $author$project$Logic$App$Types$Boolean = function (a) {
-	return {$: 'Boolean', a: a};
-};
 var $author$project$Logic$App$Types$Vector = function (a) {
 	return {$: 'Vector', a: a};
 };
@@ -9864,39 +9854,15 @@ var $author$project$Logic$App$Patterns$Misc$print = F2(
 	});
 var $author$project$Logic$App$Patterns$Misc$raycast = F2(
 	function (stack, ctx) {
-		var action = F3(
-			function (_v0, _v1, _v2) {
-				return _Utils_Tuple2(
-					A2(
-						$elm$core$Array$repeat,
-						1,
-						$author$project$Logic$App$Types$Vector(
-							_Utils_Tuple3(0.0, 0.0, 0.0))),
-					ctx);
-			});
-		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector, $author$project$Logic$App$Patterns$OperatorUtils$getVector, action);
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
 	});
 var $author$project$Logic$App$Patterns$Misc$raycastAxis = F2(
 	function (stack, ctx) {
-		var action = F3(
-			function (_v0, _v1, _v2) {
-				return _Utils_Tuple2(
-					A2(
-						$elm$core$Array$repeat,
-						1,
-						$author$project$Logic$App$Types$Vector(
-							_Utils_Tuple3(0.0, 0.0, 0.0))),
-					ctx);
-			});
-		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector, $author$project$Logic$App$Patterns$OperatorUtils$getVector, action);
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
 	});
 var $author$project$Logic$App$Patterns$Misc$raycastEntity = F2(
 	function (stack, ctx) {
-		var action = F3(
-			function (_v0, _v1, _v2) {
-				return _Utils_Tuple2($elm$core$Array$empty, ctx);
-			});
-		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector, $author$project$Logic$App$Patterns$OperatorUtils$getVector, action);
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
 	});
 var $author$project$Logic$App$Patterns$ReadWrite$read = F2(
 	function (stack, ctx) {
@@ -10558,8 +10524,38 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _List_f
 		{action: $author$project$Logic$App$Patterns$Misc$getEntityLook, color: $author$project$Settings$Theme$accent1, displayName: 'Alidade\'s Purification', internalName: 'get_entity_look', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wa'},
 		{action: $author$project$Logic$App$Patterns$Misc$getEntityHeight, color: $author$project$Settings$Theme$accent1, displayName: 'Stadiometer\'s Purification', internalName: 'get_entity_height', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'awq'},
 		{action: $author$project$Logic$App$Patterns$Misc$getEntityVelocity, color: $author$project$Settings$Theme$accent1, displayName: 'Pace Purification', internalName: 'get_entity_velocity', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wq'},
-		{action: $author$project$Logic$App$Patterns$Misc$raycast, color: $author$project$Settings$Theme$accent1, displayName: 'Archer\'s Distillation', internalName: 'raycast', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wqaawdd'},
-		{action: $author$project$Logic$App$Patterns$Misc$raycastAxis, color: $author$project$Settings$Theme$accent1, displayName: 'Architect\'s Distillation', internalName: 'raycast/axis', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'weddwaa'},
+		{
+		action: $author$project$Logic$App$Patterns$Misc$raycast,
+		color: $author$project$Settings$Theme$accent1,
+		displayName: 'Archer\'s Distillation',
+		internalName: 'raycast',
+		outputOptions: _List_fromArray(
+			[
+				$author$project$Logic$App$Types$Vector(
+				_Utils_Tuple3(0, 0, 0)),
+				$author$project$Logic$App$Types$Null
+			]),
+		selectedOutput: $elm$core$Maybe$Just(
+			$author$project$Logic$App$Types$Vector(
+				_Utils_Tuple3(0, 0, 0))),
+		signature: 'wqaawdd'
+	},
+		{
+		action: $author$project$Logic$App$Patterns$Misc$raycastAxis,
+		color: $author$project$Settings$Theme$accent1,
+		displayName: 'Architect\'s Distillation',
+		internalName: 'raycast/axis',
+		outputOptions: _List_fromArray(
+			[
+				$author$project$Logic$App$Types$Vector(
+				_Utils_Tuple3(0, 0, 0)),
+				$author$project$Logic$App$Types$Null
+			]),
+		selectedOutput: $elm$core$Maybe$Just(
+			$author$project$Logic$App$Types$Vector(
+				_Utils_Tuple3(0, 0, 0))),
+		signature: 'weddwaa'
+	},
 		{
 		action: $author$project$Logic$App$Patterns$Misc$raycastEntity,
 		color: $author$project$Settings$Theme$accent1,
@@ -10907,6 +10903,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _List_f
 	]);
 var $elm$json$Json$Encode$float = _Json_wrap;
 var $author$project$Ports$HexNumGen$sendNumber = _Platform_outgoingPort('sendNumber', $elm$json$Json$Encode$float);
+var $elm$core$String$toFloat = _String_toFloat;
 var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName = function (name) {
 	var _v0 = $elm$core$List$head(
 		A2(
@@ -12006,21 +12003,13 @@ var $author$project$Main$update = F2(
 					$elm$core$Platform$Cmd$none);
 			default:
 				var index = msg.a;
-				var iotaString = msg.b;
-				var outputIota = $author$project$Logic$App$Utils$GetIotaValue$getIotaFromString(iotaString);
+				var replacementPattern = msg.b;
 				var newUncoloredPatternArray = A3(
 					$elm_community$array_extra$Array$Extra$update,
 					index,
 					function (patternTuple) {
-						var pattern = patternTuple.a;
 						var d = patternTuple.b;
-						return _Utils_Tuple2(
-							_Utils_update(
-								pattern,
-								{
-									selectedOutput: $elm$core$Maybe$Just(outputIota)
-								}),
-							d);
+						return _Utils_Tuple2(replacementPattern, d);
 					},
 					model.patternArray);
 				var stackResult = A3(
@@ -13448,7 +13437,7 @@ var $author$project$Components$App$PatternAutoComplete$patternInputAutoComplete 
 				_List_fromArray(
 					[
 						$elm$html$Html$text(
-						(name === '') ? 'owo' : name)
+						(name === '') ? '[pattern not implemented]' : name)
 					]));
 		});
 	return _Utils_Tuple2(
@@ -13517,6 +13506,38 @@ var $author$project$Components$App$Panels$PatternPanel$draggedSourceConfig = fun
 		onEnd: $elm$core$Basics$always($author$project$Logic$App$Msg$DragEnd),
 		onStart: $author$project$Logic$App$Msg$DragStart(id)
 	};
+};
+var $author$project$Logic$App$Utils$GetIotaValue$getIotaFromString = function (string) {
+	return (string === 'Null') ? $author$project$Logic$App$Types$Null : ((string === 'Entity') ? $author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset) : ((!_Utils_eq(
+		$elm$core$String$toFloat(string),
+		$elm$core$Maybe$Nothing)) ? $author$project$Logic$App$Types$Number(
+		A2(
+			$elm$core$Maybe$withDefault,
+			0,
+			$elm$core$String$toFloat(string))) : $author$project$Logic$App$Types$Null));
+};
+var $author$project$Logic$App$Utils$GetIotaValue$getIotaTypeAsString = function (iota) {
+	switch (iota.$) {
+		case 'Null':
+			return 'Null';
+		case 'Number':
+			return 'Number';
+		case 'Vector':
+			return 'Vector';
+		case 'Boolean':
+			var bool = iota.a;
+			return bool ? 'True' : 'False';
+		case 'Entity':
+			return 'Entity';
+		case 'IotaList':
+			return 'List';
+		case 'Pattern':
+			return 'Pattern';
+		case 'Garbage':
+			return 'Garbage';
+		default:
+			return 'List';
+	}
 };
 var $author$project$Components$Icon$MoveButton$moveButton = A2(
 	$elm$svg$Svg$svg,
@@ -13770,9 +13791,9 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F4(
 											_List_fromArray(
 												[$author$project$Components$Icon$MoveButton$moveButton]))
 										])),
-								($elm$core$List$length(pattern.outputOptions) > 0) ? _List_fromArray(
-									[
-										A2(
+								($elm$core$List$length(pattern.outputOptions) > 0) ? A2(
+									$elm$core$List$cons,
+									A2(
 										$elm$html$Html$div,
 										_List_fromArray(
 											[
@@ -13792,10 +13813,20 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F4(
 												_List_fromArray(
 													[
 														$elm$html$Html$Attributes$value(
-														$author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString(
+														$author$project$Logic$App$Utils$GetIotaValue$getIotaTypeAsString(
 															A2($elm$core$Maybe$withDefault, $author$project$Logic$App$Types$Null, pattern.selectedOutput))),
 														$elm$html$Html$Events$onInput(
-														$author$project$Logic$App$Msg$UpdatePatternOuptut(index))
+														function (str) {
+															return A2(
+																$author$project$Logic$App$Msg$UpdatePatternOuptut,
+																index,
+																_Utils_update(
+																	pattern,
+																	{
+																		selectedOutput: $elm$core$Maybe$Just(
+																			$author$project$Logic$App$Utils$GetIotaValue$getIotaFromString(str))
+																	}));
+														})
 													]),
 												A2(
 													$elm$core$List$map,
@@ -13806,12 +13837,193 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F4(
 															_List_fromArray(
 																[
 																	$elm$html$Html$text(
-																	$author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString(iota))
+																	$author$project$Logic$App$Utils$GetIotaValue$getIotaTypeAsString(iota))
 																]));
 													},
 													pattern.outputOptions))
-											]))
-									]) : _List_Nil))
+											])),
+									function () {
+										var _v0 = pattern.selectedOutput;
+										if ((_v0.$ === 'Just') && (_v0.a.$ === 'Vector')) {
+											var vector = _v0.a.a;
+											var x = vector.a;
+											var y = vector.b;
+											var z = vector.c;
+											return _List_fromArray(
+												[
+													A2(
+													$elm$html$Html$div,
+													_List_fromArray(
+														[
+															$elm$html$Html$Attributes$class('output_option_box'),
+															A2($elm$html$Html$Attributes$style, 'grid-template-columns', '2.1fr 3fr')
+														]),
+													_List_fromArray(
+														[
+															A2(
+															$elm$html$Html$label,
+															_List_Nil,
+															_List_fromArray(
+																[
+																	$elm$html$Html$text('X Value:')
+																])),
+															A2(
+															$elm$html$Html$input,
+															_List_fromArray(
+																[
+																	$elm$html$Html$Attributes$value(
+																	$elm$core$String$fromFloat(x)),
+																	$elm$html$Html$Events$onInput(
+																	function (str) {
+																		return A2(
+																			$author$project$Logic$App$Msg$UpdatePatternOuptut,
+																			index,
+																			_Utils_update(
+																				pattern,
+																				{
+																					selectedOutput: $elm$core$Maybe$Just(
+																						$author$project$Logic$App$Types$Vector(
+																							_Utils_Tuple3(
+																								A2(
+																									$elm$core$Maybe$withDefault,
+																									0,
+																									$elm$core$String$toFloat(str)),
+																								y,
+																								z)))
+																				}));
+																	})
+																]),
+															A2(
+																$elm$core$List$map,
+																function (iota) {
+																	return A2(
+																		$elm$html$Html$option,
+																		_List_Nil,
+																		_List_fromArray(
+																			[
+																				$elm$html$Html$text(
+																				$author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString(iota))
+																			]));
+																},
+																pattern.outputOptions))
+														])),
+													A2(
+													$elm$html$Html$div,
+													_List_fromArray(
+														[
+															$elm$html$Html$Attributes$class('output_option_box'),
+															A2($elm$html$Html$Attributes$style, 'grid-template-columns', '2.1fr 3fr')
+														]),
+													_List_fromArray(
+														[
+															A2(
+															$elm$html$Html$label,
+															_List_Nil,
+															_List_fromArray(
+																[
+																	$elm$html$Html$text('Y Value:')
+																])),
+															A2(
+															$elm$html$Html$input,
+															_List_fromArray(
+																[
+																	$elm$html$Html$Attributes$value(
+																	$elm$core$String$fromFloat(y)),
+																	$elm$html$Html$Events$onInput(
+																	function (str) {
+																		return A2(
+																			$author$project$Logic$App$Msg$UpdatePatternOuptut,
+																			index,
+																			_Utils_update(
+																				pattern,
+																				{
+																					selectedOutput: $elm$core$Maybe$Just(
+																						$author$project$Logic$App$Types$Vector(
+																							_Utils_Tuple3(
+																								x,
+																								A2(
+																									$elm$core$Maybe$withDefault,
+																									0,
+																									$elm$core$String$toFloat(str)),
+																								z)))
+																				}));
+																	})
+																]),
+															A2(
+																$elm$core$List$map,
+																function (iota) {
+																	return A2(
+																		$elm$html$Html$option,
+																		_List_Nil,
+																		_List_fromArray(
+																			[
+																				$elm$html$Html$text(
+																				$author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString(iota))
+																			]));
+																},
+																pattern.outputOptions))
+														])),
+													A2(
+													$elm$html$Html$div,
+													_List_fromArray(
+														[
+															$elm$html$Html$Attributes$class('output_option_box'),
+															A2($elm$html$Html$Attributes$style, 'grid-template-columns', '2.1fr 3fr')
+														]),
+													_List_fromArray(
+														[
+															A2(
+															$elm$html$Html$label,
+															_List_Nil,
+															_List_fromArray(
+																[
+																	$elm$html$Html$text('Z Value:')
+																])),
+															A2(
+															$elm$html$Html$input,
+															_List_fromArray(
+																[
+																	$elm$html$Html$Attributes$value(
+																	$elm$core$String$fromFloat(z)),
+																	$elm$html$Html$Events$onInput(
+																	function (str) {
+																		return A2(
+																			$author$project$Logic$App$Msg$UpdatePatternOuptut,
+																			index,
+																			_Utils_update(
+																				pattern,
+																				{
+																					selectedOutput: $elm$core$Maybe$Just(
+																						$author$project$Logic$App$Types$Vector(
+																							_Utils_Tuple3(
+																								x,
+																								y,
+																								A2(
+																									$elm$core$Maybe$withDefault,
+																									0,
+																									$elm$core$String$toFloat(str)))))
+																				}));
+																	})
+																]),
+															A2(
+																$elm$core$List$map,
+																function (iota) {
+																	return A2(
+																		$elm$html$Html$option,
+																		_List_Nil,
+																		_List_fromArray(
+																			[
+																				$elm$html$Html$text(
+																				$author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString(iota))
+																			]));
+																},
+																pattern.outputOptions))
+														]))
+												]);
+										} else {
+											return _List_Nil;
+										}
+									}()) : _List_Nil))
 						]));
 			});
 		var patterns = $elm$core$List$unzip(
