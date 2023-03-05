@@ -7021,7 +7021,7 @@ var $author$project$Logic$App$Stack$Stack$applyPatternsToStackLoop = F5(
 			var resultArray = stackResultTuple.b;
 			var _v0 = $elm$core$List$head(patterns);
 			if (_v0.$ === 'Nothing') {
-				return {ctx: ctx, error: false, resultArray: resultArray, stack: stack};
+				return {ctx: ctx, error: false, halted: false, resultArray: resultArray, stack: stack};
 			} else {
 				var pattern = _v0.a;
 				if (considerThis) {
@@ -7043,7 +7043,7 @@ var $author$project$Logic$App$Stack$Stack$applyPatternsToStackLoop = F5(
 					continue applyPatternsToStackLoop;
 				} else {
 					if ((pattern.internalName === 'halt') && stopAtErrorOrHalt) {
-						return {ctx: ctx, error: false, resultArray: resultArray, stack: stack};
+						return {ctx: ctx, error: false, halted: true, resultArray: resultArray, stack: stack};
 					} else {
 						var applyResult = A3($author$project$Logic$App$Stack$Stack$applyPatternToStack, stack, ctx, pattern);
 						if ((!stopAtErrorOrHalt) || (stopAtErrorOrHalt && (!_Utils_eq(applyResult.result, $author$project$Logic$App$Types$Failed)))) {
@@ -7067,6 +7067,7 @@ var $author$project$Logic$App$Stack$Stack$applyPatternsToStackLoop = F5(
 							return {
 								ctx: applyResult.ctx,
 								error: true,
+								halted: false,
 								resultArray: A2($author$project$Logic$App$Utils$Utils$unshift, applyResult.result, resultArray),
 								stack: applyResult.stack
 							};
@@ -7302,6 +7303,7 @@ var $author$project$Logic$App$Types$Garbage = function (a) {
 var $elm$core$Basics$abs = function (n) {
 	return (n < 0) ? (-n) : n;
 };
+var $author$project$Logic$App$Types$IncorrectIota = {$: 'IncorrectIota'};
 var $author$project$Logic$App$Types$NotEnoughIotas = {$: 'NotEnoughIotas'};
 var $elm$core$List$drop = F2(
 	function (n, list) {
@@ -7528,7 +7530,7 @@ var $author$project$Logic$App$Patterns$OperatorUtils$action1Input = F4(
 					ctx: ctx,
 					stack: A2(
 						$author$project$Logic$App$Utils$Utils$unshift,
-						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
+						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
 						newStack),
 					success: false
 				};
@@ -7647,7 +7649,6 @@ var $author$project$Logic$App$Patterns$Math$absLen = F2(
 			});
 		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, action);
 	});
-var $author$project$Logic$App$Types$IncorrectIota = {$: 'IncorrectIota'};
 var $elm$core$Maybe$map = F2(
 	function (f, maybe) {
 		if (maybe.$ === 'Just') {
@@ -9257,6 +9258,182 @@ var $author$project$Logic$App$Patterns$Math$floorAction = F2(
 			});
 		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
 	});
+var $elm$core$Array$foldl = F3(
+	function (func, baseCase, _v0) {
+		var tree = _v0.c;
+		var tail = _v0.d;
+		var helper = F2(
+			function (node, acc) {
+				if (node.$ === 'SubTree') {
+					var subTree = node.a;
+					return A3($elm$core$Elm$JsArray$foldl, helper, acc, subTree);
+				} else {
+					var values = node.a;
+					return A3($elm$core$Elm$JsArray$foldl, func, acc, values);
+				}
+			});
+		return A3(
+			$elm$core$Elm$JsArray$foldl,
+			func,
+			A3($elm$core$Elm$JsArray$foldl, helper, baseCase, tree),
+			tail);
+	});
+var $elm$core$Debug$log = _Debug_log;
+var $elm_community$array_extra$Array$Extra$reverseToList = A2($elm$core$Array$foldl, $elm$core$List$cons, _List_Nil);
+var $elm_community$array_extra$Array$Extra$reverse = A2($elm$core$Basics$composeR, $elm_community$array_extra$Array$Extra$reverseToList, $elm$core$Array$fromList);
+var $author$project$Logic$App$Patterns$PatternRegistry$forEach = F2(
+	function (stack, ctx) {
+		var newStack = A3(
+			$elm$core$Array$slice,
+			2,
+			$elm$core$Array$length(stack),
+			stack);
+		var maybeIota2 = A2($elm$core$Array$get, 0, stack);
+		var maybeIota1 = A2($elm$core$Array$get, 1, stack);
+		if (_Utils_eq(maybeIota1, $elm$core$Maybe$Nothing) || _Utils_eq(maybeIota2, $elm$core$Maybe$Nothing)) {
+			return {
+				ctx: ctx,
+				stack: A2(
+					$elm$core$Array$append,
+					A2(
+						$elm$core$Array$map,
+						$author$project$Logic$App$Patterns$OperatorUtils$mapNothingToMissingIota,
+						$elm$core$Array$fromList(
+							$author$project$Logic$App$Patterns$OperatorUtils$moveNothingsToFront(
+								_List_fromArray(
+									[maybeIota1, maybeIota2])))),
+					newStack),
+				success: false
+			};
+		} else {
+			var _v0 = _Utils_Tuple2(
+				A2($elm$core$Maybe$map, $author$project$Logic$App$Patterns$OperatorUtils$getPatternList, maybeIota1),
+				A2($elm$core$Maybe$map, $author$project$Logic$App$Patterns$OperatorUtils$getIotaList, maybeIota2));
+			if ((_v0.a.$ === 'Just') && (_v0.b.$ === 'Just')) {
+				var iota1 = _v0.a.a;
+				var iota2 = _v0.b.a;
+				if (_Utils_eq(iota1, $elm$core$Maybe$Nothing) || _Utils_eq(iota2, $elm$core$Maybe$Nothing)) {
+					return {
+						ctx: ctx,
+						stack: A2(
+							$elm$core$Array$append,
+							$elm$core$Array$fromList(
+								_List_fromArray(
+									[
+										A2(
+										$elm$core$Maybe$withDefault,
+										$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+										iota1),
+										A2(
+										$elm$core$Maybe$withDefault,
+										$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+										iota2)
+									])),
+							newStack),
+						success: false
+					};
+				} else {
+					var _v1 = _Utils_Tuple2(iota1, iota2);
+					if ((((_v1.a.$ === 'Just') && (_v1.a.a.$ === 'IotaList')) && (_v1.b.$ === 'Just')) && (_v1.b.a.$ === 'IotaList')) {
+						var patternList = _v1.a.a.a;
+						var iotaList = _v1.b.a.a;
+						var applyResult = A3(
+							$elm$core$Array$foldl,
+							F2(
+								function (iota, accumulator) {
+									if (!accumulator._continue) {
+										return accumulator;
+									} else {
+										var thothList = function () {
+											var _v4 = A2($elm$core$Array$get, 0, accumulator.stack);
+											if ((_v4.$ === 'Just') && (_v4.a.$ === 'IotaList')) {
+												var list = _v4.a.a;
+												return list;
+											} else {
+												return $elm$core$Array$empty;
+											}
+										}();
+										var subApplyResult = A3(
+											$author$project$Logic$App$Stack$Stack$applyPatternsToStackStopAtErrorOrHalt,
+											A2($author$project$Logic$App$Utils$Utils$unshift, iota, newStack),
+											accumulator.ctx,
+											$elm$core$Array$toList(
+												A2(
+													$elm$core$Array$map,
+													function (i) {
+														if (i.$ === 'Pattern') {
+															var pattern = i.a;
+															return pattern;
+														} else {
+															return $author$project$Logic$App$Patterns$PatternRegistry$unknownPattern;
+														}
+													},
+													patternList)));
+										var success = (accumulator.success && subApplyResult.error) ? false : accumulator.success;
+										return {
+											_continue: ((!success) || subApplyResult.halted) ? false : true,
+											ctx: A2($elm$core$Debug$log, 'ctx', subApplyResult.ctx),
+											stack: A3(
+												$elm$core$Array$set,
+												0,
+												$author$project$Logic$App$Types$IotaList(
+													A2(
+														$elm$core$Array$append,
+														thothList,
+														$elm_community$array_extra$Array$Extra$reverse(subApplyResult.stack))),
+												accumulator.stack),
+											success: success
+										};
+									}
+								}),
+							{
+								_continue: true,
+								ctx: ctx,
+								stack: A2(
+									$author$project$Logic$App$Utils$Utils$unshift,
+									$author$project$Logic$App$Types$IotaList($elm$core$Array$empty),
+									newStack),
+								success: true
+							},
+							iotaList);
+						return {
+							ctx: applyResult.ctx,
+							stack: A2(
+								$elm$core$Array$filter,
+								function (i) {
+									if (i.$ === 'OpenParenthesis') {
+										return false;
+									} else {
+										return true;
+									}
+								},
+								applyResult.stack),
+							success: applyResult.success
+						};
+					} else {
+						return {
+							ctx: ctx,
+							stack: $elm$core$Array$fromList(
+								_List_fromArray(
+									[
+										$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure)
+									])),
+							success: false
+						};
+					}
+				}
+			} else {
+				return {
+					ctx: ctx,
+					stack: A2(
+						$author$project$Logic$App$Utils$Utils$unshift,
+						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure),
+						newStack),
+					success: false
+				};
+			}
+		}
+	});
 var $author$project$Logic$App$Types$Player = {$: 'Player'};
 var $author$project$Logic$App$Patterns$Selectors$getCaster = F2(
 	function (stack, ctx) {
@@ -10249,26 +10426,6 @@ var $author$project$Logic$App$Patterns$Math$tangent = F2(
 			});
 		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
 	});
-var $elm$core$Array$foldl = F3(
-	function (func, baseCase, _v0) {
-		var tree = _v0.c;
-		var tail = _v0.d;
-		var helper = F2(
-			function (node, acc) {
-				if (node.$ === 'SubTree') {
-					var subTree = node.a;
-					return A3($elm$core$Elm$JsArray$foldl, helper, acc, subTree);
-				} else {
-					var values = node.a;
-					return A3($elm$core$Elm$JsArray$foldl, func, acc, values);
-				}
-			});
-		return A3(
-			$elm$core$Elm$JsArray$foldl,
-			func,
-			A3($elm$core$Elm$JsArray$foldl, helper, baseCase, tree),
-			tail);
-	});
 var $author$project$Logic$App$Patterns$Math$toSet = F2(
 	function (stack, ctx) {
 		var constructSet = F2(
@@ -11041,7 +11198,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _List_f
 		{action: $author$project$Logic$App$Patterns$Lists$append, color: $author$project$Settings$Theme$accent1, displayName: 'Integration Distillation', internalName: 'append', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'edqde'},
 		{action: $author$project$Logic$App$Patterns$Lists$concat, color: $author$project$Settings$Theme$accent1, displayName: 'Combination Distillation', internalName: 'concat', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaeaq'},
 		{action: $author$project$Logic$App$Patterns$Lists$index, color: $author$project$Settings$Theme$accent1, displayName: 'Selection Distillation', internalName: 'index', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'deeed'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'for_each', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dadad'},
+		{action: $author$project$Logic$App$Patterns$PatternRegistry$forEach, color: $author$project$Settings$Theme$accent1, displayName: 'Thoth\'s Gambit', internalName: 'for_each', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dadad'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'list_size', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqaeaq'},
 		{action: $author$project$Logic$App$Patterns$Lists$singleton, color: $author$project$Settings$Theme$accent1, displayName: 'Single\'s Purification', internalName: 'singleton', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'adeeed'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'empty_list', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqaeaae'},
@@ -11215,7 +11372,6 @@ var $elm_community$array_extra$Array$Extra$insertAt = F2(
 			}
 		};
 	});
-var $elm$core$Debug$log = _Debug_log;
 var $elm_community$array_extra$Array$Extra$map2 = F3(
 	function (combineAb, aArray, bArray) {
 		return $elm$core$Array$fromList(

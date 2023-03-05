@@ -1,11 +1,13 @@
 module Logic.App.Patterns.PatternRegistry exposing (getPatternFromName, getPatternFromSignature, numberLiteralGenerator, patternRegistry, unknownPattern)
 
 import Array exposing (Array)
+import Array.Extra as Array
+import Html exposing (i)
 import Logic.App.Patterns.Circles exposing (..)
 import Logic.App.Patterns.Lists exposing (..)
 import Logic.App.Patterns.Math exposing (..)
 import Logic.App.Patterns.Misc exposing (..)
-import Logic.App.Patterns.OperatorUtils exposing (action1Input, getAny, getPatternOrPatternList, makeConstant)
+import Logic.App.Patterns.OperatorUtils exposing (action1Input, getAny, getIotaList, getPatternList, getPatternOrPatternList, makeConstant, mapNothingToMissingIota, moveNothingsToFront)
 import Logic.App.Patterns.ReadWrite exposing (..)
 import Logic.App.Patterns.Selectors exposing (..)
 import Logic.App.Patterns.Spells exposing (..)
@@ -211,7 +213,7 @@ patternRegistry =
     , { signature = "edqde", internalName = "append", action = append, displayName = "Integration Distillation", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "qaeaq", internalName = "concat", action = concat, displayName = "Combination Distillation", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "deeed", internalName = "index", action = index, displayName = "Selection Distillation", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "dadad", internalName = "for_each", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
+    , { signature = "dadad", internalName = "for_each", action = forEach, displayName = "Thoth's Gambit", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "aqaeaq", internalName = "list_size", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "adeeed", internalName = "singleton", action = singleton, displayName = "Single's Purification", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "qqaeaae", internalName = "empty_list", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
@@ -298,6 +300,124 @@ eval stack ctx =
 
                         _ ->
                             { stack = Array.fromList [ Garbage CatastrophicFailure ], ctx = ctx, success = False }
+
+
+forEach : Array Iota -> CastingContext -> ActionResult
+forEach stack ctx =
+    let
+        maybeIota1 =
+            Array.get 1 stack
+
+        maybeIota2 =
+            Array.get 0 stack
+
+        newStack =
+            Array.slice 2 (Array.length stack) stack
+    in
+    if maybeIota1 == Nothing || maybeIota2 == Nothing then
+        { stack = Array.append (Array.map mapNothingToMissingIota <| Array.fromList <| moveNothingsToFront [ maybeIota1, maybeIota2 ]) newStack
+        , ctx = ctx
+        , success = False
+        }
+
+    else
+        case ( Maybe.map getPatternList maybeIota1, Maybe.map getIotaList maybeIota2 ) of
+            ( Just iota1, Just iota2 ) ->
+                if iota1 == Nothing || iota2 == Nothing then
+                    { stack =
+                        Array.append
+                            (Array.fromList
+                                [ Maybe.withDefault (Garbage IncorrectIota) iota1
+                                , Maybe.withDefault (Garbage IncorrectIota) iota2
+                                ]
+                            )
+                            newStack
+                    , ctx = ctx
+                    , success = False
+                    }
+
+                else
+                    case ( iota1, iota2 ) of
+                        ( Just (IotaList patternList), Just (IotaList iotaList) ) ->
+                            let
+                                applyResult =
+                                    Array.foldl
+                                        (\iota accumulator ->
+                                            if accumulator.continue == False then
+                                                accumulator
+
+                                            else
+                                                let
+                                                    subApplyResult =
+                                                        applyPatternsToStackStopAtErrorOrHalt
+                                                            (unshift iota newStack)
+                                                            accumulator.ctx
+                                                            (Array.toList <|
+                                                                Array.map
+                                                                    (\i ->
+                                                                        case i of
+                                                                            Pattern pattern _ ->
+                                                                                pattern
+
+                                                                            _ ->
+                                                                                unknownPattern
+                                                                    )
+                                                                    patternList
+                                                            )
+
+                                                    thothList =
+                                                        case Array.get 0 accumulator.stack of
+                                                            Just (IotaList list) ->
+                                                                list
+
+                                                            _ ->
+                                                                Array.empty
+
+                                                    success =
+                                                        if accumulator.success == True && subApplyResult.error then
+                                                            False
+
+                                                        else
+                                                            accumulator.success
+                                                in
+                                                { stack = Array.set 0 (IotaList (Array.append thothList (Array.reverse subApplyResult.stack))) accumulator.stack
+                                                , ctx = Debug.log "ctx" subApplyResult.ctx
+                                                , success = success
+                                                , continue =
+                                                    if not success || subApplyResult.halted then
+                                                        False
+
+                                                    else
+                                                        True
+                                                }
+                                        )
+                                        { stack = unshift (IotaList Array.empty) newStack, ctx = ctx, success = True, continue = True }
+                                        iotaList
+                            in
+                            { stack =
+                                Array.filter
+                                    (\i ->
+                                        case i of
+                                            OpenParenthesis _ ->
+                                                False
+
+                                            _ ->
+                                                True
+                                    )
+                                    applyResult.stack
+                            , ctx = applyResult.ctx
+                            , success = applyResult.success
+                            }
+
+                        _ ->
+                            { stack = Array.fromList [ Garbage CatastrophicFailure ], ctx = ctx, success = False }
+
+            _ ->
+                -- this should never happen
+                { stack = unshift (Garbage CatastrophicFailure) newStack
+                , ctx = ctx
+                , success = False
+                }
 
 
 numberLiteralGenerator : String -> Bool -> PatternType

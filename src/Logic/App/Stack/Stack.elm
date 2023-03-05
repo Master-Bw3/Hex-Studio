@@ -6,17 +6,17 @@ import Logic.App.Types exposing (ActionResult, ApplyToStackResult(..), CastingCo
 import Logic.App.Utils.Utils exposing (isJust, unshift)
 
 
-applyPatternsToStackStopAtErrorOrHalt : Array Iota -> CastingContext -> List PatternType -> { stack : Array Iota, resultArray : Array ApplyToStackResult, ctx : CastingContext, error : Bool }
+applyPatternsToStackStopAtErrorOrHalt : Array Iota -> CastingContext -> List PatternType -> { stack : Array Iota, resultArray : Array ApplyToStackResult, ctx : CastingContext, error : Bool, halted : Bool }
 applyPatternsToStackStopAtErrorOrHalt stack ctx patterns =
     applyPatternsToStackLoop ( stack, Array.empty ) ctx patterns False True
 
 
-applyPatternsToStack : Array Iota -> CastingContext -> List PatternType -> { stack : Array Iota, resultArray : Array ApplyToStackResult, ctx : CastingContext, error : Bool }
+applyPatternsToStack : Array Iota -> CastingContext -> List PatternType -> { stack : Array Iota, resultArray : Array ApplyToStackResult, ctx : CastingContext, error : Bool, halted : Bool }
 applyPatternsToStack stack ctx patterns =
     applyPatternsToStackLoop ( stack, Array.empty ) ctx patterns False False
 
 
-applyPatternsToStackLoop : ( Array Iota, Array ApplyToStackResult ) -> CastingContext -> List PatternType -> Bool -> Bool -> { stack : Array Iota, resultArray : Array ApplyToStackResult, ctx : CastingContext, error : Bool }
+applyPatternsToStackLoop : ( Array Iota, Array ApplyToStackResult ) -> CastingContext -> List PatternType -> Bool -> Bool -> { stack : Array Iota, resultArray : Array ApplyToStackResult, ctx : CastingContext, error : Bool, halted : Bool }
 applyPatternsToStackLoop stackResultTuple ctx patterns considerThis stopAtErrorOrHalt =
     let
         stack =
@@ -27,7 +27,7 @@ applyPatternsToStackLoop stackResultTuple ctx patterns considerThis stopAtErrorO
     in
     case List.head patterns of
         Nothing ->
-            { stack = stack, resultArray = resultArray, ctx = ctx, error = False }
+            { stack = stack, resultArray = resultArray, ctx = ctx, error = False, halted = False }
 
         Just pattern ->
             if considerThis then
@@ -39,7 +39,7 @@ applyPatternsToStackLoop stackResultTuple ctx patterns considerThis stopAtErrorO
                     stopAtErrorOrHalt
 
             else if pattern.internalName == "halt" && stopAtErrorOrHalt then
-                { stack = stack, resultArray = resultArray, ctx = ctx, error = False }
+                { stack = stack, resultArray = resultArray, ctx = ctx, error = False, halted = True }
 
             else
                 let
@@ -55,7 +55,7 @@ applyPatternsToStackLoop stackResultTuple ctx patterns considerThis stopAtErrorO
                         stopAtErrorOrHalt
 
                 else
-                    { stack = applyResult.stack, resultArray = unshift applyResult.result resultArray, ctx = applyResult.ctx, error = True }
+                    { stack = applyResult.stack, resultArray = unshift applyResult.result resultArray, ctx = applyResult.ctx, error = True, halted = False  }
 
 
 applyPatternToStack : Array Iota -> CastingContext -> PatternType -> { stack : Array Iota, result : ApplyToStackResult, ctx : CastingContext, considerNext : Bool }

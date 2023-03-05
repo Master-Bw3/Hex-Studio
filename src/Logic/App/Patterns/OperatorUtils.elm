@@ -42,7 +42,7 @@ action1Input stack ctx inputGetter action =
         Just iota ->
             case inputGetter iota of
                 Nothing ->
-                    { stack = unshift (Garbage NotEnoughIotas) newStack, ctx = ctx, success = False }
+                    { stack = unshift (Garbage IncorrectIota) newStack, ctx = ctx, success = False }
 
                 Just _ ->
                     let
