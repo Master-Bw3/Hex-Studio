@@ -47,10 +47,10 @@ getAngleSignature unflippedPath =
                 |> Tuple.first
 
         directionList =
-                List.map2
-                    (\pnt1 pnt2 -> directionBetweenPoints ( pnt1.offsetX, pnt1.offsetY ) ( pnt2.offsetX, pnt2.offsetY ))
-                    path
-                    (Maybe.withDefault [] <| List.tail path)
+            List.map2
+                (\pnt1 pnt2 -> directionBetweenPoints ( pnt1.offsetX, pnt1.offsetY ) ( pnt2.offsetX, pnt2.offsetY ))
+                path
+                (Maybe.withDefault [] <| List.tail path)
 
         getAngleLetter direction1 direction2 =
             letterMap
@@ -67,6 +67,7 @@ getAngleSignature unflippedPath =
             (Maybe.withDefault [] <| List.tail directionList)
 
 
+letterMap : List ( String, ( Direction, Direction ) )
 letterMap =
     [ ( "w", ( East, East ) )
     , ( "a", ( East, Northwest ) )

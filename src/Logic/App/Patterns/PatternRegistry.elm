@@ -48,7 +48,6 @@ getPatternFromSignature signature =
 
             else if String.startsWith "dedd" signature then
                 numberLiteralGenerator signature True
-
             else
                 { unknownPattern | signature = signature, displayName = "Pattern " ++ "\"" ++ signature ++ "\"" }
 
