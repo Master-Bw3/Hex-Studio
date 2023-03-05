@@ -9247,6 +9247,10 @@ var $author$project$Logic$App$Patterns$Selectors$getCaster = F2(
 		};
 		return A3($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, ctx, action);
 	});
+var $author$project$Logic$App$Patterns$Selectors$getEntity = F2(
+	function (stack, ctx) {
+		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
+	});
 var $author$project$Logic$App$Patterns$Misc$getEntityHeight = F2(
 	function (stack, ctx) {
 		var action = F2(
@@ -10854,12 +10858,90 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _List_f
 		selectedOutput: $elm$core$Maybe$Nothing,
 		signature: 'aaq'
 	},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'get_entity', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqdaqa'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'get_entity/animal', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqdaqaawa'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'get_entity/monster', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqdaqaawq'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'get_entity/item', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqdaqaaww'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'get_entity/player', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqdaqaawe'},
-		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'get_entity/living', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqdaqaawd'},
+		{
+		action: $author$project$Logic$App$Patterns$Selectors$getEntity,
+		color: $author$project$Settings$Theme$accent1,
+		displayName: 'Entity Purification',
+		internalName: 'get_entity',
+		outputOptions: _List_fromArray(
+			[
+				$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset),
+				$author$project$Logic$App$Types$Null
+			]),
+		selectedOutput: $elm$core$Maybe$Just(
+			$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset)),
+		signature: 'qqqqqdaqa'
+	},
+		{
+		action: $author$project$Logic$App$Patterns$Selectors$getEntity,
+		color: $author$project$Settings$Theme$accent1,
+		displayName: 'Entity Purification: Animal',
+		internalName: 'get_entity/animal',
+		outputOptions: _List_fromArray(
+			[
+				$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset),
+				$author$project$Logic$App$Types$Null
+			]),
+		selectedOutput: $elm$core$Maybe$Just(
+			$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset)),
+		signature: 'qqqqqdaqaawa'
+	},
+		{
+		action: $author$project$Logic$App$Patterns$Selectors$getEntity,
+		color: $author$project$Settings$Theme$accent1,
+		displayName: 'Entity Purification: Monster',
+		internalName: 'get_entity/monster',
+		outputOptions: _List_fromArray(
+			[
+				$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset),
+				$author$project$Logic$App$Types$Null
+			]),
+		selectedOutput: $elm$core$Maybe$Just(
+			$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset)),
+		signature: 'qqqqqdaqaawq'
+	},
+		{
+		action: $author$project$Logic$App$Patterns$Selectors$getEntity,
+		color: $author$project$Settings$Theme$accent1,
+		displayName: 'Entity Purification: Item',
+		internalName: 'get_entity/item',
+		outputOptions: _List_fromArray(
+			[
+				$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset),
+				$author$project$Logic$App$Types$Null
+			]),
+		selectedOutput: $elm$core$Maybe$Just(
+			$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset)),
+		signature: 'qqqqqdaqaaww'
+	},
+		{
+		action: $author$project$Logic$App$Patterns$Selectors$getEntity,
+		color: $author$project$Settings$Theme$accent1,
+		displayName: 'Entity Purification: Player',
+		internalName: 'get_entity/player',
+		outputOptions: _List_fromArray(
+			[
+				$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset),
+				$author$project$Logic$App$Types$Null
+			]),
+		selectedOutput: $elm$core$Maybe$Just(
+			$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset)),
+		signature: 'qqqqqdaqaawe'
+	},
+		{
+		action: $author$project$Logic$App$Patterns$Selectors$getEntity,
+		color: $author$project$Settings$Theme$accent1,
+		displayName: 'Entity Purification: Living',
+		internalName: 'get_entity/living',
+		outputOptions: _List_fromArray(
+			[
+				$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset),
+				$author$project$Logic$App$Types$Null
+			]),
+		selectedOutput: $elm$core$Maybe$Just(
+			$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset)),
+		signature: 'qqqqqdaqaawd'
+	},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'zone_entity', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqwded'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'zone_entity/animal', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqwdeddwa'},
 		{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, color: $author$project$Settings$Theme$accent1, displayName: '', internalName: 'zone_entity/not_animal', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eeeeewaqaawa'},

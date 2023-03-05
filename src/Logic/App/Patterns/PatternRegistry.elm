@@ -191,12 +191,12 @@ patternRegistry =
     , { signature = "qdwdq", internalName = "const/double/pi", action = makeConstant (Number pi), displayName = "Arc's Reflection", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "eawae", internalName = "const/double/tau", action = makeConstant (Number (pi * 2)), displayName = "Circle's Reflection", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "aaq", internalName = "const/double/e", action = makeConstant (Number e), displayName = "Euler's Reflection", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "qqqqqdaqa", internalName = "get_entity", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "qqqqqdaqaawa", internalName = "get_entity/animal", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "qqqqqdaqaawq", internalName = "get_entity/monster", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "qqqqqdaqaaww", internalName = "get_entity/item", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "qqqqqdaqaawe", internalName = "get_entity/player", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "qqqqqdaqaawd", internalName = "get_entity/living", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
+    , { signature = "qqqqqdaqa", internalName = "get_entity", action = getEntity, displayName = "Entity Purification", color = accent1, outputOptions = [Entity Unset, Null], selectedOutput = Just (Entity Unset) }
+    , { signature = "qqqqqdaqaawa", internalName = "get_entity/animal", action = getEntity, displayName = "Entity Purification: Animal", color = accent1, outputOptions = [Entity Unset, Null], selectedOutput = Just (Entity Unset) }
+    , { signature = "qqqqqdaqaawq", internalName = "get_entity/monster", action = getEntity, displayName = "Entity Purification: Monster", color = accent1, outputOptions = [Entity Unset, Null], selectedOutput = Just (Entity Unset) }
+    , { signature = "qqqqqdaqaaww", internalName = "get_entity/item", action = getEntity, displayName = "Entity Purification: Item", color = accent1, outputOptions = [Entity Unset, Null], selectedOutput = Just (Entity Unset) }
+    , { signature = "qqqqqdaqaawe", internalName = "get_entity/player", action = getEntity, displayName = "Entity Purification: Player", color = accent1, outputOptions = [Entity Unset, Null], selectedOutput = Just (Entity Unset) }
+    , { signature = "qqqqqdaqaawd", internalName = "get_entity/living", action = getEntity, displayName = "Entity Purification: Living", color = accent1, outputOptions = [Entity Unset, Null], selectedOutput = Just (Entity Unset) }
     , { signature = "qqqqqwded", internalName = "zone_entity", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "qqqqqwdeddwa", internalName = "zone_entity/animal", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "eeeeewaqaawa", internalName = "zone_entity/not_animal", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
