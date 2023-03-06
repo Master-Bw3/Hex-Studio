@@ -7037,6 +7037,7 @@ var $author$project$Logic$App$Stack$Stack$applyPatternToStack = F3(
 			}
 		}
 	});
+var $elm$core$Debug$log = _Debug_log;
 var $author$project$Logic$App$Stack$Stack$applyPatternsToStackLoop = F5(
 	function (stackResultTuple, ctx, patterns, considerThis, stopAtErrorOrHalt) {
 		applyPatternsToStackLoop:
@@ -7088,13 +7089,17 @@ var $author$project$Logic$App$Stack$Stack$applyPatternsToStackLoop = F5(
 							stopAtErrorOrHalt = $temp$stopAtErrorOrHalt;
 							continue applyPatternsToStackLoop;
 						} else {
-							return {
-								ctx: applyResult.ctx,
-								error: true,
-								halted: false,
-								resultArray: A2($author$project$Logic$App$Utils$Utils$unshift, applyResult.result, resultArray),
-								stack: applyResult.stack
-							};
+							var _v1 = A2($elm$core$Debug$log, 'error', pattern);
+							return A2(
+								$elm$core$Debug$log,
+								'error',
+								{
+									ctx: applyResult.ctx,
+									error: true,
+									halted: false,
+									resultArray: A2($author$project$Logic$App$Utils$Utils$unshift, applyResult.result, resultArray),
+									stack: applyResult.stack
+								});
 						}
 					}
 				}
@@ -9013,22 +9018,12 @@ var $author$project$Logic$App$Stack$Stack$applyPatternsToStackStopAtErrorOrHalt 
 			false,
 			true);
 	});
-var $author$project$Logic$App$Patterns$OperatorUtils$getPatternOrPatternList = function (iota) {
+var $author$project$Logic$App$Patterns$OperatorUtils$getPatternOrIotaList = function (iota) {
 	switch (iota.$) {
 		case 'Pattern':
 			return $elm$core$Maybe$Just(iota);
 		case 'IotaList':
-			var list = iota.a;
-			return A2(
-				$elm$core$List$all,
-				function (i) {
-					if (i.$ === 'Pattern') {
-						return true;
-					} else {
-						return false;
-					}
-				},
-				$elm$core$Array$toList(list)) ? $elm$core$Maybe$Just(iota) : $elm$core$Maybe$Nothing;
+			return $elm$core$Maybe$Just(iota);
 		default:
 			return $elm$core$Maybe$Nothing;
 	}
@@ -9073,7 +9068,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$eval = F2(
 			};
 		} else {
 			var iota = maybeIota.a;
-			var _v1 = $author$project$Logic$App$Patterns$OperatorUtils$getPatternOrPatternList(iota);
+			var _v1 = $author$project$Logic$App$Patterns$OperatorUtils$getPatternOrIotaList(iota);
 			if (_v1.$ === 'Nothing') {
 				return {
 					ctx: ctx,
@@ -11948,7 +11943,6 @@ var $elm_community$array_extra$Array$Extra$insertAt = F2(
 			}
 		};
 	});
-var $elm$core$Debug$log = _Debug_log;
 var $author$project$Logic$App$Msg$MouseMoveData = F4(
 	function (pageX, pageY, offsetHeight, offsetWidth) {
 		return {offsetHeight: offsetHeight, offsetWidth: offsetWidth, pageX: pageX, pageY: pageY};

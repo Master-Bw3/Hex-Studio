@@ -55,7 +55,8 @@ applyPatternsToStackLoop stackResultTuple ctx patterns considerThis stopAtErrorO
                         stopAtErrorOrHalt
 
                 else
-                    { stack = applyResult.stack, resultArray = unshift applyResult.result resultArray, ctx = applyResult.ctx, error = True, halted = False  }
+                    let _ = Debug.log "error" pattern in
+                    Debug.log "error" { stack = applyResult.stack, resultArray = unshift applyResult.result resultArray, ctx = applyResult.ctx, error = True, halted = False  }
 
 
 applyPatternToStack : Array Iota -> CastingContext -> PatternType -> { stack : Array Iota, result : ApplyToStackResult, ctx : CastingContext, considerNext : Bool }

@@ -94,13 +94,13 @@ action2Inputs stack ctx inputGetter1 inputGetter2 action =
                                 (Maybe.withDefault (Garbage IncorrectIota) iota2)
                                 ctx
                     in
-                            { stack =
-                                Array.append
-                                    (Tuple.first actionResult)
-                                    newStack
-                            , ctx = Tuple.second actionResult
-                            , success = True
-                            }
+                    { stack =
+                        Array.append
+                            (Tuple.first actionResult)
+                            newStack
+                    , ctx = Tuple.second actionResult
+                    , success = True
+                    }
 
             _ ->
                 -- this should never happen
@@ -219,30 +219,14 @@ getPatternList iota =
             Nothing
 
 
-getPatternOrPatternList : Iota -> Maybe Iota
-getPatternOrPatternList iota =
+getPatternOrIotaList : Iota -> Maybe Iota
+getPatternOrIotaList iota =
     case iota of
         Pattern _ _ ->
             Just iota
 
-        IotaList list ->
-            if
-                List.all
-                    (\i ->
-                        case i of
-                            Pattern _ _ ->
-                                True
-
-                            _ ->
-                                False
-                    )
-                <|
-                    Array.toList list
-            then
-                Just iota
-
-            else
-                Nothing
+        IotaList _ ->
+            Just iota
 
         _ ->
             Nothing
@@ -274,11 +258,12 @@ getInteger iota =
         _ ->
             Nothing
 
+
 getPositiveInteger : Iota -> Maybe Iota
 getPositiveInteger iota =
     case iota of
         Number number ->
-            if toFloat (round number) == number && (round number) >= 0 then
+            if toFloat (round number) == number && round number >= 0 then
                 Just iota
 
             else
@@ -286,6 +271,7 @@ getPositiveInteger iota =
 
         _ ->
             Nothing
+
 
 getNumber : Iota -> Maybe Iota
 getNumber iota =

@@ -8,7 +8,7 @@ import Logic.App.Patterns.Circles exposing (..)
 import Logic.App.Patterns.Lists exposing (..)
 import Logic.App.Patterns.Math exposing (..)
 import Logic.App.Patterns.Misc exposing (..)
-import Logic.App.Patterns.OperatorUtils exposing (action1Input, getAny, getIotaList, getPatternList, getPatternOrPatternList, makeConstant, mapNothingToMissingIota, moveNothingsToFront)
+import Logic.App.Patterns.OperatorUtils exposing (action1Input, getAny, getIotaList, getPatternList, makeConstant, mapNothingToMissingIota, moveNothingsToFront)
 import Logic.App.Patterns.ReadWrite exposing (..)
 import Logic.App.Patterns.Selectors exposing (..)
 import Logic.App.Patterns.Spells exposing (..)
@@ -18,6 +18,7 @@ import Logic.App.Types exposing (ActionResult, ApplyToStackResult(..), CastingCo
 import Logic.App.Utils.Utils exposing (unshift)
 import Ports.HexNumGen as HexNumGen
 import Settings.Theme exposing (..)
+import Logic.App.Patterns.OperatorUtils exposing (getPatternOrIotaList)
 
 
 noAction : Array Iota -> CastingContext -> ActionResult
@@ -348,7 +349,7 @@ eval stack ctx =
             { stack = unshift (Garbage NotEnoughIotas) newStack, ctx = ctx, success = False }
 
         Just iota ->
-            case getPatternOrPatternList <| iota of
+            case getPatternOrIotaList <| iota of
                 Nothing ->
                     { stack = unshift (Garbage IncorrectIota) newStack, ctx = ctx, success = False }
 
