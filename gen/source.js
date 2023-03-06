@@ -6217,6 +6217,8 @@ var $elm$core$List$any = F2(
 			}
 		}
 	});
+var $elm$core$Basics$atan2 = _Basics_atan2;
+var $elm$core$Basics$cos = _Basics_cos;
 var $elm$core$Basics$pow = _Basics_pow;
 var $elm$core$Tuple$second = function (_v0) {
 	var y = _v0.b;
@@ -6308,8 +6310,13 @@ var $author$project$Components$App$Grid$getClosestPoint = F3(
 					distanceComparison,
 					$elm$core$List$concat(points))));
 	});
+var $elm$core$Basics$min = F2(
+	function (x, y) {
+		return (_Utils_cmp(x, y) < 0) ? x : y;
+	});
 var $elm$core$Basics$neq = _Utils_notEqual;
 var $elm$core$Basics$not = _Basics_not;
+var $elm$core$Basics$sin = _Basics_sin;
 var $author$project$Components$App$Grid$spacing = function (scale) {
 	return 100 * scale;
 };
@@ -6351,7 +6358,24 @@ var $author$project$Components$App$Grid$addNearbyPoint = function (model) {
 				otherNodes)));
 	var gridOffset = model.window.width - model.grid.width;
 	var offsetMousePos = _Utils_Tuple2(model.mousePos.a - gridOffset, model.mousePos.b);
-	var closestGridNode = A3($author$project$Components$App$Grid$getClosestPoint, model.mousePos, modelGrid.points, model);
+	var trimmedMousePos = function () {
+		var relativeMousePos = {x: offsetMousePos.a - prevNode.x, y: offsetMousePos.b - prevNode.y};
+		var theta = A2($elm$core$Basics$atan2, relativeMousePos.y, relativeMousePos.x);
+		var trimmedMagnitude = A2(
+			$elm$core$Basics$min,
+			$elm$core$Basics$sqrt(
+				A2($elm$core$Basics$pow, relativeMousePos.x, 2) + A2($elm$core$Basics$pow, relativeMousePos.y, 2)),
+			$author$project$Components$App$Grid$spacing(scale));
+		var _v0 = model.mousePos;
+		return _Utils_Tuple2(
+			(trimmedMagnitude * $elm$core$Basics$cos(theta)) + prevNode.x,
+			(trimmedMagnitude * $elm$core$Basics$sin(theta)) + prevNode.y);
+	}();
+	var closestGridNode = A3(
+		$author$project$Components$App$Grid$getClosestPoint,
+		_Utils_Tuple2(trimmedMousePos.a + gridOffset, trimmedMousePos.b),
+		modelGrid.points,
+		model);
 	var closestPoint = A2(
 		$elm$core$Maybe$withDefault,
 		closestGridNode,
@@ -6367,7 +6391,7 @@ var $author$project$Components$App$Grid$addNearbyPoint = function (model) {
 	var mouseDistanceCloseToPoint = _Utils_cmp(
 		A2(
 			$author$project$Components$App$Grid$distanceBetweenCoordinates,
-			offsetMousePos,
+			trimmedMousePos,
 			_Utils_Tuple2(closestPoint.x, closestPoint.y)),
 		$author$project$Components$App$Grid$spacing(scale) / 2) < 1;
 	var pointCloseToPrevPoint = _Utils_cmp(
@@ -8452,9 +8476,7 @@ var $author$project$Logic$App$Patterns$Circles$circleImpetusDirection = F2(
 		};
 		return A3($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, ctx, action);
 	});
-var $elm$core$Basics$cos = _Basics_cos;
 var $elm$core$Basics$pi = _Basics_pi;
-var $elm$core$Basics$sin = _Basics_sin;
 var $author$project$Logic$App$Patterns$Math$coerceAxial = F2(
 	function (stack, ctx) {
 		var action = F2(
@@ -11927,10 +11949,6 @@ var $elm_community$array_extra$Array$Extra$insertAt = F2(
 		};
 	});
 var $elm$core$Debug$log = _Debug_log;
-var $elm$core$Basics$min = F2(
-	function (x, y) {
-		return (_Utils_cmp(x, y) < 0) ? x : y;
-	});
 var $author$project$Logic$App$Msg$MouseMoveData = F4(
 	function (pageX, pageY, offsetHeight, offsetWidth) {
 		return {offsetHeight: offsetHeight, offsetWidth: offsetWidth, pageX: pageX, pageY: pageY};

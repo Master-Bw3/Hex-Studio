@@ -317,8 +317,26 @@ addNearbyPoint model =
         offsetMousePos =
             ( Tuple.first model.mousePos - gridOffset, Tuple.second model.mousePos )
 
+        trimmedMousePos =
+            let
+                relativeMousePos =
+                    { x = Tuple.first offsetMousePos - prevNode.x, y = Tuple.second offsetMousePos - prevNode.y }
+
+                trimmedMagnitude =
+                    Basics.min (sqrt (relativeMousePos.x ^ 2 + relativeMousePos.y ^ 2)) (spacing scale)
+
+                theta =
+                    atan2 relativeMousePos.y relativeMousePos.x
+
+                _ =
+                    model.mousePos
+            in
+            ( (trimmedMagnitude * cos theta) + prevNode.x, (trimmedMagnitude * sin theta) + prevNode.y )
+
+        
+
         closestGridNode =
-            getClosestPoint model.mousePos modelGrid.points model
+            getClosestPoint ( Tuple.first trimmedMousePos +  gridOffset, Tuple.second trimmedMousePos ) modelGrid.points model
 
         closestPoint =
             Maybe.withDefault closestGridNode (List.head <| List.filter (\point -> ( point.x, point.y ) == ( closestGridNode.x, closestGridNode.y )) <| modelGrid.drawing.activePath)
@@ -349,7 +367,7 @@ addNearbyPoint model =
             ( prevNode.x, prevNode.y ) /= ( closestPoint.x, closestPoint.y )
 
         mouseDistanceCloseToPoint =
-            distanceBetweenCoordinates offsetMousePos ( closestPoint.x, closestPoint.y ) <= (spacing scale / 2)
+            distanceBetweenCoordinates trimmedMousePos ( closestPoint.x, closestPoint.y ) <= (spacing scale / 2)
 
         pointCloseToPrevPoint =
             distanceBetweenCoordinates ( prevNode.x, prevNode.y ) ( closestPoint.x, closestPoint.y ) <= (spacing scale * 1.5)
