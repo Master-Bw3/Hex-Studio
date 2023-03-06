@@ -2,9 +2,8 @@ module Logic.App.Utils.GetIotaValue exposing (..)
 
 import Array
 import Html exposing (br, li, ol, p, text)
-import Html.Attributes exposing (style)
+import Html.Attributes exposing (start, style)
 import Logic.App.Types exposing (EntityType(..), Iota(..), Mishap(..))
-import Html.Attributes exposing (start)
 
 
 getIotaValueAsHtmlMsg : Iota -> List (Html.Html msg)
@@ -21,7 +20,7 @@ getIotaValueAsHtmlMsg iota =
             String.dropLeft 6 string
                 |> String.split "| "
                 |> List.map (\str -> li [] [ text str ])
-                |> ol [start 0]
+                |> ol [ start 0 ]
                 |> List.singleton
                 |> (::) (p [] [ text "List:" ])
 
@@ -96,17 +95,17 @@ getIotaValueAsString iota =
         IotaList list ->
             (++) "List: " <|
                 String.join "| " <|
-                        List.map
-                            (\item ->
-                                case item of
-                                    Pattern pattern _ ->
-                                        pattern.displayName
+                    List.map
+                        (\item ->
+                            case item of
+                                Pattern pattern _ ->
+                                    pattern.displayName
 
-                                    x ->
-                                        getIotaValueAsString x
-                            )
-                        <|
-                            Array.toList list
+                                x ->
+                                    getIotaValueAsString x
+                        )
+                    <|
+                        Array.toList list
 
         Pattern pattern _ ->
             pattern.displayName
@@ -159,17 +158,17 @@ getIotaValueAsString iota =
         OpenParenthesis list ->
             (++) "List: " <|
                 String.join "| " <|
-                        List.map
-                            (\item ->
-                                case item of
-                                    Pattern pattern _ ->
-                                        pattern.displayName
+                    List.map
+                        (\item ->
+                            case item of
+                                Pattern pattern _ ->
+                                    pattern.displayName
 
-                                    _ ->
-                                        ""
-                            )
-                        <|
-                            Array.toList list
+                                _ ->
+                                    ""
+                        )
+                    <|
+                        Array.toList list
 
 
 getIotaFromString : String -> Iota

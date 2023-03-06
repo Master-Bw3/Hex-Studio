@@ -9978,14 +9978,17 @@ var $author$project$Logic$App$Patterns$Lists$modifyinPlace = F2(
 							var list = _v0.a.a;
 							var number = _v0.b.a;
 							return A2(
-								$elm$core$Array$repeat,
-								1,
-								$author$project$Logic$App$Types$IotaList(
-									A3(
-										$elm$core$Array$set,
-										$elm$core$Basics$round(number),
-										iota3,
-										list)));
+								$elm$core$Debug$log,
+								'list',
+								A2(
+									$elm$core$Array$repeat,
+									1,
+									$author$project$Logic$App$Types$IotaList(
+										A3(
+											$elm$core$Array$set,
+											$elm$core$Basics$round(number),
+											A2($elm$core$Debug$log, 'iota3', iota3),
+											list))));
 						} else {
 							return A2(
 								$elm$core$Array$repeat,

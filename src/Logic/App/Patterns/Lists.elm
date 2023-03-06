@@ -229,8 +229,9 @@ modifyinPlace stack ctx =
         action iota1 iota2 iota3 _ =
             ( case ( iota1, iota2 ) of
                 ( IotaList list, Number number ) ->
-                    IotaList (Array.set (round number) iota3 list)
+                    IotaList (Array.set (round number) (Debug.log "iota3" iota3) list)
                         |> Array.repeat 1
+                        |> Debug.log "list"
 
                 _ ->
                     Garbage CatastrophicFailure
