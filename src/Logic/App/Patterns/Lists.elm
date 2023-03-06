@@ -43,7 +43,7 @@ concat stack ctx =
         action iota1 iota2 _ =
             ( case ( iota1, iota2 ) of
                 ( IotaList list1, IotaList list2 ) ->
-                    IotaList (Array.append list2 list1)
+                    IotaList (Array.append list1 list2)
                         |> Array.repeat 1
 
                 _ ->

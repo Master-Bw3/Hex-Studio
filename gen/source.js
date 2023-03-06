@@ -8549,7 +8549,7 @@ var $author$project$Logic$App$Patterns$Lists$concat = F2(
 								$elm$core$Array$repeat,
 								1,
 								$author$project$Logic$App$Types$IotaList(
-									A2($elm$core$Array$append, list2, list1)));
+									A2($elm$core$Array$append, list1, list2)));
 						} else {
 							return A2(
 								$elm$core$Array$repeat,
