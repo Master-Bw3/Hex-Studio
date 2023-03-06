@@ -290,7 +290,7 @@ renderPoint mousePos gridOffset scale point =
             , viewBox "0 0 300 280"
             , Attr.style "position" "absolute"
             , Attr.style "left" (String.fromFloat (point.x - (8 * scale)) ++ "px")
-            , Attr.style "top" (String.fromFloat (point.y - (8 * scale)))
+            , Attr.style "top" (String.fromFloat (point.y - (8 * scale)) ++ "px")
             , Attr.style "transform" ("scale(" ++ String.fromFloat pointScale ++ ")")
             , fill point.color
             ]

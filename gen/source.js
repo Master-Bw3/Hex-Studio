@@ -15552,7 +15552,7 @@ var $author$project$Components$App$Grid$renderPoint = F4(
 						A2(
 						$elm$html$Html$Attributes$style,
 						'top',
-						$elm$core$String$fromFloat(point.y - (8 * scale))),
+						$elm$core$String$fromFloat(point.y - (8 * scale)) + 'px'),
 						A2(
 						$elm$html$Html$Attributes$style,
 						'transform',
