@@ -13,7 +13,7 @@ import Logic.App.Patterns.ReadWrite exposing (..)
 import Logic.App.Patterns.Selectors exposing (..)
 import Logic.App.Patterns.Spells exposing (..)
 import Logic.App.Patterns.Stack exposing (..)
-import Logic.App.Stack.Stack exposing (applyPatternToStack, applyPatternsToStack, applyPatternsToStackStopAtErrorOrHalt)
+import Logic.App.Stack.Stack exposing (applyPatternToStack, applyPatternsToStack, applyToStackStopAtErrorOrHalt)
 import Logic.App.Types exposing (ActionResult, ApplyToStackResult(..), CastingContext, EntityType(..), HeldItem(..), Iota(..), Mishap(..), PatternType)
 import Logic.App.Utils.Utils exposing (unshift)
 import Ports.HexNumGen as HexNumGen
@@ -358,21 +358,10 @@ eval stack ctx =
                         IotaList list ->
                             let
                                 applyResult =
-                                    applyPatternsToStackStopAtErrorOrHalt
+                                    applyToStackStopAtErrorOrHalt
                                         newStack
                                         ctx
-                                        (Array.toList <|
-                                            Array.map
-                                                (\i ->
-                                                    case i of
-                                                        Pattern pattern _ ->
-                                                            pattern
-
-                                                        _ ->
-                                                            unknownPattern
-                                                )
-                                                list
-                                        )
+                                        list
                             in
                             { stack =
                                 Array.filter
@@ -392,7 +381,7 @@ eval stack ctx =
                         Pattern pattern _ ->
                             let
                                 applyResult =
-                                    applyPatternsToStackStopAtErrorOrHalt newStack ctx [ pattern ]
+                                    applyToStackStopAtErrorOrHalt newStack ctx (Array.fromList [Pattern pattern False])
                             in
                             { stack = applyResult.stack, ctx = applyResult.ctx, success = not applyResult.error }
 
@@ -447,21 +436,10 @@ forEach stack ctx =
                                             else
                                                 let
                                                     subApplyResult =
-                                                        applyPatternsToStackStopAtErrorOrHalt
+                                                        applyToStackStopAtErrorOrHalt
                                                             (unshift iota newStack)
                                                             accumulator.ctx
-                                                            (Array.toList <|
-                                                                Array.map
-                                                                    (\i ->
-                                                                        case i of
-                                                                            Pattern pattern _ ->
-                                                                                pattern
-
-                                                                            _ ->
-                                                                                unknownPattern
-                                                                    )
-                                                                    patternList
-                                                            )
+                                                            patternList
 
                                                     thothList =
                                                         case Array.get 0 accumulator.stack of

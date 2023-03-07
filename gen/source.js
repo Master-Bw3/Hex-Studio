@@ -6774,14 +6774,14 @@ var $author$project$Logic$App$PatternList$PatternArray$applyColorToPatternFromRe
 					{color: $author$project$Settings$Theme$accent5});
 		}
 	});
-var $author$project$Logic$App$Types$Considered = {$: 'Considered'};
-var $author$project$Logic$App$Types$OpenParenthesis = function (a) {
-	return {$: 'OpenParenthesis', a: a};
-};
 var $author$project$Logic$App$Types$Pattern = F2(
 	function (a, b) {
 		return {$: 'Pattern', a: a, b: b};
 	});
+var $author$project$Logic$App$Types$Considered = {$: 'Considered'};
+var $author$project$Logic$App$Types$OpenParenthesis = function (a) {
+	return {$: 'OpenParenthesis', a: a};
+};
 var $elm$core$Array$getHelp = F3(
 	function (shift, index, tree) {
 		getHelp:
@@ -6877,8 +6877,8 @@ var $author$project$Logic$App$Utils$Utils$unshift = F2(
 					[item])),
 			array);
 	});
-var $author$project$Logic$App$Stack$Stack$addEscapedPatternIotaToStack = F2(
-	function (stack, pattern) {
+var $author$project$Logic$App$Stack$Stack$addEscapedIotaToStack = F2(
+	function (stack, iota) {
 		var _v0 = A2($elm$core$Array$get, 0, stack);
 		if ((_v0.$ === 'Just') && (_v0.a.$ === 'OpenParenthesis')) {
 			var list = _v0.a.a;
@@ -6886,16 +6886,10 @@ var $author$project$Logic$App$Stack$Stack$addEscapedPatternIotaToStack = F2(
 				$elm$core$Array$set,
 				0,
 				$author$project$Logic$App$Types$OpenParenthesis(
-					A2(
-						$elm$core$Array$push,
-						A2($author$project$Logic$App$Types$Pattern, pattern, true),
-						list)),
+					A2($elm$core$Array$push, iota, list)),
 				stack);
 		} else {
-			return A2(
-				$author$project$Logic$App$Utils$Utils$unshift,
-				A2($author$project$Logic$App$Types$Pattern, pattern, true),
-				stack);
+			return A2($author$project$Logic$App$Utils$Utils$unshift, iota, stack);
 		}
 	});
 var $author$project$Logic$App$Types$IotaList = function (a) {
@@ -7038,69 +7032,108 @@ var $author$project$Logic$App$Stack$Stack$applyPatternToStack = F3(
 		}
 	});
 var $elm$core$Debug$log = _Debug_log;
-var $author$project$Logic$App$Stack$Stack$applyPatternsToStackLoop = F5(
+var $author$project$Logic$App$Stack$Stack$applyToStackLoop = F5(
 	function (stackResultTuple, ctx, patterns, considerThis, stopAtErrorOrHalt) {
-		applyPatternsToStackLoop:
+		applyToStackLoop:
 		while (true) {
 			var stack = stackResultTuple.a;
 			var resultArray = stackResultTuple.b;
+			var introspection = function () {
+				var _v3 = A2($elm$core$Array$get, 0, stack);
+				if ((_v3.$ === 'Just') && (_v3.a.$ === 'OpenParenthesis')) {
+					return true;
+				} else {
+					return false;
+				}
+			}();
 			var _v0 = $elm$core$List$head(patterns);
 			if (_v0.$ === 'Nothing') {
 				return {ctx: ctx, error: false, halted: false, resultArray: resultArray, stack: stack};
 			} else {
-				var pattern = _v0.a;
-				if (considerThis) {
-					var $temp$stackResultTuple = _Utils_Tuple2(
-						A2($author$project$Logic$App$Stack$Stack$addEscapedPatternIotaToStack, stack, pattern),
-						A2($author$project$Logic$App$Utils$Utils$unshift, $author$project$Logic$App$Types$Considered, resultArray)),
-						$temp$ctx = ctx,
-						$temp$patterns = A2(
-						$elm$core$Maybe$withDefault,
-						_List_Nil,
-						$elm$core$List$tail(patterns)),
-						$temp$considerThis = false,
-						$temp$stopAtErrorOrHalt = stopAtErrorOrHalt;
-					stackResultTuple = $temp$stackResultTuple;
-					ctx = $temp$ctx;
-					patterns = $temp$patterns;
-					considerThis = $temp$considerThis;
-					stopAtErrorOrHalt = $temp$stopAtErrorOrHalt;
-					continue applyPatternsToStackLoop;
-				} else {
-					if ((pattern.internalName === 'halt') && stopAtErrorOrHalt) {
-						return {ctx: ctx, error: false, halted: true, resultArray: resultArray, stack: stack};
+				if (_v0.a.$ === 'Pattern') {
+					var _v1 = _v0.a;
+					var pattern = _v1.a;
+					if (considerThis) {
+						var $temp$stackResultTuple = _Utils_Tuple2(
+							A2(
+								$author$project$Logic$App$Stack$Stack$addEscapedIotaToStack,
+								stack,
+								A2($author$project$Logic$App$Types$Pattern, pattern, false)),
+							A2($author$project$Logic$App$Utils$Utils$unshift, $author$project$Logic$App$Types$Considered, resultArray)),
+							$temp$ctx = ctx,
+							$temp$patterns = A2(
+							$elm$core$Maybe$withDefault,
+							_List_Nil,
+							$elm$core$List$tail(patterns)),
+							$temp$considerThis = false,
+							$temp$stopAtErrorOrHalt = stopAtErrorOrHalt;
+						stackResultTuple = $temp$stackResultTuple;
+						ctx = $temp$ctx;
+						patterns = $temp$patterns;
+						considerThis = $temp$considerThis;
+						stopAtErrorOrHalt = $temp$stopAtErrorOrHalt;
+						continue applyToStackLoop;
 					} else {
-						var applyResult = A3($author$project$Logic$App$Stack$Stack$applyPatternToStack, stack, ctx, pattern);
-						if ((!stopAtErrorOrHalt) || (stopAtErrorOrHalt && (!_Utils_eq(applyResult.result, $author$project$Logic$App$Types$Failed)))) {
-							var $temp$stackResultTuple = _Utils_Tuple2(
-								applyResult.stack,
-								A2($author$project$Logic$App$Utils$Utils$unshift, applyResult.result, resultArray)),
-								$temp$ctx = applyResult.ctx,
-								$temp$patterns = A2(
-								$elm$core$Maybe$withDefault,
-								_List_Nil,
-								$elm$core$List$tail(patterns)),
-								$temp$considerThis = applyResult.considerNext,
-								$temp$stopAtErrorOrHalt = stopAtErrorOrHalt;
-							stackResultTuple = $temp$stackResultTuple;
-							ctx = $temp$ctx;
-							patterns = $temp$patterns;
-							considerThis = $temp$considerThis;
-							stopAtErrorOrHalt = $temp$stopAtErrorOrHalt;
-							continue applyPatternsToStackLoop;
+						if ((pattern.internalName === 'halt') && stopAtErrorOrHalt) {
+							return {ctx: ctx, error: false, halted: true, resultArray: resultArray, stack: stack};
 						} else {
-							var _v1 = A2($elm$core$Debug$log, 'error', pattern);
-							return A2(
-								$elm$core$Debug$log,
-								'error',
-								{
-									ctx: applyResult.ctx,
-									error: true,
-									halted: false,
-									resultArray: A2($author$project$Logic$App$Utils$Utils$unshift, applyResult.result, resultArray),
-									stack: applyResult.stack
-								});
+							var applyResult = A3($author$project$Logic$App$Stack$Stack$applyPatternToStack, stack, ctx, pattern);
+							if ((!stopAtErrorOrHalt) || (stopAtErrorOrHalt && (!_Utils_eq(applyResult.result, $author$project$Logic$App$Types$Failed)))) {
+								var $temp$stackResultTuple = _Utils_Tuple2(
+									applyResult.stack,
+									A2($author$project$Logic$App$Utils$Utils$unshift, applyResult.result, resultArray)),
+									$temp$ctx = applyResult.ctx,
+									$temp$patterns = A2(
+									$elm$core$Maybe$withDefault,
+									_List_Nil,
+									$elm$core$List$tail(patterns)),
+									$temp$considerThis = applyResult.considerNext,
+									$temp$stopAtErrorOrHalt = stopAtErrorOrHalt;
+								stackResultTuple = $temp$stackResultTuple;
+								ctx = $temp$ctx;
+								patterns = $temp$patterns;
+								considerThis = $temp$considerThis;
+								stopAtErrorOrHalt = $temp$stopAtErrorOrHalt;
+								continue applyToStackLoop;
+							} else {
+								var _v2 = A2($elm$core$Debug$log, 'error', pattern);
+								return A2(
+									$elm$core$Debug$log,
+									'error',
+									{
+										ctx: applyResult.ctx,
+										error: true,
+										halted: false,
+										resultArray: A2($author$project$Logic$App$Utils$Utils$unshift, applyResult.result, resultArray),
+										stack: applyResult.stack
+									});
+							}
 						}
+					}
+				} else {
+					var iota = _v0.a;
+					if (considerThis || introspection) {
+						var $temp$stackResultTuple = _Utils_Tuple2(
+							A2($author$project$Logic$App$Stack$Stack$addEscapedIotaToStack, stack, iota),
+							A2($author$project$Logic$App$Utils$Utils$unshift, $author$project$Logic$App$Types$Considered, resultArray)),
+							$temp$ctx = ctx,
+							$temp$patterns = A2(
+							$elm$core$Maybe$withDefault,
+							_List_Nil,
+							$elm$core$List$tail(patterns)),
+							$temp$considerThis = false,
+							$temp$stopAtErrorOrHalt = stopAtErrorOrHalt;
+						stackResultTuple = $temp$stackResultTuple;
+						ctx = $temp$ctx;
+						patterns = $temp$patterns;
+						considerThis = $temp$considerThis;
+						stopAtErrorOrHalt = $temp$stopAtErrorOrHalt;
+						continue applyToStackLoop;
+					} else {
+						return A2(
+							$elm$core$Debug$log,
+							'error',
+							{ctx: ctx, error: true, halted: false, resultArray: resultArray, stack: stack});
 					}
 				}
 			}
@@ -7108,11 +7141,17 @@ var $author$project$Logic$App$Stack$Stack$applyPatternsToStackLoop = F5(
 	});
 var $author$project$Logic$App$Stack$Stack$applyPatternsToStack = F3(
 	function (stack, ctx, patterns) {
+		var patternIotas = A2(
+			$elm$core$List$map,
+			function (pattern) {
+				return A2($author$project$Logic$App$Types$Pattern, pattern, false);
+			},
+			patterns);
 		return A5(
-			$author$project$Logic$App$Stack$Stack$applyPatternsToStackLoop,
+			$author$project$Logic$App$Stack$Stack$applyToStackLoop,
 			_Utils_Tuple2(stack, $elm$core$Array$empty),
 			ctx,
-			patterns,
+			patternIotas,
 			false,
 			false);
 	});
@@ -9008,13 +9047,13 @@ var $author$project$Logic$App$Patterns$Spells$erase = F2(
 	function (stack, ctx) {
 		return A2($author$project$Logic$App$Patterns$OperatorUtils$spellNoInput, stack, ctx);
 	});
-var $author$project$Logic$App$Stack$Stack$applyPatternsToStackStopAtErrorOrHalt = F3(
-	function (stack, ctx, patterns) {
+var $author$project$Logic$App$Stack$Stack$applyToStackStopAtErrorOrHalt = F3(
+	function (stack, ctx, iotas) {
 		return A5(
-			$author$project$Logic$App$Stack$Stack$applyPatternsToStackLoop,
+			$author$project$Logic$App$Stack$Stack$applyToStackLoop,
 			_Utils_Tuple2(stack, $elm$core$Array$empty),
 			ctx,
-			patterns,
+			$elm$core$Array$toList(iotas),
 			false,
 			true);
 	});
@@ -9027,27 +9066,6 @@ var $author$project$Logic$App$Patterns$OperatorUtils$getPatternOrIotaList = func
 		default:
 			return $elm$core$Maybe$Nothing;
 	}
-};
-var $author$project$Logic$App$Types$InvalidPattern = {$: 'InvalidPattern'};
-var $author$project$Settings$Theme$accent3 = '#e0b8b8';
-var $author$project$Logic$App$Patterns$PatternRegistry$unknownPattern = {
-	action: F2(
-		function (stack, ctx) {
-			return {
-				ctx: ctx,
-				stack: A2(
-					$author$project$Logic$App$Utils$Utils$unshift,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$InvalidPattern),
-					stack),
-				success: false
-			};
-		}),
-	color: $author$project$Settings$Theme$accent3,
-	displayName: 'Unknown Pattern',
-	internalName: 'unknown',
-	outputOptions: _List_Nil,
-	selectedOutput: $elm$core$Maybe$Nothing,
-	signature: ''
 };
 var $author$project$Logic$App$Patterns$PatternRegistry$eval = F2(
 	function (stack, ctx) {
@@ -9082,22 +9100,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$eval = F2(
 				switch (iota.$) {
 					case 'IotaList':
 						var list = iota.a;
-						var applyResult = A3(
-							$author$project$Logic$App$Stack$Stack$applyPatternsToStackStopAtErrorOrHalt,
-							newStack,
-							ctx,
-							$elm$core$Array$toList(
-								A2(
-									$elm$core$Array$map,
-									function (i) {
-										if (i.$ === 'Pattern') {
-											var pattern = i.a;
-											return pattern;
-										} else {
-											return $author$project$Logic$App$Patterns$PatternRegistry$unknownPattern;
-										}
-									},
-									list)));
+						var applyResult = A3($author$project$Logic$App$Stack$Stack$applyToStackStopAtErrorOrHalt, newStack, ctx, list);
 						return {
 							ctx: applyResult.ctx,
 							stack: A2(
@@ -9115,11 +9118,14 @@ var $author$project$Logic$App$Patterns$PatternRegistry$eval = F2(
 					case 'Pattern':
 						var pattern = iota.a;
 						var applyResult = A3(
-							$author$project$Logic$App$Stack$Stack$applyPatternsToStackStopAtErrorOrHalt,
+							$author$project$Logic$App$Stack$Stack$applyToStackStopAtErrorOrHalt,
 							newStack,
 							ctx,
-							_List_fromArray(
-								[pattern]));
+							$elm$core$Array$fromList(
+								_List_fromArray(
+									[
+										A2($author$project$Logic$App$Types$Pattern, pattern, false)
+									])));
 						return {ctx: applyResult.ctx, stack: applyResult.stack, success: !applyResult.error};
 					default:
 						return {
@@ -9453,30 +9459,19 @@ var $author$project$Logic$App$Patterns$PatternRegistry$forEach = F2(
 										return accumulator;
 									} else {
 										var thothList = function () {
-											var _v4 = A2($elm$core$Array$get, 0, accumulator.stack);
-											if ((_v4.$ === 'Just') && (_v4.a.$ === 'IotaList')) {
-												var list = _v4.a.a;
+											var _v3 = A2($elm$core$Array$get, 0, accumulator.stack);
+											if ((_v3.$ === 'Just') && (_v3.a.$ === 'IotaList')) {
+												var list = _v3.a.a;
 												return list;
 											} else {
 												return $elm$core$Array$empty;
 											}
 										}();
 										var subApplyResult = A3(
-											$author$project$Logic$App$Stack$Stack$applyPatternsToStackStopAtErrorOrHalt,
+											$author$project$Logic$App$Stack$Stack$applyToStackStopAtErrorOrHalt,
 											A2($author$project$Logic$App$Utils$Utils$unshift, iota, newStack),
 											accumulator.ctx,
-											$elm$core$Array$toList(
-												A2(
-													$elm$core$Array$map,
-													function (i) {
-														if (i.$ === 'Pattern') {
-															var pattern = i.a;
-															return pattern;
-														} else {
-															return $author$project$Logic$App$Patterns$PatternRegistry$unknownPattern;
-														}
-													},
-													patternList)));
+											patternList);
 										var success = (accumulator.success && subApplyResult.error) ? false : accumulator.success;
 										return {
 											_continue: ((!success) || subApplyResult.halted) ? false : true,
@@ -11627,6 +11622,27 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _List_f
 var $elm$json$Json$Encode$float = _Json_wrap;
 var $author$project$Ports$HexNumGen$sendNumber = _Platform_outgoingPort('sendNumber', $elm$json$Json$Encode$float);
 var $elm$core$String$toFloat = _String_toFloat;
+var $author$project$Logic$App$Types$InvalidPattern = {$: 'InvalidPattern'};
+var $author$project$Settings$Theme$accent3 = '#e0b8b8';
+var $author$project$Logic$App$Patterns$PatternRegistry$unknownPattern = {
+	action: F2(
+		function (stack, ctx) {
+			return {
+				ctx: ctx,
+				stack: A2(
+					$author$project$Logic$App$Utils$Utils$unshift,
+					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$InvalidPattern),
+					stack),
+				success: false
+			};
+		}),
+	color: $author$project$Settings$Theme$accent3,
+	displayName: 'Unknown Pattern',
+	internalName: 'unknown',
+	outputOptions: _List_Nil,
+	selectedOutput: $elm$core$Maybe$Nothing,
+	signature: ''
+};
 var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName = function (name) {
 	var _v0 = $elm$core$List$head(
 		A2(

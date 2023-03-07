@@ -6,33 +6,45 @@ import Logic.App.Types exposing (ActionResult, ApplyToStackResult(..), CastingCo
 import Logic.App.Utils.Utils exposing (isJust, unshift)
 
 
-applyPatternsToStackStopAtErrorOrHalt : Array Iota -> CastingContext -> List PatternType -> { stack : Array Iota, resultArray : Array ApplyToStackResult, ctx : CastingContext, error : Bool, halted : Bool }
-applyPatternsToStackStopAtErrorOrHalt stack ctx patterns =
-    applyPatternsToStackLoop ( stack, Array.empty ) ctx patterns False True
+applyToStackStopAtErrorOrHalt : Array Iota -> CastingContext -> Array Iota -> { stack : Array Iota, resultArray : Array ApplyToStackResult, ctx : CastingContext, error : Bool, halted : Bool }
+applyToStackStopAtErrorOrHalt stack ctx iotas =
+    applyToStackLoop ( stack, Array.empty ) ctx (Array.toList iotas) False True
 
 
 applyPatternsToStack : Array Iota -> CastingContext -> List PatternType -> { stack : Array Iota, resultArray : Array ApplyToStackResult, ctx : CastingContext, error : Bool, halted : Bool }
 applyPatternsToStack stack ctx patterns =
-    applyPatternsToStackLoop ( stack, Array.empty ) ctx patterns False False
+    let
+        patternIotas =
+            List.map (\pattern -> Pattern pattern False) patterns
+    in
+    applyToStackLoop ( stack, Array.empty ) ctx patternIotas False False
 
 
-applyPatternsToStackLoop : ( Array Iota, Array ApplyToStackResult ) -> CastingContext -> List PatternType -> Bool -> Bool -> { stack : Array Iota, resultArray : Array ApplyToStackResult, ctx : CastingContext, error : Bool, halted : Bool }
-applyPatternsToStackLoop stackResultTuple ctx patterns considerThis stopAtErrorOrHalt =
+applyToStackLoop : ( Array Iota, Array ApplyToStackResult ) -> CastingContext -> List Iota -> Bool -> Bool -> { stack : Array Iota, resultArray : Array ApplyToStackResult, ctx : CastingContext, error : Bool, halted : Bool }
+applyToStackLoop stackResultTuple ctx patterns considerThis stopAtErrorOrHalt =
     let
         stack =
             Tuple.first stackResultTuple
 
         resultArray =
             Tuple.second stackResultTuple
+
+        introspection =
+            case Array.get 0 stack of
+                Just (OpenParenthesis _) ->
+                    True
+
+                _ ->
+                    False
     in
     case List.head patterns of
         Nothing ->
             { stack = stack, resultArray = resultArray, ctx = ctx, error = False, halted = False }
 
-        Just pattern ->
+        Just (Pattern pattern _) ->
             if considerThis then
-                applyPatternsToStackLoop
-                    ( addEscapedPatternIotaToStack stack pattern, unshift Considered resultArray )
+                applyToStackLoop
+                    ( addEscapedIotaToStack stack (Pattern pattern False), unshift Considered resultArray )
                     ctx
                     (Maybe.withDefault [] <| List.tail patterns)
                     False
@@ -47,7 +59,7 @@ applyPatternsToStackLoop stackResultTuple ctx patterns considerThis stopAtErrorO
                         applyPatternToStack stack ctx pattern
                 in
                 if not stopAtErrorOrHalt || (stopAtErrorOrHalt && applyResult.result /= Failed) then
-                    applyPatternsToStackLoop
+                    applyToStackLoop
                         ( applyResult.stack, unshift applyResult.result resultArray )
                         applyResult.ctx
                         (Maybe.withDefault [] <| List.tail patterns)
@@ -55,8 +67,23 @@ applyPatternsToStackLoop stackResultTuple ctx patterns considerThis stopAtErrorO
                         stopAtErrorOrHalt
 
                 else
-                    let _ = Debug.log "error" pattern in
-                    Debug.log "error" { stack = applyResult.stack, resultArray = unshift applyResult.result resultArray, ctx = applyResult.ctx, error = True, halted = False  }
+                    let
+                        _ =
+                            Debug.log "error" pattern
+                    in
+                    Debug.log "error" { stack = applyResult.stack, resultArray = unshift applyResult.result resultArray, ctx = applyResult.ctx, error = True, halted = False }
+
+        Just iota ->
+            if considerThis || introspection then
+                applyToStackLoop
+                    ( addEscapedIotaToStack stack iota, unshift Considered resultArray )
+                    ctx
+                    (Maybe.withDefault [] <| List.tail patterns)
+                    False
+                    stopAtErrorOrHalt
+
+            else
+                Debug.log "error" { stack = stack, resultArray = resultArray, ctx = ctx, error = True, halted = False }
 
 
 applyPatternToStack : Array Iota -> CastingContext -> PatternType -> { stack : Array Iota, result : ApplyToStackResult, ctx : CastingContext, considerNext : Bool }
@@ -153,11 +180,11 @@ applyPatternToStack stack ctx pattern =
                     { stack = actionResult.stack, result = Failed, ctx = actionResult.ctx, considerNext = False }
 
 
-addEscapedPatternIotaToStack : Array Iota -> PatternType -> Array Iota
-addEscapedPatternIotaToStack stack pattern =
+addEscapedIotaToStack : Array Iota -> Iota -> Array Iota
+addEscapedIotaToStack stack iota =
     case Array.get 0 stack of
         Just (OpenParenthesis list) ->
-            Array.set 0 (OpenParenthesis (Array.push (Pattern pattern True) list)) stack
+            Array.set 0 (OpenParenthesis (Array.push iota list)) stack
 
         _ ->
-            unshift (Pattern pattern True) stack
+            unshift iota stack
