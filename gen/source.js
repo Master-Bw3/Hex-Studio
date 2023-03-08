@@ -14712,6 +14712,7 @@ var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$onSourceDrag = functio
 				config.onDrag)
 			]));
 };
+var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
 var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
 var $elm$svg$Svg$style = $elm$svg$Svg$trustedNode('style');
 var $elm$svg$Svg$Attributes$x1 = _VirtualDom_attribute('x1');
@@ -14962,6 +14963,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F4(
 																			_List_fromArray(
 																				[
 																					$elm$html$Html$Attributes$placeholder('0'),
+																					$elm$html$Html$Attributes$type_('number'),
 																					$elm$html$Html$Events$onInput(
 																					function (str) {
 																						return A2(
@@ -15007,6 +15009,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F4(
 																			_List_fromArray(
 																				[
 																					$elm$html$Html$Attributes$placeholder('0'),
+																					$elm$html$Html$Attributes$type_('number'),
 																					$elm$html$Html$Events$onInput(
 																					function (str) {
 																						return A2(
@@ -15052,6 +15055,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F4(
 																			_List_fromArray(
 																				[
 																					$elm$html$Html$Attributes$placeholder('0'),
+																					$elm$html$Html$Attributes$type_('number'),
 																					$elm$html$Html$Events$onInput(
 																					function (str) {
 																						return A2(
@@ -15108,6 +15112,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F4(
 																			_List_fromArray(
 																				[
 																					$elm$html$Html$Attributes$placeholder('0'),
+																					$elm$html$Html$Attributes$type_('number'),
 																					$elm$html$Html$Events$onInput(
 																					function (str) {
 																						return A2(
@@ -15172,6 +15177,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F4(
 																			_List_fromArray(
 																				[
 																					$elm$html$Html$Attributes$placeholder('0'),
+																					$elm$html$Html$Attributes$type_('number'),
 																					$elm$html$Html$Events$onInput(
 																					function (str) {
 																						return A2(

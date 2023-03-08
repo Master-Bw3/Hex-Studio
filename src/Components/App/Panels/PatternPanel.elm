@@ -24,6 +24,7 @@ import Logic.App.Patterns.PatternRegistry exposing (patternRegistry)
 import Logic.App.Types exposing (EntityType(..), GridPoint, Iota(..), IotaType(..), Panel(..), Pattern)
 import Logic.App.Utils.GetIotaValue exposing (getIotaFromString, getIotaTypeAsString, getIotaTypeFromString, getIotaValueAsString)
 import String exposing (fromInt)
+import Html.Attributes exposing (type_)
 
 
 patternPanel : Model -> Html Msg
@@ -182,6 +183,7 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle =
                                                                 [ label [] [ text "X Value:" ]
                                                                 , input
                                                                     [ placeholder "0"
+                                                                    , type_ "number"
                                                                     , onInput
                                                                         (\str ->
                                                                             UpdatePatternOuptut index
@@ -194,6 +196,7 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle =
                                                                 [ label [] [ text "Y Value:" ]
                                                                 , input
                                                                     [ placeholder "0"
+                                                                    , type_ "number"
                                                                     , onInput
                                                                         (\str ->
                                                                             UpdatePatternOuptut index
@@ -206,6 +209,7 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle =
                                                                 [ label [] [ text "Z Value:" ]
                                                                 , input
                                                                     [ placeholder "0"
+                                                                    , type_ "number"
                                                                     , onInput
                                                                         (\str ->
                                                                             UpdatePatternOuptut index
@@ -221,6 +225,7 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle =
                                                         [ label [] [ text "Number:" ]
                                                         , input
                                                             [ placeholder "0"
+                                                            , type_ "number"
                                                             , onInput
                                                                 (\str ->
                                                                     UpdatePatternOuptut index
@@ -236,6 +241,7 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle =
                                                         [ label [] [ text "Count:" ]
                                                         , input
                                                             [ placeholder "0"
+                                                            , type_ "number"
                                                             , onInput
                                                                 (\str ->
                                                                     UpdatePatternOuptut index
