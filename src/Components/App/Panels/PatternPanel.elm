@@ -1,6 +1,6 @@
 module Components.App.Panels.PatternPanel exposing (patternPanel)
 
-import Array exposing (Array)
+import Array exposing (Array(..))
 import Components.App.Panels.Utils exposing (visibilityToDisplayStyle)
 import Components.App.PatternAutoComplete exposing (..)
 import Components.Icon.MoveButton exposing (moveButton)
@@ -21,8 +21,8 @@ import Json.Decode as Json exposing (Decoder, at, float, int, map4)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (MouseMoveData, Msg(..))
 import Logic.App.Patterns.PatternRegistry exposing (patternRegistry)
-import Logic.App.Types exposing (GridPoint, Iota(..), Panel(..), PatternType)
-import Logic.App.Utils.GetIotaValue exposing (getIotaFromString, getIotaTypeAsString, getIotaValueAsString)
+import Logic.App.Types exposing (EntityType(..), GridPoint, Iota(..), IotaType(..), Panel(..), Pattern)
+import Logic.App.Utils.GetIotaValue exposing (getIotaFromString, getIotaTypeAsString, getIotaTypeFromString, getIotaValueAsString)
 import String exposing (fromInt)
 
 
@@ -122,14 +122,14 @@ draggedSourceConfig id =
     }
 
 
-renderPatternList : Array ( PatternType, List GridPoint ) -> Int -> Int -> Bool -> List (Html Msg)
+renderPatternList : Array ( Pattern, List GridPoint ) -> Int -> Int -> Bool -> List (Html Msg)
 renderPatternList patternList dragoverIndex dragstartIndex overDragHandle =
     let
-        patterns : List PatternType
+        patterns : List Pattern
         patterns =
             Tuple.first <| List.unzip <| Array.toList patternList
 
-        renderPattern : Int -> PatternType -> List (Html Msg)
+        renderPattern : Int -> Pattern -> List (Html Msg)
         renderPattern index pattern =
             (if dragoverIndex == index then
                 [ div [ class "seperator" ] [] ]
@@ -169,13 +169,13 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle =
                                     div [ class "output_option_box" ]
                                         [ label [] [ text "Output:" ]
                                         , select
-                                            [ value <| getIotaTypeAsString (Maybe.withDefault Null pattern.selectedOutput)
-                                            , onInput (\str -> UpdatePatternOuptut index { pattern | selectedOutput = Just <| getIotaFromString str })
+                                            [ value <| getIotaTypeAsString (Tuple.first <| Maybe.withDefault ( NullType, Null ) pattern.selectedOutput)
+                                            , onInput (\str -> UpdatePatternOuptut index { pattern | selectedOutput = Just <| ( getIotaTypeFromString str, getIotaFromString str ) })
                                             ]
                                             (List.map (\iota -> option [] [ text <| getIotaTypeAsString iota ]) pattern.outputOptions)
                                         ]
                                         :: (case pattern.selectedOutput of
-                                                Just (Vector vector) ->
+                                                Just ( VectorType, Vector vector ) ->
                                                     case vector of
                                                         ( x, y, z ) ->
                                                             [ div [ class "output_option_box", style "grid-template-columns" "2.1fr 3fr" ]
@@ -185,7 +185,7 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle =
                                                                     , onInput
                                                                         (\str ->
                                                                             UpdatePatternOuptut index
-                                                                                { pattern | selectedOutput = Just (Vector ( Maybe.withDefault 0 <| String.toFloat str, y, z )) }
+                                                                                { pattern | selectedOutput = Just ( VectorType, Vector ( Maybe.withDefault 0 <| String.toFloat str, y, z ) ) }
                                                                         )
                                                                     ]
                                                                     []
@@ -197,7 +197,7 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle =
                                                                     , onInput
                                                                         (\str ->
                                                                             UpdatePatternOuptut index
-                                                                                { pattern | selectedOutput = Just (Vector ( x, Maybe.withDefault 0 <| String.toFloat str, z )) }
+                                                                                { pattern | selectedOutput = Just ( VectorType, Vector ( x, Maybe.withDefault 0 <| String.toFloat str, z ) ) }
                                                                         )
                                                                     ]
                                                                     []
@@ -209,14 +209,14 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle =
                                                                     , onInput
                                                                         (\str ->
                                                                             UpdatePatternOuptut index
-                                                                                { pattern | selectedOutput = Just (Vector ( x, y, Maybe.withDefault 0 <| String.toFloat str )) }
+                                                                                { pattern | selectedOutput = Just ( VectorType, Vector ( x, y, Maybe.withDefault 0 <| String.toFloat str ) ) }
                                                                         )
                                                                     ]
                                                                     []
                                                                 ]
                                                             ]
 
-                                                Just (Number number) ->
+                                                Just ( NumberType, Number number ) ->
                                                     [ div [ class "output_option_box", style "grid-template-columns" "2.1fr 3fr" ]
                                                         [ label [] [ text "Number:" ]
                                                         , input
@@ -224,10 +224,31 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle =
                                                             , onInput
                                                                 (\str ->
                                                                     UpdatePatternOuptut index
-                                                                        { pattern | selectedOutput = Just (Number <| Maybe.withDefault 0 <| String.toFloat str) }
+                                                                        { pattern | selectedOutput = Just ( NumberType, Number <| Maybe.withDefault 0 <| String.toFloat str ) }
                                                                 )
                                                             ]
-                                                            (List.map (\iota -> option [] [ text <| getIotaValueAsString iota ]) pattern.outputOptions)
+                                                            (List.map (\iota -> option [] [ text <| getIotaTypeAsString iota ]) pattern.outputOptions)
+                                                        ]
+                                                    ]
+
+                                                Just ( IotaListType EntityType, IotaList _ ) ->
+                                                    [ div [ class "output_option_box", style "grid-template-columns" "2.1fr 3fr" ]
+                                                        [ label [] [ text "Count:" ]
+                                                        , input
+                                                            [ placeholder "0"
+                                                            , onInput
+                                                                (\str ->
+                                                                    UpdatePatternOuptut index
+                                                                        { pattern
+                                                                            | selectedOutput =
+                                                                                Just
+                                                                                    ( IotaListType EntityType
+                                                                                    , IotaList (Array.repeat (Maybe.withDefault 0 <| String.toInt str) (Entity Unset))
+                                                                                    )
+                                                                        }
+                                                                )
+                                                            ]
+                                                            (List.map (\iota -> option [] [ text <| getIotaTypeAsString iota ]) pattern.outputOptions)
                                                         ]
                                                     ]
 

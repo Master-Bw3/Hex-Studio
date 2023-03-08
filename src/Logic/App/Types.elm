@@ -27,14 +27,14 @@ type EntityType
     | Minecart
 
 
-type alias PatternType =
+type alias Pattern =
     { signature : String
     , action : Array Iota -> CastingContext -> ActionResult
     , displayName : String
     , internalName : String
     , color : String
-    , outputOptions : List Iota
-    , selectedOutput : Maybe Iota
+    , outputOptions : List IotaType
+    , selectedOutput : Maybe (IotaType, Iota)
     }
 
 
@@ -59,13 +59,24 @@ type Mishap
     | CatastrophicFailure
 
 
+type IotaType
+    = NumberType
+    | VectorType
+    | BooleanType
+    | EntityType
+    | IotaListType IotaType
+    | PatternType
+    | NullType
+    | GarbageType
+
+
 type Iota
     = Number Float
     | Vector ( Float, Float, Float )
     | Boolean Bool
     | Entity EntityType
     | IotaList (Array Iota)
-    | Pattern PatternType Bool -- bool is for if pattern was from consideration (not sure if this bool is even used anymore)
+    | PatternIota Pattern Bool -- bool is for if pattern was from consideration (not sure if this bool is even used anymore)
     | Null
     | Garbage Mishap
     | OpenParenthesis (Array Iota)

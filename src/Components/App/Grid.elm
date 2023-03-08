@@ -18,7 +18,7 @@ import Html.Events.Extra.Touch as TouchEvent
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (Msg(..))
 import Logic.App.Patterns.PatternRegistry exposing (unknownPattern)
-import Logic.App.Types exposing (CoordinatePair, GridPoint, PatternType, PointConnection)
+import Logic.App.Types exposing (CoordinatePair, GridPoint, Pattern, PointConnection)
 import Logic.App.Utils.Utils exposing (touchCoordinates)
 import Random
 import Settings.Theme exposing (..)
@@ -484,7 +484,7 @@ generateGrid gridWidth gridHeight scale =
 -- TODO: Finish this
 
 
-updateGridPoints : Float -> Float -> Array ( PatternType, List GridPoint ) -> List (List GridPoint) -> Float -> List (List GridPoint)
+updateGridPoints : Float -> Float -> Array ( Pattern, List GridPoint ) -> List (List GridPoint) -> Float -> List (List GridPoint)
 updateGridPoints gridWidth gridHeight patternArray maybeGrid scale =
     let
         drawing =

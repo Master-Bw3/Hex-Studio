@@ -1,12 +1,12 @@
 module Logic.App.Model exposing (..)
 
 import Array exposing (Array)
-import Logic.App.Types exposing (CastingContext, GridPoint, HeldItem, Iota, Panel, PatternType)
+import Logic.App.Types exposing (CastingContext, GridPoint, HeldItem, Iota, Panel, Pattern)
 
 
 type alias Model =
     { stack : Array Iota
-    , patternArray : Array ( PatternType, List GridPoint )
+    , patternArray : Array ( Pattern, List GridPoint )
     , ui :
         { openPanels : List Panel
         , patternInputField : String

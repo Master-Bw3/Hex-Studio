@@ -201,7 +201,7 @@ getPatternList iota =
                 List.all
                     (\i ->
                         case i of
-                            Pattern _ _ ->
+                            PatternIota _ _ ->
                                 True
 
                             _ ->
@@ -222,7 +222,7 @@ getPatternList iota =
 getPatternOrIotaList : Iota -> Maybe Iota
 getPatternOrIotaList iota =
     case iota of
-        Pattern _ _ ->
+        PatternIota _ _ ->
             Just iota
 
         IotaList _ ->
@@ -411,7 +411,7 @@ checkEquality iota1 iota2 =
             0.0001
     in
     case ( iota1, iota2 ) of
-        ( Pattern pattern1 _, Pattern pattern2 _ ) ->
+        ( PatternIota pattern1 _, PatternIota pattern2 _ ) ->
             pattern1.signature == pattern2.signature
 
         ( IotaList list1, IotaList list2 ) ->

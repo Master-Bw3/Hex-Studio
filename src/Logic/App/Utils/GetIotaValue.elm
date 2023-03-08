@@ -3,7 +3,7 @@ module Logic.App.Utils.GetIotaValue exposing (..)
 import Array
 import Html exposing (br, li, ol, p, text)
 import Html.Attributes exposing (start, style)
-import Logic.App.Types exposing (EntityType(..), Iota(..), Mishap(..))
+import Logic.App.Types exposing (EntityType(..), Iota(..), IotaType(..), Mishap(..))
 
 
 getIotaValueAsHtmlMsg : Iota -> List (Html.Html msg)
@@ -28,39 +28,32 @@ getIotaValueAsHtmlMsg iota =
         [ p [] [ text string ] ]
 
 
-getIotaTypeAsString : Iota -> String
+getIotaTypeAsString : IotaType -> String
 getIotaTypeAsString iota =
     case iota of
-        Null ->
+        NullType ->
             "Null"
 
-        Number _ ->
+        NumberType ->
             "Number"
 
-        Vector _ ->
+        VectorType ->
             "Vector"
 
-        Boolean bool ->
-            if bool == True then
-                "True"
+        BooleanType ->
+            "Boolean"
 
-            else
-                "False"
-
-        Entity _ ->
+        EntityType ->
             "Entity"
 
-        IotaList _ ->
-            "List"
+        IotaListType iotaType ->
+            "List: " ++ getIotaTypeAsString iotaType
 
-        Pattern _ _ ->
+        PatternType ->
             "Pattern"
 
-        Garbage _ ->
+        GarbageType ->
             "Garbage"
-
-        OpenParenthesis _ ->
-            "List"
 
 
 getIotaValueAsString : Iota -> String
@@ -98,7 +91,7 @@ getIotaValueAsString iota =
                     List.map
                         (\item ->
                             case item of
-                                Pattern pattern _ ->
+                                PatternIota pattern _ ->
                                     pattern.displayName
 
                                 x ->
@@ -107,7 +100,7 @@ getIotaValueAsString iota =
                     <|
                         Array.toList list
 
-        Pattern pattern _ ->
+        PatternIota pattern _ ->
             pattern.displayName
 
         Garbage mishap ->
@@ -161,7 +154,7 @@ getIotaValueAsString iota =
                     List.map
                         (\item ->
                             case item of
-                                Pattern pattern _ ->
+                                PatternIota pattern _ ->
                                     pattern.displayName
 
                                 _ ->
@@ -187,3 +180,20 @@ getIotaFromString string =
 
     else
         Null
+
+getIotaTypeFromString : String -> IotaType
+getIotaTypeFromString string =
+    if string == "Null" then
+        NullType
+
+    else if string == "Entity" then
+        EntityType
+
+    else if string == "Vector" then
+        VectorType
+
+    else if String.toFloat string /= Nothing then
+        NumberType
+
+    else
+        NullType

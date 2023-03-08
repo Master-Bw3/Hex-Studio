@@ -1,10 +1,10 @@
 module Logic.App.Patterns.Selectors exposing (..)
 
 import Array exposing (Array)
-import Logic.App.Patterns.OperatorUtils exposing (actionNoInput)
+import Logic.App.Patterns.OperatorUtils exposing (actionNoInput, getVector, spell1Input)
 import Logic.App.Types exposing (ActionResult, CastingContext, EntityType(..), Iota(..))
-import Logic.App.Patterns.OperatorUtils exposing (spell1Input)
-import Logic.App.Patterns.OperatorUtils exposing (getVector)
+import Logic.App.Patterns.OperatorUtils exposing (getNumber)
+import Logic.App.Patterns.OperatorUtils exposing (spell2Inputs)
 
 
 getCaster : Array Iota -> CastingContext -> ActionResult
@@ -22,3 +22,8 @@ getCaster stack ctx =
 getEntity : Array Iota -> CastingContext -> ActionResult
 getEntity stack ctx =
     spell1Input stack ctx getVector
+
+
+zoneEntity : Array Iota -> CastingContext -> ActionResult
+zoneEntity stack ctx =
+    spell2Inputs stack ctx getVector getNumber

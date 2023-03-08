@@ -3,12 +3,12 @@ module Logic.App.PatternList.PatternArray exposing (addToPatternArray, applyColo
 import Array exposing (Array)
 import Html.Attributes exposing (name)
 import Logic.App.Model exposing (Model)
-import Logic.App.Types exposing (ApplyToStackResult(..), GridPoint, PatternType)
+import Logic.App.Types exposing (ApplyToStackResult(..), GridPoint, Pattern)
 import Ports.HexNumGen as HexNumGen
 import Settings.Theme exposing (accent1, accent4, accent5)
 
 
-addToPatternArray : Model -> PatternType -> Array ( PatternType, List GridPoint )
+addToPatternArray : Model -> Pattern -> Array ( Pattern, List GridPoint )
 addToPatternArray model pattern =
     let
         patternList =
@@ -23,7 +23,7 @@ addToPatternArray model pattern =
     Array.append (Array.fromList [ updateDrawingColors patternDrawingPair ]) patternList
 
 
-updateDrawingColors : ( PatternType, List GridPoint ) -> ( PatternType, List GridPoint )
+updateDrawingColors : ( Pattern, List GridPoint ) -> ( Pattern, List GridPoint )
 updateDrawingColors patternTuple =
     ( Tuple.first patternTuple
     , List.map
@@ -38,7 +38,7 @@ updateDrawingColors patternTuple =
     )
 
 
-applyColorToPatternFromResult : PatternType -> ApplyToStackResult -> PatternType
+applyColorToPatternFromResult : Pattern -> ApplyToStackResult -> Pattern
 applyColorToPatternFromResult pattern result =
     case result of
         Succeeded ->

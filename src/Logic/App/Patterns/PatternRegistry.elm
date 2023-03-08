@@ -14,11 +14,12 @@ import Logic.App.Patterns.Selectors exposing (..)
 import Logic.App.Patterns.Spells exposing (..)
 import Logic.App.Patterns.Stack exposing (..)
 import Logic.App.Stack.Stack exposing (applyPatternToStack, applyPatternsToStack, applyToStackStopAtErrorOrHalt)
-import Logic.App.Types exposing (ActionResult, ApplyToStackResult(..), CastingContext, EntityType(..), HeldItem(..), Iota(..), Mishap(..), PatternType)
+import Logic.App.Types exposing (ActionResult, ApplyToStackResult(..), CastingContext, EntityType(..), HeldItem(..), Iota(..), Mishap(..), Pattern)
 import Logic.App.Utils.Utils exposing (unshift)
 import Ports.HexNumGen as HexNumGen
 import Settings.Theme exposing (..)
 import Logic.App.Patterns.OperatorUtils exposing (getPatternOrIotaList)
+import Logic.App.Types exposing (IotaType(..))
 
 
 noAction : Array Iota -> CastingContext -> ActionResult
@@ -26,7 +27,7 @@ noAction stack ctx =
     { stack = stack, ctx = ctx, success = True }
 
 
-unknownPattern : PatternType
+unknownPattern : Pattern
 unknownPattern =
     { signature = ""
     , action = \stack ctx -> { stack = unshift (Garbage InvalidPattern) stack, ctx = ctx, success = False }
@@ -38,7 +39,7 @@ unknownPattern =
     }
 
 
-getPatternFromSignature : String -> PatternType
+getPatternFromSignature : String -> Pattern
 getPatternFromSignature signature =
     case List.head <| List.filter (\regPattern -> regPattern.signature == signature) patternRegistry of
         Just a ->
@@ -63,7 +64,7 @@ getPatternFromSignature signature =
                     { unknownPattern | signature = signature, displayName = "Pattern " ++ "\"" ++ signature ++ "\"" }
 
 
-getPatternFromName : String -> ( PatternType, Cmd msg )
+getPatternFromName : String -> ( Pattern, Cmd msg )
 getPatternFromName name =
     case List.head <| List.filter (\regPattern -> regPattern.displayName == name || regPattern.internalName == name || regPattern.signature == name) patternRegistry of
         Just a ->
@@ -78,7 +79,7 @@ getPatternFromName name =
                     ( unknownPattern, Cmd.none )
 
 
-parseBookkeeper : String -> PatternType
+parseBookkeeper : String -> Pattern
 parseBookkeeper signature =
     if signature == "" then
         { signature = signature, internalName = "mask", action = mask [ "-" ], displayName = "Bookkeeper's -", color = accent1, outputOptions = [], selectedOutput = Nothing }
@@ -166,21 +167,21 @@ parseBookkeeper signature =
                 unknownPattern
 
 
-patternRegistry : List PatternType
+patternRegistry : List Pattern
 patternRegistry =
     [ { signature = "wawawddew", internalName = "interop/gravity/get", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "wdwdwaaqw", internalName = "interop/gravity/set", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "aawawwawwa", internalName = "interop/pehkui/get", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "ddwdwwdwwd", internalName = "interop/pehkui/set", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "qaq", internalName = "get_caster", action = getCaster, displayName = "Mind's Reflection", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "aa", internalName = "entity_pos/eye", action = entityPos, displayName = "Compass' Purification", color = accent1, outputOptions = [ Vector ( 0, 0, 0 ) ], selectedOutput = Just (Vector ( 0, 0, 0 )) }
-    , { signature = "dd", internalName = "entity_pos/foot", action = entityPos, displayName = "Compass' Purification II", color = accent1, outputOptions = [ Vector ( 0, 0, 0 ) ], selectedOutput = Just (Vector ( 0, 0, 0 )) }
-    , { signature = "wa", internalName = "get_entity_look", action = getEntityLook, displayName = "Alidade's Purification", color = accent1, outputOptions = [ Vector ( 0, 0, 0 ) ], selectedOutput = Just (Vector ( 0, 0, 0 )) }
-    , { signature = "awq", internalName = "get_entity_height", action = getEntityHeight, displayName = "Stadiometer's Purification", color = accent1, outputOptions = [ Number 0 ], selectedOutput = Just (Number 0) }
-    , { signature = "wq", internalName = "get_entity_velocity", action = getEntityVelocity, displayName = "Pace Purification", color = accent1, outputOptions = [ Vector ( 0, 0, 0 ) ], selectedOutput = Just (Vector ( 0, 0, 0 )) }
-    , { signature = "wqaawdd", internalName = "raycast", action = raycast, displayName = "Archer's Distillation", color = accent1, outputOptions = [ Vector ( 0, 0, 0 ), Null ], selectedOutput = Just (Vector ( 0, 0, 0 )) }
-    , { signature = "weddwaa", internalName = "raycast/axis", action = raycastAxis, displayName = "Architect's Distillation", color = accent1, outputOptions = [ Vector ( 0, 0, 0 ), Null ], selectedOutput = Just (Vector ( 0, 0, 0 )) }
-    , { signature = "weaqa", internalName = "raycast/entity", action = raycastEntity, displayName = "Scout's Distillation", color = accent1, outputOptions = [ Entity Unset, Null ], selectedOutput = Just (Entity Unset) }
+    , { signature = "aa", internalName = "entity_pos/eye", action = entityPos, displayName = "Compass' Purification", color = accent1, outputOptions = [ VectorType ], selectedOutput = Just ( VectorType, Vector ( 0, 0, 0 )) }
+    , { signature = "dd", internalName = "entity_pos/foot", action = entityPos, displayName = "Compass' Purification II", color = accent1, outputOptions = [ VectorType ], selectedOutput = Just ( VectorType, Vector ( 0, 0, 0 )) }
+    , { signature = "wa", internalName = "get_entity_look", action = getEntityLook, displayName = "Alidade's Purification", color = accent1, outputOptions = [ VectorType ], selectedOutput = Just ( VectorType, Vector ( 0, 0, 0 )) }
+    , { signature = "awq", internalName = "get_entity_height", action = getEntityHeight, displayName = "Stadiometer's Purification", color = accent1, outputOptions = [ NumberType ], selectedOutput = Just (NumberType, Number 0) }
+    , { signature = "wq", internalName = "get_entity_velocity", action = getEntityVelocity, displayName = "Pace Purification", color = accent1, outputOptions = [ VectorType ], selectedOutput = Just ( VectorType, Vector ( 0, 0, 0 )) }
+    , { signature = "wqaawdd", internalName = "raycast", action = raycast, displayName = "Archer's Distillation", color = accent1, outputOptions = [ VectorType, NullType ], selectedOutput = Just ( VectorType, Vector ( 0, 0, 0 )) }
+    , { signature = "weddwaa", internalName = "raycast/axis", action = raycastAxis, displayName = "Architect's Distillation", color = accent1, outputOptions = [ VectorType, NullType ], selectedOutput = Just ( VectorType, Vector ( 0, 0, 0 )) }
+    , { signature = "weaqa", internalName = "raycast/entity", action = raycastEntity, displayName = "Scout's Distillation", color = accent1, outputOptions = [ EntityType, NullType ], selectedOutput = Just (EntityType, Entity Unset) }
     , { signature = "eaqwqae", internalName = "circle/impetus_pos", action = noAction, displayName = "Waystone Reflection", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "eaqwqaewede", internalName = "circle/impetus_dir", action = circleImpetusDirection, displayName = "Lodestone Reflection", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "eaqwqaewdd", internalName = "circle/bounds/min", action = circleBoundsMin, displayName = "Lesser Fold Reflection", color = accent1, outputOptions = [], selectedOutput = Nothing }
@@ -291,24 +292,24 @@ patternRegistry =
     , { signature = "qdwdq", internalName = "const/double/pi", action = makeConstant (Number pi), displayName = "Arc's Reflection", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "eawae", internalName = "const/double/tau", action = makeConstant (Number (pi * 2)), displayName = "Circle's Reflection", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "aaq", internalName = "const/double/e", action = makeConstant (Number e), displayName = "Euler's Reflection", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "qqqqqdaqa", internalName = "get_entity", action = getEntity, displayName = "Entity Purification", color = accent1, outputOptions = [ Entity Unset, Null ], selectedOutput = Just (Entity Unset) }
-    , { signature = "qqqqqdaqaawa", internalName = "get_entity/animal", action = getEntity, displayName = "Entity Purification: Animal", color = accent1, outputOptions = [ Entity Unset, Null ], selectedOutput = Just (Entity Unset) }
-    , { signature = "qqqqqdaqaawq", internalName = "get_entity/monster", action = getEntity, displayName = "Entity Purification: Monster", color = accent1, outputOptions = [ Entity Unset, Null ], selectedOutput = Just (Entity Unset) }
-    , { signature = "qqqqqdaqaaww", internalName = "get_entity/item", action = getEntity, displayName = "Entity Purification: Item", color = accent1, outputOptions = [ Entity Unset, Null ], selectedOutput = Just (Entity Unset) }
-    , { signature = "qqqqqdaqaawe", internalName = "get_entity/player", action = getEntity, displayName = "Entity Purification: Player", color = accent1, outputOptions = [ Entity Unset, Null ], selectedOutput = Just (Entity Unset) }
-    , { signature = "qqqqqdaqaawd", internalName = "get_entity/living", action = getEntity, displayName = "Entity Purification: Living", color = accent1, outputOptions = [ Entity Unset, Null ], selectedOutput = Just (Entity Unset) }
-    , { signature = "qqqqqwded", internalName = "zone_entity", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "qqqqqwdeddwa", internalName = "zone_entity/animal", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "eeeeewaqaawa", internalName = "zone_entity/not_animal", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "qqqqqwdeddwq", internalName = "zone_entity/monster", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "eeeeewaqaawq", internalName = "zone_entity/not_monster", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "qqqqqwdeddww", internalName = "zone_entity/item", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "eeeeewaqaaww", internalName = "zone_entity/not_item", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "qqqqqwdeddwe", internalName = "zone_entity/player", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "eeeeewaqaawe", internalName = "zone_entity/not_player", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "qqqqqwdeddwd", internalName = "zone_entity/living", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "eeeeewaqaawd", internalName = "zone_entity/not_living", action = noAction, displayName = "", color = accent1, outputOptions = [], selectedOutput = Nothing }
-    , { signature = "edqde", internalName = "append", action = append, displayName = "Integration Distillation", color = accent1, outputOptions = [], selectedOutput = Nothing }
+    , { signature = "qqqqqdaqa", internalName = "get_entity", action = getEntity, displayName = "Entity Purification", color = accent1, outputOptions = [ EntityType, NullType ], selectedOutput = Just (EntityType, Entity Unset) }
+    , { signature = "qqqqqdaqaawa", internalName = "get_entity/animal", action = getEntity, displayName = "Entity Purification: Animal", color = accent1, outputOptions = [ EntityType, NullType ], selectedOutput = Just (EntityType, Entity Unset) }
+    , { signature = "qqqqqdaqaawq", internalName = "get_entity/monster", action = getEntity, displayName = "Entity Purification: Monster", color = accent1, outputOptions = [ EntityType, NullType ], selectedOutput = Just (EntityType, Entity Unset) }
+    , { signature = "qqqqqdaqaaww", internalName = "get_entity/item", action = getEntity, displayName = "Entity Purification: Item", color = accent1, outputOptions = [ EntityType, NullType ], selectedOutput = Just (EntityType, Entity Unset) }
+    , { signature = "qqqqqdaqaawe", internalName = "get_entity/player", action = getEntity, displayName = "Entity Purification: Player", color = accent1, outputOptions = [ EntityType, NullType ], selectedOutput = Just (EntityType, Entity Unset) }
+    , { signature = "qqqqqdaqaawd", internalName = "get_entity/living", action = getEntity, displayName = "Entity Purification: Living", color = accent1, outputOptions = [ EntityType, NullType ], selectedOutput = Just (EntityType, Entity Unset) }
+    , { signature = "qqqqqwded", internalName = "zone_entity", action = zoneEntity, displayName = "Zone Distillation: Any", color = accent1, outputOptions = [IotaListType EntityType], selectedOutput = Just (IotaListType EntityType, IotaList Array.empty) }
+    , { signature = "qqqqqwdeddwa", internalName = "zone_entity/animal", action = zoneEntity, displayName = "Zone Distillation: Animal", color = accent1, outputOptions = [IotaListType EntityType], selectedOutput = Just (IotaListType EntityType, IotaList Array.empty) }
+    , { signature = "eeeeewaqaawa", internalName = "zone_entity/not_animal", action = zoneEntity, displayName = "Zone Distillation: Non-Animal", color = accent1, outputOptions = [IotaListType EntityType], selectedOutput = Just (IotaListType EntityType, IotaList Array.empty) }
+    , { signature = "qqqqqwdeddwq", internalName = "zone_entity/monster", action = zoneEntity, displayName = "Zone Distillation: Monster", color = accent1, outputOptions = [IotaListType EntityType], selectedOutput = Just (IotaListType EntityType, IotaList Array.empty) }
+    , { signature = "eeeeewaqaawq", internalName = "zone_entity/not_monster", action = zoneEntity, displayName = "Zone Distillation: Non-Monster", color = accent1, outputOptions = [IotaListType EntityType], selectedOutput = Just (IotaListType EntityType, IotaList Array.empty) }
+    , { signature = "qqqqqwdeddww", internalName = "zone_entity/item", action = zoneEntity, displayName = "Zone Distillation: Item", color = accent1, outputOptions = [IotaListType EntityType], selectedOutput = Just (IotaListType EntityType, IotaList Array.empty) }
+    , { signature = "eeeeewaqaaww", internalName = "zone_entity/not_item", action = zoneEntity, displayName = "Zone Distillation: Non-Item", color = accent1, outputOptions = [IotaListType EntityType], selectedOutput = Just (IotaListType EntityType, IotaList Array.empty) }
+    , { signature = "qqqqqwdeddwe", internalName = "zone_entity/player", action = zoneEntity, displayName = "Zone Distillation: Player", color = accent1, outputOptions = [IotaListType EntityType], selectedOutput = Just (IotaListType EntityType, IotaList Array.empty) }
+    , { signature = "eeeeewaqaawe", internalName = "zone_entity/not_player", action = zoneEntity, displayName = "Zone Distillation: Non-Player", color = accent1, outputOptions = [IotaListType EntityType], selectedOutput = Just (IotaListType EntityType, IotaList Array.empty) }
+    , { signature = "qqqqqwdeddwd", internalName = "zone_entity/living", action = zoneEntity, displayName = "Zone Distillation: Living", color = accent1, outputOptions = [IotaListType EntityType], selectedOutput = Just (IotaListType EntityType, IotaList Array.empty) }
+    , { signature = "eeeeewaqaawd", internalName = "zone_entity/not_living", action = zoneEntity, displayName = "Zone Distillation: Non-Living", color = accent1, outputOptions = [IotaListType EntityType], selectedOutput = Just (IotaListType EntityType, IotaList Array.empty) }
+    , { signature = "edqde", internalName = "append", action = append, displayName = "Integration Distillation", color = accent1, outputOptions = [IotaListType EntityType], selectedOutput = Just (IotaListType EntityType, IotaList Array.empty) }
     , { signature = "qaeaq", internalName = "concat", action = concat, displayName = "Combination Distillation", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "deeed", internalName = "index", action = index, displayName = "Selection Distillation", color = accent1, outputOptions = [], selectedOutput = Nothing }
     , { signature = "dadad", internalName = "for_each", action = forEach, displayName = "Thoth's Gambit", color = accent1, outputOptions = [], selectedOutput = Nothing }
@@ -378,10 +379,10 @@ eval stack ctx =
                             , success = not applyResult.error
                             }
 
-                        Pattern pattern _ ->
+                        PatternIota pattern _ ->
                             let
                                 applyResult =
-                                    applyToStackStopAtErrorOrHalt newStack ctx (Array.fromList [Pattern pattern False])
+                                    applyToStackStopAtErrorOrHalt newStack ctx (Array.fromList [PatternIota pattern False])
                             in
                             { stack = applyResult.stack, ctx = applyResult.ctx, success = not applyResult.error }
 
@@ -496,7 +497,7 @@ forEach stack ctx =
                 }
 
 
-numberLiteralGenerator : String -> Bool -> PatternType
+numberLiteralGenerator : String -> Bool -> Pattern
 numberLiteralGenerator angleSignature isNegative =
     let
         letterMap : Char -> (Float -> Float)

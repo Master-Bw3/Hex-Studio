@@ -2,8 +2,9 @@ module Logic.App.Stack.Stack exposing (..)
 
 import Array exposing (Array)
 import List.Extra as List
-import Logic.App.Types exposing (ActionResult, ApplyToStackResult(..), CastingContext, Iota(..), Mishap(..), PatternType)
+import Logic.App.Types exposing (ActionResult, ApplyToStackResult(..), CastingContext, Iota(..), Mishap(..), Pattern)
 import Logic.App.Utils.Utils exposing (isJust, unshift)
+import Logic.App.Types exposing (IotaType(..))
 
 
 applyToStackStopAtErrorOrHalt : Array Iota -> CastingContext -> Array Iota -> { stack : Array Iota, resultArray : Array ApplyToStackResult, ctx : CastingContext, error : Bool, halted : Bool }
@@ -11,11 +12,11 @@ applyToStackStopAtErrorOrHalt stack ctx iotas =
     applyToStackLoop ( stack, Array.empty ) ctx (Array.toList iotas) False True
 
 
-applyPatternsToStack : Array Iota -> CastingContext -> List PatternType -> { stack : Array Iota, resultArray : Array ApplyToStackResult, ctx : CastingContext, error : Bool, halted : Bool }
+applyPatternsToStack : Array Iota -> CastingContext -> List Pattern -> { stack : Array Iota, resultArray : Array ApplyToStackResult, ctx : CastingContext, error : Bool, halted : Bool }
 applyPatternsToStack stack ctx patterns =
     let
         patternIotas =
-            List.map (\pattern -> Pattern pattern False) patterns
+            List.map (\pattern -> PatternIota pattern False) patterns
     in
     applyToStackLoop ( stack, Array.empty ) ctx patternIotas False False
 
@@ -41,10 +42,10 @@ applyToStackLoop stackResultTuple ctx patterns considerThis stopAtErrorOrHalt =
         Nothing ->
             { stack = stack, resultArray = resultArray, ctx = ctx, error = False, halted = False }
 
-        Just (Pattern pattern _) ->
+        Just (PatternIota pattern _) ->
             if considerThis then
                 applyToStackLoop
-                    ( addEscapedIotaToStack stack (Pattern pattern False), unshift Considered resultArray )
+                    ( addEscapedIotaToStack stack (PatternIota pattern False), unshift Considered resultArray )
                     ctx
                     (Maybe.withDefault [] <| List.tail patterns)
                     False
@@ -86,7 +87,7 @@ applyToStackLoop stackResultTuple ctx patterns considerThis stopAtErrorOrHalt =
                 Debug.log "error" { stack = stack, resultArray = resultArray, ctx = ctx, error = True, halted = False }
 
 
-applyPatternToStack : Array Iota -> CastingContext -> PatternType -> { stack : Array Iota, result : ApplyToStackResult, ctx : CastingContext, considerNext : Bool }
+applyPatternToStack : Array Iota -> CastingContext -> Pattern -> { stack : Array Iota, result : ApplyToStackResult, ctx : CastingContext, considerNext : Bool }
 applyPatternToStack stack ctx pattern =
     case Array.get 0 stack of
         Just (OpenParenthesis list) ->
@@ -96,7 +97,7 @@ applyPatternToStack stack ctx pattern =
                         (Array.filter
                             (\iota ->
                                 case iota of
-                                    Pattern pat False ->
+                                    PatternIota pat False ->
                                         pat.internalName == "close_paren"
 
                                     _ ->
@@ -111,7 +112,7 @@ applyPatternToStack stack ctx pattern =
                             (Array.filter
                                 (\iota ->
                                     case iota of
-                                        Pattern pat False ->
+                                        PatternIota pat False ->
                                             pat.internalName == "open_paren"
 
                                         _ ->
@@ -121,7 +122,7 @@ applyPatternToStack stack ctx pattern =
                             )
 
                 addToIntroList =
-                    Array.set 0 (OpenParenthesis (Array.push (Pattern pattern False) list)) stack
+                    Array.set 0 (OpenParenthesis (Array.push (PatternIota pattern False) list)) stack
             in
             if pattern.internalName == "escape" then
                 { stack = stack, result = Succeeded, ctx = ctx, considerNext = True }
@@ -158,7 +159,7 @@ applyPatternToStack stack ctx pattern =
                 { stack = stack, result = Succeeded, ctx = ctx, considerNext = True }
 
             else if pattern.internalName == "close_paren" then
-                { stack = unshift (Pattern pattern False) stack, result = Failed, ctx = ctx, considerNext = False }
+                { stack = unshift (PatternIota pattern False) stack, result = Failed, ctx = ctx, considerNext = False }
 
             else
                 let
@@ -168,7 +169,7 @@ applyPatternToStack stack ctx pattern =
                                 pattern.action stack ctx
                         in
                         if preActionResult.success == True && isJust pattern.selectedOutput then
-                            { preActionResult | stack = unshift (Maybe.withDefault Null pattern.selectedOutput) preActionResult.stack }
+                            { preActionResult | stack = unshift (Tuple.second <| Maybe.withDefault (NullType, Null) pattern.selectedOutput) preActionResult.stack }
 
                         else
                             preActionResult
