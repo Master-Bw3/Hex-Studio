@@ -27,14 +27,23 @@ type EntityType
     | Minecart
 
 
+type MetaActionMsg
+    = None
+    | ClearPatterns
+    | Reset
+    | Undo
+    | Wrap
+
+
 type alias Pattern =
     { signature : String
     , action : Array Iota -> CastingContext -> ActionResult
+    , metaAction : MetaActionMsg
     , displayName : String
     , internalName : String
     , color : String
     , outputOptions : List IotaType
-    , selectedOutput : Maybe (IotaType, Iota)
+    , selectedOutput : Maybe ( IotaType, Iota )
     }
 
 

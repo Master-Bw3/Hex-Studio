@@ -14,7 +14,7 @@ import Logic.App.Patterns.Selectors exposing (..)
 import Logic.App.Patterns.Spells exposing (..)
 import Logic.App.Patterns.Stack exposing (..)
 import Logic.App.Stack.Stack exposing (applyPatternToStack, applyPatternsToStack, applyToStackStopAtErrorOrHalt)
-import Logic.App.Types exposing (ActionResult, ApplyToStackResult(..), CastingContext, EntityType(..), HeldItem(..), Iota(..), IotaType(..), Mishap(..), Pattern)
+import Logic.App.Types exposing (ActionResult, ApplyToStackResult(..), CastingContext, EntityType(..), HeldItem(..), Iota(..), IotaType(..), MetaActionMsg(..), Mishap(..), Pattern)
 import Logic.App.Utils.Utils exposing (unshift)
 import Ports.HexNumGen as HexNumGen
 import Settings.Theme exposing (..)
@@ -29,6 +29,7 @@ unknownPattern : Pattern
 unknownPattern =
     { signature = ""
     , action = \stack ctx -> { stack = unshift (Garbage InvalidPattern) stack, ctx = ctx, success = False }
+    , metaAction = None
     , displayName = "Unknown Pattern"
     , internalName = "unknown"
     , color = accent3
@@ -80,7 +81,7 @@ getPatternFromName name =
 parseBookkeeper : String -> Pattern
 parseBookkeeper signature =
     if signature == "" then
-        { signature = signature, internalName = "mask", action = mask [ "-" ], displayName = "Bookkeeper's -", color = accent1, outputOptions = [], selectedOutput = Nothing }
+        { signature = signature, internalName = "mask", action = mask [ "-" ], metaAction = None, displayName = "Bookkeeper's -", color = accent1, outputOptions = [], selectedOutput = Nothing }
 
     else
         let
@@ -155,6 +156,7 @@ parseBookkeeper signature =
                 { signature = signature
                 , internalName = "mask"
                 , action = mask maskCode
+                , metaAction = None
                 , displayName = "Bookkeeper's " ++ String.concat maskCode
                 , color = accent1
                 , outputOptions = []
@@ -333,6 +335,29 @@ patternRegistry =
                 { signature = pattern.signature
                 , internalName = pattern.internalName
                 , action = pattern.action
+                , metaAction = None
+                , displayName = pattern.displayName
+                , outputOptions = pattern.outputOptions
+                , selectedOutput = pattern.selectedOutput
+                , color = accent1
+                }
+            )
+        |> (++) metapatternRegistry
+
+
+metapatternRegistry : List Pattern
+metapatternRegistry =
+    [ { signature = "qqqq", internalName = "clearPatterns", action = noAction, metaAction = ClearPatterns, displayName = "Clear", outputOptions = [], selectedOutput = Nothing }
+    , { signature = "qqqqqa", internalName = "resetApp", action = noAction, metaAction = Reset, displayName = "Clear", outputOptions = [], selectedOutput = Nothing }
+    , { signature = "qa", internalName = "undo", action = noAction, metaAction = Undo, displayName = "Clear", outputOptions = [], selectedOutput = Nothing }
+    , { signature = "qwqqqwq", internalName = "wrap", action = noAction, metaAction = Wrap, displayName = "Wrap", outputOptions = [], selectedOutput = Nothing }
+    ]
+        |> List.map
+            (\pattern ->
+                { signature = pattern.signature
+                , internalName = pattern.internalName
+                , action = pattern.action
+                , metaAction = pattern.metaAction
                 , displayName = pattern.displayName
                 , outputOptions = pattern.outputOptions
                 , selectedOutput = pattern.selectedOutput
@@ -542,6 +567,7 @@ numberLiteralGenerator angleSignature isNegative =
     in
     { signature = angleSignature
     , action = numberLiteral number
+    , metaAction = None
     , displayName = "Numerical Reflection: " ++ String.fromFloat number
     , internalName = String.fromFloat number
     , color = accent1

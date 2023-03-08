@@ -12,6 +12,7 @@ import Json.Decode exposing (Decoder)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (..)
 import Logic.App.PatternList.PatternArray exposing (addToPatternArray, applyColorToPatternFromResult, updateDrawingColors)
+import Logic.App.Patterns.MetaActions exposing (applyMetaAction)
 import Logic.App.Patterns.PatternRegistry exposing (..)
 import Logic.App.Stack.Stack exposing (applyPatternsToStack)
 import Logic.App.Types exposing (..)
@@ -185,12 +186,14 @@ update msg model =
                                 , drawing = { drawing | drawingMode = False, activePath = [] }
                             }
                     in
-                    ( { model
-                        | patternArray = addToPatternArray model newPattern
-                        , grid = newGrid
-                        , stack = newStack
-                        , castingContext = stackResult.ctx
-                      }
+                    ( applyMetaAction
+                        { model
+                            | patternArray = addToPatternArray model newPattern
+                            , grid = newGrid
+                            , stack = newStack
+                            , castingContext = stackResult.ctx
+                        }
+                        newPattern.metaAction
                     , Cmd.none
                     )
 
@@ -515,7 +518,6 @@ update msg model =
 
         UpdatePatternOuptut index replacementPattern ->
             let
-
                 newUncoloredPatternArray =
                     Array.update index
                         (\patternTuple ->
