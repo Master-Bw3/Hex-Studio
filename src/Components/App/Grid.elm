@@ -8,6 +8,8 @@ module Components.App.Grid exposing
     , spacing
     , updateGridPoints
     , updatemidLineOffsets
+    , getGridpointFromOffsetCoordinates
+    , emptyGridpoint
     )
 
 import Array exposing (Array)

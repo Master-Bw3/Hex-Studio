@@ -147,3 +147,22 @@ type alias CastingContext =
 
 type alias ActionResult =
     { stack : Array Iota, ctx : CastingContext, success : Bool }
+
+type Direction
+    = Northeast
+    | Northwest
+    | East
+    | West
+    | Southeast
+    | Southwest
+    | ErrorDirection
+
+type alias Grid =
+    { width : Float
+    , height : Float
+    , points : List (List GridPoint)
+    , drawing :
+        { drawingMode : Bool
+        , activePath : List GridPoint
+        }
+    }

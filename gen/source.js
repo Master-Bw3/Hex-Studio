@@ -9784,8 +9784,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$metapatternRegistry = A2(
 	_List_fromArray(
 		[
 			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Clear', internalName: 'clearPatterns', metaAction: $author$project$Logic$App$Types$ClearPatterns, outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqq'},
-			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Clear', internalName: 'resetApp', metaAction: $author$project$Logic$App$Types$Reset, outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqa'},
-			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Clear', internalName: 'undo', metaAction: $author$project$Logic$App$Types$Undo, outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qa'},
+			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Reset', internalName: 'resetApp', metaAction: $author$project$Logic$App$Types$Reset, outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqa'},
+			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Undo', internalName: 'undo', metaAction: $author$project$Logic$App$Types$Undo, outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qa'},
 			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Wrap', internalName: 'wrap', metaAction: $author$project$Logic$App$Types$Wrap, outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qwqqqwq'}
 		]));
 var $author$project$Logic$App$Patterns$OperatorUtils$getPositiveInteger = function (iota) {
@@ -11809,109 +11809,304 @@ var $author$project$Logic$App$Patterns$MetaActions$applyMetaAction = F2(
 					});
 		}
 	});
-var $author$project$Logic$App$Utils$GetAngleSignature$East = {$: 'East'};
-var $author$project$Logic$App$Utils$GetAngleSignature$Error = {$: 'Error'};
-var $author$project$Logic$App$Utils$GetAngleSignature$Northeast = {$: 'Northeast'};
-var $author$project$Logic$App$Utils$GetAngleSignature$Northwest = {$: 'Northwest'};
-var $author$project$Logic$App$Utils$GetAngleSignature$Southeast = {$: 'Southeast'};
-var $author$project$Logic$App$Utils$GetAngleSignature$Southwest = {$: 'Southwest'};
-var $author$project$Logic$App$Utils$GetAngleSignature$West = {$: 'West'};
-var $elm$core$String$concat = function (strings) {
-	return A2($elm$core$String$join, '', strings);
-};
-var $author$project$Logic$App$Utils$GetAngleSignature$letterMap = _List_fromArray(
+var $author$project$Logic$App$Types$East = {$: 'East'};
+var $author$project$Logic$App$Types$ErrorDirection = {$: 'ErrorDirection'};
+var $author$project$Logic$App$Types$Northeast = {$: 'Northeast'};
+var $author$project$Logic$App$Types$Northwest = {$: 'Northwest'};
+var $author$project$Logic$App$Types$Southeast = {$: 'Southeast'};
+var $author$project$Logic$App$Types$Southwest = {$: 'Southwest'};
+var $author$project$Logic$App$Types$West = {$: 'West'};
+var $author$project$Logic$App$Utils$DirectionMap$directionMap = _List_fromArray(
+	[
+		_Utils_Tuple2(
+		$author$project$Logic$App$Types$Northeast,
+		_Utils_Tuple2(1, -1)),
+		_Utils_Tuple2(
+		$author$project$Logic$App$Types$East,
+		_Utils_Tuple2(2, 0)),
+		_Utils_Tuple2(
+		$author$project$Logic$App$Types$Southeast,
+		_Utils_Tuple2(1, 1)),
+		_Utils_Tuple2(
+		$author$project$Logic$App$Types$Southwest,
+		_Utils_Tuple2(-1, 1)),
+		_Utils_Tuple2(
+		$author$project$Logic$App$Types$West,
+		_Utils_Tuple2(-2, 0)),
+		_Utils_Tuple2(
+		$author$project$Logic$App$Types$Northwest,
+		_Utils_Tuple2(-1, -1))
+	]);
+var $author$project$Components$App$Grid$getGridpointFromOffsetCoordinates = F2(
+	function (grid_, offsetCoords) {
+		var checkMatchingOffsetCoords = function (point) {
+			return _Utils_eq(
+				_Utils_Tuple2(point.offsetX, point.offsetY),
+				_Utils_Tuple2(offsetCoords.offsetX, offsetCoords.offsetY));
+		};
+		return A2(
+			$elm$core$Maybe$withDefault,
+			$author$project$Components$App$Grid$emptyGridpoint,
+			$elm$core$List$head(
+				A2(
+					$elm$core$List$filter,
+					checkMatchingOffsetCoords,
+					$elm$core$List$concat(grid_))));
+	});
+var $author$project$Logic$App$Utils$LetterMap$letterMap = _List_fromArray(
 	[
 		_Utils_Tuple2(
 		'w',
-		_Utils_Tuple2($author$project$Logic$App$Utils$GetAngleSignature$East, $author$project$Logic$App$Utils$GetAngleSignature$East)),
+		_Utils_Tuple2($author$project$Logic$App$Types$East, $author$project$Logic$App$Types$East)),
 		_Utils_Tuple2(
 		'a',
-		_Utils_Tuple2($author$project$Logic$App$Utils$GetAngleSignature$East, $author$project$Logic$App$Utils$GetAngleSignature$Northwest)),
+		_Utils_Tuple2($author$project$Logic$App$Types$East, $author$project$Logic$App$Types$Northwest)),
 		_Utils_Tuple2(
 		'q',
-		_Utils_Tuple2($author$project$Logic$App$Utils$GetAngleSignature$East, $author$project$Logic$App$Utils$GetAngleSignature$Northeast)),
+		_Utils_Tuple2($author$project$Logic$App$Types$East, $author$project$Logic$App$Types$Northeast)),
 		_Utils_Tuple2(
 		'd',
-		_Utils_Tuple2($author$project$Logic$App$Utils$GetAngleSignature$East, $author$project$Logic$App$Utils$GetAngleSignature$Southwest)),
+		_Utils_Tuple2($author$project$Logic$App$Types$East, $author$project$Logic$App$Types$Southwest)),
 		_Utils_Tuple2(
 		'e',
-		_Utils_Tuple2($author$project$Logic$App$Utils$GetAngleSignature$East, $author$project$Logic$App$Utils$GetAngleSignature$Southeast)),
+		_Utils_Tuple2($author$project$Logic$App$Types$East, $author$project$Logic$App$Types$Southeast)),
 		_Utils_Tuple2(
 		'e',
-		_Utils_Tuple2($author$project$Logic$App$Utils$GetAngleSignature$Northeast, $author$project$Logic$App$Utils$GetAngleSignature$East)),
+		_Utils_Tuple2($author$project$Logic$App$Types$Northeast, $author$project$Logic$App$Types$East)),
 		_Utils_Tuple2(
 		'q',
-		_Utils_Tuple2($author$project$Logic$App$Utils$GetAngleSignature$Northeast, $author$project$Logic$App$Utils$GetAngleSignature$Northwest)),
+		_Utils_Tuple2($author$project$Logic$App$Types$Northeast, $author$project$Logic$App$Types$Northwest)),
 		_Utils_Tuple2(
 		'a',
-		_Utils_Tuple2($author$project$Logic$App$Utils$GetAngleSignature$Northeast, $author$project$Logic$App$Utils$GetAngleSignature$West)),
+		_Utils_Tuple2($author$project$Logic$App$Types$Northeast, $author$project$Logic$App$Types$West)),
 		_Utils_Tuple2(
 		'w',
-		_Utils_Tuple2($author$project$Logic$App$Utils$GetAngleSignature$Northeast, $author$project$Logic$App$Utils$GetAngleSignature$Northeast)),
+		_Utils_Tuple2($author$project$Logic$App$Types$Northeast, $author$project$Logic$App$Types$Northeast)),
 		_Utils_Tuple2(
 		'd',
-		_Utils_Tuple2($author$project$Logic$App$Utils$GetAngleSignature$Northeast, $author$project$Logic$App$Utils$GetAngleSignature$Southeast)),
+		_Utils_Tuple2($author$project$Logic$App$Types$Northeast, $author$project$Logic$App$Types$Southeast)),
 		_Utils_Tuple2(
 		'd',
-		_Utils_Tuple2($author$project$Logic$App$Utils$GetAngleSignature$Northwest, $author$project$Logic$App$Utils$GetAngleSignature$East)),
+		_Utils_Tuple2($author$project$Logic$App$Types$Northwest, $author$project$Logic$App$Types$East)),
 		_Utils_Tuple2(
 		'w',
-		_Utils_Tuple2($author$project$Logic$App$Utils$GetAngleSignature$Northwest, $author$project$Logic$App$Utils$GetAngleSignature$Northwest)),
+		_Utils_Tuple2($author$project$Logic$App$Types$Northwest, $author$project$Logic$App$Types$Northwest)),
 		_Utils_Tuple2(
 		'q',
-		_Utils_Tuple2($author$project$Logic$App$Utils$GetAngleSignature$Northwest, $author$project$Logic$App$Utils$GetAngleSignature$West)),
+		_Utils_Tuple2($author$project$Logic$App$Types$Northwest, $author$project$Logic$App$Types$West)),
 		_Utils_Tuple2(
 		'e',
-		_Utils_Tuple2($author$project$Logic$App$Utils$GetAngleSignature$Northwest, $author$project$Logic$App$Utils$GetAngleSignature$Northeast)),
+		_Utils_Tuple2($author$project$Logic$App$Types$Northwest, $author$project$Logic$App$Types$Northeast)),
 		_Utils_Tuple2(
 		'a',
-		_Utils_Tuple2($author$project$Logic$App$Utils$GetAngleSignature$Northwest, $author$project$Logic$App$Utils$GetAngleSignature$Southwest)),
+		_Utils_Tuple2($author$project$Logic$App$Types$Northwest, $author$project$Logic$App$Types$Southwest)),
 		_Utils_Tuple2(
 		'd',
-		_Utils_Tuple2($author$project$Logic$App$Utils$GetAngleSignature$West, $author$project$Logic$App$Utils$GetAngleSignature$Northeast)),
+		_Utils_Tuple2($author$project$Logic$App$Types$West, $author$project$Logic$App$Types$Northeast)),
 		_Utils_Tuple2(
 		'e',
-		_Utils_Tuple2($author$project$Logic$App$Utils$GetAngleSignature$West, $author$project$Logic$App$Utils$GetAngleSignature$Northwest)),
+		_Utils_Tuple2($author$project$Logic$App$Types$West, $author$project$Logic$App$Types$Northwest)),
 		_Utils_Tuple2(
 		'w',
-		_Utils_Tuple2($author$project$Logic$App$Utils$GetAngleSignature$West, $author$project$Logic$App$Utils$GetAngleSignature$West)),
+		_Utils_Tuple2($author$project$Logic$App$Types$West, $author$project$Logic$App$Types$West)),
 		_Utils_Tuple2(
 		'a',
-		_Utils_Tuple2($author$project$Logic$App$Utils$GetAngleSignature$West, $author$project$Logic$App$Utils$GetAngleSignature$Southeast)),
+		_Utils_Tuple2($author$project$Logic$App$Types$West, $author$project$Logic$App$Types$Southeast)),
 		_Utils_Tuple2(
 		'q',
-		_Utils_Tuple2($author$project$Logic$App$Utils$GetAngleSignature$West, $author$project$Logic$App$Utils$GetAngleSignature$Southwest)),
+		_Utils_Tuple2($author$project$Logic$App$Types$West, $author$project$Logic$App$Types$Southwest)),
 		_Utils_Tuple2(
 		'a',
-		_Utils_Tuple2($author$project$Logic$App$Utils$GetAngleSignature$Southwest, $author$project$Logic$App$Utils$GetAngleSignature$East)),
+		_Utils_Tuple2($author$project$Logic$App$Types$Southwest, $author$project$Logic$App$Types$East)),
 		_Utils_Tuple2(
 		'd',
-		_Utils_Tuple2($author$project$Logic$App$Utils$GetAngleSignature$Southwest, $author$project$Logic$App$Utils$GetAngleSignature$Northwest)),
+		_Utils_Tuple2($author$project$Logic$App$Types$Southwest, $author$project$Logic$App$Types$Northwest)),
 		_Utils_Tuple2(
 		'e',
-		_Utils_Tuple2($author$project$Logic$App$Utils$GetAngleSignature$Southwest, $author$project$Logic$App$Utils$GetAngleSignature$West)),
+		_Utils_Tuple2($author$project$Logic$App$Types$Southwest, $author$project$Logic$App$Types$West)),
 		_Utils_Tuple2(
 		'q',
-		_Utils_Tuple2($author$project$Logic$App$Utils$GetAngleSignature$Southwest, $author$project$Logic$App$Utils$GetAngleSignature$Southeast)),
+		_Utils_Tuple2($author$project$Logic$App$Types$Southwest, $author$project$Logic$App$Types$Southeast)),
 		_Utils_Tuple2(
 		'w',
-		_Utils_Tuple2($author$project$Logic$App$Utils$GetAngleSignature$Southwest, $author$project$Logic$App$Utils$GetAngleSignature$Southwest)),
+		_Utils_Tuple2($author$project$Logic$App$Types$Southwest, $author$project$Logic$App$Types$Southwest)),
 		_Utils_Tuple2(
 		'q',
-		_Utils_Tuple2($author$project$Logic$App$Utils$GetAngleSignature$Southeast, $author$project$Logic$App$Utils$GetAngleSignature$East)),
+		_Utils_Tuple2($author$project$Logic$App$Types$Southeast, $author$project$Logic$App$Types$East)),
 		_Utils_Tuple2(
 		'a',
-		_Utils_Tuple2($author$project$Logic$App$Utils$GetAngleSignature$Southeast, $author$project$Logic$App$Utils$GetAngleSignature$Northeast)),
+		_Utils_Tuple2($author$project$Logic$App$Types$Southeast, $author$project$Logic$App$Types$Northeast)),
 		_Utils_Tuple2(
 		'd',
-		_Utils_Tuple2($author$project$Logic$App$Utils$GetAngleSignature$Southeast, $author$project$Logic$App$Utils$GetAngleSignature$West)),
+		_Utils_Tuple2($author$project$Logic$App$Types$Southeast, $author$project$Logic$App$Types$West)),
 		_Utils_Tuple2(
 		'w',
-		_Utils_Tuple2($author$project$Logic$App$Utils$GetAngleSignature$Southeast, $author$project$Logic$App$Utils$GetAngleSignature$Southeast)),
+		_Utils_Tuple2($author$project$Logic$App$Types$Southeast, $author$project$Logic$App$Types$Southeast)),
 		_Utils_Tuple2(
 		'e',
-		_Utils_Tuple2($author$project$Logic$App$Utils$GetAngleSignature$Southeast, $author$project$Logic$App$Utils$GetAngleSignature$Southwest))
+		_Utils_Tuple2($author$project$Logic$App$Types$Southeast, $author$project$Logic$App$Types$Southwest))
 	]);
+var $author$project$Logic$App$Grid$generateDrawingFromSignature = F2(
+	function (signature, grid) {
+		var gridpointToPointConnection = function (point) {
+			return {
+				betweenOffsetValues: _Utils_Tuple3(
+					_Utils_Tuple2(0, 0),
+					_Utils_Tuple2(0, 0),
+					_Utils_Tuple2(0, 0)),
+				color: $author$project$Settings$Theme$accent1,
+				offsetX: point.offsetX,
+				offsetY: point.offsetY
+			};
+		};
+		var getNextDirection = F2(
+			function (prevDirection, angle) {
+				return A2(
+					$elm$core$Maybe$withDefault,
+					_Utils_Tuple2(
+						'',
+						_Utils_Tuple2($author$project$Logic$App$Types$ErrorDirection, $author$project$Logic$App$Types$ErrorDirection)),
+					$elm$core$List$head(
+						A2(
+							$elm$core$List$filter,
+							function (mapItem) {
+								var letter = mapItem.a;
+								var direction = mapItem.b;
+								return (_Utils_eq(letter, angle) && _Utils_eq(direction.a, prevDirection)) ? true : false;
+							},
+							$author$project$Logic$App$Utils$LetterMap$letterMap))).b.b;
+			});
+		var signatureToAngles = F2(
+			function (angle, accumulator) {
+				return A2(
+					$elm$core$List$cons,
+					A2(
+						getNextDirection,
+						A2(
+							$elm$core$Maybe$withDefault,
+							$author$project$Logic$App$Types$East,
+							$elm$core$List$head(accumulator)),
+						angle),
+					accumulator);
+			});
+		var directionToCoord = function (direction) {
+			return A2(
+				$elm$core$Maybe$withDefault,
+				_Utils_Tuple2(
+					$author$project$Logic$App$Types$ErrorDirection,
+					_Utils_Tuple2(0, 0)),
+				$elm$core$List$head(
+					A2(
+						$elm$core$List$filter,
+						function (mapItem) {
+							var dir = mapItem.a;
+							return _Utils_eq(dir, direction) ? true : false;
+						},
+						$author$project$Logic$App$Utils$DirectionMap$directionMap))).b;
+		};
+		var coordsToPathCoords = F2(
+			function (coord, accumulator) {
+				var _v1 = $elm$core$List$head(accumulator);
+				if (_v1.$ === 'Just') {
+					var prevPoint = _v1.a;
+					return A2(
+						$elm$core$List$cons,
+						_Utils_Tuple2(coord.a + prevPoint.a, coord.b + prevPoint.b),
+						accumulator);
+				} else {
+					return _List_fromArray(
+						[coord]);
+				}
+			});
+		var coordToPointConnection = function (coord) {
+			return {
+				betweenOffsetValues: _Utils_Tuple3(
+					_Utils_Tuple2(0, 0),
+					_Utils_Tuple2(0, 0),
+					_Utils_Tuple2(0, 0)),
+				color: $author$project$Settings$Theme$accent1,
+				offsetX: coord.a,
+				offsetY: coord.b
+			};
+		};
+		var connectPoints = F2(
+			function (point, accumulator) {
+				var prevPoint = accumulator.a;
+				var drawing = accumulator.b;
+				var _v0 = $elm$core$List$head(drawing);
+				if (_v0.$ === 'Just') {
+					return A2(
+						$elm$core$List$any,
+						function (x) {
+							return _Utils_eq(
+								_Utils_Tuple2(x.offsetX, x.offsetY),
+								_Utils_Tuple2(point.offsetX, point.offsetY));
+						},
+						drawing) ? _Utils_Tuple2(
+						point,
+						A2(
+							$elm$core$List$map,
+							function (x) {
+								return _Utils_eq(
+									_Utils_Tuple2(x.offsetX, x.offsetY),
+									_Utils_Tuple2(point.offsetX, point.offsetY)) ? _Utils_update(
+									x,
+									{
+										connectedPoints: A2(
+											$elm$core$List$cons,
+											gridpointToPointConnection(prevPoint),
+											x.connectedPoints)
+									}) : x;
+							},
+							drawing)) : _Utils_Tuple2(
+						point,
+						A2(
+							$elm$core$List$cons,
+							_Utils_update(
+								point,
+								{
+									connectedPoints: _List_fromArray(
+										[
+											gridpointToPointConnection(prevPoint)
+										])
+								}),
+							drawing));
+				} else {
+					return _Utils_Tuple2(
+						point,
+						A2($elm$core$List$cons, point, drawing));
+				}
+			});
+		return A3(
+			$elm$core$List$foldr,
+			connectPoints,
+			_Utils_Tuple2($author$project$Components$App$Grid$emptyGridpoint, _List_Nil),
+			A2(
+				$elm$core$List$map,
+				function (x) {
+					return A2(
+						$author$project$Components$App$Grid$getGridpointFromOffsetCoordinates,
+						grid,
+						coordToPointConnection(x));
+				},
+				A3(
+					$elm$core$List$foldl,
+					coordsToPathCoords,
+					_List_Nil,
+					A2(
+						$elm$core$List$map,
+						directionToCoord,
+						$elm$core$List$reverse(
+							A3(
+								$elm$core$List$foldl,
+								signatureToAngles,
+								_List_fromArray(
+									[$author$project$Logic$App$Types$East, $author$project$Logic$App$Types$East]),
+								A2($elm$core$String$split, '', signature))))))).b;
+	});
+var $elm$core$String$concat = function (strings) {
+	return A2($elm$core$String$join, '', strings);
+};
 var $author$project$Logic$App$Utils$GetAngleSignature$getAngleSignature = function (unflippedPath) {
 	var path = $elm$core$List$reverse(unflippedPath);
 	var getAngleLetter = F2(
@@ -11920,7 +12115,7 @@ var $author$project$Logic$App$Utils$GetAngleSignature$getAngleSignature = functi
 				$elm$core$Maybe$withDefault,
 				_Utils_Tuple2(
 					'',
-					_Utils_Tuple2($author$project$Logic$App$Utils$GetAngleSignature$Error, $author$project$Logic$App$Utils$GetAngleSignature$Error)),
+					_Utils_Tuple2($author$project$Logic$App$Types$ErrorDirection, $author$project$Logic$App$Types$ErrorDirection)),
 				$elm$core$List$head(
 					A2(
 						$elm$core$List$filter,
@@ -11929,7 +12124,7 @@ var $author$project$Logic$App$Utils$GetAngleSignature$getAngleSignature = functi
 								x.b,
 								_Utils_Tuple2(direction1, direction2));
 						},
-						$author$project$Logic$App$Utils$GetAngleSignature$letterMap))).a;
+						$author$project$Logic$App$Utils$LetterMap$letterMap))).a;
 		});
 	var directionVector = function (_v0) {
 		var x1 = _v0.x1;
@@ -11938,33 +12133,12 @@ var $author$project$Logic$App$Utils$GetAngleSignature$getAngleSignature = functi
 		var y2 = _v0.y2;
 		return _Utils_Tuple2(x2 - x1, y2 - y1);
 	};
-	var directionMap = _List_fromArray(
-		[
-			_Utils_Tuple2(
-			$author$project$Logic$App$Utils$GetAngleSignature$Northeast,
-			_Utils_Tuple2(1, -1)),
-			_Utils_Tuple2(
-			$author$project$Logic$App$Utils$GetAngleSignature$East,
-			_Utils_Tuple2(2, 0)),
-			_Utils_Tuple2(
-			$author$project$Logic$App$Utils$GetAngleSignature$Southeast,
-			_Utils_Tuple2(1, 1)),
-			_Utils_Tuple2(
-			$author$project$Logic$App$Utils$GetAngleSignature$Southwest,
-			_Utils_Tuple2(-1, 1)),
-			_Utils_Tuple2(
-			$author$project$Logic$App$Utils$GetAngleSignature$West,
-			_Utils_Tuple2(-2, 0)),
-			_Utils_Tuple2(
-			$author$project$Logic$App$Utils$GetAngleSignature$Northwest,
-			_Utils_Tuple2(-1, -1))
-		]);
 	var directionBetweenPoints = F2(
 		function (point1, point2) {
 			return A2(
 				$elm$core$Maybe$withDefault,
 				_Utils_Tuple2(
-					$author$project$Logic$App$Utils$GetAngleSignature$Error,
+					$author$project$Logic$App$Types$ErrorDirection,
 					_Utils_Tuple2(404, 0)),
 				$elm$core$List$head(
 					A2(
@@ -11975,7 +12149,7 @@ var $author$project$Logic$App$Utils$GetAngleSignature$getAngleSignature = functi
 								directionVector(
 									{x1: point1.a, x2: point2.a, y1: point1.b, y2: point2.b}));
 						},
-						directionMap))).a;
+						$author$project$Logic$App$Utils$DirectionMap$directionMap))).a;
 		});
 	var directionList = A3(
 		$elm$core$List$map2,
@@ -12820,7 +12994,7 @@ var $author$project$Main$update = F2(
 			case 'InputPattern':
 				var name = msg.a;
 				var getPattern = $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName(name);
-				var newPattern = getPattern.a;
+				var newUncoloredPattern = getPattern.a;
 				var stackResult = A3(
 					$author$project$Logic$App$Stack$Stack$applyPatternsToStack,
 					$elm$core$Array$empty,
@@ -12832,19 +13006,59 @@ var $author$project$Main$update = F2(
 								return x.a;
 							},
 							$elm$core$Array$toList(
-								A2($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern)))));
+								A2($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newUncoloredPattern)))));
+				var newPattern = A2(
+					$author$project$Logic$App$PatternList$PatternArray$applyColorToPatternFromResult,
+					newUncoloredPattern,
+					A2(
+						$elm$core$Maybe$withDefault,
+						$author$project$Logic$App$Types$Failed,
+						A2($elm$core$Array$get, 0, stackResult.resultArray)));
+				var newGrid = _Utils_update(
+					grid,
+					{
+						drawing: _Utils_update(
+							drawing,
+							{activePath: _List_Nil, drawingMode: false}),
+						points: A2(
+							$author$project$Components$App$Grid$applyActivePathToGrid,
+							model.grid.points,
+							$author$project$Logic$App$PatternList$PatternArray$updateDrawingColors(
+								_Utils_Tuple2(
+									newPattern,
+									A2($author$project$Logic$App$Grid$generateDrawingFromSignature, newPattern.signature, model.grid.points))).b)
+					});
 				var command = getPattern.b;
 				return _Utils_eq(command, $elm$core$Platform$Cmd$none) ? _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							castingContext: stackResult.ctx,
-							patternArray: A2($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern),
-							stack: stackResult.stack,
-							ui: _Utils_update(
-								ui,
-								{patternInputField: ''})
-						}),
+					A2(
+						$author$project$Logic$App$Patterns$MetaActions$applyMetaAction,
+						_Utils_update(
+							model,
+							{
+								castingContext: stackResult.ctx,
+								grid: newGrid,
+								patternArray: A2(
+									$author$project$Logic$App$PatternList$PatternArray$addToPatternArray,
+									_Utils_update(
+										model,
+										{
+											grid: _Utils_update(
+												grid,
+												{
+													drawing: _Utils_update(
+														drawing,
+														{
+															activePath: A2($author$project$Logic$App$Grid$generateDrawingFromSignature, newPattern.signature, model.grid.points)
+														})
+												})
+										}),
+									newPattern),
+								stack: stackResult.stack,
+								ui: _Utils_update(
+									ui,
+									{patternInputField: ''})
+							}),
+						newPattern.metaAction),
 					$elm$core$Platform$Cmd$none) : _Utils_Tuple2(model, command);
 			case 'SendNumberLiteralToGenerate':
 				var number = msg.a;
@@ -15762,22 +15976,6 @@ var $elm$core$List$concatMap = F2(
 	function (f, list) {
 		return $elm$core$List$concat(
 			A2($elm$core$List$map, f, list));
-	});
-var $author$project$Components$App$Grid$getGridpointFromOffsetCoordinates = F2(
-	function (grid_, offsetCoords) {
-		var checkMatchingOffsetCoords = function (point) {
-			return _Utils_eq(
-				_Utils_Tuple2(point.offsetX, point.offsetY),
-				_Utils_Tuple2(offsetCoords.offsetX, offsetCoords.offsetY));
-		};
-		return A2(
-			$elm$core$Maybe$withDefault,
-			$author$project$Components$App$Grid$emptyGridpoint,
-			$elm$core$List$head(
-				A2(
-					$elm$core$List$filter,
-					checkMatchingOffsetCoords,
-					$elm$core$List$concat(grid_))));
 	});
 var $author$project$Components$App$Grid$findLinkedPoints = F2(
 	function (grid_, point) {

@@ -2,6 +2,7 @@ module Logic.App.Model exposing (..)
 
 import Array exposing (Array)
 import Logic.App.Types exposing (CastingContext, GridPoint, HeldItem, Iota, Panel, Pattern)
+import Logic.App.Types exposing (Grid)
 
 
 type alias Model =
@@ -18,15 +19,8 @@ type alias Model =
         , overDragHandle : Bool
         , patternElementMiddleLocations : List Float
         }
-    , grid :
-        { width : Float
-        , height : Float
-        , points : List (List GridPoint)
-        , drawing :
-            { drawingMode : Bool
-            , activePath : List GridPoint
-            }
-        }
+    , grid : Grid
+        
     , mousePos : ( Float, Float )
     , window :
         { width : Float

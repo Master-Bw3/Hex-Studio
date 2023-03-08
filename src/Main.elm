@@ -9,6 +9,7 @@ import Components.App.Content exposing (content)
 import Components.App.Grid exposing (..)
 import Html exposing (..)
 import Json.Decode exposing (Decoder)
+import Logic.App.Grid exposing (generateDrawingFromSignature)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (..)
 import Logic.App.PatternList.PatternArray exposing (addToPatternArray, applyColorToPatternFromResult, updateDrawingColors)
@@ -272,24 +273,45 @@ update msg model =
         InputPattern name ->
             let
                 stackResult =
-                    applyPatternsToStack Array.empty castingContext (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern))
+                    applyPatternsToStack Array.empty castingContext (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newUncoloredPattern))
 
                 getPattern =
                     getPatternFromName name
 
-                newPattern =
+                newUncoloredPattern =
                     Tuple.first <| getPattern
+
+                newPattern =
+                    applyColorToPatternFromResult newUncoloredPattern (Maybe.withDefault Failed (Array.get 0 stackResult.resultArray))
 
                 command =
                     Tuple.second <| getPattern
+
+                newGrid =
+                    { grid
+                        | points = applyActivePathToGrid model.grid.points (Tuple.second (updateDrawingColors ( newPattern, generateDrawingFromSignature newPattern.signature model.grid.points )))
+                        , drawing = { drawing | drawingMode = False, activePath = [] }
+                    }
             in
             if command == Cmd.none then
-                ( { model
-                    | patternArray = addToPatternArray model newPattern
-                    , ui = { ui | patternInputField = "" }
-                    , stack = stackResult.stack
-                    , castingContext = stackResult.ctx
-                  }
+                ( applyMetaAction
+                    { model
+                        | patternArray =
+                            addToPatternArray
+                                { model
+                                    | grid =
+                                        { grid
+                                            | drawing =
+                                                { drawing | activePath = generateDrawingFromSignature newPattern.signature model.grid.points }
+                                        }
+                                }
+                                newPattern
+                        , ui = { ui | patternInputField = "" }
+                        , stack = stackResult.stack
+                        , castingContext = stackResult.ctx
+                        , grid = newGrid
+                    }
+                    newPattern.metaAction
                 , Cmd.none
                 )
 
