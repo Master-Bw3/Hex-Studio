@@ -7062,7 +7062,7 @@ var $author$project$Logic$App$Stack$Stack$applyToStackLoop = F5(
 							A2(
 								$author$project$Logic$App$Stack$Stack$addEscapedIotaToStack,
 								stack,
-								A2($author$project$Logic$App$Types$PatternIota, pattern, false)),
+								A2($author$project$Logic$App$Types$PatternIota, pattern, true)),
 							A2($author$project$Logic$App$Utils$Utils$unshift, $author$project$Logic$App$Types$Considered, resultArray)),
 							$temp$ctx = ctx,
 							$temp$patterns = A2(

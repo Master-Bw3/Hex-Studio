@@ -45,7 +45,7 @@ applyToStackLoop stackResultTuple ctx patterns considerThis stopAtErrorOrHalt =
         Just (PatternIota pattern _) ->
             if considerThis then
                 applyToStackLoop
-                    ( addEscapedIotaToStack stack (PatternIota pattern False), unshift Considered resultArray )
+                    ( addEscapedIotaToStack stack (PatternIota pattern True), unshift Considered resultArray )
                     ctx
                     (Maybe.withDefault [] <| List.tail patterns)
                     False
