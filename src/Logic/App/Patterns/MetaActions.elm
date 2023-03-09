@@ -44,7 +44,7 @@ applyMetaAction model metaActionMsg =
                 , insertionPoint = 0
             }
 
-        Undo ->
+        Backspace ->
             let
                 newUncoloredPatternArray =
                     Array.removeAt model.insertionPoint model.patternArray

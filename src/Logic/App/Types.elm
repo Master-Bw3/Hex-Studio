@@ -31,7 +31,7 @@ type MetaActionMsg
     = None
     | ClearPatterns
     | Reset
-    | Undo
+    | Backspace
     | Wrap
 
 

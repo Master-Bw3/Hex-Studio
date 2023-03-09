@@ -9782,9 +9782,9 @@ var $author$project$Logic$App$Patterns$OperatorUtils$makeConstant = F3(
 			success: true
 		};
 	});
+var $author$project$Logic$App$Types$Backspace = {$: 'Backspace'};
 var $author$project$Logic$App$Types$ClearPatterns = {$: 'ClearPatterns'};
 var $author$project$Logic$App$Types$Reset = {$: 'Reset'};
-var $author$project$Logic$App$Types$Undo = {$: 'Undo'};
 var $author$project$Logic$App$Types$Wrap = {$: 'Wrap'};
 var $author$project$Logic$App$Patterns$PatternRegistry$noAction = F2(
 	function (stack, ctx) {
@@ -9799,7 +9799,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$metapatternRegistry = A2(
 		[
 			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Clear', internalName: 'clearPatterns', metaAction: $author$project$Logic$App$Types$ClearPatterns, outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqq'},
 			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Reset', internalName: 'resetApp', metaAction: $author$project$Logic$App$Types$Reset, outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqa'},
-			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Undo', internalName: 'undo', metaAction: $author$project$Logic$App$Types$Undo, outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qa'},
+			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Backspace', internalName: 'backspace', metaAction: $author$project$Logic$App$Types$Backspace, outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qa'},
 			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Wrap', internalName: 'wrap', metaAction: $author$project$Logic$App$Types$Wrap, outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qwqqqwq'}
 		]));
 var $author$project$Logic$App$Patterns$OperatorUtils$getPositiveInteger = function (iota) {
@@ -11742,7 +11742,7 @@ var $author$project$Logic$App$Patterns$MetaActions$applyMetaAction = F2(
 						patternArray: $elm$core$Array$empty,
 						stack: $elm$core$Array$empty
 					});
-			case 'Undo':
+			case 'Backspace':
 				var newUncoloredPatternArray = A2(
 					$elm_community$array_extra$Array$Extra$removeAt,
 					model.insertionPoint,
