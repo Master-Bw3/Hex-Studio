@@ -42,6 +42,7 @@ type Msg
     | RequestGridDrawingAsGIF
     | RecieveGridDrawingAsGIF String
     | UpdatePatternOuptut Int Pattern
+    | SetInsertionPoint Int Keys
 
 type alias MouseMoveData =
     { pageX : Int

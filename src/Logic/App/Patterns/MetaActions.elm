@@ -33,6 +33,7 @@ applyMetaAction model metaActionMsg =
                 , grid = { grid | points = updateGridPoints grid.width grid.height Array.empty [] settings.gridScale }
                 , stack = Array.empty
                 , castingContext = { castingContext | heldItemContent = Nothing }
+                , insertionPoint = 0
             }
 
         ClearPatterns ->
@@ -40,13 +41,14 @@ applyMetaAction model metaActionMsg =
                 | patternArray = Array.empty
                 , grid = { grid | points = updateGridPoints grid.width grid.height Array.empty [] settings.gridScale }
                 , stack = Array.empty
+                , insertionPoint = 0
             }
 
         Undo ->
             let
                 newUncoloredPatternArray =
-                    Array.removeAt 0 model.patternArray
-                        |> Array.removeAt 0
+                    Array.removeAt model.insertionPoint model.patternArray
+                        |> Array.removeAt model.insertionPoint
 
                 stackResult =
                     applyPatternsToStack Array.empty castingContext (List.reverse <| Tuple.first <| List.unzip <| Array.toList newUncoloredPatternArray)
@@ -70,6 +72,12 @@ applyMetaAction model metaActionMsg =
                 , grid = { grid | points = updateGridPoints grid.width grid.height newPatternArray [] settings.gridScale }
                 , stack = newStack
                 , castingContext = stackResult.ctx
+                , insertionPoint =
+                    if model.insertionPoint > Array.length newPatternArray then
+                        0
+
+                    else
+                        model.insertionPoint
             }
 
         Wrap ->

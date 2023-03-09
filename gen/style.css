@@ -243,6 +243,7 @@ input:focus,
 select:focus {
     outline: none !important;
     border-color: rgba(255, 255, 255, 0.4);
+    animation-iteration-count: 3;
 }
 
 .outer_box .x_button svg:hover g {
@@ -257,6 +258,17 @@ button {
     font: inherit;
     cursor: pointer;
     outline: inherit;
+}
+
+.outer_box {
+    animation: blink 1.5s steps(1, end);
+    animation-iteration-count: infinite;
+}
+
+@keyframes blink {
+    50% {
+        border-color: transparent;
+    }
 }
 
 .outer_box .x_button {
@@ -520,7 +532,8 @@ button {
     border-radius: 5px;
 }
 
-.stored_iota_container, .output_option_box {
+.stored_iota_container,
+.output_option_box {
     display: grid;
 }
 

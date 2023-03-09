@@ -31,4 +31,5 @@ type alias Model =
     , castingContext : CastingContext
     , time : Int
     , gridGifSrc : String
+    , insertionPoint : Int
     }

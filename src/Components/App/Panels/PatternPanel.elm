@@ -13,10 +13,10 @@ import FontAwesome.Layering as Icon
 import FontAwesome.Solid as Icon
 import FontAwesome.Styles as Icon
 import Html exposing (..)
-import Html.Attributes exposing (attribute, class, id, placeholder, style, value)
+import Html.Attributes exposing (attribute, class, id, placeholder, style, type_, value)
 import Html.Events exposing (keyCode, onBlur, onClick, onFocus, onInput, preventDefaultOn)
 import Html.Events.Extra.Drag exposing (DraggedSourceConfig, DropTargetConfig, Event, onDropTarget, onSourceDrag)
-import Html.Events.Extra.Mouse exposing (onOver, onWithOptions)
+import Html.Events.Extra.Mouse as MouseEvents exposing (onOver, onWithOptions)
 import Json.Decode as Json exposing (Decoder, at, float, int, map4)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (MouseMoveData, Msg(..))
@@ -24,7 +24,8 @@ import Logic.App.Patterns.PatternRegistry exposing (patternRegistry)
 import Logic.App.Types exposing (EntityType(..), GridPoint, Iota(..), IotaType(..), Panel(..), Pattern)
 import Logic.App.Utils.GetIotaValue exposing (getIotaFromString, getIotaTypeAsString, getIotaTypeFromString, getIotaValueAsString)
 import String exposing (fromInt)
-import Html.Attributes exposing (type_)
+import Settings.Theme exposing (accent1)
+import Settings.Theme exposing (accent2)
 
 
 patternPanel : Model -> Html Msg
@@ -68,6 +69,7 @@ patternPanel model =
                     model.ui.mouseOverElementIndex
                     (Tuple.second model.ui.dragging)
                     model.ui.overDragHandle
+                    model.insertionPoint
                 )
             )
         , div
@@ -123,8 +125,8 @@ draggedSourceConfig id =
     }
 
 
-renderPatternList : Array ( Pattern, List GridPoint ) -> Int -> Int -> Bool -> List (Html Msg)
-renderPatternList patternList dragoverIndex dragstartIndex overDragHandle =
+renderPatternList : Array ( Pattern, List GridPoint ) -> Int -> Int -> Bool -> Int -> List (Html Msg)
+renderPatternList patternList dragoverIndex dragstartIndex overDragHandle insertionPoint =
     let
         patterns : List Pattern
         patterns =
@@ -141,6 +143,7 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle =
                 ++ [ div
                         ([ class "outer_box"
                          , attribute "data-index" <| fromInt index
+                         , MouseEvents.onClick (\event -> SetInsertionPoint index event.keys)
                          ]
                             ++ (if overDragHandle then
                                     onSourceDrag (draggedSourceConfig index)
@@ -159,6 +162,12 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle =
                                             else
                                                 []
                                            )
+                               )
+                            ++ (if index == insertionPoint && index /= 0 then
+                                    [style "border-bottom" ("1px solid " ++ "#7D8599")]
+
+                                else
+                                    []
                                )
                         )
                         (div [ class "inner_box" ]

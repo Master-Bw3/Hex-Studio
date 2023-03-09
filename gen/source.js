@@ -5453,6 +5453,7 @@ var $author$project$Main$init = function (_v0) {
 				width: 0
 			},
 			gridGifSrc: '',
+			insertionPoint: 0,
 			mousePos: _Utils_Tuple2(0.0, 0.0),
 			patternArray: $elm$core$Array$empty,
 			settings: {gridScale: 1.0},
@@ -6652,41 +6653,237 @@ var $elm$core$Array$append = F2(
 						bTree)));
 		}
 	});
-var $elm$core$Array$fromListHelp = F3(
-	function (list, nodeList, nodeListSize) {
-		fromListHelp:
+var $elm$core$Array$length = function (_v0) {
+	var len = _v0.a;
+	return len;
+};
+var $elm$core$Array$push = F2(
+	function (a, array) {
+		var tail = array.d;
+		return A2(
+			$elm$core$Array$unsafeReplaceTail,
+			A2($elm$core$Elm$JsArray$push, a, tail),
+			array);
+	});
+var $elm$core$List$drop = F2(
+	function (n, list) {
+		drop:
 		while (true) {
-			var _v0 = A2($elm$core$Elm$JsArray$initializeFromList, $elm$core$Array$branchFactor, list);
-			var jsArray = _v0.a;
-			var remainingItems = _v0.b;
-			if (_Utils_cmp(
-				$elm$core$Elm$JsArray$length(jsArray),
-				$elm$core$Array$branchFactor) < 0) {
-				return A2(
-					$elm$core$Array$builderToArray,
-					true,
-					{nodeList: nodeList, nodeListSize: nodeListSize, tail: jsArray});
+			if (n <= 0) {
+				return list;
 			} else {
-				var $temp$list = remainingItems,
-					$temp$nodeList = A2(
-					$elm$core$List$cons,
-					$elm$core$Array$Leaf(jsArray),
-					nodeList),
-					$temp$nodeListSize = nodeListSize + 1;
-				list = $temp$list;
-				nodeList = $temp$nodeList;
-				nodeListSize = $temp$nodeListSize;
-				continue fromListHelp;
+				if (!list.b) {
+					return list;
+				} else {
+					var x = list.a;
+					var xs = list.b;
+					var $temp$n = n - 1,
+						$temp$list = xs;
+					n = $temp$n;
+					list = $temp$list;
+					continue drop;
+				}
 			}
 		}
 	});
-var $elm$core$Array$fromList = function (list) {
-	if (!list.b) {
-		return $elm$core$Array$empty;
-	} else {
-		return A3($elm$core$Array$fromListHelp, list, _List_Nil, 0);
-	}
+var $elm$core$Array$tailIndex = function (len) {
+	return (len >>> 5) << 5;
 };
+var $elm$core$Array$sliceLeft = F2(
+	function (from, array) {
+		var len = array.a;
+		var tree = array.c;
+		var tail = array.d;
+		if (!from) {
+			return array;
+		} else {
+			if (_Utils_cmp(
+				from,
+				$elm$core$Array$tailIndex(len)) > -1) {
+				return A4(
+					$elm$core$Array$Array_elm_builtin,
+					len - from,
+					$elm$core$Array$shiftStep,
+					$elm$core$Elm$JsArray$empty,
+					A3(
+						$elm$core$Elm$JsArray$slice,
+						from - $elm$core$Array$tailIndex(len),
+						$elm$core$Elm$JsArray$length(tail),
+						tail));
+			} else {
+				var skipNodes = (from / $elm$core$Array$branchFactor) | 0;
+				var helper = F2(
+					function (node, acc) {
+						if (node.$ === 'SubTree') {
+							var subTree = node.a;
+							return A3($elm$core$Elm$JsArray$foldr, helper, acc, subTree);
+						} else {
+							var leaf = node.a;
+							return A2($elm$core$List$cons, leaf, acc);
+						}
+					});
+				var leafNodes = A3(
+					$elm$core$Elm$JsArray$foldr,
+					helper,
+					_List_fromArray(
+						[tail]),
+					tree);
+				var nodesToInsert = A2($elm$core$List$drop, skipNodes, leafNodes);
+				if (!nodesToInsert.b) {
+					return $elm$core$Array$empty;
+				} else {
+					var head = nodesToInsert.a;
+					var rest = nodesToInsert.b;
+					var firstSlice = from - (skipNodes * $elm$core$Array$branchFactor);
+					var initialBuilder = {
+						nodeList: _List_Nil,
+						nodeListSize: 0,
+						tail: A3(
+							$elm$core$Elm$JsArray$slice,
+							firstSlice,
+							$elm$core$Elm$JsArray$length(head),
+							head)
+					};
+					return A2(
+						$elm$core$Array$builderToArray,
+						true,
+						A3($elm$core$List$foldl, $elm$core$Array$appendHelpBuilder, initialBuilder, rest));
+				}
+			}
+		}
+	});
+var $elm$core$Array$fetchNewTail = F4(
+	function (shift, end, treeEnd, tree) {
+		fetchNewTail:
+		while (true) {
+			var pos = $elm$core$Array$bitMask & (treeEnd >>> shift);
+			var _v0 = A2($elm$core$Elm$JsArray$unsafeGet, pos, tree);
+			if (_v0.$ === 'SubTree') {
+				var sub = _v0.a;
+				var $temp$shift = shift - $elm$core$Array$shiftStep,
+					$temp$end = end,
+					$temp$treeEnd = treeEnd,
+					$temp$tree = sub;
+				shift = $temp$shift;
+				end = $temp$end;
+				treeEnd = $temp$treeEnd;
+				tree = $temp$tree;
+				continue fetchNewTail;
+			} else {
+				var values = _v0.a;
+				return A3($elm$core$Elm$JsArray$slice, 0, $elm$core$Array$bitMask & end, values);
+			}
+		}
+	});
+var $elm$core$Array$hoistTree = F3(
+	function (oldShift, newShift, tree) {
+		hoistTree:
+		while (true) {
+			if ((_Utils_cmp(oldShift, newShift) < 1) || (!$elm$core$Elm$JsArray$length(tree))) {
+				return tree;
+			} else {
+				var _v0 = A2($elm$core$Elm$JsArray$unsafeGet, 0, tree);
+				if (_v0.$ === 'SubTree') {
+					var sub = _v0.a;
+					var $temp$oldShift = oldShift - $elm$core$Array$shiftStep,
+						$temp$newShift = newShift,
+						$temp$tree = sub;
+					oldShift = $temp$oldShift;
+					newShift = $temp$newShift;
+					tree = $temp$tree;
+					continue hoistTree;
+				} else {
+					return tree;
+				}
+			}
+		}
+	});
+var $elm$core$Array$sliceTree = F3(
+	function (shift, endIdx, tree) {
+		var lastPos = $elm$core$Array$bitMask & (endIdx >>> shift);
+		var _v0 = A2($elm$core$Elm$JsArray$unsafeGet, lastPos, tree);
+		if (_v0.$ === 'SubTree') {
+			var sub = _v0.a;
+			var newSub = A3($elm$core$Array$sliceTree, shift - $elm$core$Array$shiftStep, endIdx, sub);
+			return (!$elm$core$Elm$JsArray$length(newSub)) ? A3($elm$core$Elm$JsArray$slice, 0, lastPos, tree) : A3(
+				$elm$core$Elm$JsArray$unsafeSet,
+				lastPos,
+				$elm$core$Array$SubTree(newSub),
+				A3($elm$core$Elm$JsArray$slice, 0, lastPos + 1, tree));
+		} else {
+			return A3($elm$core$Elm$JsArray$slice, 0, lastPos, tree);
+		}
+	});
+var $elm$core$Array$sliceRight = F2(
+	function (end, array) {
+		var len = array.a;
+		var startShift = array.b;
+		var tree = array.c;
+		var tail = array.d;
+		if (_Utils_eq(end, len)) {
+			return array;
+		} else {
+			if (_Utils_cmp(
+				end,
+				$elm$core$Array$tailIndex(len)) > -1) {
+				return A4(
+					$elm$core$Array$Array_elm_builtin,
+					end,
+					startShift,
+					tree,
+					A3($elm$core$Elm$JsArray$slice, 0, $elm$core$Array$bitMask & end, tail));
+			} else {
+				var endIdx = $elm$core$Array$tailIndex(end);
+				var depth = $elm$core$Basics$floor(
+					A2(
+						$elm$core$Basics$logBase,
+						$elm$core$Array$branchFactor,
+						A2($elm$core$Basics$max, 1, endIdx - 1)));
+				var newShift = A2($elm$core$Basics$max, 5, depth * $elm$core$Array$shiftStep);
+				return A4(
+					$elm$core$Array$Array_elm_builtin,
+					end,
+					newShift,
+					A3(
+						$elm$core$Array$hoistTree,
+						startShift,
+						newShift,
+						A3($elm$core$Array$sliceTree, startShift, endIdx, tree)),
+					A4($elm$core$Array$fetchNewTail, startShift, end, endIdx, tree));
+			}
+		}
+	});
+var $elm$core$Array$translateIndex = F2(
+	function (index, _v0) {
+		var len = _v0.a;
+		var posIndex = (index < 0) ? (len + index) : index;
+		return (posIndex < 0) ? 0 : ((_Utils_cmp(posIndex, len) > 0) ? len : posIndex);
+	});
+var $elm$core$Array$slice = F3(
+	function (from, to, array) {
+		var correctTo = A2($elm$core$Array$translateIndex, to, array);
+		var correctFrom = A2($elm$core$Array$translateIndex, from, array);
+		return (_Utils_cmp(correctFrom, correctTo) > 0) ? $elm$core$Array$empty : A2(
+			$elm$core$Array$sliceLeft,
+			correctFrom,
+			A2($elm$core$Array$sliceRight, correctTo, array));
+	});
+var $elm_community$array_extra$Array$Extra$insertAt = F2(
+	function (index, val) {
+		return function (array) {
+			var arrayLength = $elm$core$Array$length(array);
+			if ((index >= 0) && (_Utils_cmp(index, arrayLength) < 1)) {
+				var before = A3($elm$core$Array$slice, 0, index, array);
+				var after = A3($elm$core$Array$slice, index, arrayLength, array);
+				return A2(
+					$elm$core$Array$append,
+					A2($elm$core$Array$push, val, before),
+					after);
+			} else {
+				return array;
+			}
+		};
+	});
 var $author$project$Logic$App$PatternList$PatternArray$updateDrawingColors = function (patternTuple) {
 	return _Utils_Tuple2(
 		patternTuple.a,
@@ -6708,18 +6905,15 @@ var $author$project$Logic$App$PatternList$PatternArray$updateDrawingColors = fun
 			},
 			patternTuple.b));
 };
-var $author$project$Logic$App$PatternList$PatternArray$addToPatternArray = F2(
-	function (model, pattern) {
+var $author$project$Logic$App$PatternList$PatternArray$addToPatternArray = F3(
+	function (model, pattern, index) {
 		var patternList = model.patternArray;
 		var drawing = model.grid.drawing;
 		var patternDrawingPair = _Utils_Tuple2(pattern, drawing.activePath);
-		return A2(
-			$elm$core$Array$append,
-			$elm$core$Array$fromList(
-				_List_fromArray(
-					[
-						$author$project$Logic$App$PatternList$PatternArray$updateDrawingColors(patternDrawingPair)
-					])),
+		return A3(
+			$elm_community$array_extra$Array$Extra$insertAt,
+			index,
+			$author$project$Logic$App$PatternList$PatternArray$updateDrawingColors(patternDrawingPair),
 			patternList);
 	});
 var $author$project$Components$App$Grid$applyPathToGrid = F2(
@@ -6803,9 +6997,6 @@ var $elm$core$Array$getHelp = F3(
 			}
 		}
 	});
-var $elm$core$Array$tailIndex = function (len) {
-	return (len >>> 5) << 5;
-};
 var $elm$core$Array$get = F2(
 	function (index, _v0) {
 		var len = _v0.a;
@@ -6817,14 +7008,6 @@ var $elm$core$Array$get = F2(
 			$elm$core$Array$tailIndex(len)) > -1) ? $elm$core$Maybe$Just(
 			A2($elm$core$Elm$JsArray$unsafeGet, $elm$core$Array$bitMask & index, tail)) : $elm$core$Maybe$Just(
 			A3($elm$core$Array$getHelp, startShift, index, tree)));
-	});
-var $elm$core$Array$push = F2(
-	function (a, array) {
-		var tail = array.d;
-		return A2(
-			$elm$core$Array$unsafeReplaceTail,
-			A2($elm$core$Elm$JsArray$push, a, tail),
-			array);
 	});
 var $elm$core$Array$setHelp = F4(
 	function (shift, index, value, tree) {
@@ -6868,6 +7051,41 @@ var $elm$core$Array$set = F3(
 			A4($elm$core$Array$setHelp, startShift, index, value, tree),
 			tail));
 	});
+var $elm$core$Array$fromListHelp = F3(
+	function (list, nodeList, nodeListSize) {
+		fromListHelp:
+		while (true) {
+			var _v0 = A2($elm$core$Elm$JsArray$initializeFromList, $elm$core$Array$branchFactor, list);
+			var jsArray = _v0.a;
+			var remainingItems = _v0.b;
+			if (_Utils_cmp(
+				$elm$core$Elm$JsArray$length(jsArray),
+				$elm$core$Array$branchFactor) < 0) {
+				return A2(
+					$elm$core$Array$builderToArray,
+					true,
+					{nodeList: nodeList, nodeListSize: nodeListSize, tail: jsArray});
+			} else {
+				var $temp$list = remainingItems,
+					$temp$nodeList = A2(
+					$elm$core$List$cons,
+					$elm$core$Array$Leaf(jsArray),
+					nodeList),
+					$temp$nodeListSize = nodeListSize + 1;
+				list = $temp$list;
+				nodeList = $temp$nodeList;
+				nodeListSize = $temp$nodeListSize;
+				continue fromListHelp;
+			}
+		}
+	});
+var $elm$core$Array$fromList = function (list) {
+	if (!list.b) {
+		return $elm$core$Array$empty;
+	} else {
+		return A3($elm$core$Array$fromListHelp, list, _List_Nil, 0);
+	}
+};
 var $author$project$Logic$App$Utils$Utils$unshift = F2(
 	function (item, array) {
 		return A2(
@@ -6916,10 +7134,6 @@ var $author$project$Logic$App$Utils$Utils$isJust = function (maybe) {
 	} else {
 		return false;
 	}
-};
-var $elm$core$Array$length = function (_v0) {
-	var len = _v0.a;
-	return len;
 };
 var $elm$core$Elm$JsArray$map = _JsArray_map;
 var $elm$core$Array$map = F2(
@@ -7189,206 +7403,6 @@ var $elm$core$Basics$abs = function (n) {
 };
 var $author$project$Logic$App$Types$IncorrectIota = {$: 'IncorrectIota'};
 var $author$project$Logic$App$Types$NotEnoughIotas = {$: 'NotEnoughIotas'};
-var $elm$core$List$drop = F2(
-	function (n, list) {
-		drop:
-		while (true) {
-			if (n <= 0) {
-				return list;
-			} else {
-				if (!list.b) {
-					return list;
-				} else {
-					var x = list.a;
-					var xs = list.b;
-					var $temp$n = n - 1,
-						$temp$list = xs;
-					n = $temp$n;
-					list = $temp$list;
-					continue drop;
-				}
-			}
-		}
-	});
-var $elm$core$Array$sliceLeft = F2(
-	function (from, array) {
-		var len = array.a;
-		var tree = array.c;
-		var tail = array.d;
-		if (!from) {
-			return array;
-		} else {
-			if (_Utils_cmp(
-				from,
-				$elm$core$Array$tailIndex(len)) > -1) {
-				return A4(
-					$elm$core$Array$Array_elm_builtin,
-					len - from,
-					$elm$core$Array$shiftStep,
-					$elm$core$Elm$JsArray$empty,
-					A3(
-						$elm$core$Elm$JsArray$slice,
-						from - $elm$core$Array$tailIndex(len),
-						$elm$core$Elm$JsArray$length(tail),
-						tail));
-			} else {
-				var skipNodes = (from / $elm$core$Array$branchFactor) | 0;
-				var helper = F2(
-					function (node, acc) {
-						if (node.$ === 'SubTree') {
-							var subTree = node.a;
-							return A3($elm$core$Elm$JsArray$foldr, helper, acc, subTree);
-						} else {
-							var leaf = node.a;
-							return A2($elm$core$List$cons, leaf, acc);
-						}
-					});
-				var leafNodes = A3(
-					$elm$core$Elm$JsArray$foldr,
-					helper,
-					_List_fromArray(
-						[tail]),
-					tree);
-				var nodesToInsert = A2($elm$core$List$drop, skipNodes, leafNodes);
-				if (!nodesToInsert.b) {
-					return $elm$core$Array$empty;
-				} else {
-					var head = nodesToInsert.a;
-					var rest = nodesToInsert.b;
-					var firstSlice = from - (skipNodes * $elm$core$Array$branchFactor);
-					var initialBuilder = {
-						nodeList: _List_Nil,
-						nodeListSize: 0,
-						tail: A3(
-							$elm$core$Elm$JsArray$slice,
-							firstSlice,
-							$elm$core$Elm$JsArray$length(head),
-							head)
-					};
-					return A2(
-						$elm$core$Array$builderToArray,
-						true,
-						A3($elm$core$List$foldl, $elm$core$Array$appendHelpBuilder, initialBuilder, rest));
-				}
-			}
-		}
-	});
-var $elm$core$Array$fetchNewTail = F4(
-	function (shift, end, treeEnd, tree) {
-		fetchNewTail:
-		while (true) {
-			var pos = $elm$core$Array$bitMask & (treeEnd >>> shift);
-			var _v0 = A2($elm$core$Elm$JsArray$unsafeGet, pos, tree);
-			if (_v0.$ === 'SubTree') {
-				var sub = _v0.a;
-				var $temp$shift = shift - $elm$core$Array$shiftStep,
-					$temp$end = end,
-					$temp$treeEnd = treeEnd,
-					$temp$tree = sub;
-				shift = $temp$shift;
-				end = $temp$end;
-				treeEnd = $temp$treeEnd;
-				tree = $temp$tree;
-				continue fetchNewTail;
-			} else {
-				var values = _v0.a;
-				return A3($elm$core$Elm$JsArray$slice, 0, $elm$core$Array$bitMask & end, values);
-			}
-		}
-	});
-var $elm$core$Array$hoistTree = F3(
-	function (oldShift, newShift, tree) {
-		hoistTree:
-		while (true) {
-			if ((_Utils_cmp(oldShift, newShift) < 1) || (!$elm$core$Elm$JsArray$length(tree))) {
-				return tree;
-			} else {
-				var _v0 = A2($elm$core$Elm$JsArray$unsafeGet, 0, tree);
-				if (_v0.$ === 'SubTree') {
-					var sub = _v0.a;
-					var $temp$oldShift = oldShift - $elm$core$Array$shiftStep,
-						$temp$newShift = newShift,
-						$temp$tree = sub;
-					oldShift = $temp$oldShift;
-					newShift = $temp$newShift;
-					tree = $temp$tree;
-					continue hoistTree;
-				} else {
-					return tree;
-				}
-			}
-		}
-	});
-var $elm$core$Array$sliceTree = F3(
-	function (shift, endIdx, tree) {
-		var lastPos = $elm$core$Array$bitMask & (endIdx >>> shift);
-		var _v0 = A2($elm$core$Elm$JsArray$unsafeGet, lastPos, tree);
-		if (_v0.$ === 'SubTree') {
-			var sub = _v0.a;
-			var newSub = A3($elm$core$Array$sliceTree, shift - $elm$core$Array$shiftStep, endIdx, sub);
-			return (!$elm$core$Elm$JsArray$length(newSub)) ? A3($elm$core$Elm$JsArray$slice, 0, lastPos, tree) : A3(
-				$elm$core$Elm$JsArray$unsafeSet,
-				lastPos,
-				$elm$core$Array$SubTree(newSub),
-				A3($elm$core$Elm$JsArray$slice, 0, lastPos + 1, tree));
-		} else {
-			return A3($elm$core$Elm$JsArray$slice, 0, lastPos, tree);
-		}
-	});
-var $elm$core$Array$sliceRight = F2(
-	function (end, array) {
-		var len = array.a;
-		var startShift = array.b;
-		var tree = array.c;
-		var tail = array.d;
-		if (_Utils_eq(end, len)) {
-			return array;
-		} else {
-			if (_Utils_cmp(
-				end,
-				$elm$core$Array$tailIndex(len)) > -1) {
-				return A4(
-					$elm$core$Array$Array_elm_builtin,
-					end,
-					startShift,
-					tree,
-					A3($elm$core$Elm$JsArray$slice, 0, $elm$core$Array$bitMask & end, tail));
-			} else {
-				var endIdx = $elm$core$Array$tailIndex(end);
-				var depth = $elm$core$Basics$floor(
-					A2(
-						$elm$core$Basics$logBase,
-						$elm$core$Array$branchFactor,
-						A2($elm$core$Basics$max, 1, endIdx - 1)));
-				var newShift = A2($elm$core$Basics$max, 5, depth * $elm$core$Array$shiftStep);
-				return A4(
-					$elm$core$Array$Array_elm_builtin,
-					end,
-					newShift,
-					A3(
-						$elm$core$Array$hoistTree,
-						startShift,
-						newShift,
-						A3($elm$core$Array$sliceTree, startShift, endIdx, tree)),
-					A4($elm$core$Array$fetchNewTail, startShift, end, endIdx, tree));
-			}
-		}
-	});
-var $elm$core$Array$translateIndex = F2(
-	function (index, _v0) {
-		var len = _v0.a;
-		var posIndex = (index < 0) ? (len + index) : index;
-		return (posIndex < 0) ? 0 : ((_Utils_cmp(posIndex, len) > 0) ? len : posIndex);
-	});
-var $elm$core$Array$slice = F3(
-	function (from, to, array) {
-		var correctTo = A2($elm$core$Array$translateIndex, to, array);
-		var correctFrom = A2($elm$core$Array$translateIndex, from, array);
-		return (_Utils_cmp(correctFrom, correctTo) > 0) ? $elm$core$Array$empty : A2(
-			$elm$core$Array$sliceLeft,
-			correctFrom,
-			A2($elm$core$Array$sliceRight, correctTo, array));
-	});
 var $author$project$Logic$App$Patterns$OperatorUtils$action1Input = F4(
 	function (stack, ctx, inputGetter, action) {
 		var newStack = A3(
@@ -11711,6 +11725,7 @@ var $author$project$Logic$App$Patterns$MetaActions$applyMetaAction = F2(
 							{
 								points: A5($author$project$Components$App$Grid$updateGridPoints, grid.width, grid.height, $elm$core$Array$empty, _List_Nil, settings.gridScale)
 							}),
+						insertionPoint: 0,
 						patternArray: $elm$core$Array$empty,
 						stack: $elm$core$Array$empty
 					});
@@ -11723,14 +11738,15 @@ var $author$project$Logic$App$Patterns$MetaActions$applyMetaAction = F2(
 							{
 								points: A5($author$project$Components$App$Grid$updateGridPoints, grid.width, grid.height, $elm$core$Array$empty, _List_Nil, settings.gridScale)
 							}),
+						insertionPoint: 0,
 						patternArray: $elm$core$Array$empty,
 						stack: $elm$core$Array$empty
 					});
 			case 'Undo':
 				var newUncoloredPatternArray = A2(
 					$elm_community$array_extra$Array$Extra$removeAt,
-					0,
-					A2($elm_community$array_extra$Array$Extra$removeAt, 0, model.patternArray));
+					model.insertionPoint,
+					A2($elm_community$array_extra$Array$Extra$removeAt, model.insertionPoint, model.patternArray));
 				var stackResult = A3(
 					$author$project$Logic$App$Stack$Stack$applyPatternsToStack,
 					$elm$core$Array$empty,
@@ -11760,6 +11776,9 @@ var $author$project$Logic$App$Patterns$MetaActions$applyMetaAction = F2(
 							{
 								points: A5($author$project$Components$App$Grid$updateGridPoints, grid.width, grid.height, newPatternArray, _List_Nil, settings.gridScale)
 							}),
+						insertionPoint: (_Utils_cmp(
+							model.insertionPoint,
+							$elm$core$Array$length(newPatternArray)) > 0) ? 0 : model.insertionPoint,
 						patternArray: newPatternArray,
 						stack: newStack
 					});
@@ -12452,22 +12471,6 @@ var $elm$core$Array$indexedMap = F2(
 			true,
 			A3($elm$core$Elm$JsArray$foldl, helper, initialBuilder, tree));
 	});
-var $elm_community$array_extra$Array$Extra$insertAt = F2(
-	function (index, val) {
-		return function (array) {
-			var arrayLength = $elm$core$Array$length(array);
-			if ((index >= 0) && (_Utils_cmp(index, arrayLength) < 1)) {
-				var before = A3($elm$core$Array$slice, 0, index, array);
-				var after = A3($elm$core$Array$slice, index, arrayLength, array);
-				return A2(
-					$elm$core$Array$append,
-					A2($elm$core$Array$push, val, before),
-					after);
-			} else {
-				return array;
-			}
-		};
-	});
 var $author$project$Logic$App$Msg$MouseMoveData = F4(
 	function (pageX, pageY, offsetHeight, offsetWidth) {
 		return {offsetHeight: offsetHeight, offsetWidth: offsetWidth, pageX: pageX, pageY: pageY};
@@ -12822,7 +12825,7 @@ var $author$project$Main$update = F2(
 										return x.a;
 									},
 									$elm$core$Array$toList(
-										A2($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newUncoloredPattern)))));
+										A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newUncoloredPattern, model.insertionPoint)))));
 						var resultArray = stackResult.resultArray;
 						var newStack = stackResult.stack;
 						var newPattern = A2(
@@ -12831,7 +12834,7 @@ var $author$project$Main$update = F2(
 							A2(
 								$elm$core$Maybe$withDefault,
 								$author$project$Logic$App$Types$Failed,
-								A2($elm$core$Array$get, 0, resultArray)));
+								A2($elm$core$Array$get, model.insertionPoint, resultArray)));
 						var newGrid = _Utils_update(
 							grid,
 							{
@@ -12852,7 +12855,10 @@ var $author$project$Main$update = F2(
 									{
 										castingContext: stackResult.ctx,
 										grid: newGrid,
-										patternArray: A2($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern),
+										insertionPoint: (_Utils_cmp(
+											model.insertionPoint,
+											$elm$core$Array$length(model.patternArray)) > 0) ? 0 : model.insertionPoint,
+										patternArray: A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, model.insertionPoint),
 										stack: newStack
 									}),
 								newPattern.metaAction),
@@ -12909,6 +12915,9 @@ var $author$project$Main$update = F2(
 								{
 									points: A5($author$project$Components$App$Grid$updateGridPoints, grid.width, grid.height, newPatternArray, _List_Nil, settings.gridScale)
 								}),
+							insertionPoint: (_Utils_cmp(
+								model.insertionPoint,
+								$elm$core$Array$length(newPatternArray)) > 0) ? 0 : A2($elm$core$Basics$max, model.insertionPoint - 1, 0),
 							patternArray: newPatternArray,
 							stack: newStack
 						}),
@@ -13006,14 +13015,14 @@ var $author$project$Main$update = F2(
 								return x.a;
 							},
 							$elm$core$Array$toList(
-								A2($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newUncoloredPattern)))));
+								A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newUncoloredPattern, model.insertionPoint)))));
 				var newPattern = A2(
 					$author$project$Logic$App$PatternList$PatternArray$applyColorToPatternFromResult,
 					newUncoloredPattern,
 					A2(
 						$elm$core$Maybe$withDefault,
 						$author$project$Logic$App$Types$Failed,
-						A2($elm$core$Array$get, 0, stackResult.resultArray)));
+						A2($elm$core$Array$get, model.insertionPoint, stackResult.resultArray)));
 				var newGrid = _Utils_update(
 					grid,
 					{
@@ -13037,7 +13046,10 @@ var $author$project$Main$update = F2(
 							{
 								castingContext: stackResult.ctx,
 								grid: newGrid,
-								patternArray: A2(
+								insertionPoint: (_Utils_cmp(
+									model.insertionPoint,
+									$elm$core$Array$length(model.patternArray)) > 0) ? 0 : model.insertionPoint,
+								patternArray: A3(
 									$author$project$Logic$App$PatternList$PatternArray$addToPatternArray,
 									_Utils_update(
 										model,
@@ -13052,7 +13064,8 @@ var $author$project$Main$update = F2(
 														})
 												})
 										}),
-									newPattern),
+									newPattern,
+									model.insertionPoint),
 								stack: stackResult.stack,
 								ui: _Utils_update(
 									ui,
@@ -13079,13 +13092,16 @@ var $author$project$Main$update = F2(
 								return x.a;
 							},
 							$elm$core$Array$toList(
-								A2($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern)))));
+								A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, model.insertionPoint)))));
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
 							castingContext: stackResult.ctx,
-							patternArray: A2($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern),
+							insertionPoint: (_Utils_cmp(
+								model.insertionPoint,
+								$elm$core$Array$length(model.patternArray)) > 0) ? 0 : model.insertionPoint,
+							patternArray: A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, model.insertionPoint),
 							stack: stackResult.stack,
 							ui: _Utils_update(
 								ui,
@@ -13384,7 +13400,7 @@ var $author$project$Main$update = F2(
 						model,
 						{gridGifSrc: src}),
 					$elm$core$Platform$Cmd$none);
-			default:
+			case 'UpdatePatternOuptut':
 				var index = msg.a;
 				var replacementPattern = msg.b;
 				var newUncoloredPatternArray = A3(
@@ -13429,6 +13445,18 @@ var $author$project$Main$update = F2(
 							stack: newStack
 						}),
 					$elm$core$Platform$Cmd$none);
+			default:
+				var index = msg.a;
+				var keys = msg.b;
+				return keys.shift ? (_Utils_eq(model.insertionPoint, index) ? _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{insertionPoint: 0}),
+					$elm$core$Platform$Cmd$none) : _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{insertionPoint: index}),
+					$elm$core$Platform$Cmd$none)) : _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 		}
 	});
 var $author$project$Logic$App$Msg$MouseMove = function (a) {
@@ -14880,6 +14908,10 @@ var $author$project$Logic$App$Msg$RemoveFromPatternArray = F2(
 	function (a, b) {
 		return {$: 'RemoveFromPatternArray', a: a, b: b};
 	});
+var $author$project$Logic$App$Msg$SetInsertionPoint = F2(
+	function (a, b) {
+		return {$: 'SetInsertionPoint', a: a, b: b};
+	});
 var $author$project$Logic$App$Msg$UpdatePatternOuptut = F2(
 	function (a, b) {
 		return {$: 'UpdatePatternOuptut', a: a, b: b};
@@ -15104,8 +15136,8 @@ var $author$project$Components$Icon$XButton$xButton = A2(
 						]))
 				]))
 		]));
-var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F4(
-	function (patternList, dragoverIndex, dragstartIndex, overDragHandle) {
+var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F5(
+	function (patternList, dragoverIndex, dragstartIndex, overDragHandle, insertionPoint) {
 		var renderPattern = F2(
 			function (index, pattern) {
 				return _Utils_ap(
@@ -15130,23 +15162,32 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F4(
 										A2(
 										$elm$html$Html$Attributes$attribute,
 										'data-index',
-										$elm$core$String$fromInt(index))
+										$elm$core$String$fromInt(index)),
+										$mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$onClick(
+										function (event) {
+											return A2($author$project$Logic$App$Msg$SetInsertionPoint, index, event.keys);
+										})
 									]),
-								overDragHandle ? $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$onSourceDrag(
-									$author$project$Components$App$Panels$PatternPanel$draggedSourceConfig(index)) : _Utils_ap(
-									_List_Nil,
-									_Utils_ap(
-										_Utils_eq(index, dragstartIndex) ? _List_fromArray(
-											[
-												A2($elm$html$Html$Attributes$style, 'opacity', '40%')
-											]) : _List_fromArray(
-											[
-												A2($elm$html$Html$Attributes$style, 'opacity', '100%')
-											]),
-										_Utils_eq(dragoverIndex, index) ? _List_fromArray(
-											[
-												$elm$html$Html$Attributes$class('dragover')
-											]) : _List_Nil))),
+								_Utils_ap(
+									overDragHandle ? $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$onSourceDrag(
+										$author$project$Components$App$Panels$PatternPanel$draggedSourceConfig(index)) : _Utils_ap(
+										_List_Nil,
+										_Utils_ap(
+											_Utils_eq(index, dragstartIndex) ? _List_fromArray(
+												[
+													A2($elm$html$Html$Attributes$style, 'opacity', '40%')
+												]) : _List_fromArray(
+												[
+													A2($elm$html$Html$Attributes$style, 'opacity', '100%')
+												]),
+											_Utils_eq(dragoverIndex, index) ? _List_fromArray(
+												[
+													$elm$html$Html$Attributes$class('dragover')
+												]) : _List_Nil)),
+									(_Utils_eq(index, insertionPoint) && (!(!index))) ? _List_fromArray(
+										[
+											A2($elm$html$Html$Attributes$style, 'border-bottom', '1px solid ' + '#7D8599')
+										]) : _List_Nil)),
 							A2(
 								$elm$core$List$cons,
 								A2(
@@ -15610,7 +15651,7 @@ var $author$project$Components$App$Panels$PatternPanel$patternPanel = function (
 					$elm$html$Html$Attributes$id('pattern_draggable_container'),
 					$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$onDropTarget($author$project$Components$App$Panels$PatternPanel$dropTargetConfig)),
 				$elm$core$List$reverse(
-					A4($author$project$Components$App$Panels$PatternPanel$renderPatternList, model.patternArray, model.ui.mouseOverElementIndex, model.ui.dragging.b, model.ui.overDragHandle))),
+					A5($author$project$Components$App$Panels$PatternPanel$renderPatternList, model.patternArray, model.ui.mouseOverElementIndex, model.ui.dragging.b, model.ui.overDragHandle, model.insertionPoint))),
 				A2(
 				$elm$html$Html$div,
 				_List_fromArray(

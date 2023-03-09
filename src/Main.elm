@@ -78,6 +78,7 @@ init _ =
             }
       , time = 0
       , gridGifSrc = ""
+      , insertionPoint = 0
       }
     , Cmd.batch [ Task.attempt GetGrid (getElement "hex_grid"), Task.attempt GetContentSize (getElement "content") ]
     )
@@ -167,7 +168,7 @@ update msg model =
                 if List.length drawing.activePath > 1 then
                     let
                         stackResult =
-                            applyPatternsToStack Array.empty castingContext (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newUncoloredPattern))
+                            applyPatternsToStack Array.empty castingContext (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newUncoloredPattern model.insertionPoint))
 
                         newStack =
                             stackResult.stack
@@ -179,7 +180,7 @@ update msg model =
                             getPatternFromSignature <| getAngleSignature drawing.activePath
 
                         newPattern =
-                            applyColorToPatternFromResult newUncoloredPattern (Maybe.withDefault Failed (Array.get 0 resultArray))
+                            applyColorToPatternFromResult newUncoloredPattern (Maybe.withDefault Failed (Array.get model.insertionPoint resultArray))
 
                         newGrid =
                             { grid
@@ -189,10 +190,16 @@ update msg model =
                     in
                     ( applyMetaAction
                         { model
-                            | patternArray = addToPatternArray model newPattern
+                            | patternArray = addToPatternArray model newPattern model.insertionPoint
                             , grid = newGrid
                             , stack = newStack
                             , castingContext = stackResult.ctx
+                            , insertionPoint =
+                                if model.insertionPoint > Array.length model.patternArray then
+                                    0
+
+                                else
+                                    model.insertionPoint
                         }
                         newPattern.metaAction
                     , Cmd.none
@@ -231,6 +238,12 @@ update msg model =
                 , grid = { grid | points = updateGridPoints grid.width grid.height newPatternArray [] settings.gridScale }
                 , stack = newStack
                 , castingContext = stackResult.ctx
+                , insertionPoint =
+                    if model.insertionPoint > Array.length newPatternArray then
+                        0
+
+                    else
+                        max (model.insertionPoint - 1) 0
               }
             , Cmd.none
             )
@@ -273,7 +286,7 @@ update msg model =
         InputPattern name ->
             let
                 stackResult =
-                    applyPatternsToStack Array.empty castingContext (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newUncoloredPattern))
+                    applyPatternsToStack Array.empty castingContext (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newUncoloredPattern model.insertionPoint))
 
                 getPattern =
                     getPatternFromName name
@@ -282,7 +295,7 @@ update msg model =
                     Tuple.first <| getPattern
 
                 newPattern =
-                    applyColorToPatternFromResult newUncoloredPattern (Maybe.withDefault Failed (Array.get 0 stackResult.resultArray))
+                    applyColorToPatternFromResult newUncoloredPattern (Maybe.withDefault Failed (Array.get model.insertionPoint stackResult.resultArray))
 
                 command =
                     Tuple.second <| getPattern
@@ -306,10 +319,17 @@ update msg model =
                                         }
                                 }
                                 newPattern
+                                model.insertionPoint
                         , ui = { ui | patternInputField = "" }
                         , stack = stackResult.stack
                         , castingContext = stackResult.ctx
                         , grid = newGrid
+                        , insertionPoint =
+                            if model.insertionPoint > Array.length model.patternArray then
+                                0
+
+                            else
+                                model.insertionPoint
                     }
                     newPattern.metaAction
                 , Cmd.none
@@ -324,16 +344,22 @@ update msg model =
         RecieveGeneratedNumberLiteral signature ->
             let
                 stackResult =
-                    applyPatternsToStack Array.empty castingContext (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern))
+                    applyPatternsToStack Array.empty castingContext (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern model.insertionPoint))
 
                 newPattern =
                     getPatternFromSignature signature
             in
             ( { model
-                | patternArray = addToPatternArray model newPattern
+                | patternArray = addToPatternArray model newPattern model.insertionPoint
                 , ui = { ui | patternInputField = "" }
                 , stack = stackResult.stack
                 , castingContext = stackResult.ctx
+                , insertionPoint =
+                    if model.insertionPoint > Array.length model.patternArray then
+                        0
+
+                    else
+                        model.insertionPoint
               }
             , Cmd.none
             )
@@ -574,6 +600,17 @@ update msg model =
               }
             , Cmd.none
             )
+
+        SetInsertionPoint index keys ->
+            if keys.shift then
+                if model.insertionPoint == index then
+                    ( { model | insertionPoint = 0 }, Cmd.none )
+
+                else
+                    ( { model | insertionPoint = index }, Cmd.none )
+
+            else
+                ( model, Cmd.none )
 
 
 
