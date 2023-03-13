@@ -12597,6 +12597,13 @@ var $author$project$Components$App$Grid$getGridpointFromOffsetCoordinates = F2(
 	});
 var $author$project$Logic$App$Grid$generateDrawingFromSignature = F2(
 	function (signature, grid) {
+		var positionCoords = F4(
+			function (leftBound, topBound, coord, accumulator) {
+				return A2(
+					$elm$core$List$cons,
+					_Utils_Tuple2(coord.a + leftBound, coord.b + topBound),
+					accumulator);
+			});
 		var gridpointToPointConnection = function (point) {
 			return {
 				betweenOffsetValues: _Utils_Tuple3(
@@ -12638,6 +12645,15 @@ var $author$project$Logic$App$Grid$generateDrawingFromSignature = F2(
 						angle),
 					accumulator);
 			});
+		var getLeftmostAndTopmostValues = F2(
+			function (coord, accumulator) {
+				var x = coord.a;
+				var y = coord.b;
+				return {
+					x: A2($elm$core$Basics$min, x, accumulator.x),
+					y: A2($elm$core$Basics$min, y, accumulator.y)
+				};
+			});
 		var directionToCoord = function (direction) {
 			return A2(
 				$elm$core$Maybe$withDefault,
@@ -12667,6 +12683,25 @@ var $author$project$Logic$App$Grid$generateDrawingFromSignature = F2(
 						[coord]);
 				}
 			});
+		var pathCoords = A3(
+			$elm$core$List$foldl,
+			coordsToPathCoords,
+			_List_Nil,
+			A2(
+				$elm$core$List$map,
+				directionToCoord,
+				$elm$core$List$reverse(
+					A3(
+						$elm$core$List$foldl,
+						signatureToAngles,
+						_List_fromArray(
+							[$author$project$Logic$App$Types$East, $author$project$Logic$App$Types$East]),
+						A2($elm$core$String$split, '', signature)))));
+		var leftmostAndTopmostValues = A3(
+			$elm$core$List$foldl,
+			getLeftmostAndTopmostValues,
+			{x: 0, y: 0},
+			pathCoords);
 		var coordToPointConnection = function (coord) {
 			return {
 				betweenOffsetValues: _Utils_Tuple3(
@@ -12740,18 +12775,9 @@ var $author$project$Logic$App$Grid$generateDrawingFromSignature = F2(
 				},
 				A3(
 					$elm$core$List$foldl,
-					coordsToPathCoords,
+					A2(positionCoords, 2 - leftmostAndTopmostValues.x, 2 - leftmostAndTopmostValues.y),
 					_List_Nil,
-					A2(
-						$elm$core$List$map,
-						directionToCoord,
-						$elm$core$List$reverse(
-							A3(
-								$elm$core$List$foldl,
-								signatureToAngles,
-								_List_fromArray(
-									[$author$project$Logic$App$Types$East, $author$project$Logic$App$Types$East]),
-								A2($elm$core$String$split, '', signature))))))).b;
+					pathCoords))).b;
 	});
 var $author$project$Main$updatePatternArrayFromQueue = function (model) {
 	if ($elm$core$List$length(model.importQueue) > 0) {

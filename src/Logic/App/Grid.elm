@@ -72,6 +72,20 @@ generateDrawingFromSignature signature grid =
             , betweenOffsetValues = ( ( 0, 0 ), ( 0, 0 ), ( 0, 0 ) )
             }
 
+        getLeftmostAndTopmostValues coord accumulator =
+            case coord of
+                ( x, y ) ->
+                    { x = min x accumulator.x, y = min y accumulator.y }
+
+        leftmostAndTopmostValues =
+            List.foldl getLeftmostAndTopmostValues { x = 0, y = 0 } pathCoords
+
+        positionCoords leftBound topBound coord accumulator =
+            ( Tuple.first coord + leftBound
+            , Tuple.second coord + topBound
+            )
+                :: accumulator
+
         connectPoints : GridPoint -> ( GridPoint, List GridPoint ) -> ( GridPoint, List GridPoint )
         connectPoints point accumulator =
             let
@@ -101,12 +115,16 @@ generateDrawingFromSignature signature grid =
 
                 Nothing ->
                     ( point, point :: drawing )
+
+        pathCoords =
+            String.split "" signature
+                |> List.foldl signatureToAngles [ East, East ]
+                |> List.reverse
+                |> List.map directionToCoord
+                |> List.foldl coordsToPathCoords []
     in
-    String.split "" signature
-        |> List.foldl signatureToAngles [ East, East ]
-        |> List.reverse
-        |> List.map directionToCoord
-        |> List.foldl coordsToPathCoords []
+    pathCoords
+        |> List.foldl (positionCoords (2 - leftmostAndTopmostValues.x) (2 - leftmostAndTopmostValues.y)) []
         |> List.map
             (\x ->
                 x
@@ -115,3 +133,13 @@ generateDrawingFromSignature signature grid =
             )
         |> List.foldr connectPoints ( emptyGridpoint, [] )
         |> Tuple.second
+
+
+
+{-
+   get points
+   move points down until top point == current line point
+   move points right until valid
+   apply to grid
+   connect
+-}
