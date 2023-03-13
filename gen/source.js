@@ -12464,6 +12464,10 @@ var $author$project$Main$mouseMoveDecoder = A5(
 		_List_fromArray(
 			['target', 'offsetWidth']),
 		$elm$json$Json$Decode$float));
+var $author$project$Logic$App$Utils$RegexPatterns$bookkeepersValuePattern = A2(
+	$elm$core$Maybe$withDefault,
+	$elm$regex$Regex$never,
+	$elm$regex$Regex$fromString(':(?=[^\\n]*[-v])[\\sv-]*'));
 var $author$project$Logic$App$Utils$RegexPatterns$commentPattern = A2(
 	$elm$core$Maybe$withDefault,
 	$elm$regex$Regex$never,
@@ -12476,24 +12480,35 @@ var $author$project$Logic$App$Utils$RegexPatterns$numberValuePattern = A2(
 var $elm$regex$Regex$replace = _Regex_replaceAtMost(_Regex_infinity);
 var $author$project$Logic$App$ImportExport$ImportParser$parseInput = function (input) {
 	var getPatternFromString = function (string) {
-		return (string === '{') ? $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName('open_paren') : ((string === '}') ? $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName('close_paren') : (A2($elm$regex$Regex$contains, $author$project$Logic$App$Utils$RegexPatterns$numberValuePattern, string) ? A2(
-			$elm$core$Debug$log,
-			'value',
-			$author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName(
-				$elm$core$String$trim(
+		return (string === '{') ? $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName('open_paren') : ((string === '}') ? $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName('close_paren') : (A2($elm$regex$Regex$contains, $author$project$Logic$App$Utils$RegexPatterns$numberValuePattern, string) ? $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName(
+			$elm$core$String$trim(
+				A2(
+					$elm$core$String$dropLeft,
+					1,
 					A2(
-						$elm$core$String$dropLeft,
-						1,
-						A2(
-							$elm$core$Maybe$withDefault,
-							'',
-							$elm$core$List$head(
-								A2(
-									$elm$core$List$map,
-									function (numVal) {
-										return numVal.match;
-									},
-									A2($elm$regex$Regex$find, $author$project$Logic$App$Utils$RegexPatterns$numberValuePattern, string)))))))) : $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName(string)));
+						$elm$core$Maybe$withDefault,
+						'',
+						$elm$core$List$head(
+							A2(
+								$elm$core$List$map,
+								function (val) {
+									return val.match;
+								},
+								A2($elm$regex$Regex$find, $author$project$Logic$App$Utils$RegexPatterns$numberValuePattern, string))))))) : (A2($elm$regex$Regex$contains, $author$project$Logic$App$Utils$RegexPatterns$bookkeepersValuePattern, string) ? $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName(
+			$elm$core$String$trim(
+				A2(
+					$elm$core$String$dropLeft,
+					1,
+					A2(
+						$elm$core$Maybe$withDefault,
+						'',
+						$elm$core$List$head(
+							A2(
+								$elm$core$List$map,
+								function (val) {
+									return val.match;
+								},
+								A2($elm$regex$Regex$find, $author$project$Logic$App$Utils$RegexPatterns$bookkeepersValuePattern, string))))))) : $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName(string))));
 	};
 	return A2(
 		$elm$core$Debug$log,
