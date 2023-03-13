@@ -1,4 +1,4 @@
-module Components.App.Panels.SaveExportPanel exposing (..)
+module Components.App.Panels.FilePanel exposing (..)
 
 import Array exposing (Array)
 import Components.App.Panels.Utils exposing (visibilityToDisplayStyle)
@@ -14,7 +14,7 @@ saveExportPanel : Model -> Html Msg
 saveExportPanel model =
     let
         visibility =
-            List.member SaveExportPanel model.ui.openPanels
+            List.member FilePanel model.ui.openPanels
     in
     div
         [ id "save_export_panel"
@@ -22,8 +22,13 @@ saveExportPanel model =
         , visibilityToDisplayStyle visibility
         ]
         [ h1 [ class "panel_title" ]
-            [ text "Save / Export" ]
-        , div [style "height" "300px", style "align-content" "center"]
+            [ text "Import" ]
+        , div [ style "align-self" "center", style "width" "100%"]
+            [ textarea [id "import_input", onInput SetImportInputValue] []]
+        , button [style "color" "white", onClick (ImportText model.ui.importInput)] [text "Import"]
+        , h1 [ class "panel_title" ]
+            [ text "Export" ]
+        , div [ style "height" "300px", style "align-content" "center" ]
             [ img
                 ([ src
                     (if model.gridGifSrc == "loading" then

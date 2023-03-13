@@ -309,7 +309,7 @@ patternRegistry =
     , { signature = "eeeeewaqaawe", internalName = "zone_entity/not_player", action = zoneEntity, displayName = "Zone Distillation: Non-Player", outputOptions = [ IotaListType EntityType ], selectedOutput = Just ( IotaListType EntityType, IotaList Array.empty ) }
     , { signature = "qqqqqwdeddwd", internalName = "zone_entity/living", action = zoneEntity, displayName = "Zone Distillation: Living", outputOptions = [ IotaListType EntityType ], selectedOutput = Just ( IotaListType EntityType, IotaList Array.empty ) }
     , { signature = "eeeeewaqaawd", internalName = "zone_entity/not_living", action = zoneEntity, displayName = "Zone Distillation: Non-Living", outputOptions = [ IotaListType EntityType ], selectedOutput = Just ( IotaListType EntityType, IotaList Array.empty ) }
-    , { signature = "edqde", internalName = "append", action = append, displayName = "Integration Distillation", outputOptions = [ IotaListType EntityType ], selectedOutput = Just ( IotaListType EntityType, IotaList Array.empty ) }
+    , { signature = "edqde", internalName = "append", action = append, displayName = "Integration Distillation", outputOptions = [], selectedOutput = Nothing }
     , { signature = "qaeaq", internalName = "concat", action = concat, displayName = "Combination Distillation", outputOptions = [], selectedOutput = Nothing }
     , { signature = "deeed", internalName = "index", action = index, displayName = "Selection Distillation", outputOptions = [], selectedOutput = Nothing }
     , { signature = "dadad", internalName = "for_each", action = forEach, displayName = "Thoth's Gambit", outputOptions = [], selectedOutput = Nothing }

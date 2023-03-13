@@ -514,7 +514,8 @@ button {
 }
 
 .input_label_box > label,
-.stored_iota_label {
+.stored_iota_label,
+#import_input {
     color: rgba(255, 255, 255, 0.6);
     font-family: 'fira';
     font-weight: bold;
@@ -524,7 +525,8 @@ button {
 }
 
 .input_label_box > input,
-.input_label_box > select {
+.input_label_box > select,
+#import_input {
     margin-right: 0.5em;
     margin-left: 0.25em;
     border-color: var(--primary_lighter);
@@ -562,4 +564,14 @@ button {
     align-self: center;
     margin-top: 0.5em;
     margin-bottom: 0.5em;
+}
+
+#import_input {
+    align-self: center;
+    min-width: calc(100% - 25px);
+    max-width: calc(100% - 25px);
+    font-size: small;
+    font-weight: normal;
+    height: 10em;
+    margin: 10px;
 }

@@ -18,6 +18,7 @@ type alias Model =
         , dragging : ( Bool, Int )
         , overDragHandle : Bool
         , patternElementMiddleLocations : List Float
+        , importInput : String
         }
     , grid : Grid
         

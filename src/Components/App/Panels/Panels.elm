@@ -7,7 +7,7 @@ import Html exposing (..)
 import Html.Attributes exposing (class, id)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (Msg)
-import Components.App.Panels.SaveExportPanel exposing (saveExportPanel)
+import Components.App.Panels.FilePanel exposing (saveExportPanel)
 
 
 panels : Model -> Html Msg

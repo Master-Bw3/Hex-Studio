@@ -58,13 +58,37 @@ menu model =
             , Icon.sliders |> Icon.styled [ Icon.sm ] |> Icon.view
             ]
         , button
-            ([ id "save_export_menu_button"
+            ([ id "home_menu_button"
              , class "menu_button"
-             , onClick (\event -> ViewPanel SaveExportPanel event.keys)
+             , style "margin-top" "auto"
+
+             --  , onClick (\event -> ViewPanel SaveExportPanel event.keys)
              ]
-                ++ highlightIfActive SaveExportPanel
+             -- ++ highlightIfActive SaveExportPanel
             )
             [ Icon.css
-            , Icon.download |> Icon.styled [ Icon.sm ] |> Icon.view
+            , Icon.home |> Icon.styled [ Icon.sm ] |> Icon.view
             ]
+        , button
+            ([ id "save_export_menu_button"
+             , class "menu_button"
+             , onClick (\event -> ViewPanel FilePanel event.keys)
+             ]
+                ++ highlightIfActive FilePanel
+            )
+            [ Icon.css
+            , Icon.file |> Icon.styled [ Icon.sm ] |> Icon.view
+            ]
+        , button
+            ([ id "settings_menu_button"
+             , class "menu_button"
+
+             --  , onClick (\event -> ViewPanel SaveExportPanel event.keys)
+             ]
+             -- ++ highlightIfActive SaveExportPanel
+            )
+            [ Icon.css
+            , Icon.gear |> Icon.styled [ Icon.sm ] |> Icon.view
+            ]
+        
         ]

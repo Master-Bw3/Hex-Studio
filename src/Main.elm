@@ -10,6 +10,7 @@ import Components.App.Grid exposing (..)
 import Html exposing (..)
 import Json.Decode exposing (Decoder)
 import Logic.App.Grid exposing (generateDrawingFromSignature)
+import Logic.App.ImportExport.ImportParser exposing (parseInput)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (..)
 import Logic.App.PatternList.PatternArray exposing (addToPatternArray, applyColorToPatternFromResult, updateDrawingColors)
@@ -53,6 +54,7 @@ init _ =
             , dragging = ( False, -1 )
             , patternElementMiddleLocations = []
             , overDragHandle = False
+            , importInput = ""
             }
       , grid =
             { height = 0
@@ -611,6 +613,16 @@ update msg model =
 
             else
                 ( model, Cmd.none )
+
+        SetImportInputValue string ->
+            ( { model | ui = { ui | importInput = string } }, Cmd.none )
+
+        ImportText string ->
+            let
+                _ =
+                    parseInput string
+            in
+            ( model, Cmd.none )
 
 
 
