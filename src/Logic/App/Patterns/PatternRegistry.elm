@@ -192,7 +192,7 @@ patternRegistry =
     , { signature = "aadaa", internalName = "duplicate", action = duplicate, displayName = "Gemini Decomposition", outputOptions = [], selectedOutput = Nothing }
     , { signature = "aaedd", internalName = "over", action = over, displayName = "Prospector's Gambit", outputOptions = [], selectedOutput = Nothing }
     , { signature = "ddqaa", internalName = "tuck", action = tuck, displayName = "Undertaker's Gambit", outputOptions = [], selectedOutput = Nothing }
-    , { signature = "aadadaaw", internalName = "two_dup", action = dup2, displayName = "Dioscuri Gambi", outputOptions = [], selectedOutput = Nothing }
+    , { signature = "aadadaaw", internalName = "two_dup", action = dup2, displayName = "Dioscuri Gambit", outputOptions = [], selectedOutput = Nothing }
     , { signature = "qwaeawqaeaqa", internalName = "stack_len", action = stackLength, displayName = "Flock's Reflection", outputOptions = [], selectedOutput = Nothing }
     , { signature = "aadaadaa", internalName = "duplicate_n", action = duplicateN, displayName = "Gemini Gambit", outputOptions = [], selectedOutput = Nothing }
     , { signature = "ddad", internalName = "fisherman", action = fisherman, displayName = "Fisherman's Gambit", outputOptions = [], selectedOutput = Nothing }

@@ -524,6 +524,11 @@ button {
     margin-left: 0.5em;
 }
 
+#import_input:focus {
+    outline: none;
+    border: 1px solid var(--primary_lightest);
+}
+
 .input_label_box > input,
 .input_label_box > select,
 #import_input {

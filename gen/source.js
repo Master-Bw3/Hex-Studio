@@ -4440,6 +4440,107 @@ var _Bitwise_shiftRightZfBy = F2(function(offset, a)
 });
 
 
+// CREATE
+
+var _Regex_never = /.^/;
+
+var _Regex_fromStringWith = F2(function(options, string)
+{
+	var flags = 'g';
+	if (options.multiline) { flags += 'm'; }
+	if (options.caseInsensitive) { flags += 'i'; }
+
+	try
+	{
+		return $elm$core$Maybe$Just(new RegExp(string, flags));
+	}
+	catch(error)
+	{
+		return $elm$core$Maybe$Nothing;
+	}
+});
+
+
+// USE
+
+var _Regex_contains = F2(function(re, string)
+{
+	return string.match(re) !== null;
+});
+
+
+var _Regex_findAtMost = F3(function(n, re, str)
+{
+	var out = [];
+	var number = 0;
+	var string = str;
+	var lastIndex = re.lastIndex;
+	var prevLastIndex = -1;
+	var result;
+	while (number++ < n && (result = re.exec(string)))
+	{
+		if (prevLastIndex == re.lastIndex) break;
+		var i = result.length - 1;
+		var subs = new Array(i);
+		while (i > 0)
+		{
+			var submatch = result[i];
+			subs[--i] = submatch
+				? $elm$core$Maybe$Just(submatch)
+				: $elm$core$Maybe$Nothing;
+		}
+		out.push(A4($elm$regex$Regex$Match, result[0], result.index, number, _List_fromArray(subs)));
+		prevLastIndex = re.lastIndex;
+	}
+	re.lastIndex = lastIndex;
+	return _List_fromArray(out);
+});
+
+
+var _Regex_replaceAtMost = F4(function(n, re, replacer, string)
+{
+	var count = 0;
+	function jsReplacer(match)
+	{
+		if (count++ >= n)
+		{
+			return match;
+		}
+		var i = arguments.length - 3;
+		var submatches = new Array(i);
+		while (i > 0)
+		{
+			var submatch = arguments[i];
+			submatches[--i] = submatch
+				? $elm$core$Maybe$Just(submatch)
+				: $elm$core$Maybe$Nothing;
+		}
+		return replacer(A4($elm$regex$Regex$Match, match, arguments[arguments.length - 2], count, _List_fromArray(submatches)));
+	}
+	return string.replace(re, jsReplacer);
+});
+
+var _Regex_splitAtMost = F3(function(n, re, str)
+{
+	var string = str;
+	var out = [];
+	var start = re.lastIndex;
+	var restoreLastIndex = re.lastIndex;
+	while (n--)
+	{
+		var result = re.exec(string);
+		if (!result) break;
+		out.push(string.slice(start, result.index));
+		start = re.lastIndex;
+	}
+	out.push(string.slice(start));
+	re.lastIndex = restoreLastIndex;
+	return _List_fromArray(out);
+});
+
+var _Regex_infinity = Infinity;
+
+
 
 // DECODER
 
@@ -5453,6 +5554,7 @@ var $author$project$Main$init = function (_v0) {
 				width: 0
 			},
 			gridGifSrc: '',
+			importQueue: _List_Nil,
 			insertionPoint: 0,
 			mousePos: _Utils_Tuple2(0.0, 0.0),
 			patternArray: $elm$core$Array$empty,
@@ -11052,7 +11154,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 				{action: $author$project$Logic$App$Patterns$Stack$duplicate, displayName: 'Gemini Decomposition', internalName: 'duplicate', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aadaa'},
 				{action: $author$project$Logic$App$Patterns$Stack$over, displayName: 'Prospector\'s Gambit', internalName: 'over', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aaedd'},
 				{action: $author$project$Logic$App$Patterns$Stack$tuck, displayName: 'Undertaker\'s Gambit', internalName: 'tuck', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddqaa'},
-				{action: $author$project$Logic$App$Patterns$Stack$dup2, displayName: 'Dioscuri Gambi', internalName: 'two_dup', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aadadaaw'},
+				{action: $author$project$Logic$App$Patterns$Stack$dup2, displayName: 'Dioscuri Gambit', internalName: 'two_dup', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aadadaaw'},
 				{action: $author$project$Logic$App$Patterns$Stack$stackLength, displayName: 'Flock\'s Reflection', internalName: 'stack_len', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qwaeawqaeaqa'},
 				{action: $author$project$Logic$App$Patterns$Stack$duplicateN, displayName: 'Gemini Gambit', internalName: 'duplicate_n', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aadaadaa'},
 				{action: $author$project$Logic$App$Patterns$Stack$fisherman, displayName: 'Fisherman\'s Gambit', internalName: 'fisherman', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddad'},
@@ -11816,8 +11918,11 @@ var $author$project$Logic$App$Patterns$MetaActions$applyMetaAction = F2(
 					});
 		}
 	});
-var $author$project$Logic$App$Types$East = {$: 'East'};
 var $author$project$Logic$App$Types$ErrorDirection = {$: 'ErrorDirection'};
+var $elm$core$String$concat = function (strings) {
+	return A2($elm$core$String$join, '', strings);
+};
+var $author$project$Logic$App$Types$East = {$: 'East'};
 var $author$project$Logic$App$Types$Northeast = {$: 'Northeast'};
 var $author$project$Logic$App$Types$Northwest = {$: 'Northwest'};
 var $author$project$Logic$App$Types$Southeast = {$: 'Southeast'};
@@ -11844,22 +11949,6 @@ var $author$project$Logic$App$Utils$DirectionMap$directionMap = _List_fromArray(
 		$author$project$Logic$App$Types$Northwest,
 		_Utils_Tuple2(-1, -1))
 	]);
-var $author$project$Components$App$Grid$getGridpointFromOffsetCoordinates = F2(
-	function (grid_, offsetCoords) {
-		var checkMatchingOffsetCoords = function (point) {
-			return _Utils_eq(
-				_Utils_Tuple2(point.offsetX, point.offsetY),
-				_Utils_Tuple2(offsetCoords.offsetX, offsetCoords.offsetY));
-		};
-		return A2(
-			$elm$core$Maybe$withDefault,
-			$author$project$Components$App$Grid$emptyGridpoint,
-			$elm$core$List$head(
-				A2(
-					$elm$core$List$filter,
-					checkMatchingOffsetCoords,
-					$elm$core$List$concat(grid_))));
-	});
 var $author$project$Logic$App$Utils$LetterMap$letterMap = _List_fromArray(
 	[
 		_Utils_Tuple2(
@@ -11953,167 +12042,6 @@ var $author$project$Logic$App$Utils$LetterMap$letterMap = _List_fromArray(
 		'e',
 		_Utils_Tuple2($author$project$Logic$App$Types$Southeast, $author$project$Logic$App$Types$Southwest))
 	]);
-var $author$project$Logic$App$Grid$generateDrawingFromSignature = F2(
-	function (signature, grid) {
-		var gridpointToPointConnection = function (point) {
-			return {
-				betweenOffsetValues: _Utils_Tuple3(
-					_Utils_Tuple2(0, 0),
-					_Utils_Tuple2(0, 0),
-					_Utils_Tuple2(0, 0)),
-				color: $author$project$Settings$Theme$accent1,
-				offsetX: point.offsetX,
-				offsetY: point.offsetY
-			};
-		};
-		var getNextDirection = F2(
-			function (prevDirection, angle) {
-				return A2(
-					$elm$core$Maybe$withDefault,
-					_Utils_Tuple2(
-						'',
-						_Utils_Tuple2($author$project$Logic$App$Types$ErrorDirection, $author$project$Logic$App$Types$ErrorDirection)),
-					$elm$core$List$head(
-						A2(
-							$elm$core$List$filter,
-							function (mapItem) {
-								var letter = mapItem.a;
-								var direction = mapItem.b;
-								return (_Utils_eq(letter, angle) && _Utils_eq(direction.a, prevDirection)) ? true : false;
-							},
-							$author$project$Logic$App$Utils$LetterMap$letterMap))).b.b;
-			});
-		var signatureToAngles = F2(
-			function (angle, accumulator) {
-				return A2(
-					$elm$core$List$cons,
-					A2(
-						getNextDirection,
-						A2(
-							$elm$core$Maybe$withDefault,
-							$author$project$Logic$App$Types$East,
-							$elm$core$List$head(accumulator)),
-						angle),
-					accumulator);
-			});
-		var directionToCoord = function (direction) {
-			return A2(
-				$elm$core$Maybe$withDefault,
-				_Utils_Tuple2(
-					$author$project$Logic$App$Types$ErrorDirection,
-					_Utils_Tuple2(0, 0)),
-				$elm$core$List$head(
-					A2(
-						$elm$core$List$filter,
-						function (mapItem) {
-							var dir = mapItem.a;
-							return _Utils_eq(dir, direction) ? true : false;
-						},
-						$author$project$Logic$App$Utils$DirectionMap$directionMap))).b;
-		};
-		var coordsToPathCoords = F2(
-			function (coord, accumulator) {
-				var _v1 = $elm$core$List$head(accumulator);
-				if (_v1.$ === 'Just') {
-					var prevPoint = _v1.a;
-					return A2(
-						$elm$core$List$cons,
-						_Utils_Tuple2(coord.a + prevPoint.a, coord.b + prevPoint.b),
-						accumulator);
-				} else {
-					return _List_fromArray(
-						[coord]);
-				}
-			});
-		var coordToPointConnection = function (coord) {
-			return {
-				betweenOffsetValues: _Utils_Tuple3(
-					_Utils_Tuple2(0, 0),
-					_Utils_Tuple2(0, 0),
-					_Utils_Tuple2(0, 0)),
-				color: $author$project$Settings$Theme$accent1,
-				offsetX: coord.a,
-				offsetY: coord.b
-			};
-		};
-		var connectPoints = F2(
-			function (point, accumulator) {
-				var prevPoint = accumulator.a;
-				var drawing = accumulator.b;
-				var _v0 = $elm$core$List$head(drawing);
-				if (_v0.$ === 'Just') {
-					return A2(
-						$elm$core$List$any,
-						function (x) {
-							return _Utils_eq(
-								_Utils_Tuple2(x.offsetX, x.offsetY),
-								_Utils_Tuple2(point.offsetX, point.offsetY));
-						},
-						drawing) ? _Utils_Tuple2(
-						point,
-						A2(
-							$elm$core$List$map,
-							function (x) {
-								return _Utils_eq(
-									_Utils_Tuple2(x.offsetX, x.offsetY),
-									_Utils_Tuple2(point.offsetX, point.offsetY)) ? _Utils_update(
-									x,
-									{
-										connectedPoints: A2(
-											$elm$core$List$cons,
-											gridpointToPointConnection(prevPoint),
-											x.connectedPoints)
-									}) : x;
-							},
-							drawing)) : _Utils_Tuple2(
-						point,
-						A2(
-							$elm$core$List$cons,
-							_Utils_update(
-								point,
-								{
-									connectedPoints: _List_fromArray(
-										[
-											gridpointToPointConnection(prevPoint)
-										])
-								}),
-							drawing));
-				} else {
-					return _Utils_Tuple2(
-						point,
-						A2($elm$core$List$cons, point, drawing));
-				}
-			});
-		return A3(
-			$elm$core$List$foldr,
-			connectPoints,
-			_Utils_Tuple2($author$project$Components$App$Grid$emptyGridpoint, _List_Nil),
-			A2(
-				$elm$core$List$map,
-				function (x) {
-					return A2(
-						$author$project$Components$App$Grid$getGridpointFromOffsetCoordinates,
-						grid,
-						coordToPointConnection(x));
-				},
-				A3(
-					$elm$core$List$foldl,
-					coordsToPathCoords,
-					_List_Nil,
-					A2(
-						$elm$core$List$map,
-						directionToCoord,
-						$elm$core$List$reverse(
-							A3(
-								$elm$core$List$foldl,
-								signatureToAngles,
-								_List_fromArray(
-									[$author$project$Logic$App$Types$East, $author$project$Logic$App$Types$East]),
-								A2($elm$core$String$split, '', signature))))))).b;
-	});
-var $elm$core$String$concat = function (strings) {
-	return A2($elm$core$String$join, '', strings);
-};
 var $author$project$Logic$App$Utils$GetAngleSignature$getAngleSignature = function (unflippedPath) {
 	var path = $elm$core$List$reverse(unflippedPath);
 	var getAngleLetter = F2(
@@ -12492,21 +12420,74 @@ var $author$project$Main$mouseMoveDecoder = A5(
 		_List_fromArray(
 			['target', 'offsetWidth']),
 		$elm$json$Json$Decode$float));
+var $elm$regex$Regex$Match = F4(
+	function (match, index, number, submatches) {
+		return {index: index, match: match, number: number, submatches: submatches};
+	});
+var $elm$regex$Regex$contains = _Regex_contains;
+var $elm$regex$Regex$find = _Regex_findAtMost(_Regex_infinity);
+var $elm$regex$Regex$fromStringWith = _Regex_fromStringWith;
+var $elm$regex$Regex$fromString = function (string) {
+	return A2(
+		$elm$regex$Regex$fromStringWith,
+		{caseInsensitive: false, multiline: false},
+		string);
+};
+var $elm$regex$Regex$never = _Regex_never;
+var $elm$regex$Regex$replace = _Regex_replaceAtMost(_Regex_infinity);
 var $elm$core$String$trim = _String_trim;
 var $author$project$Logic$App$ImportExport$ImportParser$parseInput = function (input) {
+	var numberValuePattern = A2(
+		$elm$core$Maybe$withDefault,
+		$elm$regex$Regex$never,
+		$elm$regex$Regex$fromString(':(?=[^\\n]*\\d)[\\d\\s.]*'));
+	var getPatternFromString = function (string) {
+		return (string === '{') ? $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName('open_paren') : ((string === '}') ? $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName('close_paren') : (A2($elm$regex$Regex$contains, numberValuePattern, string) ? A2(
+			$elm$core$Debug$log,
+			'value',
+			$author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName(
+				$elm$core$String$trim(
+					A2(
+						$elm$core$String$dropLeft,
+						1,
+						A2(
+							$elm$core$Maybe$withDefault,
+							'',
+							$elm$core$List$head(
+								A2(
+									$elm$core$List$map,
+									function (numVal) {
+										return numVal.match;
+									},
+									A2($elm$regex$Regex$find, numberValuePattern, string)))))))) : $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName(string)));
+	};
+	var commentPattern = A2(
+		$elm$core$Maybe$withDefault,
+		$elm$regex$Regex$never,
+		$elm$regex$Regex$fromString('\\/\\/.*'));
 	return A2(
 		$elm$core$Debug$log,
 		'i',
 		A2(
-			$elm$core$List$filter,
+			$elm$core$List$map,
+			getPatternFromString,
 			A2(
-				$elm$core$Basics$composeL,
-				$elm$core$Basics$not,
-				$elm$core$String$startsWith('//')),
-			A2(
-				$elm$core$List$map,
-				$elm$core$String$trim,
-				A2($elm$core$String$split, '\n', input))));
+				$elm$core$List$filter,
+				function (l) {
+					return l !== '';
+				},
+				A2(
+					$elm$core$List$map,
+					$elm$core$String$trim,
+					A2(
+						$elm$core$List$map,
+						A2(
+							$elm$regex$Regex$replace,
+							commentPattern,
+							function (_v0) {
+								return '';
+							}),
+						A2($elm$core$String$split, '\n', input))))));
 };
 var $elm$time$Time$posixToMillis = function (_v0) {
 	var millis = _v0.a;
@@ -12553,6 +12534,276 @@ var $elm_community$array_extra$Array$Extra$update = F2(
 			}
 		};
 	});
+var $author$project$Components$App$Grid$getGridpointFromOffsetCoordinates = F2(
+	function (grid_, offsetCoords) {
+		var checkMatchingOffsetCoords = function (point) {
+			return _Utils_eq(
+				_Utils_Tuple2(point.offsetX, point.offsetY),
+				_Utils_Tuple2(offsetCoords.offsetX, offsetCoords.offsetY));
+		};
+		return A2(
+			$elm$core$Maybe$withDefault,
+			$author$project$Components$App$Grid$emptyGridpoint,
+			$elm$core$List$head(
+				A2(
+					$elm$core$List$filter,
+					checkMatchingOffsetCoords,
+					$elm$core$List$concat(grid_))));
+	});
+var $author$project$Logic$App$Grid$generateDrawingFromSignature = F2(
+	function (signature, grid) {
+		var gridpointToPointConnection = function (point) {
+			return {
+				betweenOffsetValues: _Utils_Tuple3(
+					_Utils_Tuple2(0, 0),
+					_Utils_Tuple2(0, 0),
+					_Utils_Tuple2(0, 0)),
+				color: $author$project$Settings$Theme$accent1,
+				offsetX: point.offsetX,
+				offsetY: point.offsetY
+			};
+		};
+		var getNextDirection = F2(
+			function (prevDirection, angle) {
+				return A2(
+					$elm$core$Maybe$withDefault,
+					_Utils_Tuple2(
+						'',
+						_Utils_Tuple2($author$project$Logic$App$Types$ErrorDirection, $author$project$Logic$App$Types$ErrorDirection)),
+					$elm$core$List$head(
+						A2(
+							$elm$core$List$filter,
+							function (mapItem) {
+								var letter = mapItem.a;
+								var direction = mapItem.b;
+								return (_Utils_eq(letter, angle) && _Utils_eq(direction.a, prevDirection)) ? true : false;
+							},
+							$author$project$Logic$App$Utils$LetterMap$letterMap))).b.b;
+			});
+		var signatureToAngles = F2(
+			function (angle, accumulator) {
+				return A2(
+					$elm$core$List$cons,
+					A2(
+						getNextDirection,
+						A2(
+							$elm$core$Maybe$withDefault,
+							$author$project$Logic$App$Types$East,
+							$elm$core$List$head(accumulator)),
+						angle),
+					accumulator);
+			});
+		var directionToCoord = function (direction) {
+			return A2(
+				$elm$core$Maybe$withDefault,
+				_Utils_Tuple2(
+					$author$project$Logic$App$Types$ErrorDirection,
+					_Utils_Tuple2(0, 0)),
+				$elm$core$List$head(
+					A2(
+						$elm$core$List$filter,
+						function (mapItem) {
+							var dir = mapItem.a;
+							return _Utils_eq(dir, direction) ? true : false;
+						},
+						$author$project$Logic$App$Utils$DirectionMap$directionMap))).b;
+		};
+		var coordsToPathCoords = F2(
+			function (coord, accumulator) {
+				var _v1 = $elm$core$List$head(accumulator);
+				if (_v1.$ === 'Just') {
+					var prevPoint = _v1.a;
+					return A2(
+						$elm$core$List$cons,
+						_Utils_Tuple2(coord.a + prevPoint.a, coord.b + prevPoint.b),
+						accumulator);
+				} else {
+					return _List_fromArray(
+						[coord]);
+				}
+			});
+		var coordToPointConnection = function (coord) {
+			return {
+				betweenOffsetValues: _Utils_Tuple3(
+					_Utils_Tuple2(0, 0),
+					_Utils_Tuple2(0, 0),
+					_Utils_Tuple2(0, 0)),
+				color: $author$project$Settings$Theme$accent1,
+				offsetX: coord.a,
+				offsetY: coord.b
+			};
+		};
+		var connectPoints = F2(
+			function (point, accumulator) {
+				var prevPoint = accumulator.a;
+				var drawing = accumulator.b;
+				var _v0 = $elm$core$List$head(drawing);
+				if (_v0.$ === 'Just') {
+					return A2(
+						$elm$core$List$any,
+						function (x) {
+							return _Utils_eq(
+								_Utils_Tuple2(x.offsetX, x.offsetY),
+								_Utils_Tuple2(point.offsetX, point.offsetY));
+						},
+						drawing) ? _Utils_Tuple2(
+						point,
+						A2(
+							$elm$core$List$map,
+							function (x) {
+								return _Utils_eq(
+									_Utils_Tuple2(x.offsetX, x.offsetY),
+									_Utils_Tuple2(point.offsetX, point.offsetY)) ? _Utils_update(
+									x,
+									{
+										connectedPoints: A2(
+											$elm$core$List$cons,
+											gridpointToPointConnection(prevPoint),
+											x.connectedPoints)
+									}) : x;
+							},
+							drawing)) : _Utils_Tuple2(
+						point,
+						A2(
+							$elm$core$List$cons,
+							_Utils_update(
+								point,
+								{
+									connectedPoints: _List_fromArray(
+										[
+											gridpointToPointConnection(prevPoint)
+										])
+								}),
+							drawing));
+				} else {
+					return _Utils_Tuple2(
+						point,
+						A2($elm$core$List$cons, point, drawing));
+				}
+			});
+		return A3(
+			$elm$core$List$foldr,
+			connectPoints,
+			_Utils_Tuple2($author$project$Components$App$Grid$emptyGridpoint, _List_Nil),
+			A2(
+				$elm$core$List$map,
+				function (x) {
+					return A2(
+						$author$project$Components$App$Grid$getGridpointFromOffsetCoordinates,
+						grid,
+						coordToPointConnection(x));
+				},
+				A3(
+					$elm$core$List$foldl,
+					coordsToPathCoords,
+					_List_Nil,
+					A2(
+						$elm$core$List$map,
+						directionToCoord,
+						$elm$core$List$reverse(
+							A3(
+								$elm$core$List$foldl,
+								signatureToAngles,
+								_List_fromArray(
+									[$author$project$Logic$App$Types$East, $author$project$Logic$App$Types$East]),
+								A2($elm$core$String$split, '', signature))))))).b;
+	});
+var $author$project$Main$updatePatternArrayFromQueue = function (model) {
+	if ($elm$core$List$length(model.importQueue) > 0) {
+		var ui = model.ui;
+		var grid = model.grid;
+		var getPattern = A2(
+			$elm$core$Maybe$withDefault,
+			_Utils_Tuple2($author$project$Logic$App$Patterns$PatternRegistry$unknownPattern, $elm$core$Platform$Cmd$none),
+			$elm$core$List$head(model.importQueue));
+		var newUncoloredPattern = getPattern.a;
+		var drawing = model.grid.drawing;
+		var command = getPattern.b;
+		var castingContext = model.castingContext;
+		var stackResult = A3(
+			$author$project$Logic$App$Stack$Stack$applyPatternsToStack,
+			$elm$core$Array$empty,
+			castingContext,
+			$elm$core$List$reverse(
+				A2(
+					$elm$core$List$map,
+					function (x) {
+						return x.a;
+					},
+					$elm$core$Array$toList(
+						A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newUncoloredPattern, model.insertionPoint)))));
+		var newPattern = A2(
+			$author$project$Logic$App$PatternList$PatternArray$applyColorToPatternFromResult,
+			newUncoloredPattern,
+			A2(
+				$elm$core$Maybe$withDefault,
+				$author$project$Logic$App$Types$Failed,
+				A2($elm$core$Array$get, model.insertionPoint, stackResult.resultArray)));
+		var newGrid = _Utils_update(
+			grid,
+			{
+				drawing: _Utils_update(
+					drawing,
+					{activePath: _List_Nil, drawingMode: false}),
+				points: A2(
+					$author$project$Components$App$Grid$applyActivePathToGrid,
+					model.grid.points,
+					$author$project$Logic$App$PatternList$PatternArray$updateDrawingColors(
+						_Utils_Tuple2(
+							newPattern,
+							A2($author$project$Logic$App$Grid$generateDrawingFromSignature, newPattern.signature, model.grid.points))).b)
+			});
+		return _Utils_eq(command, $elm$core$Platform$Cmd$none) ? $author$project$Main$updatePatternArrayFromQueue(
+			A2(
+				$author$project$Logic$App$Patterns$MetaActions$applyMetaAction,
+				_Utils_update(
+					model,
+					{
+						castingContext: stackResult.ctx,
+						grid: newGrid,
+						importQueue: A2(
+							$elm$core$Maybe$withDefault,
+							_List_Nil,
+							$elm$core$List$tail(model.importQueue)),
+						insertionPoint: (_Utils_cmp(
+							model.insertionPoint,
+							$elm$core$Array$length(model.patternArray)) > 0) ? 0 : model.insertionPoint,
+						patternArray: A3(
+							$author$project$Logic$App$PatternList$PatternArray$addToPatternArray,
+							_Utils_update(
+								model,
+								{
+									grid: _Utils_update(
+										grid,
+										{
+											drawing: _Utils_update(
+												drawing,
+												{
+													activePath: A2($author$project$Logic$App$Grid$generateDrawingFromSignature, newPattern.signature, model.grid.points)
+												})
+										})
+								}),
+							newPattern,
+							model.insertionPoint),
+						stack: stackResult.stack,
+						ui: _Utils_update(
+							ui,
+							{patternInputField: ''})
+					}),
+				newPattern.metaAction)) : _Utils_Tuple2(
+			_Utils_update(
+				model,
+				{
+					importQueue: A2(
+						$elm$core$Maybe$withDefault,
+						_List_Nil,
+						$elm$core$List$tail(model.importQueue))
+				}),
+			command);
+	} else {
+		return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+	}
+};
 var $elm$random$Random$Seed = F2(
 	function (a, b) {
 		return {$: 'Seed', a: a, b: b};
@@ -13006,77 +13257,14 @@ var $author$project$Main$update = F2(
 					$elm$core$Platform$Cmd$none);
 			case 'InputPattern':
 				var name = msg.a;
-				var getPattern = $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName(name);
-				var newUncoloredPattern = getPattern.a;
-				var stackResult = A3(
-					$author$project$Logic$App$Stack$Stack$applyPatternsToStack,
-					$elm$core$Array$empty,
-					castingContext,
-					$elm$core$List$reverse(
-						A2(
-							$elm$core$List$map,
-							function (x) {
-								return x.a;
-							},
-							$elm$core$Array$toList(
-								A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newUncoloredPattern, model.insertionPoint)))));
-				var newPattern = A2(
-					$author$project$Logic$App$PatternList$PatternArray$applyColorToPatternFromResult,
-					newUncoloredPattern,
-					A2(
-						$elm$core$Maybe$withDefault,
-						$author$project$Logic$App$Types$Failed,
-						A2($elm$core$Array$get, model.insertionPoint, stackResult.resultArray)));
-				var newGrid = _Utils_update(
-					grid,
-					{
-						drawing: _Utils_update(
-							drawing,
-							{activePath: _List_Nil, drawingMode: false}),
-						points: A2(
-							$author$project$Components$App$Grid$applyActivePathToGrid,
-							model.grid.points,
-							$author$project$Logic$App$PatternList$PatternArray$updateDrawingColors(
-								_Utils_Tuple2(
-									newPattern,
-									A2($author$project$Logic$App$Grid$generateDrawingFromSignature, newPattern.signature, model.grid.points))).b)
-					});
-				var command = getPattern.b;
-				return _Utils_eq(command, $elm$core$Platform$Cmd$none) ? _Utils_Tuple2(
-					A2(
-						$author$project$Logic$App$Patterns$MetaActions$applyMetaAction,
-						_Utils_update(
-							model,
-							{
-								castingContext: stackResult.ctx,
-								grid: newGrid,
-								insertionPoint: (_Utils_cmp(
-									model.insertionPoint,
-									$elm$core$Array$length(model.patternArray)) > 0) ? 0 : model.insertionPoint,
-								patternArray: A3(
-									$author$project$Logic$App$PatternList$PatternArray$addToPatternArray,
-									_Utils_update(
-										model,
-										{
-											grid: _Utils_update(
-												grid,
-												{
-													drawing: _Utils_update(
-														drawing,
-														{
-															activePath: A2($author$project$Logic$App$Grid$generateDrawingFromSignature, newPattern.signature, model.grid.points)
-														})
-												})
-										}),
-									newPattern,
-									model.insertionPoint),
-								stack: stackResult.stack,
-								ui: _Utils_update(
-									ui,
-									{patternInputField: ''})
-							}),
-						newPattern.metaAction),
-					$elm$core$Platform$Cmd$none) : _Utils_Tuple2(model, command);
+				var newImportQueue = (name !== '') ? A2(
+					$elm$core$List$cons,
+					$author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName(name),
+					model.importQueue) : model.importQueue;
+				return $author$project$Main$updatePatternArrayFromQueue(
+					_Utils_update(
+						model,
+						{importQueue: newImportQueue}));
 			case 'SendNumberLiteralToGenerate':
 				var number = msg.a;
 				return _Utils_Tuple2(
@@ -13097,7 +13285,7 @@ var $author$project$Main$update = F2(
 							},
 							$elm$core$Array$toList(
 								A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, model.insertionPoint)))));
-				return _Utils_Tuple2(
+				return $author$project$Main$updatePatternArrayFromQueue(
 					_Utils_update(
 						model,
 						{
@@ -13110,8 +13298,7 @@ var $author$project$Main$update = F2(
 							ui: _Utils_update(
 								ui,
 								{patternInputField: ''})
-						}),
-					$elm$core$Platform$Cmd$none);
+						}));
 			case 'SelectPreviousSuggestion':
 				var suggestLength = msg.a;
 				var newIndex = (model.ui.suggestionIndex <= 0) ? (A2($elm$core$Basics$min, 3, suggestLength) - 1) : (model.ui.suggestionIndex - 1);
@@ -13474,8 +13661,11 @@ var $author$project$Main$update = F2(
 					$elm$core$Platform$Cmd$none);
 			default:
 				var string = msg.a;
-				var _v11 = $author$project$Logic$App$ImportExport$ImportParser$parseInput(string);
-				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+				var importQueue = $author$project$Logic$App$ImportExport$ImportParser$parseInput(string);
+				return $author$project$Main$updatePatternArrayFromQueue(
+					_Utils_update(
+						model,
+						{importQueue: importQueue}));
 		}
 	});
 var $author$project$Logic$App$Msg$MouseMove = function (a) {

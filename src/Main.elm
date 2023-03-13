@@ -81,9 +81,84 @@ init _ =
       , time = 0
       , gridGifSrc = ""
       , insertionPoint = 0
+      , importQueue = []
       }
     , Cmd.batch [ Task.attempt GetGrid (getElement "hex_grid"), Task.attempt GetContentSize (getElement "content") ]
     )
+
+
+updatePatternArrayFromQueue : Model -> ( Model, Cmd Msg )
+updatePatternArrayFromQueue model =
+    if List.length model.importQueue > 0 then
+        let
+            ui =
+                model.ui
+
+            grid =
+                model.grid
+
+            drawing =
+                model.grid.drawing
+
+            castingContext =
+                model.castingContext
+
+            stackResult =
+                applyPatternsToStack Array.empty castingContext (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newUncoloredPattern model.insertionPoint))
+
+            getPattern =
+                List.head model.importQueue
+                    |> Maybe.withDefault ( unknownPattern, Cmd.none )
+
+            newUncoloredPattern =
+                Tuple.first <| getPattern
+
+            newPattern =
+                applyColorToPatternFromResult newUncoloredPattern (Maybe.withDefault Failed (Array.get model.insertionPoint stackResult.resultArray))
+
+            command =
+                Tuple.second <| getPattern
+
+            newGrid =
+                { grid
+                    | points = applyActivePathToGrid model.grid.points (Tuple.second (updateDrawingColors ( newPattern, generateDrawingFromSignature newPattern.signature model.grid.points )))
+                    , drawing = { drawing | drawingMode = False, activePath = [] }
+                }
+        in
+        if command == Cmd.none then
+            updatePatternArrayFromQueue <|
+                applyMetaAction
+                    { model
+                        | patternArray =
+                            addToPatternArray
+                                { model
+                                    | grid =
+                                        { grid
+                                            | drawing =
+                                                { drawing | activePath = generateDrawingFromSignature newPattern.signature model.grid.points }
+                                        }
+                                }
+                                newPattern
+                                model.insertionPoint
+                        , ui = { ui | patternInputField = "" }
+                        , stack = stackResult.stack
+                        , castingContext = stackResult.ctx
+                        , grid = newGrid
+                        , importQueue = Maybe.withDefault [] <| List.tail model.importQueue
+                        , insertionPoint =
+                            if model.insertionPoint > Array.length model.patternArray then
+                                0
+
+                            else
+                                model.insertionPoint
+                    }
+                    newPattern.metaAction
+
+        else
+            ( { model | importQueue = Maybe.withDefault [] <| List.tail model.importQueue }, command )
+
+    else
+        ( model, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -287,58 +362,14 @@ update msg model =
 
         InputPattern name ->
             let
-                stackResult =
-                    applyPatternsToStack Array.empty castingContext (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newUncoloredPattern model.insertionPoint))
+                newImportQueue =
+                    if name /= "" then
+                        getPatternFromName name :: model.importQueue
 
-                getPattern =
-                    getPatternFromName name
-
-                newUncoloredPattern =
-                    Tuple.first <| getPattern
-
-                newPattern =
-                    applyColorToPatternFromResult newUncoloredPattern (Maybe.withDefault Failed (Array.get model.insertionPoint stackResult.resultArray))
-
-                command =
-                    Tuple.second <| getPattern
-
-                newGrid =
-                    { grid
-                        | points = applyActivePathToGrid model.grid.points (Tuple.second (updateDrawingColors ( newPattern, generateDrawingFromSignature newPattern.signature model.grid.points )))
-                        , drawing = { drawing | drawingMode = False, activePath = [] }
-                    }
+                    else
+                        model.importQueue
             in
-            if command == Cmd.none then
-                ( applyMetaAction
-                    { model
-                        | patternArray =
-                            addToPatternArray
-                                { model
-                                    | grid =
-                                        { grid
-                                            | drawing =
-                                                { drawing | activePath = generateDrawingFromSignature newPattern.signature model.grid.points }
-                                        }
-                                }
-                                newPattern
-                                model.insertionPoint
-                        , ui = { ui | patternInputField = "" }
-                        , stack = stackResult.stack
-                        , castingContext = stackResult.ctx
-                        , grid = newGrid
-                        , insertionPoint =
-                            if model.insertionPoint > Array.length model.patternArray then
-                                0
-
-                            else
-                                model.insertionPoint
-                    }
-                    newPattern.metaAction
-                , Cmd.none
-                )
-
-            else
-                ( model, command )
+            updatePatternArrayFromQueue { model | importQueue = newImportQueue }
 
         SendNumberLiteralToGenerate number ->
             ( model, HexNumGen.sendNumber number )
@@ -351,20 +382,19 @@ update msg model =
                 newPattern =
                     getPatternFromSignature signature
             in
-            ( { model
-                | patternArray = addToPatternArray model newPattern model.insertionPoint
-                , ui = { ui | patternInputField = "" }
-                , stack = stackResult.stack
-                , castingContext = stackResult.ctx
-                , insertionPoint =
-                    if model.insertionPoint > Array.length model.patternArray then
-                        0
+            updatePatternArrayFromQueue
+                { model
+                    | patternArray = addToPatternArray model newPattern model.insertionPoint
+                    , ui = { ui | patternInputField = "" }
+                    , stack = stackResult.stack
+                    , castingContext = stackResult.ctx
+                    , insertionPoint =
+                        if model.insertionPoint > Array.length model.patternArray then
+                            0
 
-                    else
-                        model.insertionPoint
-              }
-            , Cmd.none
-            )
+                        else
+                            model.insertionPoint
+                }
 
         SelectPreviousSuggestion suggestLength ->
             let
@@ -619,10 +649,10 @@ update msg model =
 
         ImportText string ->
             let
-                _ =
+                importQueue =
                     parseInput string
             in
-            ( model, Cmd.none )
+            updatePatternArrayFromQueue { model | importQueue = importQueue }
 
 
 

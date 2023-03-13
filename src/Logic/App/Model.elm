@@ -3,6 +3,7 @@ module Logic.App.Model exposing (..)
 import Array exposing (Array)
 import Logic.App.Types exposing (CastingContext, GridPoint, HeldItem, Iota, Panel, Pattern)
 import Logic.App.Types exposing (Grid)
+import Logic.App.Msg exposing (Msg)
 
 
 type alias Model =
@@ -33,4 +34,5 @@ type alias Model =
     , time : Int
     , gridGifSrc : String
     , insertionPoint : Int
+    , importQueue : List (Pattern, Cmd Msg)
     }
