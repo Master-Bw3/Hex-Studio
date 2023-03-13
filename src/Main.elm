@@ -376,24 +376,13 @@ update msg model =
 
         RecieveGeneratedNumberLiteral signature ->
             let
-                stackResult =
-                    applyPatternsToStack Array.empty castingContext (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern model.insertionPoint))
 
                 newPattern =
                     getPatternFromSignature signature
             in
             updatePatternArrayFromQueue
                 { model
-                    | patternArray = addToPatternArray model newPattern model.insertionPoint
-                    , ui = { ui | patternInputField = "" }
-                    , stack = stackResult.stack
-                    , castingContext = stackResult.ctx
-                    , insertionPoint =
-                        if model.insertionPoint > Array.length model.patternArray then
-                            0
-
-                        else
-                            model.insertionPoint
+                    |importQueue = (newPattern, Cmd.none) :: model.importQueue 
                 }
 
         SelectPreviousSuggestion suggestLength ->
