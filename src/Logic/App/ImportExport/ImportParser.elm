@@ -5,15 +5,12 @@ import Logic.App.Patterns.PatternRegistry exposing (getPatternFromName)
 import Logic.App.Types exposing (Pattern)
 import Regex
 import String exposing (String)
+import Logic.App.Utils.RegexPatterns exposing (numberValuePattern)
+import Logic.App.Utils.RegexPatterns exposing (commentPattern)
 
 
 parseInput input =
     let
-        commentPattern =
-            Maybe.withDefault Regex.never <| Regex.fromString "\\/\\/.*"
-
-        numberValuePattern =
-            Maybe.withDefault Regex.never <| Regex.fromString ":(?=[^\\n]*\\d)[\\d\\s.]*"
 
         getPatternFromString string =
             if string == "{" then

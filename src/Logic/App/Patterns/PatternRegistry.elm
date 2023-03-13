@@ -15,8 +15,10 @@ import Logic.App.Patterns.Spells exposing (..)
 import Logic.App.Patterns.Stack exposing (..)
 import Logic.App.Stack.Stack exposing (applyPatternToStack, applyPatternsToStack, applyToStackStopAtErrorOrHalt)
 import Logic.App.Types exposing (ActionResult, ApplyToStackResult(..), CastingContext, EntityType(..), HeldItem(..), Iota(..), IotaType(..), MetaActionMsg(..), Mishap(..), Pattern)
+import Logic.App.Utils.RegexPatterns exposing (bookkeepersPattern)
 import Logic.App.Utils.Utils exposing (unshift)
 import Ports.HexNumGen as HexNumGen
+import Regex
 import Settings.Theme exposing (..)
 
 
@@ -75,7 +77,32 @@ getPatternFromName name =
                     ( unknownPattern, HexNumGen.sendNumber number )
 
                 Nothing ->
-                    ( unknownPattern, Cmd.none )
+                    let
+                        regexMatch =
+                            Regex.find bookkeepersPattern name
+                                |> List.map (\x -> x.match)
+                                |> List.head
+                                |> Maybe.withDefault ""
+                                |> String.trim
+                        maskCode = String.split "" regexMatch
+
+                        _ = Debug.log regexMatch name
+                    in
+                    if regexMatch == String.trim name then
+                        ( { signature = ""
+                          , internalName = "mask"
+                          , action = mask maskCode
+                          , metaAction = None
+                          , displayName = "Bookkeeper's: " ++ String.concat maskCode
+                          , color = accent1
+                          , outputOptions = []
+                          , selectedOutput = Nothing
+                          }
+                        , Cmd.none
+                        )
+
+                    else
+                        ( unknownPattern, Cmd.none )
 
 
 parseBookkeeper : String -> Pattern
@@ -157,7 +184,7 @@ parseBookkeeper signature =
                 , internalName = "mask"
                 , action = mask maskCode
                 , metaAction = None
-                , displayName = "Bookkeeper's " ++ String.concat maskCode
+                , displayName = "Bookkeeper's: " ++ String.concat maskCode
                 , color = accent1
                 , outputOptions = []
                 , selectedOutput = Nothing

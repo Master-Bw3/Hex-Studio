@@ -7476,6 +7476,104 @@ var $author$project$Logic$App$Stack$Stack$applyPatternsToStack = F3(
 			false,
 			false);
 	});
+var $author$project$Logic$App$Types$None = {$: 'None'};
+var $elm$regex$Regex$Match = F4(
+	function (match, index, number, submatches) {
+		return {index: index, match: match, number: number, submatches: submatches};
+	});
+var $elm$regex$Regex$fromStringWith = _Regex_fromStringWith;
+var $elm$regex$Regex$fromString = function (string) {
+	return A2(
+		$elm$regex$Regex$fromStringWith,
+		{caseInsensitive: false, multiline: false},
+		string);
+};
+var $elm$regex$Regex$never = _Regex_never;
+var $author$project$Logic$App$Utils$RegexPatterns$bookkeepersPattern = A2(
+	$elm$core$Maybe$withDefault,
+	$elm$regex$Regex$never,
+	$elm$regex$Regex$fromString('^[v-]+$'));
+var $elm$core$String$concat = function (strings) {
+	return A2($elm$core$String$join, '', strings);
+};
+var $elm$regex$Regex$find = _Regex_findAtMost(_Regex_infinity);
+var $author$project$Logic$App$Types$CatastrophicFailure = {$: 'CatastrophicFailure'};
+var $author$project$Logic$App$Types$Garbage = function (a) {
+	return {$: 'Garbage', a: a};
+};
+var $author$project$Logic$App$Types$NotEnoughIotas = {$: 'NotEnoughIotas'};
+var $elm_community$array_extra$Array$Extra$map2 = F3(
+	function (combineAb, aArray, bArray) {
+		return $elm$core$Array$fromList(
+			A3(
+				$elm$core$List$map2,
+				combineAb,
+				$elm$core$Array$toList(aArray),
+				$elm$core$Array$toList(bArray)));
+	});
+var $elm$core$Array$repeat = F2(
+	function (n, e) {
+		return A2(
+			$elm$core$Array$initialize,
+			n,
+			function (_v0) {
+				return e;
+			});
+	});
+var $author$project$Logic$App$Patterns$Misc$mask = F3(
+	function (maskCode, stack, ctx) {
+		var action = F2(
+			function (code, iota) {
+				if (code === 'v') {
+					return $elm$core$Maybe$Nothing;
+				} else {
+					return $elm$core$Maybe$Just(iota);
+				}
+			});
+		if (_Utils_cmp(
+			$elm$core$Array$length(stack),
+			$elm$core$List$length(maskCode)) > -1) {
+			var newStack = A2(
+				$elm$core$Array$append,
+				A2(
+					$elm$core$Array$map,
+					function (x) {
+						return A2(
+							$elm$core$Maybe$withDefault,
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure),
+							x);
+					},
+					A2(
+						$elm$core$Array$filter,
+						function (x) {
+							return $author$project$Logic$App$Utils$Utils$isJust(x);
+						},
+						A3(
+							$elm_community$array_extra$Array$Extra$map2,
+							action,
+							$elm$core$Array$fromList(
+								$elm$core$List$reverse(maskCode)),
+							stack))),
+				A3(
+					$elm$core$Array$slice,
+					$elm$core$List$length(maskCode),
+					$elm$core$Array$length(stack),
+					stack));
+			return {ctx: ctx, stack: newStack, success: true};
+		} else {
+			return {
+				ctx: ctx,
+				stack: A2(
+					$elm$core$Array$append,
+					stack,
+					A2(
+						$elm$core$Array$repeat,
+						$elm$core$List$length(maskCode) - $elm$core$Array$length(stack),
+						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas))),
+				success: false
+			};
+		}
+	});
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Logic$App$Types$Boolean = function (a) {
 	return {$: 'Boolean', a: a};
@@ -7487,7 +7585,6 @@ var $author$project$Logic$App$Types$EntityType = {$: 'EntityType'};
 var $author$project$Logic$App$Types$IotaListType = function (a) {
 	return {$: 'IotaListType', a: a};
 };
-var $author$project$Logic$App$Types$None = {$: 'None'};
 var $author$project$Logic$App$Types$Number = function (a) {
 	return {$: 'Number', a: a};
 };
@@ -7497,15 +7594,10 @@ var $author$project$Logic$App$Types$Vector = function (a) {
 	return {$: 'Vector', a: a};
 };
 var $author$project$Logic$App$Types$VectorType = {$: 'VectorType'};
-var $author$project$Logic$App$Types$CatastrophicFailure = {$: 'CatastrophicFailure'};
-var $author$project$Logic$App$Types$Garbage = function (a) {
-	return {$: 'Garbage', a: a};
-};
 var $elm$core$Basics$abs = function (n) {
 	return (n < 0) ? (-n) : n;
 };
 var $author$project$Logic$App$Types$IncorrectIota = {$: 'IncorrectIota'};
-var $author$project$Logic$App$Types$NotEnoughIotas = {$: 'NotEnoughIotas'};
 var $author$project$Logic$App$Patterns$OperatorUtils$action1Input = F4(
 	function (stack, ctx, inputGetter, action) {
 		var newStack = A3(
@@ -7603,15 +7695,6 @@ var $ianmackenzie$elm_geometry$Vector3d$length = function (_v0) {
 var $ianmackenzie$elm_units$Length$meters = function (numMeters) {
 	return $ianmackenzie$elm_units$Quantity$Quantity(numMeters);
 };
-var $elm$core$Array$repeat = F2(
-	function (n, e) {
-		return A2(
-			$elm$core$Array$initialize,
-			n,
-			function (_v0) {
-				return e;
-			});
-	});
 var $ianmackenzie$elm_units$Quantity$unwrap = function (_v0) {
 	var value = _v0.a;
 	return value;
@@ -11675,6 +11758,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 var $elm$json$Json$Encode$float = _Json_wrap;
 var $author$project$Ports$HexNumGen$sendNumber = _Platform_outgoingPort('sendNumber', $elm$json$Json$Encode$float);
 var $elm$core$String$toFloat = _String_toFloat;
+var $elm$core$String$trim = _String_trim;
 var $author$project$Logic$App$Types$InvalidPattern = {$: 'InvalidPattern'};
 var $author$project$Settings$Theme$accent3 = '#e0b8b8';
 var $author$project$Logic$App$Patterns$PatternRegistry$unknownPattern = {
@@ -11716,19 +11800,36 @@ var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName = func
 				$author$project$Logic$App$Patterns$PatternRegistry$unknownPattern,
 				$author$project$Ports$HexNumGen$sendNumber(number));
 		} else {
-			return _Utils_Tuple2($author$project$Logic$App$Patterns$PatternRegistry$unknownPattern, $elm$core$Platform$Cmd$none);
+			var regexMatch = $elm$core$String$trim(
+				A2(
+					$elm$core$Maybe$withDefault,
+					'',
+					$elm$core$List$head(
+						A2(
+							$elm$core$List$map,
+							function (x) {
+								return x.match;
+							},
+							A2($elm$regex$Regex$find, $author$project$Logic$App$Utils$RegexPatterns$bookkeepersPattern, name)))));
+			var maskCode = A2($elm$core$String$split, '', regexMatch);
+			var _v2 = A2($elm$core$Debug$log, regexMatch, name);
+			return _Utils_eq(
+				regexMatch,
+				$elm$core$String$trim(name)) ? _Utils_Tuple2(
+				{
+					action: $author$project$Logic$App$Patterns$Misc$mask(maskCode),
+					color: $author$project$Settings$Theme$accent1,
+					displayName: 'Bookkeeper\'s: ' + $elm$core$String$concat(maskCode),
+					internalName: 'mask',
+					metaAction: $author$project$Logic$App$Types$None,
+					outputOptions: _List_Nil,
+					selectedOutput: $elm$core$Maybe$Nothing,
+					signature: ''
+				},
+				$elm$core$Platform$Cmd$none) : _Utils_Tuple2($author$project$Logic$App$Patterns$PatternRegistry$unknownPattern, $elm$core$Platform$Cmd$none);
 		}
 	}
 };
-var $elm_community$array_extra$Array$Extra$map2 = F3(
-	function (combineAb, aArray, bArray) {
-		return $elm$core$Array$fromList(
-			A3(
-				$elm$core$List$map2,
-				combineAb,
-				$elm$core$Array$toList(aArray),
-				$elm$core$Array$toList(bArray)));
-	});
 var $elm$core$Basics$modBy = _Basics_modBy;
 var $author$project$Components$App$Grid$verticalSpacing = function (scale) {
 	return ($author$project$Components$App$Grid$spacing(scale) * $elm$core$Basics$sqrt(3.0)) / 2;
@@ -11919,9 +12020,6 @@ var $author$project$Logic$App$Patterns$MetaActions$applyMetaAction = F2(
 		}
 	});
 var $author$project$Logic$App$Types$ErrorDirection = {$: 'ErrorDirection'};
-var $elm$core$String$concat = function (strings) {
-	return A2($elm$core$String$join, '', strings);
-};
 var $author$project$Logic$App$Types$East = {$: 'East'};
 var $author$project$Logic$App$Types$Northeast = {$: 'Northeast'};
 var $author$project$Logic$App$Types$Northwest = {$: 'Northwest'};
@@ -12165,60 +12263,6 @@ var $author$project$Logic$App$Patterns$PatternRegistry$numberLiteralGenerator = 
 			signature: angleSignature
 		};
 	});
-var $author$project$Logic$App$Patterns$Misc$mask = F3(
-	function (maskCode, stack, ctx) {
-		var action = F2(
-			function (code, iota) {
-				if (code === 'v') {
-					return $elm$core$Maybe$Nothing;
-				} else {
-					return $elm$core$Maybe$Just(iota);
-				}
-			});
-		if (_Utils_cmp(
-			$elm$core$Array$length(stack),
-			$elm$core$List$length(maskCode)) > -1) {
-			var newStack = A2(
-				$elm$core$Array$append,
-				A2(
-					$elm$core$Array$map,
-					function (x) {
-						return A2(
-							$elm$core$Maybe$withDefault,
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure),
-							x);
-					},
-					A2(
-						$elm$core$Array$filter,
-						function (x) {
-							return $author$project$Logic$App$Utils$Utils$isJust(x);
-						},
-						A3(
-							$elm_community$array_extra$Array$Extra$map2,
-							action,
-							$elm$core$Array$fromList(
-								$elm$core$List$reverse(maskCode)),
-							stack))),
-				A3(
-					$elm$core$Array$slice,
-					$elm$core$List$length(maskCode),
-					$elm$core$Array$length(stack),
-					stack));
-			return {ctx: ctx, stack: newStack, success: true};
-		} else {
-			return {
-				ctx: ctx,
-				stack: A2(
-					$elm$core$Array$append,
-					stack,
-					A2(
-						$elm$core$Array$repeat,
-						$elm$core$List$length(maskCode) - $elm$core$Array$length(stack),
-						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas))),
-				success: false
-			};
-		}
-	});
 var $author$project$Logic$App$Patterns$PatternRegistry$parseBookkeeper = function (signature) {
 	if (signature === '') {
 		return {
@@ -12312,7 +12356,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$parseBookkeeper = functio
 			return {
 				action: $author$project$Logic$App$Patterns$Misc$mask(maskCode),
 				color: $author$project$Settings$Theme$accent1,
-				displayName: 'Bookkeeper\'s ' + $elm$core$String$concat(maskCode),
+				displayName: 'Bookkeeper\'s: ' + $elm$core$String$concat(maskCode),
 				internalName: 'mask',
 				metaAction: $author$project$Logic$App$Types$None,
 				outputOptions: _List_Nil,
@@ -12420,29 +12464,19 @@ var $author$project$Main$mouseMoveDecoder = A5(
 		_List_fromArray(
 			['target', 'offsetWidth']),
 		$elm$json$Json$Decode$float));
-var $elm$regex$Regex$Match = F4(
-	function (match, index, number, submatches) {
-		return {index: index, match: match, number: number, submatches: submatches};
-	});
+var $author$project$Logic$App$Utils$RegexPatterns$commentPattern = A2(
+	$elm$core$Maybe$withDefault,
+	$elm$regex$Regex$never,
+	$elm$regex$Regex$fromString('\\/\\/.*'));
 var $elm$regex$Regex$contains = _Regex_contains;
-var $elm$regex$Regex$find = _Regex_findAtMost(_Regex_infinity);
-var $elm$regex$Regex$fromStringWith = _Regex_fromStringWith;
-var $elm$regex$Regex$fromString = function (string) {
-	return A2(
-		$elm$regex$Regex$fromStringWith,
-		{caseInsensitive: false, multiline: false},
-		string);
-};
-var $elm$regex$Regex$never = _Regex_never;
+var $author$project$Logic$App$Utils$RegexPatterns$numberValuePattern = A2(
+	$elm$core$Maybe$withDefault,
+	$elm$regex$Regex$never,
+	$elm$regex$Regex$fromString(':(?=[^\\n]*\\d)[\\d\\s.]*'));
 var $elm$regex$Regex$replace = _Regex_replaceAtMost(_Regex_infinity);
-var $elm$core$String$trim = _String_trim;
 var $author$project$Logic$App$ImportExport$ImportParser$parseInput = function (input) {
-	var numberValuePattern = A2(
-		$elm$core$Maybe$withDefault,
-		$elm$regex$Regex$never,
-		$elm$regex$Regex$fromString(':(?=[^\\n]*\\d)[\\d\\s.]*'));
 	var getPatternFromString = function (string) {
-		return (string === '{') ? $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName('open_paren') : ((string === '}') ? $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName('close_paren') : (A2($elm$regex$Regex$contains, numberValuePattern, string) ? A2(
+		return (string === '{') ? $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName('open_paren') : ((string === '}') ? $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName('close_paren') : (A2($elm$regex$Regex$contains, $author$project$Logic$App$Utils$RegexPatterns$numberValuePattern, string) ? A2(
 			$elm$core$Debug$log,
 			'value',
 			$author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName(
@@ -12459,12 +12493,8 @@ var $author$project$Logic$App$ImportExport$ImportParser$parseInput = function (i
 									function (numVal) {
 										return numVal.match;
 									},
-									A2($elm$regex$Regex$find, numberValuePattern, string)))))))) : $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName(string)));
+									A2($elm$regex$Regex$find, $author$project$Logic$App$Utils$RegexPatterns$numberValuePattern, string)))))))) : $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName(string)));
 	};
-	var commentPattern = A2(
-		$elm$core$Maybe$withDefault,
-		$elm$regex$Regex$never,
-		$elm$regex$Regex$fromString('\\/\\/.*'));
 	return A2(
 		$elm$core$Debug$log,
 		'i',
@@ -12483,7 +12513,7 @@ var $author$project$Logic$App$ImportExport$ImportParser$parseInput = function (i
 						$elm$core$List$map,
 						A2(
 							$elm$regex$Regex$replace,
-							commentPattern,
+							$author$project$Logic$App$Utils$RegexPatterns$commentPattern,
 							function (_v0) {
 								return '';
 							}),
