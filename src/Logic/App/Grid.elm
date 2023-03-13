@@ -56,7 +56,7 @@ generateDrawingFromSignature signature grid =
                         :: accumulator
 
                 Nothing ->
-                    [ coord ]
+                    [ ( Tuple.first coord - 2, Tuple.second coord ) ]
 
         coordToPointConnection coord =
             { color = accent1
@@ -78,13 +78,23 @@ generateDrawingFromSignature signature grid =
                     { x = min x accumulator.x, y = min y accumulator.y }
 
         leftmostAndTopmostValues =
-            List.foldl getLeftmostAndTopmostValues { x = 0, y = 0 } pathCoords
+            Debug.log "lmtm" <| List.foldl getLeftmostAndTopmostValues { x = 0, y = 0 } pathCoords
 
         positionCoords leftBound topBound coord accumulator =
-            ( Tuple.first coord + leftBound
-            , Tuple.second coord + topBound
-            )
-                :: accumulator
+            let
+                offsetBounds =
+                    if modBy 2 leftBound == modBy 2 topBound then
+                        ( leftBound, topBound )
+
+                    else
+                        ( leftBound + 1, topBound )
+            in
+            case offsetBounds of
+                ( offsetLeftBound, offsetTopBound ) ->
+                    ( Tuple.first coord + offsetLeftBound
+                    , Tuple.second coord + offsetTopBound
+                    )
+                        :: accumulator
 
         connectPoints : GridPoint -> ( GridPoint, List GridPoint ) -> ( GridPoint, List GridPoint )
         connectPoints point accumulator =
@@ -122,14 +132,17 @@ generateDrawingFromSignature signature grid =
                 |> List.reverse
                 |> List.map directionToCoord
                 |> List.foldl coordsToPathCoords []
+
+        pointConnectionToGridPoint point =
+            { emptyGridpoint | color = point.color, offsetX = point.offsetX, offsetY = point.offsetY, used = True }
     in
     pathCoords
-        |> List.foldl (positionCoords (2 - leftmostAndTopmostValues.x) (2 - leftmostAndTopmostValues.y)) []
+        |> List.foldl (positionCoords (0 - leftmostAndTopmostValues.x) (0 - leftmostAndTopmostValues.y)) []
         |> List.map
             (\x ->
                 x
                     |> coordToPointConnection
-                    |> getGridpointFromOffsetCoordinates grid
+                    |> pointConnectionToGridPoint
             )
         |> List.foldr connectPoints ( emptyGridpoint, [] )
         |> Tuple.second

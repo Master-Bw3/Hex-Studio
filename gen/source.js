@@ -12579,31 +12579,25 @@ var $elm_community$array_extra$Array$Extra$update = F2(
 			}
 		};
 	});
-var $author$project$Components$App$Grid$getGridpointFromOffsetCoordinates = F2(
-	function (grid_, offsetCoords) {
-		var checkMatchingOffsetCoords = function (point) {
-			return _Utils_eq(
-				_Utils_Tuple2(point.offsetX, point.offsetY),
-				_Utils_Tuple2(offsetCoords.offsetX, offsetCoords.offsetY));
-		};
-		return A2(
-			$elm$core$Maybe$withDefault,
-			$author$project$Components$App$Grid$emptyGridpoint,
-			$elm$core$List$head(
-				A2(
-					$elm$core$List$filter,
-					checkMatchingOffsetCoords,
-					$elm$core$List$concat(grid_))));
-	});
 var $author$project$Logic$App$Grid$generateDrawingFromSignature = F2(
 	function (signature, grid) {
 		var positionCoords = F4(
 			function (leftBound, topBound, coord, accumulator) {
+				var offsetBounds = _Utils_eq(
+					A2($elm$core$Basics$modBy, 2, leftBound),
+					A2($elm$core$Basics$modBy, 2, topBound)) ? _Utils_Tuple2(leftBound, topBound) : _Utils_Tuple2(leftBound + 1, topBound);
+				var offsetLeftBound = offsetBounds.a;
+				var offsetTopBound = offsetBounds.b;
 				return A2(
 					$elm$core$List$cons,
-					_Utils_Tuple2(coord.a + leftBound, coord.b + topBound),
+					_Utils_Tuple2(coord.a + offsetLeftBound, coord.b + offsetTopBound),
 					accumulator);
 			});
+		var pointConnectionToGridPoint = function (point) {
+			return _Utils_update(
+				$author$project$Components$App$Grid$emptyGridpoint,
+				{color: point.color, offsetX: point.offsetX, offsetY: point.offsetY, used: true});
+		};
 		var gridpointToPointConnection = function (point) {
 			return {
 				betweenOffsetValues: _Utils_Tuple3(
@@ -12680,7 +12674,9 @@ var $author$project$Logic$App$Grid$generateDrawingFromSignature = F2(
 						accumulator);
 				} else {
 					return _List_fromArray(
-						[coord]);
+						[
+							_Utils_Tuple2(coord.a - 2, coord.b)
+						]);
 				}
 			});
 		var pathCoords = A3(
@@ -12697,11 +12693,14 @@ var $author$project$Logic$App$Grid$generateDrawingFromSignature = F2(
 						_List_fromArray(
 							[$author$project$Logic$App$Types$East, $author$project$Logic$App$Types$East]),
 						A2($elm$core$String$split, '', signature)))));
-		var leftmostAndTopmostValues = A3(
-			$elm$core$List$foldl,
-			getLeftmostAndTopmostValues,
-			{x: 0, y: 0},
-			pathCoords);
+		var leftmostAndTopmostValues = A2(
+			$elm$core$Debug$log,
+			'lmtm',
+			A3(
+				$elm$core$List$foldl,
+				getLeftmostAndTopmostValues,
+				{x: 0, y: 0},
+				pathCoords));
 		var coordToPointConnection = function (coord) {
 			return {
 				betweenOffsetValues: _Utils_Tuple3(
@@ -12768,14 +12767,12 @@ var $author$project$Logic$App$Grid$generateDrawingFromSignature = F2(
 			A2(
 				$elm$core$List$map,
 				function (x) {
-					return A2(
-						$author$project$Components$App$Grid$getGridpointFromOffsetCoordinates,
-						grid,
+					return pointConnectionToGridPoint(
 						coordToPointConnection(x));
 				},
 				A3(
 					$elm$core$List$foldl,
-					A2(positionCoords, 2 - leftmostAndTopmostValues.x, 2 - leftmostAndTopmostValues.y),
+					A2(positionCoords, 0 - leftmostAndTopmostValues.x, 0 - leftmostAndTopmostValues.y),
 					_List_Nil,
 					pathCoords))).b;
 	});
@@ -13344,31 +13341,14 @@ var $author$project$Main$update = F2(
 			case 'RecieveGeneratedNumberLiteral':
 				var signature = msg.a;
 				var newPattern = $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature(signature);
-				var stackResult = A3(
-					$author$project$Logic$App$Stack$Stack$applyPatternsToStack,
-					$elm$core$Array$empty,
-					castingContext,
-					$elm$core$List$reverse(
-						A2(
-							$elm$core$List$map,
-							function (x) {
-								return x.a;
-							},
-							$elm$core$Array$toList(
-								A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, model.insertionPoint)))));
 				return $author$project$Main$updatePatternArrayFromQueue(
 					_Utils_update(
 						model,
 						{
-							castingContext: stackResult.ctx,
-							insertionPoint: (_Utils_cmp(
-								model.insertionPoint,
-								$elm$core$Array$length(model.patternArray)) > 0) ? 0 : model.insertionPoint,
-							patternArray: A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, model.insertionPoint),
-							stack: stackResult.stack,
-							ui: _Utils_update(
-								ui,
-								{patternInputField: ''})
+							importQueue: A2(
+								$elm$core$List$cons,
+								_Utils_Tuple2(newPattern, $elm$core$Platform$Cmd$none),
+								model.importQueue)
 						}));
 			case 'SelectPreviousSuggestion':
 				var suggestLength = msg.a;
@@ -16394,6 +16374,22 @@ var $elm$core$List$concatMap = F2(
 	function (f, list) {
 		return $elm$core$List$concat(
 			A2($elm$core$List$map, f, list));
+	});
+var $author$project$Components$App$Grid$getGridpointFromOffsetCoordinates = F2(
+	function (grid_, offsetCoords) {
+		var checkMatchingOffsetCoords = function (point) {
+			return _Utils_eq(
+				_Utils_Tuple2(point.offsetX, point.offsetY),
+				_Utils_Tuple2(offsetCoords.offsetX, offsetCoords.offsetY));
+		};
+		return A2(
+			$elm$core$Maybe$withDefault,
+			$author$project$Components$App$Grid$emptyGridpoint,
+			$elm$core$List$head(
+				A2(
+					$elm$core$List$filter,
+					checkMatchingOffsetCoords,
+					$elm$core$List$concat(grid_))));
 	});
 var $author$project$Components$App$Grid$findLinkedPoints = F2(
 	function (grid_, point) {
