@@ -35,7 +35,7 @@ drawPatterns patterns grid =
                 |> Maybe.withDefault []
                 |> List.length
                 |> (*) 2
-                |> (+) -2
+                |> (+) -6
 
         addPatternToGrid pattern accumulator =
             let
@@ -63,7 +63,7 @@ drawPatterns patterns grid =
             in
             { xOffset = drawPatternResult.rightBound + 1
             , yOffset = drawPatternResult.yOffset
-            , currentLowestY = Debug.log "h" (max accumulator.currentLowestY drawPatternResult.bottomBound)
+            , currentLowestY = (max accumulator.currentLowestY drawPatternResult.bottomBound)
             , points = accumulator.points ++ drawPatternResult.points
             , patternArray = unshift ( pattern, drawPatternResult.points ) accumulator.patternArray
             }

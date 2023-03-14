@@ -12805,7 +12805,7 @@ var $author$project$Logic$App$Grid$drawPattern = F3(
 	});
 var $author$project$Logic$App$Grid$drawPatterns = F2(
 	function (patterns, grid) {
-		var gridOffsetWidth = (-2) + (2 * $elm$core$List$length(
+		var gridOffsetWidth = (-6) + (2 * $elm$core$List$length(
 			A2(
 				$elm$core$Maybe$withDefault,
 				_List_Nil,
@@ -12822,10 +12822,7 @@ var $author$project$Logic$App$Grid$drawPatterns = F2(
 					}
 				}();
 				return {
-					currentLowestY: A2(
-						$elm$core$Debug$log,
-						'h',
-						A2($elm$core$Basics$max, accumulator.currentLowestY, drawPatternResult.bottomBound)),
+					currentLowestY: A2($elm$core$Basics$max, accumulator.currentLowestY, drawPatternResult.bottomBound),
 					patternArray: A2(
 						$author$project$Logic$App$Utils$Utils$unshift,
 						_Utils_Tuple2(pattern, drawPatternResult.points),
