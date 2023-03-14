@@ -44,23 +44,32 @@ drawPatterns patterns grid =
 
                 drawPatternResult =
                     if attemptDrawPatternResult.rightBound < gridOffsetWidth then
-                        { attemptDrawPatternResult | bottomBound = accumulator.yOffset }
+                        { yOffset = accumulator.yOffset
+                        , rightBound = attemptDrawPatternResult.rightBound
+                        , bottomBound = attemptDrawPatternResult.bottomBound
+                        , points = attemptDrawPatternResult.points
+                        }
 
                     else
                         let
                             drawPatternResultOld =
-                                drawPattern 0 (attemptDrawPatternResult.bottomBound + 1) pattern
+                                drawPattern 0 (accumulator.currentLowestY + 1) pattern
                         in
-                        { drawPatternResultOld | bottomBound = attemptDrawPatternResult.bottomBound + 1 }
+                        { yOffset = accumulator.currentLowestY + 1
+                        , rightBound = drawPatternResultOld.rightBound
+                        , bottomBound = drawPatternResultOld.bottomBound
+                        , points = drawPatternResultOld.points
+                        }
             in
             { xOffset = drawPatternResult.rightBound + 1
-            , yOffset = drawPatternResult.bottomBound
+            , yOffset = drawPatternResult.yOffset
+            , currentLowestY = Debug.log "h" (max accumulator.currentLowestY drawPatternResult.bottomBound)
             , points = accumulator.points ++ drawPatternResult.points
             , patternArray = unshift ( pattern, drawPatternResult.points ) accumulator.patternArray
             }
 
         drawPatternsResult =
-            Array.foldr addPatternToGrid { xOffset = 0, yOffset = 0, points = [], patternArray = Array.empty } patterns
+            Array.foldr addPatternToGrid { xOffset = 0, yOffset = 0, currentLowestY = 0, points = [], patternArray = Array.empty } patterns
     in
     { grid = { grid | points = applyPathToGrid (clearGrid grid.points) drawPatternsResult.points }
     , patternArray = drawPatternsResult.patternArray

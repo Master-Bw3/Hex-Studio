@@ -12815,30 +12815,30 @@ var $author$project$Logic$App$Grid$drawPatterns = F2(
 				var attemptDrawPatternResult = A3($author$project$Logic$App$Grid$drawPattern, accumulator.xOffset, accumulator.yOffset, pattern);
 				var drawPatternResult = function () {
 					if (_Utils_cmp(attemptDrawPatternResult.rightBound, gridOffsetWidth) < 0) {
-						return _Utils_update(
-							attemptDrawPatternResult,
-							{bottomBound: accumulator.yOffset});
+						return {bottomBound: attemptDrawPatternResult.bottomBound, points: attemptDrawPatternResult.points, rightBound: attemptDrawPatternResult.rightBound, yOffset: accumulator.yOffset};
 					} else {
-						var drawPatternResultOld = A3($author$project$Logic$App$Grid$drawPattern, 0, attemptDrawPatternResult.bottomBound + 1, pattern);
-						return _Utils_update(
-							drawPatternResultOld,
-							{bottomBound: attemptDrawPatternResult.bottomBound + 1});
+						var drawPatternResultOld = A3($author$project$Logic$App$Grid$drawPattern, 0, accumulator.currentLowestY + 1, pattern);
+						return {bottomBound: drawPatternResultOld.bottomBound, points: drawPatternResultOld.points, rightBound: drawPatternResultOld.rightBound, yOffset: accumulator.currentLowestY + 1};
 					}
 				}();
 				return {
+					currentLowestY: A2(
+						$elm$core$Debug$log,
+						'h',
+						A2($elm$core$Basics$max, accumulator.currentLowestY, drawPatternResult.bottomBound)),
 					patternArray: A2(
 						$author$project$Logic$App$Utils$Utils$unshift,
 						_Utils_Tuple2(pattern, drawPatternResult.points),
 						accumulator.patternArray),
 					points: _Utils_ap(accumulator.points, drawPatternResult.points),
 					xOffset: drawPatternResult.rightBound + 1,
-					yOffset: drawPatternResult.bottomBound
+					yOffset: drawPatternResult.yOffset
 				};
 			});
 		var drawPatternsResult = A3(
 			$elm$core$Array$foldr,
 			addPatternToGrid,
-			{patternArray: $elm$core$Array$empty, points: _List_Nil, xOffset: 0, yOffset: 0},
+			{currentLowestY: 0, patternArray: $elm$core$Array$empty, points: _List_Nil, xOffset: 0, yOffset: 0},
 			patterns);
 		return {
 			grid: _Utils_update(
