@@ -80,7 +80,7 @@ function trim_canvas(c, bound) {
 async function grid_to_gif() {
     let encoder;
 
-    n = 20;
+    n = 10;
     let bounds;
 
     for (let i = 0; i < n; i++) {
@@ -91,7 +91,7 @@ async function grid_to_gif() {
         const svgDataUrl = `data:image/svg+xml;charset=utf-8;base64,${svgDataBase64}`;
         let dataUrl;
 
-        await sleep(50);
+        await sleep(100);
         const image = new Image();
         image.src = svgDataUrl;
 
