@@ -1,15 +1,74 @@
 module Logic.App.Grid exposing (..)
 
-import Components.App.Grid exposing (emptyGridpoint, getGridpointFromOffsetCoordinates)
+import Array exposing (Array)
+import Components.App.Grid exposing (applyPathToGrid, emptyGridpoint)
 import List.Extra as List
 import Logic.App.Types exposing (Direction(..), Grid, GridPoint, Pattern)
 import Logic.App.Utils.DirectionMap exposing (directionMap)
 import Logic.App.Utils.LetterMap exposing (letterMap)
+import Logic.App.Utils.Utils exposing (unshift)
 import Settings.Theme exposing (accent1)
 
 
-generateDrawingFromSignature : String -> List (List GridPoint) -> List GridPoint
-generateDrawingFromSignature signature grid =
+clearGrid : List (List GridPoint) -> List (List GridPoint)
+clearGrid points =
+    List.map
+        (\row ->
+            List.map
+                (\point ->
+                    { point
+                        | used = False
+                        , color = accent1
+                        , connectedPoints = []
+                    }
+                )
+                row
+        )
+        points
+
+
+drawPatterns : Array Pattern -> Grid -> { grid : Grid, patternArray : Array ( Pattern, List GridPoint ) }
+drawPatterns patterns grid =
+    let
+        gridOffsetWidth =
+            List.head grid.points
+                |> Maybe.withDefault []
+                |> List.length
+                |> (*) 2
+                |> (+) -2
+
+        addPatternToGrid pattern accumulator =
+            let
+                attemptDrawPatternResult =
+                    drawPattern accumulator.xOffset accumulator.yOffset pattern
+
+                drawPatternResult =
+                    if attemptDrawPatternResult.rightBound < gridOffsetWidth then
+                        { attemptDrawPatternResult | bottomBound = accumulator.yOffset }
+
+                    else
+                        let
+                            drawPatternResultOld =
+                                drawPattern 0 (attemptDrawPatternResult.bottomBound + 1) pattern
+                        in
+                        { drawPatternResultOld | bottomBound = attemptDrawPatternResult.bottomBound + 1 }
+            in
+            { xOffset = drawPatternResult.rightBound + 1
+            , yOffset = drawPatternResult.bottomBound
+            , points = accumulator.points ++ drawPatternResult.points
+            , patternArray = unshift ( pattern, drawPatternResult.points ) accumulator.patternArray
+            }
+
+        drawPatternsResult =
+            Array.foldr addPatternToGrid { xOffset = 0, yOffset = 0, points = [], patternArray = Array.empty } patterns
+    in
+    { grid = { grid | points = applyPathToGrid (clearGrid grid.points) drawPatternsResult.points }
+    , patternArray = drawPatternsResult.patternArray
+    }
+
+
+drawPattern : Int -> Int -> Pattern -> { points : List GridPoint, bottomBound : Int, rightBound : Int }
+drawPattern xOffset yOffset pattern =
     let
         getNextDirection prevDirection angle =
             List.filter
@@ -59,14 +118,14 @@ generateDrawingFromSignature signature grid =
                     [ ( Tuple.first coord - 2, Tuple.second coord ) ]
 
         coordToPointConnection coord =
-            { color = accent1
+            { color = pattern.color
             , offsetX = Tuple.first coord
             , offsetY = Tuple.second coord
             , betweenOffsetValues = ( ( 0, 0 ), ( 0, 0 ), ( 0, 0 ) )
             }
 
         gridpointToPointConnection point =
-            { color = accent1
+            { color = pattern.color
             , offsetX = point.offsetX
             , offsetY = point.offsetY
             , betweenOffsetValues = ( ( 0, 0 ), ( 0, 0 ), ( 0, 0 ) )
@@ -78,7 +137,7 @@ generateDrawingFromSignature signature grid =
                     { x = min x accumulator.x, y = min y accumulator.y }
 
         leftmostAndTopmostValues =
-            Debug.log "lmtm" <| List.foldl getLeftmostAndTopmostValues { x = 0, y = 0 } pathCoords
+            List.foldl getLeftmostAndTopmostValues { x = 0, y = 0 } pathCoords
 
         positionCoords leftBound topBound coord accumulator =
             let
@@ -127,7 +186,7 @@ generateDrawingFromSignature signature grid =
                     ( point, point :: drawing )
 
         pathCoords =
-            String.split "" signature
+            String.split "" pattern.signature
                 |> List.foldl signatureToAngles [ East, East ]
                 |> List.reverse
                 |> List.map directionToCoord
@@ -135,24 +194,26 @@ generateDrawingFromSignature signature grid =
 
         pointConnectionToGridPoint point =
             { emptyGridpoint | color = point.color, offsetX = point.offsetX, offsetY = point.offsetY, used = True }
+
+        bottomAndRightBound =
+            List.foldl (positionCoords (xOffset - leftmostAndTopmostValues.x) (yOffset - leftmostAndTopmostValues.y)) [] pathCoords
+                |> List.foldl getbottomAndRightBound { right = 0, bottom = 0 }
+
+        getbottomAndRightBound coord accumulator =
+            case coord of
+                ( x, y ) ->
+                    { right = max x accumulator.right, bottom = max y accumulator.bottom }
+
+        grid =
+            pathCoords
+                |> List.foldl (positionCoords (xOffset - leftmostAndTopmostValues.x) (yOffset - leftmostAndTopmostValues.y)) []
+                |> List.map
+                    (\x ->
+                        x
+                            |> coordToPointConnection
+                            |> pointConnectionToGridPoint
+                    )
+                |> List.foldr connectPoints ( emptyGridpoint, [] )
+                |> Tuple.second
     in
-    pathCoords
-        |> List.foldl (positionCoords (0 - leftmostAndTopmostValues.x) (0 - leftmostAndTopmostValues.y)) []
-        |> List.map
-            (\x ->
-                x
-                    |> coordToPointConnection
-                    |> pointConnectionToGridPoint
-            )
-        |> List.foldr connectPoints ( emptyGridpoint, [] )
-        |> Tuple.second
-
-
-
-{-
-   get points
-   move points down until top point == current line point
-   move points right until valid
-   apply to grid
-   connect
--}
+    { points = grid, bottomBound = bottomAndRightBound.bottom, rightBound = bottomAndRightBound.right }

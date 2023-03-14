@@ -9,7 +9,7 @@ import Components.App.Content exposing (content)
 import Components.App.Grid exposing (..)
 import Html exposing (..)
 import Json.Decode exposing (Decoder)
-import Logic.App.Grid exposing (generateDrawingFromSignature)
+import Logic.App.Grid exposing (drawPattern, drawPatterns)
 import Logic.App.ImportExport.ImportParser exposing (parseInput)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (..)
@@ -20,7 +20,7 @@ import Logic.App.Stack.Stack exposing (applyPatternsToStack)
 import Logic.App.Types exposing (..)
 import Logic.App.Utils.GetAngleSignature exposing (getAngleSignature)
 import Logic.App.Utils.GetIotaValue exposing (getIotaFromString)
-import Logic.App.Utils.Utils exposing (removeFromArray)
+import Logic.App.Utils.Utils exposing (removeFromArray, unshift)
 import Ports.CheckMouseOverDragHandle as CheckMouseOverDragHandle
 import Ports.GetElementBoundingBoxById as GetElementBoundingBoxById
 import Ports.GetGridDrawingAsGif as GetGridDrawingAsGif
@@ -94,56 +94,53 @@ updatePatternArrayFromQueue model =
             ui =
                 model.ui
 
-            grid =
-                model.grid
-
-            drawing =
-                model.grid.drawing
-
             castingContext =
                 model.castingContext
 
             stackResult =
-                applyPatternsToStack Array.empty castingContext (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newUncoloredPattern model.insertionPoint))
+                applyPatternsToStack Array.empty castingContext (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern model.insertionPoint))
 
             getPattern =
                 List.head model.importQueue
                     |> Maybe.withDefault ( unknownPattern, Cmd.none )
 
-            newUncoloredPattern =
-                Tuple.first <| getPattern
-
             newPattern =
-                applyColorToPatternFromResult newUncoloredPattern (Maybe.withDefault Failed (Array.get model.insertionPoint stackResult.resultArray))
+                Tuple.first <| getPattern
 
             command =
                 Tuple.second <| getPattern
 
-            newGrid =
-                { grid
-                    | points = applyActivePathToGrid model.grid.points (Tuple.second (updateDrawingColors ( newPattern, generateDrawingFromSignature newPattern.signature model.grid.points )))
-                    , drawing = { drawing | drawingMode = False, activePath = [] }
-                }
+            newUncoloredPatternArray =
+                addToPatternArray
+                    model
+                    newPattern
+                    model.insertionPoint
+
+            newPatternArray =
+                Array.map2
+                    (\patternTuple result ->
+                        updateDrawingColors ( applyColorToPatternFromResult (Tuple.first patternTuple) result, Tuple.second patternTuple )
+                    )
+                    newUncoloredPatternArray
+                    stackResult.resultArray
+
+            patterns =
+                Array.map (\x -> Tuple.first x) newPatternArray
+
+            drawPatternsResult =
+                drawPatterns patterns model.grid
+
+
         in
         if command == Cmd.none then
             updatePatternArrayFromQueue <|
                 applyMetaAction
                     { model
-                        | patternArray =
-                            addToPatternArray
-                                { model
-                                    | grid =
-                                        { grid
-                                            | drawing =
-                                                { drawing | activePath = generateDrawingFromSignature newPattern.signature model.grid.points }
-                                        }
-                                }
-                                newPattern
-                                model.insertionPoint
+                        | patternArray = drawPatternsResult.patternArray
                         , ui = { ui | patternInputField = "" }
                         , stack = stackResult.stack
                         , castingContext = stackResult.ctx
-                        , grid = newGrid
+                        , grid = drawPatternsResult.grid
                         , importQueue = Maybe.withDefault [] <| List.tail model.importQueue
                         , insertionPoint =
                             if model.insertionPoint > Array.length model.patternArray then
@@ -245,7 +242,7 @@ update msg model =
                 if List.length drawing.activePath > 1 then
                     let
                         stackResult =
-                            applyPatternsToStack Array.empty castingContext (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newUncoloredPattern model.insertionPoint))
+                            applyPatternsToStack Array.empty castingContext (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern model.insertionPoint))
 
                         newStack =
                             stackResult.stack
@@ -253,21 +250,32 @@ update msg model =
                         resultArray =
                             stackResult.resultArray
 
-                        newUncoloredPattern =
-                            getPatternFromSignature <| getAngleSignature drawing.activePath
-
                         newPattern =
-                            applyColorToPatternFromResult newUncoloredPattern (Maybe.withDefault Failed (Array.get model.insertionPoint resultArray))
+                            getPatternFromSignature <| getAngleSignature drawing.activePath
+                        
+                        newUncoloredPatternArray =
+                            addToPatternArray
+                                model
+                                newPattern
+                                model.insertionPoint
+
+                        newPatternArray =
+                            Array.map2
+                                (\patternTuple result ->
+                                    updateDrawingColors ( applyColorToPatternFromResult (Tuple.first patternTuple) result, Tuple.second patternTuple )
+                                )
+                                newUncoloredPatternArray
+                                resultArray
 
                         newGrid =
                             { grid
-                                | points = applyActivePathToGrid model.grid.points (Tuple.second (updateDrawingColors ( newPattern, drawing.activePath )))
+                                | points = updateGridPoints grid.width grid.height newPatternArray [] settings.gridScale
                                 , drawing = { drawing | drawingMode = False, activePath = [] }
                             }
                     in
                     ( applyMetaAction
                         { model
-                            | patternArray = addToPatternArray model newPattern model.insertionPoint
+                            | patternArray = newPatternArray
                             , grid = newGrid
                             , stack = newStack
                             , castingContext = stackResult.ctx
@@ -376,13 +384,12 @@ update msg model =
 
         RecieveGeneratedNumberLiteral signature ->
             let
-
                 newPattern =
                     getPatternFromSignature signature
             in
             updatePatternArrayFromQueue
                 { model
-                    |importQueue = (newPattern, Cmd.none) :: model.importQueue 
+                    | importQueue = ( newPattern, Cmd.none ) :: model.importQueue
                 }
 
         SelectPreviousSuggestion suggestLength ->

@@ -6294,7 +6294,6 @@ var $author$project$Main$subscriptions = function (_v0) {
 };
 var $author$project$Logic$App$Types$Artifact = {$: 'Artifact'};
 var $author$project$Logic$App$Types$Cypher = {$: 'Cypher'};
-var $author$project$Logic$App$Types$Failed = {$: 'Failed'};
 var $author$project$Logic$App$Types$Focus = {$: 'Focus'};
 var $author$project$Logic$App$Types$Pie = {$: 'Pie'};
 var $author$project$Logic$App$Types$Spellbook = {$: 'Spellbook'};
@@ -7019,38 +7018,6 @@ var $author$project$Logic$App$PatternList$PatternArray$addToPatternArray = F3(
 			$author$project$Logic$App$PatternList$PatternArray$updateDrawingColors(patternDrawingPair),
 			patternList);
 	});
-var $author$project$Components$App$Grid$applyPathToGrid = F2(
-	function (gridPoints, pointsToAdd) {
-		var replace = function (pnt) {
-			var replacedPnt = $elm$core$List$head(
-				A2(
-					$elm$core$List$filter,
-					function (activePnt) {
-						return _Utils_eq(
-							_Utils_Tuple2(activePnt.offsetX, activePnt.offsetY),
-							_Utils_Tuple2(pnt.offsetX, pnt.offsetY));
-					},
-					pointsToAdd));
-			if (replacedPnt.$ === 'Just') {
-				var point = replacedPnt.a;
-				return _Utils_update(
-					pnt,
-					{color: $author$project$Settings$Theme$accent2, connectedPoints: point.connectedPoints, used: true});
-			} else {
-				return pnt;
-			}
-		};
-		return A2(
-			$elm$core$List$map,
-			function (row) {
-				return A2($elm$core$List$map, replace, row);
-			},
-			gridPoints);
-	});
-var $author$project$Components$App$Grid$applyActivePathToGrid = F2(
-	function (gridPoints, activePoints) {
-		return A2($author$project$Components$App$Grid$applyPathToGrid, gridPoints, activePoints);
-	});
 var $author$project$Settings$Theme$accent1 = '#BAC5E2';
 var $author$project$Settings$Theme$accent4 = '#dd6666';
 var $author$project$Settings$Theme$accent5 = '#E0E3B8';
@@ -7076,6 +7043,7 @@ var $author$project$Logic$App$Types$PatternIota = F2(
 		return {$: 'PatternIota', a: a, b: b};
 	});
 var $author$project$Logic$App$Types$Considered = {$: 'Considered'};
+var $author$project$Logic$App$Types$Failed = {$: 'Failed'};
 var $author$project$Logic$App$Types$OpenParenthesis = function (a) {
 	return {$: 'OpenParenthesis', a: a};
 };
@@ -11830,6 +11798,34 @@ var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName = func
 		}
 	}
 };
+var $author$project$Components$App$Grid$applyPathToGrid = F2(
+	function (gridPoints, pointsToAdd) {
+		var replace = function (pnt) {
+			var replacedPnt = $elm$core$List$head(
+				A2(
+					$elm$core$List$filter,
+					function (activePnt) {
+						return _Utils_eq(
+							_Utils_Tuple2(activePnt.offsetX, activePnt.offsetY),
+							_Utils_Tuple2(pnt.offsetX, pnt.offsetY));
+					},
+					pointsToAdd));
+			if (replacedPnt.$ === 'Just') {
+				var point = replacedPnt.a;
+				return _Utils_update(
+					pnt,
+					{color: $author$project$Settings$Theme$accent2, connectedPoints: point.connectedPoints, used: true});
+			} else {
+				return pnt;
+			}
+		};
+		return A2(
+			$elm$core$List$map,
+			function (row) {
+				return A2($elm$core$List$map, replace, row);
+			},
+			gridPoints);
+	});
 var $elm$core$Basics$modBy = _Basics_modBy;
 var $author$project$Components$App$Grid$verticalSpacing = function (scale) {
 	return ($author$project$Components$App$Grid$spacing(scale) * $elm$core$Basics$sqrt(3.0)) / 2;
@@ -12579,8 +12575,23 @@ var $elm_community$array_extra$Array$Extra$update = F2(
 			}
 		};
 	});
-var $author$project$Logic$App$Grid$generateDrawingFromSignature = F2(
-	function (signature, grid) {
+var $author$project$Logic$App$Grid$clearGrid = function (points) {
+	return A2(
+		$elm$core$List$map,
+		function (row) {
+			return A2(
+				$elm$core$List$map,
+				function (point) {
+					return _Utils_update(
+						point,
+						{color: $author$project$Settings$Theme$accent1, connectedPoints: _List_Nil, used: false});
+				},
+				row);
+		},
+		points);
+};
+var $author$project$Logic$App$Grid$drawPattern = F3(
+	function (xOffset, yOffset, pattern) {
 		var positionCoords = F4(
 			function (leftBound, topBound, coord, accumulator) {
 				var offsetBounds = _Utils_eq(
@@ -12604,11 +12615,20 @@ var $author$project$Logic$App$Grid$generateDrawingFromSignature = F2(
 					_Utils_Tuple2(0, 0),
 					_Utils_Tuple2(0, 0),
 					_Utils_Tuple2(0, 0)),
-				color: $author$project$Settings$Theme$accent1,
+				color: pattern.color,
 				offsetX: point.offsetX,
 				offsetY: point.offsetY
 			};
 		};
+		var getbottomAndRightBound = F2(
+			function (coord, accumulator) {
+				var x = coord.a;
+				var y = coord.b;
+				return {
+					bottom: A2($elm$core$Basics$max, y, accumulator.bottom),
+					right: A2($elm$core$Basics$max, x, accumulator.right)
+				};
+			});
 		var getNextDirection = F2(
 			function (prevDirection, angle) {
 				return A2(
@@ -12692,22 +12712,19 @@ var $author$project$Logic$App$Grid$generateDrawingFromSignature = F2(
 						signatureToAngles,
 						_List_fromArray(
 							[$author$project$Logic$App$Types$East, $author$project$Logic$App$Types$East]),
-						A2($elm$core$String$split, '', signature)))));
-		var leftmostAndTopmostValues = A2(
-			$elm$core$Debug$log,
-			'lmtm',
-			A3(
-				$elm$core$List$foldl,
-				getLeftmostAndTopmostValues,
-				{x: 0, y: 0},
-				pathCoords));
+						A2($elm$core$String$split, '', pattern.signature)))));
+		var leftmostAndTopmostValues = A3(
+			$elm$core$List$foldl,
+			getLeftmostAndTopmostValues,
+			{x: 0, y: 0},
+			pathCoords);
 		var coordToPointConnection = function (coord) {
 			return {
 				betweenOffsetValues: _Utils_Tuple3(
 					_Utils_Tuple2(0, 0),
 					_Utils_Tuple2(0, 0),
 					_Utils_Tuple2(0, 0)),
-				color: $author$project$Settings$Theme$accent1,
+				color: pattern.color,
 				offsetX: coord.a,
 				offsetY: coord.b
 			};
@@ -12760,7 +12777,7 @@ var $author$project$Logic$App$Grid$generateDrawingFromSignature = F2(
 						A2($elm$core$List$cons, point, drawing));
 				}
 			});
-		return A3(
+		var grid = A3(
 			$elm$core$List$foldr,
 			connectPoints,
 			_Utils_Tuple2($author$project$Components$App$Grid$emptyGridpoint, _List_Nil),
@@ -12772,20 +12789,78 @@ var $author$project$Logic$App$Grid$generateDrawingFromSignature = F2(
 				},
 				A3(
 					$elm$core$List$foldl,
-					A2(positionCoords, 0 - leftmostAndTopmostValues.x, 0 - leftmostAndTopmostValues.y),
+					A2(positionCoords, xOffset - leftmostAndTopmostValues.x, yOffset - leftmostAndTopmostValues.y),
 					_List_Nil,
 					pathCoords))).b;
+		var bottomAndRightBound = A3(
+			$elm$core$List$foldl,
+			getbottomAndRightBound,
+			{bottom: 0, right: 0},
+			A3(
+				$elm$core$List$foldl,
+				A2(positionCoords, xOffset - leftmostAndTopmostValues.x, yOffset - leftmostAndTopmostValues.y),
+				_List_Nil,
+				pathCoords));
+		return {bottomBound: bottomAndRightBound.bottom, points: grid, rightBound: bottomAndRightBound.right};
+	});
+var $author$project$Logic$App$Grid$drawPatterns = F2(
+	function (patterns, grid) {
+		var gridOffsetWidth = (-2) + (2 * $elm$core$List$length(
+			A2(
+				$elm$core$Maybe$withDefault,
+				_List_Nil,
+				$elm$core$List$head(grid.points))));
+		var addPatternToGrid = F2(
+			function (pattern, accumulator) {
+				var attemptDrawPatternResult = A3($author$project$Logic$App$Grid$drawPattern, accumulator.xOffset, accumulator.yOffset, pattern);
+				var drawPatternResult = function () {
+					if (_Utils_cmp(attemptDrawPatternResult.rightBound, gridOffsetWidth) < 0) {
+						return _Utils_update(
+							attemptDrawPatternResult,
+							{bottomBound: accumulator.yOffset});
+					} else {
+						var drawPatternResultOld = A3($author$project$Logic$App$Grid$drawPattern, 0, attemptDrawPatternResult.bottomBound + 1, pattern);
+						return _Utils_update(
+							drawPatternResultOld,
+							{bottomBound: attemptDrawPatternResult.bottomBound + 1});
+					}
+				}();
+				return {
+					patternArray: A2(
+						$author$project$Logic$App$Utils$Utils$unshift,
+						_Utils_Tuple2(pattern, drawPatternResult.points),
+						accumulator.patternArray),
+					points: _Utils_ap(accumulator.points, drawPatternResult.points),
+					xOffset: drawPatternResult.rightBound + 1,
+					yOffset: drawPatternResult.bottomBound
+				};
+			});
+		var drawPatternsResult = A3(
+			$elm$core$Array$foldr,
+			addPatternToGrid,
+			{patternArray: $elm$core$Array$empty, points: _List_Nil, xOffset: 0, yOffset: 0},
+			patterns);
+		return {
+			grid: _Utils_update(
+				grid,
+				{
+					points: A2(
+						$author$project$Components$App$Grid$applyPathToGrid,
+						$author$project$Logic$App$Grid$clearGrid(grid.points),
+						drawPatternsResult.points)
+				}),
+			patternArray: drawPatternsResult.patternArray
+		};
 	});
 var $author$project$Main$updatePatternArrayFromQueue = function (model) {
 	if ($elm$core$List$length(model.importQueue) > 0) {
 		var ui = model.ui;
-		var grid = model.grid;
 		var getPattern = A2(
 			$elm$core$Maybe$withDefault,
 			_Utils_Tuple2($author$project$Logic$App$Patterns$PatternRegistry$unknownPattern, $elm$core$Platform$Cmd$none),
 			$elm$core$List$head(model.importQueue));
-		var newUncoloredPattern = getPattern.a;
-		var drawing = model.grid.drawing;
+		var newPattern = getPattern.a;
+		var newUncoloredPatternArray = A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, model.insertionPoint);
 		var command = getPattern.b;
 		var castingContext = model.castingContext;
 		var stackResult = A3(
@@ -12799,28 +12874,25 @@ var $author$project$Main$updatePatternArrayFromQueue = function (model) {
 						return x.a;
 					},
 					$elm$core$Array$toList(
-						A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newUncoloredPattern, model.insertionPoint)))));
-		var newPattern = A2(
-			$author$project$Logic$App$PatternList$PatternArray$applyColorToPatternFromResult,
-			newUncoloredPattern,
-			A2(
-				$elm$core$Maybe$withDefault,
-				$author$project$Logic$App$Types$Failed,
-				A2($elm$core$Array$get, model.insertionPoint, stackResult.resultArray)));
-		var newGrid = _Utils_update(
-			grid,
-			{
-				drawing: _Utils_update(
-					drawing,
-					{activePath: _List_Nil, drawingMode: false}),
-				points: A2(
-					$author$project$Components$App$Grid$applyActivePathToGrid,
-					model.grid.points,
-					$author$project$Logic$App$PatternList$PatternArray$updateDrawingColors(
+						A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, model.insertionPoint)))));
+		var newPatternArray = A3(
+			$elm_community$array_extra$Array$Extra$map2,
+			F2(
+				function (patternTuple, result) {
+					return $author$project$Logic$App$PatternList$PatternArray$updateDrawingColors(
 						_Utils_Tuple2(
-							newPattern,
-							A2($author$project$Logic$App$Grid$generateDrawingFromSignature, newPattern.signature, model.grid.points))).b)
-			});
+							A2($author$project$Logic$App$PatternList$PatternArray$applyColorToPatternFromResult, patternTuple.a, result),
+							patternTuple.b));
+				}),
+			newUncoloredPatternArray,
+			stackResult.resultArray);
+		var patterns = A2(
+			$elm$core$Array$map,
+			function (x) {
+				return x.a;
+			},
+			newPatternArray);
+		var drawPatternsResult = A2($author$project$Logic$App$Grid$drawPatterns, patterns, model.grid);
 		return _Utils_eq(command, $elm$core$Platform$Cmd$none) ? $author$project$Main$updatePatternArrayFromQueue(
 			A2(
 				$author$project$Logic$App$Patterns$MetaActions$applyMetaAction,
@@ -12828,7 +12900,7 @@ var $author$project$Main$updatePatternArrayFromQueue = function (model) {
 					model,
 					{
 						castingContext: stackResult.ctx,
-						grid: newGrid,
+						grid: drawPatternsResult.grid,
 						importQueue: A2(
 							$elm$core$Maybe$withDefault,
 							_List_Nil,
@@ -12836,23 +12908,7 @@ var $author$project$Main$updatePatternArrayFromQueue = function (model) {
 						insertionPoint: (_Utils_cmp(
 							model.insertionPoint,
 							$elm$core$Array$length(model.patternArray)) > 0) ? 0 : model.insertionPoint,
-						patternArray: A3(
-							$author$project$Logic$App$PatternList$PatternArray$addToPatternArray,
-							_Utils_update(
-								model,
-								{
-									grid: _Utils_update(
-										grid,
-										{
-											drawing: _Utils_update(
-												drawing,
-												{
-													activePath: A2($author$project$Logic$App$Grid$generateDrawingFromSignature, newPattern.signature, model.grid.points)
-												})
-										})
-								}),
-							newPattern,
-							model.insertionPoint),
+						patternArray: drawPatternsResult.patternArray,
 						stack: stackResult.stack,
 						ui: _Utils_update(
 							ui,
@@ -13135,8 +13191,9 @@ var $author$project$Main$update = F2(
 			case 'MouseUp':
 				if (drawing.drawingMode) {
 					if ($elm$core$List$length(drawing.activePath) > 1) {
-						var newUncoloredPattern = $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature(
+						var newPattern = $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature(
 							$author$project$Logic$App$Utils$GetAngleSignature$getAngleSignature(drawing.activePath));
+						var newUncoloredPatternArray = A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, model.insertionPoint);
 						var stackResult = A3(
 							$author$project$Logic$App$Stack$Stack$applyPatternsToStack,
 							$elm$core$Array$empty,
@@ -13148,27 +13205,27 @@ var $author$project$Main$update = F2(
 										return x.a;
 									},
 									$elm$core$Array$toList(
-										A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newUncoloredPattern, model.insertionPoint)))));
-						var resultArray = stackResult.resultArray;
+										A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, model.insertionPoint)))));
 						var newStack = stackResult.stack;
-						var newPattern = A2(
-							$author$project$Logic$App$PatternList$PatternArray$applyColorToPatternFromResult,
-							newUncoloredPattern,
-							A2(
-								$elm$core$Maybe$withDefault,
-								$author$project$Logic$App$Types$Failed,
-								A2($elm$core$Array$get, model.insertionPoint, resultArray)));
+						var resultArray = stackResult.resultArray;
+						var newPatternArray = A3(
+							$elm_community$array_extra$Array$Extra$map2,
+							F2(
+								function (patternTuple, result) {
+									return $author$project$Logic$App$PatternList$PatternArray$updateDrawingColors(
+										_Utils_Tuple2(
+											A2($author$project$Logic$App$PatternList$PatternArray$applyColorToPatternFromResult, patternTuple.a, result),
+											patternTuple.b));
+								}),
+							newUncoloredPatternArray,
+							resultArray);
 						var newGrid = _Utils_update(
 							grid,
 							{
 								drawing: _Utils_update(
 									drawing,
 									{activePath: _List_Nil, drawingMode: false}),
-								points: A2(
-									$author$project$Components$App$Grid$applyActivePathToGrid,
-									model.grid.points,
-									$author$project$Logic$App$PatternList$PatternArray$updateDrawingColors(
-										_Utils_Tuple2(newPattern, drawing.activePath)).b)
+								points: A5($author$project$Components$App$Grid$updateGridPoints, grid.width, grid.height, newPatternArray, _List_Nil, settings.gridScale)
 							});
 						return _Utils_Tuple2(
 							A2(
@@ -13181,7 +13238,7 @@ var $author$project$Main$update = F2(
 										insertionPoint: (_Utils_cmp(
 											model.insertionPoint,
 											$elm$core$Array$length(model.patternArray)) > 0) ? 0 : model.insertionPoint,
-										patternArray: A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, model.insertionPoint),
+										patternArray: newPatternArray,
 										stack: newStack
 									}),
 								newPattern.metaAction),

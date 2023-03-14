@@ -1,6 +1,7 @@
 module Components.App.Grid exposing
     ( addNearbyPoint
     , applyActivePathToGrid
+    , applyPathToGrid
     , distanceBetweenCoordinates
     , generateGrid
     , getClosestPoint
