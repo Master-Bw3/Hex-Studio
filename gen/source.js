@@ -7320,7 +7320,6 @@ var $author$project$Logic$App$Stack$Stack$applyPatternToStack = F3(
 			}
 		}
 	});
-var $elm$core$Debug$log = _Debug_log;
 var $author$project$Logic$App$Stack$Stack$applyToStackLoop = F5(
 	function (stackResultTuple, ctx, patterns, considerThis, stopAtErrorOrHalt) {
 		applyToStackLoop:
@@ -7328,8 +7327,8 @@ var $author$project$Logic$App$Stack$Stack$applyToStackLoop = F5(
 			var stack = stackResultTuple.a;
 			var resultArray = stackResultTuple.b;
 			var introspection = function () {
-				var _v3 = A2($elm$core$Array$get, 0, stack);
-				if ((_v3.$ === 'Just') && (_v3.a.$ === 'OpenParenthesis')) {
+				var _v2 = A2($elm$core$Array$get, 0, stack);
+				if ((_v2.$ === 'Just') && (_v2.a.$ === 'OpenParenthesis')) {
 					return true;
 				} else {
 					return false;
@@ -7385,17 +7384,13 @@ var $author$project$Logic$App$Stack$Stack$applyToStackLoop = F5(
 								stopAtErrorOrHalt = $temp$stopAtErrorOrHalt;
 								continue applyToStackLoop;
 							} else {
-								var _v2 = A2($elm$core$Debug$log, 'error', pattern);
-								return A2(
-									$elm$core$Debug$log,
-									'error',
-									{
-										ctx: applyResult.ctx,
-										error: true,
-										halted: false,
-										resultArray: A2($author$project$Logic$App$Utils$Utils$unshift, applyResult.result, resultArray),
-										stack: applyResult.stack
-									});
+								return {
+									ctx: applyResult.ctx,
+									error: true,
+									halted: false,
+									resultArray: A2($author$project$Logic$App$Utils$Utils$unshift, applyResult.result, resultArray),
+									stack: applyResult.stack
+								};
 							}
 						}
 					}
@@ -7419,10 +7414,7 @@ var $author$project$Logic$App$Stack$Stack$applyToStackLoop = F5(
 						stopAtErrorOrHalt = $temp$stopAtErrorOrHalt;
 						continue applyToStackLoop;
 					} else {
-						return A2(
-							$elm$core$Debug$log,
-							'error',
-							{ctx: ctx, error: true, halted: false, resultArray: resultArray, stack: stack});
+						return {ctx: ctx, error: true, halted: false, resultArray: resultArray, stack: stack};
 					}
 				}
 			}
@@ -9977,17 +9969,14 @@ var $author$project$Logic$App$Patterns$Lists$modifyinPlace = F2(
 							var list = _v0.a.a;
 							var number = _v0.b.a;
 							return A2(
-								$elm$core$Debug$log,
-								'list',
-								A2(
-									$elm$core$Array$repeat,
-									1,
-									$author$project$Logic$App$Types$IotaList(
-										A3(
-											$elm$core$Array$set,
-											$elm$core$Basics$round(number),
-											A2($elm$core$Debug$log, 'iota3', iota3),
-											list))));
+								$elm$core$Array$repeat,
+								1,
+								$author$project$Logic$App$Types$IotaList(
+									A3(
+										$elm$core$Array$set,
+										$elm$core$Basics$round(number),
+										iota3,
+										list)));
 						} else {
 							return A2(
 								$elm$core$Array$repeat,
@@ -11780,7 +11769,6 @@ var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName = func
 							},
 							A2($elm$regex$Regex$find, $author$project$Logic$App$Utils$RegexPatterns$bookkeepersPattern, name)))));
 			var maskCode = A2($elm$core$String$split, '', regexMatch);
-			var _v2 = A2($elm$core$Debug$log, regexMatch, name);
 			return _Utils_eq(
 				regexMatch,
 				$elm$core$String$trim(name)) ? _Utils_Tuple2(
@@ -12507,28 +12495,25 @@ var $author$project$Logic$App$ImportExport$ImportParser$parseInput = function (i
 								A2($elm$regex$Regex$find, $author$project$Logic$App$Utils$RegexPatterns$bookkeepersValuePattern, string))))))) : $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName(string))));
 	};
 	return A2(
-		$elm$core$Debug$log,
-		'i',
+		$elm$core$List$map,
+		getPatternFromString,
 		A2(
-			$elm$core$List$map,
-			getPatternFromString,
+			$elm$core$List$filter,
+			function (l) {
+				return l !== '';
+			},
 			A2(
-				$elm$core$List$filter,
-				function (l) {
-					return l !== '';
-				},
+				$elm$core$List$map,
+				$elm$core$String$trim,
 				A2(
 					$elm$core$List$map,
-					$elm$core$String$trim,
 					A2(
-						$elm$core$List$map,
-						A2(
-							$elm$regex$Regex$replace,
-							$author$project$Logic$App$Utils$RegexPatterns$commentPattern,
-							function (_v0) {
-								return '';
-							}),
-						A2($elm$core$String$split, '\n', input))))));
+						$elm$regex$Regex$replace,
+						$author$project$Logic$App$Utils$RegexPatterns$commentPattern,
+						function (_v0) {
+							return '';
+						}),
+					A2($elm$core$String$split, '\n', input)))));
 };
 var $elm$time$Time$posixToMillis = function (_v0) {
 	var millis = _v0.a;
@@ -13294,7 +13279,7 @@ var $author$project$Main$update = F2(
 								}),
 							insertionPoint: (_Utils_cmp(
 								model.insertionPoint,
-								$elm$core$Array$length(newPatternArray)) > 0) ? 0 : A2($elm$core$Basics$max, model.insertionPoint - 1, 0),
+								$elm$core$Array$length(newPatternArray)) > 0) ? 0 : ((_Utils_cmp(model.insertionPoint, endIndex) < 0) ? A2($elm$core$Basics$max, model.insertionPoint, 0) : A2($elm$core$Basics$max, model.insertionPoint - 1, 0)),
 							patternArray: newPatternArray,
 							stack: newStack
 						}),
@@ -13677,10 +13662,7 @@ var $author$project$Main$update = F2(
 						{
 							castingContext: _Utils_update(
 								castingContext,
-								{
-									heldItem: A2($elm$core$Debug$log, 'item', item),
-									heldItemContent: $elm$core$Maybe$Nothing
-								})
+								{heldItem: item, heldItemContent: $elm$core$Maybe$Nothing})
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 'RequestGridDrawingAsGIF':

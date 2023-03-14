@@ -129,8 +129,6 @@ updatePatternArrayFromQueue model =
 
             drawPatternsResult =
                 drawPatterns patterns model.grid
-
-
         in
         if command == Cmd.none then
             updatePatternArrayFromQueue <|
@@ -252,7 +250,7 @@ update msg model =
 
                         newPattern =
                             getPatternFromSignature <| getAngleSignature drawing.activePath
-                        
+
                         newUncoloredPatternArray =
                             addToPatternArray
                                 model
@@ -326,6 +324,9 @@ update msg model =
                 , insertionPoint =
                     if model.insertionPoint > Array.length newPatternArray then
                         0
+
+                    else if model.insertionPoint < endIndex then
+                        max (model.insertionPoint) 0
 
                     else
                         max (model.insertionPoint - 1) 0

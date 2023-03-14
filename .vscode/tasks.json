@@ -1,9 +1,15 @@
-{   "version": "2.0.0",
+{
+    "version": "2.0.0",
     "tasks": [
         {
             "type": "shell",
             "label": "launch dev server",
             "command": "elm-live src/Main.elm --open --  --output gen/source.js"
+        },
+        {
+            "type": "shell",
+            "label": "build (optimized)",
+            "command": "elm make src/Main.elm --output gen/source.js --optimize"
         }
     ]
 }
