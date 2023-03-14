@@ -22,12 +22,10 @@ saveExportPanel model =
         , visibilityToDisplayStyle visibility
         ]
         [ h1 [ class "panel_title" ]
-            [ text "Import" ]
+            [ text "File" ]
         , div [ style "align-self" "center", style "width" "100%"]
             [ textarea [id "import_input", onInput SetImportInputValue] []]
         , button [style "color" "white", onClick (ImportText model.ui.importInput)] [text "Import"]
-        , h1 [ class "panel_title" ]
-            [ text "Export" ]
         , div [ style "height" "300px", style "align-content" "center" ]
             [ img
                 ([ src

@@ -16130,7 +16130,7 @@ var $author$project$Components$App$Panels$FilePanel$saveExportPanel = function (
 					]),
 				_List_fromArray(
 					[
-						$elm$html$Html$text('Import')
+						$elm$html$Html$text('File')
 					])),
 				A2(
 				$elm$html$Html$div,
@@ -16161,16 +16161,6 @@ var $author$project$Components$App$Panels$FilePanel$saveExportPanel = function (
 				_List_fromArray(
 					[
 						$elm$html$Html$text('Import')
-					])),
-				A2(
-				$elm$html$Html$h1,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$class('panel_title')
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text('Export')
 					])),
 				A2(
 				$elm$html$Html$div,
