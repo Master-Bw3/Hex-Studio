@@ -662,7 +662,7 @@ subscriptions : Model -> Sub Msg
 subscriptions _ =
     Sub.batch
         [ Browser.Events.onResize (\_ _ -> WindowResize)
-        , Time.every 50 Tick
+        , Time.every 100 Tick
         , HexNumGen.recieveNumber RecieveGeneratedNumberLiteral
         , GetElementBoundingBoxById.recieveBoundingBox (Json.Decode.decodeValue locationDecoder >> RecieveInputBoundingBox)
         , GetElementBoundingBoxById.recieveBoundingBoxes (List.map (Json.Decode.decodeValue locationDecoder) >> RecieveInputBoundingBoxes)

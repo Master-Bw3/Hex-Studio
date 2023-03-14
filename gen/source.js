@@ -6275,7 +6275,7 @@ var $author$project$Main$subscriptions = function (_v0) {
 					function (_v1, _v2) {
 						return $author$project$Logic$App$Msg$WindowResize;
 					})),
-				A2($elm$time$Time$every, 50, $author$project$Logic$App$Msg$Tick),
+				A2($elm$time$Time$every, 100, $author$project$Logic$App$Msg$Tick),
 				$author$project$Ports$HexNumGen$recieveNumber($author$project$Logic$App$Msg$RecieveGeneratedNumberLiteral),
 				$author$project$Ports$GetElementBoundingBoxById$recieveBoundingBox(
 				A2(
@@ -12472,7 +12472,7 @@ var $elm$regex$Regex$contains = _Regex_contains;
 var $author$project$Logic$App$Utils$RegexPatterns$numberValuePattern = A2(
 	$elm$core$Maybe$withDefault,
 	$elm$regex$Regex$never,
-	$elm$regex$Regex$fromString(':(?=[^\\n]*\\d)[\\d\\s.]*'));
+	$elm$regex$Regex$fromString(':(?=[^\\n]*\\d)[\\d\\s.-]*'));
 var $elm$regex$Regex$replace = _Regex_replaceAtMost(_Regex_infinity);
 var $author$project$Logic$App$ImportExport$ImportParser$parseInput = function (input) {
 	var getPatternFromString = function (string) {
@@ -16585,7 +16585,7 @@ var $author$project$Components$App$Grid$renderPoint = F4(
 				$author$project$Components$App$Grid$distanceBetweenCoordinates,
 				mousePos,
 				_Utils_Tuple2(point.x + gridOffset, point.y)) / 30)) * scale) : 0;
-		return (_Utils_cmp(pointScale, 0.01 * scale) > 0) ? _List_fromArray(
+		return (pointScale > 0.05) ? _List_fromArray(
 			[
 				A2(
 				$elm$svg$Svg$svg,

@@ -8,7 +8,7 @@ commentPattern =
 
 
 numberValuePattern =
-    Maybe.withDefault Regex.never <| Regex.fromString ":(?=[^\\n]*\\d)[\\d\\s.]*"
+    Maybe.withDefault Regex.never <| Regex.fromString ":(?=[^\\n]*\\d)[\\d\\s.-]*"
 
 
 bookkeepersValuePattern =

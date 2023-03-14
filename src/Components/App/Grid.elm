@@ -286,7 +286,7 @@ renderPoint mousePos gridOffset scale point =
             else
                 0
     in
-    if pointScale > 0.01 * scale then
+    if pointScale > 0.05 then
         [ svg
             [ width <| String.fromFloat <| point.radius * 2
             , height <| String.fromFloat <| point.radius * 2

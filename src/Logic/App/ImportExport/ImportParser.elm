@@ -3,17 +3,13 @@ module Logic.App.ImportExport.ImportParser exposing (..)
 import Array exposing (Array)
 import Logic.App.Patterns.PatternRegistry exposing (getPatternFromName)
 import Logic.App.Types exposing (Pattern)
+import Logic.App.Utils.RegexPatterns exposing (bookkeepersPattern, bookkeepersValuePattern, commentPattern, numberValuePattern)
 import Regex
 import String exposing (String)
-import Logic.App.Utils.RegexPatterns exposing (numberValuePattern)
-import Logic.App.Utils.RegexPatterns exposing (commentPattern)
-import Logic.App.Utils.RegexPatterns exposing (bookkeepersPattern)
-import Logic.App.Utils.RegexPatterns exposing (bookkeepersValuePattern)
 
 
 parseInput input =
     let
-
         getPatternFromString string =
             if string == "{" then
                 getPatternFromName "open_paren"
