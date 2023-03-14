@@ -9,6 +9,7 @@ import Logic.App.Patterns.PatternRegistry exposing (getPatternFromName)
 import Logic.App.Stack.Stack exposing (applyPatternsToStack)
 import Logic.App.Types exposing (Iota(..), MetaActionMsg(..))
 import Logic.App.Utils.Utils exposing (unshift)
+import Logic.App.Grid exposing (drawPatterns)
 
 
 applyMetaAction : Model -> MetaActionMsg -> Model
@@ -104,10 +105,16 @@ applyMetaAction model metaActionMsg =
                         )
                         newUncoloredPatternArray
                         resultArray
+
+                patterns =
+                    Array.map (\x -> Tuple.first x) newPatternArray
+
+                drawPatternsResult =
+                    drawPatterns patterns model.grid
             in
             { model
-                | patternArray = newPatternArray
-                , grid = { grid | points = updateGridPoints grid.width grid.height newPatternArray [] settings.gridScale }
+                | patternArray = drawPatternsResult.patternArray
+                , grid = drawPatternsResult.grid
                 , stack = newStack
                 , castingContext = stackResult.ctx
             }

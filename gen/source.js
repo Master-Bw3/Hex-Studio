@@ -7436,6 +7436,430 @@ var $author$project$Logic$App$Stack$Stack$applyPatternsToStack = F3(
 			false,
 			false);
 	});
+var $author$project$Components$App$Grid$applyPathToGrid = F2(
+	function (gridPoints, pointsToAdd) {
+		var replace = function (pnt) {
+			var replacedPnt = $elm$core$List$head(
+				A2(
+					$elm$core$List$filter,
+					function (activePnt) {
+						return _Utils_eq(
+							_Utils_Tuple2(activePnt.offsetX, activePnt.offsetY),
+							_Utils_Tuple2(pnt.offsetX, pnt.offsetY));
+					},
+					pointsToAdd));
+			if (replacedPnt.$ === 'Just') {
+				var point = replacedPnt.a;
+				return _Utils_update(
+					pnt,
+					{color: $author$project$Settings$Theme$accent2, connectedPoints: point.connectedPoints, used: true});
+			} else {
+				return pnt;
+			}
+		};
+		return A2(
+			$elm$core$List$map,
+			function (row) {
+				return A2($elm$core$List$map, replace, row);
+			},
+			gridPoints);
+	});
+var $author$project$Logic$App$Grid$clearGrid = function (points) {
+	return A2(
+		$elm$core$List$map,
+		function (row) {
+			return A2(
+				$elm$core$List$map,
+				function (point) {
+					return _Utils_update(
+						point,
+						{color: $author$project$Settings$Theme$accent1, connectedPoints: _List_Nil, used: false});
+				},
+				row);
+		},
+		points);
+};
+var $author$project$Logic$App$Types$East = {$: 'East'};
+var $author$project$Logic$App$Types$ErrorDirection = {$: 'ErrorDirection'};
+var $author$project$Logic$App$Types$Northeast = {$: 'Northeast'};
+var $author$project$Logic$App$Types$Northwest = {$: 'Northwest'};
+var $author$project$Logic$App$Types$Southeast = {$: 'Southeast'};
+var $author$project$Logic$App$Types$Southwest = {$: 'Southwest'};
+var $author$project$Logic$App$Types$West = {$: 'West'};
+var $author$project$Logic$App$Utils$DirectionMap$directionMap = _List_fromArray(
+	[
+		_Utils_Tuple2(
+		$author$project$Logic$App$Types$Northeast,
+		_Utils_Tuple2(1, -1)),
+		_Utils_Tuple2(
+		$author$project$Logic$App$Types$East,
+		_Utils_Tuple2(2, 0)),
+		_Utils_Tuple2(
+		$author$project$Logic$App$Types$Southeast,
+		_Utils_Tuple2(1, 1)),
+		_Utils_Tuple2(
+		$author$project$Logic$App$Types$Southwest,
+		_Utils_Tuple2(-1, 1)),
+		_Utils_Tuple2(
+		$author$project$Logic$App$Types$West,
+		_Utils_Tuple2(-2, 0)),
+		_Utils_Tuple2(
+		$author$project$Logic$App$Types$Northwest,
+		_Utils_Tuple2(-1, -1))
+	]);
+var $author$project$Logic$App$Utils$LetterMap$letterMap = _List_fromArray(
+	[
+		_Utils_Tuple2(
+		'w',
+		_Utils_Tuple2($author$project$Logic$App$Types$East, $author$project$Logic$App$Types$East)),
+		_Utils_Tuple2(
+		'a',
+		_Utils_Tuple2($author$project$Logic$App$Types$East, $author$project$Logic$App$Types$Northwest)),
+		_Utils_Tuple2(
+		'q',
+		_Utils_Tuple2($author$project$Logic$App$Types$East, $author$project$Logic$App$Types$Northeast)),
+		_Utils_Tuple2(
+		'd',
+		_Utils_Tuple2($author$project$Logic$App$Types$East, $author$project$Logic$App$Types$Southwest)),
+		_Utils_Tuple2(
+		'e',
+		_Utils_Tuple2($author$project$Logic$App$Types$East, $author$project$Logic$App$Types$Southeast)),
+		_Utils_Tuple2(
+		'e',
+		_Utils_Tuple2($author$project$Logic$App$Types$Northeast, $author$project$Logic$App$Types$East)),
+		_Utils_Tuple2(
+		'q',
+		_Utils_Tuple2($author$project$Logic$App$Types$Northeast, $author$project$Logic$App$Types$Northwest)),
+		_Utils_Tuple2(
+		'a',
+		_Utils_Tuple2($author$project$Logic$App$Types$Northeast, $author$project$Logic$App$Types$West)),
+		_Utils_Tuple2(
+		'w',
+		_Utils_Tuple2($author$project$Logic$App$Types$Northeast, $author$project$Logic$App$Types$Northeast)),
+		_Utils_Tuple2(
+		'd',
+		_Utils_Tuple2($author$project$Logic$App$Types$Northeast, $author$project$Logic$App$Types$Southeast)),
+		_Utils_Tuple2(
+		'd',
+		_Utils_Tuple2($author$project$Logic$App$Types$Northwest, $author$project$Logic$App$Types$East)),
+		_Utils_Tuple2(
+		'w',
+		_Utils_Tuple2($author$project$Logic$App$Types$Northwest, $author$project$Logic$App$Types$Northwest)),
+		_Utils_Tuple2(
+		'q',
+		_Utils_Tuple2($author$project$Logic$App$Types$Northwest, $author$project$Logic$App$Types$West)),
+		_Utils_Tuple2(
+		'e',
+		_Utils_Tuple2($author$project$Logic$App$Types$Northwest, $author$project$Logic$App$Types$Northeast)),
+		_Utils_Tuple2(
+		'a',
+		_Utils_Tuple2($author$project$Logic$App$Types$Northwest, $author$project$Logic$App$Types$Southwest)),
+		_Utils_Tuple2(
+		'd',
+		_Utils_Tuple2($author$project$Logic$App$Types$West, $author$project$Logic$App$Types$Northeast)),
+		_Utils_Tuple2(
+		'e',
+		_Utils_Tuple2($author$project$Logic$App$Types$West, $author$project$Logic$App$Types$Northwest)),
+		_Utils_Tuple2(
+		'w',
+		_Utils_Tuple2($author$project$Logic$App$Types$West, $author$project$Logic$App$Types$West)),
+		_Utils_Tuple2(
+		'a',
+		_Utils_Tuple2($author$project$Logic$App$Types$West, $author$project$Logic$App$Types$Southeast)),
+		_Utils_Tuple2(
+		'q',
+		_Utils_Tuple2($author$project$Logic$App$Types$West, $author$project$Logic$App$Types$Southwest)),
+		_Utils_Tuple2(
+		'a',
+		_Utils_Tuple2($author$project$Logic$App$Types$Southwest, $author$project$Logic$App$Types$East)),
+		_Utils_Tuple2(
+		'd',
+		_Utils_Tuple2($author$project$Logic$App$Types$Southwest, $author$project$Logic$App$Types$Northwest)),
+		_Utils_Tuple2(
+		'e',
+		_Utils_Tuple2($author$project$Logic$App$Types$Southwest, $author$project$Logic$App$Types$West)),
+		_Utils_Tuple2(
+		'q',
+		_Utils_Tuple2($author$project$Logic$App$Types$Southwest, $author$project$Logic$App$Types$Southeast)),
+		_Utils_Tuple2(
+		'w',
+		_Utils_Tuple2($author$project$Logic$App$Types$Southwest, $author$project$Logic$App$Types$Southwest)),
+		_Utils_Tuple2(
+		'q',
+		_Utils_Tuple2($author$project$Logic$App$Types$Southeast, $author$project$Logic$App$Types$East)),
+		_Utils_Tuple2(
+		'a',
+		_Utils_Tuple2($author$project$Logic$App$Types$Southeast, $author$project$Logic$App$Types$Northeast)),
+		_Utils_Tuple2(
+		'd',
+		_Utils_Tuple2($author$project$Logic$App$Types$Southeast, $author$project$Logic$App$Types$West)),
+		_Utils_Tuple2(
+		'w',
+		_Utils_Tuple2($author$project$Logic$App$Types$Southeast, $author$project$Logic$App$Types$Southeast)),
+		_Utils_Tuple2(
+		'e',
+		_Utils_Tuple2($author$project$Logic$App$Types$Southeast, $author$project$Logic$App$Types$Southwest))
+	]);
+var $elm$core$Basics$modBy = _Basics_modBy;
+var $author$project$Logic$App$Grid$drawPattern = F3(
+	function (xOffset, yOffset, pattern) {
+		var positionCoords = F4(
+			function (leftBound, topBound, coord, accumulator) {
+				var offsetBounds = _Utils_eq(
+					A2($elm$core$Basics$modBy, 2, leftBound),
+					A2($elm$core$Basics$modBy, 2, topBound)) ? _Utils_Tuple2(leftBound, topBound) : _Utils_Tuple2(leftBound + 1, topBound);
+				var offsetLeftBound = offsetBounds.a;
+				var offsetTopBound = offsetBounds.b;
+				return A2(
+					$elm$core$List$cons,
+					_Utils_Tuple2(coord.a + offsetLeftBound, coord.b + offsetTopBound),
+					accumulator);
+			});
+		var pointConnectionToGridPoint = function (point) {
+			return _Utils_update(
+				$author$project$Components$App$Grid$emptyGridpoint,
+				{color: point.color, offsetX: point.offsetX, offsetY: point.offsetY, used: true});
+		};
+		var gridpointToPointConnection = function (point) {
+			return {
+				betweenOffsetValues: _Utils_Tuple3(
+					_Utils_Tuple2(0, 0),
+					_Utils_Tuple2(0, 0),
+					_Utils_Tuple2(0, 0)),
+				color: pattern.color,
+				offsetX: point.offsetX,
+				offsetY: point.offsetY
+			};
+		};
+		var getbottomAndRightBound = F2(
+			function (coord, accumulator) {
+				var x = coord.a;
+				var y = coord.b;
+				return {
+					bottom: A2($elm$core$Basics$max, y, accumulator.bottom),
+					right: A2($elm$core$Basics$max, x, accumulator.right)
+				};
+			});
+		var getNextDirection = F2(
+			function (prevDirection, angle) {
+				return A2(
+					$elm$core$Maybe$withDefault,
+					_Utils_Tuple2(
+						'',
+						_Utils_Tuple2($author$project$Logic$App$Types$ErrorDirection, $author$project$Logic$App$Types$ErrorDirection)),
+					$elm$core$List$head(
+						A2(
+							$elm$core$List$filter,
+							function (mapItem) {
+								var letter = mapItem.a;
+								var direction = mapItem.b;
+								return (_Utils_eq(letter, angle) && _Utils_eq(direction.a, prevDirection)) ? true : false;
+							},
+							$author$project$Logic$App$Utils$LetterMap$letterMap))).b.b;
+			});
+		var signatureToAngles = F2(
+			function (angle, accumulator) {
+				return A2(
+					$elm$core$List$cons,
+					A2(
+						getNextDirection,
+						A2(
+							$elm$core$Maybe$withDefault,
+							$author$project$Logic$App$Types$East,
+							$elm$core$List$head(accumulator)),
+						angle),
+					accumulator);
+			});
+		var getLeftmostAndTopmostValues = F2(
+			function (coord, accumulator) {
+				var x = coord.a;
+				var y = coord.b;
+				return {
+					x: A2($elm$core$Basics$min, x, accumulator.x),
+					y: A2($elm$core$Basics$min, y, accumulator.y)
+				};
+			});
+		var directionToCoord = function (direction) {
+			return A2(
+				$elm$core$Maybe$withDefault,
+				_Utils_Tuple2(
+					$author$project$Logic$App$Types$ErrorDirection,
+					_Utils_Tuple2(0, 0)),
+				$elm$core$List$head(
+					A2(
+						$elm$core$List$filter,
+						function (mapItem) {
+							var dir = mapItem.a;
+							return _Utils_eq(dir, direction) ? true : false;
+						},
+						$author$project$Logic$App$Utils$DirectionMap$directionMap))).b;
+		};
+		var coordsToPathCoords = F2(
+			function (coord, accumulator) {
+				var _v1 = $elm$core$List$head(accumulator);
+				if (_v1.$ === 'Just') {
+					var prevPoint = _v1.a;
+					return A2(
+						$elm$core$List$cons,
+						_Utils_Tuple2(coord.a + prevPoint.a, coord.b + prevPoint.b),
+						accumulator);
+				} else {
+					return _List_fromArray(
+						[
+							_Utils_Tuple2(coord.a - 2, coord.b)
+						]);
+				}
+			});
+		var pathCoords = A3(
+			$elm$core$List$foldl,
+			coordsToPathCoords,
+			_List_Nil,
+			A2(
+				$elm$core$List$map,
+				directionToCoord,
+				$elm$core$List$reverse(
+					A3(
+						$elm$core$List$foldl,
+						signatureToAngles,
+						_List_fromArray(
+							[$author$project$Logic$App$Types$East, $author$project$Logic$App$Types$East]),
+						A2($elm$core$String$split, '', pattern.signature)))));
+		var leftmostAndTopmostValues = A3(
+			$elm$core$List$foldl,
+			getLeftmostAndTopmostValues,
+			{x: 0, y: 0},
+			pathCoords);
+		var coordToPointConnection = function (coord) {
+			return {
+				betweenOffsetValues: _Utils_Tuple3(
+					_Utils_Tuple2(0, 0),
+					_Utils_Tuple2(0, 0),
+					_Utils_Tuple2(0, 0)),
+				color: pattern.color,
+				offsetX: coord.a,
+				offsetY: coord.b
+			};
+		};
+		var connectPoints = F2(
+			function (point, accumulator) {
+				var prevPoint = accumulator.a;
+				var drawing = accumulator.b;
+				var _v0 = $elm$core$List$head(drawing);
+				if (_v0.$ === 'Just') {
+					return A2(
+						$elm$core$List$any,
+						function (x) {
+							return _Utils_eq(
+								_Utils_Tuple2(x.offsetX, x.offsetY),
+								_Utils_Tuple2(point.offsetX, point.offsetY));
+						},
+						drawing) ? _Utils_Tuple2(
+						point,
+						A2(
+							$elm$core$List$map,
+							function (x) {
+								return _Utils_eq(
+									_Utils_Tuple2(x.offsetX, x.offsetY),
+									_Utils_Tuple2(point.offsetX, point.offsetY)) ? _Utils_update(
+									x,
+									{
+										connectedPoints: A2(
+											$elm$core$List$cons,
+											gridpointToPointConnection(prevPoint),
+											x.connectedPoints)
+									}) : x;
+							},
+							drawing)) : _Utils_Tuple2(
+						point,
+						A2(
+							$elm$core$List$cons,
+							_Utils_update(
+								point,
+								{
+									connectedPoints: _List_fromArray(
+										[
+											gridpointToPointConnection(prevPoint)
+										])
+								}),
+							drawing));
+				} else {
+					return _Utils_Tuple2(
+						point,
+						A2($elm$core$List$cons, point, drawing));
+				}
+			});
+		var grid = A3(
+			$elm$core$List$foldr,
+			connectPoints,
+			_Utils_Tuple2($author$project$Components$App$Grid$emptyGridpoint, _List_Nil),
+			A2(
+				$elm$core$List$map,
+				function (x) {
+					return pointConnectionToGridPoint(
+						coordToPointConnection(x));
+				},
+				A3(
+					$elm$core$List$foldl,
+					A2(positionCoords, xOffset - leftmostAndTopmostValues.x, yOffset - leftmostAndTopmostValues.y),
+					_List_Nil,
+					pathCoords))).b;
+		var bottomAndRightBound = A3(
+			$elm$core$List$foldl,
+			getbottomAndRightBound,
+			{bottom: 0, right: 0},
+			A3(
+				$elm$core$List$foldl,
+				A2(positionCoords, xOffset - leftmostAndTopmostValues.x, yOffset - leftmostAndTopmostValues.y),
+				_List_Nil,
+				pathCoords));
+		return {bottomBound: bottomAndRightBound.bottom, points: grid, rightBound: bottomAndRightBound.right};
+	});
+var $author$project$Logic$App$Grid$drawPatterns = F2(
+	function (patterns, grid) {
+		var gridOffsetWidth = (-6) + (2 * $elm$core$List$length(
+			A2(
+				$elm$core$Maybe$withDefault,
+				_List_Nil,
+				$elm$core$List$head(grid.points))));
+		var addPatternToGrid = F2(
+			function (pattern, accumulator) {
+				var attemptDrawPatternResult = A3($author$project$Logic$App$Grid$drawPattern, accumulator.xOffset, accumulator.yOffset, pattern);
+				var drawPatternResult = function () {
+					if (_Utils_cmp(attemptDrawPatternResult.rightBound, gridOffsetWidth) < 0) {
+						return {bottomBound: attemptDrawPatternResult.bottomBound, points: attemptDrawPatternResult.points, rightBound: attemptDrawPatternResult.rightBound, yOffset: accumulator.yOffset};
+					} else {
+						var drawPatternResultOld = A3($author$project$Logic$App$Grid$drawPattern, 0, accumulator.currentLowestY + 1, pattern);
+						return {bottomBound: drawPatternResultOld.bottomBound, points: drawPatternResultOld.points, rightBound: drawPatternResultOld.rightBound, yOffset: accumulator.currentLowestY + 1};
+					}
+				}();
+				return {
+					currentLowestY: A2($elm$core$Basics$max, accumulator.currentLowestY, drawPatternResult.bottomBound),
+					patternArray: A2(
+						$author$project$Logic$App$Utils$Utils$unshift,
+						_Utils_Tuple2(pattern, drawPatternResult.points),
+						accumulator.patternArray),
+					points: _Utils_ap(accumulator.points, drawPatternResult.points),
+					xOffset: drawPatternResult.rightBound + 1,
+					yOffset: drawPatternResult.yOffset
+				};
+			});
+		var drawPatternsResult = A3(
+			$elm$core$Array$foldr,
+			addPatternToGrid,
+			{currentLowestY: 0, patternArray: $elm$core$Array$empty, points: _List_Nil, xOffset: 0, yOffset: 0},
+			patterns);
+		return {
+			grid: _Utils_update(
+				grid,
+				{
+					points: A2(
+						$author$project$Components$App$Grid$applyPathToGrid,
+						$author$project$Logic$App$Grid$clearGrid(grid.points),
+						drawPatternsResult.points)
+				}),
+			patternArray: drawPatternsResult.patternArray
+		};
+	});
 var $author$project$Logic$App$Types$None = {$: 'None'};
 var $elm$regex$Regex$Match = F4(
 	function (match, index, number, submatches) {
@@ -11786,35 +12210,6 @@ var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName = func
 		}
 	}
 };
-var $author$project$Components$App$Grid$applyPathToGrid = F2(
-	function (gridPoints, pointsToAdd) {
-		var replace = function (pnt) {
-			var replacedPnt = $elm$core$List$head(
-				A2(
-					$elm$core$List$filter,
-					function (activePnt) {
-						return _Utils_eq(
-							_Utils_Tuple2(activePnt.offsetX, activePnt.offsetY),
-							_Utils_Tuple2(pnt.offsetX, pnt.offsetY));
-					},
-					pointsToAdd));
-			if (replacedPnt.$ === 'Just') {
-				var point = replacedPnt.a;
-				return _Utils_update(
-					pnt,
-					{color: $author$project$Settings$Theme$accent2, connectedPoints: point.connectedPoints, used: true});
-			} else {
-				return pnt;
-			}
-		};
-		return A2(
-			$elm$core$List$map,
-			function (row) {
-				return A2($elm$core$List$map, replace, row);
-			},
-			gridPoints);
-	});
-var $elm$core$Basics$modBy = _Basics_modBy;
 var $author$project$Components$App$Grid$verticalSpacing = function (scale) {
 	return ($author$project$Components$App$Grid$spacing(scale) * $elm$core$Basics$sqrt(3.0)) / 2;
 };
@@ -11989,141 +12384,18 @@ var $author$project$Logic$App$Patterns$MetaActions$applyMetaAction = F2(
 						}),
 					newUncoloredPatternArray,
 					resultArray);
+				var patterns = A2(
+					$elm$core$Array$map,
+					function (x) {
+						return x.a;
+					},
+					newPatternArray);
+				var drawPatternsResult = A2($author$project$Logic$App$Grid$drawPatterns, patterns, model.grid);
 				return _Utils_update(
 					model,
-					{
-						castingContext: stackResult.ctx,
-						grid: _Utils_update(
-							grid,
-							{
-								points: A5($author$project$Components$App$Grid$updateGridPoints, grid.width, grid.height, newPatternArray, _List_Nil, settings.gridScale)
-							}),
-						patternArray: newPatternArray,
-						stack: newStack
-					});
+					{castingContext: stackResult.ctx, grid: drawPatternsResult.grid, patternArray: drawPatternsResult.patternArray, stack: newStack});
 		}
 	});
-var $author$project$Logic$App$Types$ErrorDirection = {$: 'ErrorDirection'};
-var $author$project$Logic$App$Types$East = {$: 'East'};
-var $author$project$Logic$App$Types$Northeast = {$: 'Northeast'};
-var $author$project$Logic$App$Types$Northwest = {$: 'Northwest'};
-var $author$project$Logic$App$Types$Southeast = {$: 'Southeast'};
-var $author$project$Logic$App$Types$Southwest = {$: 'Southwest'};
-var $author$project$Logic$App$Types$West = {$: 'West'};
-var $author$project$Logic$App$Utils$DirectionMap$directionMap = _List_fromArray(
-	[
-		_Utils_Tuple2(
-		$author$project$Logic$App$Types$Northeast,
-		_Utils_Tuple2(1, -1)),
-		_Utils_Tuple2(
-		$author$project$Logic$App$Types$East,
-		_Utils_Tuple2(2, 0)),
-		_Utils_Tuple2(
-		$author$project$Logic$App$Types$Southeast,
-		_Utils_Tuple2(1, 1)),
-		_Utils_Tuple2(
-		$author$project$Logic$App$Types$Southwest,
-		_Utils_Tuple2(-1, 1)),
-		_Utils_Tuple2(
-		$author$project$Logic$App$Types$West,
-		_Utils_Tuple2(-2, 0)),
-		_Utils_Tuple2(
-		$author$project$Logic$App$Types$Northwest,
-		_Utils_Tuple2(-1, -1))
-	]);
-var $author$project$Logic$App$Utils$LetterMap$letterMap = _List_fromArray(
-	[
-		_Utils_Tuple2(
-		'w',
-		_Utils_Tuple2($author$project$Logic$App$Types$East, $author$project$Logic$App$Types$East)),
-		_Utils_Tuple2(
-		'a',
-		_Utils_Tuple2($author$project$Logic$App$Types$East, $author$project$Logic$App$Types$Northwest)),
-		_Utils_Tuple2(
-		'q',
-		_Utils_Tuple2($author$project$Logic$App$Types$East, $author$project$Logic$App$Types$Northeast)),
-		_Utils_Tuple2(
-		'd',
-		_Utils_Tuple2($author$project$Logic$App$Types$East, $author$project$Logic$App$Types$Southwest)),
-		_Utils_Tuple2(
-		'e',
-		_Utils_Tuple2($author$project$Logic$App$Types$East, $author$project$Logic$App$Types$Southeast)),
-		_Utils_Tuple2(
-		'e',
-		_Utils_Tuple2($author$project$Logic$App$Types$Northeast, $author$project$Logic$App$Types$East)),
-		_Utils_Tuple2(
-		'q',
-		_Utils_Tuple2($author$project$Logic$App$Types$Northeast, $author$project$Logic$App$Types$Northwest)),
-		_Utils_Tuple2(
-		'a',
-		_Utils_Tuple2($author$project$Logic$App$Types$Northeast, $author$project$Logic$App$Types$West)),
-		_Utils_Tuple2(
-		'w',
-		_Utils_Tuple2($author$project$Logic$App$Types$Northeast, $author$project$Logic$App$Types$Northeast)),
-		_Utils_Tuple2(
-		'd',
-		_Utils_Tuple2($author$project$Logic$App$Types$Northeast, $author$project$Logic$App$Types$Southeast)),
-		_Utils_Tuple2(
-		'd',
-		_Utils_Tuple2($author$project$Logic$App$Types$Northwest, $author$project$Logic$App$Types$East)),
-		_Utils_Tuple2(
-		'w',
-		_Utils_Tuple2($author$project$Logic$App$Types$Northwest, $author$project$Logic$App$Types$Northwest)),
-		_Utils_Tuple2(
-		'q',
-		_Utils_Tuple2($author$project$Logic$App$Types$Northwest, $author$project$Logic$App$Types$West)),
-		_Utils_Tuple2(
-		'e',
-		_Utils_Tuple2($author$project$Logic$App$Types$Northwest, $author$project$Logic$App$Types$Northeast)),
-		_Utils_Tuple2(
-		'a',
-		_Utils_Tuple2($author$project$Logic$App$Types$Northwest, $author$project$Logic$App$Types$Southwest)),
-		_Utils_Tuple2(
-		'd',
-		_Utils_Tuple2($author$project$Logic$App$Types$West, $author$project$Logic$App$Types$Northeast)),
-		_Utils_Tuple2(
-		'e',
-		_Utils_Tuple2($author$project$Logic$App$Types$West, $author$project$Logic$App$Types$Northwest)),
-		_Utils_Tuple2(
-		'w',
-		_Utils_Tuple2($author$project$Logic$App$Types$West, $author$project$Logic$App$Types$West)),
-		_Utils_Tuple2(
-		'a',
-		_Utils_Tuple2($author$project$Logic$App$Types$West, $author$project$Logic$App$Types$Southeast)),
-		_Utils_Tuple2(
-		'q',
-		_Utils_Tuple2($author$project$Logic$App$Types$West, $author$project$Logic$App$Types$Southwest)),
-		_Utils_Tuple2(
-		'a',
-		_Utils_Tuple2($author$project$Logic$App$Types$Southwest, $author$project$Logic$App$Types$East)),
-		_Utils_Tuple2(
-		'd',
-		_Utils_Tuple2($author$project$Logic$App$Types$Southwest, $author$project$Logic$App$Types$Northwest)),
-		_Utils_Tuple2(
-		'e',
-		_Utils_Tuple2($author$project$Logic$App$Types$Southwest, $author$project$Logic$App$Types$West)),
-		_Utils_Tuple2(
-		'q',
-		_Utils_Tuple2($author$project$Logic$App$Types$Southwest, $author$project$Logic$App$Types$Southeast)),
-		_Utils_Tuple2(
-		'w',
-		_Utils_Tuple2($author$project$Logic$App$Types$Southwest, $author$project$Logic$App$Types$Southwest)),
-		_Utils_Tuple2(
-		'q',
-		_Utils_Tuple2($author$project$Logic$App$Types$Southeast, $author$project$Logic$App$Types$East)),
-		_Utils_Tuple2(
-		'a',
-		_Utils_Tuple2($author$project$Logic$App$Types$Southeast, $author$project$Logic$App$Types$Northeast)),
-		_Utils_Tuple2(
-		'd',
-		_Utils_Tuple2($author$project$Logic$App$Types$Southeast, $author$project$Logic$App$Types$West)),
-		_Utils_Tuple2(
-		'w',
-		_Utils_Tuple2($author$project$Logic$App$Types$Southeast, $author$project$Logic$App$Types$Southeast)),
-		_Utils_Tuple2(
-		'e',
-		_Utils_Tuple2($author$project$Logic$App$Types$Southeast, $author$project$Logic$App$Types$Southwest))
-	]);
 var $author$project$Logic$App$Utils$GetAngleSignature$getAngleSignature = function (unflippedPath) {
 	var path = $elm$core$List$reverse(unflippedPath);
 	var getAngleLetter = F2(
@@ -12558,280 +12830,6 @@ var $elm_community$array_extra$Array$Extra$update = F2(
 					alter(element),
 					array);
 			}
-		};
-	});
-var $author$project$Logic$App$Grid$clearGrid = function (points) {
-	return A2(
-		$elm$core$List$map,
-		function (row) {
-			return A2(
-				$elm$core$List$map,
-				function (point) {
-					return _Utils_update(
-						point,
-						{color: $author$project$Settings$Theme$accent1, connectedPoints: _List_Nil, used: false});
-				},
-				row);
-		},
-		points);
-};
-var $author$project$Logic$App$Grid$drawPattern = F3(
-	function (xOffset, yOffset, pattern) {
-		var positionCoords = F4(
-			function (leftBound, topBound, coord, accumulator) {
-				var offsetBounds = _Utils_eq(
-					A2($elm$core$Basics$modBy, 2, leftBound),
-					A2($elm$core$Basics$modBy, 2, topBound)) ? _Utils_Tuple2(leftBound, topBound) : _Utils_Tuple2(leftBound + 1, topBound);
-				var offsetLeftBound = offsetBounds.a;
-				var offsetTopBound = offsetBounds.b;
-				return A2(
-					$elm$core$List$cons,
-					_Utils_Tuple2(coord.a + offsetLeftBound, coord.b + offsetTopBound),
-					accumulator);
-			});
-		var pointConnectionToGridPoint = function (point) {
-			return _Utils_update(
-				$author$project$Components$App$Grid$emptyGridpoint,
-				{color: point.color, offsetX: point.offsetX, offsetY: point.offsetY, used: true});
-		};
-		var gridpointToPointConnection = function (point) {
-			return {
-				betweenOffsetValues: _Utils_Tuple3(
-					_Utils_Tuple2(0, 0),
-					_Utils_Tuple2(0, 0),
-					_Utils_Tuple2(0, 0)),
-				color: pattern.color,
-				offsetX: point.offsetX,
-				offsetY: point.offsetY
-			};
-		};
-		var getbottomAndRightBound = F2(
-			function (coord, accumulator) {
-				var x = coord.a;
-				var y = coord.b;
-				return {
-					bottom: A2($elm$core$Basics$max, y, accumulator.bottom),
-					right: A2($elm$core$Basics$max, x, accumulator.right)
-				};
-			});
-		var getNextDirection = F2(
-			function (prevDirection, angle) {
-				return A2(
-					$elm$core$Maybe$withDefault,
-					_Utils_Tuple2(
-						'',
-						_Utils_Tuple2($author$project$Logic$App$Types$ErrorDirection, $author$project$Logic$App$Types$ErrorDirection)),
-					$elm$core$List$head(
-						A2(
-							$elm$core$List$filter,
-							function (mapItem) {
-								var letter = mapItem.a;
-								var direction = mapItem.b;
-								return (_Utils_eq(letter, angle) && _Utils_eq(direction.a, prevDirection)) ? true : false;
-							},
-							$author$project$Logic$App$Utils$LetterMap$letterMap))).b.b;
-			});
-		var signatureToAngles = F2(
-			function (angle, accumulator) {
-				return A2(
-					$elm$core$List$cons,
-					A2(
-						getNextDirection,
-						A2(
-							$elm$core$Maybe$withDefault,
-							$author$project$Logic$App$Types$East,
-							$elm$core$List$head(accumulator)),
-						angle),
-					accumulator);
-			});
-		var getLeftmostAndTopmostValues = F2(
-			function (coord, accumulator) {
-				var x = coord.a;
-				var y = coord.b;
-				return {
-					x: A2($elm$core$Basics$min, x, accumulator.x),
-					y: A2($elm$core$Basics$min, y, accumulator.y)
-				};
-			});
-		var directionToCoord = function (direction) {
-			return A2(
-				$elm$core$Maybe$withDefault,
-				_Utils_Tuple2(
-					$author$project$Logic$App$Types$ErrorDirection,
-					_Utils_Tuple2(0, 0)),
-				$elm$core$List$head(
-					A2(
-						$elm$core$List$filter,
-						function (mapItem) {
-							var dir = mapItem.a;
-							return _Utils_eq(dir, direction) ? true : false;
-						},
-						$author$project$Logic$App$Utils$DirectionMap$directionMap))).b;
-		};
-		var coordsToPathCoords = F2(
-			function (coord, accumulator) {
-				var _v1 = $elm$core$List$head(accumulator);
-				if (_v1.$ === 'Just') {
-					var prevPoint = _v1.a;
-					return A2(
-						$elm$core$List$cons,
-						_Utils_Tuple2(coord.a + prevPoint.a, coord.b + prevPoint.b),
-						accumulator);
-				} else {
-					return _List_fromArray(
-						[
-							_Utils_Tuple2(coord.a - 2, coord.b)
-						]);
-				}
-			});
-		var pathCoords = A3(
-			$elm$core$List$foldl,
-			coordsToPathCoords,
-			_List_Nil,
-			A2(
-				$elm$core$List$map,
-				directionToCoord,
-				$elm$core$List$reverse(
-					A3(
-						$elm$core$List$foldl,
-						signatureToAngles,
-						_List_fromArray(
-							[$author$project$Logic$App$Types$East, $author$project$Logic$App$Types$East]),
-						A2($elm$core$String$split, '', pattern.signature)))));
-		var leftmostAndTopmostValues = A3(
-			$elm$core$List$foldl,
-			getLeftmostAndTopmostValues,
-			{x: 0, y: 0},
-			pathCoords);
-		var coordToPointConnection = function (coord) {
-			return {
-				betweenOffsetValues: _Utils_Tuple3(
-					_Utils_Tuple2(0, 0),
-					_Utils_Tuple2(0, 0),
-					_Utils_Tuple2(0, 0)),
-				color: pattern.color,
-				offsetX: coord.a,
-				offsetY: coord.b
-			};
-		};
-		var connectPoints = F2(
-			function (point, accumulator) {
-				var prevPoint = accumulator.a;
-				var drawing = accumulator.b;
-				var _v0 = $elm$core$List$head(drawing);
-				if (_v0.$ === 'Just') {
-					return A2(
-						$elm$core$List$any,
-						function (x) {
-							return _Utils_eq(
-								_Utils_Tuple2(x.offsetX, x.offsetY),
-								_Utils_Tuple2(point.offsetX, point.offsetY));
-						},
-						drawing) ? _Utils_Tuple2(
-						point,
-						A2(
-							$elm$core$List$map,
-							function (x) {
-								return _Utils_eq(
-									_Utils_Tuple2(x.offsetX, x.offsetY),
-									_Utils_Tuple2(point.offsetX, point.offsetY)) ? _Utils_update(
-									x,
-									{
-										connectedPoints: A2(
-											$elm$core$List$cons,
-											gridpointToPointConnection(prevPoint),
-											x.connectedPoints)
-									}) : x;
-							},
-							drawing)) : _Utils_Tuple2(
-						point,
-						A2(
-							$elm$core$List$cons,
-							_Utils_update(
-								point,
-								{
-									connectedPoints: _List_fromArray(
-										[
-											gridpointToPointConnection(prevPoint)
-										])
-								}),
-							drawing));
-				} else {
-					return _Utils_Tuple2(
-						point,
-						A2($elm$core$List$cons, point, drawing));
-				}
-			});
-		var grid = A3(
-			$elm$core$List$foldr,
-			connectPoints,
-			_Utils_Tuple2($author$project$Components$App$Grid$emptyGridpoint, _List_Nil),
-			A2(
-				$elm$core$List$map,
-				function (x) {
-					return pointConnectionToGridPoint(
-						coordToPointConnection(x));
-				},
-				A3(
-					$elm$core$List$foldl,
-					A2(positionCoords, xOffset - leftmostAndTopmostValues.x, yOffset - leftmostAndTopmostValues.y),
-					_List_Nil,
-					pathCoords))).b;
-		var bottomAndRightBound = A3(
-			$elm$core$List$foldl,
-			getbottomAndRightBound,
-			{bottom: 0, right: 0},
-			A3(
-				$elm$core$List$foldl,
-				A2(positionCoords, xOffset - leftmostAndTopmostValues.x, yOffset - leftmostAndTopmostValues.y),
-				_List_Nil,
-				pathCoords));
-		return {bottomBound: bottomAndRightBound.bottom, points: grid, rightBound: bottomAndRightBound.right};
-	});
-var $author$project$Logic$App$Grid$drawPatterns = F2(
-	function (patterns, grid) {
-		var gridOffsetWidth = (-6) + (2 * $elm$core$List$length(
-			A2(
-				$elm$core$Maybe$withDefault,
-				_List_Nil,
-				$elm$core$List$head(grid.points))));
-		var addPatternToGrid = F2(
-			function (pattern, accumulator) {
-				var attemptDrawPatternResult = A3($author$project$Logic$App$Grid$drawPattern, accumulator.xOffset, accumulator.yOffset, pattern);
-				var drawPatternResult = function () {
-					if (_Utils_cmp(attemptDrawPatternResult.rightBound, gridOffsetWidth) < 0) {
-						return {bottomBound: attemptDrawPatternResult.bottomBound, points: attemptDrawPatternResult.points, rightBound: attemptDrawPatternResult.rightBound, yOffset: accumulator.yOffset};
-					} else {
-						var drawPatternResultOld = A3($author$project$Logic$App$Grid$drawPattern, 0, accumulator.currentLowestY + 1, pattern);
-						return {bottomBound: drawPatternResultOld.bottomBound, points: drawPatternResultOld.points, rightBound: drawPatternResultOld.rightBound, yOffset: accumulator.currentLowestY + 1};
-					}
-				}();
-				return {
-					currentLowestY: A2($elm$core$Basics$max, accumulator.currentLowestY, drawPatternResult.bottomBound),
-					patternArray: A2(
-						$author$project$Logic$App$Utils$Utils$unshift,
-						_Utils_Tuple2(pattern, drawPatternResult.points),
-						accumulator.patternArray),
-					points: _Utils_ap(accumulator.points, drawPatternResult.points),
-					xOffset: drawPatternResult.rightBound + 1,
-					yOffset: drawPatternResult.yOffset
-				};
-			});
-		var drawPatternsResult = A3(
-			$elm$core$Array$foldr,
-			addPatternToGrid,
-			{currentLowestY: 0, patternArray: $elm$core$Array$empty, points: _List_Nil, xOffset: 0, yOffset: 0},
-			patterns);
-		return {
-			grid: _Utils_update(
-				grid,
-				{
-					points: A2(
-						$author$project$Components$App$Grid$applyPathToGrid,
-						$author$project$Logic$App$Grid$clearGrid(grid.points),
-						drawPatternsResult.points)
-				}),
-			patternArray: drawPatternsResult.patternArray
 		};
 	});
 var $author$project$Main$updatePatternArrayFromQueue = function (model) {
