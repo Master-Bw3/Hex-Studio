@@ -2,9 +2,8 @@ module Logic.App.Stack.Stack exposing (..)
 
 import Array exposing (Array)
 import List.Extra as List
-import Logic.App.Types exposing (ActionResult, ApplyToStackResult(..), CastingContext, Iota(..), Mishap(..), Pattern)
+import Logic.App.Types exposing (ActionResult, ApplyToStackResult(..), CastingContext, Iota(..), IotaType(..), Mishap(..), Pattern)
 import Logic.App.Utils.Utils exposing (isJust, unshift)
-import Logic.App.Types exposing (IotaType(..))
 
 
 applyToStackStopAtErrorOrHalt : Array Iota -> CastingContext -> Array Iota -> { stack : Array Iota, resultArray : Array ApplyToStackResult, ctx : CastingContext, error : Bool, halted : Bool }
@@ -68,11 +67,7 @@ applyToStackLoop stackResultTuple ctx patterns considerThis stopAtErrorOrHalt =
                         stopAtErrorOrHalt
 
                 else
-                    let
-                        _ =
-                            Debug.log "error" pattern
-                    in
-                    Debug.log "error" { stack = applyResult.stack, resultArray = unshift applyResult.result resultArray, ctx = applyResult.ctx, error = True, halted = False }
+                    { stack = applyResult.stack, resultArray = unshift applyResult.result resultArray, ctx = applyResult.ctx, error = True, halted = False }
 
         Just iota ->
             if considerThis || introspection then
@@ -84,7 +79,7 @@ applyToStackLoop stackResultTuple ctx patterns considerThis stopAtErrorOrHalt =
                     stopAtErrorOrHalt
 
             else
-                Debug.log "error" { stack = stack, resultArray = resultArray, ctx = ctx, error = True, halted = False }
+                { stack = stack, resultArray = resultArray, ctx = ctx, error = True, halted = False }
 
 
 applyPatternToStack : Array Iota -> CastingContext -> Pattern -> { stack : Array Iota, result : ApplyToStackResult, ctx : CastingContext, considerNext : Bool }
@@ -169,7 +164,7 @@ applyPatternToStack stack ctx pattern =
                                 pattern.action stack ctx
                         in
                         if preActionResult.success == True && isJust pattern.selectedOutput then
-                            { preActionResult | stack = unshift (Tuple.second <| Maybe.withDefault (NullType, Null) pattern.selectedOutput) preActionResult.stack }
+                            { preActionResult | stack = unshift (Tuple.second <| Maybe.withDefault ( NullType, Null ) pattern.selectedOutput) preActionResult.stack }
 
                         else
                             preActionResult

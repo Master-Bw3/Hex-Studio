@@ -44,4 +44,3 @@ parseInput input =
         |> List.map String.trim
         |> List.filter (\l -> l /= "")
         |> List.map getPatternFromString
-        |> Debug.log "i"

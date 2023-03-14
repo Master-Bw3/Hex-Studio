@@ -584,7 +584,7 @@ update msg model =
                         _ ->
                             NoItem
             in
-            ( { model | castingContext = { castingContext | heldItem = Debug.log "item" item, heldItemContent = Nothing } }, Cmd.none )
+            ( { model | castingContext = { castingContext | heldItem = item, heldItemContent = Nothing } }, Cmd.none )
 
         RequestGridDrawingAsGIF ->
             ( { model | gridGifSrc = "loading" }, GetGridDrawingAsGif.requestGIF () )

@@ -84,9 +84,9 @@ getPatternFromName name =
                                 |> List.head
                                 |> Maybe.withDefault ""
                                 |> String.trim
-                        maskCode = String.split "" regexMatch
 
-                        _ = Debug.log regexMatch name
+                        maskCode =
+                            String.split "" regexMatch
                     in
                     if regexMatch == String.trim name then
                         ( { signature = ""
