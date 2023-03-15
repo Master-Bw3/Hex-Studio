@@ -16065,31 +16065,6 @@ var $author$project$Components$App$Panels$PatternPanel$patternPanel = function (
 					]))
 			]));
 };
-var $author$project$Logic$App$Msg$ImportText = function (a) {
-	return {$: 'ImportText', a: a};
-};
-var $author$project$Logic$App$Msg$RequestGridDrawingAsGIF = {$: 'RequestGridDrawingAsGIF'};
-var $author$project$Logic$App$Msg$SetImportInputValue = function (a) {
-	return {$: 'SetImportInputValue', a: a};
-};
-var $elm$html$Html$a = _VirtualDom_node('a');
-var $elm$html$Html$Attributes$download = function (fileName) {
-	return A2($elm$html$Html$Attributes$stringProperty, 'download', fileName);
-};
-var $elm$html$Html$Attributes$href = function (url) {
-	return A2(
-		$elm$html$Html$Attributes$stringProperty,
-		'href',
-		_VirtualDom_noJavaScriptUri(url));
-};
-var $elm$html$Html$img = _VirtualDom_node('img');
-var $elm$html$Html$Attributes$src = function (url) {
-	return A2(
-		$elm$html$Html$Attributes$stringProperty,
-		'src',
-		_VirtualDom_noJavaScriptOrHtmlUri(url));
-};
-var $elm$html$Html$textarea = _VirtualDom_node('textarea');
 var $author$project$Components$App$Panels$FilePanel$saveExportPanel = function (model) {
 	var visibility = A2($elm$core$List$member, $author$project$Logic$App$Types$FilePanel, model.ui.openPanels);
 	return A2(
@@ -16113,101 +16088,64 @@ var $author$project$Components$App$Panels$FilePanel$saveExportPanel = function (
 						$elm$html$Html$text('File')
 					])),
 				A2(
-				$elm$html$Html$div,
+				$elm$html$Html$button,
 				_List_fromArray(
 					[
-						A2($elm$html$Html$Attributes$style, 'align-self', 'center'),
-						A2($elm$html$Html$Attributes$style, 'width', '100%')
+						$elm$html$Html$Attributes$class('generic_button')
 					]),
 				_List_fromArray(
 					[
-						A2(
-						$elm$html$Html$textarea,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$id('import_input'),
-								$elm$html$Html$Events$onInput($author$project$Logic$App$Msg$SetImportInputValue)
-							]),
-						_List_Nil)
+						$elm$html$Html$text(' • Save Project')
 					])),
 				A2(
 				$elm$html$Html$button,
 				_List_fromArray(
 					[
-						A2($elm$html$Html$Attributes$style, 'color', 'white'),
-						$elm$html$Html$Events$onClick(
-						$author$project$Logic$App$Msg$ImportText(model.ui.importInput))
+						$elm$html$Html$Attributes$class('generic_button')
 					]),
 				_List_fromArray(
 					[
-						$elm$html$Html$text('Import')
+						$elm$html$Html$text(' • Load Project')
 					])),
 				A2(
-				$elm$html$Html$div,
+				$elm$html$Html$button,
 				_List_fromArray(
 					[
-						A2($elm$html$Html$Attributes$style, 'height', '300px'),
-						A2($elm$html$Html$Attributes$style, 'align-content', 'center')
+						$elm$html$Html$Attributes$class('generic_button')
 					]),
 				_List_fromArray(
 					[
-						A2(
-						$elm$html$Html$img,
-						_Utils_ap(
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$src(
-									(model.gridGifSrc === 'loading') ? './gen/resources/loading.gif' : model.gridGifSrc),
-									A2($elm$html$Html$Attributes$style, 'width', '100%'),
-									A2($elm$html$Html$Attributes$style, 'max-height', '300px'),
-									A2($elm$html$Html$Attributes$style, 'object-fit', 'cover')
-								]),
-							(model.gridGifSrc === '') ? _List_fromArray(
-								[
-									A2($elm$html$Html$Attributes$style, 'opacity', '0')
-								]) : _List_Nil),
-						_List_Nil)
+						$elm$html$Html$text(' • Import Patterns')
 					])),
 				A2(
-				$elm$html$Html$div,
+				$elm$html$Html$button,
 				_List_fromArray(
 					[
-						A2($elm$html$Html$Attributes$style, 'align-self', 'center')
+						$elm$html$Html$Attributes$class('generic_button')
 					]),
 				_List_fromArray(
 					[
-						A2(
-						$elm$html$Html$button,
-						_List_fromArray(
-							[
-								A2($elm$html$Html$Attributes$style, 'color', 'white'),
-								$elm$html$Html$Events$onClick($author$project$Logic$App$Msg$RequestGridDrawingAsGIF)
-							]),
-						_List_fromArray(
-							[
-								$elm$html$Html$text('generate gif')
-							])),
-						A2(
-						$elm$html$Html$a,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$href(model.gridGifSrc),
-								$elm$html$Html$Attributes$download('hex.gif'),
-								A2($elm$html$Html$Attributes$style, 'padding-left', '2em')
-							]),
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										A2($elm$html$Html$Attributes$style, 'color', 'white')
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('download gif')
-									]))
-							]))
+						$elm$html$Html$text(' • Export Patterns')
+					])),
+				A2(
+				$elm$html$Html$button,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('generic_button')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text(' • Export Image')
+					])),
+				A2(
+				$elm$html$Html$button,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('generic_button')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text(' • Export Gif')
 					]))
 			]));
 };

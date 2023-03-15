@@ -439,13 +439,14 @@ button {
 
 .add_button {
     margin-top: 0.3em;
-    color: rgba(255, 255, 255, 0.7);
+    color: rgb(255, 255, 255);
     display: flex;
     align-items: center;
     cursor: pointer;
     font-size: 1.1em;
     margin-right: 0.3em;
     margin-left: 0.3em;
+    opacity: 0.7;
 }
 
 .add_button svg {
@@ -464,7 +465,7 @@ button {
     height: 0.85em;
 }
 
-#paragraph_dropdown:hover g {
+#paragraph_dropdown:hover g, .add_button:hover {
     opacity: 1;
 }
 #add_pattern .mutliline_input {
@@ -579,4 +580,16 @@ button {
     font-weight: normal;
     height: 10em;
     margin: 10px;
+}
+
+.generic_button {
+    color: rgba(255, 255, 255, 0.6);
+    font-family: 'fira';
+    font-weight: bold;
+    padding: 0.3em  0.5em  0.2em  0.5em;
+    text-align: start;
+}
+
+.generic_button:hover {
+    background-color: var(--primary_lighter);
 }
