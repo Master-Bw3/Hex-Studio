@@ -16284,6 +16284,16 @@ var $author$project$Components$App$Panels$FilePanel$saveExportPanel = function (
 				$elm$html$Html$button,
 				_List_fromArray(
 					[
+						$elm$html$Html$Attributes$class('generic_button')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text(' • Export Patterns')
+					])),
+				A2(
+				$elm$html$Html$button,
+				_List_fromArray(
+					[
 						$elm$html$Html$Attributes$class('generic_button'),
 						$elm$html$Html$Events$onClick($author$project$Logic$App$Msg$RequestGridDrawingAsImage)
 					]),
