@@ -16,6 +16,10 @@ exportTextOverlay model =
         []
 
     else
+        let
+            patternText =
+                exportPatternsAsLineList <| Array.map Tuple.first model.patternArray
+        in
         [ div [ class "overlay" ]
             [ div
                 [ id "export_text"
@@ -24,11 +28,11 @@ exportTextOverlay model =
                 , style "display" "flex"
                 , style "flex-direction" "column"
                 ]
-                [p [] [text <| exportPatternsAsLineList <| Array.map Tuple.first model.patternArray]]
+                [ p [] [ text patternText ] ]
             , div [ id "import_overlay_button_container" ]
                 [ button
                     [ class "import_overlay_button"
-                    , onClick (ImportText model.ui.importInput)
+                    , onClick (Download patternText)
                     ]
                     [ text "Download" ]
                 , button

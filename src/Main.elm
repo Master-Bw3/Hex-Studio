@@ -663,6 +663,9 @@ update msg model =
         ViewOverlay overlay ->
             ( { model | ui = { ui | openOverlay = overlay } }, Cmd.none )
 
+        Download string ->
+            ( model, Download.string "Hex.hexcasting" "text/plain" string )
+
 
 
 -- argg : List (List (GridPoint)) -> (Float, Float) -> List (List (GridPoint))

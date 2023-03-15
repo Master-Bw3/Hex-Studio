@@ -49,6 +49,7 @@ type Msg
     | SetImportInputValue String
     | ImportText String
     | ViewOverlay Overlay
+    | Download String
 
 type alias MouseMoveData =
     { pageX : Int
