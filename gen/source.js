@@ -7982,6 +7982,65 @@ var $elm$core$Basics$abs = function (n) {
 	return (n < 0) ? (-n) : n;
 };
 var $author$project$Logic$App$Types$IncorrectIota = {$: 'IncorrectIota'};
+var $author$project$Logic$App$Types$MathematicalError = {$: 'MathematicalError'};
+var $elm$core$Array$foldl = F3(
+	function (func, baseCase, _v0) {
+		var tree = _v0.c;
+		var tail = _v0.d;
+		var helper = F2(
+			function (node, acc) {
+				if (node.$ === 'SubTree') {
+					var subTree = node.a;
+					return A3($elm$core$Elm$JsArray$foldl, helper, acc, subTree);
+				} else {
+					var values = node.a;
+					return A3($elm$core$Elm$JsArray$foldl, func, acc, values);
+				}
+			});
+		return A3(
+			$elm$core$Elm$JsArray$foldl,
+			func,
+			A3($elm$core$Elm$JsArray$foldl, helper, baseCase, tree),
+			tail);
+	});
+var $elm_community$array_extra$Array$Extra$any = function (isOkay) {
+	return A2(
+		$elm$core$Array$foldl,
+		F2(
+			function (element, soFar) {
+				return soFar || isOkay(element);
+			}),
+		false);
+};
+var $elm$core$Basics$isInfinite = _Basics_isInfinite;
+var $elm$core$Basics$isNaN = _Basics_isNaN;
+var $author$project$Logic$App$Patterns$OperatorUtils$nanOrInfinityCheck = function (array) {
+	return A2(
+		$elm_community$array_extra$Array$Extra$any,
+		function (i) {
+			switch (i.$) {
+				case 'Number':
+					var number = i.a;
+					return $elm$core$Basics$isNaN(number) || $elm$core$Basics$isInfinite(number);
+				case 'Vector':
+					var _v1 = i.a;
+					var x = _v1.a;
+					var y = _v1.b;
+					var z = _v1.c;
+					return A2(
+						$elm_community$array_extra$Array$Extra$any,
+						function (num) {
+							return $elm$core$Basics$isNaN(num) || $elm$core$Basics$isInfinite(num);
+						},
+						$elm$core$Array$fromList(
+							_List_fromArray(
+								[x, y, z])));
+				default:
+					return false;
+			}
+		},
+		array);
+};
 var $author$project$Logic$App$Patterns$OperatorUtils$action1Input = F4(
 	function (stack, ctx, inputGetter, action) {
 		var newStack = A3(
@@ -8013,7 +8072,14 @@ var $author$project$Logic$App$Patterns$OperatorUtils$action1Input = F4(
 				};
 			} else {
 				var actionResult = A2(action, iota, ctx);
-				return {
+				return $author$project$Logic$App$Patterns$OperatorUtils$nanOrInfinityCheck(actionResult.a) ? {
+					ctx: actionResult.b,
+					stack: A2(
+						$author$project$Logic$App$Utils$Utils$unshift,
+						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$MathematicalError),
+						stack),
+					success: false
+				} : {
 					ctx: actionResult.b,
 					stack: A2($elm$core$Array$append, actionResult.a, newStack),
 					success: true
@@ -8223,7 +8289,14 @@ var $author$project$Logic$App$Patterns$OperatorUtils$action2Inputs = F5(
 							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
 							iota2),
 						ctx);
-					return {
+					return $author$project$Logic$App$Patterns$OperatorUtils$nanOrInfinityCheck(actionResult.a) ? {
+						ctx: actionResult.b,
+						stack: A2(
+							$author$project$Logic$App$Utils$Utils$unshift,
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$MathematicalError),
+							stack),
+						success: false
+					} : {
 						ctx: actionResult.b,
 						stack: A2($elm$core$Array$append, actionResult.a, newStack),
 						success: true
@@ -8745,7 +8818,14 @@ var $author$project$Logic$App$Patterns$OperatorUtils$action3Inputs = F6(
 							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
 							iota3),
 						ctx);
-					return {
+					return $author$project$Logic$App$Patterns$OperatorUtils$nanOrInfinityCheck(actionResult.a) ? {
+						ctx: actionResult.b,
+						stack: A2(
+							$author$project$Logic$App$Utils$Utils$unshift,
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$MathematicalError),
+							stack),
+						success: false
+					} : {
 						ctx: actionResult.b,
 						stack: A2($elm$core$Array$append, actionResult.a, newStack),
 						success: true
@@ -8875,7 +8955,14 @@ var $author$project$Logic$App$Patterns$Math$ceilAction = F2(
 var $author$project$Logic$App$Patterns$OperatorUtils$actionNoInput = F3(
 	function (stack, ctx, action) {
 		var actionResult = action(ctx);
-		return {
+		return $author$project$Logic$App$Patterns$OperatorUtils$nanOrInfinityCheck(actionResult.a) ? {
+			ctx: actionResult.b,
+			stack: A2(
+				$author$project$Logic$App$Utils$Utils$unshift,
+				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$MathematicalError),
+				stack),
+			success: false
+		} : {
 			ctx: actionResult.b,
 			stack: A2($elm$core$Array$append, actionResult.a, stack),
 			success: true
@@ -9772,26 +9859,6 @@ var $author$project$Logic$App$Patterns$Math$floorAction = F2(
 					ctx);
 			});
 		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
-	});
-var $elm$core$Array$foldl = F3(
-	function (func, baseCase, _v0) {
-		var tree = _v0.c;
-		var tail = _v0.d;
-		var helper = F2(
-			function (node, acc) {
-				if (node.$ === 'SubTree') {
-					var subTree = node.a;
-					return A3($elm$core$Elm$JsArray$foldl, helper, acc, subTree);
-				} else {
-					var values = node.a;
-					return A3($elm$core$Elm$JsArray$foldl, func, acc, values);
-				}
-			});
-		return A3(
-			$elm$core$Elm$JsArray$foldl,
-			func,
-			A3($elm$core$Elm$JsArray$foldl, helper, baseCase, tree),
-			tail);
 	});
 var $elm_community$array_extra$Array$Extra$reverseToList = A2($elm$core$Array$foldl, $elm$core$List$cons, _List_Nil);
 var $elm_community$array_extra$Array$Extra$reverse = A2($elm$core$Basics$composeR, $elm_community$array_extra$Array$Extra$reverseToList, $elm$core$Array$fromList);

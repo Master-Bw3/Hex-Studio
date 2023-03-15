@@ -1,6 +1,7 @@
 module Logic.App.Patterns.OperatorUtils exposing (..)
 
 import Array exposing (Array)
+import Array.Extra as Array
 import Length
 import Logic.App.Types exposing (ActionResult, CastingContext, Iota(..), Mishap(..))
 import Logic.App.Utils.Utils exposing (unshift)
@@ -20,10 +21,11 @@ actionNoInput stack ctx action =
             action
                 ctx
     in
-    { stack = Array.append (Tuple.first actionResult) stack
-    , ctx = Tuple.second actionResult
-    , success = True
-    }
+    if nanOrInfinityCheck (Tuple.first actionResult) then
+        { stack = unshift (Garbage MathematicalError) stack, ctx = Tuple.second actionResult, success = False }
+
+    else
+        { stack = Array.append (Tuple.first actionResult) stack, ctx = Tuple.second actionResult, success = True }
 
 
 action1Input : Array Iota -> CastingContext -> (Iota -> Maybe Iota) -> (Iota -> CastingContext -> ( Array Iota, CastingContext )) -> ActionResult
@@ -49,7 +51,11 @@ action1Input stack ctx inputGetter action =
                         actionResult =
                             action iota ctx
                     in
-                    { stack = Array.append (Tuple.first actionResult) newStack, ctx = Tuple.second actionResult, success = True }
+                    if nanOrInfinityCheck (Tuple.first actionResult) then
+                        { stack = unshift (Garbage MathematicalError) stack, ctx = Tuple.second actionResult, success = False }
+
+                    else
+                        { stack = Array.append (Tuple.first actionResult) newStack, ctx = Tuple.second actionResult, success = True }
 
 
 action2Inputs : Array Iota -> CastingContext -> (Iota -> Maybe Iota) -> (Iota -> Maybe Iota) -> (Iota -> Iota -> CastingContext -> ( Array Iota, CastingContext )) -> ActionResult
@@ -94,13 +100,11 @@ action2Inputs stack ctx inputGetter1 inputGetter2 action =
                                 (Maybe.withDefault (Garbage IncorrectIota) iota2)
                                 ctx
                     in
-                    { stack =
-                        Array.append
-                            (Tuple.first actionResult)
-                            newStack
-                    , ctx = Tuple.second actionResult
-                    , success = True
-                    }
+                    if nanOrInfinityCheck (Tuple.first actionResult) then
+                        { stack = unshift (Garbage MathematicalError) stack, ctx = Tuple.second actionResult, success = False }
+
+                    else
+                        { stack = Array.append (Tuple.first actionResult) newStack, ctx = Tuple.second actionResult, success = True }
 
             _ ->
                 -- this should never happen
@@ -157,13 +161,11 @@ action3Inputs stack ctx inputGetter1 inputGetter2 inputGetter3 action =
                                 (Maybe.withDefault (Garbage IncorrectIota) iota3)
                                 ctx
                     in
-                    { stack =
-                        Array.append
-                            (Tuple.first actionResult)
-                            newStack
-                    , ctx = Tuple.second actionResult
-                    , success = True
-                    }
+                    if nanOrInfinityCheck (Tuple.first actionResult) then
+                        { stack = unshift (Garbage MathematicalError) stack, ctx = Tuple.second actionResult, success = False }
+
+                    else
+                        { stack = Array.append (Tuple.first actionResult) newStack, ctx = Tuple.second actionResult, success = True }
 
             _ ->
                 -- this should never happen
@@ -191,6 +193,23 @@ spell2Inputs stack ctx inputGetter1 inputGetter2 =
 spell3Inputs : Array Iota -> CastingContext -> (Iota -> Maybe Iota) -> (Iota -> Maybe Iota) -> (Iota -> Maybe Iota) -> ActionResult
 spell3Inputs stack ctx inputGetter1 inputGetter2 inputGetter3 =
     action3Inputs stack ctx inputGetter1 inputGetter2 inputGetter3 (\_ _ _ _ -> ( Array.empty, ctx ))
+
+
+nanOrInfinityCheck : Array Iota -> Bool
+nanOrInfinityCheck array =
+    Array.any
+        (\i ->
+            case i of
+                Number number ->
+                    isNaN number || isInfinite number
+
+                Vector ( x, y, z ) ->
+                    Array.any (\num -> isNaN num || isInfinite num) <| Array.fromList [ x, y, z ]
+
+                _ ->
+                    False
+        )
+        array
 
 
 getPatternList : Iota -> Maybe Iota
