@@ -11,6 +11,7 @@ import Html.Events.Extra.Touch as TouchEvent
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (Msg(..))
 import Logic.App.Utils.Utils exposing (touchCoordinates)
+import Components.App.ImportTextOverlay exposing (importTextOverlay)
 
 
 content : Model -> Html Msg
@@ -24,4 +25,5 @@ content model =
         [ leftBox model
         , right model
         , Tuple.first <| patternInputAutoComplete model
+        , importTextOverlay model
         ]

@@ -10,6 +10,7 @@ import Logic.App.Msg exposing (Msg(..))
 import Logic.App.Types exposing (Iota(..), Panel(..))
 
 
+
 -- saveExportPanel : Model -> Html Msg
 -- saveExportPanel model =
 --     let
@@ -31,7 +32,6 @@ import Logic.App.Types exposing (Iota(..), Panel(..))
 --                 ([ src
 --                     (if model.gridGifSrc == "loading" then
 --                         "./gen/resources/loading.gif"
-
 --                      else
 --                         model.gridGifSrc
 --                     )
@@ -41,7 +41,6 @@ import Logic.App.Types exposing (Iota(..), Panel(..))
 --                  ]
 --                     ++ (if model.gridGifSrc == "" then
 --                             [ style "opacity" "0" ]
-
 --                         else
 --                             []
 --                        )
@@ -53,6 +52,7 @@ import Logic.App.Types exposing (Iota(..), Panel(..))
 --             , a [ href model.gridGifSrc, download "hex.gif", style "padding-left" "2em" ] [ button [ style "color" "white" ] [ text "download gif" ] ]
 --             ]
 --         ]
+
 
 saveExportPanel : Model -> Html Msg
 saveExportPanel model =
@@ -66,10 +66,10 @@ saveExportPanel model =
         , visibilityToDisplayStyle visibility
         ]
         [ h1 [ class "panel_title" ] [ text "File" ]
-        , button [class "generic_button"] [text " • Save Project"]
-        , button [class "generic_button"] [text " • Load Project"]
-        , button [class "generic_button"] [text " • Import Patterns"]
-        , button [class "generic_button"] [text " • Export Patterns"]
-        , button [class "generic_button"] [text " • Export Image"]
-        , button [class "generic_button"] [text " • Export Gif"]
+        , button [ class "generic_button" ] [ text " • Save Project" ]
+        , button [ class "generic_button" ] [ text " • Load Project" ]
+        , button [ class "generic_button", onClick (SetImportOverlayVisibility True) ] [ text " • Import Patterns" ]
+        , button [ class "generic_button" ] [ text " • Export Patterns" ]
+        , button [ class "generic_button" ] [ text " • Export Image" ]
+        , button [ class "generic_button", onClick RequestGridDrawingAsGIF ] [ text " • Export Gif" ]
         ]

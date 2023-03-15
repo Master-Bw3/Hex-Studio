@@ -45,6 +45,7 @@ type Msg
     | SetInsertionPoint Int Keys
     | SetImportInputValue String
     | ImportText String
+    | SetImportOverlayVisibility Bool
 
 type alias MouseMoveData =
     { pageX : Int

@@ -5572,6 +5572,7 @@ var $author$project$Main$init = function (_v0) {
 				patternInputField: '',
 				patternInputLocation: _Utils_Tuple2(0, 0),
 				selectedInputID: '',
+				showImportTextOverlay: false,
 				suggestionIndex: 0
 			},
 			window: {height: 0.0, width: 0.0}
@@ -12754,6 +12755,7 @@ var $elm$core$Array$indexedMap = F2(
 			true,
 			A3($elm$core$Elm$JsArray$foldl, helper, initialBuilder, tree));
 	});
+var $elm$core$Debug$log = _Debug_log;
 var $author$project$Logic$App$Msg$MouseMoveData = F4(
 	function (pageX, pageY, offsetHeight, offsetWidth) {
 		return {offsetHeight: offsetHeight, offsetWidth: offsetWidth, pageX: pageX, pageY: pageY};
@@ -13114,6 +13116,12 @@ var $author$project$Components$App$Grid$updatemidLineOffsets = F2(
 			},
 			grid_);
 	});
+var $elm$file$File$Download$url = function (href) {
+	return A2(
+		$elm$core$Task$perform,
+		$elm$core$Basics$never,
+		_File_downloadUrl(href));
+};
 var $author$project$Main$update = F2(
 	function (msg, model) {
 		var ui = model.ui;
@@ -13734,7 +13742,7 @@ var $author$project$Main$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{gridGifSrc: 'loading'}),
+						{gridGifSrc: ''}),
 					$author$project$Ports$GetGridDrawingAsGif$requestGIF(_Utils_Tuple0));
 			case 'RecieveGridDrawingAsGIF':
 				var src = msg.a;
@@ -13742,7 +13750,8 @@ var $author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{gridGifSrc: src}),
-					$elm$core$Platform$Cmd$none);
+					$elm$file$File$Download$url(
+						A2($elm$core$Debug$log, 'src', src)));
 			case 'UpdatePatternOuptut':
 				var index = msg.a;
 				var replacementPattern = msg.b;
@@ -13811,13 +13820,29 @@ var $author$project$Main$update = F2(
 								{importInput: string})
 						}),
 					$elm$core$Platform$Cmd$none);
-			default:
+			case 'ImportText':
 				var string = msg.a;
 				var importQueue = $author$project$Logic$App$ImportExport$ImportParser$parseInput(string);
 				return $author$project$Main$updatePatternArrayFromQueue(
 					_Utils_update(
 						model,
-						{importQueue: importQueue}));
+						{
+							importQueue: importQueue,
+							ui: _Utils_update(
+								ui,
+								{importInput: '', showImportTextOverlay: false})
+						}));
+			default:
+				var bool = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							ui: _Utils_update(
+								ui,
+								{showImportTextOverlay: bool})
+						}),
+					$elm$core$Platform$Cmd$none);
 		}
 	});
 var $author$project$Logic$App$Msg$MouseMove = function (a) {
@@ -13833,6 +13858,123 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 			$elm$json$Json$Encode$string(string));
 	});
 var $elm$html$Html$Attributes$id = $elm$html$Html$Attributes$stringProperty('id');
+var $author$project$Logic$App$Msg$ImportText = function (a) {
+	return {$: 'ImportText', a: a};
+};
+var $author$project$Logic$App$Msg$SetImportInputValue = function (a) {
+	return {$: 'SetImportInputValue', a: a};
+};
+var $author$project$Logic$App$Msg$SetImportOverlayVisibility = function (a) {
+	return {$: 'SetImportOverlayVisibility', a: a};
+};
+var $elm$html$Html$button = _VirtualDom_node('button');
+var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
+var $elm$virtual_dom$VirtualDom$Normal = function (a) {
+	return {$: 'Normal', a: a};
+};
+var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
+var $elm$html$Html$Events$on = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$Normal(decoder));
+	});
+var $elm$html$Html$Events$onClick = function (msg) {
+	return A2(
+		$elm$html$Html$Events$on,
+		'click',
+		$elm$json$Json$Decode$succeed(msg));
+};
+var $elm$html$Html$Events$alwaysStop = function (x) {
+	return _Utils_Tuple2(x, true);
+};
+var $elm$virtual_dom$VirtualDom$MayStopPropagation = function (a) {
+	return {$: 'MayStopPropagation', a: a};
+};
+var $elm$html$Html$Events$stopPropagationOn = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
+	});
+var $elm$html$Html$Events$targetValue = A2(
+	$elm$json$Json$Decode$at,
+	_List_fromArray(
+		['target', 'value']),
+	$elm$json$Json$Decode$string);
+var $elm$html$Html$Events$onInput = function (tagger) {
+	return A2(
+		$elm$html$Html$Events$stopPropagationOn,
+		'input',
+		A2(
+			$elm$json$Json$Decode$map,
+			$elm$html$Html$Events$alwaysStop,
+			A2($elm$json$Json$Decode$map, tagger, $elm$html$Html$Events$targetValue)));
+};
+var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
+var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
+var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
+var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
+var $elm$html$Html$textarea = _VirtualDom_node('textarea');
+var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
+var $author$project$Components$App$ImportTextOverlay$importTextOverlay = function (model) {
+	var visibility = (!model.ui.showImportTextOverlay) ? A2($elm$html$Html$Attributes$style, 'display', 'none') : A2($elm$html$Html$Attributes$style, '', '');
+	return A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$id('import_text_overlay'),
+				visibility
+			]),
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$textarea,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$id('import_input'),
+						$elm$html$Html$Events$onInput($author$project$Logic$App$Msg$SetImportInputValue),
+						$elm$html$Html$Attributes$value(model.ui.importInput)
+					]),
+				_List_Nil),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$id('import_overlay_button_container')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$button,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('import_overlay_button'),
+								$elm$html$Html$Events$onClick(
+								$author$project$Logic$App$Msg$ImportText(model.ui.importInput))
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('Import')
+							])),
+						A2(
+						$elm$html$Html$button,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('import_overlay_button'),
+								$elm$html$Html$Attributes$class('cancel_button'),
+								$elm$html$Html$Events$onClick(
+								$author$project$Logic$App$Msg$SetImportOverlayVisibility(false))
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('Cancel')
+							]))
+					]))
+			]));
+};
 var $author$project$Logic$App$Types$ConfigHexPanel = {$: 'ConfigHexPanel'};
 var $author$project$Logic$App$Types$FilePanel = {$: 'FilePanel'};
 var $author$project$Logic$App$Types$StackPanel = {$: 'StackPanel'};
@@ -13840,8 +13982,6 @@ var $author$project$Logic$App$Msg$ViewPanel = F2(
 	function (a, b) {
 		return {$: 'ViewPanel', a: a, b: b};
 	});
-var $elm$html$Html$button = _VirtualDom_node('button');
-var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $lattyware$elm_fontawesome$FontAwesome$IconDef = F4(
 	function (prefix, name, size, paths) {
 		return {name: name, paths: paths, prefix: prefix, size: size};
@@ -13865,8 +14005,6 @@ var $elm$virtual_dom$VirtualDom$node = function (tag) {
 		_VirtualDom_noScript(tag));
 };
 var $elm$html$Html$node = $elm$virtual_dom$VirtualDom$node;
-var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
-var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $lattyware$elm_fontawesome$FontAwesome$Styles$css = A3(
 	$elm$html$Html$node,
 	'style',
@@ -13908,7 +14046,6 @@ var $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$defaultOptions = {pre
 var $elm$virtual_dom$VirtualDom$Custom = function (a) {
 	return {$: 'Custom', a: a};
 };
-var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
 var $elm$html$Html$Events$custom = F2(
 	function (event, decoder) {
 		return A2(
@@ -14017,8 +14154,6 @@ var $lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$sliders = A4(
 var $lattyware$elm_fontawesome$FontAwesome$Solid$sliders = $lattyware$elm_fontawesome$FontAwesome$present($lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$sliders);
 var $elm$svg$Svg$Attributes$class = _VirtualDom_attribute('class');
 var $lattyware$elm_fontawesome$FontAwesome$Attributes$sm = $elm$svg$Svg$Attributes$class('fa-sm');
-var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
-var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
 var $lattyware$elm_fontawesome$FontAwesome$styled = F2(
 	function (attributes, _v0) {
 		var presentation = _v0.a;
@@ -14524,33 +14659,6 @@ var $author$project$Logic$App$Msg$ChangeHeldItem = function (a) {
 	return {$: 'ChangeHeldItem', a: a};
 };
 var $elm$html$Html$label = _VirtualDom_node('label');
-var $elm$html$Html$Events$alwaysStop = function (x) {
-	return _Utils_Tuple2(x, true);
-};
-var $elm$virtual_dom$VirtualDom$MayStopPropagation = function (a) {
-	return {$: 'MayStopPropagation', a: a};
-};
-var $elm$html$Html$Events$stopPropagationOn = F2(
-	function (event, decoder) {
-		return A2(
-			$elm$virtual_dom$VirtualDom$on,
-			event,
-			$elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
-	});
-var $elm$html$Html$Events$targetValue = A2(
-	$elm$json$Json$Decode$at,
-	_List_fromArray(
-		['target', 'value']),
-	$elm$json$Json$Decode$string);
-var $elm$html$Html$Events$onInput = function (tagger) {
-	return A2(
-		$elm$html$Html$Events$stopPropagationOn,
-		'input',
-		A2(
-			$elm$json$Json$Decode$map,
-			$elm$html$Html$Events$alwaysStop,
-			A2($elm$json$Json$Decode$map, tagger, $elm$html$Html$Events$targetValue)));
-};
 var $elm$html$Html$option = _VirtualDom_node('option');
 var $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString = function (iota) {
 	switch (iota.$) {
@@ -14995,26 +15103,10 @@ var $author$project$Components$App$Panels$PatternPanel$dropTargetConfig = {
 var $elm$json$Json$Decode$fail = _Json_fail;
 var $elm$html$Html$input = _VirtualDom_node('input');
 var $elm$html$Html$Events$keyCode = A2($elm$json$Json$Decode$field, 'keyCode', $elm$json$Json$Decode$int);
-var $elm$virtual_dom$VirtualDom$Normal = function (a) {
-	return {$: 'Normal', a: a};
-};
-var $elm$html$Html$Events$on = F2(
-	function (event, decoder) {
-		return A2(
-			$elm$virtual_dom$VirtualDom$on,
-			event,
-			$elm$virtual_dom$VirtualDom$Normal(decoder));
-	});
 var $elm$html$Html$Events$onBlur = function (msg) {
 	return A2(
 		$elm$html$Html$Events$on,
 		'blur',
-		$elm$json$Json$Decode$succeed(msg));
-};
-var $elm$html$Html$Events$onClick = function (msg) {
-	return A2(
-		$elm$html$Html$Events$on,
-		'click',
 		$elm$json$Json$Decode$succeed(msg));
 };
 var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$Event = F2(
@@ -15472,7 +15564,6 @@ var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$onSourceDrag = functio
 			]));
 };
 var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
-var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
 var $elm$svg$Svg$style = $elm$svg$Svg$trustedNode('style');
 var $elm$svg$Svg$Attributes$x1 = _VirtualDom_attribute('x1');
 var $author$project$Components$Icon$XButton$xButton = A2(
@@ -16132,6 +16223,7 @@ var $author$project$Components$App$Panels$PatternPanel$patternPanel = function (
 					]))
 			]));
 };
+var $author$project$Logic$App$Msg$RequestGridDrawingAsGIF = {$: 'RequestGridDrawingAsGIF'};
 var $author$project$Components$App$Panels$FilePanel$saveExportPanel = function (model) {
 	var visibility = A2($elm$core$List$member, $author$project$Logic$App$Types$FilePanel, model.ui.openPanels);
 	return A2(
@@ -16178,7 +16270,9 @@ var $author$project$Components$App$Panels$FilePanel$saveExportPanel = function (
 				$elm$html$Html$button,
 				_List_fromArray(
 					[
-						$elm$html$Html$Attributes$class('generic_button')
+						$elm$html$Html$Attributes$class('generic_button'),
+						$elm$html$Html$Events$onClick(
+						$author$project$Logic$App$Msg$SetImportOverlayVisibility(true))
 					]),
 				_List_fromArray(
 					[
@@ -16208,7 +16302,8 @@ var $author$project$Components$App$Panels$FilePanel$saveExportPanel = function (
 				$elm$html$Html$button,
 				_List_fromArray(
 					[
-						$elm$html$Html$Attributes$class('generic_button')
+						$elm$html$Html$Attributes$class('generic_button'),
+						$elm$html$Html$Events$onClick($author$project$Logic$App$Msg$RequestGridDrawingAsGIF)
 					]),
 				_List_fromArray(
 					[
@@ -16777,7 +16872,8 @@ var $author$project$Components$App$Content$content = function (model) {
 			[
 				$author$project$Components$App$LeftBox$leftBox(model),
 				$author$project$Components$App$Right$right(model),
-				$author$project$Components$App$PatternAutoComplete$patternInputAutoComplete(model).a
+				$author$project$Components$App$PatternAutoComplete$patternInputAutoComplete(model).a,
+				$author$project$Components$App$ImportTextOverlay$importTextOverlay(model)
 			]));
 };
 var $author$project$Main$view = function (model) {

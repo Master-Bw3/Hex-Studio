@@ -54,6 +54,11 @@ body {
     background: var(--primary_medium);
 }
 
+body {
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
 #content {
     display: flex;
     overflow: hidden;
@@ -465,7 +470,8 @@ button {
     height: 0.85em;
 }
 
-#paragraph_dropdown:hover g, .add_button:hover {
+#paragraph_dropdown:hover g,
+.add_button:hover {
     opacity: 1;
 }
 #add_pattern .mutliline_input {
@@ -572,24 +578,61 @@ button {
     margin-bottom: 0.5em;
 }
 
-#import_input {
-    align-self: center;
-    min-width: calc(100% - 25px);
-    max-width: calc(100% - 25px);
-    font-size: small;
-    font-weight: normal;
-    height: 10em;
-    margin: 10px;
-}
-
 .generic_button {
     color: rgba(255, 255, 255, 0.6);
     font-family: 'fira';
     font-weight: bold;
-    padding: 0.3em  0.5em  0.2em  0.5em;
+    padding: 0.3em 0.5em 0.2em 0.5em;
     text-align: start;
 }
 
-.generic_button:hover {
+.generic_button:hover, .import_overlay_button:hover {
     background-color: var(--primary_lighter);
+}
+
+#import_text_overlay {
+    z-index: 100000;
+    width: 100vw;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    padding: 5em;
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+#import_input {
+    font-weight: normal;
+    width: 100%;
+    padding: 0.5em;
+    flex-grow: 1;
+}
+
+#import_overlay_button_container {
+    box-sizing: border-box;
+    height: 10em;
+    padding-top: 2em;
+    justify-content: center;
+    display: flex;
+    gap: 5em;
+}
+
+.import_overlay_button {
+    background-color: var(--primary_light);
+    padding: 0.3em 0.5em 0.2em 0.5em;
+    border-radius: 5px;
+    font-size: 2em;
+    height: fit-content;
+    font-family: sans-serif;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.cancel_button {
+    background-color: rgb(96 26 26)
+}
+
+.cancel_button:hover {
+    background-color: rgb(124 35 35)
 }

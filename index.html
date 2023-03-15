@@ -11,6 +11,7 @@
         <!-- <script src="./gen/Ports.js"></script> -->
         <script src="./gen/source.js"></script>
         <script src="./gen/grid_to_gif.js"></script>
+        <script src="./gen/grid_to_image.js"></script>
 
         <script type="module">
             var app = Elm.Main.init({
@@ -70,6 +71,9 @@
             });
             app.ports.requestGIF.subscribe(async function (a) {
                 app.ports.recieveGIF.send(await grid_to_gif());
+            });
+            app.ports.requestImage.subscribe(async function (a) {
+                app.ports.recieveImage.send(await grid_to_image());
             });
         </script>
     </body>

@@ -20,6 +20,7 @@ type alias Model =
         , overDragHandle : Bool
         , patternElementMiddleLocations : List Float
         , importInput : String
+        , showImportTextOverlay : Bool
         }
     , grid : Grid
         

@@ -29,6 +29,7 @@ import Settings.Theme exposing (..)
 import String exposing (fromInt)
 import Task
 import Time
+import File.Download as Download
 
 
 main =
@@ -55,6 +56,7 @@ init _ =
             , patternElementMiddleLocations = []
             , overDragHandle = False
             , importInput = ""
+            , showImportTextOverlay = False
             }
       , grid =
             { height = 0
@@ -326,7 +328,7 @@ update msg model =
                         0
 
                     else if model.insertionPoint < endIndex then
-                        max (model.insertionPoint) 0
+                        max model.insertionPoint 0
 
                     else
                         max (model.insertionPoint - 1) 0
@@ -588,10 +590,10 @@ update msg model =
             ( { model | castingContext = { castingContext | heldItem = item, heldItemContent = Nothing } }, Cmd.none )
 
         RequestGridDrawingAsGIF ->
-            ( { model | gridGifSrc = "loading" }, GetGridDrawingAsGif.requestGIF () )
+            ( { model | gridGifSrc = "" }, GetGridDrawingAsGif.requestGIF () )
 
         RecieveGridDrawingAsGIF src ->
-            ( { model | gridGifSrc = src }, Cmd.none )
+            ( { model | gridGifSrc = src }, Download.url (Debug.log "src" src) )
 
         UpdatePatternOuptut index replacementPattern ->
             let
@@ -649,7 +651,10 @@ update msg model =
                 importQueue =
                     parseInput string
             in
-            updatePatternArrayFromQueue { model | importQueue = importQueue }
+            updatePatternArrayFromQueue { model | importQueue = importQueue, ui = { ui | showImportTextOverlay = False, importInput = "" } }
+
+        SetImportOverlayVisibility bool ->
+            ( { model | ui = { ui | showImportTextOverlay = bool } }, Cmd.none )
 
 
 
