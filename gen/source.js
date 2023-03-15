@@ -16272,26 +16272,6 @@ var $author$project$Components$App$Panels$FilePanel$saveExportPanel = function (
 				$elm$html$Html$button,
 				_List_fromArray(
 					[
-						$elm$html$Html$Attributes$class('generic_button')
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text(' • Save Project')
-					])),
-				A2(
-				$elm$html$Html$button,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$class('generic_button')
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text(' • Load Project')
-					])),
-				A2(
-				$elm$html$Html$button,
-				_List_fromArray(
-					[
 						$elm$html$Html$Attributes$class('generic_button'),
 						$elm$html$Html$Events$onClick(
 						$author$project$Logic$App$Msg$SetImportOverlayVisibility(true))
@@ -16299,16 +16279,6 @@ var $author$project$Components$App$Panels$FilePanel$saveExportPanel = function (
 				_List_fromArray(
 					[
 						$elm$html$Html$text(' • Import Patterns')
-					])),
-				A2(
-				$elm$html$Html$button,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$class('generic_button')
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text(' • Export Patterns')
 					])),
 				A2(
 				$elm$html$Html$button,

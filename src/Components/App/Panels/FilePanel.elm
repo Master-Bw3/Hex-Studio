@@ -66,10 +66,10 @@ saveExportPanel model =
         , visibilityToDisplayStyle visibility
         ]
         [ h1 [ class "panel_title" ] [ text "File" ]
-        , button [ class "generic_button" ] [ text " • Save Project" ]
-        , button [ class "generic_button" ] [ text " • Load Project" ]
+        -- , button [ class "generic_button" ] [ text " • Save Project" ]
+        -- , button [ class "generic_button" ] [ text " • Load Project" ]
         , button [ class "generic_button", onClick (SetImportOverlayVisibility True) ] [ text " • Import Patterns" ]
-        , button [ class "generic_button" ] [ text " • Export Patterns" ]
+        -- , button [ class "generic_button" ] [ text " • Export Patterns" ]
         , button [ class "generic_button", onClick RequestGridDrawingAsImage ] [ text " • Export Image" ]
         , button [ class "generic_button", onClick RequestGridDrawingAsGIF ] [ text " • Export Gif" ]
         ]
