@@ -33,7 +33,7 @@ type alias Model =
         { gridScale : Float }
     , castingContext : CastingContext
     , time : Int
-    , gridGifSrc : String
+    , downloadSrc : String
     , insertionPoint : Int
     , importQueue : List (Pattern, Cmd Msg)
     }

@@ -7,6 +7,7 @@ import Browser.Dom exposing (getElement)
 import Browser.Events
 import Components.App.Content exposing (content)
 import Components.App.Grid exposing (..)
+import File.Download as Download
 import Html exposing (..)
 import Json.Decode exposing (Decoder)
 import Logic.App.Grid exposing (drawPattern, drawPatterns)
@@ -24,12 +25,12 @@ import Logic.App.Utils.Utils exposing (removeFromArray, unshift)
 import Ports.CheckMouseOverDragHandle as CheckMouseOverDragHandle
 import Ports.GetElementBoundingBoxById as GetElementBoundingBoxById
 import Ports.GetGridDrawingAsGif as GetGridDrawingAsGif
+import Ports.GetGridDrawingAsImage as GetGridDrawingAsImage
 import Ports.HexNumGen as HexNumGen
 import Settings.Theme exposing (..)
 import String exposing (fromInt)
 import Task
 import Time
-import File.Download as Download
 
 
 main =
@@ -81,7 +82,7 @@ init _ =
             , ravenmind = Nothing
             }
       , time = 0
-      , gridGifSrc = ""
+      , downloadSrc = ""
       , insertionPoint = 0
       , importQueue = []
       }
@@ -590,10 +591,16 @@ update msg model =
             ( { model | castingContext = { castingContext | heldItem = item, heldItemContent = Nothing } }, Cmd.none )
 
         RequestGridDrawingAsGIF ->
-            ( { model | gridGifSrc = "" }, GetGridDrawingAsGif.requestGIF () )
+            ( { model | downloadSrc = "" }, GetGridDrawingAsGif.requestGIF () )
 
         RecieveGridDrawingAsGIF src ->
-            ( { model | gridGifSrc = src }, Download.url (Debug.log "src" src) )
+            ( { model | downloadSrc = src }, Download.url (src) )
+
+        RequestGridDrawingAsImage ->
+            ( { model | downloadSrc = "" },  (GetGridDrawingAsImage.requestImage ()) )
+
+        RecieveGridDrawingAsImage src ->
+            ( { model | downloadSrc = src }, Download.url (src) )
 
         UpdatePatternOuptut index replacementPattern ->
             let
@@ -674,6 +681,7 @@ subscriptions _ =
         , GetElementBoundingBoxById.recieveBoundingBoxes (List.map (Json.Decode.decodeValue locationDecoder) >> RecieveInputBoundingBoxes)
         , CheckMouseOverDragHandle.recieveCheckMouseOverDragHandle RecieveMouseOverHandle
         , GetGridDrawingAsGif.recieveGIF RecieveGridDrawingAsGIF
+        , GetGridDrawingAsImage.recieveImage RecieveGridDrawingAsImage
         ]
 
 

@@ -94,6 +94,7 @@ async function grid_to_image() {
     const svgDataBase64 = btoa(svgData);
     const svgDataUrl = `data:image/svg+xml;charset=utf-8;base64,${svgDataBase64}`;
     let dataUrl;
+    let trimmedCanvas;
 
     // console.log(svgData)
     // console.log(encodeURIComponent(svgData))
@@ -113,10 +114,18 @@ async function grid_to_image() {
             canvas.setAttribute('height', height);
             const context = canvas.getContext('2d');
             context.drawImage(image, 0, 0, width, height);
+            trimmedCanvas = trimCanvas(canvas);
 
-            dataUrl = trimCanvas(canvas).toDataURL('image/png');
             resolve();
         });
     });
+    await new Promise(function (resolve, reject) {
+        trimmedCanvas.toBlob(function (blob) {
+            dataUrl = URL.createObjectURL(blob);
+
+            resolve();
+        });
+    });
+
     return dataUrl;
 }

@@ -41,6 +41,8 @@ type Msg
     | ChangeHeldItem String
     | RequestGridDrawingAsGIF
     | RecieveGridDrawingAsGIF String
+    | RequestGridDrawingAsImage
+    | RecieveGridDrawingAsImage String
     | UpdatePatternOuptut Int Pattern
     | SetInsertionPoint Int Keys
     | SetImportInputValue String

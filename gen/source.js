@@ -5547,13 +5547,13 @@ var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
 		{
 			castingContext: {heldItem: $author$project$Logic$App$Types$NoItem, heldItemContent: $elm$core$Maybe$Nothing, ravenmind: $elm$core$Maybe$Nothing},
+			downloadSrc: '',
 			grid: {
 				drawing: {activePath: _List_Nil, drawingMode: false},
 				height: 0,
 				points: _List_Nil,
 				width: 0
 			},
-			gridGifSrc: '',
 			importQueue: _List_Nil,
 			insertionPoint: 0,
 			mousePos: _Utils_Tuple2(0.0, 0.0),
@@ -5595,6 +5595,9 @@ var $author$project$Logic$App$Msg$RecieveGeneratedNumberLiteral = function (a) {
 };
 var $author$project$Logic$App$Msg$RecieveGridDrawingAsGIF = function (a) {
 	return {$: 'RecieveGridDrawingAsGIF', a: a};
+};
+var $author$project$Logic$App$Msg$RecieveGridDrawingAsImage = function (a) {
+	return {$: 'RecieveGridDrawingAsImage', a: a};
 };
 var $author$project$Logic$App$Msg$RecieveInputBoundingBox = function (a) {
 	return {$: 'RecieveInputBoundingBox', a: a};
@@ -6266,6 +6269,7 @@ var $author$project$Ports$GetElementBoundingBoxById$recieveBoundingBoxes = _Plat
 var $elm$json$Json$Decode$bool = _Json_decodeBool;
 var $author$project$Ports$CheckMouseOverDragHandle$recieveCheckMouseOverDragHandle = _Platform_incomingPort('recieveCheckMouseOverDragHandle', $elm$json$Json$Decode$bool);
 var $author$project$Ports$GetGridDrawingAsGif$recieveGIF = _Platform_incomingPort('recieveGIF', $elm$json$Json$Decode$string);
+var $author$project$Ports$GetGridDrawingAsImage$recieveImage = _Platform_incomingPort('recieveImage', $elm$json$Json$Decode$string);
 var $author$project$Ports$HexNumGen$recieveNumber = _Platform_incomingPort('recieveNumber', $elm$json$Json$Decode$string);
 var $author$project$Main$subscriptions = function (_v0) {
 	return $elm$core$Platform$Sub$batch(
@@ -6290,7 +6294,8 @@ var $author$project$Main$subscriptions = function (_v0) {
 						$elm$json$Json$Decode$decodeValue($author$project$Main$locationDecoder)),
 					$author$project$Logic$App$Msg$RecieveInputBoundingBoxes)),
 				$author$project$Ports$CheckMouseOverDragHandle$recieveCheckMouseOverDragHandle($author$project$Logic$App$Msg$RecieveMouseOverHandle),
-				$author$project$Ports$GetGridDrawingAsGif$recieveGIF($author$project$Logic$App$Msg$RecieveGridDrawingAsGIF)
+				$author$project$Ports$GetGridDrawingAsGif$recieveGIF($author$project$Logic$App$Msg$RecieveGridDrawingAsGIF),
+				$author$project$Ports$GetGridDrawingAsImage$recieveImage($author$project$Logic$App$Msg$RecieveGridDrawingAsImage)
 			]));
 };
 var $author$project$Logic$App$Types$Artifact = {$: 'Artifact'};
@@ -12755,7 +12760,6 @@ var $elm$core$Array$indexedMap = F2(
 			true,
 			A3($elm$core$Elm$JsArray$foldl, helper, initialBuilder, tree));
 	});
-var $elm$core$Debug$log = _Debug_log;
 var $author$project$Logic$App$Msg$MouseMoveData = F4(
 	function (pageX, pageY, offsetHeight, offsetWidth) {
 		return {offsetHeight: offsetHeight, offsetWidth: offsetWidth, pageX: pageX, pageY: pageY};
@@ -12882,6 +12886,11 @@ var $author$project$Ports$CheckMouseOverDragHandle$requestCheckMouseOverDragHand
 	});
 var $author$project$Ports$GetGridDrawingAsGif$requestGIF = _Platform_outgoingPort(
 	'requestGIF',
+	function ($) {
+		return $elm$json$Json$Encode$null;
+	});
+var $author$project$Ports$GetGridDrawingAsImage$requestImage = _Platform_outgoingPort(
+	'requestImage',
 	function ($) {
 		return $elm$json$Json$Encode$null;
 	});
@@ -13742,16 +13751,28 @@ var $author$project$Main$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{gridGifSrc: ''}),
+						{downloadSrc: ''}),
 					$author$project$Ports$GetGridDrawingAsGif$requestGIF(_Utils_Tuple0));
 			case 'RecieveGridDrawingAsGIF':
 				var src = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{gridGifSrc: src}),
-					$elm$file$File$Download$url(
-						A2($elm$core$Debug$log, 'src', src)));
+						{downloadSrc: src}),
+					$elm$file$File$Download$url(src));
+			case 'RequestGridDrawingAsImage':
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{downloadSrc: ''}),
+					$author$project$Ports$GetGridDrawingAsImage$requestImage(_Utils_Tuple0));
+			case 'RecieveGridDrawingAsImage':
+				var src = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{downloadSrc: src}),
+					$elm$file$File$Download$url(src));
 			case 'UpdatePatternOuptut':
 				var index = msg.a;
 				var replacementPattern = msg.b;
@@ -16224,6 +16245,7 @@ var $author$project$Components$App$Panels$PatternPanel$patternPanel = function (
 			]));
 };
 var $author$project$Logic$App$Msg$RequestGridDrawingAsGIF = {$: 'RequestGridDrawingAsGIF'};
+var $author$project$Logic$App$Msg$RequestGridDrawingAsImage = {$: 'RequestGridDrawingAsImage'};
 var $author$project$Components$App$Panels$FilePanel$saveExportPanel = function (model) {
 	var visibility = A2($elm$core$List$member, $author$project$Logic$App$Types$FilePanel, model.ui.openPanels);
 	return A2(
@@ -16292,7 +16314,8 @@ var $author$project$Components$App$Panels$FilePanel$saveExportPanel = function (
 				$elm$html$Html$button,
 				_List_fromArray(
 					[
-						$elm$html$Html$Attributes$class('generic_button')
+						$elm$html$Html$Attributes$class('generic_button'),
+						$elm$html$Html$Events$onClick($author$project$Logic$App$Msg$RequestGridDrawingAsImage)
 					]),
 				_List_fromArray(
 					[
