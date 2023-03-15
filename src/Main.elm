@@ -57,7 +57,7 @@ init _ =
             , patternElementMiddleLocations = []
             , overDragHandle = False
             , importInput = ""
-            , showImportTextOverlay = False
+            , openOverlay = NoOverlay
             }
       , grid =
             { height = 0
@@ -594,13 +594,13 @@ update msg model =
             ( { model | downloadSrc = "" }, GetGridDrawingAsGif.requestGIF () )
 
         RecieveGridDrawingAsGIF src ->
-            ( { model | downloadSrc = src }, Download.url (src) )
+            ( { model | downloadSrc = src }, Download.url src )
 
         RequestGridDrawingAsImage ->
-            ( { model | downloadSrc = "" },  (GetGridDrawingAsImage.requestImage ()) )
+            ( { model | downloadSrc = "" }, GetGridDrawingAsImage.requestImage () )
 
         RecieveGridDrawingAsImage src ->
-            ( { model | downloadSrc = src }, Download.url (src) )
+            ( { model | downloadSrc = src }, Download.url src )
 
         UpdatePatternOuptut index replacementPattern ->
             let
@@ -658,10 +658,10 @@ update msg model =
                 importQueue =
                     parseInput string
             in
-            updatePatternArrayFromQueue { model | importQueue = importQueue, ui = { ui | showImportTextOverlay = False, importInput = "" } }
+            updatePatternArrayFromQueue { model | importQueue = importQueue, ui = { ui | openOverlay = NoOverlay, importInput = "" } }
 
-        SetImportOverlayVisibility bool ->
-            ( { model | ui = { ui | showImportTextOverlay = bool } }, Cmd.none )
+        ViewOverlay overlay ->
+            ( { model | ui = { ui | openOverlay = overlay } }, Cmd.none )
 
 
 

@@ -4,21 +4,34 @@ import Array exposing (Array)
 import Logic.App.Types exposing (Pattern)
 
 
-exportPatternsAsText : Array Pattern -> String
-exportPatternsAsText patternArray =
+exportPatternsAsLineList : Array Pattern -> String
+exportPatternsAsLineList patternArray =
     let
-        mapPatternToLine : Pattern -> String
-        mapPatternToLine pattern =
+        mapPatternToLine : Pattern -> ( Int, List String ) -> ( Int, List String )
+        mapPatternToLine pattern accumulator =
+            let
+                indentDepth =
+                    Tuple.first accumulator
+
+                lines =
+                    Tuple.second accumulator
+
+                applyIndent depth string =
+                    List.repeat depth "    "
+                        ++ [ string ]
+                        |> String.concat
+            in
             case pattern.internalName of
                 "open_paren" ->
-                    "{"
+                    ( indentDepth + 1, applyIndent indentDepth "{" :: lines )
 
                 "close_paren" ->
-                    "{"
+                    ( indentDepth - 1, applyIndent (indentDepth - 1) "}" :: lines )
 
                 _ ->
-                    pattern.displayName
+                    ( indentDepth, applyIndent indentDepth pattern.displayName :: lines )
     in
-    Array.map mapPatternToLine patternArray
-        |> Array.toList
+    Array.foldr mapPatternToLine ( 0, [] ) patternArray
+        |> Tuple.second
+        |> List.reverse
         |> String.join "\n"

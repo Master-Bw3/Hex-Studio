@@ -148,6 +148,7 @@ type alias CastingContext =
 type alias ActionResult =
     { stack : Array Iota, ctx : CastingContext, success : Bool }
 
+
 type Direction
     = Northeast
     | Northwest
@@ -156,6 +157,7 @@ type Direction
     | Southeast
     | Southwest
     | ErrorDirection
+
 
 type alias Grid =
     { width : Float
@@ -166,3 +168,9 @@ type alias Grid =
         , activePath : List GridPoint
         }
     }
+
+
+type Overlay
+    = NoOverlay
+    | ImportTextOverlay
+    | ExportTextOverlay

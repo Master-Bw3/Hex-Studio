@@ -4,6 +4,7 @@ import Array exposing (Array)
 import Logic.App.Types exposing (CastingContext, GridPoint, HeldItem, Iota, Panel, Pattern)
 import Logic.App.Types exposing (Grid)
 import Logic.App.Msg exposing (Msg)
+import Logic.App.Types exposing (Overlay)
 
 
 type alias Model =
@@ -20,7 +21,7 @@ type alias Model =
         , overDragHandle : Bool
         , patternElementMiddleLocations : List Float
         , importInput : String
-        , showImportTextOverlay : Bool
+        , openOverlay : Overlay
         }
     , grid : Grid
         

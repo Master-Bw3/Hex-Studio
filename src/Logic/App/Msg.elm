@@ -8,6 +8,7 @@ import Logic.App.Types exposing (ElementLocation)
 import Html.Events.Extra.Drag as Drag
 import Json.Decode exposing (Value)
 import Logic.App.Types exposing (Pattern)
+import Logic.App.Types exposing (Overlay)
 
 type Msg
     = NoOp
@@ -47,7 +48,7 @@ type Msg
     | SetInsertionPoint Int Keys
     | SetImportInputValue String
     | ImportText String
-    | SetImportOverlayVisibility Bool
+    | ViewOverlay Overlay
 
 type alias MouseMoveData =
     { pageX : Int

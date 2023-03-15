@@ -440,6 +440,7 @@ button {
 
 #pattern_draggable_container {
     overflow-y: scroll;
+    max-height: calc(100vh - 180px);
 }
 
 .add_button {
@@ -522,7 +523,8 @@ button {
 
 .input_label_box > label,
 .stored_iota_label,
-#import_input {
+#import_input,
+#export_text {
     color: rgba(255, 255, 255, 0.6);
     font-family: 'fira';
     font-weight: bold;
@@ -538,7 +540,8 @@ button {
 
 .input_label_box > input,
 .input_label_box > select,
-#import_input {
+#import_input,
+#export_text {
     margin-right: 0.5em;
     margin-left: 0.25em;
     border-color: var(--primary_lighter);
@@ -586,11 +589,12 @@ button {
     text-align: start;
 }
 
-.generic_button:hover, .import_overlay_button:hover {
+.generic_button:hover,
+.import_overlay_button:hover {
     background-color: var(--primary_lighter);
 }
 
-#import_text_overlay {
+.overlay {
     z-index: 100000;
     width: 100vw;
     position: absolute;
@@ -601,9 +605,11 @@ button {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
+    user-select: auto;
 }
 
-#import_input {
+#import_input,
+#export_text {
     font-weight: normal;
     width: 100%;
     padding: 0.5em;
@@ -630,9 +636,14 @@ button {
 }
 
 .cancel_button {
-    background-color: rgb(96 26 26)
+    background-color: rgb(96 26 26);
 }
 
 .cancel_button:hover {
-    background-color: rgb(124 35 35)
+    background-color: rgb(124 35 35);
+}
+
+#export_text p {
+    user-select: text;
+    white-space: pre-wrap;
 }

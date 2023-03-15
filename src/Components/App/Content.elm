@@ -1,6 +1,8 @@
 module Components.App.Content exposing (content)
 
 import Components.App.LeftBox exposing (leftBox)
+import Components.App.Overlays.ExportTextOverlay exposing (exportTextOverlay)
+import Components.App.Overlays.ImportTextOverlay exposing (importTextOverlay)
 import Components.App.PatternAutoComplete exposing (patternInputAutoComplete)
 import Components.App.Right exposing (right)
 import Html exposing (..)
@@ -11,7 +13,6 @@ import Html.Events.Extra.Touch as TouchEvent
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (Msg(..))
 import Logic.App.Utils.Utils exposing (touchCoordinates)
-import Components.App.ImportTextOverlay exposing (importTextOverlay)
 
 
 content : Model -> Html Msg
@@ -22,8 +23,10 @@ content model =
         , TouchEvent.onWithOptions "touchmove" { stopPropagation = False, preventDefault = False } (touchCoordinates >> MouseMove)
         , onMouseUp MouseUp
         ]
-        [ leftBox model
-        , right model
-        , Tuple.first <| patternInputAutoComplete model
-        , importTextOverlay model
-        ]
+        ([ leftBox model
+         , right model
+         , Tuple.first <| patternInputAutoComplete model
+         ]
+            ++ importTextOverlay model
+            ++ exportTextOverlay model
+        )

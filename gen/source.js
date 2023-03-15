@@ -5513,6 +5513,7 @@ var $author$project$Logic$App$Msg$GetGrid = function (a) {
 	return {$: 'GetGrid', a: a};
 };
 var $author$project$Logic$App$Types$NoItem = {$: 'NoItem'};
+var $author$project$Logic$App$Types$NoOverlay = {$: 'NoOverlay'};
 var $author$project$Logic$App$Types$PatternPanel = {$: 'PatternPanel'};
 var $elm$core$Basics$composeL = F3(
 	function (g, f, x) {
@@ -5565,6 +5566,7 @@ var $author$project$Main$init = function (_v0) {
 				dragging: _Utils_Tuple2(false, -1),
 				importInput: '',
 				mouseOverElementIndex: -1,
+				openOverlay: $author$project$Logic$App$Types$NoOverlay,
 				openPanels: _List_fromArray(
 					[$author$project$Logic$App$Types$PatternPanel]),
 				overDragHandle: false,
@@ -5572,7 +5574,6 @@ var $author$project$Main$init = function (_v0) {
 				patternInputField: '',
 				patternInputLocation: _Utils_Tuple2(0, 0),
 				selectedInputID: '',
-				showImportTextOverlay: false,
 				suggestionIndex: 0
 			},
 			window: {height: 0.0, width: 0.0}
@@ -12272,7 +12273,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName = func
 				{
 					action: $author$project$Logic$App$Patterns$Misc$mask(maskCode),
 					color: $author$project$Settings$Theme$accent1,
-					displayName: 'Bookkeeper\'s: ' + $elm$core$String$concat(maskCode),
+					displayName: 'Bookkeeper\'s Gambit: ' + $elm$core$String$concat(maskCode),
 					internalName: 'mask',
 					metaAction: $author$project$Logic$App$Types$None,
 					outputOptions: _List_Nil,
@@ -12685,7 +12686,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$parseBookkeeper = functio
 			return {
 				action: $author$project$Logic$App$Patterns$Misc$mask(maskCode),
 				color: $author$project$Settings$Theme$accent1,
-				displayName: 'Bookkeeper\'s: ' + $elm$core$String$concat(maskCode),
+				displayName: 'Bookkeeper\'s Gambit: ' + $elm$core$String$concat(maskCode),
 				internalName: 'mask',
 				metaAction: $author$project$Logic$App$Types$None,
 				outputOptions: _List_Nil,
@@ -13851,17 +13852,17 @@ var $author$project$Main$update = F2(
 							importQueue: importQueue,
 							ui: _Utils_update(
 								ui,
-								{importInput: '', showImportTextOverlay: false})
+								{importInput: '', openOverlay: $author$project$Logic$App$Types$NoOverlay})
 						}));
 			default:
-				var bool = msg.a;
+				var overlay = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
 							ui: _Utils_update(
 								ui,
-								{showImportTextOverlay: bool})
+								{openOverlay: overlay})
 						}),
 					$elm$core$Platform$Cmd$none);
 		}
@@ -13871,6 +13872,17 @@ var $author$project$Logic$App$Msg$MouseMove = function (a) {
 };
 var $author$project$Logic$App$Msg$MouseUp = {$: 'MouseUp'};
 var $elm$html$Html$div = _VirtualDom_node('div');
+var $author$project$Logic$App$Types$ExportTextOverlay = {$: 'ExportTextOverlay'};
+var $author$project$Logic$App$Msg$ImportText = function (a) {
+	return {$: 'ImportText', a: a};
+};
+var $author$project$Logic$App$Msg$SetImportInputValue = function (a) {
+	return {$: 'SetImportInputValue', a: a};
+};
+var $author$project$Logic$App$Msg$ViewOverlay = function (a) {
+	return {$: 'ViewOverlay', a: a};
+};
+var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {
 		return A2(
@@ -13878,18 +13890,56 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 			key,
 			$elm$json$Json$Encode$string(string));
 	});
-var $elm$html$Html$Attributes$id = $elm$html$Html$Attributes$stringProperty('id');
-var $author$project$Logic$App$Msg$ImportText = function (a) {
-	return {$: 'ImportText', a: a};
-};
-var $author$project$Logic$App$Msg$SetImportInputValue = function (a) {
-	return {$: 'SetImportInputValue', a: a};
-};
-var $author$project$Logic$App$Msg$SetImportOverlayVisibility = function (a) {
-	return {$: 'SetImportOverlayVisibility', a: a};
-};
-var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
+var $author$project$Logic$App$ImportExport$ExportAsText$exportPatternsAsLineList = function (patternArray) {
+	var mapPatternToLine = F2(
+		function (pattern, accumulator) {
+			var lines = accumulator.b;
+			var indentDepth = accumulator.a;
+			var applyIndent = F2(
+				function (depth, string) {
+					return $elm$core$String$concat(
+						_Utils_ap(
+							A2($elm$core$List$repeat, depth, '    '),
+							_List_fromArray(
+								[string])));
+				});
+			var _v0 = pattern.internalName;
+			switch (_v0) {
+				case 'open_paren':
+					return _Utils_Tuple2(
+						indentDepth + 1,
+						A2(
+							$elm$core$List$cons,
+							A2(applyIndent, indentDepth, '{'),
+							lines));
+				case 'close_paren':
+					return _Utils_Tuple2(
+						indentDepth - 1,
+						A2(
+							$elm$core$List$cons,
+							A2(applyIndent, indentDepth - 1, '}'),
+							lines));
+				default:
+					return _Utils_Tuple2(
+						indentDepth,
+						A2(
+							$elm$core$List$cons,
+							A2(applyIndent, indentDepth, pattern.displayName),
+							lines));
+			}
+		});
+	return A2(
+		$elm$core$String$join,
+		'\n',
+		$elm$core$List$reverse(
+			A3(
+				$elm$core$Array$foldr,
+				mapPatternToLine,
+				_Utils_Tuple2(0, _List_Nil),
+				patternArray).b));
+};
+var $elm$html$Html$Attributes$id = $elm$html$Html$Attributes$stringProperty('id');
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 'Normal', a: a};
 };
@@ -13934,67 +13984,140 @@ var $elm$html$Html$Events$onInput = function (tagger) {
 			$elm$html$Html$Events$alwaysStop,
 			A2($elm$json$Json$Decode$map, tagger, $elm$html$Html$Events$targetValue)));
 };
+var $elm$html$Html$p = _VirtualDom_node('p');
 var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
 var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
-var $elm$html$Html$textarea = _VirtualDom_node('textarea');
 var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
-var $author$project$Components$App$ImportTextOverlay$importTextOverlay = function (model) {
-	var visibility = (!model.ui.showImportTextOverlay) ? A2($elm$html$Html$Attributes$style, 'display', 'none') : A2($elm$html$Html$Attributes$style, '', '');
-	return A2(
-		$elm$html$Html$div,
-		_List_fromArray(
-			[
-				$elm$html$Html$Attributes$id('import_text_overlay'),
-				visibility
-			]),
-		_List_fromArray(
-			[
-				A2(
-				$elm$html$Html$textarea,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$id('import_input'),
-						$elm$html$Html$Events$onInput($author$project$Logic$App$Msg$SetImportInputValue),
-						$elm$html$Html$Attributes$value(model.ui.importInput)
-					]),
-				_List_Nil),
-				A2(
-				$elm$html$Html$div,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$id('import_overlay_button_container')
-					]),
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$button,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$class('import_overlay_button'),
-								$elm$html$Html$Events$onClick(
-								$author$project$Logic$App$Msg$ImportText(model.ui.importInput))
-							]),
-						_List_fromArray(
-							[
-								$elm$html$Html$text('Import')
-							])),
-						A2(
-						$elm$html$Html$button,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$class('import_overlay_button'),
-								$elm$html$Html$Attributes$class('cancel_button'),
-								$elm$html$Html$Events$onClick(
-								$author$project$Logic$App$Msg$SetImportOverlayVisibility(false))
-							]),
-						_List_fromArray(
-							[
-								$elm$html$Html$text('Cancel')
-							]))
-					]))
-			]));
+var $author$project$Components$App$Overlays$ExportTextOverlay$exportTextOverlay = function (model) {
+	return (!_Utils_eq(model.ui.openOverlay, $author$project$Logic$App$Types$ExportTextOverlay)) ? _List_Nil : _List_fromArray(
+		[
+			A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('overlay')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$id('export_text'),
+							$elm$html$Html$Events$onInput($author$project$Logic$App$Msg$SetImportInputValue),
+							$elm$html$Html$Attributes$value(model.ui.importInput),
+							A2($elm$html$Html$Attributes$style, 'display', 'flex'),
+							A2($elm$html$Html$Attributes$style, 'flex-direction', 'column')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$p,
+							_List_Nil,
+							_List_fromArray(
+								[
+									$elm$html$Html$text(
+									$author$project$Logic$App$ImportExport$ExportAsText$exportPatternsAsLineList(
+										A2($elm$core$Array$map, $elm$core$Tuple$first, model.patternArray)))
+								]))
+						])),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$id('import_overlay_button_container')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$button,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('import_overlay_button'),
+									$elm$html$Html$Events$onClick(
+									$author$project$Logic$App$Msg$ImportText(model.ui.importInput))
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text('Download')
+								])),
+							A2(
+							$elm$html$Html$button,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('import_overlay_button'),
+									$elm$html$Html$Attributes$class('cancel_button'),
+									$elm$html$Html$Events$onClick(
+									$author$project$Logic$App$Msg$ViewOverlay($author$project$Logic$App$Types$NoOverlay))
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text('Cancel')
+								]))
+						]))
+				]))
+		]);
+};
+var $author$project$Logic$App$Types$ImportTextOverlay = {$: 'ImportTextOverlay'};
+var $elm$html$Html$textarea = _VirtualDom_node('textarea');
+var $author$project$Components$App$Overlays$ImportTextOverlay$importTextOverlay = function (model) {
+	return (!_Utils_eq(model.ui.openOverlay, $author$project$Logic$App$Types$ImportTextOverlay)) ? _List_Nil : _List_fromArray(
+		[
+			A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('overlay')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$textarea,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$id('import_input'),
+							$elm$html$Html$Events$onInput($author$project$Logic$App$Msg$SetImportInputValue),
+							$elm$html$Html$Attributes$value(model.ui.importInput)
+						]),
+					_List_Nil),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$id('import_overlay_button_container')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$button,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('import_overlay_button'),
+									$elm$html$Html$Events$onClick(
+									$author$project$Logic$App$Msg$ImportText(model.ui.importInput))
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text('Import')
+								])),
+							A2(
+							$elm$html$Html$button,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('import_overlay_button'),
+									$elm$html$Html$Attributes$class('cancel_button'),
+									$elm$html$Html$Events$onClick(
+									$author$project$Logic$App$Msg$ViewOverlay($author$project$Logic$App$Types$NoOverlay))
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text('Cancel')
+								]))
+						]))
+				]))
+		]);
 };
 var $author$project$Logic$App$Types$ConfigHexPanel = {$: 'ConfigHexPanel'};
 var $author$project$Logic$App$Types$FilePanel = {$: 'FilePanel'};
@@ -14772,7 +14895,6 @@ var $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString = function
 };
 var $elm$html$Html$li = _VirtualDom_node('li');
 var $elm$html$Html$ol = _VirtualDom_node('ol');
-var $elm$html$Html$p = _VirtualDom_node('p');
 var $elm$core$List$singleton = function (value) {
 	return _List_fromArray(
 		[value]);
@@ -16274,7 +16396,7 @@ var $author$project$Components$App$Panels$FilePanel$saveExportPanel = function (
 					[
 						$elm$html$Html$Attributes$class('generic_button'),
 						$elm$html$Html$Events$onClick(
-						$author$project$Logic$App$Msg$SetImportOverlayVisibility(true))
+						$author$project$Logic$App$Msg$ViewOverlay($author$project$Logic$App$Types$ImportTextOverlay))
 					]),
 				_List_fromArray(
 					[
@@ -16284,7 +16406,9 @@ var $author$project$Components$App$Panels$FilePanel$saveExportPanel = function (
 				$elm$html$Html$button,
 				_List_fromArray(
 					[
-						$elm$html$Html$Attributes$class('generic_button')
+						$elm$html$Html$Attributes$class('generic_button'),
+						$elm$html$Html$Events$onClick(
+						$author$project$Logic$App$Msg$ViewOverlay($author$project$Logic$App$Types$ExportTextOverlay))
 					]),
 				_List_fromArray(
 					[
@@ -16871,13 +16995,16 @@ var $author$project$Components$App$Content$content = function (model) {
 				A2($elm$core$Basics$composeR, $author$project$Logic$App$Utils$Utils$touchCoordinates, $author$project$Logic$App$Msg$MouseMove)),
 				$elm$html$Html$Events$onMouseUp($author$project$Logic$App$Msg$MouseUp)
 			]),
-		_List_fromArray(
-			[
-				$author$project$Components$App$LeftBox$leftBox(model),
-				$author$project$Components$App$Right$right(model),
-				$author$project$Components$App$PatternAutoComplete$patternInputAutoComplete(model).a,
-				$author$project$Components$App$ImportTextOverlay$importTextOverlay(model)
-			]));
+		_Utils_ap(
+			_List_fromArray(
+				[
+					$author$project$Components$App$LeftBox$leftBox(model),
+					$author$project$Components$App$Right$right(model),
+					$author$project$Components$App$PatternAutoComplete$patternInputAutoComplete(model).a
+				]),
+			_Utils_ap(
+				$author$project$Components$App$Overlays$ImportTextOverlay$importTextOverlay(model),
+				$author$project$Components$App$Overlays$ExportTextOverlay$exportTextOverlay(model))));
 };
 var $author$project$Main$view = function (model) {
 	return {
