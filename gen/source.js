@@ -7228,6 +7228,57 @@ var $elm$core$Array$filter = F2(
 				_List_Nil,
 				array));
 	});
+var $elm$core$Array$foldl = F3(
+	function (func, baseCase, _v0) {
+		var tree = _v0.c;
+		var tail = _v0.d;
+		var helper = F2(
+			function (node, acc) {
+				if (node.$ === 'SubTree') {
+					var subTree = node.a;
+					return A3($elm$core$Elm$JsArray$foldl, helper, acc, subTree);
+				} else {
+					var values = node.a;
+					return A3($elm$core$Elm$JsArray$foldl, func, acc, values);
+				}
+			});
+		return A3(
+			$elm$core$Elm$JsArray$foldl,
+			func,
+			A3($elm$core$Elm$JsArray$foldl, helper, baseCase, tree),
+			tail);
+	});
+var $author$project$Logic$App$Patterns$OperatorUtils$getIotaList = function (iota) {
+	if (iota.$ === 'IotaList') {
+		return $elm$core$Maybe$Just(iota);
+	} else {
+		return $elm$core$Maybe$Nothing;
+	}
+};
+var $elm$core$List$all = F2(
+	function (isOkay, list) {
+		return !A2(
+			$elm$core$List$any,
+			A2($elm$core$Basics$composeL, $elm$core$Basics$not, isOkay),
+			list);
+	});
+var $author$project$Logic$App$Patterns$OperatorUtils$getPatternList = function (iota) {
+	if (iota.$ === 'IotaList') {
+		var list = iota.a;
+		return A2(
+			$elm$core$List$all,
+			function (i) {
+				if (i.$ === 'PatternIota') {
+					return true;
+				} else {
+					return false;
+				}
+			},
+			$elm$core$Array$toList(list)) ? $elm$core$Maybe$Just(iota) : $elm$core$Maybe$Nothing;
+	} else {
+		return $elm$core$Maybe$Nothing;
+	}
+};
 var $author$project$Logic$App$Patterns$OperatorUtils$getPatternOrIotaList = function (iota) {
 	switch (iota.$) {
 		case 'PatternIota':
@@ -7270,11 +7321,56 @@ var $elm$core$Array$map = F2(
 			A2($elm$core$Elm$JsArray$map, helper, tree),
 			A2($elm$core$Elm$JsArray$map, func, tail));
 	});
+var $elm$core$Maybe$map = F2(
+	function (f, maybe) {
+		if (maybe.$ === 'Just') {
+			var value = maybe.a;
+			return $elm$core$Maybe$Just(
+				f(value));
+		} else {
+			return $elm$core$Maybe$Nothing;
+		}
+	});
+var $author$project$Logic$App$Patterns$OperatorUtils$mapNothingToMissingIota = function (maybeIota) {
+	if (maybeIota.$ === 'Nothing') {
+		return $author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas);
+	} else {
+		var iota = maybeIota.a;
+		return iota;
+	}
+};
+var $author$project$Logic$App$Patterns$OperatorUtils$moveNothingsToFront = function (list) {
+	var comparison = F2(
+		function (a, b) {
+			var checkNothing = function (x) {
+				if (x.$ === 'Nothing') {
+					return 1;
+				} else {
+					return 2;
+				}
+			};
+			var _v0 = A2(
+				$elm$core$Basics$compare,
+				checkNothing(a),
+				checkNothing(b));
+			switch (_v0.$) {
+				case 'LT':
+					return $elm$core$Basics$LT;
+				case 'EQ':
+					return $elm$core$Basics$EQ;
+				default:
+					return $elm$core$Basics$GT;
+			}
+		});
+	return A2($elm$core$List$sortWith, comparison, list);
+};
+var $elm_community$array_extra$Array$Extra$reverseToList = A2($elm$core$Array$foldl, $elm$core$List$cons, _List_Nil);
+var $elm_community$array_extra$Array$Extra$reverse = A2($elm$core$Basics$composeR, $elm_community$array_extra$Array$Extra$reverseToList, $elm$core$Array$fromList);
 var $author$project$Logic$App$Stack$EvalStack$applyPatternToStack = F4(
 	function (stack, ctx, pattern, index) {
-		var _v7 = A2($elm$core$Array$get, 0, stack);
-		if ((_v7.$ === 'Just') && (_v7.a.$ === 'OpenParenthesis')) {
-			var list = _v7.a.a;
+		var _v11 = A2($elm$core$Array$get, 0, stack);
+		if ((_v11.$ === 'Just') && (_v11.a.$ === 'OpenParenthesis')) {
+			var list = _v11.a.a;
 			var numberOfOpenParen = 1 + $elm$core$Array$length(
 				A2(
 					$elm$core$Array$filter,
@@ -7443,41 +7539,68 @@ var $author$project$Logic$App$Stack$EvalStack$applyPatternToStack = F4(
 								actionResult.allStackStates)
 						};
 					} else {
-						var actionResult = function () {
-							var preActionResult = A2(pattern.action, stack, ctx);
-							return (preActionResult.success && $author$project$Logic$App$Utils$Utils$isJust(pattern.selectedOutput)) ? _Utils_update(
-								preActionResult,
-								{
-									stack: A2(
-										$author$project$Logic$App$Utils$Utils$unshift,
-										A2(
-											$elm$core$Maybe$withDefault,
-											_Utils_Tuple2($author$project$Logic$App$Types$NullType, $author$project$Logic$App$Types$Null),
-											pattern.selectedOutput).b,
-										preActionResult.stack)
-								}) : preActionResult;
-						}();
-						return actionResult.success ? {
-							considerNext: false,
-							ctx: actionResult.ctx,
-							result: $author$project$Logic$App$Types$Succeeded,
-							stack: actionResult.stack,
-							timeline: $elm$core$Array$fromList(
-								_List_fromArray(
-									[
-										{patternIndex: index, stack: actionResult.stack}
-									]))
-						} : {
-							considerNext: false,
-							ctx: actionResult.ctx,
-							result: $author$project$Logic$App$Types$Failed,
-							stack: actionResult.stack,
-							timeline: $elm$core$Array$fromList(
-								_List_fromArray(
-									[
-										{patternIndex: index, stack: actionResult.stack}
-									]))
-						};
+						if (pattern.internalName === 'for_each') {
+							var actionResult = A2($author$project$Logic$App$Stack$EvalStack$forEach, stack, ctx);
+							return actionResult.success ? {
+								considerNext: false,
+								ctx: actionResult.ctx,
+								result: $author$project$Logic$App$Types$Succeeded,
+								stack: actionResult.stack,
+								timeline: A2(
+									$elm$core$Array$map,
+									function (x) {
+										return {patternIndex: index, stack: x};
+									},
+									actionResult.allStackStates)
+							} : {
+								considerNext: false,
+								ctx: actionResult.ctx,
+								result: $author$project$Logic$App$Types$Failed,
+								stack: actionResult.stack,
+								timeline: A2(
+									$elm$core$Array$map,
+									function (x) {
+										return {patternIndex: index, stack: x};
+									},
+									actionResult.allStackStates)
+							};
+						} else {
+							var actionResult = function () {
+								var preActionResult = A2(pattern.action, stack, ctx);
+								return (preActionResult.success && $author$project$Logic$App$Utils$Utils$isJust(pattern.selectedOutput)) ? _Utils_update(
+									preActionResult,
+									{
+										stack: A2(
+											$author$project$Logic$App$Utils$Utils$unshift,
+											A2(
+												$elm$core$Maybe$withDefault,
+												_Utils_Tuple2($author$project$Logic$App$Types$NullType, $author$project$Logic$App$Types$Null),
+												pattern.selectedOutput).b,
+											preActionResult.stack)
+									}) : preActionResult;
+							}();
+							return actionResult.success ? {
+								considerNext: false,
+								ctx: actionResult.ctx,
+								result: $author$project$Logic$App$Types$Succeeded,
+								stack: actionResult.stack,
+								timeline: $elm$core$Array$fromList(
+									_List_fromArray(
+										[
+											{patternIndex: index, stack: actionResult.stack}
+										]))
+							} : {
+								considerNext: false,
+								ctx: actionResult.ctx,
+								result: $author$project$Logic$App$Types$Failed,
+								stack: actionResult.stack,
+								timeline: $elm$core$Array$fromList(
+									_List_fromArray(
+										[
+											{patternIndex: index, stack: actionResult.stack}
+										]))
+							};
+						}
 					}
 				}
 			}
@@ -7490,20 +7613,20 @@ var $author$project$Logic$App$Stack$EvalStack$applyToStackLoop = F7(
 			var stack = stackResultTuple.a;
 			var resultArray = stackResultTuple.b;
 			var introspection = function () {
-				var _v6 = A2($elm$core$Array$get, 0, stack);
-				if ((_v6.$ === 'Just') && (_v6.a.$ === 'OpenParenthesis')) {
+				var _v10 = A2($elm$core$Array$get, 0, stack);
+				if ((_v10.$ === 'Just') && (_v10.a.$ === 'OpenParenthesis')) {
 					return true;
 				} else {
 					return false;
 				}
 			}();
-			var _v4 = $elm$core$List$head(patterns);
-			if (_v4.$ === 'Nothing') {
+			var _v8 = $elm$core$List$head(patterns);
+			if (_v8.$ === 'Nothing') {
 				return {ctx: ctx, error: false, halted: false, resultArray: resultArray, stack: stack, timeline: timeline};
 			} else {
-				if (_v4.a.$ === 'PatternIota') {
-					var _v5 = _v4.a;
-					var pattern = _v5.a;
+				if (_v8.a.$ === 'PatternIota') {
+					var _v9 = _v8.a;
+					var pattern = _v9.a;
 					if (considerThis) {
 						var applyResult = _Utils_Tuple2(
 							A2(
@@ -7574,7 +7697,7 @@ var $author$project$Logic$App$Stack$EvalStack$applyToStackLoop = F7(
 						}
 					}
 				} else {
-					var iota = _v4.a;
+					var iota = _v8.a;
 					if (considerThis || introspection) {
 						var applyResult = _Utils_Tuple2(
 							A2($author$project$Logic$App$Stack$EvalStack$addEscapedIotaToStack, stack, iota),
@@ -7646,8 +7769,8 @@ var $author$project$Logic$App$Stack$EvalStack$eval = F2(
 			};
 		} else {
 			var iota = maybeIota.a;
-			var _v1 = $author$project$Logic$App$Patterns$OperatorUtils$getPatternOrIotaList(iota);
-			if (_v1.$ === 'Nothing') {
+			var _v5 = $author$project$Logic$App$Patterns$OperatorUtils$getPatternOrIotaList(iota);
+			if (_v5.$ === 'Nothing') {
 				return {
 					allStackStates: $elm$core$Array$fromList(
 						_List_fromArray(
@@ -7731,6 +7854,195 @@ var $author$project$Logic$App$Stack$EvalStack$eval = F2(
 							success: false
 						};
 				}
+			}
+		}
+	});
+var $author$project$Logic$App$Stack$EvalStack$forEach = F2(
+	function (stack, ctx) {
+		var newStack = A3(
+			$elm$core$Array$slice,
+			2,
+			$elm$core$Array$length(stack),
+			stack);
+		var maybeIota2 = A2($elm$core$Array$get, 0, stack);
+		var maybeIota1 = A2($elm$core$Array$get, 1, stack);
+		if (_Utils_eq(maybeIota1, $elm$core$Maybe$Nothing) || _Utils_eq(maybeIota2, $elm$core$Maybe$Nothing)) {
+			var newNewStack = A2(
+				$elm$core$Array$append,
+				A2(
+					$elm$core$Array$map,
+					$author$project$Logic$App$Patterns$OperatorUtils$mapNothingToMissingIota,
+					$elm$core$Array$fromList(
+						$author$project$Logic$App$Patterns$OperatorUtils$moveNothingsToFront(
+							_List_fromArray(
+								[maybeIota1, maybeIota2])))),
+				newStack);
+			return {
+				allStackStates: $elm$core$Array$fromList(
+					_List_fromArray(
+						[newNewStack])),
+				ctx: ctx,
+				stack: newNewStack,
+				success: false
+			};
+		} else {
+			var _v0 = _Utils_Tuple2(
+				A2($elm$core$Maybe$map, $author$project$Logic$App$Patterns$OperatorUtils$getPatternList, maybeIota1),
+				A2($elm$core$Maybe$map, $author$project$Logic$App$Patterns$OperatorUtils$getIotaList, maybeIota2));
+			if ((_v0.a.$ === 'Just') && (_v0.b.$ === 'Just')) {
+				var iota1 = _v0.a.a;
+				var iota2 = _v0.b.a;
+				if (_Utils_eq(iota1, $elm$core$Maybe$Nothing) || _Utils_eq(iota2, $elm$core$Maybe$Nothing)) {
+					var newNewStack = A2(
+						$elm$core$Array$append,
+						$elm$core$Array$fromList(
+							_List_fromArray(
+								[
+									A2(
+									$elm$core$Maybe$withDefault,
+									$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+									iota1),
+									A2(
+									$elm$core$Maybe$withDefault,
+									$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+									iota2)
+								])),
+						newStack);
+					return {
+						allStackStates: $elm$core$Array$fromList(
+							_List_fromArray(
+								[newNewStack])),
+						ctx: ctx,
+						stack: newNewStack,
+						success: false
+					};
+				} else {
+					var _v1 = _Utils_Tuple2(iota1, iota2);
+					if ((((_v1.a.$ === 'Just') && (_v1.a.a.$ === 'IotaList')) && (_v1.b.$ === 'Just')) && (_v1.b.a.$ === 'IotaList')) {
+						var patternList = _v1.a.a.a;
+						var iotaList = _v1.b.a.a;
+						var applyResult = A3(
+							$elm$core$Array$foldl,
+							F2(
+								function (iota, accumulator) {
+									if (!accumulator._continue) {
+										return accumulator;
+									} else {
+										var thothList = function () {
+											var _v3 = A2($elm$core$Array$get, 0, accumulator.stack);
+											if ((_v3.$ === 'Just') && (_v3.a.$ === 'IotaList')) {
+												var list = _v3.a.a;
+												return list;
+											} else {
+												return $elm$core$Array$empty;
+											}
+										}();
+										var subApplyResult = A3(
+											$author$project$Logic$App$Stack$EvalStack$applyToStackStopAtErrorOrHalt,
+											A2($author$project$Logic$App$Utils$Utils$unshift, iota, newStack),
+											accumulator.ctx,
+											patternList);
+										var success = (accumulator.success && subApplyResult.error) ? false : accumulator.success;
+										return {
+											allStackStates: A2(
+												$elm$core$Array$append,
+												A2(
+													$author$project$Logic$App$Utils$Utils$unshift,
+													A3(
+														$elm$core$Array$set,
+														0,
+														$author$project$Logic$App$Types$IotaList(
+															A2(
+																$elm$core$Array$append,
+																thothList,
+																$elm_community$array_extra$Array$Extra$reverse(subApplyResult.stack))),
+														accumulator.stack),
+													A2(
+														$elm$core$Array$map,
+														function (x) {
+															return x.stack;
+														},
+														subApplyResult.timeline)),
+												accumulator.allStackStates),
+											_continue: ((!success) || subApplyResult.halted) ? false : true,
+											ctx: subApplyResult.ctx,
+											stack: A3(
+												$elm$core$Array$set,
+												0,
+												$author$project$Logic$App$Types$IotaList(
+													A2(
+														$elm$core$Array$append,
+														thothList,
+														$elm_community$array_extra$Array$Extra$reverse(subApplyResult.stack))),
+												accumulator.stack),
+											success: success
+										};
+									}
+								}),
+							{
+								allStackStates: $elm$core$Array$empty,
+								_continue: true,
+								ctx: ctx,
+								stack: A2(
+									$author$project$Logic$App$Utils$Utils$unshift,
+									$author$project$Logic$App$Types$IotaList($elm$core$Array$empty),
+									newStack),
+								success: true
+							},
+							iotaList);
+						return {
+							allStackStates: applyResult.allStackStates,
+							ctx: applyResult.ctx,
+							stack: A2(
+								$elm$core$Array$filter,
+								function (i) {
+									if (i.$ === 'OpenParenthesis') {
+										return false;
+									} else {
+										return true;
+									}
+								},
+								applyResult.stack),
+							success: applyResult.success
+						};
+					} else {
+						return {
+							allStackStates: $elm$core$Array$fromList(
+								_List_fromArray(
+									[
+										$elm$core$Array$fromList(
+										_List_fromArray(
+											[
+												$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure)
+											]))
+									])),
+							ctx: ctx,
+							stack: $elm$core$Array$fromList(
+								_List_fromArray(
+									[
+										$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure)
+									])),
+							success: false
+						};
+					}
+				}
+			} else {
+				return {
+					allStackStates: $elm$core$Array$fromList(
+						_List_fromArray(
+							[
+								A2(
+								$author$project$Logic$App$Utils$Utils$unshift,
+								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure),
+								newStack)
+							])),
+					ctx: ctx,
+					stack: A2(
+						$author$project$Logic$App$Utils$Utils$unshift,
+						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure),
+						newStack),
+					success: false
+				};
 			}
 		}
 	});
@@ -8293,26 +8605,6 @@ var $elm$core$Basics$abs = function (n) {
 	return (n < 0) ? (-n) : n;
 };
 var $author$project$Logic$App$Types$MathematicalError = {$: 'MathematicalError'};
-var $elm$core$Array$foldl = F3(
-	function (func, baseCase, _v0) {
-		var tree = _v0.c;
-		var tail = _v0.d;
-		var helper = F2(
-			function (node, acc) {
-				if (node.$ === 'SubTree') {
-					var subTree = node.a;
-					return A3($elm$core$Elm$JsArray$foldl, helper, acc, subTree);
-				} else {
-					var values = node.a;
-					return A3($elm$core$Elm$JsArray$foldl, func, acc, values);
-				}
-			});
-		return A3(
-			$elm$core$Elm$JsArray$foldl,
-			func,
-			A3($elm$core$Elm$JsArray$foldl, helper, baseCase, tree),
-			tail);
-	});
 var $elm_community$array_extra$Array$Extra$any = function (isOkay) {
 	return A2(
 		$elm$core$Array$foldl,
@@ -8493,49 +8785,6 @@ var $author$project$Logic$App$Patterns$Math$absLen = F2(
 			});
 		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, action);
 	});
-var $elm$core$Maybe$map = F2(
-	function (f, maybe) {
-		if (maybe.$ === 'Just') {
-			var value = maybe.a;
-			return $elm$core$Maybe$Just(
-				f(value));
-		} else {
-			return $elm$core$Maybe$Nothing;
-		}
-	});
-var $author$project$Logic$App$Patterns$OperatorUtils$mapNothingToMissingIota = function (maybeIota) {
-	if (maybeIota.$ === 'Nothing') {
-		return $author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas);
-	} else {
-		var iota = maybeIota.a;
-		return iota;
-	}
-};
-var $author$project$Logic$App$Patterns$OperatorUtils$moveNothingsToFront = function (list) {
-	var comparison = F2(
-		function (a, b) {
-			var checkNothing = function (x) {
-				if (x.$ === 'Nothing') {
-					return 1;
-				} else {
-					return 2;
-				}
-			};
-			var _v0 = A2(
-				$elm$core$Basics$compare,
-				checkNothing(a),
-				checkNothing(b));
-			switch (_v0.$) {
-				case 'LT':
-					return $elm$core$Basics$LT;
-				case 'EQ':
-					return $elm$core$Basics$EQ;
-				default:
-					return $elm$core$Basics$GT;
-			}
-		});
-	return A2($elm$core$List$sortWith, comparison, list);
-};
 var $author$project$Logic$App$Patterns$OperatorUtils$action2Inputs = F5(
 	function (stack, ctx, inputGetter1, inputGetter2, action) {
 		var newStack = A3(
@@ -8940,13 +9189,6 @@ var $author$project$Logic$App$Patterns$Math$andBool = F2(
 	});
 var $author$project$Logic$App$Patterns$OperatorUtils$getAny = function (iota) {
 	return $elm$core$Maybe$Just(iota);
-};
-var $author$project$Logic$App$Patterns$OperatorUtils$getIotaList = function (iota) {
-	if (iota.$ === 'IotaList') {
-		return $elm$core$Maybe$Just(iota);
-	} else {
-		return $elm$core$Maybe$Nothing;
-	}
 };
 var $author$project$Logic$App$Patterns$Lists$append = F2(
 	function (stack, ctx) {
@@ -9480,30 +9722,6 @@ var $author$project$Logic$App$Patterns$Math$cosine = F2(
 			});
 		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
 	});
-var $elm$core$List$all = F2(
-	function (isOkay, list) {
-		return !A2(
-			$elm$core$List$any,
-			A2($elm$core$Basics$composeL, $elm$core$Basics$not, isOkay),
-			list);
-	});
-var $author$project$Logic$App$Patterns$OperatorUtils$getPatternList = function (iota) {
-	if (iota.$ === 'IotaList') {
-		var list = iota.a;
-		return A2(
-			$elm$core$List$all,
-			function (i) {
-				if (i.$ === 'PatternIota') {
-					return true;
-				} else {
-					return false;
-				}
-			},
-			$elm$core$Array$toList(list)) ? $elm$core$Maybe$Just(iota) : $elm$core$Maybe$Nothing;
-	} else {
-		return $elm$core$Maybe$Nothing;
-	}
-};
 var $author$project$Logic$App$Patterns$Spells$craftArtifact = F3(
 	function (requiredItem, stack, ctx) {
 		var action = F3(
@@ -10274,8 +10492,6 @@ var $author$project$Logic$App$Patterns$Math$invertBool = F2(
 			});
 		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getBoolean, action);
 	});
-var $elm_community$array_extra$Array$Extra$reverseToList = A2($elm$core$Array$foldl, $elm$core$List$cons, _List_Nil);
-var $elm_community$array_extra$Array$Extra$reverse = A2($elm$core$Basics$composeR, $elm_community$array_extra$Array$Extra$reverseToList, $elm$core$Array$fromList);
 var $author$project$Logic$App$Patterns$Lists$lastNList = F2(
 	function (stack, ctx) {
 		var newStack = A3(
@@ -13875,6 +14091,18 @@ var $author$project$Main$update = F2(
 					A3($elm$file$File$Download$string, 'Hex.hexcasting', 'text/plain', string));
 			default:
 				var index = msg.a;
+				var timelinePatternIndex = (index >= 0) ? A2(
+					$elm$core$Maybe$withDefault,
+					$elm$core$Array$length(model.timeline),
+					A2(
+						$elm$core$Maybe$andThen,
+						function (x) {
+							return $elm$core$Maybe$Just(x.patternIndex);
+						},
+						A2(
+							$elm$core$Array$get,
+							index,
+							$elm_community$array_extra$Array$Extra$reverse(model.timeline)))) : (-1);
 				var newPatternArray = $elm_community$array_extra$Array$Extra$reverse(
 					$elm$core$Array$fromList(
 						A2(
@@ -13886,7 +14114,7 @@ var $author$project$Main$update = F2(
 									function () {
 										var pat = tuple.a;
 										var draw = tuple.b;
-										return (_Utils_cmp(index, patternIndex) < 0) ? _Utils_Tuple2(
+										return (_Utils_cmp(timelinePatternIndex, patternIndex) < 0) ? _Utils_Tuple2(
 											_Utils_update(
 												pat,
 												{active: false}),

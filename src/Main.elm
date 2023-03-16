@@ -671,6 +671,16 @@ update msg model =
 
         SetTimelineIndex index ->
             let
+                timelinePatternIndex =
+                    if index >= 0 then
+                        Array.reverse model.timeline
+                            |> Array.get index
+                            |> Maybe.andThen (\x -> Just x.patternIndex)
+                            |> Maybe.withDefault (Array.length model.timeline)
+
+                    else
+                        -1
+
                 newPatternArray =
                     Array.reverse <|
                         Array.fromList <|
@@ -681,7 +691,7 @@ update msg model =
                                             updateDrawingColors <|
                                                 case tuple of
                                                     ( pat, draw ) ->
-                                                        if index < patternIndex then
+                                                        if timelinePatternIndex < patternIndex then
                                                             ( { pat | active = False }, draw )
 
                                                         else

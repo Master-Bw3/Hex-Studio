@@ -214,6 +214,28 @@ applyPatternToStack stack ctx pattern index =
                     , timeline = Array.map (\x -> { stack = x, patternIndex = index }) actionResult.allStackStates
                     }
 
+            else if pattern.internalName == "for_each" then
+                --special cases for eval and for_each because they need to return multiple stack states for the timeline
+                let
+                    actionResult =
+                        forEach stack ctx
+                in
+                if actionResult.success == True then
+                    { stack = actionResult.stack
+                    , result = Succeeded
+                    , ctx = actionResult.ctx
+                    , considerNext = False
+                    , timeline = Array.map (\x -> { stack = x, patternIndex = index }) actionResult.allStackStates
+                    }
+
+                else
+                    { stack = actionResult.stack
+                    , result = Failed
+                    , ctx = actionResult.ctx
+                    , considerNext = False
+                    , timeline = Array.map (\x -> { stack = x, patternIndex = index }) actionResult.allStackStates
+                    }
+
             else
                 let
                     actionResult =
@@ -299,7 +321,7 @@ eval stack ctx =
                             { stack = Array.fromList [ Garbage CatastrophicFailure ], ctx = ctx, success = False, allStackStates = Array.fromList [ Array.fromList [ Garbage CatastrophicFailure ] ] }
 
 
-forEach : Array Iota -> CastingContext -> ActionResult
+forEach : Array Iota -> CastingContext -> { stack : Array Iota, ctx : CastingContext, success : Bool, allStackStates : Array (Array Iota) }
 forEach stack ctx =
     let
         maybeIota1 =
@@ -312,25 +334,34 @@ forEach stack ctx =
             Array.slice 2 (Array.length stack) stack
     in
     if maybeIota1 == Nothing || maybeIota2 == Nothing then
-        { stack = Array.append (Array.map mapNothingToMissingIota <| Array.fromList <| moveNothingsToFront [ maybeIota1, maybeIota2 ]) newStack
+        let
+            newNewStack =
+                Array.append (Array.map mapNothingToMissingIota <| Array.fromList <| moveNothingsToFront [ maybeIota1, maybeIota2 ]) newStack
+        in
+        { stack = newNewStack
         , ctx = ctx
         , success = False
+        , allStackStates = Array.fromList [ newNewStack ]
         }
 
     else
         case ( Maybe.map getPatternList maybeIota1, Maybe.map getIotaList maybeIota2 ) of
             ( Just iota1, Just iota2 ) ->
                 if iota1 == Nothing || iota2 == Nothing then
-                    { stack =
-                        Array.append
-                            (Array.fromList
-                                [ Maybe.withDefault (Garbage IncorrectIota) iota1
-                                , Maybe.withDefault (Garbage IncorrectIota) iota2
-                                ]
-                            )
-                            newStack
+                    let
+                        newNewStack =
+                            Array.append
+                                (Array.fromList
+                                    [ Maybe.withDefault (Garbage IncorrectIota) iota1
+                                    , Maybe.withDefault (Garbage IncorrectIota) iota2
+                                    ]
+                                )
+                                newStack
+                    in
+                    { stack = newNewStack
                     , ctx = ctx
                     , success = False
+                    , allStackStates = Array.fromList [ newNewStack ]
                     }
 
                 else
@@ -375,9 +406,15 @@ forEach stack ctx =
 
                                                     else
                                                         True
+                                                , allStackStates =
+                                                    Array.append
+                                                        (unshift (Array.set 0 (IotaList (Array.append thothList (Array.reverse subApplyResult.stack))) accumulator.stack) <|
+                                                            Array.map (\x -> x.stack) subApplyResult.timeline
+                                                        )
+                                                        accumulator.allStackStates
                                                 }
                                         )
-                                        { stack = unshift (IotaList Array.empty) newStack, ctx = ctx, success = True, continue = True }
+                                        { stack = unshift (IotaList Array.empty) newStack, ctx = ctx, success = True, continue = True, allStackStates = Array.empty }
                                         iotaList
                             in
                             { stack =
@@ -393,14 +430,16 @@ forEach stack ctx =
                                     applyResult.stack
                             , ctx = applyResult.ctx
                             , success = applyResult.success
+                            , allStackStates = applyResult.allStackStates
                             }
 
                         _ ->
-                            { stack = Array.fromList [ Garbage CatastrophicFailure ], ctx = ctx, success = False }
+                            { stack = Array.fromList [ Garbage CatastrophicFailure ], ctx = ctx, success = False, allStackStates = Array.fromList [ Array.fromList [ Garbage CatastrophicFailure ] ] }
 
             _ ->
                 -- this should never happen
                 { stack = unshift (Garbage CatastrophicFailure) newStack
                 , ctx = ctx
                 , success = False
+                , allStackStates = Array.fromList [ unshift (Garbage CatastrophicFailure) newStack ]
                 }
