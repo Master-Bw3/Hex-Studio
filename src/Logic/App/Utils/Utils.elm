@@ -51,3 +51,12 @@ unwrapResult result =
 
         Err value ->
             value
+
+
+ifThenElse : Bool -> c -> c -> c
+ifThenElse conditional a b =
+    if conditional then
+        a
+
+    else
+        b

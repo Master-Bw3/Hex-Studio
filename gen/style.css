@@ -341,6 +341,7 @@ button {
     border-top: 1px var(--accent1) solid;
     background-color: var(--primary_light);
     position: relative;
+    display: flex;
 }
 
 #canvas_buttons {
@@ -649,4 +650,27 @@ button {
 #export_text p {
     user-select: text;
     white-space: pre-wrap;
+}
+
+#timeline_bar {
+    background-color: var(--accent1);
+    height: 3px;
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 100%;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.timeline_point_outline {
+    display: none;
+}
+
+.timeline_point:hover .timeline_point_outline {
+    display: block;
+}
+
+.timeline_point:hover, .timeline_point_selected {
+    z-index: 1000000;
+
 }

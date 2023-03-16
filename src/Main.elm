@@ -704,7 +704,7 @@ update msg model =
                 , patternArray = newPatternArray
                 , grid = { grid | points = updateGridPoints grid.width grid.height newPatternArray [] settings.gridScale }
                 , stack =
-                    if index == Array.length model.timeline then
+                    if index == (Array.length model.timeline) then
                         model.stack
 
                     else

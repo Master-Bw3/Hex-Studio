@@ -12752,7 +12752,16 @@ var $author$project$Logic$App$Patterns$MetaActions$applyMetaAction = F2(
 				var drawPatternsResult = A2($author$project$Logic$App$Grid$drawPatterns, patterns, model.grid);
 				return _Utils_update(
 					model,
-					{castingContext: stackResult.ctx, grid: drawPatternsResult.grid, patternArray: drawPatternsResult.patternArray, stack: newStack});
+					{
+						castingContext: stackResult.ctx,
+						grid: drawPatternsResult.grid,
+						patternArray: drawPatternsResult.patternArray,
+						stack: newStack,
+						timeline: A2(
+							$author$project$Logic$App$Utils$Utils$unshift,
+							{patternIndex: -1, stack: $elm$core$Array$empty},
+							stackResult.timeline)
+					});
 		}
 	});
 var $author$project$Logic$App$Utils$GetAngleSignature$getAngleSignature = function (unflippedPath) {
@@ -17273,65 +17282,174 @@ var $lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$minus = A4(
 	_Utils_Tuple2(448, 512),
 	_Utils_Tuple2('M400 288h-352c-17.69 0-32-14.32-32-32.01s14.31-31.99 32-31.99h352c17.69 0 32 14.3 32 31.99S417.7 288 400 288z', $elm$core$Maybe$Nothing));
 var $lattyware$elm_fontawesome$FontAwesome$Solid$minus = $lattyware$elm_fontawesome$FontAwesome$present($lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$minus);
+var $author$project$Logic$App$Utils$Utils$ifThenElse = F3(
+	function (conditional, a, b) {
+		return conditional ? a : b;
+	});
 var $author$project$Components$App$Timeline$renderPoints = function (model) {
 	var timelineLength = $elm$core$Array$length(model.timeline);
 	var spacing = (model.grid.width - 50) / (timelineLength - 1);
-	var setSpecificAttributes = function (index) {
-		return _Utils_eq(index, timelineLength - 1) ? _List_fromArray(
-			[
-				A2(
-				$elm$html$Html$Attributes$style,
-				'left',
-				$elm$core$String$fromFloat(model.grid.width - 30) + 'px'),
-				A2($elm$html$Html$Attributes$style, 'transform', 'scale(200%)')
-			]) : ((!index) ? _List_fromArray(
-			[
-				A2(
-				$elm$html$Html$Attributes$style,
-				'left',
-				$elm$core$String$fromFloat(20) + 'px'),
-				A2($elm$html$Html$Attributes$style, 'transform', 'scale(200%)')
-			]) : _List_fromArray(
-			[
-				A2(
-				$elm$html$Html$Attributes$style,
-				'left',
-				$elm$core$String$fromFloat((spacing * index) + 20) + 'px')
-			]));
-	};
+	var setSpecificAttributes = F2(
+		function (scale, index) {
+			return _Utils_eq(index, timelineLength - 1) ? _List_fromArray(
+				[
+					A2(
+					$elm$html$Html$Attributes$style,
+					'left',
+					$elm$core$String$fromFloat(model.grid.width - 30) + 'px'),
+					A2(
+					$elm$html$Html$Attributes$style,
+					'transform',
+					'scale(' + ($elm$core$String$fromFloat(200 * scale) + '%)'))
+				]) : ((!index) ? _List_fromArray(
+				[
+					A2(
+					$elm$html$Html$Attributes$style,
+					'left',
+					$elm$core$String$fromFloat(20) + 'px'),
+					A2(
+					$elm$html$Html$Attributes$style,
+					'transform',
+					'scale(' + ($elm$core$String$fromFloat(200 * scale) + '%)'))
+				]) : _List_fromArray(
+				[
+					A2(
+					$elm$html$Html$Attributes$style,
+					'left',
+					$elm$core$String$fromFloat((spacing * index) + 20) + 'px'),
+					A2(
+					$elm$html$Html$Attributes$style,
+					'transform',
+					'scale(' + ($elm$core$String$fromFloat(100 * scale) + '%)'))
+				]));
+		});
+	var currentTime = _Utils_eq(
+		model.timelineIndex,
+		$elm$core$Array$length(model.timeline));
 	return A2(
 		$elm$core$List$indexedMap,
 		F2(
 			function (index, _v0) {
 				return A2(
-					$elm$svg$Svg$svg,
-					_Utils_ap(
-						_List_fromArray(
-							[
-								$elm$svg$Svg$Attributes$width(
-								$elm$core$String$fromFloat(10)),
-								$elm$svg$Svg$Attributes$height(
-								$elm$core$String$fromFloat(10)),
-								$elm$svg$Svg$Attributes$viewBox('0 0 300 280'),
-								A2($elm$html$Html$Attributes$style, 'position', 'absolute'),
-								A2(
-								$elm$html$Html$Attributes$style,
-								'top',
-								$elm$core$String$fromInt(50) + 'px'),
-								$elm$svg$Svg$Attributes$fill($author$project$Settings$Theme$accent1),
-								$elm$html$Html$Events$onClick(
-								$author$project$Logic$App$Msg$SetTimelineIndex(index - 1))
-							]),
-						setSpecificAttributes(index)),
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							A3(
+							$author$project$Logic$App$Utils$Utils$ifThenElse,
+							_Utils_eq(index, model.timelineIndex + 1) || (currentTime && _Utils_eq(index + 1, timelineLength)),
+							$elm$svg$Svg$Attributes$class('timeline_point_selected'),
+							$elm$svg$Svg$Attributes$class('timeline_point'))
+						]),
 					_List_fromArray(
 						[
 							A2(
-							$elm$svg$Svg$polygon,
+							$elm$svg$Svg$svg,
+							_Utils_ap(
+								_List_fromArray(
+									[
+										$elm$svg$Svg$Attributes$width(
+										$elm$core$String$fromFloat(12)),
+										$elm$svg$Svg$Attributes$height(
+										$elm$core$String$fromFloat(12)),
+										$elm$svg$Svg$Attributes$viewBox('0 0 300 280'),
+										A3(
+										$author$project$Logic$App$Utils$Utils$ifThenElse,
+										_Utils_eq(index, model.timelineIndex + 1) || (currentTime && _Utils_eq(index + 1, timelineLength)),
+										$elm$svg$Svg$Attributes$class('timeline_point_outline_selected'),
+										$elm$svg$Svg$Attributes$class('timeline_point_outline')),
+										A2($elm$html$Html$Attributes$style, 'position', 'absolute'),
+										A2(
+										$elm$html$Html$Attributes$style,
+										'top',
+										$elm$core$String$fromInt(44) + 'px'),
+										A3(
+										$author$project$Logic$App$Utils$Utils$ifThenElse,
+										_Utils_eq(index, model.timelineIndex + 1) || (currentTime && _Utils_eq(index + 1, timelineLength)),
+										$elm$svg$Svg$Attributes$fill($author$project$Settings$Theme$accent2),
+										$elm$svg$Svg$Attributes$fill($author$project$Settings$Theme$accent1)),
+										$elm$html$Html$Events$onClick(
+										$author$project$Logic$App$Msg$SetTimelineIndex(index - 1))
+									]),
+								A2(setSpecificAttributes, 1.7, index)),
 							_List_fromArray(
 								[
-									$elm$svg$Svg$Attributes$points('300,150 225,280 75,280 0,150 75,20 225,20')
-								]),
-							_List_Nil)
+									A2(
+									$elm$svg$Svg$polygon,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$points('300,150 225,280 75,280 0,150 75,20 225,20')
+										]),
+									_List_Nil)
+								])),
+							A2(
+							$elm$svg$Svg$svg,
+							_Utils_ap(
+								_List_fromArray(
+									[
+										$elm$svg$Svg$Attributes$width(
+										$elm$core$String$fromFloat(12)),
+										$elm$svg$Svg$Attributes$height(
+										$elm$core$String$fromFloat(12)),
+										$elm$svg$Svg$Attributes$viewBox('0 0 300 280'),
+										A3(
+										$author$project$Logic$App$Utils$Utils$ifThenElse,
+										_Utils_eq(index, model.timelineIndex + 1) || (currentTime && _Utils_eq(index + 1, timelineLength)),
+										$elm$svg$Svg$Attributes$class('timeline_point_outline_selected'),
+										$elm$svg$Svg$Attributes$class('timeline_point_outline')),
+										A2($elm$html$Html$Attributes$style, 'position', 'absolute'),
+										A2(
+										$elm$html$Html$Attributes$style,
+										'top',
+										$elm$core$String$fromInt(44) + 'px'),
+										$elm$svg$Svg$Attributes$fill('var(--primary_light)'),
+										$elm$html$Html$Events$onClick(
+										$author$project$Logic$App$Msg$SetTimelineIndex(index - 1))
+									]),
+								A2(setSpecificAttributes, 1.3, index)),
+							_List_fromArray(
+								[
+									A2(
+									$elm$svg$Svg$polygon,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$points('300,150 225,280 75,280 0,150 75,20 225,20')
+										]),
+									_List_Nil)
+								])),
+							A2(
+							$elm$svg$Svg$svg,
+							_Utils_ap(
+								_List_fromArray(
+									[
+										$elm$svg$Svg$Attributes$width(
+										$elm$core$String$fromFloat(12)),
+										$elm$svg$Svg$Attributes$height(
+										$elm$core$String$fromFloat(12)),
+										$elm$svg$Svg$Attributes$viewBox('0 0 300 280'),
+										A2($elm$html$Html$Attributes$style, 'position', 'absolute'),
+										A2(
+										$elm$html$Html$Attributes$style,
+										'top',
+										$elm$core$String$fromInt(44) + 'px'),
+										A3(
+										$author$project$Logic$App$Utils$Utils$ifThenElse,
+										_Utils_eq(index, model.timelineIndex + 1) || (currentTime && _Utils_eq(index + 1, timelineLength)),
+										$elm$svg$Svg$Attributes$fill($author$project$Settings$Theme$accent2),
+										$elm$svg$Svg$Attributes$fill($author$project$Settings$Theme$accent1)),
+										$elm$html$Html$Events$onClick(
+										$author$project$Logic$App$Msg$SetTimelineIndex(index - 1))
+									]),
+								A2(setSpecificAttributes, 1, index)),
+							_List_fromArray(
+								[
+									A2(
+									$elm$svg$Svg$polygon,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$points('300,150 225,280 75,280 0,150 75,20 225,20')
+										]),
+									_List_Nil)
+								]))
 						]));
 			}),
 		A2($elm$core$List$repeat, timelineLength, $elm$core$Maybe$Nothing));
@@ -17343,7 +17461,16 @@ var $author$project$Components$App$Timeline$timeline = function (model) {
 			[
 				$elm$html$Html$Attributes$id('bottom_box')
 			]),
-		$author$project$Components$App$Timeline$renderPoints(model));
+		A2(
+			$elm$core$List$cons,
+			A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$id('timeline_bar')
+					]),
+				_List_Nil),
+			$author$project$Components$App$Timeline$renderPoints(model)));
 };
 var $author$project$Components$App$Right$right = function (model) {
 	return A2(

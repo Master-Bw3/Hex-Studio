@@ -117,4 +117,5 @@ applyMetaAction model metaActionMsg =
                 , grid = drawPatternsResult.grid
                 , stack = newStack
                 , castingContext = stackResult.ctx
+                , timeline = unshift { stack = Array.empty, patternIndex = -1 } stackResult.timeline
             }
