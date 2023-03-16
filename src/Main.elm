@@ -277,22 +277,22 @@ update msg model =
                                 , drawing = { drawing | drawingMode = False, activePath = [] }
                             }
                     in
-                    ( applyMetaAction
-                        { model
-                            | patternArray = newPatternArray
-                            , grid = newGrid
-                            , stack = newStack
-                            , castingContext = stackResult.ctx
-                            , insertionPoint =
-                                if model.insertionPoint > Array.length model.patternArray then
-                                    0
+                    update (SetTimelineIndex (Array.length stackResult.timeline + 1)) <|
+                        applyMetaAction
+                            { model
+                                | patternArray = newPatternArray
+                                , grid = newGrid
+                                , stack = newStack
+                                , castingContext = stackResult.ctx
+                                , timeline = unshift { stack = Array.empty, patternIndex = -1 } stackResult.timeline
+                                , insertionPoint =
+                                    if model.insertionPoint > Array.length model.patternArray then
+                                        0
 
-                                else
-                                    model.insertionPoint
-                        }
-                        newPattern.metaAction
-                    , Cmd.none
-                    )
+                                    else
+                                        model.insertionPoint
+                            }
+                            newPattern.metaAction
 
                 else
                     ( { model | grid = { grid | drawing = { drawing | drawingMode = False, activePath = [] } } }, Cmd.none )
@@ -322,23 +322,23 @@ update msg model =
                         newUncoloredPatternArray
                         resultArray
             in
-            ( { model
-                | patternArray = newPatternArray
-                , grid = { grid | points = updateGridPoints grid.width grid.height newPatternArray [] settings.gridScale }
-                , stack = newStack
-                , castingContext = stackResult.ctx
-                , insertionPoint =
-                    if model.insertionPoint > Array.length newPatternArray then
-                        0
+            update (SetTimelineIndex (Array.length stackResult.timeline + 1)) <|
+                { model
+                    | patternArray = newPatternArray
+                    , grid = { grid | points = updateGridPoints grid.width grid.height newPatternArray [] settings.gridScale }
+                    , stack = newStack
+                    , castingContext = stackResult.ctx
+                    , timeline = unshift { stack = Array.empty, patternIndex = -1 } stackResult.timeline
+                    , insertionPoint =
+                        if model.insertionPoint > Array.length newPatternArray then
+                            0
 
-                    else if model.insertionPoint < endIndex then
-                        max model.insertionPoint 0
+                        else if model.insertionPoint < endIndex then
+                            max model.insertionPoint 0
 
-                    else
-                        max (model.insertionPoint - 1) 0
-              }
-            , Cmd.none
-            )
+                        else
+                            max (model.insertionPoint - 1) 0
+                }
 
         SetGridScale scale ->
             ( { model | grid = { grid | points = updateGridPoints grid.width grid.height model.patternArray [] scale }, settings = { settings | gridScale = scale } }, Cmd.none )
@@ -550,15 +550,15 @@ update msg model =
                         newUncoloredPatternArray
                         resultArray
             in
-            ( { model
-                | ui = { ui | mouseOverElementIndex = -1, dragging = ( False, -1 ) }
-                , patternArray = newPatternArray
-                , grid = { grid | points = updateGridPoints grid.width grid.height newPatternArray [] settings.gridScale }
-                , stack = newStack
-                , castingContext = stackResult.ctx
-              }
-            , Cmd.none
-            )
+            update (SetTimelineIndex (Array.length stackResult.timeline + 1)) <|
+                { model
+                    | ui = { ui | mouseOverElementIndex = -1, dragging = ( False, -1 ) }
+                    , patternArray = newPatternArray
+                    , grid = { grid | points = updateGridPoints grid.width grid.height newPatternArray [] settings.gridScale }
+                    , stack = newStack
+                    , castingContext = stackResult.ctx
+                    , timeline = unshift { stack = Array.empty, patternIndex = -1 } stackResult.timeline
+                }
 
         SetFocus id ->
             ( { model | ui = { ui | selectedInputID = id } }, Cmd.none )
@@ -633,14 +633,14 @@ update msg model =
                         newUncoloredPatternArray
                         resultArray
             in
-            ( { model
-                | patternArray = newPatternArray
-                , grid = { grid | points = updateGridPoints grid.width grid.height newPatternArray [] settings.gridScale }
-                , stack = newStack
-                , castingContext = stackResult.ctx
-              }
-            , Cmd.none
-            )
+            update (SetTimelineIndex (Array.length stackResult.timeline + 1)) <|
+                { model
+                    | patternArray = newPatternArray
+                    , grid = { grid | points = updateGridPoints grid.width grid.height newPatternArray [] settings.gridScale }
+                    , stack = newStack
+                    , castingContext = stackResult.ctx
+                    , timeline = unshift { stack = Array.empty, patternIndex = -1 } stackResult.timeline
+                }
 
         SetInsertionPoint index keys ->
             if keys.shift then
@@ -704,7 +704,7 @@ update msg model =
                 , patternArray = newPatternArray
                 , grid = { grid | points = updateGridPoints grid.width grid.height newPatternArray [] settings.gridScale }
                 , stack =
-                    if index == (Array.length model.timeline) then
+                    if index == Array.length model.timeline then
                         model.stack
 
                     else

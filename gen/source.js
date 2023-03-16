@@ -12656,7 +12656,8 @@ var $author$project$Logic$App$Patterns$MetaActions$applyMetaAction = F2(
 							}),
 						insertionPoint: 0,
 						patternArray: $elm$core$Array$empty,
-						stack: $elm$core$Array$empty
+						stack: $elm$core$Array$empty,
+						timeline: $elm$core$Array$empty
 					});
 			case 'ClearPatterns':
 				return _Utils_update(
@@ -12669,7 +12670,8 @@ var $author$project$Logic$App$Patterns$MetaActions$applyMetaAction = F2(
 							}),
 						insertionPoint: 0,
 						patternArray: $elm$core$Array$empty,
-						stack: $elm$core$Array$empty
+						stack: $elm$core$Array$empty,
+						timeline: $elm$core$Array$empty
 					});
 			case 'Backspace':
 				var newUncoloredPatternArray = A2(
@@ -12709,7 +12711,11 @@ var $author$project$Logic$App$Patterns$MetaActions$applyMetaAction = F2(
 							model.insertionPoint,
 							$elm$core$Array$length(newPatternArray)) > 0) ? 0 : model.insertionPoint,
 						patternArray: newPatternArray,
-						stack: newStack
+						stack: newStack,
+						timeline: A2(
+							$author$project$Logic$App$Utils$Utils$unshift,
+							{patternIndex: -1, stack: $elm$core$Array$empty},
+							stackResult.timeline)
 					});
 			default:
 				var newUncoloredPatternArray = A2(
@@ -13520,7 +13526,10 @@ var $author$project$Main$update = F2(
 									{activePath: _List_Nil, drawingMode: false}),
 								points: A5($author$project$Components$App$Grid$updateGridPoints, grid.width, grid.height, newPatternArray, _List_Nil, settings.gridScale)
 							});
-						return _Utils_Tuple2(
+						return A2(
+							$author$project$Main$update,
+							$author$project$Logic$App$Msg$SetTimelineIndex(
+								$elm$core$Array$length(stackResult.timeline) + 1),
 							A2(
 								$author$project$Logic$App$Patterns$MetaActions$applyMetaAction,
 								_Utils_update(
@@ -13532,10 +13541,13 @@ var $author$project$Main$update = F2(
 											model.insertionPoint,
 											$elm$core$Array$length(model.patternArray)) > 0) ? 0 : model.insertionPoint,
 										patternArray: newPatternArray,
-										stack: newStack
+										stack: newStack,
+										timeline: A2(
+											$author$project$Logic$App$Utils$Utils$unshift,
+											{patternIndex: -1, stack: $elm$core$Array$empty},
+											stackResult.timeline)
 									}),
-								newPattern.metaAction),
-							$elm$core$Platform$Cmd$none);
+								newPattern.metaAction));
 					} else {
 						return _Utils_Tuple2(
 							_Utils_update(
@@ -13578,7 +13590,10 @@ var $author$project$Main$update = F2(
 						}),
 					newUncoloredPatternArray,
 					resultArray);
-				return _Utils_Tuple2(
+				return A2(
+					$author$project$Main$update,
+					$author$project$Logic$App$Msg$SetTimelineIndex(
+						$elm$core$Array$length(stackResult.timeline) + 1),
 					_Utils_update(
 						model,
 						{
@@ -13592,9 +13607,12 @@ var $author$project$Main$update = F2(
 								model.insertionPoint,
 								$elm$core$Array$length(newPatternArray)) > 0) ? 0 : ((_Utils_cmp(model.insertionPoint, endIndex) < 0) ? A2($elm$core$Basics$max, model.insertionPoint, 0) : A2($elm$core$Basics$max, model.insertionPoint - 1, 0)),
 							patternArray: newPatternArray,
-							stack: newStack
-						}),
-					$elm$core$Platform$Cmd$none);
+							stack: newStack,
+							timeline: A2(
+								$author$project$Logic$App$Utils$Utils$unshift,
+								{patternIndex: -1, stack: $elm$core$Array$empty},
+								stackResult.timeline)
+						}));
 			case 'SetGridScale':
 				var scale = msg.a;
 				return _Utils_Tuple2(
@@ -13905,7 +13923,10 @@ var $author$project$Main$update = F2(
 						}),
 					newUncoloredPatternArray,
 					resultArray);
-				return _Utils_Tuple2(
+				return A2(
+					$author$project$Main$update,
+					$author$project$Logic$App$Msg$SetTimelineIndex(
+						$elm$core$Array$length(stackResult.timeline) + 1),
 					_Utils_update(
 						model,
 						{
@@ -13917,14 +13938,17 @@ var $author$project$Main$update = F2(
 								}),
 							patternArray: newPatternArray,
 							stack: newStack,
+							timeline: A2(
+								$author$project$Logic$App$Utils$Utils$unshift,
+								{patternIndex: -1, stack: $elm$core$Array$empty},
+								stackResult.timeline),
 							ui: _Utils_update(
 								ui,
 								{
 									dragging: _Utils_Tuple2(false, -1),
 									mouseOverElementIndex: -1
 								})
-						}),
-					$elm$core$Platform$Cmd$none);
+						}));
 			case 'SetFocus':
 				var id = msg.a;
 				return _Utils_Tuple2(
@@ -14033,7 +14057,10 @@ var $author$project$Main$update = F2(
 						}),
 					newUncoloredPatternArray,
 					resultArray);
-				return _Utils_Tuple2(
+				return A2(
+					$author$project$Main$update,
+					$author$project$Logic$App$Msg$SetTimelineIndex(
+						$elm$core$Array$length(stackResult.timeline) + 1),
 					_Utils_update(
 						model,
 						{
@@ -14044,9 +14071,12 @@ var $author$project$Main$update = F2(
 									points: A5($author$project$Components$App$Grid$updateGridPoints, grid.width, grid.height, newPatternArray, _List_Nil, settings.gridScale)
 								}),
 							patternArray: newPatternArray,
-							stack: newStack
-						}),
-					$elm$core$Platform$Cmd$none);
+							stack: newStack,
+							timeline: A2(
+								$author$project$Logic$App$Utils$Utils$unshift,
+								{patternIndex: -1, stack: $elm$core$Array$empty},
+								stackResult.timeline)
+						}));
 			case 'SetInsertionPoint':
 				var index = msg.a;
 				var keys = msg.b;

@@ -35,6 +35,7 @@ applyMetaAction model metaActionMsg =
                 , stack = Array.empty
                 , castingContext = { castingContext | heldItemContent = Nothing }
                 , insertionPoint = 0
+                , timeline = Array.empty
             }
 
         ClearPatterns ->
@@ -43,6 +44,7 @@ applyMetaAction model metaActionMsg =
                 , grid = { grid | points = updateGridPoints grid.width grid.height Array.empty [] settings.gridScale }
                 , stack = Array.empty
                 , insertionPoint = 0
+                , timeline = Array.empty
             }
 
         Backspace ->
@@ -73,6 +75,7 @@ applyMetaAction model metaActionMsg =
                 , grid = { grid | points = updateGridPoints grid.width grid.height newPatternArray [] settings.gridScale }
                 , stack = newStack
                 , castingContext = stackResult.ctx
+                , timeline = unshift { stack = Array.empty, patternIndex = -1 } stackResult.timeline
                 , insertionPoint =
                     if model.insertionPoint > Array.length newPatternArray then
                         0
