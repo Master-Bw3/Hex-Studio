@@ -671,12 +671,19 @@ update msg model =
 
         SetTimelineIndex index ->
             let
+                timeline =
+                    if Array.length model.timeline < 2 then
+                        Array.repeat 2 { stack = Array.empty, patternIndex = -1 }
+
+                    else
+                        model.timeline
+
                 timelinePatternIndex =
                     if index >= 0 then
-                        Array.reverse model.timeline
+                        Array.reverse timeline
                             |> Array.get index
                             |> Maybe.andThen (\x -> Just x.patternIndex)
-                            |> Maybe.withDefault (Array.length model.timeline)
+                            |> Maybe.withDefault (Array.length timeline)
 
                     else
                         -1
@@ -704,11 +711,11 @@ update msg model =
                 , patternArray = newPatternArray
                 , grid = { grid | points = updateGridPoints grid.width grid.height newPatternArray [] settings.gridScale }
                 , stack =
-                    if index == Array.length model.timeline then
+                    if index == Array.length timeline then
                         model.stack
 
                     else
-                        Array.reverse model.timeline
+                        Array.reverse timeline
                             |> Array.get index
                             |> Maybe.andThen (\x -> Just x.stack)
                             |> Maybe.withDefault Array.empty
@@ -745,13 +752,21 @@ keyDecoder model =
 
 
 keyPressHandler model keyValue =
+    let
+        timeline =
+            if Array.length model.timeline < 2 then
+                Array.repeat 2 { stack = Array.empty, patternIndex = -1 }
+
+            else
+                model.timeline
+    in
     case keyValue of
         "ArrowLeft" ->
             --idk where these weird constants are coming from either
-            SetTimelineIndex <| min (Array.length model.timeline - 3) <| max -1 <| model.timelineIndex - 1
+            SetTimelineIndex <| min (Array.length timeline - 3) <| max -1 <| model.timelineIndex - 1
 
         "ArrowRight" ->
-            SetTimelineIndex <| min (Array.length model.timeline - 2) <| model.timelineIndex + 1
+            SetTimelineIndex <| min (Array.length timeline - 2) <| model.timelineIndex + 1
 
         _ ->
             NoOp

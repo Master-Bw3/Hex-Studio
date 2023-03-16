@@ -6045,20 +6045,33 @@ var $elm$core$Basics$min = F2(
 	function (x, y) {
 		return (_Utils_cmp(x, y) < 0) ? x : y;
 	});
+var $elm$core$Array$repeat = F2(
+	function (n, e) {
+		return A2(
+			$elm$core$Array$initialize,
+			n,
+			function (_v0) {
+				return e;
+			});
+	});
 var $author$project$Main$keyPressHandler = F2(
 	function (model, keyValue) {
+		var timeline = ($elm$core$Array$length(model.timeline) < 2) ? A2(
+			$elm$core$Array$repeat,
+			2,
+			{patternIndex: -1, stack: $elm$core$Array$empty}) : model.timeline;
 		switch (keyValue) {
 			case 'ArrowLeft':
 				return $author$project$Logic$App$Msg$SetTimelineIndex(
 					A2(
 						$elm$core$Basics$min,
-						$elm$core$Array$length(model.timeline) - 3,
+						$elm$core$Array$length(timeline) - 3,
 						A2($elm$core$Basics$max, -1, model.timelineIndex - 1)));
 			case 'ArrowRight':
 				return $author$project$Logic$App$Msg$SetTimelineIndex(
 					A2(
 						$elm$core$Basics$min,
-						$elm$core$Array$length(model.timeline) - 2,
+						$elm$core$Array$length(timeline) - 2,
 						model.timelineIndex + 1));
 			default:
 				return $author$project$Logic$App$Msg$NoOp;
@@ -8547,15 +8560,6 @@ var $elm_community$array_extra$Array$Extra$map2 = F3(
 				combineAb,
 				$elm$core$Array$toList(aArray),
 				$elm$core$Array$toList(bArray)));
-	});
-var $elm$core$Array$repeat = F2(
-	function (n, e) {
-		return A2(
-			$elm$core$Array$initialize,
-			n,
-			function (_v0) {
-				return e;
-			});
 	});
 var $author$project$Logic$App$Patterns$Misc$mask = F3(
 	function (maskCode, stack, ctx) {
@@ -14160,9 +14164,13 @@ var $author$project$Main$update = F2(
 					A3($elm$file$File$Download$string, 'Hex.hexcasting', 'text/plain', string));
 			default:
 				var index = msg.a;
+				var timeline = ($elm$core$Array$length(model.timeline) < 2) ? A2(
+					$elm$core$Array$repeat,
+					2,
+					{patternIndex: -1, stack: $elm$core$Array$empty}) : model.timeline;
 				var timelinePatternIndex = (index >= 0) ? A2(
 					$elm$core$Maybe$withDefault,
-					$elm$core$Array$length(model.timeline),
+					$elm$core$Array$length(timeline),
 					A2(
 						$elm$core$Maybe$andThen,
 						function (x) {
@@ -14171,7 +14179,7 @@ var $author$project$Main$update = F2(
 						A2(
 							$elm$core$Array$get,
 							index,
-							$elm_community$array_extra$Array$Extra$reverse(model.timeline)))) : (-1);
+							$elm_community$array_extra$Array$Extra$reverse(timeline)))) : (-1);
 				var newPatternArray = $elm_community$array_extra$Array$Extra$reverse(
 					$elm$core$Array$fromList(
 						A2(
@@ -14208,7 +14216,7 @@ var $author$project$Main$update = F2(
 							patternArray: newPatternArray,
 							stack: _Utils_eq(
 								index,
-								$elm$core$Array$length(model.timeline)) ? model.stack : A2(
+								$elm$core$Array$length(timeline)) ? model.stack : A2(
 								$elm$core$Maybe$withDefault,
 								$elm$core$Array$empty,
 								A2(
@@ -14219,7 +14227,7 @@ var $author$project$Main$update = F2(
 									A2(
 										$elm$core$Array$get,
 										index,
-										$elm_community$array_extra$Array$Extra$reverse(model.timeline)))),
+										$elm_community$array_extra$Array$Extra$reverse(timeline)))),
 							timelineIndex: index
 						}),
 					$elm$core$Platform$Cmd$none);
@@ -17537,7 +17545,15 @@ var $author$project$Components$App$Timeline$timeline = function (model) {
 						$elm$html$Html$Attributes$id('timeline_bar')
 					]),
 				_List_Nil),
-			$author$project$Components$App$Timeline$renderPoints(model)));
+			$author$project$Components$App$Timeline$renderPoints(
+				_Utils_update(
+					model,
+					{
+						timeline: ($elm$core$Array$length(model.timeline) < 2) ? A2(
+							$elm$core$Array$repeat,
+							2,
+							{patternIndex: -1, stack: $elm$core$Array$empty}) : model.timeline
+					}))));
 };
 var $author$project$Components$App$Right$right = function (model) {
 	return A2(

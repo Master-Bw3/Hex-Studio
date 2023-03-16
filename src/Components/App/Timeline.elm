@@ -19,7 +19,15 @@ timeline model =
         [ id "bottom_box"
         ]
         (div [ id "timeline_bar" ] []
-            :: renderPoints model
+            :: renderPoints
+                { model
+                    | timeline =
+                        if Array.length model.timeline < 2 then
+                            Array.repeat 2 {stack = Array.empty, patternIndex = -1}
+
+                        else
+                            model.timeline
+                }
         )
 
 
@@ -28,8 +36,9 @@ renderPoints model =
     let
         timelineLength =
             Array.length model.timeline
-        
-        currentTime = model.timelineIndex == Array.length model.timeline
+
+        currentTime =
+            model.timelineIndex == Array.length model.timeline
 
         spacing =
             (model.grid.width - 50) / (toFloat timelineLength - 1)
