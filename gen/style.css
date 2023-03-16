@@ -340,6 +340,7 @@ button {
     height: 100px;
     border-top: 1px var(--accent1) solid;
     background-color: var(--primary_light);
+    position: relative;
 }
 
 #canvas_buttons {

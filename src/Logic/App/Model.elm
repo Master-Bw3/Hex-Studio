@@ -5,6 +5,7 @@ import Logic.App.Types exposing (CastingContext, GridPoint, HeldItem, Iota, Pane
 import Logic.App.Types exposing (Grid)
 import Logic.App.Msg exposing (Msg)
 import Logic.App.Types exposing (Overlay)
+import Logic.App.Types exposing (Timeline)
 
 
 type alias Model =
@@ -37,4 +38,6 @@ type alias Model =
     , downloadSrc : String
     , insertionPoint : Int
     , importQueue : List (Pattern, Cmd Msg)
+    , timeline : Timeline
+    , timelineIndex : Int
     }

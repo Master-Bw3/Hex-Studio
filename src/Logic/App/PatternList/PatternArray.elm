@@ -31,7 +31,17 @@ updateDrawingColors patternTuple =
         (\pnt ->
             { pnt
                 | connectedPoints =
-                    List.map (\conPnt -> { conPnt | color = (Tuple.first patternTuple).color })
+                    List.map
+                        (\conPnt ->
+                            { conPnt
+                                | color =
+                                    if (Tuple.first patternTuple).active == False then
+                                        "grey"
+
+                                    else
+                                        (Tuple.first patternTuple).color
+                            }
+                        )
                         pnt.connectedPoints
             }
         )

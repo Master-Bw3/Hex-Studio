@@ -44,6 +44,7 @@ type alias Pattern =
     , color : String
     , outputOptions : List IotaType
     , selectedOutput : Maybe ( IotaType, Iota )
+    , active : Bool
     }
 
 
@@ -174,3 +175,5 @@ type Overlay
     = NoOverlay
     | ImportTextOverlay
     | ExportTextOverlay
+
+type alias Timeline = Array ({stack : Array Iota, patternIndex : Int})

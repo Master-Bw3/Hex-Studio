@@ -23,9 +23,8 @@ import Logic.App.Msg exposing (MouseMoveData, Msg(..))
 import Logic.App.Patterns.PatternRegistry exposing (patternRegistry)
 import Logic.App.Types exposing (EntityType(..), GridPoint, Iota(..), IotaType(..), Panel(..), Pattern)
 import Logic.App.Utils.GetIotaValue exposing (getIotaFromString, getIotaTypeAsString, getIotaTypeFromString, getIotaValueAsString)
+import Settings.Theme exposing (accent1, accent2)
 import String exposing (fromInt)
-import Settings.Theme exposing (accent1)
-import Settings.Theme exposing (accent2)
 
 
 patternPanel : Model -> Html Msg
@@ -164,7 +163,7 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle insert
                                            )
                                )
                             ++ (if index == insertionPoint && index /= 0 then
-                                    [style "border-bottom" ("1px solid " ++ "#7D8599")]
+                                    [ style "border-bottom" ("1px solid " ++ "#7D8599") ]
 
                                 else
                                     []
@@ -172,7 +171,15 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle insert
                         )
                         (div [ class "inner_box" ]
                             [ button [ class "x_button", onClick (RemoveFromPatternArray index (index + 1)) ] [ xButton ]
-                            , div [ class "text" ] [ text pattern.displayName ]
+                            , div
+                                [ class "text"
+                                , if pattern.active == False then
+                                    style "opacity" "50%"
+
+                                  else
+                                    style "" ""
+                                ]
+                                [ text pattern.displayName ]
                             , div [ class "move_button" ] [ moveButton ]
                             ]
                             :: (if List.length pattern.outputOptions > 0 then

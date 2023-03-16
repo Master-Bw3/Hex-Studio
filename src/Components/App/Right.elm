@@ -12,6 +12,7 @@ import Html.Attributes exposing (class, id)
 import Html.Events exposing (onClick)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (Msg(..))
+import Components.App.Timeline exposing (timeline)
 
 
 right : Model -> Html Msg
@@ -24,6 +25,7 @@ right model =
             ]
             [ button
                 [ id "sort"
+                , onClick (SetTimelineIndex 2)
                 ]
                 [ Icon.css
                 , Icon.arrowDownShortWide |> Icon.styled [ Icon.sm ] |> Icon.view
@@ -44,8 +46,5 @@ right model =
                 ]
             ]
         , grid model
-        , div
-            [ id "bottom_box"
-            ]
-            []
+        , timeline model
         ]

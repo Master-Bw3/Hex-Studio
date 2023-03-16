@@ -50,6 +50,7 @@ type Msg
     | ImportText String
     | ViewOverlay Overlay
     | Download String
+    | SetTimelineIndex Int
 
 type alias MouseMoveData =
     { pageX : Int

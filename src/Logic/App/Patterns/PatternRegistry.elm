@@ -13,7 +13,7 @@ import Logic.App.Patterns.ReadWrite exposing (..)
 import Logic.App.Patterns.Selectors exposing (..)
 import Logic.App.Patterns.Spells exposing (..)
 import Logic.App.Patterns.Stack exposing (..)
-import Logic.App.Stack.Stack exposing (applyPatternToStack, applyPatternsToStack, applyToStackStopAtErrorOrHalt)
+import Logic.App.Stack.EvalStack exposing (applyPatternToStack, applyPatternsToStack, applyToStackStopAtErrorOrHalt)
 import Logic.App.Types exposing (ActionResult, ApplyToStackResult(..), CastingContext, EntityType(..), HeldItem(..), Iota(..), IotaType(..), MetaActionMsg(..), Mishap(..), Pattern)
 import Logic.App.Utils.RegexPatterns exposing (bookkeepersPattern)
 import Logic.App.Utils.Utils exposing (unshift)
@@ -37,6 +37,7 @@ unknownPattern =
     , color = accent3
     , outputOptions = []
     , selectedOutput = Nothing
+    , active = True
     }
 
 
@@ -96,6 +97,7 @@ getPatternFromName name =
                           , displayName = "Bookkeeper's Gambit: " ++ String.concat maskCode
                           , color = accent1
                           , outputOptions = []
+                          , active = True
                           , selectedOutput = Nothing
                           }
                         , Cmd.none
@@ -108,7 +110,7 @@ getPatternFromName name =
 parseBookkeeper : String -> Pattern
 parseBookkeeper signature =
     if signature == "" then
-        { signature = signature, internalName = "mask", action = mask [ "-" ], metaAction = None, displayName = "Bookkeeper's -", color = accent1, outputOptions = [], selectedOutput = Nothing }
+        { signature = signature, internalName = "mask", action = mask [ "-" ], metaAction = None, displayName = "Bookkeeper's -", color = accent1, outputOptions = [], selectedOutput = Nothing, active = True }
 
     else
         let
@@ -188,6 +190,7 @@ parseBookkeeper signature =
                 , color = accent1
                 , outputOptions = []
                 , selectedOutput = Nothing
+                , active = True
                 }
 
             Err _ ->
@@ -339,7 +342,6 @@ patternRegistry =
     , { signature = "edqde", internalName = "append", action = append, displayName = "Integration Distillation", outputOptions = [], selectedOutput = Nothing }
     , { signature = "qaeaq", internalName = "concat", action = concat, displayName = "Combination Distillation", outputOptions = [], selectedOutput = Nothing }
     , { signature = "deeed", internalName = "index", action = index, displayName = "Selection Distillation", outputOptions = [], selectedOutput = Nothing }
-    , { signature = "dadad", internalName = "for_each", action = forEach, displayName = "Thoth's Gambit", outputOptions = [], selectedOutput = Nothing }
     , { signature = "aqaeaq", internalName = "list_size", action = listSize, displayName = "Abacus Purification", outputOptions = [], selectedOutput = Nothing }
     , { signature = "adeeed", internalName = "singleton", action = singleton, displayName = "Single's Purification", outputOptions = [], selectedOutput = Nothing }
     , { signature = "qqaeaae", internalName = "empty_list", action = makeConstant (IotaList Array.empty), displayName = "Vacant Reflection", outputOptions = [], selectedOutput = Nothing }
@@ -355,7 +357,8 @@ patternRegistry =
     , { signature = "qqqaw", internalName = "escape", action = noAction, displayName = "Consideration", outputOptions = [], selectedOutput = Nothing }
     , { signature = "qqq", internalName = "open_paren", action = makeConstant (OpenParenthesis Array.empty), displayName = "Introspection", outputOptions = [], selectedOutput = Nothing }
     , { signature = "eee", internalName = "close_paren", action = noAction, displayName = "Retrospection", outputOptions = [], selectedOutput = Nothing }
-    , { signature = "deaqq", internalName = "eval", action = eval, displayName = "Hermes' Gambit", outputOptions = [], selectedOutput = Nothing }
+    , { signature = "deaqq", internalName = "eval", action = noAction, displayName = "Hermes' Gambit", outputOptions = [], selectedOutput = Nothing }
+    , { signature = "dadad", internalName = "for_each", action = noAction, displayName = "Thoth's Gambit", outputOptions = [], selectedOutput = Nothing }
     ]
         |> List.map
             (\pattern ->
@@ -367,6 +370,7 @@ patternRegistry =
                 , outputOptions = pattern.outputOptions
                 , selectedOutput = pattern.selectedOutput
                 , color = accent1
+                , active = True
                 }
             )
         |> (++) metapatternRegistry
@@ -389,173 +393,11 @@ metapatternRegistry =
                 , outputOptions = pattern.outputOptions
                 , selectedOutput = pattern.selectedOutput
                 , color = accent1
+                , active = True
                 }
             )
 
 
-
--- eval patterns
-
-
-eval : Array Iota -> CastingContext -> ActionResult
-eval stack ctx =
-    let
-        maybeIota =
-            Array.get 0 stack
-
-        newStack =
-            Array.slice 1 (Array.length stack) stack
-    in
-    case maybeIota of
-        Nothing ->
-            { stack = unshift (Garbage NotEnoughIotas) newStack, ctx = ctx, success = False }
-
-        Just iota ->
-            case getPatternOrIotaList <| iota of
-                Nothing ->
-                    { stack = unshift (Garbage IncorrectIota) newStack, ctx = ctx, success = False }
-
-                _ ->
-                    case iota of
-                        IotaList list ->
-                            let
-                                applyResult =
-                                    applyToStackStopAtErrorOrHalt
-                                        newStack
-                                        ctx
-                                        list
-                            in
-                            { stack =
-                                Array.filter
-                                    (\i ->
-                                        case i of
-                                            OpenParenthesis _ ->
-                                                False
-
-                                            _ ->
-                                                True
-                                    )
-                                    applyResult.stack
-                            , ctx = applyResult.ctx
-                            , success = not applyResult.error
-                            }
-
-                        PatternIota pattern _ ->
-                            let
-                                applyResult =
-                                    applyToStackStopAtErrorOrHalt newStack ctx (Array.fromList [ PatternIota pattern False ])
-                            in
-                            { stack = applyResult.stack, ctx = applyResult.ctx, success = not applyResult.error }
-
-                        _ ->
-                            { stack = Array.fromList [ Garbage CatastrophicFailure ], ctx = ctx, success = False }
-
-
-forEach : Array Iota -> CastingContext -> ActionResult
-forEach stack ctx =
-    let
-        maybeIota1 =
-            Array.get 1 stack
-
-        maybeIota2 =
-            Array.get 0 stack
-
-        newStack =
-            Array.slice 2 (Array.length stack) stack
-    in
-    if maybeIota1 == Nothing || maybeIota2 == Nothing then
-        { stack = Array.append (Array.map mapNothingToMissingIota <| Array.fromList <| moveNothingsToFront [ maybeIota1, maybeIota2 ]) newStack
-        , ctx = ctx
-        , success = False
-        }
-
-    else
-        case ( Maybe.map getPatternList maybeIota1, Maybe.map getIotaList maybeIota2 ) of
-            ( Just iota1, Just iota2 ) ->
-                if iota1 == Nothing || iota2 == Nothing then
-                    { stack =
-                        Array.append
-                            (Array.fromList
-                                [ Maybe.withDefault (Garbage IncorrectIota) iota1
-                                , Maybe.withDefault (Garbage IncorrectIota) iota2
-                                ]
-                            )
-                            newStack
-                    , ctx = ctx
-                    , success = False
-                    }
-
-                else
-                    case ( iota1, iota2 ) of
-                        ( Just (IotaList patternList), Just (IotaList iotaList) ) ->
-                            let
-                                applyResult =
-                                    Array.foldl
-                                        (\iota accumulator ->
-                                            if accumulator.continue == False then
-                                                accumulator
-
-                                            else
-                                                let
-                                                    subApplyResult =
-                                                        applyToStackStopAtErrorOrHalt
-                                                            (unshift iota newStack)
-                                                            accumulator.ctx
-                                                            patternList
-
-                                                    thothList =
-                                                        case Array.get 0 accumulator.stack of
-                                                            Just (IotaList list) ->
-                                                                list
-
-                                                            _ ->
-                                                                Array.empty
-
-                                                    success =
-                                                        if accumulator.success == True && subApplyResult.error then
-                                                            False
-
-                                                        else
-                                                            accumulator.success
-                                                in
-                                                { stack = Array.set 0 (IotaList (Array.append thothList (Array.reverse subApplyResult.stack))) accumulator.stack
-                                                , ctx = subApplyResult.ctx
-                                                , success = success
-                                                , continue =
-                                                    if not success || subApplyResult.halted then
-                                                        False
-
-                                                    else
-                                                        True
-                                                }
-                                        )
-                                        { stack = unshift (IotaList Array.empty) newStack, ctx = ctx, success = True, continue = True }
-                                        iotaList
-                            in
-                            { stack =
-                                Array.filter
-                                    (\i ->
-                                        case i of
-                                            OpenParenthesis _ ->
-                                                False
-
-                                            _ ->
-                                                True
-                                    )
-                                    applyResult.stack
-                            , ctx = applyResult.ctx
-                            , success = applyResult.success
-                            }
-
-                        _ ->
-                            { stack = Array.fromList [ Garbage CatastrophicFailure ], ctx = ctx, success = False }
-
-            _ ->
-                -- this should never happen
-                { stack = unshift (Garbage CatastrophicFailure) newStack
-                , ctx = ctx
-                , success = False
-                }
 
 
 numberLiteralGenerator : String -> Bool -> Pattern
@@ -600,4 +442,5 @@ numberLiteralGenerator angleSignature isNegative =
     , color = accent1
     , outputOptions = []
     , selectedOutput = Nothing
+    , active = True
     }

@@ -17,7 +17,7 @@ import Logic.App.Msg exposing (..)
 import Logic.App.PatternList.PatternArray exposing (addToPatternArray, applyColorToPatternFromResult, updateDrawingColors)
 import Logic.App.Patterns.MetaActions exposing (applyMetaAction)
 import Logic.App.Patterns.PatternRegistry exposing (..)
-import Logic.App.Stack.Stack exposing (applyPatternsToStack)
+import Logic.App.Stack.EvalStack exposing (applyPatternsToStack)
 import Logic.App.Types exposing (..)
 import Logic.App.Utils.GetAngleSignature exposing (getAngleSignature)
 import Logic.App.Utils.GetIotaValue exposing (getIotaFromString)
@@ -85,6 +85,8 @@ init _ =
       , downloadSrc = ""
       , insertionPoint = 0
       , importQueue = []
+      , timeline = Array.empty
+      , timelineIndex = 0
       }
     , Cmd.batch [ Task.attempt GetGrid (getElement "hex_grid"), Task.attempt GetContentSize (getElement "content") ]
     )
@@ -143,6 +145,7 @@ updatePatternArrayFromQueue model =
                         , castingContext = stackResult.ctx
                         , grid = drawPatternsResult.grid
                         , importQueue = Maybe.withDefault [] <| List.tail model.importQueue
+                        , timeline = unshift { stack = Array.empty, patternIndex = -1 } stackResult.timeline
                         , insertionPoint =
                             if model.insertionPoint > Array.length model.patternArray then
                                 0
@@ -156,7 +159,7 @@ updatePatternArrayFromQueue model =
             ( { model | importQueue = Maybe.withDefault [] <| List.tail model.importQueue }, command )
 
     else
-        ( model, Cmd.none )
+        update (SetTimelineIndex (Array.length model.timeline)) model
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -665,6 +668,43 @@ update msg model =
 
         Download string ->
             ( model, Download.string "Hex.hexcasting" "text/plain" string )
+
+        SetTimelineIndex index ->
+            let
+                newPatternArray =
+                    Array.reverse <|
+                        Array.fromList <|
+                            List.map
+                                (\indexTuple ->
+                                    case indexTuple of
+                                        ( patternIndex, tuple ) ->
+                                            updateDrawingColors <|
+                                                case tuple of
+                                                    ( pat, draw ) ->
+                                                        if index < patternIndex then
+                                                            ( { pat | active = False }, draw )
+
+                                                        else
+                                                            ( { pat | active = True }, draw )
+                                )
+                                (Array.toIndexedList <| Array.reverse model.patternArray)
+            in
+            ( { model
+                | timelineIndex = index
+                , patternArray = newPatternArray
+                , grid = { grid | points = updateGridPoints grid.width grid.height newPatternArray [] settings.gridScale }
+                , stack =
+                    if index == Array.length model.timeline then
+                        model.stack
+
+                    else
+                        Array.reverse model.timeline
+                            |> Array.get index
+                            |> Maybe.andThen (\x -> Just x.stack)
+                            |> Maybe.withDefault Array.empty
+              }
+            , Cmd.none
+            )
 
 
 
