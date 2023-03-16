@@ -671,6 +671,6 @@ button {
 }
 
 .timeline_point:hover, .timeline_point_selected {
-    z-index: 1000000;
+    z-index: 10000;
 
 }

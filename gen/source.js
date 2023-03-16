@@ -6032,14 +6032,51 @@ var $elm$time$Time$every = F2(
 		return $elm$time$Time$subscription(
 			A2($elm$time$Time$Every, interval, tagger));
 	});
+var $elm$json$Json$Decode$field = _Json_decodeField;
+var $author$project$Logic$App$Msg$NoOp = {$: 'NoOp'};
+var $author$project$Logic$App$Msg$SetTimelineIndex = function (a) {
+	return {$: 'SetTimelineIndex', a: a};
+};
+var $elm$core$Array$length = function (_v0) {
+	var len = _v0.a;
+	return len;
+};
+var $elm$core$Basics$min = F2(
+	function (x, y) {
+		return (_Utils_cmp(x, y) < 0) ? x : y;
+	});
+var $author$project$Main$keyPressHandler = F2(
+	function (model, keyValue) {
+		switch (keyValue) {
+			case 'ArrowLeft':
+				return $author$project$Logic$App$Msg$SetTimelineIndex(
+					A2(
+						$elm$core$Basics$min,
+						$elm$core$Array$length(model.timeline) - 3,
+						A2($elm$core$Basics$max, -1, model.timelineIndex - 1)));
+			case 'ArrowRight':
+				return $author$project$Logic$App$Msg$SetTimelineIndex(
+					A2(
+						$elm$core$Basics$min,
+						$elm$core$Array$length(model.timeline) - 2,
+						model.timelineIndex + 1));
+			default:
+				return $author$project$Logic$App$Msg$NoOp;
+		}
+	});
+var $elm$json$Json$Decode$string = _Json_decodeString;
+var $author$project$Main$keyDecoder = function (model) {
+	return A2(
+		$elm$json$Json$Decode$map,
+		$author$project$Main$keyPressHandler(model),
+		A2($elm$json$Json$Decode$field, 'key', $elm$json$Json$Decode$string));
+};
 var $author$project$Logic$App$Types$ElementLocation = F5(
 	function (element, left, bottom, top, right) {
 		return {bottom: bottom, element: element, left: left, right: right, top: top};
 	});
-var $elm$json$Json$Decode$field = _Json_decodeField;
 var $elm$json$Json$Decode$int = _Json_decodeInt;
 var $elm$json$Json$Decode$map5 = _Json_map5;
-var $elm$json$Json$Decode$string = _Json_decodeString;
 var $author$project$Main$locationDecoder = A6(
 	$elm$json$Json$Decode$map5,
 	$author$project$Logic$App$Types$ElementLocation,
@@ -6048,7 +6085,7 @@ var $author$project$Main$locationDecoder = A6(
 	A2($elm$json$Json$Decode$field, 'bottom', $elm$json$Json$Decode$int),
 	A2($elm$json$Json$Decode$field, 'top', $elm$json$Json$Decode$int),
 	A2($elm$json$Json$Decode$field, 'right', $elm$json$Json$Decode$int));
-var $elm$browser$Browser$Events$Window = {$: 'Window'};
+var $elm$browser$Browser$Events$Document = {$: 'Document'};
 var $elm$browser$Browser$Events$MySub = F3(
 	function (a, b, c) {
 		return {$: 'MySub', a: a, b: b, c: c};
@@ -6249,6 +6286,8 @@ var $elm$browser$Browser$Events$on = F3(
 		return $elm$browser$Browser$Events$subscription(
 			A3($elm$browser$Browser$Events$MySub, node, name, decoder));
 	});
+var $elm$browser$Browser$Events$onKeyDown = A2($elm$browser$Browser$Events$on, $elm$browser$Browser$Events$Document, 'keydown');
+var $elm$browser$Browser$Events$Window = {$: 'Window'};
 var $elm$browser$Browser$Events$onResize = function (func) {
 	return A3(
 		$elm$browser$Browser$Events$on,
@@ -6274,16 +6313,18 @@ var $author$project$Ports$CheckMouseOverDragHandle$recieveCheckMouseOverDragHand
 var $author$project$Ports$GetGridDrawingAsGif$recieveGIF = _Platform_incomingPort('recieveGIF', $elm$json$Json$Decode$string);
 var $author$project$Ports$GetGridDrawingAsImage$recieveImage = _Platform_incomingPort('recieveImage', $elm$json$Json$Decode$string);
 var $author$project$Ports$HexNumGen$recieveNumber = _Platform_incomingPort('recieveNumber', $elm$json$Json$Decode$string);
-var $author$project$Main$subscriptions = function (_v0) {
+var $author$project$Main$subscriptions = function (model) {
 	return $elm$core$Platform$Sub$batch(
 		_List_fromArray(
 			[
 				$elm$browser$Browser$Events$onResize(
 				F2(
-					function (_v1, _v2) {
+					function (_v0, _v1) {
 						return $author$project$Logic$App$Msg$WindowResize;
 					})),
 				A2($elm$time$Time$every, 100, $author$project$Logic$App$Msg$Tick),
+				$elm$browser$Browser$Events$onKeyDown(
+				$author$project$Main$keyDecoder(model)),
 				$author$project$Ports$HexNumGen$recieveNumber($author$project$Logic$App$Msg$RecieveGeneratedNumberLiteral),
 				$author$project$Ports$GetElementBoundingBoxById$recieveBoundingBox(
 				A2(
@@ -6305,9 +6346,6 @@ var $author$project$Logic$App$Types$Artifact = {$: 'Artifact'};
 var $author$project$Logic$App$Types$Cypher = {$: 'Cypher'};
 var $author$project$Logic$App$Types$Focus = {$: 'Focus'};
 var $author$project$Logic$App$Types$Pie = {$: 'Pie'};
-var $author$project$Logic$App$Msg$SetTimelineIndex = function (a) {
-	return {$: 'SetTimelineIndex', a: a};
-};
 var $author$project$Logic$App$Types$Spellbook = {$: 'Spellbook'};
 var $author$project$Logic$App$Types$Trinket = {$: 'Trinket'};
 var $author$project$Settings$Theme$accent2 = '#D8B8E0';
@@ -6424,10 +6462,6 @@ var $author$project$Components$App$Grid$getClosestPoint = F3(
 					$elm$core$List$sortWith,
 					distanceComparison,
 					$elm$core$List$concat(points))));
-	});
-var $elm$core$Basics$min = F2(
-	function (x, y) {
-		return (_Utils_cmp(x, y) < 0) ? x : y;
 	});
 var $elm$core$Basics$neq = _Utils_notEqual;
 var $elm$core$Basics$not = _Basics_not;
@@ -6767,10 +6801,6 @@ var $elm$core$Array$append = F2(
 						bTree)));
 		}
 	});
-var $elm$core$Array$length = function (_v0) {
-	var len = _v0.a;
-	return len;
-};
 var $elm$core$Array$push = F2(
 	function (a, array) {
 		var tail = array.d;

@@ -725,10 +725,11 @@ update msg model =
 
 
 subscriptions : Model -> Sub Msg
-subscriptions _ =
+subscriptions model =
     Sub.batch
         [ Browser.Events.onResize (\_ _ -> WindowResize)
         , Time.every 100 Tick
+        , Browser.Events.onKeyDown (keyDecoder model)
         , HexNumGen.recieveNumber RecieveGeneratedNumberLiteral
         , GetElementBoundingBoxById.recieveBoundingBox (Json.Decode.decodeValue locationDecoder >> RecieveInputBoundingBox)
         , GetElementBoundingBoxById.recieveBoundingBoxes (List.map (Json.Decode.decodeValue locationDecoder) >> RecieveInputBoundingBoxes)
@@ -736,6 +737,24 @@ subscriptions _ =
         , GetGridDrawingAsGif.recieveGIF RecieveGridDrawingAsGIF
         , GetGridDrawingAsImage.recieveImage RecieveGridDrawingAsImage
         ]
+
+
+keyDecoder : Model -> Json.Decode.Decoder Msg
+keyDecoder model =
+    Json.Decode.map (keyPressHandler model) (Json.Decode.field "key" Json.Decode.string)
+
+
+keyPressHandler model keyValue =
+    case keyValue of
+        "ArrowLeft" ->
+            --idk where these weird constants are coming from either
+            SetTimelineIndex <| min (Array.length model.timeline - 3) <| max -1 <| model.timelineIndex - 1
+
+        "ArrowRight" ->
+            SetTimelineIndex <| min (Array.length model.timeline - 2) <| model.timelineIndex + 1
+
+        _ ->
+            NoOp
 
 
 mouseMoveDecoder : Decoder MouseMoveData
