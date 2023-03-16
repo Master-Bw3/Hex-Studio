@@ -16234,6 +16234,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F5(
 	function (patternList, dragoverIndex, dragstartIndex, overDragHandle, insertionPoint) {
 		var renderPattern = F2(
 			function (index, pattern) {
+				var activeOpacity = (!pattern.active) ? A2($elm$html$Html$Attributes$style, 'opacity', '50%') : A2($elm$html$Html$Attributes$style, '', '');
 				return _Utils_ap(
 					_Utils_eq(dragoverIndex, index) ? _List_fromArray(
 						[
@@ -16307,7 +16308,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F5(
 											_List_fromArray(
 												[
 													$elm$html$Html$Attributes$class('text'),
-													(!pattern.active) ? A2($elm$html$Html$Attributes$style, 'opacity', '50%') : A2($elm$html$Html$Attributes$style, '', '')
+													activeOpacity
 												]),
 											_List_fromArray(
 												[
@@ -16328,7 +16329,8 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F5(
 										$elm$html$Html$div,
 										_List_fromArray(
 											[
-												$elm$html$Html$Attributes$class('output_option_box')
+												$elm$html$Html$Attributes$class('output_option_box'),
+												activeOpacity
 											]),
 										_List_fromArray(
 											[
@@ -16399,7 +16401,8 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F5(
 																	_List_fromArray(
 																		[
 																			$elm$html$Html$Attributes$class('output_option_box'),
-																			A2($elm$html$Html$Attributes$style, 'grid-template-columns', '2.1fr 3fr')
+																			A2($elm$html$Html$Attributes$style, 'grid-template-columns', '2.1fr 3fr'),
+																			activeOpacity
 																		]),
 																	_List_fromArray(
 																		[
@@ -16445,7 +16448,8 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F5(
 																	_List_fromArray(
 																		[
 																			$elm$html$Html$Attributes$class('output_option_box'),
-																			A2($elm$html$Html$Attributes$style, 'grid-template-columns', '2.1fr 3fr')
+																			A2($elm$html$Html$Attributes$style, 'grid-template-columns', '2.1fr 3fr'),
+																			activeOpacity
 																		]),
 																	_List_fromArray(
 																		[
@@ -16491,7 +16495,8 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F5(
 																	_List_fromArray(
 																		[
 																			$elm$html$Html$Attributes$class('output_option_box'),
-																			A2($elm$html$Html$Attributes$style, 'grid-template-columns', '2.1fr 3fr')
+																			A2($elm$html$Html$Attributes$style, 'grid-template-columns', '2.1fr 3fr'),
+																			activeOpacity
 																		]),
 																	_List_fromArray(
 																		[
@@ -16548,7 +16553,8 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F5(
 																	_List_fromArray(
 																		[
 																			$elm$html$Html$Attributes$class('output_option_box'),
-																			A2($elm$html$Html$Attributes$style, 'grid-template-columns', '2.1fr 3fr')
+																			A2($elm$html$Html$Attributes$style, 'grid-template-columns', '2.1fr 3fr'),
+																			activeOpacity
 																		]),
 																	_List_fromArray(
 																		[
@@ -16613,7 +16619,8 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F5(
 																	_List_fromArray(
 																		[
 																			$elm$html$Html$Attributes$class('output_option_box'),
-																			A2($elm$html$Html$Attributes$style, 'grid-template-columns', '2.1fr 3fr')
+																			A2($elm$html$Html$Attributes$style, 'grid-template-columns', '2.1fr 3fr'),
+																			activeOpacity
 																		]),
 																	_List_fromArray(
 																		[

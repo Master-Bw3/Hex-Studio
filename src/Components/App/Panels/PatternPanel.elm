@@ -133,6 +133,14 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle insert
 
         renderPattern : Int -> Pattern -> List (Html Msg)
         renderPattern index pattern =
+            let
+                activeOpacity =
+                    if pattern.active == False then
+                        style "opacity" "50%"
+
+                    else
+                        style "" ""
+            in
             (if dragoverIndex == index then
                 [ div [ class "seperator" ] [] ]
 
@@ -173,17 +181,13 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle insert
                             [ button [ class "x_button", onClick (RemoveFromPatternArray index (index + 1)) ] [ xButton ]
                             , div
                                 [ class "text"
-                                , if pattern.active == False then
-                                    style "opacity" "50%"
-
-                                  else
-                                    style "" ""
+                                , activeOpacity
                                 ]
                                 [ text pattern.displayName ]
                             , div [ class "move_button" ] [ moveButton ]
                             ]
                             :: (if List.length pattern.outputOptions > 0 then
-                                    div [ class "output_option_box" ]
+                                    div [ class "output_option_box", activeOpacity ]
                                         [ label [] [ text "Output:" ]
                                         , select
                                             [ value <| getIotaTypeAsString (Tuple.first <| Maybe.withDefault ( NullType, Null ) pattern.selectedOutput)
@@ -195,7 +199,7 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle insert
                                                 Just ( VectorType, Vector vector ) ->
                                                     case vector of
                                                         ( x, y, z ) ->
-                                                            [ div [ class "output_option_box", style "grid-template-columns" "2.1fr 3fr" ]
+                                                            [ div [ class "output_option_box", style "grid-template-columns" "2.1fr 3fr", activeOpacity ]
                                                                 [ label [] [ text "X Value:" ]
                                                                 , input
                                                                     [ placeholder "0"
@@ -208,7 +212,7 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle insert
                                                                     ]
                                                                     []
                                                                 ]
-                                                            , div [ class "output_option_box", style "grid-template-columns" "2.1fr 3fr" ]
+                                                            , div [ class "output_option_box", style "grid-template-columns" "2.1fr 3fr", activeOpacity ]
                                                                 [ label [] [ text "Y Value:" ]
                                                                 , input
                                                                     [ placeholder "0"
@@ -221,7 +225,7 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle insert
                                                                     ]
                                                                     []
                                                                 ]
-                                                            , div [ class "output_option_box", style "grid-template-columns" "2.1fr 3fr" ]
+                                                            , div [ class "output_option_box", style "grid-template-columns" "2.1fr 3fr", activeOpacity ]
                                                                 [ label [] [ text "Z Value:" ]
                                                                 , input
                                                                     [ placeholder "0"
@@ -237,7 +241,7 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle insert
                                                             ]
 
                                                 Just ( NumberType, Number number ) ->
-                                                    [ div [ class "output_option_box", style "grid-template-columns" "2.1fr 3fr" ]
+                                                    [ div [ class "output_option_box", style "grid-template-columns" "2.1fr 3fr", activeOpacity ]
                                                         [ label [] [ text "Number:" ]
                                                         , input
                                                             [ placeholder "0"
@@ -253,7 +257,7 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle insert
                                                     ]
 
                                                 Just ( IotaListType EntityType, IotaList _ ) ->
-                                                    [ div [ class "output_option_box", style "grid-template-columns" "2.1fr 3fr" ]
+                                                    [ div [ class "output_option_box", style "grid-template-columns" "2.1fr 3fr", activeOpacity ]
                                                         [ label [] [ text "Count:" ]
                                                         , input
                                                             [ placeholder "0"
