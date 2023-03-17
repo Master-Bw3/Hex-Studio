@@ -52,7 +52,7 @@ heldItemSection model =
             (label [ class "stored_iota_label" ] [ text "Content:" ]
                 :: (case model.castingContext.heldItemContent of
                         Just iota ->
-                            [ renderIotaBox iota ]
+                            renderIotaBox iota
 
                         Nothing ->
                             []
@@ -61,12 +61,9 @@ heldItemSection model =
         ]
 
 
-renderIotaBox : Iota -> Html msg
+renderIotaBox : Iota -> List (Html msg)
 renderIotaBox iota =
-    div [ class "outer_box", class "iota_outer_box", style "background-color" (iotaColorMap iota) ]
-        [ div [ class "inner_box" ]
-            [ div [ class "text" ] [ div [] (getIotaValueAsHtmlMsg iota) ] ]
-        ]
+    [ div [] (getIotaValueAsHtmlMsg 0 iota 0)]
 
 
 ravenmindSection : Model -> Html Msg
@@ -76,7 +73,7 @@ ravenmindSection model =
             (label [ class "stored_iota_label" ] [ text "Ravenmind:" ]
                 :: (case model.castingContext.ravenmind of
                         Just iota ->
-                            [ renderIotaBox iota ]
+                            renderIotaBox iota
 
                         Nothing ->
                             []

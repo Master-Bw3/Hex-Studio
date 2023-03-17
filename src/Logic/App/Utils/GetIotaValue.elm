@@ -1,31 +1,43 @@
 module Logic.App.Utils.GetIotaValue exposing (..)
 
 import Array
-import Html exposing (br, li, ol, p, text)
-import Html.Attributes exposing (start, style)
+import Html exposing (br, div, li, ol, p, text)
+import Html.Attributes exposing (class, start, style)
 import Logic.App.Types exposing (EntityType(..), Iota(..), IotaType(..), Mishap(..))
+import Settings.Theme exposing (iotaColorMap)
 
 
-getIotaValueAsHtmlMsg : Iota -> List (Html.Html msg)
-getIotaValueAsHtmlMsg iota =
+getIotaValueAsHtmlMsg : Int -> Iota -> Int -> List (Html.Html msg)
+getIotaValueAsHtmlMsg index iota indent =
     let
-        string =
-            getIotaValueAsString iota
+        renderList list =
+            Array.toList list
+                |> List.indexedMap (\i x -> getIotaValueAsHtmlMsg (i - 1) x (indent + 1))
+                |> List.concat
+                |> (++)
+                    [ div [ class "outer_box", style "background-color" (iotaColorMap iota), style "margin-left" (String.fromInt (indent * 26) ++ "px") ]
+                        [ div [ class "inner_box" ]
+                            [ div [ class "index_display" ] [ text (String.fromInt (index + 1)) ]
+                            , div [ class "text" ] [ div [] [ p [] [ text "List" ] ] ]
+                            ]
+                        ]
+                    ]
     in
-    if String.startsWith "List: " string then
-        if string == "List: " then
-            [ p [] [ text "List:" ] ]
+    case iota of
+        IotaList list ->
+            renderList list
 
-        else
-            String.dropLeft 6 string
-                |> String.split "| "
-                |> List.map (\str -> li [] [ text str ])
-                |> ol [ start 0 ]
-                |> List.singleton
-                |> (::) (p [] [ text "List:" ])
+        OpenParenthesis list ->
+            renderList list
 
-    else
-        [ p [] [ text string ] ]
+        _ ->
+            [ div [ class "outer_box", style "background-color" (iotaColorMap iota), style "margin-left" (String.fromInt (indent * 26) ++ "px") ]
+                [ div [ class "inner_box" ]
+                    [ div [ class "index_display" ] [ text (String.fromInt (index + 1)) ]
+                    , div [ class "text" ] [ div [] [ p [] [ text (getIotaValueAsString iota) ] ] ]
+                    ]
+                ]
+            ]
 
 
 getIotaTypeAsString : IotaType -> String
@@ -86,20 +98,20 @@ getIotaValueAsString iota =
 
         --fix later
         IotaList list ->
-            (++) "List: " <|
-                String.join "| " <|
-                    List.map
-                        (\item ->
-                            case item of
-                                PatternIota pattern _ ->
-                                    pattern.displayName
+            "dont do this"
 
-                                x ->
-                                    getIotaValueAsString x
-                        )
-                    <|
-                        Array.toList list
-
+        -- (++) "List: " <|
+        --     String.join "| " <|
+        --         List.map
+        --             (\item ->
+        --                 case item of
+        --                     PatternIota pattern _ ->
+        --                         pattern.displayName
+        --                     x ->
+        --                         getIotaValueAsString x
+        --             )
+        --         <|
+        --             Array.toList list
         PatternIota pattern _ ->
             pattern.displayName
 
@@ -149,19 +161,22 @@ getIotaValueAsString iota =
             "Garbage (" ++ mishapMessage ++ ")"
 
         OpenParenthesis list ->
-            (++) "List: " <|
-                String.join "| " <|
-                    List.map
-                        (\item ->
-                            case item of
-                                PatternIota pattern _ ->
-                                    pattern.displayName
+            "dont do this"
 
-                                _ ->
-                                    ""
-                        )
-                    <|
-                        Array.toList list
+
+
+-- (++) "List: " <|
+--     String.join "| " <|
+--         List.map
+--             (\item ->
+--                 case item of
+--                     PatternIota pattern _ ->
+--                         pattern.displayName
+--                     _ ->
+--                         ""
+--             )
+--         <|
+--             Array.toList list
 
 
 getIotaFromString : String -> Iota
@@ -180,6 +195,7 @@ getIotaFromString string =
 
     else
         Null
+
 
 getIotaTypeFromString : String -> IotaType
 getIotaTypeFromString string =

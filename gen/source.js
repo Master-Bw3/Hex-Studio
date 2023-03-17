@@ -15447,21 +15447,7 @@ var $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString = function
 			return 'Entity';
 		case 'IotaList':
 			var list = iota.a;
-			return 'List: ' + A2(
-				$elm$core$String$join,
-				'| ',
-				A2(
-					$elm$core$List$map,
-					function (item) {
-						if (item.$ === 'PatternIota') {
-							var pattern = item.a;
-							return pattern.displayName;
-						} else {
-							var x = item;
-							return $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString(x);
-						}
-					},
-					$elm$core$Array$toList(list)));
+			return 'dont do this';
 		case 'PatternIota':
 			var pattern = iota.a;
 			return pattern.displayName;
@@ -15500,85 +15486,8 @@ var $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString = function
 			return 'Garbage (' + (mishapMessage + ')');
 		default:
 			var list = iota.a;
-			return 'List: ' + A2(
-				$elm$core$String$join,
-				'| ',
-				A2(
-					$elm$core$List$map,
-					function (item) {
-						if (item.$ === 'PatternIota') {
-							var pattern = item.a;
-							return pattern.displayName;
-						} else {
-							return '';
-						}
-					},
-					$elm$core$Array$toList(list)));
+			return 'dont do this';
 	}
-};
-var $elm$html$Html$li = _VirtualDom_node('li');
-var $elm$html$Html$ol = _VirtualDom_node('ol');
-var $elm$core$List$singleton = function (value) {
-	return _List_fromArray(
-		[value]);
-};
-var $elm$html$Html$Attributes$start = function (n) {
-	return A2(
-		$elm$html$Html$Attributes$stringProperty,
-		'start',
-		$elm$core$String$fromInt(n));
-};
-var $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsHtmlMsg = function (iota) {
-	var string = $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString(iota);
-	return A2($elm$core$String$startsWith, 'List: ', string) ? ((string === 'List: ') ? _List_fromArray(
-		[
-			A2(
-			$elm$html$Html$p,
-			_List_Nil,
-			_List_fromArray(
-				[
-					$elm$html$Html$text('List:')
-				]))
-		]) : A2(
-		$elm$core$List$cons,
-		A2(
-			$elm$html$Html$p,
-			_List_Nil,
-			_List_fromArray(
-				[
-					$elm$html$Html$text('List:')
-				])),
-		$elm$core$List$singleton(
-			A2(
-				$elm$html$Html$ol,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$start(0)
-					]),
-				A2(
-					$elm$core$List$map,
-					function (str) {
-						return A2(
-							$elm$html$Html$li,
-							_List_Nil,
-							_List_fromArray(
-								[
-									$elm$html$Html$text(str)
-								]));
-					},
-					A2(
-						$elm$core$String$split,
-						'| ',
-						A2($elm$core$String$dropLeft, 6, string))))))) : _List_fromArray(
-		[
-			A2(
-			$elm$html$Html$p,
-			_List_Nil,
-			_List_fromArray(
-				[
-					$elm$html$Html$text(string)
-				]))
-		]);
 };
 var $author$project$Settings$Theme$iotaColorMap = function (iota) {
 	switch (iota.$) {
@@ -15602,43 +15511,162 @@ var $author$project$Settings$Theme$iotaColorMap = function (iota) {
 			return '#4B4845';
 	}
 };
-var $author$project$Components$App$Panels$ConfigHexPanel$renderIotaBox = function (iota) {
-	return A2(
-		$elm$html$Html$div,
-		_List_fromArray(
-			[
-				$elm$html$Html$Attributes$class('outer_box'),
-				$elm$html$Html$Attributes$class('iota_outer_box'),
-				A2(
-				$elm$html$Html$Attributes$style,
-				'background-color',
-				$author$project$Settings$Theme$iotaColorMap(iota))
-			]),
-		_List_fromArray(
-			[
-				A2(
-				$elm$html$Html$div,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$class('inner_box')
-					]),
+var $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsHtmlMsg = F3(
+	function (index, iota, indent) {
+		var renderList = function (list) {
+			return _Utils_ap(
 				_List_fromArray(
 					[
 						A2(
 						$elm$html$Html$div,
 						_List_fromArray(
 							[
-								$elm$html$Html$Attributes$class('text')
+								$elm$html$Html$Attributes$class('outer_box'),
+								A2(
+								$elm$html$Html$Attributes$style,
+								'background-color',
+								$author$project$Settings$Theme$iotaColorMap(iota)),
+								A2(
+								$elm$html$Html$Attributes$style,
+								'margin-left',
+								$elm$core$String$fromInt(indent * 26) + 'px')
 							]),
 						_List_fromArray(
 							[
 								A2(
 								$elm$html$Html$div,
-								_List_Nil,
-								$author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsHtmlMsg(iota))
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('inner_box')
+									]),
+								_List_fromArray(
+									[
+										A2(
+										$elm$html$Html$div,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('index_display')
+											]),
+										_List_fromArray(
+											[
+												$elm$html$Html$text(
+												$elm$core$String$fromInt(index + 1))
+											])),
+										A2(
+										$elm$html$Html$div,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('text')
+											]),
+										_List_fromArray(
+											[
+												A2(
+												$elm$html$Html$div,
+												_List_Nil,
+												_List_fromArray(
+													[
+														A2(
+														$elm$html$Html$p,
+														_List_Nil,
+														_List_fromArray(
+															[
+																$elm$html$Html$text('List')
+															]))
+													]))
+											]))
+									]))
 							]))
-					]))
-			]));
+					]),
+				$elm$core$List$concat(
+					A2(
+						$elm$core$List$indexedMap,
+						F2(
+							function (i, x) {
+								return A3($author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsHtmlMsg, i - 1, x, indent + 1);
+							}),
+						$elm$core$Array$toList(list))));
+		};
+		switch (iota.$) {
+			case 'IotaList':
+				var list = iota.a;
+				return renderList(list);
+			case 'OpenParenthesis':
+				var list = iota.a;
+				return renderList(list);
+			default:
+				return _List_fromArray(
+					[
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('outer_box'),
+								A2(
+								$elm$html$Html$Attributes$style,
+								'background-color',
+								$author$project$Settings$Theme$iotaColorMap(iota)),
+								A2(
+								$elm$html$Html$Attributes$style,
+								'margin-left',
+								$elm$core$String$fromInt(indent * 26) + 'px')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$div,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('inner_box')
+									]),
+								_List_fromArray(
+									[
+										A2(
+										$elm$html$Html$div,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('index_display')
+											]),
+										_List_fromArray(
+											[
+												$elm$html$Html$text(
+												$elm$core$String$fromInt(index + 1))
+											])),
+										A2(
+										$elm$html$Html$div,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('text')
+											]),
+										_List_fromArray(
+											[
+												A2(
+												$elm$html$Html$div,
+												_List_Nil,
+												_List_fromArray(
+													[
+														A2(
+														$elm$html$Html$p,
+														_List_Nil,
+														_List_fromArray(
+															[
+																$elm$html$Html$text(
+																$author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString(iota))
+															]))
+													]))
+											]))
+									]))
+							]))
+					]);
+		}
+	});
+var $author$project$Components$App$Panels$ConfigHexPanel$renderIotaBox = function (iota) {
+	return _List_fromArray(
+		[
+			A2(
+			$elm$html$Html$div,
+			_List_Nil,
+			A3($author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsHtmlMsg, 0, iota, 0))
+		]);
 };
 var $elm$html$Html$select = _VirtualDom_node('select');
 var $author$project$Components$App$Panels$ConfigHexPanel$heldItemSection = function (model) {
@@ -15746,10 +15774,7 @@ var $author$project$Components$App$Panels$ConfigHexPanel$heldItemSection = funct
 						var _v0 = model.castingContext.heldItemContent;
 						if (_v0.$ === 'Just') {
 							var iota = _v0.a;
-							return _List_fromArray(
-								[
-									$author$project$Components$App$Panels$ConfigHexPanel$renderIotaBox(iota)
-								]);
+							return $author$project$Components$App$Panels$ConfigHexPanel$renderIotaBox(iota);
 						} else {
 							return _List_Nil;
 						}
@@ -15787,10 +15812,7 @@ var $author$project$Components$App$Panels$ConfigHexPanel$ravenmindSection = func
 						var _v0 = model.castingContext.ravenmind;
 						if (_v0.$ === 'Just') {
 							var iota = _v0.a;
-							return _List_fromArray(
-								[
-									$author$project$Components$App$Panels$ConfigHexPanel$renderIotaBox(iota)
-								]);
+							return $author$project$Components$App$Panels$ConfigHexPanel$renderIotaBox(iota);
 						} else {
 							return _List_Nil;
 						}
@@ -16072,6 +16094,7 @@ var $author$project$Components$Icon$ParagraphDropdown$paragraphDropdown = A2(
 						]))
 				]))
 		]));
+var $elm$html$Html$li = _VirtualDom_node('li');
 var $author$project$Components$App$PatternAutoComplete$autocompleteList = A2(
 	$elm$core$List$map,
 	function (pat) {
@@ -17072,55 +17095,11 @@ var $author$project$Components$App$Panels$FilePanel$saveExportPanel = function (
 var $author$project$Components$App$Panels$StackPanel$renderStack = function (stack) {
 	var renderIota = F2(
 		function (index, iota) {
-			return A2(
-				$elm$html$Html$div,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$class('outer_box'),
-						A2(
-						$elm$html$Html$Attributes$style,
-						'background-color',
-						$author$project$Settings$Theme$iotaColorMap(iota))
-					]),
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$div,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$class('inner_box')
-							]),
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$div,
-								_List_fromArray(
-									[
-										$elm$html$Html$Attributes$class('index_display')
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text(
-										$elm$core$String$fromInt(index + 1))
-									])),
-								A2(
-								$elm$html$Html$div,
-								_List_fromArray(
-									[
-										$elm$html$Html$Attributes$class('text')
-									]),
-								_List_fromArray(
-									[
-										A2(
-										$elm$html$Html$div,
-										_List_Nil,
-										$author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsHtmlMsg(iota))
-									]))
-							]))
-					]));
+			return A3($author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsHtmlMsg, index, iota, 0);
 		});
-	return $elm$core$Array$toList(
-		A2($elm$core$Array$indexedMap, renderIota, stack));
+	return $elm$core$List$concat(
+		$elm$core$Array$toList(
+			A2($elm$core$Array$indexedMap, renderIota, stack)));
 };
 var $author$project$Components$App$Panels$StackPanel$stackPanel = function (model) {
 	var visibility = A2($elm$core$List$member, $author$project$Logic$App$Types$StackPanel, model.ui.openPanels);

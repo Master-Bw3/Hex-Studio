@@ -22,7 +22,7 @@ import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (MouseMoveData, Msg(..))
 import Logic.App.Patterns.PatternRegistry exposing (patternRegistry)
 import Logic.App.Types exposing (EntityType(..), GridPoint, Iota(..), IotaType(..), Panel(..), Pattern)
-import Logic.App.Utils.GetIotaValue exposing (getIotaFromString, getIotaTypeAsString, getIotaTypeFromString, getIotaValueAsString)
+import Logic.App.Utils.GetIotaValue exposing (getIotaFromString, getIotaTypeAsString, getIotaTypeFromString)
 import Settings.Theme exposing (accent1, accent2)
 import String exposing (fromInt)
 

@@ -27,13 +27,10 @@ stackPanel model =
 renderStack : Array Iota -> List (Html msg)
 renderStack stack =
     let
-        renderIota : Int -> Iota -> Html msg
         renderIota index iota =
-            div [ class "outer_box", style "background-color" (iotaColorMap iota) ]
-                [ div [ class "inner_box" ]
-                    [ div [ class "index_display" ] [ text (String.fromInt (index + 1)) ]
-                    , div [ class "text" ] [ div [] (getIotaValueAsHtmlMsg iota) ]
-                    ]
-                ]
+            getIotaValueAsHtmlMsg index iota 0
+
     in
-    Array.toList <| Array.indexedMap renderIota stack
+    Array.indexedMap renderIota stack
+    |> Array.toList
+    |> List.concat
