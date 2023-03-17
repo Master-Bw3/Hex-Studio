@@ -77,7 +77,7 @@ function A9(fun, a, b, c, d, e, f, g, h, i) {
   return fun.a === 9 ? fun.f(a, b, c, d, e, f, g, h, i) : fun(a)(b)(c)(d)(e)(f)(g)(h)(i);
 }
 
-console.warn('Compiled in DEV mode. Follow the advice at https://elm-lang.org/0.19.1/optimize for better performance and smaller assets.');
+
 
 
 // EQUALITY
@@ -113,7 +113,7 @@ function _Utils_eqHelp(x, y, depth, stack)
 		return true;
 	}
 
-	/**/
+	/**_UNUSED/
 	if (x.$ === 'Set_elm_builtin')
 	{
 		x = $elm$core$Set$toList(x);
@@ -126,7 +126,7 @@ function _Utils_eqHelp(x, y, depth, stack)
 	}
 	//*/
 
-	/**_UNUSED/
+	/**/
 	if (x.$ < 0)
 	{
 		x = $elm$core$Dict$toList(x);
@@ -161,7 +161,7 @@ function _Utils_cmp(x, y, ord)
 		return x === y ? /*EQ*/ 0 : x < y ? /*LT*/ -1 : /*GT*/ 1;
 	}
 
-	/**/
+	/**_UNUSED/
 	if (x instanceof String)
 	{
 		var a = x.valueOf();
@@ -170,10 +170,10 @@ function _Utils_cmp(x, y, ord)
 	}
 	//*/
 
-	/**_UNUSED/
+	/**/
 	if (typeof x.$ === 'undefined')
 	//*/
-	/**/
+	/**_UNUSED/
 	if (x.$[0] === '#')
 	//*/
 	{
@@ -203,17 +203,17 @@ var _Utils_compare = F2(function(x, y)
 
 // COMMON VALUES
 
-var _Utils_Tuple0_UNUSED = 0;
-var _Utils_Tuple0 = { $: '#0' };
+var _Utils_Tuple0 = 0;
+var _Utils_Tuple0_UNUSED = { $: '#0' };
 
-function _Utils_Tuple2_UNUSED(a, b) { return { a: a, b: b }; }
-function _Utils_Tuple2(a, b) { return { $: '#2', a: a, b: b }; }
+function _Utils_Tuple2(a, b) { return { a: a, b: b }; }
+function _Utils_Tuple2_UNUSED(a, b) { return { $: '#2', a: a, b: b }; }
 
-function _Utils_Tuple3_UNUSED(a, b, c) { return { a: a, b: b, c: c }; }
-function _Utils_Tuple3(a, b, c) { return { $: '#3', a: a, b: b, c: c }; }
+function _Utils_Tuple3(a, b, c) { return { a: a, b: b, c: c }; }
+function _Utils_Tuple3_UNUSED(a, b, c) { return { $: '#3', a: a, b: b, c: c }; }
 
-function _Utils_chr_UNUSED(c) { return c; }
-function _Utils_chr(c) { return new String(c); }
+function _Utils_chr(c) { return c; }
+function _Utils_chr_UNUSED(c) { return new String(c); }
 
 
 // RECORDS
@@ -264,11 +264,11 @@ function _Utils_ap(xs, ys)
 
 
 
-var _List_Nil_UNUSED = { $: 0 };
-var _List_Nil = { $: '[]' };
+var _List_Nil = { $: 0 };
+var _List_Nil_UNUSED = { $: '[]' };
 
-function _List_Cons_UNUSED(hd, tl) { return { $: 1, a: hd, b: tl }; }
-function _List_Cons(hd, tl) { return { $: '::', a: hd, b: tl }; }
+function _List_Cons(hd, tl) { return { $: 1, a: hd, b: tl }; }
+function _List_Cons_UNUSED(hd, tl) { return { $: '::', a: hd, b: tl }; }
 
 
 var _List_cons = F2(_List_Cons);
@@ -499,12 +499,12 @@ var _JsArray_appendN = F3(function(n, dest, source)
 
 // LOG
 
-var _Debug_log_UNUSED = F2(function(tag, value)
+var _Debug_log = F2(function(tag, value)
 {
 	return value;
 });
 
-var _Debug_log = F2(function(tag, value)
+var _Debug_log_UNUSED = F2(function(tag, value)
 {
 	console.log(tag + ': ' + _Debug_toString(value));
 	return value;
@@ -530,12 +530,12 @@ function _Debug_todoCase(moduleName, region, value)
 
 // TO STRING
 
-function _Debug_toString_UNUSED(value)
+function _Debug_toString(value)
 {
 	return '<internals>';
 }
 
-function _Debug_toString(value)
+function _Debug_toString_UNUSED(value)
 {
 	return _Debug_toAnsiString(false, value);
 }
@@ -720,13 +720,13 @@ function _Debug_toHexDigit(n)
 // CRASH
 
 
-function _Debug_crash_UNUSED(identifier)
+function _Debug_crash(identifier)
 {
 	throw new Error('https://github.com/elm/core/blob/1.0.0/hints/' + identifier + '.md');
 }
 
 
-function _Debug_crash(identifier, fact1, fact2, fact3, fact4)
+function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 {
 	switch(identifier)
 	{
@@ -784,11 +784,11 @@ function _Debug_crash(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.start.line === region.end.line)
+	if (region.ca.a4 === region.cr.a4)
 	{
-		return 'on line ' + region.start.line;
+		return 'on line ' + region.ca.a4;
 	}
-	return 'on lines ' + region.start.line + ' through ' + region.end.line;
+	return 'on lines ' + region.ca.a4 + ' through ' + region.cr.a4;
 }
 
 
@@ -1212,7 +1212,7 @@ function _Char_toLocaleLower(char)
 
 
 
-/**/
+/**_UNUSED/
 function _Json_errorToString(error)
 {
 	return $elm$json$Json$Decode$errorToString(error);
@@ -1616,11 +1616,11 @@ var _Json_encode = F2(function(indentLevel, value)
 	return JSON.stringify(_Json_unwrap(value), null, indentLevel) + '';
 });
 
-function _Json_wrap(value) { return { $: 0, a: value }; }
-function _Json_unwrap(value) { return value.a; }
+function _Json_wrap_UNUSED(value) { return { $: 0, a: value }; }
+function _Json_unwrap_UNUSED(value) { return value.a; }
 
-function _Json_wrap_UNUSED(value) { return value; }
-function _Json_unwrap_UNUSED(value) { return value; }
+function _Json_wrap(value) { return value; }
+function _Json_unwrap(value) { return value; }
 
 function _Json_emptyArray() { return []; }
 function _Json_emptyObject() { return {}; }
@@ -1857,9 +1857,9 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.init,
-		impl.update,
-		impl.subscriptions,
+		impl.dX,
+		impl.fc,
+		impl.e_,
 		function() { return function() {} }
 	);
 });
@@ -1872,7 +1872,7 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 function _Platform_initialize(flagDecoder, args, init, update, subscriptions, stepperBuilder)
 {
 	var result = A2(_Json_run, flagDecoder, _Json_wrap(args ? args['flags'] : undefined));
-	$elm$core$Result$isOk(result) || _Debug_crash(2 /**/, _Json_errorToString(result.a) /**/);
+	$elm$core$Result$isOk(result) || _Debug_crash(2 /**_UNUSED/, _Json_errorToString(result.a) /**/);
 	var managers = {};
 	var initPair = init(result.a);
 	var model = initPair.a;
@@ -2316,7 +2316,7 @@ function _Platform_setupIncomingPort(name, sendToApp)
 //
 
 
-function _Platform_export_UNUSED(exports)
+function _Platform_export(exports)
 {
 	scope['Elm']
 		? _Platform_mergeExportsProd(scope['Elm'], exports)
@@ -2337,7 +2337,7 @@ function _Platform_mergeExportsProd(obj, exports)
 }
 
 
-function _Platform_export(exports)
+function _Platform_export_UNUSED(exports)
 {
 	scope['Elm']
 		? _Platform_mergeExportsDebug('Elm', scope['Elm'], exports)
@@ -2377,10 +2377,10 @@ var _VirtualDom_init = F4(function(virtualNode, flagDecoder, debugMetadata, args
 {
 	// NOTE: this function needs _Platform_export available to work
 
-	/**_UNUSED/
+	/**/
 	var node = args['node'];
 	//*/
-	/**/
+	/**_UNUSED/
 	var node = args && args['node'] ? args['node'] : _Debug_crash(0);
 	//*/
 
@@ -2635,24 +2635,24 @@ function _VirtualDom_noInnerHtmlOrFormAction(key)
 	return key == 'innerHTML' || key == 'formAction' ? 'data-' + key : key;
 }
 
-function _VirtualDom_noJavaScriptUri_UNUSED(value)
+function _VirtualDom_noJavaScriptUri(value)
 {
 	return /^javascript:/i.test(value.replace(/\s/g,'')) ? '' : value;
 }
 
-function _VirtualDom_noJavaScriptUri(value)
+function _VirtualDom_noJavaScriptUri_UNUSED(value)
 {
 	return /^javascript:/i.test(value.replace(/\s/g,''))
 		? 'javascript:alert("This is an XSS vector. Please use ports or web components instead.")'
 		: value;
 }
 
-function _VirtualDom_noJavaScriptOrHtmlUri_UNUSED(value)
+function _VirtualDom_noJavaScriptOrHtmlUri(value)
 {
 	return /^\s*(javascript:|data:text\/html)/i.test(value) ? '' : value;
 }
 
-function _VirtualDom_noJavaScriptOrHtmlUri(value)
+function _VirtualDom_noJavaScriptOrHtmlUri_UNUSED(value)
 {
 	return /^\s*(javascript:|data:text\/html)/i.test(value)
 		? 'javascript:alert("This is an XSS vector. Please use ports or web components instead.")'
@@ -2704,9 +2704,9 @@ var _VirtualDom_mapEventTuple = F2(function(func, tuple)
 var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
-		message: func(record.message),
-		stopPropagation: record.stopPropagation,
-		preventDefault: record.preventDefault
+		ah: func(record.ah),
+		da: record.da,
+		cU: record.cU
 	}
 });
 
@@ -2974,11 +2974,11 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 		// 3 = Custom
 
 		var value = result.a;
-		var message = !tag ? value : tag < 3 ? value.a : value.message;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.stopPropagation;
+		var message = !tag ? value : tag < 3 ? value.a : value.ah;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.da;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.preventDefault) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.cU) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -3928,15 +3928,15 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.init,
-		impl.update,
-		impl.subscriptions,
+		impl.dX,
+		impl.fc,
+		impl.e_,
 		function(sendToApp, initialModel) {
-			var view = impl.view;
-			/**_UNUSED/
+			var view = impl.fe;
+			/**/
 			var domNode = args['node'];
 			//*/
-			/**/
+			/**_UNUSED/
 			var domNode = args && args['node'] ? args['node'] : _Debug_crash(0);
 			//*/
 			var currNode = _VirtualDom_virtualize(domNode);
@@ -3964,12 +3964,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.init,
-		impl.update,
-		impl.subscriptions,
+		impl.dX,
+		impl.fc,
+		impl.e_,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.setup && impl.setup(sendToApp)
-			var view = impl.view;
+			var divertHrefToApp = impl.b9 && impl.b9(sendToApp)
+			var view = impl.fe;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -3977,12 +3977,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.body);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.dn);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
 				_VirtualDom_divertHrefToApp = 0;
-				(title !== doc.title) && (_VirtualDom_doc.title = title = doc.title);
+				(title !== doc.e4) && (_VirtualDom_doc.title = title = doc.e4);
 			});
 		}
 	);
@@ -4038,12 +4038,12 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.onUrlChange;
-	var onUrlRequest = impl.onUrlRequest;
+	var onUrlChange = impl.et;
+	var onUrlRequest = impl.eu;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		setup: function(sendToApp)
+		b9: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4059,9 +4059,9 @@ function _Browser_application(impl)
 					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.protocol === next.protocol
-							&& curr.host === next.host
-							&& curr.port_.a === next.port_.a
+							&& curr.cY === next.cY
+							&& curr.cA === next.cA
+							&& curr.cT.a === next.cT.a
 						)
 							? $elm$browser$Browser$Internal(next)
 							: $elm$browser$Browser$External(href)
@@ -4069,13 +4069,13 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		init: function(flags)
+		dX: function(flags)
 		{
-			return A3(impl.init, flags, _Browser_getUrl(), key);
+			return A3(impl.dX, flags, _Browser_getUrl(), key);
 		},
-		view: impl.view,
-		update: impl.update,
-		subscriptions: impl.subscriptions
+		fe: impl.fe,
+		fc: impl.fc,
+		e_: impl.e_
 	});
 }
 
@@ -4141,17 +4141,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { hidden: 'hidden', change: 'visibilitychange' }
+		? { dR: 'hidden', dq: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { hidden: 'mozHidden', change: 'mozvisibilitychange' }
+		? { dR: 'mozHidden', dq: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { hidden: 'msHidden', change: 'msvisibilitychange' }
+		? { dR: 'msHidden', dq: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { hidden: 'webkitHidden', change: 'webkitvisibilitychange' }
-		: { hidden: 'hidden', change: 'visibilitychange' };
+		? { dR: 'webkitHidden', dq: 'webkitvisibilitychange' }
+		: { dR: 'hidden', dq: 'visibilitychange' };
 }
 
 
@@ -4232,12 +4232,12 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		scene: _Browser_getScene(),
-		viewport: {
-			x: _Browser_window.pageXOffset,
-			y: _Browser_window.pageYOffset,
-			width: _Browser_doc.documentElement.clientWidth,
-			height: _Browser_doc.documentElement.clientHeight
+		c3: _Browser_getScene(),
+		dg: {
+			m: _Browser_window.pageXOffset,
+			n: _Browser_window.pageYOffset,
+			ac: _Browser_doc.documentElement.clientWidth,
+			cy: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4247,8 +4247,8 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		width: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		height: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		ac: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		cy: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4271,15 +4271,15 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			scene: {
-				width: node.scrollWidth,
-				height: node.scrollHeight
+			c3: {
+				ac: node.scrollWidth,
+				cy: node.scrollHeight
 			},
-			viewport: {
-				x: node.scrollLeft,
-				y: node.scrollTop,
-				width: node.clientWidth,
-				height: node.clientHeight
+			dg: {
+				m: node.scrollLeft,
+				n: node.scrollTop,
+				ac: node.clientWidth,
+				cy: node.clientHeight
 			}
 		};
 	});
@@ -4309,18 +4309,18 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			scene: _Browser_getScene(),
-			viewport: {
-				x: x,
-				y: y,
-				width: _Browser_doc.documentElement.clientWidth,
-				height: _Browser_doc.documentElement.clientHeight
+			c3: _Browser_getScene(),
+			dg: {
+				m: x,
+				n: y,
+				ac: _Browser_doc.documentElement.clientWidth,
+				cy: _Browser_doc.documentElement.clientHeight
 			},
-			element: {
-				x: x + rect.left,
-				y: y + rect.top,
-				width: rect.width,
-				height: rect.height
+			dK: {
+				m: x + rect.left,
+				n: y + rect.top,
+				ac: rect.width,
+				cy: rect.height
 			}
 		};
 	});
@@ -4447,8 +4447,8 @@ var _Regex_never = /.^/;
 var _Regex_fromStringWith = F2(function(options, string)
 {
 	var flags = 'g';
-	if (options.multiline) { flags += 'm'; }
-	if (options.caseInsensitive) { flags += 'i'; }
+	if (options.ef) { flags += 'm'; }
+	if (options.dp) { flags += 'i'; }
 
 	try
 	{
@@ -4717,15 +4717,15 @@ function _File_toUrl(blob)
 	});
 }
 
-var $elm$core$Basics$EQ = {$: 'EQ'};
-var $elm$core$Basics$GT = {$: 'GT'};
-var $elm$core$Basics$LT = {$: 'LT'};
+var $elm$core$Basics$EQ = 1;
+var $elm$core$Basics$GT = 2;
+var $elm$core$Basics$LT = 0;
 var $elm$core$List$cons = _List_cons;
 var $elm$core$Dict$foldr = F3(
 	function (func, acc, t) {
 		foldr:
 		while (true) {
-			if (t.$ === 'RBEmpty_elm_builtin') {
+			if (t.$ === -2) {
 				return acc;
 			} else {
 				var key = t.b;
@@ -4770,7 +4770,7 @@ var $elm$core$Dict$keys = function (dict) {
 		dict);
 };
 var $elm$core$Set$toList = function (_v0) {
-	var dict = _v0.a;
+	var dict = _v0;
 	return $elm$core$Dict$keys(dict);
 };
 var $elm$core$Elm$JsArray$foldr = _JsArray_foldr;
@@ -4780,7 +4780,7 @@ var $elm$core$Array$foldr = F3(
 		var tail = _v0.d;
 		var helper = F2(
 			function (node, acc) {
-				if (node.$ === 'SubTree') {
+				if (!node.$) {
 					var subTree = node.a;
 					return A3($elm$core$Elm$JsArray$foldr, helper, acc, subTree);
 				} else {
@@ -4798,32 +4798,32 @@ var $elm$core$Array$toList = function (array) {
 	return A3($elm$core$Array$foldr, $elm$core$List$cons, _List_Nil, array);
 };
 var $elm$core$Result$Err = function (a) {
-	return {$: 'Err', a: a};
+	return {$: 1, a: a};
 };
 var $elm$json$Json$Decode$Failure = F2(
 	function (a, b) {
-		return {$: 'Failure', a: a, b: b};
+		return {$: 3, a: a, b: b};
 	});
 var $elm$json$Json$Decode$Field = F2(
 	function (a, b) {
-		return {$: 'Field', a: a, b: b};
+		return {$: 0, a: a, b: b};
 	});
 var $elm$json$Json$Decode$Index = F2(
 	function (a, b) {
-		return {$: 'Index', a: a, b: b};
+		return {$: 1, a: a, b: b};
 	});
 var $elm$core$Result$Ok = function (a) {
-	return {$: 'Ok', a: a};
+	return {$: 0, a: a};
 };
 var $elm$json$Json$Decode$OneOf = function (a) {
-	return {$: 'OneOf', a: a};
+	return {$: 2, a: a};
 };
-var $elm$core$Basics$False = {$: 'False'};
+var $elm$core$Basics$False = 1;
 var $elm$core$Basics$add = _Basics_add;
 var $elm$core$Maybe$Just = function (a) {
-	return {$: 'Just', a: a};
+	return {$: 0, a: a};
 };
-var $elm$core$Maybe$Nothing = {$: 'Nothing'};
+var $elm$core$Maybe$Nothing = {$: 1};
 var $elm$core$String$all = _String_all;
 var $elm$core$Basics$and = _Basics_and;
 var $elm$core$Basics$append = _Utils_append;
@@ -4948,12 +4948,12 @@ var $elm$json$Json$Decode$errorToStringHelp = F2(
 		errorToStringHelp:
 		while (true) {
 			switch (error.$) {
-				case 'Field':
+				case 0:
 					var f = error.a;
 					var err = error.b;
 					var isSimple = function () {
 						var _v1 = $elm$core$String$uncons(f);
-						if (_v1.$ === 'Nothing') {
+						if (_v1.$ === 1) {
 							return false;
 						} else {
 							var _v2 = _v1.a;
@@ -4968,7 +4968,7 @@ var $elm$json$Json$Decode$errorToStringHelp = F2(
 					error = $temp$error;
 					context = $temp$context;
 					continue errorToStringHelp;
-				case 'Index':
+				case 1:
 					var i = error.a;
 					var err = error.b;
 					var indexName = '[' + ($elm$core$String$fromInt(i) + ']');
@@ -4977,7 +4977,7 @@ var $elm$json$Json$Decode$errorToStringHelp = F2(
 					error = $temp$error;
 					context = $temp$context;
 					continue errorToStringHelp;
-				case 'OneOf':
+				case 2:
 					var errors = error.a;
 					if (!errors.b) {
 						return 'Ran into a Json.Decode.oneOf with no possibilities' + function () {
@@ -5041,7 +5041,7 @@ var $elm$json$Json$Decode$errorToStringHelp = F2(
 var $elm$core$Array$branchFactor = 32;
 var $elm$core$Array$Array_elm_builtin = F4(
 	function (a, b, c, d) {
-		return {$: 'Array_elm_builtin', a: a, b: b, c: c, d: d};
+		return {$: 0, a: a, b: b, c: c, d: d};
 	});
 var $elm$core$Elm$JsArray$empty = _JsArray_empty;
 var $elm$core$Basics$ceiling = _Basics_ceiling;
@@ -5056,7 +5056,7 @@ var $elm$core$Array$shiftStep = $elm$core$Basics$ceiling(
 var $elm$core$Array$empty = A4($elm$core$Array$Array_elm_builtin, 0, $elm$core$Array$shiftStep, $elm$core$Elm$JsArray$empty, $elm$core$Elm$JsArray$empty);
 var $elm$core$Elm$JsArray$initialize = _JsArray_initialize;
 var $elm$core$Array$Leaf = function (a) {
-	return {$: 'Leaf', a: a};
+	return {$: 1, a: a};
 };
 var $elm$core$Basics$apL = F2(
 	function (f, x) {
@@ -5076,7 +5076,7 @@ var $elm$core$Basics$max = F2(
 	});
 var $elm$core$Basics$mul = _Basics_mul;
 var $elm$core$Array$SubTree = function (a) {
-	return {$: 'SubTree', a: a};
+	return {$: 0, a: a};
 };
 var $elm$core$Elm$JsArray$initializeFromList = _JsArray_initializeFromList;
 var $elm$core$Array$compressNodes = F2(
@@ -5123,25 +5123,25 @@ var $elm$core$Array$treeFromBuilder = F2(
 	});
 var $elm$core$Array$builderToArray = F2(
 	function (reverseNodeList, builder) {
-		if (!builder.nodeListSize) {
+		if (!builder.s) {
 			return A4(
 				$elm$core$Array$Array_elm_builtin,
-				$elm$core$Elm$JsArray$length(builder.tail),
+				$elm$core$Elm$JsArray$length(builder.x),
 				$elm$core$Array$shiftStep,
 				$elm$core$Elm$JsArray$empty,
-				builder.tail);
+				builder.x);
 		} else {
-			var treeLen = builder.nodeListSize * $elm$core$Array$branchFactor;
+			var treeLen = builder.s * $elm$core$Array$branchFactor;
 			var depth = $elm$core$Basics$floor(
 				A2($elm$core$Basics$logBase, $elm$core$Array$branchFactor, treeLen - 1));
-			var correctNodeList = reverseNodeList ? $elm$core$List$reverse(builder.nodeList) : builder.nodeList;
-			var tree = A2($elm$core$Array$treeFromBuilder, correctNodeList, builder.nodeListSize);
+			var correctNodeList = reverseNodeList ? $elm$core$List$reverse(builder.y) : builder.y;
+			var tree = A2($elm$core$Array$treeFromBuilder, correctNodeList, builder.s);
 			return A4(
 				$elm$core$Array$Array_elm_builtin,
-				$elm$core$Elm$JsArray$length(builder.tail) + treeLen,
+				$elm$core$Elm$JsArray$length(builder.x) + treeLen,
 				A2($elm$core$Basics$max, 5, depth * $elm$core$Array$shiftStep),
 				tree,
-				builder.tail);
+				builder.x);
 		}
 	});
 var $elm$core$Basics$idiv = _Basics_idiv;
@@ -5154,7 +5154,7 @@ var $elm$core$Array$initializeHelp = F5(
 				return A2(
 					$elm$core$Array$builderToArray,
 					false,
-					{nodeList: nodeList, nodeListSize: (len / $elm$core$Array$branchFactor) | 0, tail: tail});
+					{y: nodeList, s: (len / $elm$core$Array$branchFactor) | 0, x: tail});
 			} else {
 				var leaf = $elm$core$Array$Leaf(
 					A3($elm$core$Elm$JsArray$initialize, $elm$core$Array$branchFactor, fromIndex, fn));
@@ -5184,9 +5184,9 @@ var $elm$core$Array$initialize = F2(
 			return A5($elm$core$Array$initializeHelp, fn, initialFromIndex, len, _List_Nil, tail);
 		}
 	});
-var $elm$core$Basics$True = {$: 'True'};
+var $elm$core$Basics$True = 0;
 var $elm$core$Result$isOk = function (result) {
-	if (result.$ === 'Ok') {
+	if (!result.$) {
 		return true;
 	} else {
 		return false;
@@ -5197,33 +5197,31 @@ var $elm$json$Json$Decode$map2 = _Json_map2;
 var $elm$json$Json$Decode$succeed = _Json_succeed;
 var $elm$virtual_dom$VirtualDom$toHandlerInt = function (handler) {
 	switch (handler.$) {
-		case 'Normal':
+		case 0:
 			return 0;
-		case 'MayStopPropagation':
+		case 1:
 			return 1;
-		case 'MayPreventDefault':
+		case 2:
 			return 2;
 		default:
 			return 3;
 	}
 };
 var $elm$browser$Browser$External = function (a) {
-	return {$: 'External', a: a};
+	return {$: 1, a: a};
 };
 var $elm$browser$Browser$Internal = function (a) {
-	return {$: 'Internal', a: a};
+	return {$: 0, a: a};
 };
 var $elm$core$Basics$identity = function (x) {
 	return x;
 };
-var $elm$browser$Browser$Dom$NotFound = function (a) {
-	return {$: 'NotFound', a: a};
-};
-var $elm$url$Url$Http = {$: 'Http'};
-var $elm$url$Url$Https = {$: 'Https'};
+var $elm$browser$Browser$Dom$NotFound = $elm$core$Basics$identity;
+var $elm$url$Url$Http = 0;
+var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {fragment: fragment, host: host, path: path, port_: port_, protocol: protocol, query: query};
+		return {cw: fragment, cA: host, cQ: path, cT: port_, cY: protocol, cZ: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -5259,7 +5257,7 @@ var $elm$url$Url$chompBeforePath = F5(
 					var i = _v0.a;
 					var _v1 = $elm$core$String$toInt(
 						A2($elm$core$String$dropLeft, i + 1, str));
-					if (_v1.$ === 'Nothing') {
+					if (_v1.$ === 1) {
 						return $elm$core$Maybe$Nothing;
 					} else {
 						var port_ = _v1;
@@ -5342,26 +5340,24 @@ var $elm$core$String$startsWith = _String_startsWith;
 var $elm$url$Url$fromString = function (str) {
 	return A2($elm$core$String$startsWith, 'http://', str) ? A2(
 		$elm$url$Url$chompAfterProtocol,
-		$elm$url$Url$Http,
+		0,
 		A2($elm$core$String$dropLeft, 7, str)) : (A2($elm$core$String$startsWith, 'https://', str) ? A2(
 		$elm$url$Url$chompAfterProtocol,
-		$elm$url$Url$Https,
+		1,
 		A2($elm$core$String$dropLeft, 8, str)) : $elm$core$Maybe$Nothing);
 };
 var $elm$core$Basics$never = function (_v0) {
 	never:
 	while (true) {
-		var nvr = _v0.a;
+		var nvr = _v0;
 		var $temp$_v0 = nvr;
 		_v0 = $temp$_v0;
 		continue never;
 	}
 };
-var $elm$core$Task$Perform = function (a) {
-	return {$: 'Perform', a: a};
-};
+var $elm$core$Task$Perform = $elm$core$Basics$identity;
 var $elm$core$Task$succeed = _Scheduler_succeed;
-var $elm$core$Task$init = $elm$core$Task$succeed(_Utils_Tuple0);
+var $elm$core$Task$init = $elm$core$Task$succeed(0);
 var $elm$core$List$foldrHelper = F4(
 	function (fn, acc, ctr, ls) {
 		if (!ls.b) {
@@ -5467,7 +5463,7 @@ var $elm$core$Task$sequence = function (tasks) {
 var $elm$core$Platform$sendToApp = _Platform_sendToApp;
 var $elm$core$Task$spawnCmd = F2(
 	function (router, _v0) {
-		var task = _v0.a;
+		var task = _v0;
 		return _Scheduler_spawn(
 			A2(
 				$elm$core$Task$andThen,
@@ -5479,7 +5475,7 @@ var $elm$core$Task$onEffects = F3(
 		return A2(
 			$elm$core$Task$map,
 			function (_v0) {
-				return _Utils_Tuple0;
+				return 0;
 			},
 			$elm$core$Task$sequence(
 				A2(
@@ -5489,32 +5485,30 @@ var $elm$core$Task$onEffects = F3(
 	});
 var $elm$core$Task$onSelfMsg = F3(
 	function (_v0, _v1, _v2) {
-		return $elm$core$Task$succeed(_Utils_Tuple0);
+		return $elm$core$Task$succeed(0);
 	});
 var $elm$core$Task$cmdMap = F2(
 	function (tagger, _v0) {
-		var task = _v0.a;
-		return $elm$core$Task$Perform(
-			A2($elm$core$Task$map, tagger, task));
+		var task = _v0;
+		return A2($elm$core$Task$map, tagger, task);
 	});
 _Platform_effectManagers['Task'] = _Platform_createManager($elm$core$Task$init, $elm$core$Task$onEffects, $elm$core$Task$onSelfMsg, $elm$core$Task$cmdMap);
 var $elm$core$Task$command = _Platform_leaf('Task');
 var $elm$core$Task$perform = F2(
 	function (toMessage, task) {
 		return $elm$core$Task$command(
-			$elm$core$Task$Perform(
-				A2($elm$core$Task$map, toMessage, task)));
+			A2($elm$core$Task$map, toMessage, task));
 	});
 var $elm$browser$Browser$document = _Browser_document;
 var $author$project$Logic$App$Msg$GetContentSize = function (a) {
-	return {$: 'GetContentSize', a: a};
+	return {$: 3, a: a};
 };
 var $author$project$Logic$App$Msg$GetGrid = function (a) {
-	return {$: 'GetGrid', a: a};
+	return {$: 2, a: a};
 };
-var $author$project$Logic$App$Types$NoItem = {$: 'NoItem'};
-var $author$project$Logic$App$Types$NoOverlay = {$: 'NoOverlay'};
-var $author$project$Logic$App$Types$PatternPanel = {$: 'PatternPanel'};
+var $author$project$Logic$App$Types$NoItem = 6;
+var $author$project$Logic$App$Types$NoOverlay = 0;
+var $author$project$Logic$App$Types$PatternPanel = 1;
 var $elm$core$Basics$composeL = F3(
 	function (g, f, x) {
 		return g(
@@ -5524,20 +5518,19 @@ var $elm$core$Task$onError = _Scheduler_onError;
 var $elm$core$Task$attempt = F2(
 	function (resultToMessage, task) {
 		return $elm$core$Task$command(
-			$elm$core$Task$Perform(
+			A2(
+				$elm$core$Task$onError,
 				A2(
-					$elm$core$Task$onError,
+					$elm$core$Basics$composeL,
+					A2($elm$core$Basics$composeL, $elm$core$Task$succeed, resultToMessage),
+					$elm$core$Result$Err),
+				A2(
+					$elm$core$Task$andThen,
 					A2(
 						$elm$core$Basics$composeL,
 						A2($elm$core$Basics$composeL, $elm$core$Task$succeed, resultToMessage),
-						$elm$core$Result$Err),
-					A2(
-						$elm$core$Task$andThen,
-						A2(
-							$elm$core$Basics$composeL,
-							A2($elm$core$Basics$composeL, $elm$core$Task$succeed, resultToMessage),
-							$elm$core$Result$Ok),
-						task))));
+						$elm$core$Result$Ok),
+					task)));
 	});
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$browser$Browser$Dom$getElement = _Browser_getElement;
@@ -5547,40 +5540,40 @@ var $elm$core$Basics$negate = function (n) {
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
 		{
-			castingContext: {heldItem: $author$project$Logic$App$Types$NoItem, heldItemContent: $elm$core$Maybe$Nothing, ravenmind: $elm$core$Maybe$Nothing},
-			downloadSrc: '',
-			grid: {
-				drawing: {activePath: _List_Nil, drawingMode: false},
-				drawnPoints: _List_Nil,
-				height: 0,
-				points: _List_Nil,
-				width: 0
+			cj: {bo: 6, dQ: $elm$core$Maybe$Nothing, eL: $elm$core$Maybe$Nothing},
+			dE: '',
+			F: {
+				as: {aC: _List_Nil, dG: false},
+				dH: _List_Nil,
+				cy: 0,
+				b5: _List_Nil,
+				ac: 0
 			},
-			importQueue: _List_Nil,
-			insertionPoint: 0,
-			lastEvent: $elm$core$Maybe$Nothing,
-			mousePos: _Utils_Tuple2(0.0, 0.0),
-			patternArray: $elm$core$Array$empty,
-			settings: {gridScale: 1.0},
-			stack: $elm$core$Array$empty,
-			time: 0,
-			timeline: $elm$core$Array$empty,
-			timelineIndex: 0,
-			ui: {
-				dragging: _Utils_Tuple2(false, -1),
-				importInput: '',
-				mouseOverElementIndex: -1,
-				openOverlay: $author$project$Logic$App$Types$NoOverlay,
-				openPanels: _List_fromArray(
-					[$author$project$Logic$App$Types$PatternPanel]),
-				overDragHandle: false,
-				patternElementMiddleLocations: _List_Nil,
-				patternInputField: '',
-				patternInputLocation: _Utils_Tuple2(0, 0),
-				selectedInputID: '',
-				suggestionIndex: 0
+			dV: _List_Nil,
+			dY: 0,
+			d1: $elm$core$Maybe$Nothing,
+			a5: _Utils_Tuple2(0.0, 0.0),
+			eE: $elm$core$Array$empty,
+			aP: {aI: 1.0},
+			eW: $elm$core$Array$empty,
+			e3: 0,
+			be: $elm$core$Array$empty,
+			aR: 0,
+			fb: {
+				dF: _Utils_Tuple2(false, -1),
+				dU: '',
+				ed: -1,
+				ew: 0,
+				ex: _List_fromArray(
+					[1]),
+				ey: false,
+				bv: _List_Nil,
+				cR: '',
+				b4: _Utils_Tuple2(0, 0),
+				eS: '',
+				e$: 0
 			},
-			window: {height: 0.0, width: 0.0}
+			bB: {cy: 0.0, ac: 0.0}
 		},
 		$elm$core$Platform$Cmd$batch(
 			_List_fromArray(
@@ -5596,30 +5589,30 @@ var $author$project$Main$init = function (_v0) {
 				])));
 };
 var $author$project$Logic$App$Msg$HandleKeyboardEvent = function (a) {
-	return {$: 'HandleKeyboardEvent', a: a};
+	return {$: 40, a: a};
 };
 var $author$project$Logic$App$Msg$RecieveGeneratedNumberLiteral = function (a) {
-	return {$: 'RecieveGeneratedNumberLiteral', a: a};
+	return {$: 14, a: a};
 };
 var $author$project$Logic$App$Msg$RecieveGridDrawingAsGIF = function (a) {
-	return {$: 'RecieveGridDrawingAsGIF', a: a};
+	return {$: 30, a: a};
 };
 var $author$project$Logic$App$Msg$RecieveGridDrawingAsImage = function (a) {
-	return {$: 'RecieveGridDrawingAsImage', a: a};
+	return {$: 32, a: a};
 };
 var $author$project$Logic$App$Msg$RecieveInputBoundingBox = function (a) {
-	return {$: 'RecieveInputBoundingBox', a: a};
+	return {$: 19, a: a};
 };
 var $author$project$Logic$App$Msg$RecieveInputBoundingBoxes = function (a) {
-	return {$: 'RecieveInputBoundingBoxes', a: a};
+	return {$: 20, a: a};
 };
 var $author$project$Logic$App$Msg$RecieveMouseOverHandle = function (a) {
-	return {$: 'RecieveMouseOverHandle', a: a};
+	return {$: 27, a: a};
 };
 var $author$project$Logic$App$Msg$Tick = function (a) {
-	return {$: 'Tick', a: a};
+	return {$: 10, a: a};
 };
-var $author$project$Logic$App$Msg$WindowResize = {$: 'WindowResize'};
+var $author$project$Logic$App$Msg$WindowResize = {$: 9};
 var $elm$core$Platform$Sub$batch = _Platform_batch;
 var $elm$core$Basics$composeR = F3(
 	function (f, g, x) {
@@ -5628,7 +5621,7 @@ var $elm$core$Basics$composeR = F3(
 	});
 var $Gizra$elm_keyboard_event$Keyboard$Event$KeyboardEvent = F7(
 	function (altKey, ctrlKey, key, keyCode, metaKey, repeat, shiftKey) {
-		return {altKey: altKey, ctrlKey: ctrlKey, key: key, keyCode: keyCode, metaKey: metaKey, repeat: repeat, shiftKey: shiftKey};
+		return {ch: altKey, dx: ctrlKey, cF: key, d0: keyCode, d9: metaKey, eN: repeat, eT: shiftKey};
 	});
 var $elm$json$Json$Decode$bool = _Json_decodeBool;
 var $elm$json$Json$Decode$andThen = _Json_andThen;
@@ -5666,105 +5659,105 @@ var $Gizra$elm_keyboard_event$Keyboard$Event$decodeKeyCode = $elm$json$Json$Deco
 			A2($elm$json$Json$Decode$field, 'charCode', $Gizra$elm_keyboard_event$Keyboard$Event$decodeNonZero),
 			$elm$json$Json$Decode$succeed(0)
 		]));
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$A = {$: 'A'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Add = {$: 'Add'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Alt = {$: 'Alt'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$A = {$: 0};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Add = {$: 85};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Alt = {$: 32};
 var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Ambiguous = function (a) {
-	return {$: 'Ambiguous', a: a};
+	return {$: 89, a: a};
 };
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$B = {$: 'B'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Backspace = {$: 'Backspace'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$C = {$: 'C'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$CapsLock = {$: 'CapsLock'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$ChromeSearch = {$: 'ChromeSearch'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Command = {$: 'Command'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$B = {$: 1};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Backspace = {$: 38};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$C = {$: 2};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$CapsLock = {$: 34};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$ChromeSearch = {$: 59};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Command = {$: 58};
 var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Ctrl = function (a) {
-	return {$: 'Ctrl', a: a};
+	return {$: 31, a: a};
 };
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$D = {$: 'D'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Decimal = {$: 'Decimal'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Delete = {$: 'Delete'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Divide = {$: 'Divide'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Down = {$: 'Down'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$E = {$: 'E'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Eight = {$: 'Eight'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$End = {$: 'End'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Enter = {$: 'Enter'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Escape = {$: 'Escape'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F = {$: 'F'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F1 = {$: 'F1'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F10 = {$: 'F10'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F11 = {$: 'F11'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F12 = {$: 'F12'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F2 = {$: 'F2'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F3 = {$: 'F3'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F4 = {$: 'F4'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F5 = {$: 'F5'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F6 = {$: 'F6'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F7 = {$: 'F7'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F8 = {$: 'F8'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F9 = {$: 'F9'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Five = {$: 'Five'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Four = {$: 'Four'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$G = {$: 'G'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$H = {$: 'H'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Home = {$: 'Home'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$I = {$: 'I'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Insert = {$: 'Insert'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$J = {$: 'J'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$K = {$: 'K'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$L = {$: 'L'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Left = {$: 'Left'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$M = {$: 'M'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Multiply = {$: 'Multiply'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$N = {$: 'N'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Nine = {$: 'Nine'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumLock = {$: 'NumLock'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadEight = {$: 'NumpadEight'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadFive = {$: 'NumpadFive'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadFour = {$: 'NumpadFour'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadNine = {$: 'NumpadNine'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadOne = {$: 'NumpadOne'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadSeven = {$: 'NumpadSeven'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadSix = {$: 'NumpadSix'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadThree = {$: 'NumpadThree'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadTwo = {$: 'NumpadTwo'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadZero = {$: 'NumpadZero'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$O = {$: 'O'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$One = {$: 'One'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$P = {$: 'P'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$PageDown = {$: 'PageDown'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$PageUp = {$: 'PageUp'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$PauseBreak = {$: 'PauseBreak'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$PrintScreen = {$: 'PrintScreen'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Q = {$: 'Q'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$R = {$: 'R'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Right = {$: 'Right'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$S = {$: 'S'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$ScrollLock = {$: 'ScrollLock'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Seven = {$: 'Seven'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$D = {$: 3};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Decimal = {$: 87};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Delete = {$: 39};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Divide = {$: 88};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Down = {$: 29};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$E = {$: 4};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Eight = {$: 52};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$End = {$: 42};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Enter = {$: 37};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Escape = {$: 36};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F = {$: 5};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F1 = {$: 62};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F10 = {$: 71};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F11 = {$: 72};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F12 = {$: 73};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F2 = {$: 63};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F3 = {$: 64};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F4 = {$: 65};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F5 = {$: 66};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F6 = {$: 67};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F7 = {$: 68};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F8 = {$: 69};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F9 = {$: 70};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Five = {$: 49};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Four = {$: 48};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$G = {$: 6};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$H = {$: 7};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Home = {$: 43};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$I = {$: 8};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Insert = {$: 54};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$J = {$: 9};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$K = {$: 10};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$L = {$: 11};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Left = {$: 26};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$M = {$: 12};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Multiply = {$: 84};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$N = {$: 13};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Nine = {$: 53};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumLock = {$: 60};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadEight = {$: 82};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadFive = {$: 79};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadFour = {$: 78};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadNine = {$: 83};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadOne = {$: 75};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadSeven = {$: 81};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadSix = {$: 80};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadThree = {$: 77};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadTwo = {$: 76};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadZero = {$: 74};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$O = {$: 14};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$One = {$: 45};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$P = {$: 15};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$PageDown = {$: 41};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$PageUp = {$: 40};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$PauseBreak = {$: 56};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$PrintScreen = {$: 55};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Q = {$: 16};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$R = {$: 17};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Right = {$: 27};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$S = {$: 18};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$ScrollLock = {$: 61};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Seven = {$: 51};
 var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Shift = function (a) {
-	return {$: 'Shift', a: a};
+	return {$: 30, a: a};
 };
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Six = {$: 'Six'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Spacebar = {$: 'Spacebar'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Subtract = {$: 'Subtract'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$T = {$: 'T'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Tab = {$: 'Tab'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Three = {$: 'Three'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Two = {$: 'Two'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$U = {$: 'U'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Six = {$: 50};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Spacebar = {$: 35};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Subtract = {$: 86};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$T = {$: 19};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Tab = {$: 33};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Three = {$: 47};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Two = {$: 46};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$U = {$: 20};
 var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Unknown = function (a) {
-	return {$: 'Unknown', a: a};
+	return {$: 90, a: a};
 };
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Up = {$: 'Up'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$V = {$: 'V'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$W = {$: 'W'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Windows = {$: 'Windows'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$X = {$: 'X'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Y = {$: 'Y'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Z = {$: 'Z'};
-var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Zero = {$: 'Zero'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Up = {$: 28};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$V = {$: 21};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$W = {$: 22};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Windows = {$: 57};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$X = {$: 23};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Y = {$: 24};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Z = {$: 25};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Zero = {$: 44};
 var $SwiftsNamesake$proper_keyboard$Keyboard$Key$fromCode = function (keyCode) {
 	switch (keyCode) {
 		case 8:
@@ -5961,13 +5954,13 @@ var $Gizra$elm_keyboard_event$Keyboard$Event$decodeKeyboardEvent = A8(
 var $elm$json$Json$Decode$decodeValue = _Json_run;
 var $elm$time$Time$Every = F2(
 	function (a, b) {
-		return {$: 'Every', a: a, b: b};
+		return {$: 0, a: a, b: b};
 	});
 var $elm$time$Time$State = F2(
 	function (taggers, processes) {
-		return {processes: processes, taggers: taggers};
+		return {cX: processes, dc: taggers};
 	});
-var $elm$core$Dict$RBEmpty_elm_builtin = {$: 'RBEmpty_elm_builtin'};
+var $elm$core$Dict$RBEmpty_elm_builtin = {$: -2};
 var $elm$core$Dict$empty = $elm$core$Dict$RBEmpty_elm_builtin;
 var $elm$time$Time$init = $elm$core$Task$succeed(
 	A2($elm$time$Time$State, $elm$core$Dict$empty, $elm$core$Dict$empty));
@@ -5976,7 +5969,7 @@ var $elm$core$Dict$get = F2(
 	function (targetKey, dict) {
 		get:
 		while (true) {
-			if (dict.$ === 'RBEmpty_elm_builtin') {
+			if (dict.$ === -2) {
 				return $elm$core$Maybe$Nothing;
 			} else {
 				var key = dict.b;
@@ -5984,14 +5977,14 @@ var $elm$core$Dict$get = F2(
 				var left = dict.d;
 				var right = dict.e;
 				var _v1 = A2($elm$core$Basics$compare, targetKey, key);
-				switch (_v1.$) {
-					case 'LT':
+				switch (_v1) {
+					case 0:
 						var $temp$targetKey = targetKey,
 							$temp$dict = left;
 						targetKey = $temp$targetKey;
 						dict = $temp$dict;
 						continue get;
-					case 'EQ':
+					case 1:
 						return $elm$core$Maybe$Just(value);
 					default:
 						var $temp$targetKey = targetKey,
@@ -6003,21 +5996,21 @@ var $elm$core$Dict$get = F2(
 			}
 		}
 	});
-var $elm$core$Dict$Black = {$: 'Black'};
+var $elm$core$Dict$Black = 1;
 var $elm$core$Dict$RBNode_elm_builtin = F5(
 	function (a, b, c, d, e) {
-		return {$: 'RBNode_elm_builtin', a: a, b: b, c: c, d: d, e: e};
+		return {$: -1, a: a, b: b, c: c, d: d, e: e};
 	});
-var $elm$core$Dict$Red = {$: 'Red'};
+var $elm$core$Dict$Red = 0;
 var $elm$core$Dict$balance = F5(
 	function (color, key, value, left, right) {
-		if ((right.$ === 'RBNode_elm_builtin') && (right.a.$ === 'Red')) {
+		if ((right.$ === -1) && (!right.a)) {
 			var _v1 = right.a;
 			var rK = right.b;
 			var rV = right.c;
 			var rLeft = right.d;
 			var rRight = right.e;
-			if ((left.$ === 'RBNode_elm_builtin') && (left.a.$ === 'Red')) {
+			if ((left.$ === -1) && (!left.a)) {
 				var _v3 = left.a;
 				var lK = left.b;
 				var lV = left.c;
@@ -6025,22 +6018,22 @@ var $elm$core$Dict$balance = F5(
 				var lRight = left.e;
 				return A5(
 					$elm$core$Dict$RBNode_elm_builtin,
-					$elm$core$Dict$Red,
+					0,
 					key,
 					value,
-					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, lK, lV, lLeft, lRight),
-					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, rK, rV, rLeft, rRight));
+					A5($elm$core$Dict$RBNode_elm_builtin, 1, lK, lV, lLeft, lRight),
+					A5($elm$core$Dict$RBNode_elm_builtin, 1, rK, rV, rLeft, rRight));
 			} else {
 				return A5(
 					$elm$core$Dict$RBNode_elm_builtin,
 					color,
 					rK,
 					rV,
-					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Red, key, value, left, rLeft),
+					A5($elm$core$Dict$RBNode_elm_builtin, 0, key, value, left, rLeft),
 					rRight);
 			}
 		} else {
-			if ((((left.$ === 'RBNode_elm_builtin') && (left.a.$ === 'Red')) && (left.d.$ === 'RBNode_elm_builtin')) && (left.d.a.$ === 'Red')) {
+			if ((((left.$ === -1) && (!left.a)) && (left.d.$ === -1)) && (!left.d.a)) {
 				var _v5 = left.a;
 				var lK = left.b;
 				var lV = left.c;
@@ -6053,11 +6046,11 @@ var $elm$core$Dict$balance = F5(
 				var lRight = left.e;
 				return A5(
 					$elm$core$Dict$RBNode_elm_builtin,
-					$elm$core$Dict$Red,
+					0,
 					lK,
 					lV,
-					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, llK, llV, llLeft, llRight),
-					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, key, value, lRight, right));
+					A5($elm$core$Dict$RBNode_elm_builtin, 1, llK, llV, llLeft, llRight),
+					A5($elm$core$Dict$RBNode_elm_builtin, 1, key, value, lRight, right));
 			} else {
 				return A5($elm$core$Dict$RBNode_elm_builtin, color, key, value, left, right);
 			}
@@ -6065,8 +6058,8 @@ var $elm$core$Dict$balance = F5(
 	});
 var $elm$core$Dict$insertHelp = F3(
 	function (key, value, dict) {
-		if (dict.$ === 'RBEmpty_elm_builtin') {
-			return A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Red, key, value, $elm$core$Dict$RBEmpty_elm_builtin, $elm$core$Dict$RBEmpty_elm_builtin);
+		if (dict.$ === -2) {
+			return A5($elm$core$Dict$RBNode_elm_builtin, 0, key, value, $elm$core$Dict$RBEmpty_elm_builtin, $elm$core$Dict$RBEmpty_elm_builtin);
 		} else {
 			var nColor = dict.a;
 			var nKey = dict.b;
@@ -6074,8 +6067,8 @@ var $elm$core$Dict$insertHelp = F3(
 			var nLeft = dict.d;
 			var nRight = dict.e;
 			var _v1 = A2($elm$core$Basics$compare, key, nKey);
-			switch (_v1.$) {
-				case 'LT':
+			switch (_v1) {
+				case 0:
 					return A5(
 						$elm$core$Dict$balance,
 						nColor,
@@ -6083,7 +6076,7 @@ var $elm$core$Dict$insertHelp = F3(
 						nValue,
 						A3($elm$core$Dict$insertHelp, key, value, nLeft),
 						nRight);
-				case 'EQ':
+				case 1:
 					return A5($elm$core$Dict$RBNode_elm_builtin, nColor, nKey, value, nLeft, nRight);
 				default:
 					return A5(
@@ -6099,13 +6092,13 @@ var $elm$core$Dict$insertHelp = F3(
 var $elm$core$Dict$insert = F3(
 	function (key, value, dict) {
 		var _v0 = A3($elm$core$Dict$insertHelp, key, value, dict);
-		if ((_v0.$ === 'RBNode_elm_builtin') && (_v0.a.$ === 'Red')) {
+		if ((_v0.$ === -1) && (!_v0.a)) {
 			var _v1 = _v0.a;
 			var k = _v0.b;
 			var v = _v0.c;
 			var l = _v0.d;
 			var r = _v0.e;
-			return A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, k, v, l, r);
+			return A5($elm$core$Dict$RBNode_elm_builtin, 1, k, v, l, r);
 		} else {
 			var x = _v0;
 			return x;
@@ -6116,7 +6109,7 @@ var $elm$time$Time$addMySub = F2(
 		var interval = _v0.a;
 		var tagger = _v0.b;
 		var _v1 = A2($elm$core$Dict$get, interval, state);
-		if (_v1.$ === 'Nothing') {
+		if (_v1.$ === 1) {
 			return A3(
 				$elm$core$Dict$insert,
 				interval,
@@ -6137,7 +6130,7 @@ var $elm$core$Dict$foldl = F3(
 	function (func, acc, dict) {
 		foldl:
 		while (true) {
-			if (dict.$ === 'RBEmpty_elm_builtin') {
+			if (dict.$ === -2) {
 				return acc;
 			} else {
 				var key = dict.b;
@@ -6221,14 +6214,14 @@ var $elm$core$Dict$merge = F6(
 	});
 var $elm$core$Platform$sendToSelf = _Platform_sendToSelf;
 var $elm$time$Time$Name = function (a) {
-	return {$: 'Name', a: a};
+	return {$: 0, a: a};
 };
 var $elm$time$Time$Offset = function (a) {
-	return {$: 'Offset', a: a};
+	return {$: 1, a: a};
 };
 var $elm$time$Time$Zone = F2(
 	function (a, b) {
-		return {$: 'Zone', a: a, b: b};
+		return {$: 0, a: a, b: b};
 	});
 var $elm$time$Time$customZone = $elm$time$Time$Zone;
 var $elm$time$Time$setInterval = _Time_setInterval;
@@ -6257,7 +6250,7 @@ var $elm$time$Time$spawnHelp = F3(
 	});
 var $elm$time$Time$onEffects = F3(
 	function (router, subs, _v0) {
-		var processes = _v0.processes;
+		var processes = _v0.cX;
 		var rightStep = F3(
 			function (_v6, id, _v7) {
 				var spawns = _v7.a;
@@ -6304,7 +6297,7 @@ var $elm$time$Time$onEffects = F3(
 			_Utils_Tuple3(
 				_List_Nil,
 				$elm$core$Dict$empty,
-				$elm$core$Task$succeed(_Utils_Tuple0)));
+				$elm$core$Task$succeed(0)));
 		var spawnList = _v1.a;
 		var existingDict = _v1.b;
 		var killTask = _v1.c;
@@ -6321,15 +6314,13 @@ var $elm$time$Time$onEffects = F3(
 				},
 				killTask));
 	});
-var $elm$time$Time$Posix = function (a) {
-	return {$: 'Posix', a: a};
-};
-var $elm$time$Time$millisToPosix = $elm$time$Time$Posix;
+var $elm$time$Time$Posix = $elm$core$Basics$identity;
+var $elm$time$Time$millisToPosix = $elm$core$Basics$identity;
 var $elm$time$Time$now = _Time_now($elm$time$Time$millisToPosix);
 var $elm$time$Time$onSelfMsg = F3(
 	function (router, interval, state) {
-		var _v0 = A2($elm$core$Dict$get, interval, state.taggers);
-		if (_v0.$ === 'Nothing') {
+		var _v0 = A2($elm$core$Dict$get, interval, state.dc);
+		if (_v0.$ === 1) {
 			return $elm$core$Task$succeed(state);
 		} else {
 			var taggers = _v0.a;
@@ -6371,7 +6362,7 @@ var $elm$time$Time$every = F2(
 	});
 var $author$project$Logic$App$Types$ElementLocation = F5(
 	function (element, left, bottom, top, right) {
-		return {bottom: bottom, element: element, left: left, right: right, top: top};
+		return {bm: bottom, dK: element, d2: left, bx: right, e9: top};
 	});
 var $elm$json$Json$Decode$map5 = _Json_map5;
 var $author$project$Main$locationDecoder = A6(
@@ -6382,19 +6373,19 @@ var $author$project$Main$locationDecoder = A6(
 	A2($elm$json$Json$Decode$field, 'bottom', $elm$json$Json$Decode$int),
 	A2($elm$json$Json$Decode$field, 'top', $elm$json$Json$Decode$int),
 	A2($elm$json$Json$Decode$field, 'right', $elm$json$Json$Decode$int));
-var $elm$browser$Browser$Events$Document = {$: 'Document'};
+var $elm$browser$Browser$Events$Document = 0;
 var $elm$browser$Browser$Events$MySub = F3(
 	function (a, b, c) {
-		return {$: 'MySub', a: a, b: b, c: c};
+		return {$: 0, a: a, b: b, c: c};
 	});
 var $elm$browser$Browser$Events$State = F2(
 	function (subs, pids) {
-		return {pids: pids, subs: subs};
+		return {cS: pids, db: subs};
 	});
 var $elm$browser$Browser$Events$init = $elm$core$Task$succeed(
 	A2($elm$browser$Browser$Events$State, _List_Nil, $elm$core$Dict$empty));
 var $elm$browser$Browser$Events$nodeToKey = function (node) {
-	if (node.$ === 'Document') {
+	if (!node) {
 		return 'd_';
 	} else {
 		return 'w_';
@@ -6423,14 +6414,14 @@ var $elm$core$Dict$fromList = function (assocs) {
 };
 var $elm$browser$Browser$Events$Event = F2(
 	function (key, event) {
-		return {event: event, key: key};
+		return {ct: event, cF: key};
 	});
 var $elm$browser$Browser$Events$spawn = F3(
 	function (router, key, _v0) {
 		var node = _v0.a;
 		var name = _v0.b;
 		var actualNode = function () {
-			if (node.$ === 'Document') {
+			if (!node) {
 				return _Browser_doc;
 			} else {
 				return _Browser_window;
@@ -6497,7 +6488,7 @@ var $elm$browser$Browser$Events$onEffects = F3(
 			stepLeft,
 			stepBoth,
 			stepRight,
-			state.pids,
+			state.cS,
 			$elm$core$Dict$fromList(newSubs),
 			_Utils_Tuple3(_List_Nil, $elm$core$Dict$empty, _List_Nil));
 		var deadPids = _v0.a;
@@ -6526,7 +6517,7 @@ var $elm$browser$Browser$Events$onEffects = F3(
 var $elm$core$List$maybeCons = F3(
 	function (f, mx, xs) {
 		var _v0 = f(mx);
-		if (_v0.$ === 'Just') {
+		if (!_v0.$) {
 			var x = _v0.a;
 			return A2($elm$core$List$cons, x, xs);
 		} else {
@@ -6543,8 +6534,8 @@ var $elm$core$List$filterMap = F2(
 	});
 var $elm$browser$Browser$Events$onSelfMsg = F3(
 	function (router, _v0, state) {
-		var key = _v0.key;
-		var event = _v0.event;
+		var key = _v0.cF;
+		var event = _v0.ct;
 		var toMessage = function (_v2) {
 			var subKey = _v2.a;
 			var _v3 = _v2.b;
@@ -6553,7 +6544,7 @@ var $elm$browser$Browser$Events$onSelfMsg = F3(
 			var decoder = _v3.c;
 			return _Utils_eq(subKey, key) ? A2(_Browser_decodeEvent, decoder, event) : $elm$core$Maybe$Nothing;
 		};
-		var messages = A2($elm$core$List$filterMap, toMessage, state.subs);
+		var messages = A2($elm$core$List$filterMap, toMessage, state.db);
 		return A2(
 			$elm$core$Task$andThen,
 			function (_v1) {
@@ -6583,12 +6574,12 @@ var $elm$browser$Browser$Events$on = F3(
 		return $elm$browser$Browser$Events$subscription(
 			A3($elm$browser$Browser$Events$MySub, node, name, decoder));
 	});
-var $elm$browser$Browser$Events$onKeyDown = A2($elm$browser$Browser$Events$on, $elm$browser$Browser$Events$Document, 'keydown');
-var $elm$browser$Browser$Events$Window = {$: 'Window'};
+var $elm$browser$Browser$Events$onKeyDown = A2($elm$browser$Browser$Events$on, 0, 'keydown');
+var $elm$browser$Browser$Events$Window = 1;
 var $elm$browser$Browser$Events$onResize = function (func) {
 	return A3(
 		$elm$browser$Browser$Events$on,
-		$elm$browser$Browser$Events$Window,
+		1,
 		'resize',
 		A2(
 			$elm$json$Json$Decode$field,
@@ -6638,15 +6629,15 @@ var $author$project$Main$subscriptions = function (model) {
 				$author$project$Ports$GetGridDrawingAsImage$recieveImage($author$project$Logic$App$Msg$RecieveGridDrawingAsImage)
 			]));
 };
-var $author$project$Logic$App$Types$Artifact = {$: 'Artifact'};
-var $author$project$Logic$App$Types$Cypher = {$: 'Cypher'};
-var $author$project$Logic$App$Types$Focus = {$: 'Focus'};
-var $author$project$Logic$App$Types$Pie = {$: 'Pie'};
+var $author$project$Logic$App$Types$Artifact = 1;
+var $author$project$Logic$App$Types$Cypher = 2;
+var $author$project$Logic$App$Types$Focus = 3;
+var $author$project$Logic$App$Types$Pie = 5;
 var $author$project$Logic$App$Msg$SetTimelineIndex = function (a) {
-	return {$: 'SetTimelineIndex', a: a};
+	return {$: 39, a: a};
 };
-var $author$project$Logic$App$Types$Spellbook = {$: 'Spellbook'};
-var $author$project$Logic$App$Types$Trinket = {$: 'Trinket'};
+var $author$project$Logic$App$Types$Spellbook = 4;
+var $author$project$Logic$App$Types$Trinket = 0;
 var $author$project$Settings$Theme$accent2 = '#D8B8E0';
 var $elm$core$List$any = F2(
 	function (isOkay, list) {
@@ -6686,7 +6677,7 @@ var $author$project$Components$App$Grid$distanceBetweenCoordinates = F2(
 		return $elm$core$Basics$sqrt(
 			A2($elm$core$Basics$pow, x1 - x2, 2) + A2($elm$core$Basics$pow, y1 - y2, 2));
 	});
-var $author$project$Components$App$Grid$emptyGridpoint = {color: '', connectedPoints: _List_Nil, offsetX: 0, offsetY: 0, radius: 0, used: false, x: 0, y: 0};
+var $author$project$Components$App$Grid$emptyGridpoint = {S: '', H: _List_Nil, t: 0, r: 0, bw: 0, am: false, m: 0, n: 0};
 var $elm$core$List$filter = F2(
 	function (isGood, list) {
 		return A3(
@@ -6721,7 +6712,7 @@ var $elm$core$List$head = function (list) {
 var $elm$core$List$sortWith = _List_sortWith;
 var $elm$core$Maybe$withDefault = F2(
 	function (_default, maybe) {
-		if (maybe.$ === 'Just') {
+		if (!maybe.$) {
 			var value = maybe.a;
 			return value;
 		} else {
@@ -6730,7 +6721,7 @@ var $elm$core$Maybe$withDefault = F2(
 	});
 var $author$project$Components$App$Grid$getClosestPoint = F3(
 	function (coordinates, points, model) {
-		var gridOffset = model.window.width - model.grid.width;
+		var gridOffset = model.bB.ac - model.F.ac;
 		var offsetCoords = _Utils_Tuple2(coordinates.a - gridOffset, coordinates.b);
 		var distanceComparison = F2(
 			function (a, b) {
@@ -6738,19 +6729,19 @@ var $author$project$Components$App$Grid$getClosestPoint = F3(
 					$elm$core$Basics$compare,
 					A2(
 						$author$project$Components$App$Grid$distanceBetweenCoordinates,
-						_Utils_Tuple2(a.x, a.y),
+						_Utils_Tuple2(a.m, a.n),
 						offsetCoords),
 					A2(
 						$author$project$Components$App$Grid$distanceBetweenCoordinates,
-						_Utils_Tuple2(b.x, b.y),
+						_Utils_Tuple2(b.m, b.n),
 						offsetCoords));
-				switch (_v0.$) {
-					case 'LT':
-						return $elm$core$Basics$LT;
-					case 'EQ':
-						return $elm$core$Basics$EQ;
+				switch (_v0) {
+					case 0:
+						return 0;
+					case 1:
+						return 1;
 					default:
-						return $elm$core$Basics$GT;
+						return 2;
 				}
 			});
 		return A2(
@@ -6782,12 +6773,12 @@ var $elm$core$List$tail = function (list) {
 	}
 };
 var $author$project$Components$App$Grid$addNearbyPoint = function (model) {
-	var scale = model.settings.gridScale;
-	var modelGrid = model.grid;
+	var scale = model.aP.aI;
+	var modelGrid = model.F;
 	var otherNodes = A2(
 		$elm$core$Maybe$withDefault,
 		_List_Nil,
-		$elm$core$List$tail(modelGrid.drawing.activePath));
+		$elm$core$List$tail(modelGrid.as.aC));
 	var prevPrevNode = A2(
 		$elm$core$Maybe$withDefault,
 		$author$project$Components$App$Grid$emptyGridpoint,
@@ -6795,7 +6786,7 @@ var $author$project$Components$App$Grid$addNearbyPoint = function (model) {
 	var prevGridNode = A2(
 		$elm$core$Maybe$withDefault,
 		$author$project$Components$App$Grid$emptyGridpoint,
-		$elm$core$List$head(modelGrid.drawing.activePath));
+		$elm$core$List$head(modelGrid.as.aC));
 	var prevNode = A2(
 		$elm$core$Maybe$withDefault,
 		prevGridNode,
@@ -6804,29 +6795,29 @@ var $author$project$Components$App$Grid$addNearbyPoint = function (model) {
 				$elm$core$List$filter,
 				function (point) {
 					return _Utils_eq(
-						_Utils_Tuple2(point.x, point.y),
-						_Utils_Tuple2(prevGridNode.x, prevGridNode.y));
+						_Utils_Tuple2(point.m, point.n),
+						_Utils_Tuple2(prevGridNode.m, prevGridNode.n));
 				},
 				otherNodes)));
-	var gridOffset = model.window.width - model.grid.width;
-	var offsetMousePos = _Utils_Tuple2(model.mousePos.a - gridOffset, model.mousePos.b);
+	var gridOffset = model.bB.ac - model.F.ac;
+	var offsetMousePos = _Utils_Tuple2(model.a5.a - gridOffset, model.a5.b);
 	var trimmedMousePos = function () {
-		var relativeMousePos = {x: offsetMousePos.a - prevNode.x, y: offsetMousePos.b - prevNode.y};
-		var theta = A2($elm$core$Basics$atan2, relativeMousePos.y, relativeMousePos.x);
+		var relativeMousePos = {m: offsetMousePos.a - prevNode.m, n: offsetMousePos.b - prevNode.n};
+		var theta = A2($elm$core$Basics$atan2, relativeMousePos.n, relativeMousePos.m);
 		var trimmedMagnitude = A2(
 			$elm$core$Basics$min,
 			$elm$core$Basics$sqrt(
-				A2($elm$core$Basics$pow, relativeMousePos.x, 2) + A2($elm$core$Basics$pow, relativeMousePos.y, 2)),
+				A2($elm$core$Basics$pow, relativeMousePos.m, 2) + A2($elm$core$Basics$pow, relativeMousePos.n, 2)),
 			$author$project$Components$App$Grid$spacing(scale));
-		var _v0 = model.mousePos;
+		var _v0 = model.a5;
 		return _Utils_Tuple2(
-			(trimmedMagnitude * $elm$core$Basics$cos(theta)) + prevNode.x,
-			(trimmedMagnitude * $elm$core$Basics$sin(theta)) + prevNode.y);
+			(trimmedMagnitude * $elm$core$Basics$cos(theta)) + prevNode.m,
+			(trimmedMagnitude * $elm$core$Basics$sin(theta)) + prevNode.n);
 	}();
 	var closestGridNode = A3(
 		$author$project$Components$App$Grid$getClosestPoint,
 		_Utils_Tuple2(trimmedMousePos.a + gridOffset, trimmedMousePos.b),
-		modelGrid.points,
+		modelGrid.b5,
 		model);
 	var closestPoint = A2(
 		$elm$core$Maybe$withDefault,
@@ -6836,21 +6827,21 @@ var $author$project$Components$App$Grid$addNearbyPoint = function (model) {
 				$elm$core$List$filter,
 				function (point) {
 					return _Utils_eq(
-						_Utils_Tuple2(point.x, point.y),
-						_Utils_Tuple2(closestGridNode.x, closestGridNode.y));
+						_Utils_Tuple2(point.m, point.n),
+						_Utils_Tuple2(closestGridNode.m, closestGridNode.n));
 				},
-				modelGrid.drawing.activePath)));
+				modelGrid.as.aC)));
 	var mouseDistanceCloseToPoint = _Utils_cmp(
 		A2(
 			$author$project$Components$App$Grid$distanceBetweenCoordinates,
 			trimmedMousePos,
-			_Utils_Tuple2(closestPoint.x, closestPoint.y)),
+			_Utils_Tuple2(closestPoint.m, closestPoint.n)),
 		$author$project$Components$App$Grid$spacing(scale) / 2) < 1;
 	var pointCloseToPrevPoint = _Utils_cmp(
 		A2(
 			$author$project$Components$App$Grid$distanceBetweenCoordinates,
-			_Utils_Tuple2(prevNode.x, prevNode.y),
-			_Utils_Tuple2(closestPoint.x, closestPoint.y)),
+			_Utils_Tuple2(prevNode.m, prevNode.n),
+			_Utils_Tuple2(closestPoint.m, closestPoint.n)),
 		$author$project$Components$App$Grid$spacing(scale) * 1.5) < 1;
 	var pointNotConnectedToPrevPoint = !(A2(
 		$elm$core$List$any,
@@ -6861,10 +6852,10 @@ var $author$project$Components$App$Grid$addNearbyPoint = function (model) {
 			$elm$core$List$map,
 			function (pnt) {
 				return _Utils_eq(
-					_Utils_Tuple2(pnt.offsetX, pnt.offsetY),
-					_Utils_Tuple2(closestPoint.offsetX, closestPoint.offsetY));
+					_Utils_Tuple2(pnt.t, pnt.r),
+					_Utils_Tuple2(closestPoint.t, closestPoint.r));
 			},
-			prevNode.connectedPoints)) || A2(
+			prevNode.H)) || A2(
 		$elm$core$List$any,
 		function (x) {
 			return x;
@@ -6873,78 +6864,78 @@ var $author$project$Components$App$Grid$addNearbyPoint = function (model) {
 			$elm$core$List$map,
 			function (pnt) {
 				return _Utils_eq(
-					_Utils_Tuple2(pnt.offsetX, pnt.offsetY),
-					_Utils_Tuple2(prevNode.offsetX, prevNode.offsetY));
+					_Utils_Tuple2(pnt.t, pnt.r),
+					_Utils_Tuple2(prevNode.t, prevNode.r));
 			},
-			closestPoint.connectedPoints)));
+			closestPoint.H)));
 	var pointNotPrevPoint = !_Utils_eq(
-		_Utils_Tuple2(prevNode.x, prevNode.y),
-		_Utils_Tuple2(closestPoint.x, closestPoint.y));
+		_Utils_Tuple2(prevNode.m, prevNode.n),
+		_Utils_Tuple2(closestPoint.m, closestPoint.n));
 	var pointPrevPrevPoint = _Utils_eq(
-		_Utils_Tuple2(prevPrevNode.x, prevPrevNode.y),
-		_Utils_Tuple2(closestPoint.x, closestPoint.y));
+		_Utils_Tuple2(prevPrevNode.m, prevPrevNode.n),
+		_Utils_Tuple2(closestPoint.m, closestPoint.n));
 	return pointPrevPrevPoint ? A2(
 		$elm$core$List$cons,
 		_Utils_update(
 			prevPrevNode,
 			{
-				connectedPoints: A2(
+				H: A2(
 					$elm$core$List$filter,
 					function (pnt) {
 						return !_Utils_eq(
-							_Utils_Tuple2(pnt.offsetX, pnt.offsetY),
-							_Utils_Tuple2(prevNode.offsetX, prevNode.offsetY));
+							_Utils_Tuple2(pnt.t, pnt.r),
+							_Utils_Tuple2(prevNode.t, prevNode.r));
 					},
-					prevPrevNode.connectedPoints)
+					prevPrevNode.H)
 			}),
 		A2(
 			$elm$core$Maybe$withDefault,
 			_List_Nil,
-			$elm$core$List$tail(otherNodes))) : ((mouseDistanceCloseToPoint && (pointCloseToPrevPoint && (pointNotConnectedToPrevPoint && (pointNotPrevPoint && (!closestPoint.used))))) ? _Utils_ap(
+			$elm$core$List$tail(otherNodes))) : ((mouseDistanceCloseToPoint && (pointCloseToPrevPoint && (pointNotConnectedToPrevPoint && (pointNotPrevPoint && (!closestPoint.am))))) ? _Utils_ap(
 		_List_fromArray(
 			[
 				closestPoint,
 				_Utils_update(
 				prevNode,
 				{
-					connectedPoints: A2(
+					H: A2(
 						$elm$core$List$cons,
 						{
-							betweenOffsetValues: _Utils_Tuple3(
+							ap: _Utils_Tuple3(
 								_Utils_Tuple2(0, 0),
 								_Utils_Tuple2(0, 0),
 								_Utils_Tuple2(0, 0)),
-							color: $author$project$Settings$Theme$accent2,
-							offsetX: closestPoint.offsetX,
-							offsetY: closestPoint.offsetY
+							S: $author$project$Settings$Theme$accent2,
+							t: closestPoint.t,
+							r: closestPoint.r
 						},
-						prevNode.connectedPoints)
+						prevNode.H)
 				})
 			]),
-		otherNodes) : modelGrid.drawing.activePath);
+		otherNodes) : modelGrid.as.aC);
 };
 var $elm$core$Elm$JsArray$appendN = _JsArray_appendN;
 var $elm$core$Elm$JsArray$slice = _JsArray_slice;
 var $elm$core$Array$appendHelpBuilder = F2(
 	function (tail, builder) {
 		var tailLen = $elm$core$Elm$JsArray$length(tail);
-		var notAppended = ($elm$core$Array$branchFactor - $elm$core$Elm$JsArray$length(builder.tail)) - tailLen;
-		var appended = A3($elm$core$Elm$JsArray$appendN, $elm$core$Array$branchFactor, builder.tail, tail);
+		var notAppended = ($elm$core$Array$branchFactor - $elm$core$Elm$JsArray$length(builder.x)) - tailLen;
+		var appended = A3($elm$core$Elm$JsArray$appendN, $elm$core$Array$branchFactor, builder.x, tail);
 		return (notAppended < 0) ? {
-			nodeList: A2(
+			y: A2(
 				$elm$core$List$cons,
 				$elm$core$Array$Leaf(appended),
-				builder.nodeList),
-			nodeListSize: builder.nodeListSize + 1,
-			tail: A3($elm$core$Elm$JsArray$slice, notAppended, tailLen, tail)
+				builder.y),
+			s: builder.s + 1,
+			x: A3($elm$core$Elm$JsArray$slice, notAppended, tailLen, tail)
 		} : ((!notAppended) ? {
-			nodeList: A2(
+			y: A2(
 				$elm$core$List$cons,
 				$elm$core$Array$Leaf(appended),
-				builder.nodeList),
-			nodeListSize: builder.nodeListSize + 1,
-			tail: $elm$core$Elm$JsArray$empty
-		} : {nodeList: builder.nodeList, nodeListSize: builder.nodeListSize, tail: appended});
+				builder.y),
+			s: builder.s + 1,
+			x: $elm$core$Elm$JsArray$empty
+		} : {y: builder.y, s: builder.s, x: appended});
 	});
 var $elm$core$Bitwise$and = _Bitwise_and;
 var $elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
@@ -6972,7 +6963,7 @@ var $elm$core$Array$insertTailInTree = F4(
 			}
 		} else {
 			var value = A2($elm$core$Elm$JsArray$unsafeGet, pos, tree);
-			if (value.$ === 'SubTree') {
+			if (!value.$) {
 				var subTree = value.a;
 				var newSub = $elm$core$Array$SubTree(
 					A4($elm$core$Array$insertTailInTree, shift - $elm$core$Array$shiftStep, index, tail, subTree));
@@ -7046,7 +7037,7 @@ var $elm$core$Array$builderFromArray = function (_v0) {
 	var tail = _v0.d;
 	var helper = F2(
 		function (node, acc) {
-			if (node.$ === 'SubTree') {
+			if (!node.$) {
 				var subTree = node.a;
 				return A3($elm$core$Elm$JsArray$foldl, helper, acc, subTree);
 			} else {
@@ -7054,9 +7045,9 @@ var $elm$core$Array$builderFromArray = function (_v0) {
 			}
 		});
 	return {
-		nodeList: A3($elm$core$Elm$JsArray$foldl, helper, _List_Nil, tree),
-		nodeListSize: (len / $elm$core$Array$branchFactor) | 0,
-		tail: tail
+		y: A3($elm$core$Elm$JsArray$foldl, helper, _List_Nil, tree),
+		s: (len / $elm$core$Array$branchFactor) | 0,
+		x: tail
 	};
 };
 var $elm$core$Array$append = F2(
@@ -7068,7 +7059,7 @@ var $elm$core$Array$append = F2(
 		if (_Utils_cmp(bLen, $elm$core$Array$branchFactor * 4) < 1) {
 			var foldHelper = F2(
 				function (node, array) {
-					if (node.$ === 'SubTree') {
+					if (!node.$) {
 						var tree = node.a;
 						return A3($elm$core$Elm$JsArray$foldl, foldHelper, array, tree);
 					} else {
@@ -7083,7 +7074,7 @@ var $elm$core$Array$append = F2(
 		} else {
 			var foldHelper = F2(
 				function (node, builder) {
-					if (node.$ === 'SubTree') {
+					if (!node.$) {
 						var tree = node.a;
 						return A3($elm$core$Elm$JsArray$foldl, foldHelper, builder, tree);
 					} else {
@@ -7165,7 +7156,7 @@ var $elm$core$Array$sliceLeft = F2(
 				var skipNodes = (from / $elm$core$Array$branchFactor) | 0;
 				var helper = F2(
 					function (node, acc) {
-						if (node.$ === 'SubTree') {
+						if (!node.$) {
 							var subTree = node.a;
 							return A3($elm$core$Elm$JsArray$foldr, helper, acc, subTree);
 						} else {
@@ -7187,9 +7178,9 @@ var $elm$core$Array$sliceLeft = F2(
 					var rest = nodesToInsert.b;
 					var firstSlice = from - (skipNodes * $elm$core$Array$branchFactor);
 					var initialBuilder = {
-						nodeList: _List_Nil,
-						nodeListSize: 0,
-						tail: A3(
+						y: _List_Nil,
+						s: 0,
+						x: A3(
 							$elm$core$Elm$JsArray$slice,
 							firstSlice,
 							$elm$core$Elm$JsArray$length(head),
@@ -7209,7 +7200,7 @@ var $elm$core$Array$fetchNewTail = F4(
 		while (true) {
 			var pos = $elm$core$Array$bitMask & (treeEnd >>> shift);
 			var _v0 = A2($elm$core$Elm$JsArray$unsafeGet, pos, tree);
-			if (_v0.$ === 'SubTree') {
+			if (!_v0.$) {
 				var sub = _v0.a;
 				var $temp$shift = shift - $elm$core$Array$shiftStep,
 					$temp$end = end,
@@ -7234,7 +7225,7 @@ var $elm$core$Array$hoistTree = F3(
 				return tree;
 			} else {
 				var _v0 = A2($elm$core$Elm$JsArray$unsafeGet, 0, tree);
-				if (_v0.$ === 'SubTree') {
+				if (!_v0.$) {
 					var sub = _v0.a;
 					var $temp$oldShift = oldShift - $elm$core$Array$shiftStep,
 						$temp$newShift = newShift,
@@ -7253,7 +7244,7 @@ var $elm$core$Array$sliceTree = F3(
 	function (shift, endIdx, tree) {
 		var lastPos = $elm$core$Array$bitMask & (endIdx >>> shift);
 		var _v0 = A2($elm$core$Elm$JsArray$unsafeGet, lastPos, tree);
-		if (_v0.$ === 'SubTree') {
+		if (!_v0.$) {
 			var sub = _v0.a;
 			var newSub = A3($elm$core$Array$sliceTree, shift - $elm$core$Array$shiftStep, endIdx, sub);
 			return (!$elm$core$Elm$JsArray$length(newSub)) ? A3($elm$core$Elm$JsArray$slice, 0, lastPos, tree) : A3(
@@ -7344,25 +7335,25 @@ var $author$project$Logic$App$PatternList$PatternArray$updateDrawingColors = fun
 				return _Utils_update(
 					pnt,
 					{
-						connectedPoints: A2(
+						H: A2(
 							$elm$core$List$map,
 							function (conPnt) {
 								return _Utils_update(
 									conPnt,
 									{
-										color: (!patternTuple.a.active) ? 'grey' : patternTuple.a.color
+										S: (!patternTuple.a.di) ? 'grey' : patternTuple.a.S
 									});
 							},
-							pnt.connectedPoints)
+							pnt.H)
 					});
 			},
 			patternTuple.b));
 };
 var $author$project$Logic$App$PatternList$PatternArray$addToPatternArray = F3(
 	function (model, pattern, index) {
-		var patternList = model.patternArray;
-		var drawing = model.grid.drawing;
-		var patternDrawingPair = _Utils_Tuple2(pattern, drawing.activePath);
+		var patternList = model.eE;
+		var drawing = model.F.as;
+		var patternDrawingPair = _Utils_Tuple2(pattern, drawing.aC);
 		return A3(
 			$elm_community$array_extra$Array$Extra$insertAt,
 			index,
@@ -7371,7 +7362,7 @@ var $author$project$Logic$App$PatternList$PatternArray$addToPatternArray = F3(
 	});
 var $elm$core$Maybe$andThen = F2(
 	function (callback, maybeValue) {
-		if (maybeValue.$ === 'Just') {
+		if (!maybeValue.$) {
 			var value = maybeValue.a;
 			return callback(value);
 		} else {
@@ -7383,49 +7374,49 @@ var $author$project$Settings$Theme$accent4 = '#dd6666';
 var $author$project$Settings$Theme$accent5 = '#E0E3B8';
 var $author$project$Logic$App$PatternList$PatternArray$applyColorToPatternFromResult = F2(
 	function (pattern, result) {
-		switch (result.$) {
-			case 'Succeeded':
+		switch (result) {
+			case 0:
 				return _Utils_update(
 					pattern,
-					{color: $author$project$Settings$Theme$accent1});
-			case 'Failed':
+					{S: $author$project$Settings$Theme$accent1});
+			case 1:
 				return _Utils_update(
 					pattern,
-					{color: $author$project$Settings$Theme$accent4});
+					{S: $author$project$Settings$Theme$accent4});
 			default:
 				return _Utils_update(
 					pattern,
-					{color: $author$project$Settings$Theme$accent5});
+					{S: $author$project$Settings$Theme$accent5});
 		}
 	});
 var $author$project$Logic$App$Types$PatternIota = F2(
 	function (a, b) {
-		return {$: 'PatternIota', a: a, b: b};
+		return {$: 5, a: a, b: b};
 	});
-var $author$project$Logic$App$Types$CatastrophicFailure = {$: 'CatastrophicFailure'};
-var $author$project$Logic$App$Types$Considered = {$: 'Considered'};
-var $author$project$Logic$App$Types$Failed = {$: 'Failed'};
+var $author$project$Logic$App$Types$CatastrophicFailure = 12;
+var $author$project$Logic$App$Types$Considered = 2;
+var $author$project$Logic$App$Types$Failed = 1;
 var $author$project$Logic$App$Types$Garbage = function (a) {
-	return {$: 'Garbage', a: a};
+	return {$: 7, a: a};
 };
-var $author$project$Logic$App$Types$IncorrectIota = {$: 'IncorrectIota'};
+var $author$project$Logic$App$Types$IncorrectIota = 2;
 var $author$project$Logic$App$Types$IotaList = function (a) {
-	return {$: 'IotaList', a: a};
+	return {$: 4, a: a};
 };
-var $author$project$Logic$App$Types$NotEnoughIotas = {$: 'NotEnoughIotas'};
-var $author$project$Logic$App$Types$Null = {$: 'Null'};
-var $author$project$Logic$App$Types$NullType = {$: 'NullType'};
+var $author$project$Logic$App$Types$NotEnoughIotas = 1;
+var $author$project$Logic$App$Types$Null = {$: 6};
+var $author$project$Logic$App$Types$NullType = {$: 6};
 var $author$project$Logic$App$Types$OpenParenthesis = function (a) {
-	return {$: 'OpenParenthesis', a: a};
+	return {$: 8, a: a};
 };
-var $author$project$Logic$App$Types$Succeeded = {$: 'Succeeded'};
+var $author$project$Logic$App$Types$Succeeded = 0;
 var $elm$core$Array$getHelp = F3(
 	function (shift, index, tree) {
 		getHelp:
 		while (true) {
 			var pos = $elm$core$Array$bitMask & (index >>> shift);
 			var _v0 = A2($elm$core$Elm$JsArray$unsafeGet, pos, tree);
-			if (_v0.$ === 'SubTree') {
+			if (!_v0.$) {
 				var subTree = _v0.a;
 				var $temp$shift = shift - $elm$core$Array$shiftStep,
 					$temp$index = index,
@@ -7456,7 +7447,7 @@ var $elm$core$Array$setHelp = F4(
 	function (shift, index, value, tree) {
 		var pos = $elm$core$Array$bitMask & (index >>> shift);
 		var _v0 = A2($elm$core$Elm$JsArray$unsafeGet, pos, tree);
-		if (_v0.$ === 'SubTree') {
+		if (!_v0.$) {
 			var subTree = _v0.a;
 			var newSub = A4($elm$core$Array$setHelp, shift - $elm$core$Array$shiftStep, index, value, subTree);
 			return A3(
@@ -7507,7 +7498,7 @@ var $elm$core$Array$fromListHelp = F3(
 				return A2(
 					$elm$core$Array$builderToArray,
 					true,
-					{nodeList: nodeList, nodeListSize: nodeListSize, tail: jsArray});
+					{y: nodeList, s: nodeListSize, x: jsArray});
 			} else {
 				var $temp$list = remainingItems,
 					$temp$nodeList = A2(
@@ -7541,7 +7532,7 @@ var $author$project$Logic$App$Utils$Utils$unshift = F2(
 var $author$project$Logic$App$Stack$EvalStack$addEscapedIotaToStack = F2(
 	function (stack, iota) {
 		var _v0 = A2($elm$core$Array$get, 0, stack);
-		if ((_v0.$ === 'Just') && (_v0.a.$ === 'OpenParenthesis')) {
+		if ((!_v0.$) && (_v0.a.$ === 8)) {
 			var list = _v0.a.a;
 			return A3(
 				$elm$core$Array$set,
@@ -7571,7 +7562,7 @@ var $elm$core$Array$foldl = F3(
 		var tail = _v0.d;
 		var helper = F2(
 			function (node, acc) {
-				if (node.$ === 'SubTree') {
+				if (!node.$) {
 					var subTree = node.a;
 					return A3($elm$core$Elm$JsArray$foldl, helper, acc, subTree);
 				} else {
@@ -7586,7 +7577,7 @@ var $elm$core$Array$foldl = F3(
 			tail);
 	});
 var $author$project$Logic$App$Patterns$OperatorUtils$getIotaList = function (iota) {
-	if (iota.$ === 'IotaList') {
+	if (iota.$ === 4) {
 		return $elm$core$Maybe$Just(iota);
 	} else {
 		return $elm$core$Maybe$Nothing;
@@ -7594,16 +7585,16 @@ var $author$project$Logic$App$Patterns$OperatorUtils$getIotaList = function (iot
 };
 var $author$project$Logic$App$Patterns$OperatorUtils$getPatternOrIotaList = function (iota) {
 	switch (iota.$) {
-		case 'PatternIota':
+		case 5:
 			return $elm$core$Maybe$Just(iota);
-		case 'IotaList':
+		case 4:
 			return $elm$core$Maybe$Just(iota);
 		default:
 			return $elm$core$Maybe$Nothing;
 	}
 };
 var $author$project$Logic$App$Utils$Utils$isJust = function (maybe) {
-	if (maybe.$ === 'Just') {
+	if (!maybe.$) {
 		return true;
 	} else {
 		return false;
@@ -7617,7 +7608,7 @@ var $elm$core$Array$map = F2(
 		var tree = _v0.c;
 		var tail = _v0.d;
 		var helper = function (node) {
-			if (node.$ === 'SubTree') {
+			if (!node.$) {
 				var subTree = node.a;
 				return $elm$core$Array$SubTree(
 					A2($elm$core$Elm$JsArray$map, helper, subTree));
@@ -7636,7 +7627,7 @@ var $elm$core$Array$map = F2(
 	});
 var $elm$core$Maybe$map = F2(
 	function (f, maybe) {
-		if (maybe.$ === 'Just') {
+		if (!maybe.$) {
 			var value = maybe.a;
 			return $elm$core$Maybe$Just(
 				f(value));
@@ -7645,8 +7636,8 @@ var $elm$core$Maybe$map = F2(
 		}
 	});
 var $author$project$Logic$App$Patterns$OperatorUtils$mapNothingToMissingIota = function (maybeIota) {
-	if (maybeIota.$ === 'Nothing') {
-		return $author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas);
+	if (maybeIota.$ === 1) {
+		return $author$project$Logic$App$Types$Garbage(1);
 	} else {
 		var iota = maybeIota.a;
 		return iota;
@@ -7656,7 +7647,7 @@ var $author$project$Logic$App$Patterns$OperatorUtils$moveNothingsToFront = funct
 	var comparison = F2(
 		function (a, b) {
 			var checkNothing = function (x) {
-				if (x.$ === 'Nothing') {
+				if (x.$ === 1) {
 					return 1;
 				} else {
 					return 2;
@@ -7666,13 +7657,13 @@ var $author$project$Logic$App$Patterns$OperatorUtils$moveNothingsToFront = funct
 				$elm$core$Basics$compare,
 				checkNothing(a),
 				checkNothing(b));
-			switch (_v0.$) {
-				case 'LT':
-					return $elm$core$Basics$LT;
-				case 'EQ':
-					return $elm$core$Basics$EQ;
+			switch (_v0) {
+				case 0:
+					return 0;
+				case 1:
+					return 1;
 				default:
-					return $elm$core$Basics$GT;
+					return 2;
 			}
 		});
 	return A2($elm$core$List$sortWith, comparison, list);
@@ -7682,15 +7673,15 @@ var $elm_community$array_extra$Array$Extra$reverse = A2($elm$core$Basics$compose
 var $author$project$Logic$App$Stack$EvalStack$applyPatternToStack = F4(
 	function (stack, ctx, pattern, index) {
 		var _v11 = A2($elm$core$Array$get, 0, stack);
-		if ((_v11.$ === 'Just') && (_v11.a.$ === 'OpenParenthesis')) {
+		if ((!_v11.$) && (_v11.a.$ === 8)) {
 			var list = _v11.a.a;
 			var numberOfOpenParen = 1 + $elm$core$Array$length(
 				A2(
 					$elm$core$Array$filter,
 					function (iota) {
-						if ((iota.$ === 'PatternIota') && (!iota.b)) {
+						if ((iota.$ === 5) && (!iota.b)) {
 							var pat = iota.a;
-							return pat.internalName === 'open_paren';
+							return pat.dZ === 'open_paren';
 						} else {
 							return false;
 						}
@@ -7700,9 +7691,9 @@ var $author$project$Logic$App$Stack$EvalStack$applyPatternToStack = F4(
 				A2(
 					$elm$core$Array$filter,
 					function (iota) {
-						if ((iota.$ === 'PatternIota') && (!iota.b)) {
+						if ((iota.$ === 5) && (!iota.b)) {
 							var pat = iota.a;
-							return pat.internalName === 'close_paren';
+							return pat.dZ === 'close_paren';
 						} else {
 							return false;
 						}
@@ -7717,25 +7708,25 @@ var $author$project$Logic$App$Stack$EvalStack$applyPatternToStack = F4(
 						A2($author$project$Logic$App$Types$PatternIota, pattern, false),
 						list)),
 				stack);
-			if (pattern.internalName === 'escape') {
+			if (pattern.dZ === 'escape') {
 				return {
-					considerNext: true,
-					ctx: ctx,
-					result: $author$project$Logic$App$Types$Succeeded,
-					stack: stack,
-					timeline: $elm$core$Array$fromList(
+					E: true,
+					aW: ctx,
+					A: 0,
+					eW: stack,
+					be: $elm$core$Array$fromList(
 						_List_fromArray(
 							[
-								{patternIndex: index, stack: stack}
+								{eF: index, eW: stack}
 							]))
 				};
 			} else {
-				if (pattern.internalName === 'close_paren') {
-					if ((pattern.internalName === 'close_paren') && (_Utils_cmp(numberOfCloseParen + 1, numberOfOpenParen) > -1)) {
+				if (pattern.dZ === 'close_paren') {
+					if ((pattern.dZ === 'close_paren') && (_Utils_cmp(numberOfCloseParen + 1, numberOfOpenParen) > -1)) {
 						var newStack = A2(
 							$elm$core$Array$map,
 							function (iota) {
-								if (iota.$ === 'OpenParenthesis') {
+								if (iota.$ === 8) {
 									var l = iota.a;
 									return $author$project$Logic$App$Types$IotaList(l);
 								} else {
@@ -7745,172 +7736,172 @@ var $author$project$Logic$App$Stack$EvalStack$applyPatternToStack = F4(
 							},
 							stack);
 						return {
-							considerNext: false,
-							ctx: ctx,
-							result: $author$project$Logic$App$Types$Succeeded,
-							stack: newStack,
-							timeline: $elm$core$Array$fromList(
+							E: false,
+							aW: ctx,
+							A: 0,
+							eW: newStack,
+							be: $elm$core$Array$fromList(
 								_List_fromArray(
 									[
-										{patternIndex: index, stack: newStack}
+										{eF: index, eW: newStack}
 									]))
 						};
 					} else {
 						return {
-							considerNext: false,
-							ctx: ctx,
-							result: $author$project$Logic$App$Types$Considered,
-							stack: addToIntroList,
-							timeline: $elm$core$Array$fromList(
+							E: false,
+							aW: ctx,
+							A: 2,
+							eW: addToIntroList,
+							be: $elm$core$Array$fromList(
 								_List_fromArray(
 									[
-										{patternIndex: index, stack: addToIntroList}
+										{eF: index, eW: addToIntroList}
 									]))
 						};
 					}
 				} else {
-					if (pattern.internalName === 'open_paren') {
+					if (pattern.dZ === 'open_paren') {
 						return {
-							considerNext: false,
-							ctx: ctx,
-							result: $author$project$Logic$App$Types$Considered,
-							stack: addToIntroList,
-							timeline: $elm$core$Array$fromList(
+							E: false,
+							aW: ctx,
+							A: 2,
+							eW: addToIntroList,
+							be: $elm$core$Array$fromList(
 								_List_fromArray(
 									[
-										{patternIndex: index, stack: addToIntroList}
+										{eF: index, eW: addToIntroList}
 									]))
 						};
 					} else {
 						return {
-							considerNext: false,
-							ctx: ctx,
-							result: $author$project$Logic$App$Types$Considered,
-							stack: addToIntroList,
-							timeline: $elm$core$Array$fromList(
+							E: false,
+							aW: ctx,
+							A: 2,
+							eW: addToIntroList,
+							be: $elm$core$Array$fromList(
 								_List_fromArray(
 									[
-										{patternIndex: index, stack: addToIntroList}
+										{eF: index, eW: addToIntroList}
 									]))
 						};
 					}
 				}
 			}
 		} else {
-			if (pattern.internalName === 'escape') {
+			if (pattern.dZ === 'escape') {
 				return {
-					considerNext: true,
-					ctx: ctx,
-					result: $author$project$Logic$App$Types$Succeeded,
-					stack: stack,
-					timeline: $elm$core$Array$fromList(
+					E: true,
+					aW: ctx,
+					A: 0,
+					eW: stack,
+					be: $elm$core$Array$fromList(
 						_List_fromArray(
 							[
-								{patternIndex: index, stack: stack}
+								{eF: index, eW: stack}
 							]))
 				};
 			} else {
-				if (pattern.internalName === 'close_paren') {
+				if (pattern.dZ === 'close_paren') {
 					return {
-						considerNext: false,
-						ctx: ctx,
-						result: $author$project$Logic$App$Types$Failed,
-						stack: A2(
+						E: false,
+						aW: ctx,
+						A: 1,
+						eW: A2(
 							$author$project$Logic$App$Utils$Utils$unshift,
 							A2($author$project$Logic$App$Types$PatternIota, pattern, false),
 							stack),
-						timeline: $elm$core$Array$fromList(
+						be: $elm$core$Array$fromList(
 							_List_fromArray(
 								[
-									{patternIndex: index, stack: stack}
+									{eF: index, eW: stack}
 								]))
 					};
 				} else {
-					if (pattern.internalName === 'eval') {
+					if (pattern.dZ === 'eval') {
 						var actionResult = A2($author$project$Logic$App$Stack$EvalStack$eval, stack, ctx);
-						return actionResult.success ? {
-							considerNext: false,
-							ctx: actionResult.ctx,
-							result: $author$project$Logic$App$Types$Succeeded,
-							stack: actionResult.stack,
-							timeline: A2(
+						return actionResult.ba ? {
+							E: false,
+							aW: actionResult.aW,
+							A: 0,
+							eW: actionResult.eW,
+							be: A2(
 								$elm$core$Array$map,
 								function (x) {
-									return {patternIndex: index, stack: x};
+									return {eF: index, eW: x};
 								},
-								actionResult.allStackStates)
+								actionResult.v)
 						} : {
-							considerNext: false,
-							ctx: actionResult.ctx,
-							result: $author$project$Logic$App$Types$Failed,
-							stack: actionResult.stack,
-							timeline: A2(
+							E: false,
+							aW: actionResult.aW,
+							A: 1,
+							eW: actionResult.eW,
+							be: A2(
 								$elm$core$Array$map,
 								function (x) {
-									return {patternIndex: index, stack: x};
+									return {eF: index, eW: x};
 								},
-								actionResult.allStackStates)
+								actionResult.v)
 						};
 					} else {
-						if (pattern.internalName === 'for_each') {
+						if (pattern.dZ === 'for_each') {
 							var actionResult = A2($author$project$Logic$App$Stack$EvalStack$forEach, stack, ctx);
-							return actionResult.success ? {
-								considerNext: false,
-								ctx: actionResult.ctx,
-								result: $author$project$Logic$App$Types$Succeeded,
-								stack: actionResult.stack,
-								timeline: A2(
+							return actionResult.ba ? {
+								E: false,
+								aW: actionResult.aW,
+								A: 0,
+								eW: actionResult.eW,
+								be: A2(
 									$elm$core$Array$map,
 									function (x) {
-										return {patternIndex: index, stack: x};
+										return {eF: index, eW: x};
 									},
-									actionResult.allStackStates)
+									actionResult.v)
 							} : {
-								considerNext: false,
-								ctx: actionResult.ctx,
-								result: $author$project$Logic$App$Types$Failed,
-								stack: actionResult.stack,
-								timeline: A2(
+								E: false,
+								aW: actionResult.aW,
+								A: 1,
+								eW: actionResult.eW,
+								be: A2(
 									$elm$core$Array$map,
 									function (x) {
-										return {patternIndex: index, stack: x};
+										return {eF: index, eW: x};
 									},
-									actionResult.allStackStates)
+									actionResult.v)
 							};
 						} else {
 							var actionResult = function () {
-								var preActionResult = A2(pattern.action, stack, ctx);
-								return (preActionResult.success && $author$project$Logic$App$Utils$Utils$isJust(pattern.selectedOutput)) ? _Utils_update(
+								var preActionResult = A2(pattern.a, stack, ctx);
+								return (preActionResult.ba && $author$project$Logic$App$Utils$Utils$isJust(pattern.ak)) ? _Utils_update(
 									preActionResult,
 									{
-										stack: A2(
+										eW: A2(
 											$author$project$Logic$App$Utils$Utils$unshift,
 											A2(
 												$elm$core$Maybe$withDefault,
 												_Utils_Tuple2($author$project$Logic$App$Types$NullType, $author$project$Logic$App$Types$Null),
-												pattern.selectedOutput).b,
-											preActionResult.stack)
+												pattern.ak).b,
+											preActionResult.eW)
 									}) : preActionResult;
 							}();
-							return actionResult.success ? {
-								considerNext: false,
-								ctx: actionResult.ctx,
-								result: $author$project$Logic$App$Types$Succeeded,
-								stack: actionResult.stack,
-								timeline: $elm$core$Array$fromList(
+							return actionResult.ba ? {
+								E: false,
+								aW: actionResult.aW,
+								A: 0,
+								eW: actionResult.eW,
+								be: $elm$core$Array$fromList(
 									_List_fromArray(
 										[
-											{patternIndex: index, stack: actionResult.stack}
+											{eF: index, eW: actionResult.eW}
 										]))
 							} : {
-								considerNext: false,
-								ctx: actionResult.ctx,
-								result: $author$project$Logic$App$Types$Failed,
-								stack: actionResult.stack,
-								timeline: $elm$core$Array$fromList(
+								E: false,
+								aW: actionResult.aW,
+								A: 1,
+								eW: actionResult.eW,
+								be: $elm$core$Array$fromList(
 									_List_fromArray(
 										[
-											{patternIndex: index, stack: actionResult.stack}
+											{eF: index, eW: actionResult.eW}
 										]))
 							};
 						}
@@ -7927,17 +7918,17 @@ var $author$project$Logic$App$Stack$EvalStack$applyToStackLoop = F7(
 			var resultArray = stackResultTuple.b;
 			var introspection = function () {
 				var _v10 = A2($elm$core$Array$get, 0, stack);
-				if ((_v10.$ === 'Just') && (_v10.a.$ === 'OpenParenthesis')) {
+				if ((!_v10.$) && (_v10.a.$ === 8)) {
 					return true;
 				} else {
 					return false;
 				}
 			}();
 			var _v8 = $elm$core$List$head(patterns);
-			if (_v8.$ === 'Nothing') {
-				return {ctx: ctx, error: false, halted: false, resultArray: resultArray, stack: stack, timeline: timeline};
+			if (_v8.$ === 1) {
+				return {aW: ctx, af: false, aJ: false, c1: resultArray, eW: stack, be: timeline};
 			} else {
-				if (_v8.a.$ === 'PatternIota') {
+				if (_v8.a.$ === 5) {
 					var _v9 = _v8.a;
 					var pattern = _v9.a;
 					if (considerThis) {
@@ -7946,7 +7937,7 @@ var $author$project$Logic$App$Stack$EvalStack$applyToStackLoop = F7(
 								$author$project$Logic$App$Stack$EvalStack$addEscapedIotaToStack,
 								stack,
 								A2($author$project$Logic$App$Types$PatternIota, pattern, true)),
-							A2($author$project$Logic$App$Utils$Utils$unshift, $author$project$Logic$App$Types$Considered, resultArray));
+							A2($author$project$Logic$App$Utils$Utils$unshift, 2, resultArray));
 						var $temp$stackResultTuple = applyResult,
 							$temp$ctx = ctx,
 							$temp$patterns = A2(
@@ -7956,7 +7947,7 @@ var $author$project$Logic$App$Stack$EvalStack$applyToStackLoop = F7(
 							$temp$currentIndex = currentIndex + 1,
 							$temp$timeline = A2(
 							$author$project$Logic$App$Utils$Utils$unshift,
-							{patternIndex: currentIndex, stack: applyResult.a},
+							{eF: currentIndex, eW: applyResult.a},
 							timeline),
 							$temp$considerThis = false,
 							$temp$stopAtErrorOrHalt = stopAtErrorOrHalt;
@@ -7969,22 +7960,22 @@ var $author$project$Logic$App$Stack$EvalStack$applyToStackLoop = F7(
 						stopAtErrorOrHalt = $temp$stopAtErrorOrHalt;
 						continue applyToStackLoop;
 					} else {
-						if ((pattern.internalName === 'halt') && stopAtErrorOrHalt) {
-							return {ctx: ctx, error: false, halted: true, resultArray: resultArray, stack: stack, timeline: timeline};
+						if ((pattern.dZ === 'halt') && stopAtErrorOrHalt) {
+							return {aW: ctx, af: false, aJ: true, c1: resultArray, eW: stack, be: timeline};
 						} else {
 							var applyResult = A4($author$project$Logic$App$Stack$EvalStack$applyPatternToStack, stack, ctx, pattern, currentIndex);
-							if ((!stopAtErrorOrHalt) || (stopAtErrorOrHalt && (!_Utils_eq(applyResult.result, $author$project$Logic$App$Types$Failed)))) {
+							if ((!stopAtErrorOrHalt) || (stopAtErrorOrHalt && (applyResult.A !== 1))) {
 								var $temp$stackResultTuple = _Utils_Tuple2(
-									applyResult.stack,
-									A2($author$project$Logic$App$Utils$Utils$unshift, applyResult.result, resultArray)),
-									$temp$ctx = applyResult.ctx,
+									applyResult.eW,
+									A2($author$project$Logic$App$Utils$Utils$unshift, applyResult.A, resultArray)),
+									$temp$ctx = applyResult.aW,
 									$temp$patterns = A2(
 									$elm$core$Maybe$withDefault,
 									_List_Nil,
 									$elm$core$List$tail(patterns)),
 									$temp$currentIndex = currentIndex + 1,
-									$temp$timeline = A2($elm$core$Array$append, applyResult.timeline, timeline),
-									$temp$considerThis = applyResult.considerNext,
+									$temp$timeline = A2($elm$core$Array$append, applyResult.be, timeline),
+									$temp$considerThis = applyResult.E,
 									$temp$stopAtErrorOrHalt = stopAtErrorOrHalt;
 								stackResultTuple = $temp$stackResultTuple;
 								ctx = $temp$ctx;
@@ -7996,14 +7987,14 @@ var $author$project$Logic$App$Stack$EvalStack$applyToStackLoop = F7(
 								continue applyToStackLoop;
 							} else {
 								return {
-									ctx: applyResult.ctx,
-									error: true,
-									halted: false,
-									resultArray: A2($author$project$Logic$App$Utils$Utils$unshift, applyResult.result, resultArray),
-									stack: applyResult.stack,
-									timeline: A2(
+									aW: applyResult.aW,
+									af: true,
+									aJ: false,
+									c1: A2($author$project$Logic$App$Utils$Utils$unshift, applyResult.A, resultArray),
+									eW: applyResult.eW,
+									be: A2(
 										$elm$core$Array$push,
-										{patternIndex: currentIndex, stack: applyResult.stack},
+										{eF: currentIndex, eW: applyResult.eW},
 										timeline)
 								};
 							}
@@ -8014,7 +8005,7 @@ var $author$project$Logic$App$Stack$EvalStack$applyToStackLoop = F7(
 					if (considerThis || introspection) {
 						var applyResult = _Utils_Tuple2(
 							A2($author$project$Logic$App$Stack$EvalStack$addEscapedIotaToStack, stack, iota),
-							A2($author$project$Logic$App$Utils$Utils$unshift, $author$project$Logic$App$Types$Considered, resultArray));
+							A2($author$project$Logic$App$Utils$Utils$unshift, 2, resultArray));
 						var $temp$stackResultTuple = applyResult,
 							$temp$ctx = ctx,
 							$temp$patterns = A2(
@@ -8024,7 +8015,7 @@ var $author$project$Logic$App$Stack$EvalStack$applyToStackLoop = F7(
 							$temp$currentIndex = currentIndex + 1,
 							$temp$timeline = A2(
 							$elm$core$Array$push,
-							{patternIndex: currentIndex, stack: applyResult.a},
+							{eF: currentIndex, eW: applyResult.a},
 							timeline),
 							$temp$considerThis = false,
 							$temp$stopAtErrorOrHalt = stopAtErrorOrHalt;
@@ -8037,7 +8028,7 @@ var $author$project$Logic$App$Stack$EvalStack$applyToStackLoop = F7(
 						stopAtErrorOrHalt = $temp$stopAtErrorOrHalt;
 						continue applyToStackLoop;
 					} else {
-						return {ctx: ctx, error: true, halted: false, resultArray: resultArray, stack: stack, timeline: timeline};
+						return {aW: ctx, af: true, aJ: false, c1: resultArray, eW: stack, be: timeline};
 					}
 				}
 			}
@@ -8063,69 +8054,69 @@ var $author$project$Logic$App$Stack$EvalStack$eval = F2(
 			$elm$core$Array$length(stack),
 			stack);
 		var maybeIota = A2($elm$core$Array$get, 0, stack);
-		if (maybeIota.$ === 'Nothing') {
+		if (maybeIota.$ === 1) {
 			return {
-				allStackStates: $elm$core$Array$fromList(
+				v: $elm$core$Array$fromList(
 					_List_fromArray(
 						[
 							A2(
 							$author$project$Logic$App$Utils$Utils$unshift,
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
+							$author$project$Logic$App$Types$Garbage(1),
 							newStack)
 						])),
-				ctx: ctx,
-				stack: A2(
+				aW: ctx,
+				eW: A2(
 					$author$project$Logic$App$Utils$Utils$unshift,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
+					$author$project$Logic$App$Types$Garbage(1),
 					newStack),
-				success: false
+				ba: false
 			};
 		} else {
 			var iota = maybeIota.a;
 			var _v5 = $author$project$Logic$App$Patterns$OperatorUtils$getPatternOrIotaList(iota);
-			if (_v5.$ === 'Nothing') {
+			if (_v5.$ === 1) {
 				return {
-					allStackStates: $elm$core$Array$fromList(
+					v: $elm$core$Array$fromList(
 						_List_fromArray(
 							[
 								A2(
 								$author$project$Logic$App$Utils$Utils$unshift,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+								$author$project$Logic$App$Types$Garbage(2),
 								newStack)
 							])),
-					ctx: ctx,
-					stack: A2(
+					aW: ctx,
+					eW: A2(
 						$author$project$Logic$App$Utils$Utils$unshift,
-						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+						$author$project$Logic$App$Types$Garbage(2),
 						newStack),
-					success: false
+					ba: false
 				};
 			} else {
 				switch (iota.$) {
-					case 'IotaList':
+					case 4:
 						var list = iota.a;
 						var applyResult = A3($author$project$Logic$App$Stack$EvalStack$applyToStackStopAtErrorOrHalt, newStack, ctx, list);
 						return {
-							allStackStates: A2(
+							v: A2(
 								$elm$core$Array$map,
 								function (x) {
-									return x.stack;
+									return x.eW;
 								},
-								applyResult.timeline),
-							ctx: applyResult.ctx,
-							stack: A2(
+								applyResult.be),
+							aW: applyResult.aW,
+							eW: A2(
 								$elm$core$Array$filter,
 								function (i) {
-									if (i.$ === 'OpenParenthesis') {
+									if (i.$ === 8) {
 										return false;
 									} else {
 										return true;
 									}
 								},
-								applyResult.stack),
-							success: !applyResult.error
+								applyResult.eW),
+							ba: !applyResult.af
 						};
-					case 'PatternIota':
+					case 5:
 						var pattern = iota.a;
 						var applyResult = A3(
 							$author$project$Logic$App$Stack$EvalStack$applyToStackStopAtErrorOrHalt,
@@ -8137,34 +8128,34 @@ var $author$project$Logic$App$Stack$EvalStack$eval = F2(
 										A2($author$project$Logic$App$Types$PatternIota, pattern, false)
 									])));
 						return {
-							allStackStates: A2(
+							v: A2(
 								$elm$core$Array$map,
 								function (x) {
-									return x.stack;
+									return x.eW;
 								},
-								applyResult.timeline),
-							ctx: applyResult.ctx,
-							stack: applyResult.stack,
-							success: !applyResult.error
+								applyResult.be),
+							aW: applyResult.aW,
+							eW: applyResult.eW,
+							ba: !applyResult.af
 						};
 					default:
 						return {
-							allStackStates: $elm$core$Array$fromList(
+							v: $elm$core$Array$fromList(
 								_List_fromArray(
 									[
 										$elm$core$Array$fromList(
 										_List_fromArray(
 											[
-												$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure)
+												$author$project$Logic$App$Types$Garbage(12)
 											]))
 									])),
-							ctx: ctx,
-							stack: $elm$core$Array$fromList(
+							aW: ctx,
+							eW: $elm$core$Array$fromList(
 								_List_fromArray(
 									[
-										$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure)
+										$author$project$Logic$App$Types$Garbage(12)
 									])),
-							success: false
+							ba: false
 						};
 				}
 			}
@@ -8191,18 +8182,18 @@ var $author$project$Logic$App$Stack$EvalStack$forEach = F2(
 								[maybeIota1, maybeIota2])))),
 				newStack);
 			return {
-				allStackStates: $elm$core$Array$fromList(
+				v: $elm$core$Array$fromList(
 					_List_fromArray(
 						[newNewStack])),
-				ctx: ctx,
-				stack: newNewStack,
-				success: false
+				aW: ctx,
+				eW: newNewStack,
+				ba: false
 			};
 		} else {
 			var _v0 = _Utils_Tuple2(
 				A2($elm$core$Maybe$map, $author$project$Logic$App$Patterns$OperatorUtils$getIotaList, maybeIota1),
 				A2($elm$core$Maybe$map, $author$project$Logic$App$Patterns$OperatorUtils$getIotaList, maybeIota2));
-			if ((_v0.a.$ === 'Just') && (_v0.b.$ === 'Just')) {
+			if ((!_v0.a.$) && (!_v0.b.$)) {
 				var iota1 = _v0.a.a;
 				var iota2 = _v0.b.a;
 				if (_Utils_eq(iota1, $elm$core$Maybe$Nothing) || _Utils_eq(iota2, $elm$core$Maybe$Nothing)) {
@@ -8213,37 +8204,37 @@ var $author$project$Logic$App$Stack$EvalStack$forEach = F2(
 								[
 									A2(
 									$elm$core$Maybe$withDefault,
-									$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+									$author$project$Logic$App$Types$Garbage(2),
 									iota1),
 									A2(
 									$elm$core$Maybe$withDefault,
-									$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+									$author$project$Logic$App$Types$Garbage(2),
 									iota2)
 								])),
 						newStack);
 					return {
-						allStackStates: $elm$core$Array$fromList(
+						v: $elm$core$Array$fromList(
 							_List_fromArray(
 								[newNewStack])),
-						ctx: ctx,
-						stack: newNewStack,
-						success: false
+						aW: ctx,
+						eW: newNewStack,
+						ba: false
 					};
 				} else {
 					var _v1 = _Utils_Tuple2(iota1, iota2);
-					if ((((_v1.a.$ === 'Just') && (_v1.a.a.$ === 'IotaList')) && (_v1.b.$ === 'Just')) && (_v1.b.a.$ === 'IotaList')) {
+					if ((((!_v1.a.$) && (_v1.a.a.$ === 4)) && (!_v1.b.$)) && (_v1.b.a.$ === 4)) {
 						var patternList = _v1.a.a.a;
 						var iotaList = _v1.b.a.a;
 						var applyResult = A3(
 							$elm$core$Array$foldl,
 							F2(
 								function (iota, accumulator) {
-									if (!accumulator._continue) {
+									if (!accumulator.bH) {
 										return accumulator;
 									} else {
 										var thothList = function () {
-											var _v3 = A2($elm$core$Array$get, 0, accumulator.stack);
-											if ((_v3.$ === 'Just') && (_v3.a.$ === 'IotaList')) {
+											var _v3 = A2($elm$core$Array$get, 0, accumulator.eW);
+											if ((!_v3.$) && (_v3.a.$ === 4)) {
 												var list = _v3.a.a;
 												return list;
 											} else {
@@ -8253,11 +8244,11 @@ var $author$project$Logic$App$Stack$EvalStack$forEach = F2(
 										var subApplyResult = A3(
 											$author$project$Logic$App$Stack$EvalStack$applyToStackStopAtErrorOrHalt,
 											A2($author$project$Logic$App$Utils$Utils$unshift, iota, newStack),
-											accumulator.ctx,
+											accumulator.aW,
 											patternList);
-										var success = (accumulator.success && subApplyResult.error) ? false : accumulator.success;
+										var success = (accumulator.ba && subApplyResult.af) ? false : accumulator.ba;
 										return {
-											allStackStates: A2(
+											v: A2(
 												$elm$core$Array$append,
 												A2(
 													$author$project$Logic$App$Utils$Utils$unshift,
@@ -8268,93 +8259,93 @@ var $author$project$Logic$App$Stack$EvalStack$forEach = F2(
 															A2(
 																$elm$core$Array$append,
 																thothList,
-																$elm_community$array_extra$Array$Extra$reverse(subApplyResult.stack))),
-														accumulator.stack),
+																$elm_community$array_extra$Array$Extra$reverse(subApplyResult.eW))),
+														accumulator.eW),
 													A2(
 														$elm$core$Array$map,
 														function (x) {
-															return x.stack;
+															return x.eW;
 														},
-														subApplyResult.timeline)),
-												accumulator.allStackStates),
-											_continue: ((!success) || subApplyResult.halted) ? false : true,
-											ctx: subApplyResult.ctx,
-											stack: A3(
+														subApplyResult.be)),
+												accumulator.v),
+											bH: ((!success) || subApplyResult.aJ) ? false : true,
+											aW: subApplyResult.aW,
+											eW: A3(
 												$elm$core$Array$set,
 												0,
 												$author$project$Logic$App$Types$IotaList(
 													A2(
 														$elm$core$Array$append,
 														thothList,
-														$elm_community$array_extra$Array$Extra$reverse(subApplyResult.stack))),
-												accumulator.stack),
-											success: success
+														$elm_community$array_extra$Array$Extra$reverse(subApplyResult.eW))),
+												accumulator.eW),
+											ba: success
 										};
 									}
 								}),
 							{
-								allStackStates: $elm$core$Array$empty,
-								_continue: true,
-								ctx: ctx,
-								stack: A2(
+								v: $elm$core$Array$empty,
+								bH: true,
+								aW: ctx,
+								eW: A2(
 									$author$project$Logic$App$Utils$Utils$unshift,
 									$author$project$Logic$App$Types$IotaList($elm$core$Array$empty),
 									newStack),
-								success: true
+								ba: true
 							},
 							iotaList);
 						return {
-							allStackStates: applyResult.allStackStates,
-							ctx: applyResult.ctx,
-							stack: A2(
+							v: applyResult.v,
+							aW: applyResult.aW,
+							eW: A2(
 								$elm$core$Array$filter,
 								function (i) {
-									if (i.$ === 'OpenParenthesis') {
+									if (i.$ === 8) {
 										return false;
 									} else {
 										return true;
 									}
 								},
-								applyResult.stack),
-							success: applyResult.success
+								applyResult.eW),
+							ba: applyResult.ba
 						};
 					} else {
 						return {
-							allStackStates: $elm$core$Array$fromList(
+							v: $elm$core$Array$fromList(
 								_List_fromArray(
 									[
 										$elm$core$Array$fromList(
 										_List_fromArray(
 											[
-												$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure)
+												$author$project$Logic$App$Types$Garbage(12)
 											]))
 									])),
-							ctx: ctx,
-							stack: $elm$core$Array$fromList(
+							aW: ctx,
+							eW: $elm$core$Array$fromList(
 								_List_fromArray(
 									[
-										$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure)
+										$author$project$Logic$App$Types$Garbage(12)
 									])),
-							success: false
+							ba: false
 						};
 					}
 				}
 			} else {
 				return {
-					allStackStates: $elm$core$Array$fromList(
+					v: $elm$core$Array$fromList(
 						_List_fromArray(
 							[
 								A2(
 								$author$project$Logic$App$Utils$Utils$unshift,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure),
+								$author$project$Logic$App$Types$Garbage(12),
 								newStack)
 							])),
-					ctx: ctx,
-					stack: A2(
+					aW: ctx,
+					eW: A2(
 						$author$project$Logic$App$Utils$Utils$unshift,
-						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure),
+						$author$project$Logic$App$Types$Garbage(12),
 						newStack),
-					success: false
+					ba: false
 				};
 			}
 		}
@@ -8385,14 +8376,14 @@ var $author$project$Components$App$Grid$applyUsedPointsToGrid = F2(
 					$elm$core$List$filter,
 					function (activePnt) {
 						return _Utils_eq(
-							_Utils_Tuple2(activePnt.offsetX, activePnt.offsetY),
-							_Utils_Tuple2(pnt.offsetX, pnt.offsetY));
+							_Utils_Tuple2(activePnt.t, activePnt.r),
+							_Utils_Tuple2(pnt.t, pnt.r));
 					},
 					pointsToChange));
-			if (replacedPnt.$ === 'Just') {
+			if (!replacedPnt.$) {
 				return _Utils_update(
 					pnt,
-					{used: true});
+					{am: true});
 			} else {
 				return pnt;
 			}
@@ -8413,132 +8404,132 @@ var $author$project$Logic$App$Grid$clearGrid = function (points) {
 				function (point) {
 					return _Utils_update(
 						point,
-						{color: $author$project$Settings$Theme$accent1, connectedPoints: _List_Nil, used: false});
+						{S: $author$project$Settings$Theme$accent1, H: _List_Nil, am: false});
 				},
 				row);
 		},
 		points);
 };
-var $author$project$Logic$App$Types$East = {$: 'East'};
-var $author$project$Logic$App$Types$ErrorDirection = {$: 'ErrorDirection'};
-var $author$project$Logic$App$Types$Northeast = {$: 'Northeast'};
-var $author$project$Logic$App$Types$Northwest = {$: 'Northwest'};
-var $author$project$Logic$App$Types$Southeast = {$: 'Southeast'};
-var $author$project$Logic$App$Types$Southwest = {$: 'Southwest'};
-var $author$project$Logic$App$Types$West = {$: 'West'};
+var $author$project$Logic$App$Types$East = 2;
+var $author$project$Logic$App$Types$ErrorDirection = 6;
+var $author$project$Logic$App$Types$Northeast = 0;
+var $author$project$Logic$App$Types$Northwest = 1;
+var $author$project$Logic$App$Types$Southeast = 4;
+var $author$project$Logic$App$Types$Southwest = 5;
+var $author$project$Logic$App$Types$West = 3;
 var $author$project$Logic$App$Utils$DirectionMap$directionMap = _List_fromArray(
 	[
 		_Utils_Tuple2(
-		$author$project$Logic$App$Types$Northeast,
+		0,
 		_Utils_Tuple2(1, -1)),
 		_Utils_Tuple2(
-		$author$project$Logic$App$Types$East,
+		2,
 		_Utils_Tuple2(2, 0)),
 		_Utils_Tuple2(
-		$author$project$Logic$App$Types$Southeast,
+		4,
 		_Utils_Tuple2(1, 1)),
 		_Utils_Tuple2(
-		$author$project$Logic$App$Types$Southwest,
+		5,
 		_Utils_Tuple2(-1, 1)),
 		_Utils_Tuple2(
-		$author$project$Logic$App$Types$West,
+		3,
 		_Utils_Tuple2(-2, 0)),
 		_Utils_Tuple2(
-		$author$project$Logic$App$Types$Northwest,
+		1,
 		_Utils_Tuple2(-1, -1))
 	]);
 var $author$project$Logic$App$Utils$LetterMap$letterMap = _List_fromArray(
 	[
 		_Utils_Tuple2(
 		'w',
-		_Utils_Tuple2($author$project$Logic$App$Types$East, $author$project$Logic$App$Types$East)),
+		_Utils_Tuple2(2, 2)),
 		_Utils_Tuple2(
 		'a',
-		_Utils_Tuple2($author$project$Logic$App$Types$East, $author$project$Logic$App$Types$Northwest)),
+		_Utils_Tuple2(2, 1)),
 		_Utils_Tuple2(
 		'q',
-		_Utils_Tuple2($author$project$Logic$App$Types$East, $author$project$Logic$App$Types$Northeast)),
+		_Utils_Tuple2(2, 0)),
 		_Utils_Tuple2(
 		'd',
-		_Utils_Tuple2($author$project$Logic$App$Types$East, $author$project$Logic$App$Types$Southwest)),
+		_Utils_Tuple2(2, 5)),
 		_Utils_Tuple2(
 		'e',
-		_Utils_Tuple2($author$project$Logic$App$Types$East, $author$project$Logic$App$Types$Southeast)),
+		_Utils_Tuple2(2, 4)),
 		_Utils_Tuple2(
 		'e',
-		_Utils_Tuple2($author$project$Logic$App$Types$Northeast, $author$project$Logic$App$Types$East)),
+		_Utils_Tuple2(0, 2)),
 		_Utils_Tuple2(
 		'q',
-		_Utils_Tuple2($author$project$Logic$App$Types$Northeast, $author$project$Logic$App$Types$Northwest)),
+		_Utils_Tuple2(0, 1)),
 		_Utils_Tuple2(
 		'a',
-		_Utils_Tuple2($author$project$Logic$App$Types$Northeast, $author$project$Logic$App$Types$West)),
+		_Utils_Tuple2(0, 3)),
 		_Utils_Tuple2(
 		'w',
-		_Utils_Tuple2($author$project$Logic$App$Types$Northeast, $author$project$Logic$App$Types$Northeast)),
+		_Utils_Tuple2(0, 0)),
 		_Utils_Tuple2(
 		'd',
-		_Utils_Tuple2($author$project$Logic$App$Types$Northeast, $author$project$Logic$App$Types$Southeast)),
+		_Utils_Tuple2(0, 4)),
 		_Utils_Tuple2(
 		'd',
-		_Utils_Tuple2($author$project$Logic$App$Types$Northwest, $author$project$Logic$App$Types$East)),
+		_Utils_Tuple2(1, 2)),
 		_Utils_Tuple2(
 		'w',
-		_Utils_Tuple2($author$project$Logic$App$Types$Northwest, $author$project$Logic$App$Types$Northwest)),
+		_Utils_Tuple2(1, 1)),
 		_Utils_Tuple2(
 		'q',
-		_Utils_Tuple2($author$project$Logic$App$Types$Northwest, $author$project$Logic$App$Types$West)),
+		_Utils_Tuple2(1, 3)),
 		_Utils_Tuple2(
 		'e',
-		_Utils_Tuple2($author$project$Logic$App$Types$Northwest, $author$project$Logic$App$Types$Northeast)),
+		_Utils_Tuple2(1, 0)),
 		_Utils_Tuple2(
 		'a',
-		_Utils_Tuple2($author$project$Logic$App$Types$Northwest, $author$project$Logic$App$Types$Southwest)),
+		_Utils_Tuple2(1, 5)),
 		_Utils_Tuple2(
 		'd',
-		_Utils_Tuple2($author$project$Logic$App$Types$West, $author$project$Logic$App$Types$Northeast)),
+		_Utils_Tuple2(3, 0)),
 		_Utils_Tuple2(
 		'e',
-		_Utils_Tuple2($author$project$Logic$App$Types$West, $author$project$Logic$App$Types$Northwest)),
+		_Utils_Tuple2(3, 1)),
 		_Utils_Tuple2(
 		'w',
-		_Utils_Tuple2($author$project$Logic$App$Types$West, $author$project$Logic$App$Types$West)),
+		_Utils_Tuple2(3, 3)),
 		_Utils_Tuple2(
 		'a',
-		_Utils_Tuple2($author$project$Logic$App$Types$West, $author$project$Logic$App$Types$Southeast)),
+		_Utils_Tuple2(3, 4)),
 		_Utils_Tuple2(
 		'q',
-		_Utils_Tuple2($author$project$Logic$App$Types$West, $author$project$Logic$App$Types$Southwest)),
+		_Utils_Tuple2(3, 5)),
 		_Utils_Tuple2(
 		'a',
-		_Utils_Tuple2($author$project$Logic$App$Types$Southwest, $author$project$Logic$App$Types$East)),
+		_Utils_Tuple2(5, 2)),
 		_Utils_Tuple2(
 		'd',
-		_Utils_Tuple2($author$project$Logic$App$Types$Southwest, $author$project$Logic$App$Types$Northwest)),
+		_Utils_Tuple2(5, 1)),
 		_Utils_Tuple2(
 		'e',
-		_Utils_Tuple2($author$project$Logic$App$Types$Southwest, $author$project$Logic$App$Types$West)),
+		_Utils_Tuple2(5, 3)),
 		_Utils_Tuple2(
 		'q',
-		_Utils_Tuple2($author$project$Logic$App$Types$Southwest, $author$project$Logic$App$Types$Southeast)),
+		_Utils_Tuple2(5, 4)),
 		_Utils_Tuple2(
 		'w',
-		_Utils_Tuple2($author$project$Logic$App$Types$Southwest, $author$project$Logic$App$Types$Southwest)),
+		_Utils_Tuple2(5, 5)),
 		_Utils_Tuple2(
 		'q',
-		_Utils_Tuple2($author$project$Logic$App$Types$Southeast, $author$project$Logic$App$Types$East)),
+		_Utils_Tuple2(4, 2)),
 		_Utils_Tuple2(
 		'a',
-		_Utils_Tuple2($author$project$Logic$App$Types$Southeast, $author$project$Logic$App$Types$Northeast)),
+		_Utils_Tuple2(4, 0)),
 		_Utils_Tuple2(
 		'd',
-		_Utils_Tuple2($author$project$Logic$App$Types$Southeast, $author$project$Logic$App$Types$West)),
+		_Utils_Tuple2(4, 3)),
 		_Utils_Tuple2(
 		'w',
-		_Utils_Tuple2($author$project$Logic$App$Types$Southeast, $author$project$Logic$App$Types$Southeast)),
+		_Utils_Tuple2(4, 4)),
 		_Utils_Tuple2(
 		'e',
-		_Utils_Tuple2($author$project$Logic$App$Types$Southeast, $author$project$Logic$App$Types$Southwest))
+		_Utils_Tuple2(4, 5))
 	]);
 var $elm$core$Basics$modBy = _Basics_modBy;
 var $author$project$Logic$App$Grid$drawPattern = F3(
@@ -8558,17 +8549,17 @@ var $author$project$Logic$App$Grid$drawPattern = F3(
 		var pointConnectionToGridPoint = function (point) {
 			return _Utils_update(
 				$author$project$Components$App$Grid$emptyGridpoint,
-				{color: point.color, offsetX: point.offsetX, offsetY: point.offsetY, used: true});
+				{S: point.S, t: point.t, r: point.r, am: true});
 		};
 		var gridpointToPointConnection = function (point) {
 			return {
-				betweenOffsetValues: _Utils_Tuple3(
+				ap: _Utils_Tuple3(
 					_Utils_Tuple2(0, 0),
 					_Utils_Tuple2(0, 0),
 					_Utils_Tuple2(0, 0)),
-				color: pattern.color,
-				offsetX: point.offsetX,
-				offsetY: point.offsetY
+				S: pattern.S,
+				t: point.t,
+				r: point.r
 			};
 		};
 		var getbottomAndRightBound = F2(
@@ -8576,8 +8567,8 @@ var $author$project$Logic$App$Grid$drawPattern = F3(
 				var x = coord.a;
 				var y = coord.b;
 				return {
-					bottom: A2($elm$core$Basics$max, y, accumulator.bottom),
-					right: A2($elm$core$Basics$max, x, accumulator.right)
+					bm: A2($elm$core$Basics$max, y, accumulator.bm),
+					bx: A2($elm$core$Basics$max, x, accumulator.bx)
 				};
 			});
 		var getNextDirection = F2(
@@ -8586,7 +8577,7 @@ var $author$project$Logic$App$Grid$drawPattern = F3(
 					$elm$core$Maybe$withDefault,
 					_Utils_Tuple2(
 						'',
-						_Utils_Tuple2($author$project$Logic$App$Types$ErrorDirection, $author$project$Logic$App$Types$ErrorDirection)),
+						_Utils_Tuple2(6, 6)),
 					$elm$core$List$head(
 						A2(
 							$elm$core$List$filter,
@@ -8605,7 +8596,7 @@ var $author$project$Logic$App$Grid$drawPattern = F3(
 						getNextDirection,
 						A2(
 							$elm$core$Maybe$withDefault,
-							$author$project$Logic$App$Types$East,
+							2,
 							$elm$core$List$head(accumulator)),
 						angle),
 					accumulator);
@@ -8615,15 +8606,15 @@ var $author$project$Logic$App$Grid$drawPattern = F3(
 				var x = coord.a;
 				var y = coord.b;
 				return {
-					x: A2($elm$core$Basics$min, x, accumulator.x),
-					y: A2($elm$core$Basics$min, y, accumulator.y)
+					m: A2($elm$core$Basics$min, x, accumulator.m),
+					n: A2($elm$core$Basics$min, y, accumulator.n)
 				};
 			});
 		var directionToCoord = function (direction) {
 			return A2(
 				$elm$core$Maybe$withDefault,
 				_Utils_Tuple2(
-					$author$project$Logic$App$Types$ErrorDirection,
+					6,
 					_Utils_Tuple2(0, 0)),
 				$elm$core$List$head(
 					A2(
@@ -8637,7 +8628,7 @@ var $author$project$Logic$App$Grid$drawPattern = F3(
 		var coordsToPathCoords = F2(
 			function (coord, accumulator) {
 				var _v1 = $elm$core$List$head(accumulator);
-				if (_v1.$ === 'Just') {
+				if (!_v1.$) {
 					var prevPoint = _v1.a;
 					return A2(
 						$elm$core$List$cons,
@@ -8662,22 +8653,22 @@ var $author$project$Logic$App$Grid$drawPattern = F3(
 						$elm$core$List$foldl,
 						signatureToAngles,
 						_List_fromArray(
-							[pattern.startDirection, pattern.startDirection]),
-						A2($elm$core$String$split, '', pattern.signature)))));
+							[pattern.c9, pattern.c9]),
+						A2($elm$core$String$split, '', pattern.eU)))));
 		var leftmostAndTopmostValues = A3(
 			$elm$core$List$foldl,
 			getLeftmostAndTopmostValues,
-			{x: 0, y: 0},
+			{m: 0, n: 0},
 			pathCoords);
 		var coordToPointConnection = function (coord) {
 			return {
-				betweenOffsetValues: _Utils_Tuple3(
+				ap: _Utils_Tuple3(
 					_Utils_Tuple2(0, 0),
 					_Utils_Tuple2(0, 0),
 					_Utils_Tuple2(0, 0)),
-				color: pattern.color,
-				offsetX: coord.a,
-				offsetY: coord.b
+				S: pattern.S,
+				t: coord.a,
+				r: coord.b
 			};
 		};
 		var connectPoints = F2(
@@ -8685,13 +8676,13 @@ var $author$project$Logic$App$Grid$drawPattern = F3(
 				var prevPoint = accumulator.a;
 				var drawing = accumulator.b;
 				var _v0 = $elm$core$List$head(drawing);
-				if (_v0.$ === 'Just') {
+				if (!_v0.$) {
 					return A2(
 						$elm$core$List$any,
 						function (x) {
 							return _Utils_eq(
-								_Utils_Tuple2(x.offsetX, x.offsetY),
-								_Utils_Tuple2(point.offsetX, point.offsetY));
+								_Utils_Tuple2(x.t, x.r),
+								_Utils_Tuple2(point.t, point.r));
 						},
 						drawing) ? _Utils_Tuple2(
 						point,
@@ -8699,14 +8690,14 @@ var $author$project$Logic$App$Grid$drawPattern = F3(
 							$elm$core$List$map,
 							function (x) {
 								return _Utils_eq(
-									_Utils_Tuple2(x.offsetX, x.offsetY),
-									_Utils_Tuple2(point.offsetX, point.offsetY)) ? _Utils_update(
+									_Utils_Tuple2(x.t, x.r),
+									_Utils_Tuple2(point.t, point.r)) ? _Utils_update(
 									x,
 									{
-										connectedPoints: A2(
+										H: A2(
 											$elm$core$List$cons,
 											gridpointToPointConnection(prevPoint),
-											x.connectedPoints)
+											x.H)
 									}) : x;
 							},
 							drawing)) : _Utils_Tuple2(
@@ -8716,7 +8707,7 @@ var $author$project$Logic$App$Grid$drawPattern = F3(
 							_Utils_update(
 								point,
 								{
-									connectedPoints: _List_fromArray(
+									H: _List_fromArray(
 										[
 											gridpointToPointConnection(prevPoint)
 										])
@@ -8740,19 +8731,19 @@ var $author$project$Logic$App$Grid$drawPattern = F3(
 				},
 				A3(
 					$elm$core$List$foldl,
-					A2(positionCoords, xOffset - leftmostAndTopmostValues.x, yOffset - leftmostAndTopmostValues.y),
+					A2(positionCoords, xOffset - leftmostAndTopmostValues.m, yOffset - leftmostAndTopmostValues.n),
 					_List_Nil,
 					pathCoords))).b;
 		var bottomAndRightBound = A3(
 			$elm$core$List$foldl,
 			getbottomAndRightBound,
-			{bottom: 0, right: 0},
+			{bm: 0, bx: 0},
 			A3(
 				$elm$core$List$foldl,
-				A2(positionCoords, xOffset - leftmostAndTopmostValues.x, yOffset - leftmostAndTopmostValues.y),
+				A2(positionCoords, xOffset - leftmostAndTopmostValues.m, yOffset - leftmostAndTopmostValues.n),
 				_List_Nil,
 				pathCoords));
-		return {bottomBound: bottomAndRightBound.bottom, points: grid, rightBound: bottomAndRightBound.right};
+		return {aD: bottomAndRightBound.bm, b5: grid, ax: bottomAndRightBound.bx};
 	});
 var $author$project$Components$App$Grid$updateCoords = F2(
 	function (gridPoints, pointsToUpdate) {
@@ -8763,17 +8754,17 @@ var $author$project$Components$App$Grid$updateCoords = F2(
 						$elm$core$List$filter,
 						function (activePnt) {
 							return _Utils_eq(
-								_Utils_Tuple2(activePnt.offsetX, activePnt.offsetY),
-								_Utils_Tuple2(pnt.offsetX, pnt.offsetY));
+								_Utils_Tuple2(activePnt.t, activePnt.r),
+								_Utils_Tuple2(pnt.t, pnt.r));
 						},
 						$elm$core$List$concat(gridPoints)));
-				if (replacedPnt.$ === 'Just') {
+				if (!replacedPnt.$) {
 					var point = replacedPnt.a;
 					return A2(
 						$elm$core$List$cons,
 						_Utils_update(
 							pnt,
-							{color: $author$project$Settings$Theme$accent2, used: true, x: point.x, y: point.y}),
+							{S: $author$project$Settings$Theme$accent2, am: true, m: point.m, n: point.n}),
 						accumulator);
 				} else {
 					return accumulator;
@@ -8787,67 +8778,67 @@ var $author$project$Logic$App$Grid$drawPatterns = F2(
 			A2(
 				$elm$core$Maybe$withDefault,
 				_List_Nil,
-				$elm$core$List$head(grid.points))));
+				$elm$core$List$head(grid.b5))));
 		var addPatternToGrid = F2(
 			function (pattern, accumulator) {
-				var attemptDrawPatternResult = A3($author$project$Logic$App$Grid$drawPattern, accumulator.xOffset, accumulator.yOffset, pattern);
+				var attemptDrawPatternResult = A3($author$project$Logic$App$Grid$drawPattern, accumulator.ce, accumulator.aB, pattern);
 				var drawPatternResult = function () {
-					if (_Utils_cmp(attemptDrawPatternResult.rightBound, gridOffsetWidth) < 0) {
+					if (_Utils_cmp(attemptDrawPatternResult.ax, gridOffsetWidth) < 0) {
 						return {
-							bottomBound: attemptDrawPatternResult.bottomBound,
-							points: A2($author$project$Components$App$Grid$updateCoords, grid.points, attemptDrawPatternResult.points),
-							rightBound: attemptDrawPatternResult.rightBound,
-							yOffset: accumulator.yOffset
+							aD: attemptDrawPatternResult.aD,
+							b5: A2($author$project$Components$App$Grid$updateCoords, grid.b5, attemptDrawPatternResult.b5),
+							ax: attemptDrawPatternResult.ax,
+							aB: accumulator.aB
 						};
 					} else {
-						var drawPatternResultOld = A3($author$project$Logic$App$Grid$drawPattern, 0, accumulator.currentLowestY + 1, pattern);
+						var drawPatternResultOld = A3($author$project$Logic$App$Grid$drawPattern, 0, accumulator.aX + 1, pattern);
 						return {
-							bottomBound: drawPatternResultOld.bottomBound,
-							points: A2($author$project$Components$App$Grid$updateCoords, grid.points, drawPatternResultOld.points),
-							rightBound: drawPatternResultOld.rightBound,
-							yOffset: accumulator.currentLowestY + 1
+							aD: drawPatternResultOld.aD,
+							b5: A2($author$project$Components$App$Grid$updateCoords, grid.b5, drawPatternResultOld.b5),
+							ax: drawPatternResultOld.ax,
+							aB: accumulator.aX + 1
 						};
 					}
 				}();
 				return {
-					currentLowestY: A2($elm$core$Basics$max, accumulator.currentLowestY, drawPatternResult.bottomBound),
-					patternArray: A2(
+					aX: A2($elm$core$Basics$max, accumulator.aX, drawPatternResult.aD),
+					eE: A2(
 						$author$project$Logic$App$Utils$Utils$unshift,
-						_Utils_Tuple2(pattern, drawPatternResult.points),
-						accumulator.patternArray),
-					points: _Utils_ap(accumulator.points, drawPatternResult.points),
-					xOffset: drawPatternResult.rightBound + 1,
-					yOffset: drawPatternResult.yOffset
+						_Utils_Tuple2(pattern, drawPatternResult.b5),
+						accumulator.eE),
+					b5: _Utils_ap(accumulator.b5, drawPatternResult.b5),
+					ce: drawPatternResult.ax + 1,
+					aB: drawPatternResult.aB
 				};
 			});
 		var drawPatternsResult = A3(
 			$elm$core$Array$foldr,
 			addPatternToGrid,
-			{currentLowestY: 0, patternArray: $elm$core$Array$empty, points: _List_Nil, xOffset: 0, yOffset: 0},
+			{aX: 0, eE: $elm$core$Array$empty, b5: _List_Nil, ce: 0, aB: 0},
 			patterns);
 		return {
-			grid: _Utils_update(
+			F: _Utils_update(
 				grid,
 				{
-					drawnPoints: drawPatternsResult.points,
-					points: A2(
+					dH: drawPatternsResult.b5,
+					b5: A2(
 						$author$project$Components$App$Grid$applyUsedPointsToGrid,
-						$author$project$Logic$App$Grid$clearGrid(grid.points),
-						drawPatternsResult.points)
+						$author$project$Logic$App$Grid$clearGrid(grid.b5),
+						drawPatternsResult.b5)
 				}),
-			patternArray: drawPatternsResult.patternArray
+			eE: drawPatternsResult.eE
 		};
 	});
-var $author$project$Logic$App$Types$None = {$: 'None'};
+var $author$project$Logic$App$Types$None = 0;
 var $elm$regex$Regex$Match = F4(
 	function (match, index, number, submatches) {
-		return {index: index, match: match, number: number, submatches: submatches};
+		return {dW: index, cI: match, ei: number, eZ: submatches};
 	});
 var $elm$regex$Regex$fromStringWith = _Regex_fromStringWith;
 var $elm$regex$Regex$fromString = function (string) {
 	return A2(
 		$elm$regex$Regex$fromStringWith,
-		{caseInsensitive: false, multiline: false},
+		{dp: false, ef: false},
 		string);
 };
 var $elm$regex$Regex$never = _Regex_never;
@@ -8897,7 +8888,7 @@ var $author$project$Logic$App$Patterns$Misc$mask = F3(
 					function (x) {
 						return A2(
 							$elm$core$Maybe$withDefault,
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure),
+							$author$project$Logic$App$Types$Garbage(12),
 							x);
 					},
 					A2(
@@ -8916,45 +8907,45 @@ var $author$project$Logic$App$Patterns$Misc$mask = F3(
 					$elm$core$List$length(maskCode),
 					$elm$core$Array$length(stack),
 					stack));
-			return {ctx: ctx, stack: newStack, success: true};
+			return {aW: ctx, eW: newStack, ba: true};
 		} else {
 			return {
-				ctx: ctx,
-				stack: A2(
+				aW: ctx,
+				eW: A2(
 					$elm$core$Array$append,
 					stack,
 					A2(
 						$elm$core$Array$repeat,
 						$elm$core$List$length(maskCode) - $elm$core$Array$length(stack),
-						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas))),
-				success: false
+						$author$project$Logic$App$Types$Garbage(1))),
+				ba: false
 			};
 		}
 	});
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Logic$App$Types$Boolean = function (a) {
-	return {$: 'Boolean', a: a};
+	return {$: 2, a: a};
 };
 var $author$project$Logic$App$Types$Entity = function (a) {
-	return {$: 'Entity', a: a};
+	return {$: 3, a: a};
 };
-var $author$project$Logic$App$Types$EntityType = {$: 'EntityType'};
+var $author$project$Logic$App$Types$EntityType = {$: 3};
 var $author$project$Logic$App$Types$IotaListType = function (a) {
-	return {$: 'IotaListType', a: a};
+	return {$: 4, a: a};
 };
 var $author$project$Logic$App$Types$Number = function (a) {
-	return {$: 'Number', a: a};
+	return {$: 0, a: a};
 };
-var $author$project$Logic$App$Types$NumberType = {$: 'NumberType'};
-var $author$project$Logic$App$Types$Unset = {$: 'Unset'};
+var $author$project$Logic$App$Types$NumberType = {$: 0};
+var $author$project$Logic$App$Types$Unset = 0;
 var $author$project$Logic$App$Types$Vector = function (a) {
-	return {$: 'Vector', a: a};
+	return {$: 1, a: a};
 };
-var $author$project$Logic$App$Types$VectorType = {$: 'VectorType'};
+var $author$project$Logic$App$Types$VectorType = {$: 1};
 var $elm$core$Basics$abs = function (n) {
 	return (n < 0) ? (-n) : n;
 };
-var $author$project$Logic$App$Types$MathematicalError = {$: 'MathematicalError'};
+var $author$project$Logic$App$Types$MathematicalError = 6;
 var $elm_community$array_extra$Array$Extra$any = function (isOkay) {
 	return A2(
 		$elm$core$Array$foldl,
@@ -8971,10 +8962,10 @@ var $author$project$Logic$App$Patterns$OperatorUtils$nanOrInfinityCheck = functi
 		$elm_community$array_extra$Array$Extra$any,
 		function (i) {
 			switch (i.$) {
-				case 'Number':
+				case 0:
 					var number = i.a;
 					return $elm$core$Basics$isNaN(number) || $elm$core$Basics$isInfinite(number);
-				case 'Vector':
+				case 1:
 					var _v1 = i.a;
 					var x = _v1.a;
 					var y = _v1.b;
@@ -9001,54 +8992,51 @@ var $author$project$Logic$App$Patterns$OperatorUtils$action1Input = F4(
 			$elm$core$Array$length(stack),
 			stack);
 		var maybeIota = A2($elm$core$Array$get, 0, stack);
-		if (maybeIota.$ === 'Nothing') {
+		if (maybeIota.$ === 1) {
 			return {
-				ctx: ctx,
-				stack: A2(
+				aW: ctx,
+				eW: A2(
 					$author$project$Logic$App$Utils$Utils$unshift,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
+					$author$project$Logic$App$Types$Garbage(1),
 					newStack),
-				success: false
+				ba: false
 			};
 		} else {
 			var iota = maybeIota.a;
 			var _v1 = inputGetter(iota);
-			if (_v1.$ === 'Nothing') {
+			if (_v1.$ === 1) {
 				return {
-					ctx: ctx,
-					stack: A2(
+					aW: ctx,
+					eW: A2(
 						$author$project$Logic$App$Utils$Utils$unshift,
-						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+						$author$project$Logic$App$Types$Garbage(2),
 						newStack),
-					success: false
+					ba: false
 				};
 			} else {
 				var actionResult = A2(action, iota, ctx);
 				return $author$project$Logic$App$Patterns$OperatorUtils$nanOrInfinityCheck(actionResult.a) ? {
-					ctx: actionResult.b,
-					stack: A2(
+					aW: actionResult.b,
+					eW: A2(
 						$author$project$Logic$App$Utils$Utils$unshift,
-						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$MathematicalError),
+						$author$project$Logic$App$Types$Garbage(6),
 						stack),
-					success: false
+					ba: false
 				} : {
-					ctx: actionResult.b,
-					stack: A2($elm$core$Array$append, actionResult.a, newStack),
-					success: true
+					aW: actionResult.b,
+					eW: A2($elm$core$Array$append, actionResult.a, newStack),
+					ba: true
 				};
 			}
 		}
 	});
-var $ianmackenzie$elm_geometry$Geometry$Types$Vector3d = function (a) {
-	return {$: 'Vector3d', a: a};
-};
+var $ianmackenzie$elm_geometry$Geometry$Types$Vector3d = $elm$core$Basics$identity;
 var $ianmackenzie$elm_geometry$Vector3d$xyz = F3(
 	function (_v0, _v1, _v2) {
-		var x = _v0.a;
-		var y = _v1.a;
-		var z = _v2.a;
-		return $ianmackenzie$elm_geometry$Geometry$Types$Vector3d(
-			{x: x, y: y, z: z});
+		var x = _v0;
+		var y = _v1;
+		var z = _v2;
+		return {m: x, n: y, J: z};
 	});
 var $ianmackenzie$elm_geometry$Vector3d$fromTuple = F2(
 	function (toQuantity, _v0) {
@@ -9063,42 +9051,40 @@ var $ianmackenzie$elm_geometry$Vector3d$fromTuple = F2(
 	});
 var $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector = function (iota) {
 	switch (iota.$) {
-		case 'Vector':
+		case 1:
 			return $elm$core$Maybe$Just(iota);
-		case 'Number':
+		case 0:
 			return $elm$core$Maybe$Just(iota);
 		default:
 			return $elm$core$Maybe$Nothing;
 	}
 };
-var $ianmackenzie$elm_units$Quantity$Quantity = function (a) {
-	return {$: 'Quantity', a: a};
-};
-var $ianmackenzie$elm_units$Quantity$zero = $ianmackenzie$elm_units$Quantity$Quantity(0);
+var $ianmackenzie$elm_units$Quantity$Quantity = $elm$core$Basics$identity;
+var $ianmackenzie$elm_units$Quantity$zero = 0;
 var $ianmackenzie$elm_geometry$Vector3d$length = function (_v0) {
-	var v = _v0.a;
+	var v = _v0;
 	var largestComponent = A2(
 		$elm$core$Basics$max,
-		$elm$core$Basics$abs(v.x),
+		$elm$core$Basics$abs(v.m),
 		A2(
 			$elm$core$Basics$max,
-			$elm$core$Basics$abs(v.y),
-			$elm$core$Basics$abs(v.z)));
+			$elm$core$Basics$abs(v.n),
+			$elm$core$Basics$abs(v.J)));
 	if (!largestComponent) {
 		return $ianmackenzie$elm_units$Quantity$zero;
 	} else {
-		var scaledZ = v.z / largestComponent;
-		var scaledY = v.y / largestComponent;
-		var scaledX = v.x / largestComponent;
+		var scaledZ = v.J / largestComponent;
+		var scaledY = v.n / largestComponent;
+		var scaledX = v.m / largestComponent;
 		var scaledLength = $elm$core$Basics$sqrt(((scaledX * scaledX) + (scaledY * scaledY)) + (scaledZ * scaledZ));
-		return $ianmackenzie$elm_units$Quantity$Quantity(scaledLength * largestComponent);
+		return scaledLength * largestComponent;
 	}
 };
 var $ianmackenzie$elm_units$Length$meters = function (numMeters) {
-	return $ianmackenzie$elm_units$Quantity$Quantity(numMeters);
+	return numMeters;
 };
 var $ianmackenzie$elm_units$Quantity$unwrap = function (_v0) {
-	var value = _v0.a;
+	var value = _v0;
 	return value;
 };
 var $author$project$Logic$App$Patterns$Math$absLen = F2(
@@ -9108,14 +9094,14 @@ var $author$project$Logic$App$Patterns$Math$absLen = F2(
 				return _Utils_Tuple2(
 					function () {
 						switch (iota.$) {
-							case 'Number':
+							case 0:
 								var number = iota.a;
 								return A2(
 									$elm$core$Array$repeat,
 									1,
 									$author$project$Logic$App$Types$Number(
 										$elm$core$Basics$abs(number)));
-							case 'Vector':
+							case 1:
 								var vector = iota.a;
 								var length = $ianmackenzie$elm_units$Quantity$unwrap(
 									$ianmackenzie$elm_geometry$Vector3d$length(
@@ -9128,7 +9114,7 @@ var $author$project$Logic$App$Patterns$Math$absLen = F2(
 								return A2(
 									$elm$core$Array$repeat,
 									1,
-									$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+									$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -9146,8 +9132,8 @@ var $author$project$Logic$App$Patterns$OperatorUtils$action2Inputs = F5(
 		var maybeIota1 = A2($elm$core$Array$get, 1, stack);
 		if (_Utils_eq(maybeIota1, $elm$core$Maybe$Nothing) || _Utils_eq(maybeIota2, $elm$core$Maybe$Nothing)) {
 			return {
-				ctx: ctx,
-				stack: A2(
+				aW: ctx,
+				eW: A2(
 					$elm$core$Array$append,
 					A2(
 						$elm$core$Array$map,
@@ -9157,68 +9143,68 @@ var $author$project$Logic$App$Patterns$OperatorUtils$action2Inputs = F5(
 								_List_fromArray(
 									[maybeIota1, maybeIota2])))),
 					newStack),
-				success: false
+				ba: false
 			};
 		} else {
 			var _v0 = _Utils_Tuple2(
 				A2($elm$core$Maybe$map, inputGetter1, maybeIota1),
 				A2($elm$core$Maybe$map, inputGetter2, maybeIota2));
-			if ((_v0.a.$ === 'Just') && (_v0.b.$ === 'Just')) {
+			if ((!_v0.a.$) && (!_v0.b.$)) {
 				var iota1 = _v0.a.a;
 				var iota2 = _v0.b.a;
 				if (_Utils_eq(iota1, $elm$core$Maybe$Nothing) || _Utils_eq(iota2, $elm$core$Maybe$Nothing)) {
 					return {
-						ctx: ctx,
-						stack: A2(
+						aW: ctx,
+						eW: A2(
 							$elm$core$Array$append,
 							$elm$core$Array$fromList(
 								_List_fromArray(
 									[
 										A2(
 										$elm$core$Maybe$withDefault,
-										$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+										$author$project$Logic$App$Types$Garbage(2),
 										iota1),
 										A2(
 										$elm$core$Maybe$withDefault,
-										$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+										$author$project$Logic$App$Types$Garbage(2),
 										iota2)
 									])),
 							newStack),
-						success: false
+						ba: false
 					};
 				} else {
 					var actionResult = A3(
 						action,
 						A2(
 							$elm$core$Maybe$withDefault,
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+							$author$project$Logic$App$Types$Garbage(2),
 							iota1),
 						A2(
 							$elm$core$Maybe$withDefault,
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+							$author$project$Logic$App$Types$Garbage(2),
 							iota2),
 						ctx);
 					return $author$project$Logic$App$Patterns$OperatorUtils$nanOrInfinityCheck(actionResult.a) ? {
-						ctx: actionResult.b,
-						stack: A2(
+						aW: actionResult.b,
+						eW: A2(
 							$author$project$Logic$App$Utils$Utils$unshift,
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$MathematicalError),
+							$author$project$Logic$App$Types$Garbage(6),
 							stack),
-						success: false
+						ba: false
 					} : {
-						ctx: actionResult.b,
-						stack: A2($elm$core$Array$append, actionResult.a, newStack),
-						success: true
+						aW: actionResult.b,
+						eW: A2($elm$core$Array$append, actionResult.a, newStack),
+						ba: true
 					};
 				}
 			} else {
 				return {
-					ctx: ctx,
-					stack: A2(
+					aW: ctx,
+					eW: A2(
 						$author$project$Logic$App$Utils$Utils$unshift,
-						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure),
+						$author$project$Logic$App$Types$Garbage(12),
 						newStack),
-					success: false
+					ba: false
 				};
 			}
 		}
@@ -9233,16 +9219,16 @@ var $author$project$Logic$App$Patterns$Math$add = F2(
 						_v0$4:
 						while (true) {
 							switch (_v0.a.$) {
-								case 'Number':
+								case 0:
 									switch (_v0.b.$) {
-										case 'Number':
+										case 0:
 											var number1 = _v0.a.a;
 											var number2 = _v0.b.a;
 											return A2(
 												$elm$core$Array$repeat,
 												1,
 												$author$project$Logic$App$Types$Number(number1 + number2));
-										case 'Vector':
+										case 1:
 											var number = _v0.a.a;
 											var vector = _v0.b.a;
 											var x = vector.a;
@@ -9256,9 +9242,9 @@ var $author$project$Logic$App$Patterns$Math$add = F2(
 										default:
 											break _v0$4;
 									}
-								case 'Vector':
+								case 1:
 									switch (_v0.b.$) {
-										case 'Number':
+										case 0:
 											var vector = _v0.a.a;
 											var number = _v0.b.a;
 											var x = vector.a;
@@ -9269,7 +9255,7 @@ var $author$project$Logic$App$Patterns$Math$add = F2(
 												1,
 												$author$project$Logic$App$Types$Vector(
 													_Utils_Tuple3(x + number, y + number, z + number)));
-										case 'Vector':
+										case 1:
 											var vector1 = _v0.a.a;
 											var vector2 = _v0.b.a;
 											var _v3 = _Utils_Tuple2(vector1, vector2);
@@ -9296,21 +9282,21 @@ var $author$project$Logic$App$Patterns$Math$add = F2(
 						return A2(
 							$elm$core$Array$repeat,
 							1,
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+							$author$project$Logic$App$Types$Garbage(12));
 					}(),
 					ctx);
 			});
 		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, $author$project$Logic$App$Patterns$OperatorUtils$getNumberOrVector, action);
 	});
 var $author$project$Logic$App$Patterns$OperatorUtils$getEntity = function (iota) {
-	if (iota.$ === 'Entity') {
+	if (iota.$ === 3) {
 		return $elm$core$Maybe$Just(iota);
 	} else {
 		return $elm$core$Maybe$Nothing;
 	}
 };
 var $author$project$Logic$App$Patterns$OperatorUtils$getVector = function (iota) {
-	if (iota.$ === 'Vector') {
+	if (iota.$ === 1) {
 		return $elm$core$Maybe$Just(iota);
 	} else {
 		return $elm$core$Maybe$Nothing;
@@ -9335,16 +9321,15 @@ var $author$project$Logic$App$Patterns$Spells$addMotion = F2(
 	});
 var $ianmackenzie$elm_units$Quantity$lessThanOrEqualTo = F2(
 	function (_v0, _v1) {
-		var y = _v0.a;
-		var x = _v1.a;
+		var y = _v0;
+		var x = _v1;
 		return _Utils_cmp(x, y) < 1;
 	});
 var $ianmackenzie$elm_geometry$Vector3d$minus = F2(
 	function (_v0, _v1) {
-		var v2 = _v0.a;
-		var v1 = _v1.a;
-		return $ianmackenzie$elm_geometry$Geometry$Types$Vector3d(
-			{x: v1.x - v2.x, y: v1.y - v2.y, z: v1.z - v2.z});
+		var v2 = _v0;
+		var v1 = _v1;
+		return {m: v1.m - v2.m, n: v1.n - v2.n, J: v1.J - v2.J};
 	});
 var $ianmackenzie$elm_geometry$Vector3d$equalWithin = F3(
 	function (givenTolerance, firstVector, secondVector) {
@@ -9370,18 +9355,18 @@ var $author$project$Logic$App$Patterns$OperatorUtils$checkEquality = F2(
 		_v0$5:
 		while (true) {
 			switch (_v0.a.$) {
-				case 'PatternIota':
-					if (_v0.b.$ === 'PatternIota') {
+				case 5:
+					if (_v0.b.$ === 5) {
 						var _v1 = _v0.a;
 						var pattern1 = _v1.a;
 						var _v2 = _v0.b;
 						var pattern2 = _v2.a;
-						return _Utils_eq(pattern1.signature, pattern2.signature);
+						return _Utils_eq(pattern1.eU, pattern2.eU);
 					} else {
 						break _v0$5;
 					}
-				case 'IotaList':
-					if (_v0.b.$ === 'IotaList') {
+				case 4:
+					if (_v0.b.$ === 4) {
 						var list1 = _v0.a.a;
 						var list2 = _v0.b.a;
 						return !A2(
@@ -9398,22 +9383,18 @@ var $author$project$Logic$App$Patterns$OperatorUtils$checkEquality = F2(
 					} else {
 						break _v0$5;
 					}
-				case 'Vector':
-					if (_v0.b.$ === 'Vector') {
+				case 1:
+					if (_v0.b.$ === 1) {
 						var vector1Tuple = _v0.a.a;
 						var vector2Tuple = _v0.b.a;
 						var vector2 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector2Tuple);
 						var vector1 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector1Tuple);
-						return A3(
-							$ianmackenzie$elm_geometry$Vector3d$equalWithin,
-							$ianmackenzie$elm_units$Quantity$Quantity(tolerance),
-							vector1,
-							vector2);
+						return A3($ianmackenzie$elm_geometry$Vector3d$equalWithin, tolerance, vector1, vector2);
 					} else {
 						break _v0$5;
 					}
-				case 'Number':
-					if (_v0.b.$ === 'Number') {
+				case 0:
+					if (!_v0.b.$) {
 						var number1 = _v0.a.a;
 						var number2 = _v0.b.a;
 						return _Utils_cmp(
@@ -9422,8 +9403,8 @@ var $author$project$Logic$App$Patterns$OperatorUtils$checkEquality = F2(
 					} else {
 						break _v0$5;
 					}
-				case 'Entity':
-					if (_v0.b.$ === 'Entity') {
+				case 3:
+					if (_v0.b.$ === 3) {
 						var entity1 = _v0.a.a;
 						var entity2 = _v0.b.a;
 						return _Utils_eq(entity1, entity2);
@@ -9439,12 +9420,12 @@ var $author$project$Logic$App$Patterns$OperatorUtils$checkEquality = F2(
 var $elm$core$Basics$round = _Basics_round;
 var $author$project$Logic$App$Patterns$OperatorUtils$getIntegerOrList = function (iota) {
 	switch (iota.$) {
-		case 'Number':
+		case 0:
 			var number = iota.a;
 			return _Utils_eq(
 				$elm$core$Basics$round(number),
 				number) ? $elm$core$Maybe$Just(iota) : $elm$core$Maybe$Nothing;
-		case 'IotaList':
+		case 4:
 			return $elm$core$Maybe$Just(iota);
 		default:
 			return $elm$core$Maybe$Nothing;
@@ -9460,8 +9441,8 @@ var $author$project$Logic$App$Patterns$Math$andBit = F2(
 						_v0$2:
 						while (true) {
 							switch (_v0.a.$) {
-								case 'Number':
-									if (_v0.b.$ === 'Number') {
+								case 0:
+									if (!_v0.b.$) {
 										var number1 = _v0.a.a;
 										var number2 = _v0.b.a;
 										return A2(
@@ -9472,8 +9453,8 @@ var $author$project$Logic$App$Patterns$Math$andBit = F2(
 									} else {
 										break _v0$2;
 									}
-								case 'IotaList':
-									if (_v0.b.$ === 'IotaList') {
+								case 4:
+									if (_v0.b.$ === 4) {
 										var list1 = _v0.a.a;
 										var list2 = _v0.b.a;
 										return A2(
@@ -9499,14 +9480,14 @@ var $author$project$Logic$App$Patterns$Math$andBit = F2(
 						return A2(
 							$elm$core$Array$repeat,
 							1,
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+							$author$project$Logic$App$Types$Garbage(12));
 					}(),
 					ctx);
 			});
 		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getIntegerOrList, $author$project$Logic$App$Patterns$OperatorUtils$getIntegerOrList, action);
 	});
 var $author$project$Logic$App$Patterns$OperatorUtils$getBoolean = function (iota) {
-	if (iota.$ === 'Boolean') {
+	if (iota.$ === 2) {
 		return $elm$core$Maybe$Just(iota);
 	} else {
 		return $elm$core$Maybe$Nothing;
@@ -9519,7 +9500,7 @@ var $author$project$Logic$App$Patterns$Math$andBool = F2(
 				return _Utils_Tuple2(
 					function () {
 						var _v0 = _Utils_Tuple2(iota1, iota2);
-						if ((_v0.a.$ === 'Boolean') && (_v0.b.$ === 'Boolean')) {
+						if ((_v0.a.$ === 2) && (_v0.b.$ === 2)) {
 							var bool1 = _v0.a.a;
 							var bool2 = _v0.b.a;
 							return A2(
@@ -9530,7 +9511,7 @@ var $author$project$Logic$App$Patterns$Math$andBool = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -9546,7 +9527,7 @@ var $author$project$Logic$App$Patterns$Lists$append = F2(
 			function (listIota, iota, _v1) {
 				return _Utils_Tuple2(
 					function () {
-						if (listIota.$ === 'IotaList') {
+						if (listIota.$ === 4) {
 							var list = listIota.a;
 							return A2(
 								$elm$core$Array$repeat,
@@ -9557,7 +9538,7 @@ var $author$project$Logic$App$Patterns$Lists$append = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -9566,7 +9547,7 @@ var $author$project$Logic$App$Patterns$Lists$append = F2(
 	});
 var $elm$core$Basics$acos = _Basics_acos;
 var $author$project$Logic$App$Patterns$OperatorUtils$getNumber = function (iota) {
-	if (iota.$ === 'Number') {
+	if (!iota.$) {
 		return $elm$core$Maybe$Just(iota);
 	} else {
 		return $elm$core$Maybe$Nothing;
@@ -9578,7 +9559,7 @@ var $author$project$Logic$App$Patterns$Math$arccos = F2(
 			function (iota, _v1) {
 				return _Utils_Tuple2(
 					function () {
-						if (iota.$ === 'Number') {
+						if (!iota.$) {
 							var number = iota.a;
 							return A2(
 								$elm$core$Array$repeat,
@@ -9589,7 +9570,7 @@ var $author$project$Logic$App$Patterns$Math$arccos = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -9603,7 +9584,7 @@ var $author$project$Logic$App$Patterns$Math$arcsin = F2(
 			function (iota, _v1) {
 				return _Utils_Tuple2(
 					function () {
-						if (iota.$ === 'Number') {
+						if (!iota.$) {
 							var number = iota.a;
 							return A2(
 								$elm$core$Array$repeat,
@@ -9614,7 +9595,7 @@ var $author$project$Logic$App$Patterns$Math$arcsin = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -9628,7 +9609,7 @@ var $author$project$Logic$App$Patterns$Math$arctan = F2(
 			function (iota, _v1) {
 				return _Utils_Tuple2(
 					function () {
-						if (iota.$ === 'Number') {
+						if (!iota.$) {
 							var number = iota.a;
 							return A2(
 								$elm$core$Array$repeat,
@@ -9639,7 +9620,7 @@ var $author$project$Logic$App$Patterns$Math$arctan = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -9658,8 +9639,8 @@ var $author$project$Logic$App$Patterns$OperatorUtils$action3Inputs = F6(
 		var maybeIota1 = A2($elm$core$Array$get, 2, stack);
 		if (_Utils_eq(maybeIota1, $elm$core$Maybe$Nothing) || (_Utils_eq(maybeIota2, $elm$core$Maybe$Nothing) || _Utils_eq(maybeIota3, $elm$core$Maybe$Nothing))) {
 			return {
-				ctx: ctx,
-				stack: A2(
+				aW: ctx,
+				eW: A2(
 					$elm$core$Array$append,
 					A2(
 						$elm$core$Array$map,
@@ -9669,78 +9650,78 @@ var $author$project$Logic$App$Patterns$OperatorUtils$action3Inputs = F6(
 								_List_fromArray(
 									[maybeIota1, maybeIota2, maybeIota3])))),
 					newStack),
-				success: false
+				ba: false
 			};
 		} else {
 			var _v0 = _Utils_Tuple3(
 				A2($elm$core$Maybe$map, inputGetter1, maybeIota1),
 				A2($elm$core$Maybe$map, inputGetter2, maybeIota2),
 				A2($elm$core$Maybe$map, inputGetter3, maybeIota3));
-			if (((_v0.a.$ === 'Just') && (_v0.b.$ === 'Just')) && (_v0.c.$ === 'Just')) {
+			if (((!_v0.a.$) && (!_v0.b.$)) && (!_v0.c.$)) {
 				var iota1 = _v0.a.a;
 				var iota2 = _v0.b.a;
 				var iota3 = _v0.c.a;
 				if (_Utils_eq(iota1, $elm$core$Maybe$Nothing) || (_Utils_eq(iota2, $elm$core$Maybe$Nothing) || _Utils_eq(iota3, $elm$core$Maybe$Nothing))) {
 					return {
-						ctx: ctx,
-						stack: A2(
+						aW: ctx,
+						eW: A2(
 							$elm$core$Array$append,
 							$elm$core$Array$fromList(
 								_List_fromArray(
 									[
 										A2(
 										$elm$core$Maybe$withDefault,
-										$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+										$author$project$Logic$App$Types$Garbage(2),
 										iota1),
 										A2(
 										$elm$core$Maybe$withDefault,
-										$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+										$author$project$Logic$App$Types$Garbage(2),
 										iota2),
 										A2(
 										$elm$core$Maybe$withDefault,
-										$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+										$author$project$Logic$App$Types$Garbage(2),
 										iota3)
 									])),
 							newStack),
-						success: false
+						ba: false
 					};
 				} else {
 					var actionResult = A4(
 						action,
 						A2(
 							$elm$core$Maybe$withDefault,
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+							$author$project$Logic$App$Types$Garbage(2),
 							iota1),
 						A2(
 							$elm$core$Maybe$withDefault,
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+							$author$project$Logic$App$Types$Garbage(2),
 							iota2),
 						A2(
 							$elm$core$Maybe$withDefault,
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+							$author$project$Logic$App$Types$Garbage(2),
 							iota3),
 						ctx);
 					return $author$project$Logic$App$Patterns$OperatorUtils$nanOrInfinityCheck(actionResult.a) ? {
-						ctx: actionResult.b,
-						stack: A2(
+						aW: actionResult.b,
+						eW: A2(
 							$author$project$Logic$App$Utils$Utils$unshift,
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$MathematicalError),
+							$author$project$Logic$App$Types$Garbage(6),
 							stack),
-						success: false
+						ba: false
 					} : {
-						ctx: actionResult.b,
-						stack: A2($elm$core$Array$append, actionResult.a, newStack),
-						success: true
+						aW: actionResult.b,
+						eW: A2($elm$core$Array$append, actionResult.a, newStack),
+						ba: true
 					};
 				}
 			} else {
 				return {
-					ctx: ctx,
-					stack: A2(
+					aW: ctx,
+					eW: A2(
 						$author$project$Logic$App$Utils$Utils$unshift,
-						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure),
+						$author$project$Logic$App$Types$Garbage(12),
 						newStack),
-					success: false
+					ba: false
 				};
 			}
 		}
@@ -9790,7 +9771,7 @@ var $author$project$Logic$App$Patterns$Math$boolCoerce = F2(
 				return _Utils_Tuple2(
 					function () {
 						switch (iota.$) {
-							case 'Number':
+							case 0:
 								return A2(
 									$author$project$Logic$App$Patterns$OperatorUtils$checkEquality,
 									iota,
@@ -9801,12 +9782,12 @@ var $author$project$Logic$App$Patterns$Math$boolCoerce = F2(
 									$elm$core$Array$repeat,
 									1,
 									$author$project$Logic$App$Types$Boolean(true));
-							case 'Null':
+							case 6:
 								return A2(
 									$elm$core$Array$repeat,
 									1,
 									$author$project$Logic$App$Types$Boolean(false));
-							case 'IotaList':
+							case 4:
 								var x = iota.a;
 								return _Utils_eq(x, $elm$core$Array$empty) ? A2(
 									$elm$core$Array$repeat,
@@ -9836,7 +9817,7 @@ var $author$project$Logic$App$Patterns$Math$ceilAction = F2(
 			function (iota, _v1) {
 				return _Utils_Tuple2(
 					function () {
-						if (iota.$ === 'Number') {
+						if (!iota.$) {
 							var number = iota.a;
 							return A2(
 								$elm$core$Array$repeat,
@@ -9847,7 +9828,7 @@ var $author$project$Logic$App$Patterns$Math$ceilAction = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -9858,16 +9839,16 @@ var $author$project$Logic$App$Patterns$OperatorUtils$actionNoInput = F3(
 	function (stack, ctx, action) {
 		var actionResult = action(ctx);
 		return $author$project$Logic$App$Patterns$OperatorUtils$nanOrInfinityCheck(actionResult.a) ? {
-			ctx: actionResult.b,
-			stack: A2(
+			aW: actionResult.b,
+			eW: A2(
 				$author$project$Logic$App$Utils$Utils$unshift,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$MathematicalError),
+				$author$project$Logic$App$Types$Garbage(6),
 				stack),
-			success: false
+			ba: false
 		} : {
-			ctx: actionResult.b,
-			stack: A2($elm$core$Array$append, actionResult.a, stack),
-			success: true
+			aW: actionResult.b,
+			eW: A2($elm$core$Array$append, actionResult.a, stack),
+			ba: true
 		};
 	});
 var $author$project$Logic$App$Patterns$Circles$circleBoundsMax = F2(
@@ -9916,7 +9897,7 @@ var $author$project$Logic$App$Patterns$Math$coerceAxial = F2(
 			function (iota, _v2) {
 				return _Utils_Tuple2(
 					function () {
-						if (iota.$ === 'Vector') {
+						if (iota.$ === 1) {
 							var vector = iota.a;
 							var x = vector.a;
 							var y = vector.b;
@@ -9942,7 +9923,7 @@ var $author$project$Logic$App$Patterns$Math$coerceAxial = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -9970,7 +9951,7 @@ var $author$project$Logic$App$Patterns$Lists$concat = F2(
 				return _Utils_Tuple2(
 					function () {
 						var _v0 = _Utils_Tuple2(iota1, iota2);
-						if ((_v0.a.$ === 'IotaList') && (_v0.b.$ === 'IotaList')) {
+						if ((_v0.a.$ === 4) && (_v0.b.$ === 4)) {
 							var list1 = _v0.a.a;
 							var list2 = _v0.b.a;
 							return A2(
@@ -9982,7 +9963,7 @@ var $author$project$Logic$App$Patterns$Lists$concat = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -10003,7 +9984,7 @@ var $author$project$Logic$App$Patterns$Lists$construct = F2(
 			function (listIota, iota, _v1) {
 				return _Utils_Tuple2(
 					function () {
-						if (listIota.$ === 'IotaList') {
+						if (listIota.$ === 4) {
 							var list = listIota.a;
 							return A2(
 								$elm$core$Array$repeat,
@@ -10014,7 +9995,7 @@ var $author$project$Logic$App$Patterns$Lists$construct = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -10028,7 +10009,7 @@ var $author$project$Logic$App$Patterns$Math$constructVector = F2(
 				return _Utils_Tuple2(
 					function () {
 						var _v0 = _Utils_Tuple3(iota1, iota2, iota3);
-						if (((_v0.a.$ === 'Number') && (_v0.b.$ === 'Number')) && (_v0.c.$ === 'Number')) {
+						if (((!_v0.a.$) && (!_v0.b.$)) && (!_v0.c.$)) {
 							var number1 = _v0.a.a;
 							var number2 = _v0.b.a;
 							var number3 = _v0.c.a;
@@ -10041,7 +10022,7 @@ var $author$project$Logic$App$Patterns$Math$constructVector = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -10054,7 +10035,7 @@ var $author$project$Logic$App$Patterns$Math$cosine = F2(
 			function (iota, _v1) {
 				return _Utils_Tuple2(
 					function () {
-						if (iota.$ === 'Number') {
+						if (!iota.$) {
 							var number = iota.a;
 							return A2(
 								$elm$core$Array$repeat,
@@ -10065,7 +10046,7 @@ var $author$project$Logic$App$Patterns$Math$cosine = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -10080,12 +10061,12 @@ var $elm$core$List$all = F2(
 			list);
 	});
 var $author$project$Logic$App$Patterns$OperatorUtils$getPatternList = function (iota) {
-	if (iota.$ === 'IotaList') {
+	if (iota.$ === 4) {
 		var list = iota.a;
 		return A2(
 			$elm$core$List$all,
 			function (i) {
-				if (i.$ === 'PatternIota') {
+				if (i.$ === 5) {
 					return true;
 				} else {
 					return false;
@@ -10100,12 +10081,12 @@ var $author$project$Logic$App$Patterns$Spells$craftArtifact = F3(
 	function (requiredItem, stack, ctx) {
 		var action = F3(
 			function (iota1, iota2, context) {
-				return _Utils_eq(context.heldItem, requiredItem) ? _Utils_Tuple2(
+				return _Utils_eq(context.bo, requiredItem) ? _Utils_Tuple2(
 					$elm$core$Array$empty,
 					_Utils_update(
 						context,
 						{
-							heldItemContent: $elm$core$Maybe$Just(iota2)
+							dQ: $elm$core$Maybe$Just(iota2)
 						})) : _Utils_Tuple2(
 					$elm$core$Array$fromList(
 						_List_fromArray(
@@ -10165,7 +10146,7 @@ var $author$project$Logic$App$Patterns$Lists$deconstruct = F2(
 			function (iota, _v1) {
 				return _Utils_Tuple2(
 					function () {
-						if (iota.$ === 'IotaList') {
+						if (iota.$ === 4) {
 							var list = iota.a;
 							return $elm$core$Array$fromList(
 								_List_fromArray(
@@ -10181,7 +10162,7 @@ var $author$project$Logic$App$Patterns$Lists$deconstruct = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -10194,7 +10175,7 @@ var $author$project$Logic$App$Patterns$Math$deconstructVector = F2(
 			function (iota, _v2) {
 				return _Utils_Tuple2(
 					function () {
-						if (iota.$ === 'Vector') {
+						if (iota.$ === 1) {
 							var _v1 = iota.a;
 							var x = _v1.a;
 							var y = _v1.b;
@@ -10210,7 +10191,7 @@ var $author$project$Logic$App$Patterns$Math$deconstructVector = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -10223,26 +10204,25 @@ var $author$project$Logic$App$Patterns$Spells$destroyWater = F2(
 	});
 var $ianmackenzie$elm_geometry$Vector3d$cross = F2(
 	function (_v0, _v1) {
-		var v2 = _v0.a;
-		var v1 = _v1.a;
-		return $ianmackenzie$elm_geometry$Geometry$Types$Vector3d(
-			{x: (v1.y * v2.z) - (v1.z * v2.y), y: (v1.z * v2.x) - (v1.x * v2.z), z: (v1.x * v2.y) - (v1.y * v2.x)});
+		var v2 = _v0;
+		var v1 = _v1;
+		return {m: (v1.n * v2.J) - (v1.J * v2.n), n: (v1.J * v2.m) - (v1.m * v2.J), J: (v1.m * v2.n) - (v1.n * v2.m)};
 	});
 var $ianmackenzie$elm_units$Area$inSquareMeters = function (_v0) {
-	var numSquareMeters = _v0.a;
+	var numSquareMeters = _v0;
 	return numSquareMeters;
 };
 var $ianmackenzie$elm_geometry$Vector3d$xComponent = function (_v0) {
-	var v = _v0.a;
-	return $ianmackenzie$elm_units$Quantity$Quantity(v.x);
+	var v = _v0;
+	return v.m;
 };
 var $ianmackenzie$elm_geometry$Vector3d$yComponent = function (_v0) {
-	var v = _v0.a;
-	return $ianmackenzie$elm_units$Quantity$Quantity(v.y);
+	var v = _v0;
+	return v.n;
 };
 var $ianmackenzie$elm_geometry$Vector3d$zComponent = function (_v0) {
-	var v = _v0.a;
-	return $ianmackenzie$elm_units$Quantity$Quantity(v.z);
+	var v = _v0;
+	return v.J;
 };
 var $ianmackenzie$elm_geometry$Vector3d$toTuple = F2(
 	function (fromQuantity, vector) {
@@ -10264,16 +10244,16 @@ var $author$project$Logic$App$Patterns$Math$divCross = F2(
 						_v0$4:
 						while (true) {
 							switch (_v0.a.$) {
-								case 'Number':
+								case 0:
 									switch (_v0.b.$) {
-										case 'Number':
+										case 0:
 											var number1 = _v0.a.a;
 											var number2 = _v0.b.a;
 											return A2(
 												$elm$core$Array$repeat,
 												1,
 												$author$project$Logic$App$Types$Number(number1 / number2));
-										case 'Vector':
+										case 1:
 											var number = _v0.a.a;
 											var vector = _v0.b.a;
 											var x = vector.a;
@@ -10287,9 +10267,9 @@ var $author$project$Logic$App$Patterns$Math$divCross = F2(
 										default:
 											break _v0$4;
 									}
-								case 'Vector':
+								case 1:
 									switch (_v0.b.$) {
-										case 'Number':
+										case 0:
 											var vector = _v0.a.a;
 											var number = _v0.b.a;
 											var x = vector.a;
@@ -10300,7 +10280,7 @@ var $author$project$Logic$App$Patterns$Math$divCross = F2(
 												1,
 												$author$project$Logic$App$Types$Vector(
 													_Utils_Tuple3(x / number, y / number, z / number)));
-										case 'Vector':
+										case 1:
 											var vector1 = _v0.a.a;
 											var vector2 = _v0.b.a;
 											var vec2 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector2);
@@ -10323,7 +10303,7 @@ var $author$project$Logic$App$Patterns$Math$divCross = F2(
 						return A2(
 							$elm$core$Array$repeat,
 							1,
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+							$author$project$Logic$App$Types$Garbage(12));
 					}(),
 					ctx);
 			});
@@ -10354,7 +10334,7 @@ var $author$project$Logic$App$Patterns$Stack$duplicate = F2(
 		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
 	});
 var $author$project$Logic$App$Patterns$OperatorUtils$getInteger = function (iota) {
-	if (iota.$ === 'Number') {
+	if (!iota.$) {
 		var number = iota.a;
 		return _Utils_eq(
 			$elm$core$Basics$round(number),
@@ -10390,7 +10370,7 @@ var $author$project$Logic$App$Patterns$Stack$duplicateN = F2(
 			function (iota1, iota2, _v1) {
 				return _Utils_Tuple2(
 					function () {
-						if (iota2.$ === 'Number') {
+						if (!iota2.$) {
 							var number = iota2.a;
 							return $elm$core$Array$fromList(
 								A2(
@@ -10401,7 +10381,7 @@ var $author$project$Logic$App$Patterns$Stack$duplicateN = F2(
 							return $elm$core$Array$fromList(
 								_List_fromArray(
 									[
-										$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure)
+										$author$project$Logic$App$Types$Garbage(12)
 									]));
 						}
 					}(),
@@ -10505,34 +10485,34 @@ var $author$project$Logic$App$Patterns$Stack$fisherman = F2(
 			$elm$core$Array$length(stack),
 			stack);
 		var maybeIota = A2($elm$core$Array$get, 0, stack);
-		if (maybeIota.$ === 'Nothing') {
+		if (maybeIota.$ === 1) {
 			return {
-				ctx: ctx,
-				stack: A2(
+				aW: ctx,
+				eW: A2(
 					$elm$core$Array$append,
 					$elm$core$Array$fromList(
 						_List_fromArray(
 							[
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas)
+								$author$project$Logic$App$Types$Garbage(1),
+								$author$project$Logic$App$Types$Garbage(1)
 							])),
 					newStack),
-				success: false
+				ba: false
 			};
 		} else {
 			var iota = maybeIota.a;
 			var _v1 = $author$project$Logic$App$Patterns$OperatorUtils$getInteger(iota);
-			if (_v1.$ === 'Nothing') {
+			if (_v1.$ === 1) {
 				return {
-					ctx: ctx,
-					stack: A2(
+					aW: ctx,
+					eW: A2(
 						$author$project$Logic$App$Utils$Utils$unshift,
-						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+						$author$project$Logic$App$Types$Garbage(2),
 						newStack),
-					success: false
+					ba: false
 				};
 			} else {
-				if (iota.$ === 'Number') {
+				if (!iota.$) {
 					var number = iota.a;
 					var newNewStack = A3(
 						$author$project$Logic$App$Utils$Utils$removeFromArray,
@@ -10543,31 +10523,31 @@ var $author$project$Logic$App$Patterns$Stack$fisherman = F2(
 						$elm$core$Array$get,
 						$elm$core$Basics$round(number) - 1,
 						newStack);
-					if (maybeCaughtIota.$ === 'Nothing') {
+					if (maybeCaughtIota.$ === 1) {
 						return {
-							ctx: ctx,
-							stack: A2(
+							aW: ctx,
+							eW: A2(
 								$author$project$Logic$App$Utils$Utils$unshift,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
+								$author$project$Logic$App$Types$Garbage(1),
 								stack),
-							success: false
+							ba: false
 						};
 					} else {
 						var caughtIota = maybeCaughtIota.a;
 						return {
-							ctx: ctx,
-							stack: A2($author$project$Logic$App$Utils$Utils$unshift, caughtIota, newNewStack),
-							success: true
+							aW: ctx,
+							eW: A2($author$project$Logic$App$Utils$Utils$unshift, caughtIota, newNewStack),
+							ba: true
 						};
 					}
 				} else {
 					return {
-						ctx: ctx,
-						stack: A2(
+						aW: ctx,
+						eW: A2(
 							$author$project$Logic$App$Utils$Utils$unshift,
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure),
+							$author$project$Logic$App$Types$Garbage(12),
 							stack),
-						success: false
+						ba: false
 					};
 				}
 			}
@@ -10581,64 +10561,64 @@ var $author$project$Logic$App$Patterns$Stack$fishermanCopy = F2(
 			$elm$core$Array$length(stack),
 			stack);
 		var maybeIota = A2($elm$core$Array$get, 0, stack);
-		if (maybeIota.$ === 'Nothing') {
+		if (maybeIota.$ === 1) {
 			return {
-				ctx: ctx,
-				stack: A2(
+				aW: ctx,
+				eW: A2(
 					$elm$core$Array$append,
 					$elm$core$Array$fromList(
 						_List_fromArray(
 							[
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas)
+								$author$project$Logic$App$Types$Garbage(1),
+								$author$project$Logic$App$Types$Garbage(1)
 							])),
 					newStack),
-				success: false
+				ba: false
 			};
 		} else {
 			var iota = maybeIota.a;
 			var _v1 = $author$project$Logic$App$Patterns$OperatorUtils$getInteger(iota);
-			if (_v1.$ === 'Nothing') {
+			if (_v1.$ === 1) {
 				return {
-					ctx: ctx,
-					stack: A2(
+					aW: ctx,
+					eW: A2(
 						$author$project$Logic$App$Utils$Utils$unshift,
-						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+						$author$project$Logic$App$Types$Garbage(2),
 						newStack),
-					success: false
+					ba: false
 				};
 			} else {
-				if (iota.$ === 'Number') {
+				if (!iota.$) {
 					var number = iota.a;
 					var maybeCaughtIota = A2(
 						$elm$core$Array$get,
 						$elm$core$Basics$round(number),
 						newStack);
-					if (maybeCaughtIota.$ === 'Nothing') {
+					if (maybeCaughtIota.$ === 1) {
 						return {
-							ctx: ctx,
-							stack: A2(
+							aW: ctx,
+							eW: A2(
 								$author$project$Logic$App$Utils$Utils$unshift,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
+								$author$project$Logic$App$Types$Garbage(1),
 								stack),
-							success: false
+							ba: false
 						};
 					} else {
 						var caughtIota = maybeCaughtIota.a;
 						return {
-							ctx: ctx,
-							stack: A2($author$project$Logic$App$Utils$Utils$unshift, caughtIota, newStack),
-							success: true
+							aW: ctx,
+							eW: A2($author$project$Logic$App$Utils$Utils$unshift, caughtIota, newStack),
+							ba: true
 						};
 					}
 				} else {
 					return {
-						ctx: ctx,
-						stack: A2(
+						aW: ctx,
+						eW: A2(
 							$author$project$Logic$App$Utils$Utils$unshift,
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure),
+							$author$project$Logic$App$Types$Garbage(12),
 							stack),
-						success: false
+						ba: false
 					};
 				}
 			}
@@ -10650,7 +10630,7 @@ var $author$project$Logic$App$Patterns$Math$floorAction = F2(
 			function (iota, _v1) {
 				return _Utils_Tuple2(
 					function () {
-						if (iota.$ === 'Number') {
+						if (!iota.$) {
 							var number = iota.a;
 							return A2(
 								$elm$core$Array$repeat,
@@ -10661,14 +10641,14 @@ var $author$project$Logic$App$Patterns$Math$floorAction = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
 			});
 		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
 	});
-var $author$project$Logic$App$Types$Player = {$: 'Player'};
+var $author$project$Logic$App$Types$Player = 1;
 var $author$project$Logic$App$Patterns$Selectors$getCaster = F2(
 	function (stack, ctx) {
 		var action = function (_v0) {
@@ -10676,7 +10656,7 @@ var $author$project$Logic$App$Patterns$Selectors$getCaster = F2(
 				A2(
 					$elm$core$Array$repeat,
 					1,
-					$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Player)),
+					$author$project$Logic$App$Types$Entity(1)),
 				ctx);
 		};
 		return A3($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, ctx, action);
@@ -10704,7 +10684,7 @@ var $author$project$Logic$App$Patterns$Math$greaterThan = F2(
 				return _Utils_Tuple2(
 					function () {
 						var _v0 = _Utils_Tuple2(iota1, iota2);
-						if ((_v0.a.$ === 'Number') && (_v0.b.$ === 'Number')) {
+						if ((!_v0.a.$) && (!_v0.b.$)) {
 							var number1 = _v0.a.a;
 							var number2 = _v0.b.a;
 							return A2(
@@ -10716,7 +10696,7 @@ var $author$project$Logic$App$Patterns$Math$greaterThan = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -10730,7 +10710,7 @@ var $author$project$Logic$App$Patterns$Math$greaterThanOrEqualTo = F2(
 				return _Utils_Tuple2(
 					function () {
 						var _v0 = _Utils_Tuple2(iota1, iota2);
-						if ((_v0.a.$ === 'Number') && (_v0.b.$ === 'Number')) {
+						if ((!_v0.a.$) && (!_v0.b.$)) {
 							var number1 = _v0.a.a;
 							var number2 = _v0.b.a;
 							return A2(
@@ -10742,7 +10722,7 @@ var $author$project$Logic$App$Patterns$Math$greaterThanOrEqualTo = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -10755,14 +10735,14 @@ var $author$project$Logic$App$Patterns$Math$ifBool = F2(
 			function (iota1, iota2, iota3, _v1) {
 				return _Utils_Tuple2(
 					function () {
-						if (iota1.$ === 'Boolean') {
+						if (iota1.$ === 2) {
 							var bool = iota1.a;
 							return bool ? A2($elm$core$Array$repeat, 1, iota2) : A2($elm$core$Array$repeat, 1, iota3);
 						} else {
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -10780,7 +10760,7 @@ var $author$project$Logic$App$Patterns$Lists$index = F2(
 				return _Utils_Tuple2(
 					function () {
 						var _v0 = _Utils_Tuple2(iota1, iota2);
-						if ((_v0.a.$ === 'IotaList') && (_v0.b.$ === 'Number')) {
+						if ((_v0.a.$ === 4) && (!_v0.b.$)) {
 							var list1 = _v0.a.a;
 							var number = _v0.b.a;
 							return A2(
@@ -10797,7 +10777,7 @@ var $author$project$Logic$App$Patterns$Lists$index = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -10810,7 +10790,7 @@ var $author$project$Logic$App$Patterns$Lists$indexOf = F2(
 			function (iota1, iota2, _v1) {
 				return _Utils_Tuple2(
 					function () {
-						if (iota1.$ === 'IotaList') {
+						if (iota1.$ === 4) {
 							var list = iota1.a;
 							return A2(
 								$elm$core$Array$repeat,
@@ -10830,7 +10810,7 @@ var $author$project$Logic$App$Patterns$Lists$indexOf = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -10843,7 +10823,7 @@ var $author$project$Logic$App$Patterns$Math$invertBool = F2(
 			function (iota, _v1) {
 				return _Utils_Tuple2(
 					function () {
-						if (iota.$ === 'Boolean') {
+						if (iota.$ === 2) {
 							if (iota.a) {
 								return A2(
 									$elm$core$Array$repeat,
@@ -10859,7 +10839,7 @@ var $author$project$Logic$App$Patterns$Math$invertBool = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -10874,33 +10854,33 @@ var $author$project$Logic$App$Patterns$Lists$lastNList = F2(
 			$elm$core$Array$length(stack),
 			stack);
 		var maybeIota = A2($elm$core$Array$get, 0, stack);
-		if (maybeIota.$ === 'Nothing') {
+		if (maybeIota.$ === 1) {
 			return {
-				ctx: ctx,
-				stack: A2(
+				aW: ctx,
+				eW: A2(
 					$elm$core$Array$append,
 					$elm$core$Array$fromList(
 						_List_fromArray(
 							[
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas)
+								$author$project$Logic$App$Types$Garbage(1)
 							])),
 					newStack),
-				success: false
+				ba: false
 			};
 		} else {
 			var iota = maybeIota.a;
 			var _v1 = $author$project$Logic$App$Patterns$OperatorUtils$getInteger(iota);
-			if (_v1.$ === 'Nothing') {
+			if (_v1.$ === 1) {
 				return {
-					ctx: ctx,
-					stack: A2(
+					aW: ctx,
+					eW: A2(
 						$author$project$Logic$App$Utils$Utils$unshift,
-						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
+						$author$project$Logic$App$Types$Garbage(2),
 						newStack),
-					success: false
+					ba: false
 				};
 			} else {
-				if (iota.$ === 'Number') {
+				if (!iota.$) {
 					var number = iota.a;
 					var selectedIotas = $elm_community$array_extra$Array$Extra$reverse(
 						A3(
@@ -10916,29 +10896,29 @@ var $author$project$Logic$App$Patterns$Lists$lastNList = F2(
 					return (_Utils_cmp(
 						$elm$core$Basics$round(number),
 						$elm$core$Array$length(newStack)) > 0) ? {
-						ctx: ctx,
-						stack: A2(
+						aW: ctx,
+						eW: A2(
 							$author$project$Logic$App$Utils$Utils$unshift,
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$NotEnoughIotas),
+							$author$project$Logic$App$Types$Garbage(1),
 							newStack),
-						success: false
+						ba: false
 					} : {
-						ctx: ctx,
-						stack: A2(
+						aW: ctx,
+						eW: A2(
 							$author$project$Logic$App$Utils$Utils$unshift,
 							$author$project$Logic$App$Types$IotaList(selectedIotas),
 							newNewStack),
-						success: true
+						ba: true
 					};
 				} else {
 					return {
-						ctx: ctx,
-						stack: $elm$core$Array$fromList(
+						aW: ctx,
+						eW: $elm$core$Array$fromList(
 							_List_fromArray(
 								[
-									$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure)
+									$author$project$Logic$App$Types$Garbage(12)
 								])),
-						success: false
+						ba: false
 					};
 				}
 			}
@@ -10951,7 +10931,7 @@ var $author$project$Logic$App$Patterns$Math$lessThan = F2(
 				return _Utils_Tuple2(
 					function () {
 						var _v0 = _Utils_Tuple2(iota1, iota2);
-						if ((_v0.a.$ === 'Number') && (_v0.b.$ === 'Number')) {
+						if ((!_v0.a.$) && (!_v0.b.$)) {
 							var number1 = _v0.a.a;
 							var number2 = _v0.b.a;
 							return A2(
@@ -10963,7 +10943,7 @@ var $author$project$Logic$App$Patterns$Math$lessThan = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -10977,7 +10957,7 @@ var $author$project$Logic$App$Patterns$Math$lessThanOrEqualTo = F2(
 				return _Utils_Tuple2(
 					function () {
 						var _v0 = _Utils_Tuple2(iota1, iota2);
-						if ((_v0.a.$ === 'Number') && (_v0.b.$ === 'Number')) {
+						if ((!_v0.a.$) && (!_v0.b.$)) {
 							var number1 = _v0.a.a;
 							var number2 = _v0.b.a;
 							return A2(
@@ -10989,7 +10969,7 @@ var $author$project$Logic$App$Patterns$Math$lessThanOrEqualTo = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -11003,7 +10983,7 @@ var $author$project$Logic$App$Patterns$Lists$listRemove = F2(
 				return _Utils_Tuple2(
 					function () {
 						var _v0 = _Utils_Tuple2(iota1, iota2);
-						if ((_v0.a.$ === 'IotaList') && (_v0.b.$ === 'Number')) {
+						if ((_v0.a.$ === 4) && (!_v0.b.$)) {
 							var list1 = _v0.a.a;
 							var number = _v0.b.a;
 							return A2(
@@ -11018,7 +10998,7 @@ var $author$project$Logic$App$Patterns$Lists$listRemove = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -11031,7 +11011,7 @@ var $author$project$Logic$App$Patterns$Lists$listSize = F2(
 			function (iota, _v1) {
 				return _Utils_Tuple2(
 					function () {
-						if (iota.$ === 'IotaList') {
+						if (iota.$ === 4) {
 							var list = iota.a;
 							return A2(
 								$elm$core$Array$repeat,
@@ -11042,7 +11022,7 @@ var $author$project$Logic$App$Patterns$Lists$listSize = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -11056,7 +11036,7 @@ var $author$project$Logic$App$Patterns$Math$logarithm = F2(
 				return _Utils_Tuple2(
 					function () {
 						var _v0 = _Utils_Tuple2(iota1, iota2);
-						if ((_v0.a.$ === 'Number') && (_v0.b.$ === 'Number')) {
+						if ((!_v0.a.$) && (!_v0.b.$)) {
 							var number1 = _v0.a.a;
 							var number2 = _v0.b.a;
 							return A2(
@@ -11068,7 +11048,7 @@ var $author$project$Logic$App$Patterns$Math$logarithm = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -11078,33 +11058,33 @@ var $author$project$Logic$App$Patterns$Math$logarithm = F2(
 var $author$project$Logic$App$Patterns$OperatorUtils$makeConstant = F3(
 	function (iota, stack, ctx) {
 		return {
-			ctx: ctx,
-			stack: A2($author$project$Logic$App$Utils$Utils$unshift, iota, stack),
-			success: true
+			aW: ctx,
+			eW: A2($author$project$Logic$App$Utils$Utils$unshift, iota, stack),
+			ba: true
 		};
 	});
-var $author$project$Logic$App$Types$Backspace = {$: 'Backspace'};
-var $author$project$Logic$App$Types$ClearPatterns = {$: 'ClearPatterns'};
-var $author$project$Logic$App$Types$Reset = {$: 'Reset'};
-var $author$project$Logic$App$Types$Wrap = {$: 'Wrap'};
+var $author$project$Logic$App$Types$Backspace = 3;
+var $author$project$Logic$App$Types$ClearPatterns = 1;
+var $author$project$Logic$App$Types$Reset = 2;
+var $author$project$Logic$App$Types$Wrap = 4;
 var $author$project$Logic$App$Patterns$PatternRegistry$noAction = F2(
 	function (stack, ctx) {
-		return {ctx: ctx, stack: stack, success: true};
+		return {aW: ctx, eW: stack, ba: true};
 	});
 var $author$project$Logic$App$Patterns$PatternRegistry$metapatternRegistry = A2(
 	$elm$core$List$map,
 	function (pattern) {
-		return {action: pattern.action, active: true, color: $author$project$Settings$Theme$accent1, displayName: pattern.displayName, internalName: pattern.internalName, metaAction: pattern.metaAction, outputOptions: pattern.outputOptions, selectedOutput: pattern.selectedOutput, signature: pattern.signature, startDirection: $author$project$Logic$App$Types$East};
+		return {a: pattern.a, di: true, S: $author$project$Settings$Theme$accent1, dC: pattern.dC, dZ: pattern.dZ, N: pattern.N, bt: pattern.bt, ak: pattern.ak, eU: pattern.eU, c9: 2};
 	},
 	_List_fromArray(
 		[
-			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Clear', internalName: 'clearPatterns', metaAction: $author$project$Logic$App$Types$ClearPatterns, outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqq'},
-			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Reset', internalName: 'resetApp', metaAction: $author$project$Logic$App$Types$Reset, outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqa'},
-			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Backspace', internalName: 'backspace', metaAction: $author$project$Logic$App$Types$Backspace, outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qa'},
-			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Wrap', internalName: 'wrap', metaAction: $author$project$Logic$App$Types$Wrap, outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qwqqqwq'}
+			{a: $author$project$Logic$App$Patterns$PatternRegistry$noAction, dC: 'Clear', dZ: 'clearPatterns', N: 1, bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'qqqq'},
+			{a: $author$project$Logic$App$Patterns$PatternRegistry$noAction, dC: 'Reset', dZ: 'resetApp', N: 2, bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'qqqqqa'},
+			{a: $author$project$Logic$App$Patterns$PatternRegistry$noAction, dC: 'Backspace', dZ: 'backspace', N: 3, bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'qa'},
+			{a: $author$project$Logic$App$Patterns$PatternRegistry$noAction, dC: 'Wrap', dZ: 'wrap', N: 4, bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'qwqqqwq'}
 		]));
 var $author$project$Logic$App$Patterns$OperatorUtils$getPositiveInteger = function (iota) {
-	if (iota.$ === 'Number') {
+	if (!iota.$) {
 		var number = iota.a;
 		return (_Utils_eq(
 			$elm$core$Basics$round(number),
@@ -11120,7 +11100,7 @@ var $author$project$Logic$App$Patterns$Lists$modifyinPlace = F2(
 				return _Utils_Tuple2(
 					function () {
 						var _v0 = _Utils_Tuple2(iota1, iota2);
-						if ((_v0.a.$ === 'IotaList') && (_v0.b.$ === 'Number')) {
+						if ((_v0.a.$ === 4) && (!_v0.b.$)) {
 							var list = _v0.a.a;
 							var number = _v0.b.a;
 							return A2(
@@ -11136,7 +11116,7 @@ var $author$project$Logic$App$Patterns$Lists$modifyinPlace = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -11146,9 +11126,9 @@ var $author$project$Logic$App$Patterns$Lists$modifyinPlace = F2(
 var $elm$core$Basics$truncate = _Basics_truncate;
 var $ianmackenzie$elm_units$Quantity$fractionalRemainderBy = F2(
 	function (_v0, _v1) {
-		var modulus = _v0.a;
-		var value = _v1.a;
-		return $ianmackenzie$elm_units$Quantity$Quantity(value - (modulus * ((value / modulus) | 0)));
+		var modulus = _v0;
+		var value = _v1;
+		return value - (modulus * ((value / modulus) | 0));
 	});
 var $author$project$Logic$App$Patterns$Math$modulo = F2(
 	function (stack, ctx) {
@@ -11157,7 +11137,7 @@ var $author$project$Logic$App$Patterns$Math$modulo = F2(
 				return _Utils_Tuple2(
 					function () {
 						var _v0 = _Utils_Tuple2(iota1, iota2);
-						if ((_v0.a.$ === 'Number') && (_v0.b.$ === 'Number')) {
+						if ((!_v0.a.$) && (!_v0.b.$)) {
 							var number1 = _v0.a.a;
 							var number2 = _v0.b.a;
 							return A2(
@@ -11165,15 +11145,12 @@ var $author$project$Logic$App$Patterns$Math$modulo = F2(
 								1,
 								$author$project$Logic$App$Types$Number(
 									$ianmackenzie$elm_units$Quantity$unwrap(
-										A2(
-											$ianmackenzie$elm_units$Quantity$fractionalRemainderBy,
-											$ianmackenzie$elm_units$Quantity$Quantity(number2),
-											$ianmackenzie$elm_units$Quantity$Quantity(number1)))));
+										A2($ianmackenzie$elm_units$Quantity$fractionalRemainderBy, number2, number1))));
 						} else {
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -11182,9 +11159,9 @@ var $author$project$Logic$App$Patterns$Math$modulo = F2(
 	});
 var $ianmackenzie$elm_geometry$Vector3d$dot = F2(
 	function (_v0, _v1) {
-		var v2 = _v0.a;
-		var v1 = _v1.a;
-		return $ianmackenzie$elm_units$Quantity$Quantity(((v1.x * v2.x) + (v1.y * v2.y)) + (v1.z * v2.z));
+		var v2 = _v0;
+		var v1 = _v1;
+		return ((v1.m * v2.m) + (v1.n * v2.n)) + (v1.J * v2.J);
 	});
 var $author$project$Logic$App$Patterns$Math$mulDot = F2(
 	function (stack, ctx) {
@@ -11196,16 +11173,16 @@ var $author$project$Logic$App$Patterns$Math$mulDot = F2(
 						_v0$4:
 						while (true) {
 							switch (_v0.a.$) {
-								case 'Number':
+								case 0:
 									switch (_v0.b.$) {
-										case 'Number':
+										case 0:
 											var number1 = _v0.a.a;
 											var number2 = _v0.b.a;
 											return A2(
 												$elm$core$Array$repeat,
 												1,
 												$author$project$Logic$App$Types$Number(number1 * number2));
-										case 'Vector':
+										case 1:
 											var number = _v0.a.a;
 											var vector = _v0.b.a;
 											var x = vector.a;
@@ -11219,9 +11196,9 @@ var $author$project$Logic$App$Patterns$Math$mulDot = F2(
 										default:
 											break _v0$4;
 									}
-								case 'Vector':
+								case 1:
 									switch (_v0.b.$) {
-										case 'Number':
+										case 0:
 											var vector = _v0.a.a;
 											var number = _v0.b.a;
 											var x = vector.a;
@@ -11232,7 +11209,7 @@ var $author$project$Logic$App$Patterns$Math$mulDot = F2(
 												1,
 												$author$project$Logic$App$Types$Vector(
 													_Utils_Tuple3(x * number, y * number, z * number)));
-										case 'Vector':
+										case 1:
 											var vector1 = _v0.a.a;
 											var vector2 = _v0.b.a;
 											var vec2 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector2);
@@ -11253,7 +11230,7 @@ var $author$project$Logic$App$Patterns$Math$mulDot = F2(
 						return A2(
 							$elm$core$Array$repeat,
 							1,
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+							$author$project$Logic$App$Types$Garbage(12));
 					}(),
 					ctx);
 			});
@@ -11266,7 +11243,7 @@ var $author$project$Logic$App$Patterns$Math$notBit = F2(
 			function (iota, _v1) {
 				return _Utils_Tuple2(
 					function () {
-						if (iota.$ === 'Number') {
+						if (!iota.$) {
 							var number = iota.a;
 							return A2(
 								$elm$core$Array$repeat,
@@ -11277,7 +11254,7 @@ var $author$project$Logic$App$Patterns$Math$notBit = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -11309,8 +11286,8 @@ var $author$project$Logic$App$Patterns$Math$orBit = F2(
 						_v0$2:
 						while (true) {
 							switch (_v0.a.$) {
-								case 'Number':
-									if (_v0.b.$ === 'Number') {
+								case 0:
+									if (!_v0.b.$) {
 										var number1 = _v0.a.a;
 										var number2 = _v0.b.a;
 										return A2(
@@ -11321,8 +11298,8 @@ var $author$project$Logic$App$Patterns$Math$orBit = F2(
 									} else {
 										break _v0$2;
 									}
-								case 'IotaList':
-									if (_v0.b.$ === 'IotaList') {
+								case 4:
+									if (_v0.b.$ === 4) {
 										var list1 = _v0.a.a;
 										var list2 = _v0.b.a;
 										return A2(
@@ -11351,7 +11328,7 @@ var $author$project$Logic$App$Patterns$Math$orBit = F2(
 						return A2(
 							$elm$core$Array$repeat,
 							1,
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+							$author$project$Logic$App$Types$Garbage(12));
 					}(),
 					ctx);
 			});
@@ -11364,7 +11341,7 @@ var $author$project$Logic$App$Patterns$Math$orBool = F2(
 				return _Utils_Tuple2(
 					function () {
 						var _v0 = _Utils_Tuple2(iota1, iota2);
-						if ((_v0.a.$ === 'Boolean') && (_v0.b.$ === 'Boolean')) {
+						if ((_v0.a.$ === 2) && (_v0.b.$ === 2)) {
 							var bool1 = _v0.a.a;
 							var bool2 = _v0.b.a;
 							return A2(
@@ -11375,7 +11352,7 @@ var $author$project$Logic$App$Patterns$Math$orBool = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -11416,9 +11393,9 @@ var $author$project$Logic$App$Patterns$Math$powProj = F2(
 						_v0$4:
 						while (true) {
 							switch (_v0.a.$) {
-								case 'Number':
+								case 0:
 									switch (_v0.b.$) {
-										case 'Number':
+										case 0:
 											var number1 = _v0.a.a;
 											var number2 = _v0.b.a;
 											return A2(
@@ -11426,7 +11403,7 @@ var $author$project$Logic$App$Patterns$Math$powProj = F2(
 												1,
 												$author$project$Logic$App$Types$Number(
 													A2($elm$core$Basics$pow, number1, number2)));
-										case 'Vector':
+										case 1:
 											var number = _v0.a.a;
 											var vector = _v0.b.a;
 											var x = vector.a;
@@ -11443,9 +11420,9 @@ var $author$project$Logic$App$Patterns$Math$powProj = F2(
 										default:
 											break _v0$4;
 									}
-								case 'Vector':
+								case 1:
 									switch (_v0.b.$) {
-										case 'Number':
+										case 0:
 											var vector = _v0.a.a;
 											var number = _v0.b.a;
 											var x = vector.a;
@@ -11459,7 +11436,7 @@ var $author$project$Logic$App$Patterns$Math$powProj = F2(
 														A2($elm$core$Basics$pow, x, number),
 														A2($elm$core$Basics$pow, y, number),
 														A2($elm$core$Basics$pow, z, number))));
-										case 'Vector':
+										case 1:
 											var vector1Tuple = _v0.a.a;
 											var vector2Tuple = _v0.b.a;
 											var vector2 = A2($ianmackenzie$elm_geometry$Vector3d$fromTuple, $ianmackenzie$elm_units$Length$meters, vector2Tuple);
@@ -11490,7 +11467,7 @@ var $author$project$Logic$App$Patterns$Math$powProj = F2(
 						return A2(
 							$elm$core$Array$repeat,
 							1,
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+							$author$project$Logic$App$Types$Garbage(12));
 					}(),
 					ctx);
 			});
@@ -11529,27 +11506,27 @@ var $author$project$Logic$App$Patterns$ReadWrite$read = F2(
 		var action = function (context) {
 			return _Utils_Tuple2(
 				function () {
-					var _v0 = context.heldItem;
-					switch (_v0.$) {
-						case 'NoItem':
+					var _v0 = context.bo;
+					switch (_v0) {
+						case 6:
 							return $elm$core$Array$empty;
-						case 'Trinket':
+						case 0:
 							return $elm$core$Array$empty;
-						case 'Cypher':
+						case 2:
 							return $elm$core$Array$empty;
-						case 'Artifact':
+						case 1:
 							return $elm$core$Array$empty;
-						case 'Focus':
+						case 3:
 							return $elm$core$Array$fromList(
 								_List_fromArray(
 									[
-										A2($elm$core$Maybe$withDefault, $author$project$Logic$App$Types$Null, context.heldItemContent)
+										A2($elm$core$Maybe$withDefault, $author$project$Logic$App$Types$Null, context.dQ)
 									]));
-						case 'Spellbook':
+						case 4:
 							return $elm$core$Array$fromList(
 								_List_fromArray(
 									[
-										A2($elm$core$Maybe$withDefault, $author$project$Logic$App$Types$Null, context.heldItemContent)
+										A2($elm$core$Maybe$withDefault, $author$project$Logic$App$Types$Null, context.dQ)
 									]));
 						default:
 							return $elm$core$Array$fromList(
@@ -11566,8 +11543,8 @@ var $author$project$Logic$App$Patterns$ReadWrite$read = F2(
 var $author$project$Logic$App$Patterns$ReadWrite$readLocal = F2(
 	function (stack, ctx) {
 		var action = function (context) {
-			var _v0 = context.ravenmind;
-			if (_v0.$ === 'Nothing') {
+			var _v0 = context.eL;
+			if (_v0.$ === 1) {
 				return _Utils_Tuple2(
 					A2($elm$core$Array$repeat, 1, $author$project$Logic$App$Types$Null),
 					context);
@@ -11583,44 +11560,44 @@ var $author$project$Logic$App$Patterns$ReadWrite$readLocal = F2(
 var $author$project$Logic$App$Patterns$ReadWrite$readable = F2(
 	function (stack, ctx) {
 		var action = function (context) {
-			var _v0 = context.heldItem;
-			switch (_v0.$) {
-				case 'NoItem':
+			var _v0 = context.bo;
+			switch (_v0) {
+				case 6:
 					return _Utils_Tuple2(
 						A2(
 							$elm$core$Array$repeat,
 							1,
 							$author$project$Logic$App$Types$Boolean(false)),
 						context);
-				case 'Trinket':
+				case 0:
 					return _Utils_Tuple2(
 						A2(
 							$elm$core$Array$repeat,
 							1,
 							$author$project$Logic$App$Types$Boolean(false)),
 						context);
-				case 'Cypher':
+				case 2:
 					return _Utils_Tuple2(
 						A2(
 							$elm$core$Array$repeat,
 							1,
 							$author$project$Logic$App$Types$Boolean(false)),
 						context);
-				case 'Artifact':
+				case 1:
 					return _Utils_Tuple2(
 						A2(
 							$elm$core$Array$repeat,
 							1,
 							$author$project$Logic$App$Types$Boolean(false)),
 						context);
-				case 'Focus':
+				case 3:
 					return _Utils_Tuple2(
 						A2(
 							$elm$core$Array$repeat,
 							1,
 							$author$project$Logic$App$Types$Boolean(true)),
 						context);
-				case 'Spellbook':
+				case 4:
 					return _Utils_Tuple2(
 						A2(
 							$elm$core$Array$repeat,
@@ -11648,7 +11625,7 @@ var $author$project$Logic$App$Patterns$Lists$reverseList = F2(
 			function (iota, _v1) {
 				return _Utils_Tuple2(
 					function () {
-						if (iota.$ === 'IotaList') {
+						if (iota.$ === 4) {
 							var list = iota.a;
 							return A2(
 								$elm$core$Array$repeat,
@@ -11659,7 +11636,7 @@ var $author$project$Logic$App$Patterns$Lists$reverseList = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -11740,7 +11717,7 @@ var $author$project$Logic$App$Patterns$Math$sine = F2(
 			function (iota, _v1) {
 				return _Utils_Tuple2(
 					function () {
-						if (iota.$ === 'Number') {
+						if (!iota.$) {
 							var number = iota.a;
 							return A2(
 								$elm$core$Array$repeat,
@@ -11751,7 +11728,7 @@ var $author$project$Logic$App$Patterns$Math$sine = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -11779,7 +11756,7 @@ var $author$project$Logic$App$Patterns$Lists$slice = F2(
 				return _Utils_Tuple2(
 					function () {
 						var _v0 = _Utils_Tuple3(iota1, iota2, iota3);
-						if (((_v0.a.$ === 'IotaList') && (_v0.b.$ === 'Number')) && (_v0.c.$ === 'Number')) {
+						if (((_v0.a.$ === 4) && (!_v0.b.$)) && (!_v0.c.$)) {
 							var list = _v0.a.a;
 							var number1 = _v0.b.a;
 							var number2 = _v0.c.a;
@@ -11796,7 +11773,7 @@ var $author$project$Logic$App$Patterns$Lists$slice = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -11809,14 +11786,14 @@ var $author$project$Logic$App$Patterns$Lists$splat = F2(
 			function (iota, _v1) {
 				return _Utils_Tuple2(
 					function () {
-						if (iota.$ === 'IotaList') {
+						if (iota.$ === 4) {
 							var list = iota.a;
 							return $elm_community$array_extra$Array$Extra$reverse(list);
 						} else {
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -11849,16 +11826,16 @@ var $author$project$Logic$App$Patterns$Math$subtract = F2(
 						_v0$4:
 						while (true) {
 							switch (_v0.a.$) {
-								case 'Number':
+								case 0:
 									switch (_v0.b.$) {
-										case 'Number':
+										case 0:
 											var number1 = _v0.a.a;
 											var number2 = _v0.b.a;
 											return A2(
 												$elm$core$Array$repeat,
 												1,
 												$author$project$Logic$App$Types$Number(number1 - number2));
-										case 'Vector':
+										case 1:
 											var number = _v0.a.a;
 											var vector = _v0.b.a;
 											var x = vector.a;
@@ -11872,9 +11849,9 @@ var $author$project$Logic$App$Patterns$Math$subtract = F2(
 										default:
 											break _v0$4;
 									}
-								case 'Vector':
+								case 1:
 									switch (_v0.b.$) {
-										case 'Number':
+										case 0:
 											var vector = _v0.a.a;
 											var number = _v0.b.a;
 											var x = vector.a;
@@ -11885,7 +11862,7 @@ var $author$project$Logic$App$Patterns$Math$subtract = F2(
 												1,
 												$author$project$Logic$App$Types$Vector(
 													_Utils_Tuple3(x - number, y - number, z - number)));
-										case 'Vector':
+										case 1:
 											var vector1 = _v0.a.a;
 											var vector2 = _v0.b.a;
 											var _v3 = _Utils_Tuple2(vector1, vector2);
@@ -11912,7 +11889,7 @@ var $author$project$Logic$App$Patterns$Math$subtract = F2(
 						return A2(
 							$elm$core$Array$repeat,
 							1,
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+							$author$project$Logic$App$Types$Garbage(12));
 					}(),
 					ctx);
 			});
@@ -11937,7 +11914,7 @@ var $author$project$Logic$App$Patterns$Math$tangent = F2(
 			function (iota, _v1) {
 				return _Utils_Tuple2(
 					function () {
-						if (iota.$ === 'Number') {
+						if (!iota.$) {
 							var number = iota.a;
 							return A2(
 								$elm$core$Array$repeat,
@@ -11948,7 +11925,7 @@ var $author$project$Logic$App$Patterns$Math$tangent = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -11968,7 +11945,7 @@ var $author$project$Logic$App$Patterns$Math$toSet = F2(
 			function (iota, _v1) {
 				return _Utils_Tuple2(
 					function () {
-						if (iota.$ === 'IotaList') {
+						if (iota.$ === 4) {
 							var list = iota.a;
 							return A2(
 								$elm$core$Array$repeat,
@@ -11979,7 +11956,7 @@ var $author$project$Logic$App$Patterns$Math$toSet = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -12001,44 +11978,44 @@ var $author$project$Logic$App$Patterns$Stack$tuck = F2(
 var $author$project$Logic$App$Patterns$ReadWrite$writable = F2(
 	function (stack, ctx) {
 		var action = function (context) {
-			var _v0 = context.heldItem;
-			switch (_v0.$) {
-				case 'NoItem':
+			var _v0 = context.bo;
+			switch (_v0) {
+				case 6:
 					return _Utils_Tuple2(
 						A2(
 							$elm$core$Array$repeat,
 							1,
 							$author$project$Logic$App$Types$Boolean(false)),
 						context);
-				case 'Trinket':
+				case 0:
 					return _Utils_Tuple2(
 						A2(
 							$elm$core$Array$repeat,
 							1,
 							$author$project$Logic$App$Types$Boolean(false)),
 						context);
-				case 'Cypher':
+				case 2:
 					return _Utils_Tuple2(
 						A2(
 							$elm$core$Array$repeat,
 							1,
 							$author$project$Logic$App$Types$Boolean(false)),
 						context);
-				case 'Artifact':
+				case 1:
 					return _Utils_Tuple2(
 						A2(
 							$elm$core$Array$repeat,
 							1,
 							$author$project$Logic$App$Types$Boolean(false)),
 						context);
-				case 'Focus':
+				case 3:
 					return _Utils_Tuple2(
 						A2(
 							$elm$core$Array$repeat,
 							1,
 							$author$project$Logic$App$Types$Boolean(true)),
 						context);
-				case 'Spellbook':
+				case 4:
 					return _Utils_Tuple2(
 						A2(
 							$elm$core$Array$repeat,
@@ -12060,47 +12037,47 @@ var $author$project$Logic$App$Patterns$ReadWrite$write = F2(
 	function (stack, ctx) {
 		var action = F2(
 			function (iota, context) {
-				var _v0 = context.heldItem;
-				switch (_v0.$) {
-					case 'NoItem':
+				var _v0 = context.bo;
+				switch (_v0) {
+					case 6:
 						return _Utils_Tuple2(
 							$elm$core$Array$fromList(
 								_List_fromArray(
 									[iota])),
 							context);
-					case 'Trinket':
+					case 0:
 						return _Utils_Tuple2(
 							$elm$core$Array$fromList(
 								_List_fromArray(
 									[iota])),
 							context);
-					case 'Cypher':
+					case 2:
 						return _Utils_Tuple2(
 							$elm$core$Array$fromList(
 								_List_fromArray(
 									[iota])),
 							context);
-					case 'Artifact':
+					case 1:
 						return _Utils_Tuple2(
 							$elm$core$Array$fromList(
 								_List_fromArray(
 									[iota])),
 							context);
-					case 'Focus':
+					case 3:
 						return _Utils_Tuple2(
 							$elm$core$Array$empty,
 							_Utils_update(
 								context,
 								{
-									heldItemContent: $elm$core$Maybe$Just(iota)
+									dQ: $elm$core$Maybe$Just(iota)
 								}));
-					case 'Spellbook':
+					case 4:
 						return _Utils_Tuple2(
 							$elm$core$Array$empty,
 							_Utils_update(
 								context,
 								{
-									heldItemContent: $elm$core$Maybe$Just(iota)
+									dQ: $elm$core$Maybe$Just(iota)
 								}));
 					default:
 						return _Utils_Tuple2(
@@ -12121,7 +12098,7 @@ var $author$project$Logic$App$Patterns$ReadWrite$writeLocal = F2(
 					_Utils_update(
 						context,
 						{
-							ravenmind: $elm$core$Maybe$Just(iota)
+							eL: $elm$core$Maybe$Just(iota)
 						}));
 			});
 		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
@@ -12137,8 +12114,8 @@ var $author$project$Logic$App$Patterns$Math$xorBit = F2(
 						_v0$2:
 						while (true) {
 							switch (_v0.a.$) {
-								case 'Number':
-									if (_v0.b.$ === 'Number') {
+								case 0:
+									if (!_v0.b.$) {
 										var number1 = _v0.a.a;
 										var number2 = _v0.b.a;
 										return A2(
@@ -12149,8 +12126,8 @@ var $author$project$Logic$App$Patterns$Math$xorBit = F2(
 									} else {
 										break _v0$2;
 									}
-								case 'IotaList':
-									if (_v0.b.$ === 'IotaList') {
+								case 4:
+									if (_v0.b.$ === 4) {
 										var list1 = _v0.a.a;
 										var list2 = _v0.b.a;
 										return A2(
@@ -12187,7 +12164,7 @@ var $author$project$Logic$App$Patterns$Math$xorBit = F2(
 						return A2(
 							$elm$core$Array$repeat,
 							1,
-							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+							$author$project$Logic$App$Types$Garbage(12));
 					}(),
 					ctx);
 			});
@@ -12201,7 +12178,7 @@ var $author$project$Logic$App$Patterns$Math$xorBool = F2(
 				return _Utils_Tuple2(
 					function () {
 						var _v0 = _Utils_Tuple2(iota1, iota2);
-						if ((_v0.a.$ === 'Boolean') && (_v0.b.$ === 'Boolean')) {
+						if ((_v0.a.$ === 2) && (_v0.b.$ === 2)) {
 							var bool1 = _v0.a.a;
 							var bool2 = _v0.b.a;
 							return A2(
@@ -12212,7 +12189,7 @@ var $author$project$Logic$App$Patterns$Math$xorBool = F2(
 							return A2(
 								$elm$core$Array$repeat,
 								1,
-								$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure));
+								$author$project$Logic$App$Types$Garbage(12));
 						}
 					}(),
 					ctx);
@@ -12228,733 +12205,733 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 	A2(
 		$elm$core$List$map,
 		function (pattern) {
-			return {action: pattern.action, active: true, color: $author$project$Settings$Theme$accent1, displayName: pattern.displayName, internalName: pattern.internalName, metaAction: $author$project$Logic$App$Types$None, outputOptions: pattern.outputOptions, selectedOutput: pattern.selectedOutput, signature: pattern.signature, startDirection: pattern.startDirection};
+			return {a: pattern.a, di: true, S: $author$project$Settings$Theme$accent1, dC: pattern.dC, dZ: pattern.dZ, N: 0, bt: pattern.bt, ak: pattern.ak, eU: pattern.eU, c9: pattern.c9};
 		},
 		_List_fromArray(
 			[
-				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'interop/gravity/get', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wawawddew', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'interop/gravity/set', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wdwdwaaqw', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'interop/pehkui/get', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aawawwawwa', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'interop/pehkui/set', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddwdwwdwwd', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Selectors$getCaster, displayName: 'Mind\'s Reflection', internalName: 'get_caster', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaq', startDirection: $author$project$Logic$App$Types$Northeast},
+				{a: $author$project$Logic$App$Patterns$PatternRegistry$noAction, dC: '', dZ: 'interop/gravity/get', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'wawawddew', c9: 2},
+				{a: $author$project$Logic$App$Patterns$PatternRegistry$noAction, dC: '', dZ: 'interop/gravity/set', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'wdwdwaaqw', c9: 2},
+				{a: $author$project$Logic$App$Patterns$PatternRegistry$noAction, dC: '', dZ: 'interop/pehkui/get', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'aawawwawwa', c9: 2},
+				{a: $author$project$Logic$App$Patterns$PatternRegistry$noAction, dC: '', dZ: 'interop/pehkui/set', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'ddwdwwdwwd', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Selectors$getCaster, dC: 'Mind\'s Reflection', dZ: 'get_caster', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'qaq', c9: 0},
 				{
-				action: $author$project$Logic$App$Patterns$Misc$entityPos,
-				displayName: 'Compass\' Purification',
-				internalName: 'entity_pos/eye',
-				outputOptions: _List_fromArray(
+				a: $author$project$Logic$App$Patterns$Misc$entityPos,
+				dC: 'Compass\' Purification',
+				dZ: 'entity_pos/eye',
+				bt: _List_fromArray(
 					[$author$project$Logic$App$Types$VectorType]),
-				selectedOutput: $elm$core$Maybe$Just(
+				ak: $elm$core$Maybe$Just(
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$VectorType,
 						$author$project$Logic$App$Types$Vector(
 							_Utils_Tuple3(0, 0, 0)))),
-				signature: 'aa',
-				startDirection: $author$project$Logic$App$Types$East
+				eU: 'aa',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$Misc$entityPos,
-				displayName: 'Compass\' Purification II',
-				internalName: 'entity_pos/foot',
-				outputOptions: _List_fromArray(
+				a: $author$project$Logic$App$Patterns$Misc$entityPos,
+				dC: 'Compass\' Purification II',
+				dZ: 'entity_pos/foot',
+				bt: _List_fromArray(
 					[$author$project$Logic$App$Types$VectorType]),
-				selectedOutput: $elm$core$Maybe$Just(
+				ak: $elm$core$Maybe$Just(
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$VectorType,
 						$author$project$Logic$App$Types$Vector(
 							_Utils_Tuple3(0, 0, 0)))),
-				signature: 'dd',
-				startDirection: $author$project$Logic$App$Types$East
+				eU: 'dd',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$Misc$getEntityLook,
-				displayName: 'Alidade\'s Purification',
-				internalName: 'get_entity_look',
-				outputOptions: _List_fromArray(
+				a: $author$project$Logic$App$Patterns$Misc$getEntityLook,
+				dC: 'Alidade\'s Purification',
+				dZ: 'get_entity_look',
+				bt: _List_fromArray(
 					[$author$project$Logic$App$Types$VectorType]),
-				selectedOutput: $elm$core$Maybe$Just(
+				ak: $elm$core$Maybe$Just(
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$VectorType,
 						$author$project$Logic$App$Types$Vector(
 							_Utils_Tuple3(0, 0, 0)))),
-				signature: 'wa',
-				startDirection: $author$project$Logic$App$Types$East
+				eU: 'wa',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$Misc$getEntityHeight,
-				displayName: 'Stadiometer\'s Purification',
-				internalName: 'get_entity_height',
-				outputOptions: _List_fromArray(
+				a: $author$project$Logic$App$Patterns$Misc$getEntityHeight,
+				dC: 'Stadiometer\'s Purification',
+				dZ: 'get_entity_height',
+				bt: _List_fromArray(
 					[$author$project$Logic$App$Types$NumberType]),
-				selectedOutput: $elm$core$Maybe$Just(
+				ak: $elm$core$Maybe$Just(
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$NumberType,
 						$author$project$Logic$App$Types$Number(0))),
-				signature: 'awq',
-				startDirection: $author$project$Logic$App$Types$East
+				eU: 'awq',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$Misc$getEntityVelocity,
-				displayName: 'Pace Purification',
-				internalName: 'get_entity_velocity',
-				outputOptions: _List_fromArray(
+				a: $author$project$Logic$App$Patterns$Misc$getEntityVelocity,
+				dC: 'Pace Purification',
+				dZ: 'get_entity_velocity',
+				bt: _List_fromArray(
 					[$author$project$Logic$App$Types$VectorType]),
-				selectedOutput: $elm$core$Maybe$Just(
+				ak: $elm$core$Maybe$Just(
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$VectorType,
 						$author$project$Logic$App$Types$Vector(
 							_Utils_Tuple3(0, 0, 0)))),
-				signature: 'wq',
-				startDirection: $author$project$Logic$App$Types$East
+				eU: 'wq',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$Misc$raycast,
-				displayName: 'Archer\'s Distillation',
-				internalName: 'raycast',
-				outputOptions: _List_fromArray(
+				a: $author$project$Logic$App$Patterns$Misc$raycast,
+				dC: 'Archer\'s Distillation',
+				dZ: 'raycast',
+				bt: _List_fromArray(
 					[$author$project$Logic$App$Types$VectorType, $author$project$Logic$App$Types$NullType]),
-				selectedOutput: $elm$core$Maybe$Just(
+				ak: $elm$core$Maybe$Just(
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$VectorType,
 						$author$project$Logic$App$Types$Vector(
 							_Utils_Tuple3(0, 0, 0)))),
-				signature: 'wqaawdd',
-				startDirection: $author$project$Logic$App$Types$East
+				eU: 'wqaawdd',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$Misc$raycastAxis,
-				displayName: 'Architect\'s Distillation',
-				internalName: 'raycast/axis',
-				outputOptions: _List_fromArray(
+				a: $author$project$Logic$App$Patterns$Misc$raycastAxis,
+				dC: 'Architect\'s Distillation',
+				dZ: 'raycast/axis',
+				bt: _List_fromArray(
 					[$author$project$Logic$App$Types$VectorType, $author$project$Logic$App$Types$NullType]),
-				selectedOutput: $elm$core$Maybe$Just(
+				ak: $elm$core$Maybe$Just(
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$VectorType,
 						$author$project$Logic$App$Types$Vector(
 							_Utils_Tuple3(0, 0, 0)))),
-				signature: 'weddwaa',
-				startDirection: $author$project$Logic$App$Types$East
+				eU: 'weddwaa',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$Misc$raycastEntity,
-				displayName: 'Scout\'s Distillation',
-				internalName: 'raycast/entity',
-				outputOptions: _List_fromArray(
+				a: $author$project$Logic$App$Patterns$Misc$raycastEntity,
+				dC: 'Scout\'s Distillation',
+				dZ: 'raycast/entity',
+				bt: _List_fromArray(
 					[$author$project$Logic$App$Types$EntityType, $author$project$Logic$App$Types$NullType]),
-				selectedOutput: $elm$core$Maybe$Just(
+				ak: $elm$core$Maybe$Just(
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$EntityType,
-						$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset))),
-				signature: 'weaqa',
-				startDirection: $author$project$Logic$App$Types$East
+						$author$project$Logic$App$Types$Entity(0))),
+				eU: 'weaqa',
+				c9: 2
 			},
-				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Waystone Reflection', internalName: 'circle/impetus_pos', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eaqwqae', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Circles$circleImpetusDirection, displayName: 'Lodestone Reflection', internalName: 'circle/impetus_dir', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eaqwqaewede', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Circles$circleBoundsMin, displayName: 'Lesser Fold Reflection', internalName: 'circle/bounds/min', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eaqwqaewdd', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Circles$circleBoundsMax, displayName: 'Greater Fold Reflection', internalName: 'circle/bounds/max', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqwqawaaqa', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Stack$swap, displayName: 'Jester\'s Gambit', internalName: 'swap', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aawdd', startDirection: $author$project$Logic$App$Types$Northeast},
-				{action: $author$project$Logic$App$Patterns$Stack$rotate, displayName: 'Rotation Gambit', internalName: 'rotate', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aaeaa', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Stack$rotateReverse, displayName: 'Rotation Gambit II', internalName: 'rotate_reverse', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddqdd', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Stack$duplicate, displayName: 'Gemini Decomposition', internalName: 'duplicate', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aadaa', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Stack$over, displayName: 'Prospector\'s Gambit', internalName: 'over', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aaedd', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Stack$tuck, displayName: 'Undertaker\'s Gambit', internalName: 'tuck', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddqaa', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Stack$dup2, displayName: 'Dioscuri Gambit', internalName: 'two_dup', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aadadaaw', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Stack$stackLength, displayName: 'Flock\'s Reflection', internalName: 'stack_len', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qwaeawqaeaqa', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Stack$duplicateN, displayName: 'Gemini Gambit', internalName: 'duplicate_n', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aadaadaa', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Stack$fisherman, displayName: 'Fisherman\'s Gambit', internalName: 'fisherman', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddad', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Stack$fishermanCopy, displayName: 'Fisherman\'s Gambit II', internalName: 'fisherman/copy', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aada', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'swizzle', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaawdde', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$add, displayName: 'Additive Distillation', internalName: 'add', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waaw', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$subtract, displayName: 'Subtractive Distillation', internalName: 'sub', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wddw', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$mulDot, displayName: 'Multiplicative Distillation', internalName: 'mul_dot', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waqaw', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$divCross, displayName: 'Division Distillation', internalName: 'div_cross', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wdedw', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$absLen, displayName: 'Length Purification', internalName: 'abs_len', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wqaqw', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$powProj, displayName: 'Power Distillation', internalName: 'pow_proj', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wedew', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$floorAction, displayName: 'Floor Purification', internalName: 'floor', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ewq', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$ceilAction, displayName: 'Ceiling Purification', internalName: 'ceil', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qwe', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$constructVector, displayName: 'Vector Exaltation', internalName: 'construct_vec', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eqqqqq', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$deconstructVector, displayName: 'Vector Disintegration', internalName: 'deconstruct_vec', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qeeeee', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$coerceAxial, displayName: 'Axial Purification', internalName: 'coerce_axial', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqaww', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$andBool, displayName: 'Conjunction Distillation', internalName: 'and', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wdw', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$orBool, displayName: 'Disjunction Distillation', internalName: 'or', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waw', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$xorBool, displayName: 'Exclusion Distillation', internalName: 'xor', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dwa', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$greaterThan, displayName: 'Maximus Distillation', internalName: 'greater', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'e', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$lessThan, displayName: 'Minimus Distillation', internalName: 'less', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'q', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$greaterThanOrEqualTo, displayName: 'Maximus Distillation II', internalName: 'greater_eq', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ee', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$lessThanOrEqualTo, displayName: 'Minimus Distillation II', internalName: 'less_eq', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qq', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$equalTo, displayName: 'Equality Distillation', internalName: 'equals', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ad', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$notEqualTo, displayName: 'Inequality Distillation', internalName: 'not_equals', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'da', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$invertBool, displayName: 'Negation Purification', internalName: 'not', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dw', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$boolCoerce, displayName: 'Augur\'s Purification', internalName: 'bool_coerce', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aw', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$ifBool, displayName: 'Augur\'s Exaltation', internalName: 'if', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'awdd', startDirection: $author$project$Logic$App$Types$East},
+				{a: $author$project$Logic$App$Patterns$PatternRegistry$noAction, dC: 'Waystone Reflection', dZ: 'circle/impetus_pos', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'eaqwqae', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Circles$circleImpetusDirection, dC: 'Lodestone Reflection', dZ: 'circle/impetus_dir', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'eaqwqaewede', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Circles$circleBoundsMin, dC: 'Lesser Fold Reflection', dZ: 'circle/bounds/min', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'eaqwqaewdd', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Circles$circleBoundsMax, dC: 'Greater Fold Reflection', dZ: 'circle/bounds/max', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'aqwqawaaqa', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Stack$swap, dC: 'Jester\'s Gambit', dZ: 'swap', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'aawdd', c9: 0},
+				{a: $author$project$Logic$App$Patterns$Stack$rotate, dC: 'Rotation Gambit', dZ: 'rotate', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'aaeaa', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Stack$rotateReverse, dC: 'Rotation Gambit II', dZ: 'rotate_reverse', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'ddqdd', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Stack$duplicate, dC: 'Gemini Decomposition', dZ: 'duplicate', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'aadaa', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Stack$over, dC: 'Prospector\'s Gambit', dZ: 'over', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'aaedd', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Stack$tuck, dC: 'Undertaker\'s Gambit', dZ: 'tuck', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'ddqaa', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Stack$dup2, dC: 'Dioscuri Gambit', dZ: 'two_dup', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'aadadaaw', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Stack$stackLength, dC: 'Flock\'s Reflection', dZ: 'stack_len', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'qwaeawqaeaqa', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Stack$duplicateN, dC: 'Gemini Gambit', dZ: 'duplicate_n', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'aadaadaa', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Stack$fisherman, dC: 'Fisherman\'s Gambit', dZ: 'fisherman', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'ddad', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Stack$fishermanCopy, dC: 'Fisherman\'s Gambit II', dZ: 'fisherman/copy', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'aada', c9: 2},
+				{a: $author$project$Logic$App$Patterns$PatternRegistry$noAction, dC: '', dZ: 'swizzle', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'qaawdde', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$add, dC: 'Additive Distillation', dZ: 'add', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'waaw', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$subtract, dC: 'Subtractive Distillation', dZ: 'sub', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'wddw', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$mulDot, dC: 'Multiplicative Distillation', dZ: 'mul_dot', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'waqaw', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$divCross, dC: 'Division Distillation', dZ: 'div_cross', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'wdedw', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$absLen, dC: 'Length Purification', dZ: 'abs_len', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'wqaqw', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$powProj, dC: 'Power Distillation', dZ: 'pow_proj', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'wedew', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$floorAction, dC: 'Floor Purification', dZ: 'floor', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'ewq', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$ceilAction, dC: 'Ceiling Purification', dZ: 'ceil', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'qwe', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$constructVector, dC: 'Vector Exaltation', dZ: 'construct_vec', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'eqqqqq', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$deconstructVector, dC: 'Vector Disintegration', dZ: 'deconstruct_vec', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'qeeeee', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$coerceAxial, dC: 'Axial Purification', dZ: 'coerce_axial', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'qqqqqaww', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$andBool, dC: 'Conjunction Distillation', dZ: 'and', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'wdw', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$orBool, dC: 'Disjunction Distillation', dZ: 'or', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'waw', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$xorBool, dC: 'Exclusion Distillation', dZ: 'xor', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'dwa', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$greaterThan, dC: 'Maximus Distillation', dZ: 'greater', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'e', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$lessThan, dC: 'Minimus Distillation', dZ: 'less', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'q', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$greaterThanOrEqualTo, dC: 'Maximus Distillation II', dZ: 'greater_eq', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'ee', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$lessThanOrEqualTo, dC: 'Minimus Distillation II', dZ: 'less_eq', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'qq', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$equalTo, dC: 'Equality Distillation', dZ: 'equals', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'ad', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$notEqualTo, dC: 'Inequality Distillation', dZ: 'not_equals', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'da', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$invertBool, dC: 'Negation Purification', dZ: 'not', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'dw', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$boolCoerce, dC: 'Augur\'s Purification', dZ: 'bool_coerce', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'aw', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$ifBool, dC: 'Augur\'s Exaltation', dZ: 'if', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'awdd', c9: 2},
 				{
-				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
+				a: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
 					$author$project$Logic$App$Types$Number(0.5)),
-				displayName: 'Entropy Reflection',
-				internalName: 'random',
-				outputOptions: _List_Nil,
-				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'eqqq',
-				startDirection: $author$project$Logic$App$Types$East
+				dC: 'Entropy Reflection',
+				dZ: 'random',
+				bt: _List_Nil,
+				ak: $elm$core$Maybe$Nothing,
+				eU: 'eqqq',
+				c9: 2
 			},
-				{action: $author$project$Logic$App$Patterns$Math$sine, displayName: 'Sine Purification', internalName: 'sin', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqaa', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$cosine, displayName: 'Cosine Purification', internalName: 'cos', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqad', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$tangent, displayName: 'Tangent Purification', internalName: 'tan', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wqqqqqadq', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$arcsin, displayName: 'Inverse Sine Purification', internalName: 'arcsin', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddeeeee', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$arccos, displayName: 'Inverse Cosine Purification', internalName: 'arccos', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'adeeeee', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$arctan, displayName: 'Inverse Tangent Purification', internalName: 'arctan', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eadeeeeew', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$logarithm, displayName: 'Logarithmic Distillation', internalName: 'logarithm', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eqaqe', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$modulo, displayName: 'Modulus Distillation', internalName: 'modulo', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'addwaad', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$andBit, displayName: 'Intersection Distillation', internalName: 'and_bit', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wdweaqa', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$orBit, displayName: 'Unifying Distillation', internalName: 'or_bit', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waweaqa', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$xorBit, displayName: 'Exclusionary Distillation', internalName: 'xor_bit', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dwaeaqa', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$notBit, displayName: 'Inversion Purification', internalName: 'not_bit', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dweaqa', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Math$toSet, displayName: 'Uniqueness Purification', internalName: 'to_set', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aweaqa', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Misc$print, displayName: 'Reveal', internalName: 'print', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'de', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Spells$explode, displayName: 'Explosion', internalName: 'explode', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aawaawaa', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Spells$explodeFire, displayName: 'Fireball', internalName: 'explode/fire', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddwddwdd', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Spells$addMotion, displayName: 'Impulse', internalName: 'add_motion', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'awqqqwaqw', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Spells$blink, displayName: 'Blink', internalName: 'blink', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'awqqqwaq', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Spells$breakBlock, displayName: 'Break Block', internalName: 'break_block', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaqqqqq', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Spells$placeBlock, displayName: 'Place Block', internalName: 'place_block', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eeeeede', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Spells$colorize, displayName: 'Internalize Pigment', internalName: 'colorize', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'awddwqawqwawq', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Spells$createWater, displayName: 'Create Water', internalName: 'create_water', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqawqadaq', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Spells$destroyWater, displayName: 'Destroy Liquid', internalName: 'destroy_water', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dedwedade', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Spells$ignite, displayName: 'Ignite Block', internalName: 'ignite', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aaqawawa', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Spells$extinguish, displayName: 'Extinguish Area', internalName: 'extinguish', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddedwdwd', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Spells$conjureBlock, displayName: 'Conjure Block', internalName: 'conjure_block', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqa', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Spells$conjureLight, displayName: 'Conjure Light', internalName: 'conjure_light', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqd', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Spells$bonemeal, displayName: 'Overgrow', internalName: 'bonemeal', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wqaqwawqaqw', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Spells$recharge, displayName: 'Recharge Item', internalName: 'recharge', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqwaeaeaeaeaea', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Spells$erase, displayName: 'Erase Item', internalName: 'erase', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qdqawwaww', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Spells$edify, displayName: 'Edify Sapling', internalName: 'edify', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wqaqwd', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Spells$beep, displayName: 'Make Note', internalName: 'beep', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'adaa', startDirection: $author$project$Logic$App$Types$East},
+				{a: $author$project$Logic$App$Patterns$Math$sine, dC: 'Sine Purification', dZ: 'sin', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'qqqqqaa', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$cosine, dC: 'Cosine Purification', dZ: 'cos', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'qqqqqad', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$tangent, dC: 'Tangent Purification', dZ: 'tan', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'wqqqqqadq', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$arcsin, dC: 'Inverse Sine Purification', dZ: 'arcsin', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'ddeeeee', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$arccos, dC: 'Inverse Cosine Purification', dZ: 'arccos', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'adeeeee', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$arctan, dC: 'Inverse Tangent Purification', dZ: 'arctan', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'eadeeeeew', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$logarithm, dC: 'Logarithmic Distillation', dZ: 'logarithm', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'eqaqe', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$modulo, dC: 'Modulus Distillation', dZ: 'modulo', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'addwaad', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$andBit, dC: 'Intersection Distillation', dZ: 'and_bit', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'wdweaqa', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$orBit, dC: 'Unifying Distillation', dZ: 'or_bit', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'waweaqa', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$xorBit, dC: 'Exclusionary Distillation', dZ: 'xor_bit', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'dwaeaqa', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$notBit, dC: 'Inversion Purification', dZ: 'not_bit', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'dweaqa', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Math$toSet, dC: 'Uniqueness Purification', dZ: 'to_set', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'aweaqa', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Misc$print, dC: 'Reveal', dZ: 'print', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'de', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Spells$explode, dC: 'Explosion', dZ: 'explode', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'aawaawaa', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Spells$explodeFire, dC: 'Fireball', dZ: 'explode/fire', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'ddwddwdd', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Spells$addMotion, dC: 'Impulse', dZ: 'add_motion', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'awqqqwaqw', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Spells$blink, dC: 'Blink', dZ: 'blink', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'awqqqwaq', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Spells$breakBlock, dC: 'Break Block', dZ: 'break_block', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'qaqqqqq', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Spells$placeBlock, dC: 'Place Block', dZ: 'place_block', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'eeeeede', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Spells$colorize, dC: 'Internalize Pigment', dZ: 'colorize', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'awddwqawqwawq', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Spells$createWater, dC: 'Create Water', dZ: 'create_water', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'aqawqadaq', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Spells$destroyWater, dC: 'Destroy Liquid', dZ: 'destroy_water', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'dedwedade', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Spells$ignite, dC: 'Ignite Block', dZ: 'ignite', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'aaqawawa', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Spells$extinguish, dC: 'Extinguish Area', dZ: 'extinguish', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'ddedwdwd', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Spells$conjureBlock, dC: 'Conjure Block', dZ: 'conjure_block', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'qqa', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Spells$conjureLight, dC: 'Conjure Light', dZ: 'conjure_light', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'qqd', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Spells$bonemeal, dC: 'Overgrow', dZ: 'bonemeal', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'wqaqwawqaqw', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Spells$recharge, dC: 'Recharge Item', dZ: 'recharge', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'qqqqqwaeaeaeaeaea', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Spells$erase, dC: 'Erase Item', dZ: 'erase', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'qdqawwaww', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Spells$edify, dC: 'Edify Sapling', dZ: 'edify', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'wqaqwd', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Spells$beep, dC: 'Make Note', dZ: 'beep', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'adaa', c9: 2},
 				{
-				action: $author$project$Logic$App$Patterns$Spells$craftArtifact($author$project$Logic$App$Types$Cypher),
-				displayName: 'Craft Cypher',
-				internalName: 'craft/cypher',
-				outputOptions: _List_Nil,
-				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'waqqqqq',
-				startDirection: $author$project$Logic$App$Types$East
-			},
-				{
-				action: $author$project$Logic$App$Patterns$Spells$craftArtifact($author$project$Logic$App$Types$Trinket),
-				displayName: 'Craft Trinket',
-				internalName: 'craft/trinket',
-				outputOptions: _List_Nil,
-				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'wwaqqqqqeaqeaeqqqeaeq',
-				startDirection: $author$project$Logic$App$Types$East
+				a: $author$project$Logic$App$Patterns$Spells$craftArtifact(2),
+				dC: 'Craft Cypher',
+				dZ: 'craft/cypher',
+				bt: _List_Nil,
+				ak: $elm$core$Maybe$Nothing,
+				eU: 'waqqqqq',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$Spells$craftArtifact($author$project$Logic$App$Types$Artifact),
-				displayName: 'Craft Artifact',
-				internalName: 'craft/artifact',
-				outputOptions: _List_Nil,
-				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq',
-				startDirection: $author$project$Logic$App$Types$East
+				a: $author$project$Logic$App$Patterns$Spells$craftArtifact(0),
+				dC: 'Craft Trinket',
+				dZ: 'craft/trinket',
+				bt: _List_Nil,
+				ak: $elm$core$Maybe$Nothing,
+				eU: 'wwaqqqqqeaqeaeqqqeaeq',
+				c9: 2
 			},
-				{action: $author$project$Logic$App$Patterns$Spells$potion, displayName: 'White Sun\'s Nadir', internalName: 'potion/weakness', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqaqwawaw', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Spells$potionFixedPotency, displayName: 'Blue Sun\'s Nadir', internalName: 'potion/levitation', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqawwawawd', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Spells$potion, displayName: 'Black Sun\'s Nadir', internalName: 'potion/wither', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqaewawawe', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Spells$potion, displayName: 'Red Sun\'s Nadir', internalName: 'potion/poison', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqadwawaww', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Spells$potion, displayName: 'Green Sun\'s Nadir', internalName: 'potion/slowness', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqadwawaw', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Spells$sentinelCreate, displayName: 'Summon Sentinel', internalName: 'sentinel/create', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waeawae', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Spells$sentinelDestroy, displayName: 'Banish Sentinel', internalName: 'sentinel/destroy', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qdwdqdw', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Spells$sentinelGetPos, displayName: 'Locate Sentinel', internalName: 'sentinel/get_pos', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waeawaede', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Spells$sentinelWayfind, displayName: 'Wayfind Sentinel', internalName: 'sentinel/wayfind', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waeawaedwa', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'akashic/read', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqwqqqqqaq', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'akashic/write', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eeeweeeeede', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Charon\'s Gambit', internalName: 'halt', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqdee', startDirection: $author$project$Logic$App$Types$Southwest},
-				{action: $author$project$Logic$App$Patterns$ReadWrite$read, displayName: 'Scribe\'s Reflection', internalName: 'read', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqqqqq', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Chronicler\'s Purification', internalName: 'read/entity', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wawqwqwqwqwqw', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$ReadWrite$write, displayName: 'Scribe\'s Gambit', internalName: 'write', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'deeeee', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Chronicler\'s Gambit', internalName: 'write/entity', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wdwewewewewew', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$ReadWrite$readable, displayName: 'Auditor\'s Reflection', internalName: 'readable', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqqqqqe', startDirection: $author$project$Logic$App$Types$East},
 				{
-				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
+				a: $author$project$Logic$App$Patterns$Spells$craftArtifact(1),
+				dC: 'Craft Artifact',
+				dZ: 'craft/artifact',
+				bt: _List_Nil,
+				ak: $elm$core$Maybe$Nothing,
+				eU: 'wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq',
+				c9: 2
+			},
+				{a: $author$project$Logic$App$Patterns$Spells$potion, dC: 'White Sun\'s Nadir', dZ: 'potion/weakness', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'qqqqqaqwawaw', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Spells$potionFixedPotency, dC: 'Blue Sun\'s Nadir', dZ: 'potion/levitation', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'qqqqqawwawawd', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Spells$potion, dC: 'Black Sun\'s Nadir', dZ: 'potion/wither', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'qqqqqaewawawe', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Spells$potion, dC: 'Red Sun\'s Nadir', dZ: 'potion/poison', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'qqqqqadwawaww', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Spells$potion, dC: 'Green Sun\'s Nadir', dZ: 'potion/slowness', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'qqqqqadwawaw', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Spells$sentinelCreate, dC: 'Summon Sentinel', dZ: 'sentinel/create', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'waeawae', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Spells$sentinelDestroy, dC: 'Banish Sentinel', dZ: 'sentinel/destroy', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'qdwdqdw', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Spells$sentinelGetPos, dC: 'Locate Sentinel', dZ: 'sentinel/get_pos', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'waeawaede', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Spells$sentinelWayfind, dC: 'Wayfind Sentinel', dZ: 'sentinel/wayfind', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'waeawaedwa', c9: 2},
+				{a: $author$project$Logic$App$Patterns$PatternRegistry$noAction, dC: '', dZ: 'akashic/read', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'qqqwqqqqqaq', c9: 2},
+				{a: $author$project$Logic$App$Patterns$PatternRegistry$noAction, dC: '', dZ: 'akashic/write', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'eeeweeeeede', c9: 2},
+				{a: $author$project$Logic$App$Patterns$PatternRegistry$noAction, dC: 'Charon\'s Gambit', dZ: 'halt', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'aqdee', c9: 5},
+				{a: $author$project$Logic$App$Patterns$ReadWrite$read, dC: 'Scribe\'s Reflection', dZ: 'read', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'aqqqqq', c9: 2},
+				{a: $author$project$Logic$App$Patterns$PatternRegistry$noAction, dC: 'Chronicler\'s Purification', dZ: 'read/entity', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'wawqwqwqwqwqw', c9: 2},
+				{a: $author$project$Logic$App$Patterns$ReadWrite$write, dC: 'Scribe\'s Gambit', dZ: 'write', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'deeeee', c9: 2},
+				{a: $author$project$Logic$App$Patterns$PatternRegistry$noAction, dC: 'Chronicler\'s Gambit', dZ: 'write/entity', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'wdwewewewewew', c9: 2},
+				{a: $author$project$Logic$App$Patterns$ReadWrite$readable, dC: 'Auditor\'s Reflection', dZ: 'readable', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'aqqqqqe', c9: 2},
+				{
+				a: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
 					$author$project$Logic$App$Types$Boolean(false)),
-				displayName: 'Auditor\'s Purification',
-				internalName: 'readable/entity',
-				outputOptions: _List_Nil,
-				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'wawqwqwqwqwqwew',
-				startDirection: $author$project$Logic$App$Types$East
+				dC: 'Auditor\'s Purification',
+				dZ: 'readable/entity',
+				bt: _List_Nil,
+				ak: $elm$core$Maybe$Nothing,
+				eU: 'wawqwqwqwqwqwew',
+				c9: 2
 			},
-				{action: $author$project$Logic$App$Patterns$ReadWrite$writable, displayName: 'Assessor\'s Reflection', internalName: 'writable', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'deeeeeq', startDirection: $author$project$Logic$App$Types$East},
+				{a: $author$project$Logic$App$Patterns$ReadWrite$writable, dC: 'Assessor\'s Reflection', dZ: 'writable', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'deeeeeq', c9: 2},
 				{
-				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
+				a: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
 					$author$project$Logic$App$Types$Boolean(false)),
-				displayName: 'Assessor\'s Purification',
-				internalName: 'writable/entity',
-				outputOptions: _List_Nil,
-				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'wdwewewewewewqw',
-				startDirection: $author$project$Logic$App$Types$East
+				dC: 'Assessor\'s Purification',
+				dZ: 'writable/entity',
+				bt: _List_Nil,
+				ak: $elm$core$Maybe$Nothing,
+				eU: 'wdwewewewewewqw',
+				c9: 2
 			},
-				{action: $author$project$Logic$App$Patterns$ReadWrite$readLocal, displayName: 'Muninn\'s Reflection', internalName: 'read/local', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qeewdweddw', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$ReadWrite$writeLocal, displayName: 'Huginn\'s Gambit', internalName: 'write/local', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eqqwawqaaw', startDirection: $author$project$Logic$App$Types$East},
+				{a: $author$project$Logic$App$Patterns$ReadWrite$readLocal, dC: 'Muninn\'s Reflection', dZ: 'read/local', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'qeewdweddw', c9: 2},
+				{a: $author$project$Logic$App$Patterns$ReadWrite$writeLocal, dC: 'Huginn\'s Gambit', dZ: 'write/local', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'eqqwawqaaw', c9: 2},
 				{
-				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant($author$project$Logic$App$Types$Null),
-				displayName: 'Nullary Reflection',
-				internalName: 'const/null',
-				outputOptions: _List_Nil,
-				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'd',
-				startDirection: $author$project$Logic$App$Types$East
+				a: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant($author$project$Logic$App$Types$Null),
+				dC: 'Nullary Reflection',
+				dZ: 'const/null',
+				bt: _List_Nil,
+				ak: $elm$core$Maybe$Nothing,
+				eU: 'd',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
+				a: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
 					$author$project$Logic$App$Types$Boolean(true)),
-				displayName: 'True Reflection',
-				internalName: 'const/true',
-				outputOptions: _List_Nil,
-				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'aqae',
-				startDirection: $author$project$Logic$App$Types$East
+				dC: 'True Reflection',
+				dZ: 'const/true',
+				bt: _List_Nil,
+				ak: $elm$core$Maybe$Nothing,
+				eU: 'aqae',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
+				a: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
 					$author$project$Logic$App$Types$Boolean(false)),
-				displayName: 'False Reflection',
-				internalName: 'const/false',
-				outputOptions: _List_Nil,
-				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'dedq',
-				startDirection: $author$project$Logic$App$Types$East
+				dC: 'False Reflection',
+				dZ: 'const/false',
+				bt: _List_Nil,
+				ak: $elm$core$Maybe$Nothing,
+				eU: 'dedq',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
+				a: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
 					$author$project$Logic$App$Types$Vector(
 						_Utils_Tuple3(1, 0, 0))),
-				displayName: 'Vector Reflection +X',
-				internalName: 'const/vec/px',
-				outputOptions: _List_Nil,
-				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'qqqqqea',
-				startDirection: $author$project$Logic$App$Types$East
+				dC: 'Vector Reflection +X',
+				dZ: 'const/vec/px',
+				bt: _List_Nil,
+				ak: $elm$core$Maybe$Nothing,
+				eU: 'qqqqqea',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
+				a: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
 					$author$project$Logic$App$Types$Vector(
 						_Utils_Tuple3(0, 1, 0))),
-				displayName: 'Vector Reflection +Y',
-				internalName: 'const/vec/py',
-				outputOptions: _List_Nil,
-				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'qqqqqew',
-				startDirection: $author$project$Logic$App$Types$East
+				dC: 'Vector Reflection +Y',
+				dZ: 'const/vec/py',
+				bt: _List_Nil,
+				ak: $elm$core$Maybe$Nothing,
+				eU: 'qqqqqew',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
+				a: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
 					$author$project$Logic$App$Types$Vector(
 						_Utils_Tuple3(0, 0, 1))),
-				displayName: 'Vector Reflection +Z',
-				internalName: 'const/vec/pz',
-				outputOptions: _List_Nil,
-				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'qqqqqed',
-				startDirection: $author$project$Logic$App$Types$East
+				dC: 'Vector Reflection +Z',
+				dZ: 'const/vec/pz',
+				bt: _List_Nil,
+				ak: $elm$core$Maybe$Nothing,
+				eU: 'qqqqqed',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
+				a: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
 					$author$project$Logic$App$Types$Vector(
 						_Utils_Tuple3(-1, 0, 0))),
-				displayName: 'Vector Reflection -X',
-				internalName: 'const/vec/nx',
-				outputOptions: _List_Nil,
-				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'eeeeeqa',
-				startDirection: $author$project$Logic$App$Types$East
+				dC: 'Vector Reflection -X',
+				dZ: 'const/vec/nx',
+				bt: _List_Nil,
+				ak: $elm$core$Maybe$Nothing,
+				eU: 'eeeeeqa',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
+				a: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
 					$author$project$Logic$App$Types$Vector(
 						_Utils_Tuple3(0, -1, 0))),
-				displayName: 'Vector Reflection -Y',
-				internalName: 'const/vec/ny',
-				outputOptions: _List_Nil,
-				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'eeeeeqw',
-				startDirection: $author$project$Logic$App$Types$East
+				dC: 'Vector Reflection -Y',
+				dZ: 'const/vec/ny',
+				bt: _List_Nil,
+				ak: $elm$core$Maybe$Nothing,
+				eU: 'eeeeeqw',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
+				a: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
 					$author$project$Logic$App$Types$Vector(
 						_Utils_Tuple3(0, 0, -1))),
-				displayName: 'Vector Reflection -Z',
-				internalName: 'const/vec/nz',
-				outputOptions: _List_Nil,
-				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'eeeeeqd',
-				startDirection: $author$project$Logic$App$Types$East
+				dC: 'Vector Reflection -Z',
+				dZ: 'const/vec/nz',
+				bt: _List_Nil,
+				ak: $elm$core$Maybe$Nothing,
+				eU: 'eeeeeqd',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
+				a: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
 					$author$project$Logic$App$Types$Vector(
 						_Utils_Tuple3(0, 0, 0))),
-				displayName: 'Vector Reflection Zero',
-				internalName: 'const/vec/0',
-				outputOptions: _List_Nil,
-				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'qqqqq',
-				startDirection: $author$project$Logic$App$Types$East
+				dC: 'Vector Reflection Zero',
+				dZ: 'const/vec/0',
+				bt: _List_Nil,
+				ak: $elm$core$Maybe$Nothing,
+				eU: 'qqqqq',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
+				a: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
 					$author$project$Logic$App$Types$Number($elm$core$Basics$pi)),
-				displayName: 'Arc\'s Reflection',
-				internalName: 'const/double/pi',
-				outputOptions: _List_Nil,
-				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'qdwdq',
-				startDirection: $author$project$Logic$App$Types$East
+				dC: 'Arc\'s Reflection',
+				dZ: 'const/double/pi',
+				bt: _List_Nil,
+				ak: $elm$core$Maybe$Nothing,
+				eU: 'qdwdq',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
+				a: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
 					$author$project$Logic$App$Types$Number($elm$core$Basics$pi * 2)),
-				displayName: 'Circle\'s Reflection',
-				internalName: 'const/double/tau',
-				outputOptions: _List_Nil,
-				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'eawae',
-				startDirection: $author$project$Logic$App$Types$East
+				dC: 'Circle\'s Reflection',
+				dZ: 'const/double/tau',
+				bt: _List_Nil,
+				ak: $elm$core$Maybe$Nothing,
+				eU: 'eawae',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
+				a: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
 					$author$project$Logic$App$Types$Number($elm$core$Basics$e)),
-				displayName: 'Euler\'s Reflection',
-				internalName: 'const/double/e',
-				outputOptions: _List_Nil,
-				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'aaq',
-				startDirection: $author$project$Logic$App$Types$East
+				dC: 'Euler\'s Reflection',
+				dZ: 'const/double/e',
+				bt: _List_Nil,
+				ak: $elm$core$Maybe$Nothing,
+				eU: 'aaq',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$Selectors$getEntity,
-				displayName: 'Entity Purification',
-				internalName: 'get_entity',
-				outputOptions: _List_fromArray(
+				a: $author$project$Logic$App$Patterns$Selectors$getEntity,
+				dC: 'Entity Purification',
+				dZ: 'get_entity',
+				bt: _List_fromArray(
 					[$author$project$Logic$App$Types$EntityType, $author$project$Logic$App$Types$NullType]),
-				selectedOutput: $elm$core$Maybe$Just(
+				ak: $elm$core$Maybe$Just(
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$EntityType,
-						$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset))),
-				signature: 'qqqqqdaqa',
-				startDirection: $author$project$Logic$App$Types$East
+						$author$project$Logic$App$Types$Entity(0))),
+				eU: 'qqqqqdaqa',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$Selectors$getEntity,
-				displayName: 'Entity Purification: Animal',
-				internalName: 'get_entity/animal',
-				outputOptions: _List_fromArray(
+				a: $author$project$Logic$App$Patterns$Selectors$getEntity,
+				dC: 'Entity Purification: Animal',
+				dZ: 'get_entity/animal',
+				bt: _List_fromArray(
 					[$author$project$Logic$App$Types$EntityType, $author$project$Logic$App$Types$NullType]),
-				selectedOutput: $elm$core$Maybe$Just(
+				ak: $elm$core$Maybe$Just(
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$EntityType,
-						$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset))),
-				signature: 'qqqqqdaqaawa',
-				startDirection: $author$project$Logic$App$Types$East
+						$author$project$Logic$App$Types$Entity(0))),
+				eU: 'qqqqqdaqaawa',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$Selectors$getEntity,
-				displayName: 'Entity Purification: Monster',
-				internalName: 'get_entity/monster',
-				outputOptions: _List_fromArray(
+				a: $author$project$Logic$App$Patterns$Selectors$getEntity,
+				dC: 'Entity Purification: Monster',
+				dZ: 'get_entity/monster',
+				bt: _List_fromArray(
 					[$author$project$Logic$App$Types$EntityType, $author$project$Logic$App$Types$NullType]),
-				selectedOutput: $elm$core$Maybe$Just(
+				ak: $elm$core$Maybe$Just(
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$EntityType,
-						$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset))),
-				signature: 'qqqqqdaqaawq',
-				startDirection: $author$project$Logic$App$Types$East
+						$author$project$Logic$App$Types$Entity(0))),
+				eU: 'qqqqqdaqaawq',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$Selectors$getEntity,
-				displayName: 'Entity Purification: Item',
-				internalName: 'get_entity/item',
-				outputOptions: _List_fromArray(
+				a: $author$project$Logic$App$Patterns$Selectors$getEntity,
+				dC: 'Entity Purification: Item',
+				dZ: 'get_entity/item',
+				bt: _List_fromArray(
 					[$author$project$Logic$App$Types$EntityType, $author$project$Logic$App$Types$NullType]),
-				selectedOutput: $elm$core$Maybe$Just(
+				ak: $elm$core$Maybe$Just(
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$EntityType,
-						$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset))),
-				signature: 'qqqqqdaqaaww',
-				startDirection: $author$project$Logic$App$Types$East
+						$author$project$Logic$App$Types$Entity(0))),
+				eU: 'qqqqqdaqaaww',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$Selectors$getEntity,
-				displayName: 'Entity Purification: Player',
-				internalName: 'get_entity/player',
-				outputOptions: _List_fromArray(
+				a: $author$project$Logic$App$Patterns$Selectors$getEntity,
+				dC: 'Entity Purification: Player',
+				dZ: 'get_entity/player',
+				bt: _List_fromArray(
 					[$author$project$Logic$App$Types$EntityType, $author$project$Logic$App$Types$NullType]),
-				selectedOutput: $elm$core$Maybe$Just(
+				ak: $elm$core$Maybe$Just(
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$EntityType,
-						$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset))),
-				signature: 'qqqqqdaqaawe',
-				startDirection: $author$project$Logic$App$Types$East
+						$author$project$Logic$App$Types$Entity(0))),
+				eU: 'qqqqqdaqaawe',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$Selectors$getEntity,
-				displayName: 'Entity Purification: Living',
-				internalName: 'get_entity/living',
-				outputOptions: _List_fromArray(
+				a: $author$project$Logic$App$Patterns$Selectors$getEntity,
+				dC: 'Entity Purification: Living',
+				dZ: 'get_entity/living',
+				bt: _List_fromArray(
 					[$author$project$Logic$App$Types$EntityType, $author$project$Logic$App$Types$NullType]),
-				selectedOutput: $elm$core$Maybe$Just(
+				ak: $elm$core$Maybe$Just(
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$EntityType,
-						$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset))),
-				signature: 'qqqqqdaqaawd',
-				startDirection: $author$project$Logic$App$Types$East
+						$author$project$Logic$App$Types$Entity(0))),
+				eU: 'qqqqqdaqaawd',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
-				displayName: 'Zone Distillation: Any',
-				internalName: 'zone_entity',
-				outputOptions: _List_fromArray(
+				a: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
+				dC: 'Zone Distillation: Any',
+				dZ: 'zone_entity',
+				bt: _List_fromArray(
 					[
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
 					]),
-				selectedOutput: $elm$core$Maybe$Just(
+				ak: $elm$core$Maybe$Just(
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
 						$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-				signature: 'qqqqqwded',
-				startDirection: $author$project$Logic$App$Types$East
+				eU: 'qqqqqwded',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
-				displayName: 'Zone Distillation: Animal',
-				internalName: 'zone_entity/animal',
-				outputOptions: _List_fromArray(
+				a: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
+				dC: 'Zone Distillation: Animal',
+				dZ: 'zone_entity/animal',
+				bt: _List_fromArray(
 					[
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
 					]),
-				selectedOutput: $elm$core$Maybe$Just(
+				ak: $elm$core$Maybe$Just(
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
 						$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-				signature: 'qqqqqwdeddwa',
-				startDirection: $author$project$Logic$App$Types$East
+				eU: 'qqqqqwdeddwa',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
-				displayName: 'Zone Distillation: Non-Animal',
-				internalName: 'zone_entity/not_animal',
-				outputOptions: _List_fromArray(
+				a: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
+				dC: 'Zone Distillation: Non-Animal',
+				dZ: 'zone_entity/not_animal',
+				bt: _List_fromArray(
 					[
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
 					]),
-				selectedOutput: $elm$core$Maybe$Just(
+				ak: $elm$core$Maybe$Just(
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
 						$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-				signature: 'eeeeewaqaawa',
-				startDirection: $author$project$Logic$App$Types$East
+				eU: 'eeeeewaqaawa',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
-				displayName: 'Zone Distillation: Monster',
-				internalName: 'zone_entity/monster',
-				outputOptions: _List_fromArray(
+				a: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
+				dC: 'Zone Distillation: Monster',
+				dZ: 'zone_entity/monster',
+				bt: _List_fromArray(
 					[
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
 					]),
-				selectedOutput: $elm$core$Maybe$Just(
+				ak: $elm$core$Maybe$Just(
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
 						$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-				signature: 'qqqqqwdeddwq',
-				startDirection: $author$project$Logic$App$Types$East
+				eU: 'qqqqqwdeddwq',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
-				displayName: 'Zone Distillation: Non-Monster',
-				internalName: 'zone_entity/not_monster',
-				outputOptions: _List_fromArray(
+				a: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
+				dC: 'Zone Distillation: Non-Monster',
+				dZ: 'zone_entity/not_monster',
+				bt: _List_fromArray(
 					[
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
 					]),
-				selectedOutput: $elm$core$Maybe$Just(
+				ak: $elm$core$Maybe$Just(
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
 						$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-				signature: 'eeeeewaqaawq',
-				startDirection: $author$project$Logic$App$Types$East
+				eU: 'eeeeewaqaawq',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
-				displayName: 'Zone Distillation: Item',
-				internalName: 'zone_entity/item',
-				outputOptions: _List_fromArray(
+				a: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
+				dC: 'Zone Distillation: Item',
+				dZ: 'zone_entity/item',
+				bt: _List_fromArray(
 					[
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
 					]),
-				selectedOutput: $elm$core$Maybe$Just(
+				ak: $elm$core$Maybe$Just(
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
 						$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-				signature: 'qqqqqwdeddww',
-				startDirection: $author$project$Logic$App$Types$East
+				eU: 'qqqqqwdeddww',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
-				displayName: 'Zone Distillation: Non-Item',
-				internalName: 'zone_entity/not_item',
-				outputOptions: _List_fromArray(
+				a: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
+				dC: 'Zone Distillation: Non-Item',
+				dZ: 'zone_entity/not_item',
+				bt: _List_fromArray(
 					[
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
 					]),
-				selectedOutput: $elm$core$Maybe$Just(
+				ak: $elm$core$Maybe$Just(
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
 						$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-				signature: 'eeeeewaqaaww',
-				startDirection: $author$project$Logic$App$Types$East
+				eU: 'eeeeewaqaaww',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
-				displayName: 'Zone Distillation: Player',
-				internalName: 'zone_entity/player',
-				outputOptions: _List_fromArray(
+				a: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
+				dC: 'Zone Distillation: Player',
+				dZ: 'zone_entity/player',
+				bt: _List_fromArray(
 					[
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
 					]),
-				selectedOutput: $elm$core$Maybe$Just(
+				ak: $elm$core$Maybe$Just(
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
 						$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-				signature: 'qqqqqwdeddwe',
-				startDirection: $author$project$Logic$App$Types$East
+				eU: 'qqqqqwdeddwe',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
-				displayName: 'Zone Distillation: Non-Player',
-				internalName: 'zone_entity/not_player',
-				outputOptions: _List_fromArray(
+				a: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
+				dC: 'Zone Distillation: Non-Player',
+				dZ: 'zone_entity/not_player',
+				bt: _List_fromArray(
 					[
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
 					]),
-				selectedOutput: $elm$core$Maybe$Just(
+				ak: $elm$core$Maybe$Just(
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
 						$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-				signature: 'eeeeewaqaawe',
-				startDirection: $author$project$Logic$App$Types$East
+				eU: 'eeeeewaqaawe',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
-				displayName: 'Zone Distillation: Living',
-				internalName: 'zone_entity/living',
-				outputOptions: _List_fromArray(
+				a: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
+				dC: 'Zone Distillation: Living',
+				dZ: 'zone_entity/living',
+				bt: _List_fromArray(
 					[
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
 					]),
-				selectedOutput: $elm$core$Maybe$Just(
+				ak: $elm$core$Maybe$Just(
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
 						$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-				signature: 'qqqqqwdeddwd',
-				startDirection: $author$project$Logic$App$Types$East
+				eU: 'qqqqqwdeddwd',
+				c9: 2
 			},
 				{
-				action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
-				displayName: 'Zone Distillation: Non-Living',
-				internalName: 'zone_entity/not_living',
-				outputOptions: _List_fromArray(
+				a: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
+				dC: 'Zone Distillation: Non-Living',
+				dZ: 'zone_entity/not_living',
+				bt: _List_fromArray(
 					[
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
 					]),
-				selectedOutput: $elm$core$Maybe$Just(
+				ak: $elm$core$Maybe$Just(
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
 						$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-				signature: 'eeeeewaqaawd',
-				startDirection: $author$project$Logic$App$Types$East
+				eU: 'eeeeewaqaawd',
+				c9: 2
 			},
-				{action: $author$project$Logic$App$Patterns$Lists$append, displayName: 'Integration Distillation', internalName: 'append', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'edqde', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Lists$concat, displayName: 'Combination Distillation', internalName: 'concat', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaeaq', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Lists$index, displayName: 'Selection Distillation', internalName: 'index', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'deeed', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Lists$listSize, displayName: 'Abacus Purification', internalName: 'list_size', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqaeaq', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Lists$singleton, displayName: 'Single\'s Purification', internalName: 'singleton', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'adeeed', startDirection: $author$project$Logic$App$Types$East},
+				{a: $author$project$Logic$App$Patterns$Lists$append, dC: 'Integration Distillation', dZ: 'append', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'edqde', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Lists$concat, dC: 'Combination Distillation', dZ: 'concat', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'qaeaq', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Lists$index, dC: 'Selection Distillation', dZ: 'index', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'deeed', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Lists$listSize, dC: 'Abacus Purification', dZ: 'list_size', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'aqaeaq', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Lists$singleton, dC: 'Single\'s Purification', dZ: 'singleton', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'adeeed', c9: 2},
 				{
-				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
+				a: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
 					$author$project$Logic$App$Types$IotaList($elm$core$Array$empty)),
-				displayName: 'Vacant Reflection',
-				internalName: 'empty_list',
-				outputOptions: _List_Nil,
-				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'qqaeaae',
-				startDirection: $author$project$Logic$App$Types$East
+				dC: 'Vacant Reflection',
+				dZ: 'empty_list',
+				bt: _List_Nil,
+				ak: $elm$core$Maybe$Nothing,
+				eU: 'qqaeaae',
+				c9: 2
 			},
-				{action: $author$project$Logic$App$Patterns$Lists$reverseList, displayName: 'Retrograde Purification', internalName: 'reverse_list', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqaede', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Lists$lastNList, displayName: 'Flock\'s Gambit', internalName: 'last_n_list', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ewdqdwe', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Lists$splat, displayName: 'Flock\'s Disintegration', internalName: 'splat', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qwaeawq', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Lists$indexOf, displayName: 'Locator\'s Distillation', internalName: 'index_of', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dedqde', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Lists$listRemove, displayName: 'Excisor\'s Distillation', internalName: 'list_remove', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'edqdewaqa', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Lists$slice, displayName: 'Selection Exaltation', internalName: 'slice', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaeaqwded', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Lists$modifyinPlace, displayName: 'Surgeon\'s Exaltation', internalName: 'modify_in_place', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wqaeaqw', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Lists$construct, displayName: 'Speaker\'s Distillation', internalName: 'construct', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddewedd', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$Lists$deconstruct, displayName: 'Speaker\'s Decomposition', internalName: 'deconstruct', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aaqwqaa', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Consideration', internalName: 'escape', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqaw', startDirection: $author$project$Logic$App$Types$West},
+				{a: $author$project$Logic$App$Patterns$Lists$reverseList, dC: 'Retrograde Purification', dZ: 'reverse_list', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'qqqaede', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Lists$lastNList, dC: 'Flock\'s Gambit', dZ: 'last_n_list', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'ewdqdwe', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Lists$splat, dC: 'Flock\'s Disintegration', dZ: 'splat', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'qwaeawq', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Lists$indexOf, dC: 'Locator\'s Distillation', dZ: 'index_of', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'dedqde', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Lists$listRemove, dC: 'Excisor\'s Distillation', dZ: 'list_remove', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'edqdewaqa', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Lists$slice, dC: 'Selection Exaltation', dZ: 'slice', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'qaeaqwded', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Lists$modifyinPlace, dC: 'Surgeon\'s Exaltation', dZ: 'modify_in_place', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'wqaeaqw', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Lists$construct, dC: 'Speaker\'s Distillation', dZ: 'construct', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'ddewedd', c9: 2},
+				{a: $author$project$Logic$App$Patterns$Lists$deconstruct, dC: 'Speaker\'s Decomposition', dZ: 'deconstruct', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'aaqwqaa', c9: 2},
+				{a: $author$project$Logic$App$Patterns$PatternRegistry$noAction, dC: 'Consideration', dZ: 'escape', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'qqqaw', c9: 3},
 				{
-				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
+				a: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
 					$author$project$Logic$App$Types$OpenParenthesis($elm$core$Array$empty)),
-				displayName: 'Introspection',
-				internalName: 'open_paren',
-				outputOptions: _List_Nil,
-				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'qqq',
-				startDirection: $author$project$Logic$App$Types$West
+				dC: 'Introspection',
+				dZ: 'open_paren',
+				bt: _List_Nil,
+				ak: $elm$core$Maybe$Nothing,
+				eU: 'qqq',
+				c9: 3
 			},
-				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Retrospection', internalName: 'close_paren', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eee', startDirection: $author$project$Logic$App$Types$East},
-				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Hermes\' Gambit', internalName: 'eval', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'deaqq', startDirection: $author$project$Logic$App$Types$Southeast},
-				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Thoth\'s Gambit', internalName: 'for_each', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dadad', startDirection: $author$project$Logic$App$Types$Northeast}
+				{a: $author$project$Logic$App$Patterns$PatternRegistry$noAction, dC: 'Retrospection', dZ: 'close_paren', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'eee', c9: 2},
+				{a: $author$project$Logic$App$Patterns$PatternRegistry$noAction, dC: 'Hermes\' Gambit', dZ: 'eval', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'deaqq', c9: 4},
+				{a: $author$project$Logic$App$Patterns$PatternRegistry$noAction, dC: 'Thoth\'s Gambit', dZ: 'for_each', bt: _List_Nil, ak: $elm$core$Maybe$Nothing, eU: 'dadad', c9: 0}
 			])));
 var $elm$json$Json$Encode$float = _Json_wrap;
 var $author$project$Ports$HexNumGen$sendNumber = _Platform_outgoingPort('sendNumber', $elm$json$Json$Encode$float);
 var $elm$core$String$toFloat = _String_toFloat;
 var $elm$core$String$trim = _String_trim;
-var $author$project$Logic$App$Types$InvalidPattern = {$: 'InvalidPattern'};
+var $author$project$Logic$App$Types$InvalidPattern = 0;
 var $author$project$Settings$Theme$accent3 = '#e0b8b8';
 var $author$project$Logic$App$Patterns$PatternRegistry$unknownPattern = {
-	action: F2(
+	a: F2(
 		function (stack, ctx) {
 			return {
-				ctx: ctx,
-				stack: A2(
+				aW: ctx,
+				eW: A2(
 					$author$project$Logic$App$Utils$Utils$unshift,
-					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$InvalidPattern),
+					$author$project$Logic$App$Types$Garbage(0),
 					stack),
-				success: false
+				ba: false
 			};
 		}),
-	active: true,
-	color: $author$project$Settings$Theme$accent3,
-	displayName: 'Unknown Pattern',
-	internalName: 'unknown',
-	metaAction: $author$project$Logic$App$Types$None,
-	outputOptions: _List_Nil,
-	selectedOutput: $elm$core$Maybe$Nothing,
-	signature: '',
-	startDirection: $author$project$Logic$App$Types$East
+	di: true,
+	S: $author$project$Settings$Theme$accent3,
+	dC: 'Unknown Pattern',
+	dZ: 'unknown',
+	N: 0,
+	bt: _List_Nil,
+	ak: $elm$core$Maybe$Nothing,
+	eU: '',
+	c9: 2
 };
 var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName = function (name) {
 	var _v0 = $elm$core$List$head(
 		A2(
 			$elm$core$List$filter,
 			function (regPattern) {
-				return _Utils_eq(regPattern.displayName, name) || (_Utils_eq(regPattern.internalName, name) || _Utils_eq(regPattern.signature, name));
+				return _Utils_eq(regPattern.dC, name) || (_Utils_eq(regPattern.dZ, name) || _Utils_eq(regPattern.eU, name));
 			},
 			$author$project$Logic$App$Patterns$PatternRegistry$patternRegistry));
-	if (_v0.$ === 'Just') {
+	if (!_v0.$) {
 		var a = _v0.a;
 		return _Utils_Tuple2(a, $elm$core$Platform$Cmd$none);
 	} else {
 		var _v1 = $elm$core$String$toFloat(name);
-		if (_v1.$ === 'Just') {
+		if (!_v1.$) {
 			var number = _v1.a;
 			return _Utils_Tuple2(
 				$author$project$Logic$App$Patterns$PatternRegistry$unknownPattern,
@@ -12968,7 +12945,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName = func
 						A2(
 							$elm$core$List$map,
 							function (x) {
-								return x.match;
+								return x.cI;
 							},
 							A2($elm$regex$Regex$find, $author$project$Logic$App$Utils$RegexPatterns$bookkeepersPattern, name)))));
 			var maskCode = A2($elm$core$String$split, '', regexMatch);
@@ -12976,16 +12953,16 @@ var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName = func
 				regexMatch,
 				$elm$core$String$trim(name)) ? _Utils_Tuple2(
 				{
-					action: $author$project$Logic$App$Patterns$Misc$mask(maskCode),
-					active: true,
-					color: $author$project$Settings$Theme$accent1,
-					displayName: 'Bookkeeper\'s Gambit: ' + $elm$core$String$concat(maskCode),
-					internalName: 'mask',
-					metaAction: $author$project$Logic$App$Types$None,
-					outputOptions: _List_Nil,
-					selectedOutput: $elm$core$Maybe$Nothing,
-					signature: '',
-					startDirection: $author$project$Logic$App$Types$East
+					a: $author$project$Logic$App$Patterns$Misc$mask(maskCode),
+					di: true,
+					S: $author$project$Settings$Theme$accent1,
+					dC: 'Bookkeeper\'s Gambit: ' + $elm$core$String$concat(maskCode),
+					dZ: 'mask',
+					N: 0,
+					bt: _List_Nil,
+					ak: $elm$core$Maybe$Nothing,
+					eU: '',
+					c9: 2
 				},
 				$elm$core$Platform$Cmd$none) : _Utils_Tuple2($author$project$Logic$App$Patterns$PatternRegistry$unknownPattern, $elm$core$Platform$Cmd$none);
 		}
@@ -12999,15 +12976,15 @@ var $author$project$Components$App$Grid$applyPathToGrid = F2(
 					$elm$core$List$filter,
 					function (activePnt) {
 						return _Utils_eq(
-							_Utils_Tuple2(activePnt.offsetX, activePnt.offsetY),
-							_Utils_Tuple2(pnt.offsetX, pnt.offsetY));
+							_Utils_Tuple2(activePnt.t, activePnt.r),
+							_Utils_Tuple2(pnt.t, pnt.r));
 					},
 					pointsToAdd));
-			if (replacedPnt.$ === 'Just') {
+			if (!replacedPnt.$) {
 				var point = replacedPnt.a;
 				return _Utils_update(
 					pnt,
-					{color: $author$project$Settings$Theme$accent2, connectedPoints: point.connectedPoints, used: true});
+					{S: $author$project$Settings$Theme$accent2, H: point.H, am: true});
 			} else {
 				return pnt;
 			}
@@ -13038,14 +13015,14 @@ var $author$project$Components$App$Grid$generateGrid = F3(
 							function (i, _v1) {
 								var radius = ((_Utils_cmp(r, rowCount - 3) > -1) || (_Utils_cmp(i, pointCount - 3) > -1)) ? 0 : (8.0 * scale);
 								return {
-									color: $author$project$Settings$Theme$accent1,
-									connectedPoints: _List_Nil,
-									offsetX: (i * 2) + A2($elm$core$Basics$modBy, 2, r),
-									offsetY: r,
-									radius: radius,
-									used: false,
-									x: (($author$project$Components$App$Grid$spacing(scale) * i) + (($author$project$Components$App$Grid$spacing(scale) / 2) * A2($elm$core$Basics$modBy, 2, r))) + ((gridWidth - ((pointCount - 3.5) * $author$project$Components$App$Grid$spacing(scale))) / 2),
-									y: ($author$project$Components$App$Grid$verticalSpacing(scale) * r) + ((gridHeight - ((rowCount - 4) * $author$project$Components$App$Grid$verticalSpacing(scale))) / 2)
+									S: $author$project$Settings$Theme$accent1,
+									H: _List_Nil,
+									t: (i * 2) + A2($elm$core$Basics$modBy, 2, r),
+									r: r,
+									bw: radius,
+									am: false,
+									m: (($author$project$Components$App$Grid$spacing(scale) * i) + (($author$project$Components$App$Grid$spacing(scale) / 2) * A2($elm$core$Basics$modBy, 2, r))) + ((gridWidth - ((pointCount - 3.5) * $author$project$Components$App$Grid$spacing(scale))) / 2),
+									n: ($author$project$Components$App$Grid$verticalSpacing(scale) * r) + ((gridHeight - ((rowCount - 4) * $author$project$Components$App$Grid$verticalSpacing(scale))) / 2)
 								};
 							}),
 						A2($elm$core$List$repeat, pointCount, 0));
@@ -13086,48 +13063,48 @@ var $author$project$Components$App$Grid$updateGridPoints = F5(
 	});
 var $author$project$Logic$App$Patterns$MetaActions$applyMetaAction = F2(
 	function (model, metaActionMsg) {
-		var settings = model.settings;
-		var grid = model.grid;
-		var castingContext = model.castingContext;
-		switch (metaActionMsg.$) {
-			case 'None':
+		var settings = model.aP;
+		var grid = model.F;
+		var castingContext = model.cj;
+		switch (metaActionMsg) {
+			case 0:
 				return model;
-			case 'Reset':
+			case 2:
 				return _Utils_update(
 					model,
 					{
-						castingContext: _Utils_update(
+						cj: _Utils_update(
 							castingContext,
-							{heldItemContent: $elm$core$Maybe$Nothing}),
-						grid: _Utils_update(
+							{dQ: $elm$core$Maybe$Nothing}),
+						F: _Utils_update(
 							grid,
 							{
-								points: A5($author$project$Components$App$Grid$updateGridPoints, grid.width, grid.height, $elm$core$Array$empty, _List_Nil, settings.gridScale)
+								b5: A5($author$project$Components$App$Grid$updateGridPoints, grid.ac, grid.cy, $elm$core$Array$empty, _List_Nil, settings.aI)
 							}),
-						insertionPoint: 0,
-						patternArray: $elm$core$Array$empty,
-						stack: $elm$core$Array$empty,
-						timeline: $elm$core$Array$empty
+						dY: 0,
+						eE: $elm$core$Array$empty,
+						eW: $elm$core$Array$empty,
+						be: $elm$core$Array$empty
 					});
-			case 'ClearPatterns':
+			case 1:
 				return _Utils_update(
 					model,
 					{
-						grid: _Utils_update(
+						F: _Utils_update(
 							grid,
 							{
-								points: A5($author$project$Components$App$Grid$updateGridPoints, grid.width, grid.height, $elm$core$Array$empty, _List_Nil, settings.gridScale)
+								b5: A5($author$project$Components$App$Grid$updateGridPoints, grid.ac, grid.cy, $elm$core$Array$empty, _List_Nil, settings.aI)
 							}),
-						insertionPoint: 0,
-						patternArray: $elm$core$Array$empty,
-						stack: $elm$core$Array$empty,
-						timeline: $elm$core$Array$empty
+						dY: 0,
+						eE: $elm$core$Array$empty,
+						eW: $elm$core$Array$empty,
+						be: $elm$core$Array$empty
 					});
-			case 'Backspace':
+			case 3:
 				var newUncoloredPatternArray = A2(
 					$elm_community$array_extra$Array$Extra$removeAt,
-					model.insertionPoint,
-					A2($elm_community$array_extra$Array$Extra$removeAt, model.insertionPoint, model.patternArray));
+					model.dY,
+					A2($elm_community$array_extra$Array$Extra$removeAt, model.dY, model.eE));
 				var stackResult = A3(
 					$author$project$Logic$App$Stack$EvalStack$applyPatternsToStack,
 					$elm$core$Array$empty,
@@ -13135,8 +13112,8 @@ var $author$project$Logic$App$Patterns$MetaActions$applyMetaAction = F2(
 					$elm$core$List$reverse(
 						$elm$core$List$unzip(
 							$elm$core$Array$toList(newUncoloredPatternArray)).a));
-				var resultArray = stackResult.resultArray;
-				var newStack = stackResult.stack;
+				var resultArray = stackResult.c1;
+				var newStack = stackResult.eW;
 				var newPatternArray = A3(
 					$elm_community$array_extra$Array$Extra$map2,
 					F2(
@@ -13151,21 +13128,21 @@ var $author$project$Logic$App$Patterns$MetaActions$applyMetaAction = F2(
 				return _Utils_update(
 					model,
 					{
-						castingContext: stackResult.ctx,
-						grid: _Utils_update(
+						cj: stackResult.aW,
+						F: _Utils_update(
 							grid,
 							{
-								points: A5($author$project$Components$App$Grid$updateGridPoints, grid.width, grid.height, newPatternArray, _List_Nil, settings.gridScale)
+								b5: A5($author$project$Components$App$Grid$updateGridPoints, grid.ac, grid.cy, newPatternArray, _List_Nil, settings.aI)
 							}),
-						insertionPoint: (_Utils_cmp(
-							model.insertionPoint,
-							$elm$core$Array$length(newPatternArray)) > 0) ? 0 : model.insertionPoint,
-						patternArray: newPatternArray,
-						stack: newStack,
-						timeline: A2(
+						dY: (_Utils_cmp(
+							model.dY,
+							$elm$core$Array$length(newPatternArray)) > 0) ? 0 : model.dY,
+						eE: newPatternArray,
+						eW: newStack,
+						be: A2(
 							$author$project$Logic$App$Utils$Utils$unshift,
-							{patternIndex: -1, stack: $elm$core$Array$empty},
-							stackResult.timeline)
+							{eF: -1, eW: $elm$core$Array$empty},
+							stackResult.be)
 					});
 			default:
 				var newUncoloredPatternArray = A2(
@@ -13178,7 +13155,7 @@ var $author$project$Logic$App$Patterns$MetaActions$applyMetaAction = F2(
 						_Utils_Tuple2(
 							$author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName('open_paren').a,
 							_List_Nil),
-						A2($elm_community$array_extra$Array$Extra$removeAt, 0, model.patternArray)));
+						A2($elm_community$array_extra$Array$Extra$removeAt, 0, model.eE)));
 				var stackResult = A3(
 					$author$project$Logic$App$Stack$EvalStack$applyPatternsToStack,
 					$elm$core$Array$empty,
@@ -13186,8 +13163,8 @@ var $author$project$Logic$App$Patterns$MetaActions$applyMetaAction = F2(
 					$elm$core$List$reverse(
 						$elm$core$List$unzip(
 							$elm$core$Array$toList(newUncoloredPatternArray)).a));
-				var resultArray = stackResult.resultArray;
-				var newStack = stackResult.stack;
+				var resultArray = stackResult.c1;
+				var newStack = stackResult.eW;
 				var newPatternArray = A3(
 					$elm_community$array_extra$Array$Extra$map2,
 					F2(
@@ -13205,18 +13182,18 @@ var $author$project$Logic$App$Patterns$MetaActions$applyMetaAction = F2(
 						return x.a;
 					},
 					newPatternArray);
-				var drawPatternsResult = A2($author$project$Logic$App$Grid$drawPatterns, patterns, model.grid);
+				var drawPatternsResult = A2($author$project$Logic$App$Grid$drawPatterns, patterns, model.F);
 				return _Utils_update(
 					model,
 					{
-						castingContext: stackResult.ctx,
-						grid: drawPatternsResult.grid,
-						patternArray: drawPatternsResult.patternArray,
-						stack: newStack,
-						timeline: A2(
+						cj: stackResult.aW,
+						F: drawPatternsResult.F,
+						eE: drawPatternsResult.eE,
+						eW: newStack,
+						be: A2(
 							$author$project$Logic$App$Utils$Utils$unshift,
-							{patternIndex: -1, stack: $elm$core$Array$empty},
-							stackResult.timeline)
+							{eF: -1, eW: $elm$core$Array$empty},
+							stackResult.be)
 					});
 		}
 	});
@@ -13239,7 +13216,7 @@ var $author$project$Logic$App$Utils$GetAngleSignature$getAngleSignature = functi
 				$elm$core$Maybe$withDefault,
 				_Utils_Tuple2(
 					'',
-					_Utils_Tuple2($author$project$Logic$App$Types$ErrorDirection, $author$project$Logic$App$Types$ErrorDirection)),
+					_Utils_Tuple2(6, 6)),
 				$elm$core$List$head(
 					A2(
 						$elm$core$List$filter,
@@ -13251,10 +13228,10 @@ var $author$project$Logic$App$Utils$GetAngleSignature$getAngleSignature = functi
 						$author$project$Logic$App$Utils$LetterMap$letterMap))).a;
 		});
 	var directionVector = function (_v0) {
-		var x1 = _v0.x1;
-		var x2 = _v0.x2;
-		var y1 = _v0.y1;
-		var y2 = _v0.y2;
+		var x1 = _v0.bC;
+		var x2 = _v0.bD;
+		var y1 = _v0.bE;
+		var y2 = _v0.bF;
 		return _Utils_Tuple2(x2 - x1, y2 - y1);
 	};
 	var directionBetweenPoints = F2(
@@ -13262,7 +13239,7 @@ var $author$project$Logic$App$Utils$GetAngleSignature$getAngleSignature = functi
 			return A2(
 				$elm$core$Maybe$withDefault,
 				_Utils_Tuple2(
-					$author$project$Logic$App$Types$ErrorDirection,
+					6,
 					_Utils_Tuple2(404, 0)),
 				$elm$core$List$head(
 					A2(
@@ -13271,7 +13248,7 @@ var $author$project$Logic$App$Utils$GetAngleSignature$getAngleSignature = functi
 							return _Utils_eq(
 								x.b,
 								directionVector(
-									{x1: point1.a, x2: point2.a, y1: point1.b, y2: point2.b}));
+									{bC: point1.a, bD: point2.a, bE: point1.b, bF: point2.b}));
 						},
 						$author$project$Logic$App$Utils$DirectionMap$directionMap))).a;
 		});
@@ -13281,8 +13258,8 @@ var $author$project$Logic$App$Utils$GetAngleSignature$getAngleSignature = functi
 			function (pnt1, pnt2) {
 				return A2(
 					directionBetweenPoints,
-					_Utils_Tuple2(pnt1.offsetX, pnt1.offsetY),
-					_Utils_Tuple2(pnt2.offsetX, pnt2.offsetY));
+					_Utils_Tuple2(pnt1.t, pnt1.r),
+					_Utils_Tuple2(pnt2.t, pnt2.r));
 			}),
 		path,
 		A2(
@@ -13306,12 +13283,12 @@ var $elm$core$String$fromFloat = _String_fromNumber;
 var $author$project$Logic$App$Patterns$Misc$numberLiteral = F3(
 	function (number, stack, ctx) {
 		return {
-			ctx: ctx,
-			stack: A2(
+			aW: ctx,
+			eW: A2(
 				$author$project$Logic$App$Utils$Utils$unshift,
 				$author$project$Logic$App$Types$Number(number),
 				stack),
-			success: true
+			ba: true
 		};
 	});
 var $elm$core$String$foldr = _String_foldr;
@@ -13321,7 +13298,7 @@ var $elm$core$String$toList = function (string) {
 var $author$project$Logic$App$Patterns$PatternRegistry$numberLiteralGenerator = F2(
 	function (angleSignature, isNegative) {
 		var letterMap = function (letter) {
-			switch (letter.valueOf()) {
+			switch (letter) {
 				case 'w':
 					return $elm$core$Basics$add(1);
 				case 'q':
@@ -13344,38 +13321,38 @@ var $author$project$Logic$App$Patterns$PatternRegistry$numberLiteralGenerator = 
 				A2($elm$core$String$dropLeft, 4, angleSignature)));
 		var number = isNegative ? (-numberAbs) : numberAbs;
 		return {
-			action: $author$project$Logic$App$Patterns$Misc$numberLiteral(number),
-			active: true,
-			color: $author$project$Settings$Theme$accent1,
-			displayName: 'Numerical Reflection: ' + $elm$core$String$fromFloat(number),
-			internalName: $elm$core$String$fromFloat(number),
-			metaAction: $author$project$Logic$App$Types$None,
-			outputOptions: _List_Nil,
-			selectedOutput: $elm$core$Maybe$Nothing,
-			signature: angleSignature,
-			startDirection: $author$project$Logic$App$Types$Southeast
+			a: $author$project$Logic$App$Patterns$Misc$numberLiteral(number),
+			di: true,
+			S: $author$project$Settings$Theme$accent1,
+			dC: 'Numerical Reflection: ' + $elm$core$String$fromFloat(number),
+			dZ: $elm$core$String$fromFloat(number),
+			N: 0,
+			bt: _List_Nil,
+			ak: $elm$core$Maybe$Nothing,
+			eU: angleSignature,
+			c9: 4
 		};
 	});
 var $author$project$Logic$App$Patterns$PatternRegistry$parseBookkeeper = function (signature) {
 	if (signature === '') {
 		return {
-			action: $author$project$Logic$App$Patterns$Misc$mask(
+			a: $author$project$Logic$App$Patterns$Misc$mask(
 				_List_fromArray(
 					['-'])),
-			active: true,
-			color: $author$project$Settings$Theme$accent1,
-			displayName: 'Bookkeeper\'s -',
-			internalName: 'mask',
-			metaAction: $author$project$Logic$App$Types$None,
-			outputOptions: _List_Nil,
-			selectedOutput: $elm$core$Maybe$Nothing,
-			signature: signature,
-			startDirection: $author$project$Logic$App$Types$East
+			di: true,
+			S: $author$project$Settings$Theme$accent1,
+			dC: 'Bookkeeper\'s -',
+			dZ: 'mask',
+			N: 0,
+			bt: _List_Nil,
+			ak: $elm$core$Maybe$Nothing,
+			eU: signature,
+			c9: 2
 		};
 	} else {
 		var parseSignature = F2(
 			function (angle, accumulatorResult) {
-				if (accumulatorResult.$ === 'Ok') {
+				if (!accumulatorResult.$) {
 					var accumulator = accumulatorResult.a;
 					if (!$elm$core$List$length(accumulator)) {
 						return (angle === 'e') ? $elm$core$Result$Ok(
@@ -13432,7 +13409,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$parseBookkeeper = functio
 				parseSignature,
 				$elm$core$Result$Ok(_List_Nil),
 				angleList);
-			if (_v1.$ === 'Ok') {
+			if (!_v1.$) {
 				var maskCode = _v1.a;
 				return (A2(
 					$elm$core$Maybe$withDefault,
@@ -13446,19 +13423,19 @@ var $author$project$Logic$App$Patterns$PatternRegistry$parseBookkeeper = functio
 					$elm$core$List$reverse(maskCode));
 			}
 		}();
-		if (maskCodeResult.$ === 'Ok') {
+		if (!maskCodeResult.$) {
 			var maskCode = maskCodeResult.a;
 			return {
-				action: $author$project$Logic$App$Patterns$Misc$mask(maskCode),
-				active: true,
-				color: $author$project$Settings$Theme$accent1,
-				displayName: 'Bookkeeper\'s Gambit: ' + $elm$core$String$concat(maskCode),
-				internalName: 'mask',
-				metaAction: $author$project$Logic$App$Types$None,
-				outputOptions: _List_Nil,
-				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: signature,
-				startDirection: $author$project$Logic$App$Types$East
+				a: $author$project$Logic$App$Patterns$Misc$mask(maskCode),
+				di: true,
+				S: $author$project$Settings$Theme$accent1,
+				dC: 'Bookkeeper\'s Gambit: ' + $elm$core$String$concat(maskCode),
+				dZ: 'mask',
+				N: 0,
+				bt: _List_Nil,
+				ak: $elm$core$Maybe$Nothing,
+				eU: signature,
+				c9: 2
 			};
 		} else {
 			return $author$project$Logic$App$Patterns$PatternRegistry$unknownPattern;
@@ -13470,10 +13447,10 @@ var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature =
 		A2(
 			$elm$core$List$filter,
 			function (regPattern) {
-				return _Utils_eq(regPattern.signature, signature);
+				return _Utils_eq(regPattern.eU, signature);
 			},
 			$author$project$Logic$App$Patterns$PatternRegistry$patternRegistry));
-	if (_v0.$ === 'Just') {
+	if (!_v0.$) {
 		var a = _v0.a;
 		return a;
 	} else {
@@ -13484,9 +13461,9 @@ var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature =
 				return A2($author$project$Logic$App$Patterns$PatternRegistry$numberLiteralGenerator, signature, true);
 			} else {
 				var parseBookkeeperResult = $author$project$Logic$App$Patterns$PatternRegistry$parseBookkeeper(signature);
-				return (parseBookkeeperResult.internalName !== 'unknown') ? parseBookkeeperResult : _Utils_update(
+				return (parseBookkeeperResult.dZ !== 'unknown') ? parseBookkeeperResult : _Utils_update(
 					$author$project$Logic$App$Patterns$PatternRegistry$unknownPattern,
-					{displayName: 'Pattern ' + ('\"' + (signature + '\"')), signature: signature});
+					{dC: 'Pattern ' + ('\"' + (signature + '\"')), eU: signature});
 			}
 		}
 	}
@@ -13498,9 +13475,9 @@ var $elm$core$Array$indexedMap = F2(
 		var tree = _v0.c;
 		var tail = _v0.d;
 		var initialBuilder = {
-			nodeList: _List_Nil,
-			nodeListSize: 0,
-			tail: A3(
+			y: _List_Nil,
+			s: 0,
+			x: A3(
 				$elm$core$Elm$JsArray$indexedMap,
 				func,
 				$elm$core$Array$tailIndex(len),
@@ -13508,18 +13485,18 @@ var $elm$core$Array$indexedMap = F2(
 		};
 		var helper = F2(
 			function (node, builder) {
-				if (node.$ === 'SubTree') {
+				if (!node.$) {
 					var subTree = node.a;
 					return A3($elm$core$Elm$JsArray$foldl, helper, builder, subTree);
 				} else {
 					var leaf = node.a;
-					var offset = builder.nodeListSize * $elm$core$Array$branchFactor;
+					var offset = builder.s * $elm$core$Array$branchFactor;
 					var mappedLeaf = $elm$core$Array$Leaf(
 						A3($elm$core$Elm$JsArray$indexedMap, func, offset, leaf));
 					return {
-						nodeList: A2($elm$core$List$cons, mappedLeaf, builder.nodeList),
-						nodeListSize: builder.nodeListSize + 1,
-						tail: builder.tail
+						y: A2($elm$core$List$cons, mappedLeaf, builder.y),
+						s: builder.s + 1,
+						x: builder.x
 					};
 				}
 			});
@@ -13530,7 +13507,7 @@ var $elm$core$Array$indexedMap = F2(
 	});
 var $author$project$Logic$App$Msg$MouseMoveData = F4(
 	function (pageX, pageY, offsetHeight, offsetWidth) {
-		return {offsetHeight: offsetHeight, offsetWidth: offsetWidth, pageX: pageX, pageY: pageY};
+		return {ej: offsetHeight, el: offsetWidth, eB: pageX, eC: pageY};
 	});
 var $elm$json$Json$Decode$at = F2(
 	function (fields, decoder) {
@@ -13589,7 +13566,7 @@ var $author$project$Logic$App$ImportExport$ImportParser$parseInput = function (i
 							A2(
 								$elm$core$List$map,
 								function (val) {
-									return val.match;
+									return val.cI;
 								},
 								A2($elm$regex$Regex$find, $author$project$Logic$App$Utils$RegexPatterns$numberValuePattern, string))))))) : (A2($elm$regex$Regex$contains, $author$project$Logic$App$Utils$RegexPatterns$bookkeepersValuePattern, string) ? $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName(
 			$elm$core$String$trim(
@@ -13603,7 +13580,7 @@ var $author$project$Logic$App$ImportExport$ImportParser$parseInput = function (i
 							A2(
 								$elm$core$List$map,
 								function (val) {
-									return val.match;
+									return val.cI;
 								},
 								A2($elm$regex$Regex$find, $author$project$Logic$App$Utils$RegexPatterns$bookkeepersValuePattern, string))))))) : $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName(string))));
 	};
@@ -13629,7 +13606,7 @@ var $author$project$Logic$App$ImportExport$ImportParser$parseInput = function (i
 					A2($elm$core$String$split, '\n', input)))));
 };
 var $elm$time$Time$posixToMillis = function (_v0) {
-	var millis = _v0.a;
+	var millis = _v0;
 	return millis;
 };
 var $elm$json$Json$Encode$string = _Json_wrap;
@@ -13640,7 +13617,7 @@ var $elm$json$Json$Encode$list = F2(
 			A3(
 				$elm$core$List$foldl,
 				_Json_addEntry(func),
-				_Json_emptyArray(_Utils_Tuple0),
+				_Json_emptyArray(0),
 				entries));
 	});
 var $author$project$Ports$GetElementBoundingBoxById$requestBoundingBoxes = _Platform_outgoingPort(
@@ -13665,11 +13642,11 @@ var $author$project$Ports$GetGridDrawingAsImage$requestImage = _Platform_outgoin
 var $author$project$Logic$App$Grid$sortPatterns = function (model) {
 	var drawPatternsResult = A2(
 		$author$project$Logic$App$Grid$drawPatterns,
-		A2($elm$core$Array$map, $elm$core$Tuple$first, model.patternArray),
-		model.grid);
+		A2($elm$core$Array$map, $elm$core$Tuple$first, model.eE),
+		model.F);
 	return _Utils_update(
 		model,
-		{grid: drawPatternsResult.grid, patternArray: drawPatternsResult.patternArray});
+		{F: drawPatternsResult.F, eE: drawPatternsResult.eE});
 };
 var $elm$file$File$Download$string = F3(
 	function (name, mime, content) {
@@ -13682,7 +13659,7 @@ var $elm_community$array_extra$Array$Extra$update = F2(
 	function (index, alter) {
 		return function (array) {
 			var _v0 = A2($elm$core$Array$get, index, array);
-			if (_v0.$ === 'Nothing') {
+			if (_v0.$ === 1) {
 				return array;
 			} else {
 				var element = _v0.a;
@@ -13728,7 +13705,7 @@ var $author$project$Components$App$Grid$updateUsedGridPoints = F5(
 	});
 var $elm$random$Random$Seed = F2(
 	function (a, b) {
-		return {$: 'Seed', a: a, b: b};
+		return {$: 0, a: a, b: b};
 	});
 var $elm$random$Random$next = function (_v0) {
 	var state0 = _v0.a;
@@ -13744,9 +13721,7 @@ var $elm$random$Random$initialSeed = function (x) {
 	return $elm$random$Random$next(
 		A2($elm$random$Random$Seed, state2, incr));
 };
-var $elm$random$Random$Generator = function (a) {
-	return {$: 'Generator', a: a};
-};
+var $elm$random$Random$Generator = $elm$core$Basics$identity;
 var $elm$random$Random$peel = function (_v0) {
 	var state = _v0.a;
 	var word = (state ^ (state >>> ((state >>> 28) + 4))) * 277803737;
@@ -13754,39 +13729,38 @@ var $elm$random$Random$peel = function (_v0) {
 };
 var $elm$random$Random$int = F2(
 	function (a, b) {
-		return $elm$random$Random$Generator(
-			function (seed0) {
-				var _v0 = (_Utils_cmp(a, b) < 0) ? _Utils_Tuple2(a, b) : _Utils_Tuple2(b, a);
-				var lo = _v0.a;
-				var hi = _v0.b;
-				var range = (hi - lo) + 1;
-				if (!((range - 1) & range)) {
-					return _Utils_Tuple2(
-						(((range - 1) & $elm$random$Random$peel(seed0)) >>> 0) + lo,
-						$elm$random$Random$next(seed0));
-				} else {
-					var threshhold = (((-range) >>> 0) % range) >>> 0;
-					var accountForBias = function (seed) {
-						accountForBias:
-						while (true) {
-							var x = $elm$random$Random$peel(seed);
-							var seedN = $elm$random$Random$next(seed);
-							if (_Utils_cmp(x, threshhold) < 0) {
-								var $temp$seed = seedN;
-								seed = $temp$seed;
-								continue accountForBias;
-							} else {
-								return _Utils_Tuple2((x % range) + lo, seedN);
-							}
+		return function (seed0) {
+			var _v0 = (_Utils_cmp(a, b) < 0) ? _Utils_Tuple2(a, b) : _Utils_Tuple2(b, a);
+			var lo = _v0.a;
+			var hi = _v0.b;
+			var range = (hi - lo) + 1;
+			if (!((range - 1) & range)) {
+				return _Utils_Tuple2(
+					(((range - 1) & $elm$random$Random$peel(seed0)) >>> 0) + lo,
+					$elm$random$Random$next(seed0));
+			} else {
+				var threshhold = (((-range) >>> 0) % range) >>> 0;
+				var accountForBias = function (seed) {
+					accountForBias:
+					while (true) {
+						var x = $elm$random$Random$peel(seed);
+						var seedN = $elm$random$Random$next(seed);
+						if (_Utils_cmp(x, threshhold) < 0) {
+							var $temp$seed = seedN;
+							seed = $temp$seed;
+							continue accountForBias;
+						} else {
+							return _Utils_Tuple2((x % range) + lo, seedN);
 						}
-					};
-					return accountForBias(seed0);
-				}
-			});
+					}
+				};
+				return accountForBias(seed0);
+			}
+		};
 	});
 var $elm$random$Random$step = F2(
 	function (_v0, seed) {
-		var generator = _v0.a;
+		var generator = _v0;
 		return generator(seed);
 	});
 var $author$project$Components$App$Grid$updatemidLineOffsets = F2(
@@ -13806,10 +13780,10 @@ var $author$project$Components$App$Grid$updatemidLineOffsets = F2(
 			return _Utils_update(
 				point,
 				{
-					connectedPoints: A2(
+					H: A2(
 						$elm$core$List$map,
 						function (conPoint) {
-							var _v0 = conPoint.betweenOffsetValues;
+							var _v0 = conPoint.ap;
 							var _v1 = _v0.a;
 							var a1 = _v1.a;
 							var a2 = _v1.b;
@@ -13822,8 +13796,8 @@ var $author$project$Components$App$Grid$updatemidLineOffsets = F2(
 							return _Utils_update(
 								conPoint,
 								{
-									betweenOffsetValues: function () {
-										var uniqueNumber = ((conPoint.offsetY * 10000) + conPoint.offsetX) + time;
+									ap: function () {
+										var uniqueNumber = ((conPoint.r * 10000) + conPoint.t) + time;
 										return _Utils_Tuple3(
 											_Utils_Tuple2(
 												A2(
@@ -13855,7 +13829,7 @@ var $author$project$Components$App$Grid$updatemidLineOffsets = F2(
 									}()
 								});
 						},
-						point.connectedPoints)
+						point.H)
 				});
 		};
 		return A2($elm$core$List$map, updateOffsets, grid_);
@@ -13870,26 +13844,26 @@ var $author$project$Main$update = F2(
 	function (msg, model) {
 		update:
 		while (true) {
-			var ui = model.ui;
-			var settings = model.settings;
-			var patternArray = model.patternArray;
-			var grid = model.grid;
-			var drawing = model.grid.drawing;
-			var castingContext = model.castingContext;
+			var ui = model.fb;
+			var settings = model.aP;
+			var patternArray = model.eE;
+			var grid = model.F;
+			var drawing = model.F.as;
+			var castingContext = model.cj;
 			switch (msg.$) {
-				case 'NoOp':
+				case 0:
 					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
-				case 'ViewPanel':
+				case 1:
 					var panel = msg.a;
 					var keys = msg.b;
-					return (!keys.shift) ? _Utils_Tuple2(
+					return (!keys.c6) ? _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
-								ui: _Utils_update(
+								fb: _Utils_update(
 									ui,
 									{
-										openPanels: _List_fromArray(
+										ex: _List_fromArray(
 											[panel])
 									})
 							}),
@@ -13897,104 +13871,104 @@ var $author$project$Main$update = F2(
 						_Utils_update(
 							model,
 							{
-								ui: _Utils_update(
+								fb: _Utils_update(
 									ui,
 									{
-										openPanels: _Utils_ap(
-											ui.openPanels,
+										ex: _Utils_ap(
+											ui.ex,
 											_List_fromArray(
 												[panel]))
 									})
 							}),
 						$elm$core$Platform$Cmd$none);
-				case 'GetGrid':
-					if (msg.a.$ === 'Ok') {
+				case 2:
+					if (!msg.a.$) {
 						var element = msg.a.a;
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
 								{
-									grid: _Utils_update(
+									F: _Utils_update(
 										grid,
 										{
-											height: element.element.height,
-											points: A5($author$project$Components$App$Grid$updateGridPoints, element.element.width, element.element.height, model.patternArray, _List_Nil, model.settings.gridScale),
-											width: element.element.width
+											cy: element.dK.cy,
+											b5: A5($author$project$Components$App$Grid$updateGridPoints, element.dK.ac, element.dK.cy, model.eE, _List_Nil, model.aP.aI),
+											ac: element.dK.ac
 										})
 								}),
 							$elm$core$Platform$Cmd$none);
 					} else {
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 					}
-				case 'GetContentSize':
-					if (msg.a.$ === 'Ok') {
+				case 3:
+					if (!msg.a.$) {
 						var element = msg.a.a;
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
 								{
-									window: {height: element.element.height, width: element.element.width}
+									bB: {cy: element.dK.cy, ac: element.dK.ac}
 								}),
 							$elm$core$Platform$Cmd$none);
 					} else {
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 					}
-				case 'MouseMove':
+				case 4:
 					var _v1 = msg.a;
 					var x = _v1.a;
 					var y = _v1.b;
-					return drawing.drawingMode ? _Utils_Tuple2(
+					return drawing.dG ? _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
-								grid: _Utils_update(
+								F: _Utils_update(
 									grid,
 									{
-										drawing: _Utils_update(
+										as: _Utils_update(
 											drawing,
 											{
-												activePath: $author$project$Components$App$Grid$addNearbyPoint(model)
+												aC: $author$project$Components$App$Grid$addNearbyPoint(model)
 											})
 									}),
-								mousePos: _Utils_Tuple2(x, y)
+								a5: _Utils_Tuple2(x, y)
 							}),
 						$elm$core$Platform$Cmd$none) : _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
-								mousePos: _Utils_Tuple2(x, y)
+								a5: _Utils_Tuple2(x, y)
 							}),
 						$elm$core$Platform$Cmd$none);
-				case 'GridDown':
+				case 5:
 					var _v2 = msg.a;
 					var x = _v2.a;
 					var y = _v2.b;
 					var mousePos = _Utils_Tuple2(x, y);
-					var closestPoint = A3($author$project$Components$App$Grid$getClosestPoint, mousePos, grid.points, model);
-					return (!closestPoint.used) ? _Utils_Tuple2(
+					var closestPoint = A3($author$project$Components$App$Grid$getClosestPoint, mousePos, grid.b5, model);
+					return (!closestPoint.am) ? _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
-								grid: _Utils_update(
+								F: _Utils_update(
 									grid,
 									{
-										drawing: _Utils_update(
+										as: _Utils_update(
 											drawing,
 											{
-												activePath: _List_fromArray(
+												aC: _List_fromArray(
 													[closestPoint]),
-												drawingMode: true
+												dG: true
 											})
 									}),
-								mousePos: mousePos
+								a5: mousePos
 							}),
 						$elm$core$Platform$Cmd$none) : _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
-				case 'MouseUp':
-					if (drawing.drawingMode) {
-						if ($elm$core$List$length(drawing.activePath) > 1) {
+				case 6:
+					if (drawing.dG) {
+						if ($elm$core$List$length(drawing.aC) > 1) {
 							var newPattern = $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature(
-								$author$project$Logic$App$Utils$GetAngleSignature$getAngleSignature(drawing.activePath));
-							var newUncoloredPatternArray = A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, model.insertionPoint);
+								$author$project$Logic$App$Utils$GetAngleSignature$getAngleSignature(drawing.aC));
+							var newUncoloredPatternArray = A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, model.dY);
 							var stackResult = A3(
 								$author$project$Logic$App$Stack$EvalStack$applyPatternsToStack,
 								$elm$core$Array$empty,
@@ -14006,9 +13980,9 @@ var $author$project$Main$update = F2(
 											return x.a;
 										},
 										$elm$core$Array$toList(
-											A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, model.insertionPoint)))));
-							var newStack = stackResult.stack;
-							var resultArray = stackResult.resultArray;
+											A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, model.dY)))));
+							var newStack = stackResult.eW;
+							var resultArray = stackResult.c1;
 							var newPatternArray = A3(
 								$elm_community$array_extra$Array$Extra$map2,
 								F2(
@@ -14023,43 +13997,43 @@ var $author$project$Main$update = F2(
 							var newGrid = _Utils_update(
 								grid,
 								{
-									drawing: _Utils_update(
+									as: _Utils_update(
 										drawing,
-										{activePath: _List_Nil, drawingMode: false})
+										{aC: _List_Nil, dG: false})
 								});
 							return A2(
 								$author$project$Main$update,
 								$author$project$Logic$App$Msg$SetTimelineIndex(
-									$elm$core$Array$length(stackResult.timeline) + 1),
+									$elm$core$Array$length(stackResult.be) + 1),
 								A2(
 									$author$project$Logic$App$Patterns$MetaActions$applyMetaAction,
 									_Utils_update(
 										model,
 										{
-											castingContext: stackResult.ctx,
-											grid: newGrid,
-											insertionPoint: (_Utils_cmp(
-												model.insertionPoint,
-												$elm$core$Array$length(model.patternArray)) > 0) ? 0 : model.insertionPoint,
-											patternArray: newPatternArray,
-											stack: newStack,
-											timeline: A2(
+											cj: stackResult.aW,
+											F: newGrid,
+											dY: (_Utils_cmp(
+												model.dY,
+												$elm$core$Array$length(model.eE)) > 0) ? 0 : model.dY,
+											eE: newPatternArray,
+											eW: newStack,
+											be: A2(
 												$author$project$Logic$App$Utils$Utils$unshift,
-												{patternIndex: -1, stack: $elm$core$Array$empty},
-												stackResult.timeline)
+												{eF: -1, eW: $elm$core$Array$empty},
+												stackResult.be)
 										}),
-									newPattern.metaAction));
+									newPattern.N));
 						} else {
 							return _Utils_Tuple2(
 								_Utils_update(
 									model,
 									{
-										grid: _Utils_update(
+										F: _Utils_update(
 											grid,
 											{
-												drawing: _Utils_update(
+												as: _Utils_update(
 													drawing,
-													{activePath: _List_Nil, drawingMode: false})
+													{aC: _List_Nil, dG: false})
 											})
 									}),
 								$elm$core$Platform$Cmd$none);
@@ -14067,10 +14041,10 @@ var $author$project$Main$update = F2(
 					} else {
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 					}
-				case 'RemoveFromPatternArray':
+				case 7:
 					var startIndex = msg.a;
 					var endIndex = msg.b;
-					var newUncoloredPatternArray = A3($author$project$Logic$App$Utils$Utils$removeFromArray, startIndex, endIndex, model.patternArray);
+					var newUncoloredPatternArray = A3($author$project$Logic$App$Utils$Utils$removeFromArray, startIndex, endIndex, model.eE);
 					var stackResult = A3(
 						$author$project$Logic$App$Stack$EvalStack$applyPatternsToStack,
 						$elm$core$Array$empty,
@@ -14078,8 +14052,8 @@ var $author$project$Main$update = F2(
 						$elm$core$List$reverse(
 							$elm$core$List$unzip(
 								$elm$core$Array$toList(newUncoloredPatternArray)).a));
-					var resultArray = stackResult.resultArray;
-					var newStack = stackResult.stack;
+					var resultArray = stackResult.c1;
+					var newStack = stackResult.eW;
 					var newPatternArray = A3(
 						$elm_community$array_extra$Array$Extra$map2,
 						F2(
@@ -14094,44 +14068,44 @@ var $author$project$Main$update = F2(
 					return A2(
 						$author$project$Main$update,
 						$author$project$Logic$App$Msg$SetTimelineIndex(
-							$elm$core$Array$length(stackResult.timeline) + 1),
+							$elm$core$Array$length(stackResult.be) + 1),
 						_Utils_update(
 							model,
 							{
-								castingContext: stackResult.ctx,
-								grid: _Utils_update(
+								cj: stackResult.aW,
+								F: _Utils_update(
 									grid,
 									{
-										points: A5($author$project$Components$App$Grid$updateGridPoints, grid.width, grid.height, newPatternArray, _List_Nil, settings.gridScale)
+										b5: A5($author$project$Components$App$Grid$updateGridPoints, grid.ac, grid.cy, newPatternArray, _List_Nil, settings.aI)
 									}),
-								insertionPoint: (_Utils_cmp(
-									model.insertionPoint,
-									$elm$core$Array$length(newPatternArray)) > 0) ? 0 : ((_Utils_cmp(model.insertionPoint, endIndex) < 0) ? A2($elm$core$Basics$max, model.insertionPoint, 0) : A2($elm$core$Basics$max, model.insertionPoint - 1, 0)),
-								patternArray: newPatternArray,
-								stack: newStack,
-								timeline: A2(
+								dY: (_Utils_cmp(
+									model.dY,
+									$elm$core$Array$length(newPatternArray)) > 0) ? 0 : ((_Utils_cmp(model.dY, endIndex) < 0) ? A2($elm$core$Basics$max, model.dY, 0) : A2($elm$core$Basics$max, model.dY - 1, 0)),
+								eE: newPatternArray,
+								eW: newStack,
+								be: A2(
 									$author$project$Logic$App$Utils$Utils$unshift,
-									{patternIndex: -1, stack: $elm$core$Array$empty},
-									stackResult.timeline)
+									{eF: -1, eW: $elm$core$Array$empty},
+									stackResult.be)
 							}));
-				case 'SetGridScale':
+				case 8:
 					var scale = msg.a;
 					return _Utils_Tuple2(
 						$author$project$Logic$App$Grid$sortPatterns(
 							_Utils_update(
 								model,
 								{
-									grid: _Utils_update(
+									F: _Utils_update(
 										grid,
 										{
-											points: A5($author$project$Components$App$Grid$updateGridPoints, grid.width, grid.height, model.patternArray, _List_Nil, scale)
+											b5: A5($author$project$Components$App$Grid$updateGridPoints, grid.ac, grid.cy, model.eE, _List_Nil, scale)
 										}),
-									settings: _Utils_update(
+									aP: _Utils_update(
 										settings,
-										{gridScale: scale})
+										{aI: scale})
 								})),
 						$elm$core$Platform$Cmd$none);
-				case 'WindowResize':
+				case 9:
 					return _Utils_Tuple2(
 						model,
 						$elm$core$Platform$Cmd$batch(
@@ -14146,32 +14120,32 @@ var $author$project$Main$update = F2(
 									$author$project$Logic$App$Msg$GetContentSize,
 									$elm$browser$Browser$Dom$getElement('content'))
 								])));
-				case 'Tick':
+				case 10:
 					var newTime = msg.a;
-					var drawnPoints = grid.drawnPoints;
-					var autocompleteIndex = (model.ui.patternInputField === '') ? 0 : model.ui.suggestionIndex;
+					var drawnPoints = grid.dH;
+					var autocompleteIndex = (model.fb.cR === '') ? 0 : model.fb.e$;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
-								grid: _Utils_update(
+								F: _Utils_update(
 									grid,
 									{
-										drawnPoints: A2(
+										dH: A2(
 											$author$project$Components$App$Grid$updatemidLineOffsets,
 											drawnPoints,
 											$elm$time$Time$posixToMillis(newTime))
 									}),
-								time: $elm$time$Time$posixToMillis(newTime),
-								ui: _Utils_update(
+								e3: $elm$time$Time$posixToMillis(newTime),
+								fb: _Utils_update(
 									ui,
-									{suggestionIndex: autocompleteIndex})
+									{e$: autocompleteIndex})
 							}),
 						$elm$core$Platform$Cmd$batch(
 							_List_fromArray(
 								[
 									$author$project$Ports$GetElementBoundingBoxById$requestBoundingBox('#add_pattern_input'),
-									$author$project$Ports$CheckMouseOverDragHandle$requestCheckMouseOverDragHandle(_Utils_Tuple0),
+									$author$project$Ports$CheckMouseOverDragHandle$requestCheckMouseOverDragHandle(0),
 									$author$project$Ports$GetElementBoundingBoxById$requestBoundingBoxes(
 									$elm$core$Array$toList(
 										A2(
@@ -14180,111 +14154,111 @@ var $author$project$Main$update = F2(
 												function (index, _v3) {
 													return '[data-index=\"' + ($elm$core$String$fromInt(index) + '\"]');
 												}),
-											model.patternArray)))
+											model.eE)))
 								])));
-				case 'UpdatePatternInputField':
+				case 11:
 					var text = msg.a;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
-								ui: _Utils_update(
+								fb: _Utils_update(
 									ui,
-									{patternInputField: text})
+									{cR: text})
 							}),
 						$elm$core$Platform$Cmd$none);
-				case 'InputPattern':
+				case 12:
 					var name = msg.a;
 					var newImportQueue = (name !== '') ? A2(
 						$elm$core$List$cons,
 						$author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName(name),
-						model.importQueue) : model.importQueue;
+						model.dV) : model.dV;
 					return $author$project$Main$updatePatternArrayFromQueue(
 						_Utils_update(
 							model,
-							{importQueue: newImportQueue}));
-				case 'SendNumberLiteralToGenerate':
+							{dV: newImportQueue}));
+				case 13:
 					var number = msg.a;
 					return _Utils_Tuple2(
 						model,
 						$author$project$Ports$HexNumGen$sendNumber(number));
-				case 'RecieveGeneratedNumberLiteral':
+				case 14:
 					var signature = msg.a;
 					var newPattern = $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature(signature);
 					return $author$project$Main$updatePatternArrayFromQueue(
 						_Utils_update(
 							model,
 							{
-								importQueue: A2(
+								dV: A2(
 									$elm$core$List$cons,
 									_Utils_Tuple2(newPattern, $elm$core$Platform$Cmd$none),
-									model.importQueue)
+									model.dV)
 							}));
-				case 'SelectPreviousSuggestion':
+				case 15:
 					var suggestLength = msg.a;
-					var newIndex = (model.ui.suggestionIndex <= 0) ? (A2($elm$core$Basics$min, 3, suggestLength) - 1) : (model.ui.suggestionIndex - 1);
+					var newIndex = (model.fb.e$ <= 0) ? (A2($elm$core$Basics$min, 3, suggestLength) - 1) : (model.fb.e$ - 1);
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
-								ui: _Utils_update(
+								fb: _Utils_update(
 									ui,
-									{suggestionIndex: newIndex})
+									{e$: newIndex})
 							}),
 						$elm$core$Platform$Cmd$none);
-				case 'SelectNextSuggestion':
+				case 16:
 					var suggestLength = msg.a;
 					var newIndex = (_Utils_cmp(
-						model.ui.suggestionIndex,
-						A2($elm$core$Basics$min, 3, suggestLength) - 1) > -1) ? 0 : (model.ui.suggestionIndex + 1);
+						model.fb.e$,
+						A2($elm$core$Basics$min, 3, suggestLength) - 1) > -1) ? 0 : (model.fb.e$ + 1);
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
-								ui: _Utils_update(
+								fb: _Utils_update(
 									ui,
-									{suggestionIndex: newIndex})
+									{e$: newIndex})
 							}),
 						$elm$core$Platform$Cmd$none);
-				case 'SelectFirstSuggestion':
+				case 17:
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
-								ui: _Utils_update(
+								fb: _Utils_update(
 									ui,
-									{suggestionIndex: 0})
+									{e$: 0})
 							}),
 						$elm$core$Platform$Cmd$none);
-				case 'RequestInputBoundingBox':
+				case 18:
 					var id = msg.a;
 					return _Utils_Tuple2(
 						model,
 						$author$project$Ports$GetElementBoundingBoxById$requestBoundingBox(id));
-				case 'RecieveInputBoundingBox':
+				case 19:
 					var result = msg.a;
-					if (result.$ === 'Ok') {
+					if (!result.$) {
 						var value = result.a;
-						return (value.element === '#add_pattern_input') ? _Utils_Tuple2(
+						return (value.dK === '#add_pattern_input') ? _Utils_Tuple2(
 							_Utils_update(
 								model,
 								{
-									ui: _Utils_update(
+									fb: _Utils_update(
 										ui,
 										{
-											patternInputLocation: _Utils_Tuple2(value.left, value.bottom)
+											b4: _Utils_Tuple2(value.d2, value.bm)
 										})
 								}),
 							$elm$core$Platform$Cmd$none) : _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 					} else {
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 					}
-				case 'RecieveInputBoundingBoxes':
+				case 20:
 					var resultList = msg.a;
 					var handleResult = function (result) {
-						if (result.$ === 'Ok') {
+						if (!result.$) {
 							var value = result.a;
-							return (value.top + value.bottom) / 2;
+							return (value.e9 + value.bm) / 2;
 						} else {
 							return 0.0;
 						}
@@ -14293,47 +14267,47 @@ var $author$project$Main$update = F2(
 						_Utils_update(
 							model,
 							{
-								ui: _Utils_update(
+								fb: _Utils_update(
 									ui,
 									{
-										patternElementMiddleLocations: A2($elm$core$List$map, handleResult, resultList)
+										bv: A2($elm$core$List$map, handleResult, resultList)
 									})
 							}),
 						$elm$core$Platform$Cmd$none);
-				case 'DragStart':
+				case 21:
 					var index = msg.a;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
-								ui: _Utils_update(
+								fb: _Utils_update(
 									ui,
 									{
-										dragging: _Utils_Tuple2(true, index),
-										mouseOverElementIndex: index
+										dF: _Utils_Tuple2(true, index),
+										ed: index
 									})
 							}),
 						$elm$core$Platform$Cmd$none);
-				case 'DragEnd':
+				case 22:
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
-								ui: _Utils_update(
+								fb: _Utils_update(
 									ui,
 									{
-										dragging: _Utils_Tuple2(false, -1),
-										mouseOverElementIndex: -1
+										dF: _Utils_Tuple2(false, -1),
+										ed: -1
 									})
 							}),
 						$elm$core$Platform$Cmd$none);
-				case 'DragOver':
+				case 23:
 					var eventJson = msg.b;
 					var event = A2($elm$json$Json$Decode$decodeValue, $author$project$Main$mouseMoveDecoder, eventJson);
 					var mousePos = function () {
-						if (event.$ === 'Ok') {
+						if (!event.$) {
 							var value = event.a;
-							return _Utils_Tuple2(value.pageX, value.pageY);
+							return _Utils_Tuple2(value.eB, value.eC);
 						} else {
 							return _Utils_Tuple2(0.0, 0.0);
 						}
@@ -14341,7 +14315,7 @@ var $author$project$Main$update = F2(
 					var closestElementToMouseY = A2(
 						$elm$core$Maybe$withDefault,
 						_Utils_Tuple2(
-							$elm$core$List$length(model.ui.patternElementMiddleLocations),
+							$elm$core$List$length(model.fb.bv),
 							0),
 						$elm$core$List$head(
 							A2(
@@ -14349,13 +14323,13 @@ var $author$project$Main$update = F2(
 								F2(
 									function (a, b) {
 										var _v6 = A2($elm$core$Basics$compare, a.b, b.b);
-										switch (_v6.$) {
-											case 'LT':
-												return $elm$core$Basics$LT;
-											case 'EQ':
-												return $elm$core$Basics$EQ;
+										switch (_v6) {
+											case 0:
+												return 0;
+											case 1:
+												return 1;
 											default:
-												return $elm$core$Basics$GT;
+												return 2;
 										}
 									}),
 								A2(
@@ -14369,38 +14343,38 @@ var $author$project$Main$update = F2(
 											function (index, yPos) {
 												return _Utils_Tuple2(index, mousePos.b - yPos);
 											}),
-										model.ui.patternElementMiddleLocations))))).a;
+										model.fb.bv))))).a;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
-								mousePos: mousePos,
-								ui: _Utils_update(
+								a5: mousePos,
+								fb: _Utils_update(
 									ui,
-									{mouseOverElementIndex: closestElementToMouseY})
+									{ed: closestElementToMouseY})
 							}),
 						$elm$core$Platform$Cmd$none);
-				case 'Drag':
+				case 24:
 					var event = msg.a;
-					var mouseEvent = event.mouseEvent;
-					var mousePos = mouseEvent.clientPos;
+					var mouseEvent = event.ec;
+					var mousePos = mouseEvent.ds;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{mousePos: mousePos}),
+							{a5: mousePos}),
 						$elm$core$Platform$Cmd$none);
-				case 'Drop':
-					var originIndex = model.ui.dragging.b;
-					var index = (_Utils_cmp(model.ui.mouseOverElementIndex, originIndex) > 0) ? (model.ui.mouseOverElementIndex - 1) : model.ui.mouseOverElementIndex;
+				case 25:
+					var originIndex = model.fb.dF.b;
+					var index = (_Utils_cmp(model.fb.ed, originIndex) > 0) ? (model.fb.ed - 1) : model.fb.ed;
 					var newUncoloredPatternArray = function () {
 						var _v8 = A2($elm$core$Array$get, originIndex, patternArray);
-						if (_v8.$ === 'Just') {
+						if (!_v8.$) {
 							var element = _v8.a;
 							return A3(
 								$elm_community$array_extra$Array$Extra$insertAt,
 								index,
 								element,
-								A3($author$project$Logic$App$Utils$Utils$removeFromArray, originIndex, originIndex + 1, model.patternArray));
+								A3($author$project$Logic$App$Utils$Utils$removeFromArray, originIndex, originIndex + 1, model.eE));
 						} else {
 							return patternArray;
 						}
@@ -14412,8 +14386,8 @@ var $author$project$Main$update = F2(
 						$elm$core$List$reverse(
 							$elm$core$List$unzip(
 								$elm$core$Array$toList(newUncoloredPatternArray)).a));
-					var newStack = stackResult.stack;
-					var resultArray = stackResult.resultArray;
+					var newStack = stackResult.eW;
+					var resultArray = stackResult.c1;
 					var newPatternArray = A3(
 						$elm_community$array_extra$Array$Extra$map2,
 						F2(
@@ -14428,108 +14402,108 @@ var $author$project$Main$update = F2(
 					return A2(
 						$author$project$Main$update,
 						$author$project$Logic$App$Msg$SetTimelineIndex(
-							$elm$core$Array$length(stackResult.timeline) + 1),
+							$elm$core$Array$length(stackResult.be) + 1),
 						$author$project$Logic$App$Grid$sortPatterns(
 							_Utils_update(
 								model,
 								{
-									castingContext: stackResult.ctx,
-									grid: _Utils_update(
+									cj: stackResult.aW,
+									F: _Utils_update(
 										grid,
 										{
-											points: A5($author$project$Components$App$Grid$updateGridPoints, grid.width, grid.height, newPatternArray, _List_Nil, settings.gridScale)
+											b5: A5($author$project$Components$App$Grid$updateGridPoints, grid.ac, grid.cy, newPatternArray, _List_Nil, settings.aI)
 										}),
-									patternArray: newPatternArray,
-									stack: newStack,
-									timeline: A2(
+									eE: newPatternArray,
+									eW: newStack,
+									be: A2(
 										$author$project$Logic$App$Utils$Utils$unshift,
-										{patternIndex: -1, stack: $elm$core$Array$empty},
-										stackResult.timeline),
-									ui: _Utils_update(
+										{eF: -1, eW: $elm$core$Array$empty},
+										stackResult.be),
+									fb: _Utils_update(
 										ui,
 										{
-											dragging: _Utils_Tuple2(false, -1),
-											mouseOverElementIndex: -1
+											dF: _Utils_Tuple2(false, -1),
+											ed: -1
 										})
 								})));
-				case 'SetFocus':
+				case 26:
 					var id = msg.a;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
-								ui: _Utils_update(
+								fb: _Utils_update(
 									ui,
-									{selectedInputID: id})
+									{eS: id})
 							}),
 						$elm$core$Platform$Cmd$none);
-				case 'RecieveMouseOverHandle':
+				case 27:
 					var bool = msg.a;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
-								ui: _Utils_update(
+								fb: _Utils_update(
 									ui,
-									{overDragHandle: bool})
+									{ey: bool})
 							}),
 						$elm$core$Platform$Cmd$none);
-				case 'ChangeHeldItem':
+				case 28:
 					var itemString = msg.a;
 					var item = function () {
 						switch (itemString) {
 							case 'Trinket':
-								return $author$project$Logic$App$Types$Trinket;
+								return 0;
 							case 'Cypher':
-								return $author$project$Logic$App$Types$Cypher;
+								return 2;
 							case 'Artifact':
-								return $author$project$Logic$App$Types$Artifact;
+								return 1;
 							case 'Spellbook':
-								return $author$project$Logic$App$Types$Spellbook;
+								return 4;
 							case 'Focus':
-								return $author$project$Logic$App$Types$Focus;
+								return 3;
 							case 'Pie':
-								return $author$project$Logic$App$Types$Pie;
+								return 5;
 							default:
-								return $author$project$Logic$App$Types$NoItem;
+								return 6;
 						}
 					}();
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
-								castingContext: _Utils_update(
+								cj: _Utils_update(
 									castingContext,
-									{heldItem: item, heldItemContent: $elm$core$Maybe$Nothing})
+									{bo: item, dQ: $elm$core$Maybe$Nothing})
 							}),
 						$elm$core$Platform$Cmd$none);
-				case 'RequestGridDrawingAsGIF':
+				case 29:
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{downloadSrc: ''}),
-						$author$project$Ports$GetGridDrawingAsGif$requestGIF(_Utils_Tuple0));
-				case 'RecieveGridDrawingAsGIF':
+							{dE: ''}),
+						$author$project$Ports$GetGridDrawingAsGif$requestGIF(0));
+				case 30:
 					var src = msg.a;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{downloadSrc: src}),
+							{dE: src}),
 						$elm$file$File$Download$url(src));
-				case 'RequestGridDrawingAsImage':
+				case 31:
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{downloadSrc: ''}),
-						$author$project$Ports$GetGridDrawingAsImage$requestImage(_Utils_Tuple0));
-				case 'RecieveGridDrawingAsImage':
+							{dE: ''}),
+						$author$project$Ports$GetGridDrawingAsImage$requestImage(0));
+				case 32:
 					var src = msg.a;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{downloadSrc: src}),
+							{dE: src}),
 						$elm$file$File$Download$url(src));
-				case 'UpdatePatternOuptut':
+				case 33:
 					var index = msg.a;
 					var replacementPattern = msg.b;
 					var newUncoloredPatternArray = A3(
@@ -14539,7 +14513,7 @@ var $author$project$Main$update = F2(
 							var d = patternTuple.b;
 							return _Utils_Tuple2(replacementPattern, d);
 						},
-						model.patternArray);
+						model.eE);
 					var stackResult = A3(
 						$author$project$Logic$App$Stack$EvalStack$applyPatternsToStack,
 						$elm$core$Array$empty,
@@ -14547,8 +14521,8 @@ var $author$project$Main$update = F2(
 						$elm$core$List$reverse(
 							$elm$core$List$unzip(
 								$elm$core$Array$toList(newUncoloredPatternArray)).a));
-					var resultArray = stackResult.resultArray;
-					var newStack = stackResult.stack;
+					var resultArray = stackResult.c1;
+					var newStack = stackResult.eW;
 					var newPatternArray = A3(
 						$elm_community$array_extra$Array$Extra$map2,
 						F2(
@@ -14563,87 +14537,87 @@ var $author$project$Main$update = F2(
 					return A2(
 						$author$project$Main$update,
 						$author$project$Logic$App$Msg$SetTimelineIndex(
-							$elm$core$Array$length(stackResult.timeline) + 1),
+							$elm$core$Array$length(stackResult.be) + 1),
 						_Utils_update(
 							model,
 							{
-								castingContext: stackResult.ctx,
-								grid: _Utils_update(
+								cj: stackResult.aW,
+								F: _Utils_update(
 									grid,
 									{
-										points: A5($author$project$Components$App$Grid$updateGridPoints, grid.width, grid.height, newPatternArray, _List_Nil, settings.gridScale)
+										b5: A5($author$project$Components$App$Grid$updateGridPoints, grid.ac, grid.cy, newPatternArray, _List_Nil, settings.aI)
 									}),
-								patternArray: newPatternArray,
-								stack: newStack,
-								timeline: A2(
+								eE: newPatternArray,
+								eW: newStack,
+								be: A2(
 									$author$project$Logic$App$Utils$Utils$unshift,
-									{patternIndex: -1, stack: $elm$core$Array$empty},
-									stackResult.timeline)
+									{eF: -1, eW: $elm$core$Array$empty},
+									stackResult.be)
 							}));
-				case 'SetInsertionPoint':
+				case 34:
 					var index = msg.a;
 					var keys = msg.b;
-					return keys.shift ? (_Utils_eq(model.insertionPoint, index) ? _Utils_Tuple2(
+					return keys.c6 ? (_Utils_eq(model.dY, index) ? _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{insertionPoint: 0}),
+							{dY: 0}),
 						$elm$core$Platform$Cmd$none) : _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{insertionPoint: index}),
+							{dY: index}),
 						$elm$core$Platform$Cmd$none)) : _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
-				case 'SetImportInputValue':
+				case 35:
 					var string = msg.a;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
-								ui: _Utils_update(
+								fb: _Utils_update(
 									ui,
-									{importInput: string})
+									{dU: string})
 							}),
 						$elm$core$Platform$Cmd$none);
-				case 'ImportText':
+				case 36:
 					var string = msg.a;
 					var importQueue = $author$project$Logic$App$ImportExport$ImportParser$parseInput(string);
 					return $author$project$Main$updatePatternArrayFromQueue(
 						_Utils_update(
 							model,
 							{
-								importQueue: importQueue,
-								ui: _Utils_update(
+								dV: importQueue,
+								fb: _Utils_update(
 									ui,
-									{importInput: '', openOverlay: $author$project$Logic$App$Types$NoOverlay})
+									{dU: '', ew: 0})
 							}));
-				case 'ViewOverlay':
+				case 37:
 					var overlay = msg.a;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
-								ui: _Utils_update(
+								fb: _Utils_update(
 									ui,
-									{openOverlay: overlay})
+									{ew: overlay})
 							}),
 						$elm$core$Platform$Cmd$none);
-				case 'Download':
+				case 38:
 					var string = msg.a;
 					return _Utils_Tuple2(
 						model,
 						A3($elm$file$File$Download$string, 'Hex.hexcasting', 'text/plain', string));
-				case 'SetTimelineIndex':
+				case 39:
 					var index = msg.a;
-					var timeline = ($elm$core$Array$length(model.timeline) < 2) ? A2(
+					var timeline = ($elm$core$Array$length(model.be) < 2) ? A2(
 						$elm$core$Array$repeat,
 						2,
-						{patternIndex: -1, stack: $elm$core$Array$empty}) : model.timeline;
+						{eF: -1, eW: $elm$core$Array$empty}) : model.be;
 					var timelinePatternIndex = (index >= 0) ? A2(
 						$elm$core$Maybe$withDefault,
 						$elm$core$Array$length(timeline),
 						A2(
 							$elm$core$Maybe$andThen,
 							function (x) {
-								return $elm$core$Maybe$Just(x.patternIndex);
+								return $elm$core$Maybe$Just(x.eF);
 							},
 							A2(
 								$elm$core$Array$get,
@@ -14663,71 +14637,71 @@ var $author$project$Main$update = F2(
 											return (_Utils_cmp(timelinePatternIndex, patternIndex) < 0) ? _Utils_Tuple2(
 												_Utils_update(
 													pat,
-													{active: false}),
+													{di: false}),
 												draw) : _Utils_Tuple2(
 												_Utils_update(
 													pat,
-													{active: true}),
+													{di: true}),
 												draw);
 										}());
 								},
 								$elm$core$Array$toIndexedList(
-									$elm_community$array_extra$Array$Extra$reverse(model.patternArray)))));
+									$elm_community$array_extra$Array$Extra$reverse(model.eE)))));
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
-								grid: _Utils_update(
+								F: _Utils_update(
 									grid,
 									{
-										drawnPoints: $author$project$Components$App$Grid$generateDrawnPointsListFromPatternArray(newPatternArray),
-										points: A5($author$project$Components$App$Grid$updateUsedGridPoints, grid.width, grid.height, newPatternArray, _List_Nil, settings.gridScale)
+										dH: $author$project$Components$App$Grid$generateDrawnPointsListFromPatternArray(newPatternArray),
+										b5: A5($author$project$Components$App$Grid$updateUsedGridPoints, grid.ac, grid.cy, newPatternArray, _List_Nil, settings.aI)
 									}),
-								patternArray: newPatternArray,
-								stack: _Utils_eq(
+								eE: newPatternArray,
+								eW: _Utils_eq(
 									index,
-									$elm$core$Array$length(timeline)) ? model.stack : A2(
+									$elm$core$Array$length(timeline)) ? model.eW : A2(
 									$elm$core$Maybe$withDefault,
 									$elm$core$Array$empty,
 									A2(
 										$elm$core$Maybe$andThen,
 										function (x) {
-											return $elm$core$Maybe$Just(x.stack);
+											return $elm$core$Maybe$Just(x.eW);
 										},
 										A2(
 											$elm$core$Array$get,
 											index,
 											$elm_community$array_extra$Array$Extra$reverse(timeline)))),
-								timelineIndex: index
+								aR: index
 							}),
 						$elm$core$Platform$Cmd$none);
 				default:
 					var event = msg.a;
-					var timeline = ($elm$core$Array$length(model.timeline) < 2) ? A2(
+					var timeline = ($elm$core$Array$length(model.be) < 2) ? A2(
 						$elm$core$Array$repeat,
 						2,
-						{patternIndex: -1, stack: $elm$core$Array$empty}) : model.timeline;
-					if (event.altKey && _Utils_eq(
-						event.key,
+						{eF: -1, eW: $elm$core$Array$empty}) : model.be;
+					if (event.ch && _Utils_eq(
+						event.cF,
 						$elm$core$Maybe$Just('ArrowRight'))) {
 						var $temp$msg = $author$project$Logic$App$Msg$SetTimelineIndex(
 							A2(
 								$elm$core$Basics$min,
 								$elm$core$Array$length(timeline) - 2,
-								model.timelineIndex + 1)),
+								model.aR + 1)),
 							$temp$model = model;
 						msg = $temp$msg;
 						model = $temp$model;
 						continue update;
 					} else {
-						if (event.altKey && _Utils_eq(
-							event.key,
+						if (event.ch && _Utils_eq(
+							event.cF,
 							$elm$core$Maybe$Just('ArrowLeft'))) {
 							var $temp$msg = $author$project$Logic$App$Msg$SetTimelineIndex(
 								A2(
 									$elm$core$Basics$min,
 									$elm$core$Array$length(timeline) - 3,
-									A2($elm$core$Basics$max, -1, model.timelineIndex - 1))),
+									A2($elm$core$Basics$max, -1, model.aR - 1))),
 								$temp$model = model;
 							msg = $temp$msg;
 							model = $temp$model;
@@ -14740,16 +14714,16 @@ var $author$project$Main$update = F2(
 		}
 	});
 var $author$project$Main$updatePatternArrayFromQueue = function (model) {
-	if ($elm$core$List$length(model.importQueue) > 0) {
-		var ui = model.ui;
+	if ($elm$core$List$length(model.dV) > 0) {
+		var ui = model.fb;
 		var getPattern = A2(
 			$elm$core$Maybe$withDefault,
 			_Utils_Tuple2($author$project$Logic$App$Patterns$PatternRegistry$unknownPattern, $elm$core$Platform$Cmd$none),
-			$elm$core$List$head(model.importQueue));
+			$elm$core$List$head(model.dV));
 		var newPattern = getPattern.a;
-		var newUncoloredPatternArray = A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, model.insertionPoint);
+		var newUncoloredPatternArray = A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, model.dY);
 		var command = getPattern.b;
-		var castingContext = model.castingContext;
+		var castingContext = model.cj;
 		var stackResult = A3(
 			$author$project$Logic$App$Stack$EvalStack$applyPatternsToStack,
 			$elm$core$Array$empty,
@@ -14761,7 +14735,7 @@ var $author$project$Main$updatePatternArrayFromQueue = function (model) {
 						return x.a;
 					},
 					$elm$core$Array$toList(
-						A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, model.insertionPoint)))));
+						A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, model.dY)))));
 		var newPatternArray = A3(
 			$elm_community$array_extra$Array$Extra$map2,
 			F2(
@@ -14772,71 +14746,71 @@ var $author$project$Main$updatePatternArrayFromQueue = function (model) {
 							patternTuple.b));
 				}),
 			newUncoloredPatternArray,
-			stackResult.resultArray);
+			stackResult.c1);
 		var patterns = A2(
 			$elm$core$Array$map,
 			function (x) {
 				return x.a;
 			},
 			newPatternArray);
-		var drawPatternsResult = A2($author$project$Logic$App$Grid$drawPatterns, patterns, model.grid);
+		var drawPatternsResult = A2($author$project$Logic$App$Grid$drawPatterns, patterns, model.F);
 		return _Utils_eq(command, $elm$core$Platform$Cmd$none) ? $author$project$Main$updatePatternArrayFromQueue(
 			A2(
 				$author$project$Logic$App$Patterns$MetaActions$applyMetaAction,
 				_Utils_update(
 					model,
 					{
-						castingContext: stackResult.ctx,
-						grid: drawPatternsResult.grid,
-						importQueue: A2(
+						cj: stackResult.aW,
+						F: drawPatternsResult.F,
+						dV: A2(
 							$elm$core$Maybe$withDefault,
 							_List_Nil,
-							$elm$core$List$tail(model.importQueue)),
-						insertionPoint: (_Utils_cmp(
-							model.insertionPoint,
-							$elm$core$Array$length(model.patternArray)) > 0) ? 0 : model.insertionPoint,
-						patternArray: drawPatternsResult.patternArray,
-						stack: stackResult.stack,
-						timeline: A2(
+							$elm$core$List$tail(model.dV)),
+						dY: (_Utils_cmp(
+							model.dY,
+							$elm$core$Array$length(model.eE)) > 0) ? 0 : model.dY,
+						eE: drawPatternsResult.eE,
+						eW: stackResult.eW,
+						be: A2(
 							$author$project$Logic$App$Utils$Utils$unshift,
-							{patternIndex: -1, stack: $elm$core$Array$empty},
-							stackResult.timeline),
-						ui: _Utils_update(
+							{eF: -1, eW: $elm$core$Array$empty},
+							stackResult.be),
+						fb: _Utils_update(
 							ui,
-							{patternInputField: ''})
+							{cR: ''})
 					}),
-				newPattern.metaAction)) : _Utils_Tuple2(
+				newPattern.N)) : _Utils_Tuple2(
 			_Utils_update(
 				model,
 				{
-					importQueue: A2(
+					dV: A2(
 						$elm$core$Maybe$withDefault,
 						_List_Nil,
-						$elm$core$List$tail(model.importQueue))
+						$elm$core$List$tail(model.dV))
 				}),
 			command);
 	} else {
 		return A2(
 			$author$project$Main$update,
 			$author$project$Logic$App$Msg$SetTimelineIndex(
-				$elm$core$Array$length(model.timeline)),
+				$elm$core$Array$length(model.be)),
 			model);
 	}
 };
 var $author$project$Logic$App$Msg$MouseMove = function (a) {
-	return {$: 'MouseMove', a: a};
+	return {$: 4, a: a};
 };
-var $author$project$Logic$App$Msg$MouseUp = {$: 'MouseUp'};
+var $author$project$Logic$App$Msg$MouseUp = {$: 6};
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $author$project$Logic$App$Msg$Download = function (a) {
-	return {$: 'Download', a: a};
+	return {$: 38, a: a};
 };
-var $author$project$Logic$App$Types$ExportTextOverlay = {$: 'ExportTextOverlay'};
+var $author$project$Logic$App$Types$ExportTextOverlay = 2;
 var $author$project$Logic$App$Msg$SetImportInputValue = function (a) {
-	return {$: 'SetImportInputValue', a: a};
+	return {$: 35, a: a};
 };
 var $author$project$Logic$App$Msg$ViewOverlay = function (a) {
-	return {$: 'ViewOverlay', a: a};
+	return {$: 37, a: a};
 };
 var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$html$Html$Attributes$stringProperty = F2(
@@ -14860,7 +14834,7 @@ var $author$project$Logic$App$ImportExport$ExportAsText$exportPatternsAsLineList
 							_List_fromArray(
 								[string])));
 				});
-			var _v0 = pattern.internalName;
+			var _v0 = pattern.dZ;
 			switch (_v0) {
 				case 'open_paren':
 					return _Utils_Tuple2(
@@ -14881,7 +14855,7 @@ var $author$project$Logic$App$ImportExport$ExportAsText$exportPatternsAsLineList
 						indentDepth,
 						A2(
 							$elm$core$List$cons,
-							A2(applyIndent, indentDepth, pattern.displayName),
+							A2(applyIndent, indentDepth, pattern.dC),
 							lines));
 			}
 		});
@@ -14897,7 +14871,7 @@ var $author$project$Logic$App$ImportExport$ExportAsText$exportPatternsAsLineList
 };
 var $elm$html$Html$Attributes$id = $elm$html$Html$Attributes$stringProperty('id');
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
-	return {$: 'Normal', a: a};
+	return {$: 0, a: a};
 };
 var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
 var $elm$html$Html$Events$on = F2(
@@ -14917,7 +14891,7 @@ var $elm$html$Html$Events$alwaysStop = function (x) {
 	return _Utils_Tuple2(x, true);
 };
 var $elm$virtual_dom$VirtualDom$MayStopPropagation = function (a) {
-	return {$: 'MayStopPropagation', a: a};
+	return {$: 1, a: a};
 };
 var $elm$html$Html$Events$stopPropagationOn = F2(
 	function (event, decoder) {
@@ -14947,11 +14921,11 @@ var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
 var $author$project$Components$App$Overlays$ExportTextOverlay$exportTextOverlay = function (model) {
-	if (!_Utils_eq(model.ui.openOverlay, $author$project$Logic$App$Types$ExportTextOverlay)) {
+	if (model.fb.ew !== 2) {
 		return _List_Nil;
 	} else {
 		var patternText = $author$project$Logic$App$ImportExport$ExportAsText$exportPatternsAsLineList(
-			A2($elm$core$Array$map, $elm$core$Tuple$first, model.patternArray));
+			A2($elm$core$Array$map, $elm$core$Tuple$first, model.eE));
 		return _List_fromArray(
 			[
 				A2(
@@ -14968,7 +14942,7 @@ var $author$project$Components$App$Overlays$ExportTextOverlay$exportTextOverlay 
 							[
 								$elm$html$Html$Attributes$id('export_text'),
 								$elm$html$Html$Events$onInput($author$project$Logic$App$Msg$SetImportInputValue),
-								$elm$html$Html$Attributes$value(model.ui.importInput),
+								$elm$html$Html$Attributes$value(model.fb.dU),
 								A2($elm$html$Html$Attributes$style, 'display', 'flex'),
 								A2($elm$html$Html$Attributes$style, 'flex-direction', 'column')
 							]),
@@ -15009,7 +14983,7 @@ var $author$project$Components$App$Overlays$ExportTextOverlay$exportTextOverlay 
 										$elm$html$Html$Attributes$class('import_overlay_button'),
 										$elm$html$Html$Attributes$class('cancel_button'),
 										$elm$html$Html$Events$onClick(
-										$author$project$Logic$App$Msg$ViewOverlay($author$project$Logic$App$Types$NoOverlay))
+										$author$project$Logic$App$Msg$ViewOverlay(0))
 									]),
 								_List_fromArray(
 									[
@@ -15021,12 +14995,12 @@ var $author$project$Components$App$Overlays$ExportTextOverlay$exportTextOverlay 
 	}
 };
 var $author$project$Logic$App$Msg$ImportText = function (a) {
-	return {$: 'ImportText', a: a};
+	return {$: 36, a: a};
 };
-var $author$project$Logic$App$Types$ImportTextOverlay = {$: 'ImportTextOverlay'};
+var $author$project$Logic$App$Types$ImportTextOverlay = 1;
 var $elm$html$Html$textarea = _VirtualDom_node('textarea');
 var $author$project$Components$App$Overlays$ImportTextOverlay$importTextOverlay = function (model) {
-	return (!_Utils_eq(model.ui.openOverlay, $author$project$Logic$App$Types$ImportTextOverlay)) ? _List_Nil : _List_fromArray(
+	return (model.fb.ew !== 1) ? _List_Nil : _List_fromArray(
 		[
 			A2(
 			$elm$html$Html$div,
@@ -15042,7 +15016,7 @@ var $author$project$Components$App$Overlays$ImportTextOverlay$importTextOverlay 
 						[
 							$elm$html$Html$Attributes$id('import_input'),
 							$elm$html$Html$Events$onInput($author$project$Logic$App$Msg$SetImportInputValue),
-							$elm$html$Html$Attributes$value(model.ui.importInput)
+							$elm$html$Html$Attributes$value(model.fb.dU)
 						]),
 					_List_Nil),
 					A2(
@@ -15059,7 +15033,7 @@ var $author$project$Components$App$Overlays$ImportTextOverlay$importTextOverlay 
 								[
 									$elm$html$Html$Attributes$class('import_overlay_button'),
 									$elm$html$Html$Events$onClick(
-									$author$project$Logic$App$Msg$ImportText(model.ui.importInput))
+									$author$project$Logic$App$Msg$ImportText(model.fb.dU))
 								]),
 							_List_fromArray(
 								[
@@ -15072,7 +15046,7 @@ var $author$project$Components$App$Overlays$ImportTextOverlay$importTextOverlay 
 									$elm$html$Html$Attributes$class('import_overlay_button'),
 									$elm$html$Html$Attributes$class('cancel_button'),
 									$elm$html$Html$Events$onClick(
-									$author$project$Logic$App$Msg$ViewOverlay($author$project$Logic$App$Types$NoOverlay))
+									$author$project$Logic$App$Msg$ViewOverlay(0))
 								]),
 							_List_fromArray(
 								[
@@ -15082,16 +15056,16 @@ var $author$project$Components$App$Overlays$ImportTextOverlay$importTextOverlay 
 				]))
 		]);
 };
-var $author$project$Logic$App$Types$ConfigHexPanel = {$: 'ConfigHexPanel'};
-var $author$project$Logic$App$Types$FilePanel = {$: 'FilePanel'};
-var $author$project$Logic$App$Types$StackPanel = {$: 'StackPanel'};
+var $author$project$Logic$App$Types$ConfigHexPanel = 2;
+var $author$project$Logic$App$Types$FilePanel = 3;
+var $author$project$Logic$App$Types$StackPanel = 0;
 var $author$project$Logic$App$Msg$ViewPanel = F2(
 	function (a, b) {
-		return {$: 'ViewPanel', a: a, b: b};
+		return {$: 1, a: a, b: b};
 	});
 var $lattyware$elm_fontawesome$FontAwesome$IconDef = F4(
 	function (prefix, name, size, paths) {
-		return {name: name, paths: paths, prefix: prefix, size: size};
+		return {eg: name, eD: paths, eJ: prefix, eV: size};
 	});
 var $lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$code = A4(
 	$lattyware$elm_fontawesome$FontAwesome$IconDef,
@@ -15099,12 +15073,9 @@ var $lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$code = A4(
 	'code',
 	_Utils_Tuple2(640, 512),
 	_Utils_Tuple2('M414.8 40.79L286.8 488.8C281.9 505.8 264.2 515.6 247.2 510.8C230.2 505.9 220.4 488.2 225.2 471.2L353.2 23.21C358.1 6.216 375.8-3.624 392.8 1.232C409.8 6.087 419.6 23.8 414.8 40.79H414.8zM518.6 121.4L630.6 233.4C643.1 245.9 643.1 266.1 630.6 278.6L518.6 390.6C506.1 403.1 485.9 403.1 473.4 390.6C460.9 378.1 460.9 357.9 473.4 345.4L562.7 256L473.4 166.6C460.9 154.1 460.9 133.9 473.4 121.4C485.9 108.9 506.1 108.9 518.6 121.4V121.4zM166.6 166.6L77.25 256L166.6 345.4C179.1 357.9 179.1 378.1 166.6 390.6C154.1 403.1 133.9 403.1 121.4 390.6L9.372 278.6C-3.124 266.1-3.124 245.9 9.372 233.4L121.4 121.4C133.9 108.9 154.1 108.9 166.6 121.4C179.1 133.9 179.1 154.1 166.6 166.6V166.6z', $elm$core$Maybe$Nothing));
-var $lattyware$elm_fontawesome$FontAwesome$Internal$Icon = function (a) {
-	return {$: 'Icon', a: a};
-};
+var $lattyware$elm_fontawesome$FontAwesome$Internal$Icon = $elm$core$Basics$identity;
 var $lattyware$elm_fontawesome$FontAwesome$present = function (icon) {
-	return $lattyware$elm_fontawesome$FontAwesome$Internal$Icon(
-		{attributes: _List_Nil, icon: icon, id: $elm$core$Maybe$Nothing, outer: $elm$core$Maybe$Nothing, role: 'img', title: $elm$core$Maybe$Nothing, transforms: _List_Nil});
+	return {bl: _List_Nil, cB: icon, bK: $elm$core$Maybe$Nothing, bX: $elm$core$Maybe$Nothing, b8: 'img', e4: $elm$core$Maybe$Nothing, bA: _List_Nil};
 };
 var $lattyware$elm_fontawesome$FontAwesome$Solid$code = $lattyware$elm_fontawesome$FontAwesome$present($lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$code);
 var $elm$virtual_dom$VirtualDom$node = function (tag) {
@@ -15149,9 +15120,9 @@ var $lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$layerGroup = A4(
 	_Utils_Tuple2(512, 512),
 	_Utils_Tuple2('M232.5 5.171C247.4-1.718 264.6-1.718 279.5 5.171L498.1 106.2C506.6 110.1 512 118.6 512 127.1C512 137.3 506.6 145.8 498.1 149.8L279.5 250.8C264.6 257.7 247.4 257.7 232.5 250.8L13.93 149.8C5.438 145.8 0 137.3 0 127.1C0 118.6 5.437 110.1 13.93 106.2L232.5 5.171zM498.1 234.2C506.6 238.1 512 246.6 512 255.1C512 265.3 506.6 273.8 498.1 277.8L279.5 378.8C264.6 385.7 247.4 385.7 232.5 378.8L13.93 277.8C5.438 273.8 0 265.3 0 255.1C0 246.6 5.437 238.1 13.93 234.2L67.13 209.6L219.1 279.8C242.5 290.7 269.5 290.7 292.9 279.8L444.9 209.6L498.1 234.2zM292.9 407.8L444.9 337.6L498.1 362.2C506.6 366.1 512 374.6 512 383.1C512 393.3 506.6 401.8 498.1 405.8L279.5 506.8C264.6 513.7 247.4 513.7 232.5 506.8L13.93 405.8C5.438 401.8 0 393.3 0 383.1C0 374.6 5.437 366.1 13.93 362.2L67.13 337.6L219.1 407.8C242.5 418.7 269.5 418.7 292.9 407.8V407.8z', $elm$core$Maybe$Nothing));
 var $lattyware$elm_fontawesome$FontAwesome$Solid$layerGroup = $lattyware$elm_fontawesome$FontAwesome$present($lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$layerGroup);
-var $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$defaultOptions = {preventDefault: true, stopPropagation: false};
+var $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$defaultOptions = {cU: true, da: false};
 var $elm$virtual_dom$VirtualDom$Custom = function (a) {
-	return {$: 'Custom', a: a};
+	return {$: 3, a: a};
 };
 var $elm$html$Html$Events$custom = F2(
 	function (event, decoder) {
@@ -15162,28 +15133,28 @@ var $elm$html$Html$Events$custom = F2(
 	});
 var $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$Event = F6(
 	function (keys, button, clientPos, offsetPos, pagePos, screenPos) {
-		return {button: button, clientPos: clientPos, keys: keys, offsetPos: offsetPos, pagePos: pagePos, screenPos: screenPos};
+		return {$7: button, ds: clientPos, bp: keys, ek: offsetPos, eA: pagePos, eR: screenPos};
 	});
-var $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$BackButton = {$: 'BackButton'};
-var $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$ErrorButton = {$: 'ErrorButton'};
-var $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$ForwardButton = {$: 'ForwardButton'};
-var $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$MainButton = {$: 'MainButton'};
-var $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$MiddleButton = {$: 'MiddleButton'};
-var $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$SecondButton = {$: 'SecondButton'};
+var $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$BackButton = 4;
+var $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$ErrorButton = 0;
+var $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$ForwardButton = 5;
+var $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$MainButton = 1;
+var $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$MiddleButton = 2;
+var $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$SecondButton = 3;
 var $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$buttonFromId = function (id) {
 	switch (id) {
 		case 0:
-			return $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$MainButton;
+			return 1;
 		case 1:
-			return $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$MiddleButton;
+			return 2;
 		case 2:
-			return $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$SecondButton;
+			return 3;
 		case 3:
-			return $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$BackButton;
+			return 4;
 		case 4:
-			return $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$ForwardButton;
+			return 5;
 		default:
-			return $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$ErrorButton;
+			return 0;
 	}
 };
 var $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$buttonDecoder = A2(
@@ -15200,7 +15171,7 @@ var $mpizenberg$elm_pointer_events$Internal$Decode$clientPos = A3(
 	A2($elm$json$Json$Decode$field, 'clientY', $elm$json$Json$Decode$float));
 var $mpizenberg$elm_pointer_events$Internal$Decode$Keys = F3(
 	function (alt, ctrl, shift) {
-		return {alt: alt, ctrl: ctrl, shift: shift};
+		return {dj: alt, dw: ctrl, c6: shift};
 	});
 var $elm$json$Json$Decode$map3 = _Json_map3;
 var $mpizenberg$elm_pointer_events$Internal$Decode$keys = A4(
@@ -15244,9 +15215,9 @@ var $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$onWithOptions = F3(
 				$elm$json$Json$Decode$map,
 				function (ev) {
 					return {
-						message: tag(ev),
-						preventDefault: options.preventDefault,
-						stopPropagation: options.stopPropagation
+						ah: tag(ev),
+						cU: options.cU,
+						da: options.da
 					};
 				},
 				$mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$eventDecoder));
@@ -15263,13 +15234,12 @@ var $elm$svg$Svg$Attributes$class = _VirtualDom_attribute('class');
 var $lattyware$elm_fontawesome$FontAwesome$Attributes$sm = $elm$svg$Svg$Attributes$class('fa-sm');
 var $lattyware$elm_fontawesome$FontAwesome$styled = F2(
 	function (attributes, _v0) {
-		var presentation = _v0.a;
-		return $lattyware$elm_fontawesome$FontAwesome$Internal$Icon(
-			_Utils_update(
-				presentation,
-				{
-					attributes: _Utils_ap(presentation.attributes, attributes)
-				}));
+		var presentation = _v0;
+		return _Utils_update(
+			presentation,
+			{
+				bl: _Utils_ap(presentation.bl, attributes)
+			});
 	});
 var $elm$virtual_dom$VirtualDom$attribute = F2(
 	function (key, value) {
@@ -15287,19 +15257,19 @@ var $elm$svg$Svg$svg = $elm$svg$Svg$trustedNode('svg');
 var $elm$svg$Svg$text = $elm$virtual_dom$VirtualDom$text;
 var $elm$svg$Svg$title = $elm$svg$Svg$trustedNode('title');
 var $lattyware$elm_fontawesome$FontAwesome$Internal$topLevelDimensions = function (_v1) {
-	var icon = _v1.a.icon;
-	var outer = _v1.a.outer;
+	var icon = _v1.cB;
+	var outer = _v1.bX;
 	return A2(
 		$elm$core$Maybe$withDefault,
-		icon.size,
+		icon.eV,
 		A2($elm$core$Maybe$map, $lattyware$elm_fontawesome$FontAwesome$Internal$topLevelDimensionsInternal, outer));
 };
 var $lattyware$elm_fontawesome$FontAwesome$Internal$topLevelDimensionsInternal = function (_v0) {
-	var icon = _v0.a.icon;
-	var outer = _v0.a.outer;
+	var icon = _v0.cB;
+	var outer = _v0.bX;
 	return A2(
 		$elm$core$Maybe$withDefault,
-		icon.size,
+		icon.eV,
 		A2($elm$core$Maybe$map, $lattyware$elm_fontawesome$FontAwesome$Internal$topLevelDimensions, outer));
 };
 var $elm$svg$Svg$defs = $elm$svg$Svg$trustedNode('defs');
@@ -15323,16 +15293,16 @@ var $elm$svg$Svg$Attributes$maskUnits = _VirtualDom_attribute('maskUnits');
 var $lattyware$elm_fontawesome$FontAwesome$Transforms$Internal$add = F2(
 	function (transform, combined) {
 		switch (transform.$) {
-			case 'Scale':
+			case 0:
 				var by = transform.a;
 				return _Utils_update(
 					combined,
-					{size: combined.size + by});
-			case 'Reposition':
+					{eV: combined.eV + by});
+			case 1:
 				var axis = transform.a;
 				var by = transform.b;
 				var _v1 = function () {
-					if (axis.$ === 'Vertical') {
+					if (!axis) {
 						return _Utils_Tuple2(0, by);
 					} else {
 						return _Utils_Tuple2(by, 0);
@@ -15342,27 +15312,27 @@ var $lattyware$elm_fontawesome$FontAwesome$Transforms$Internal$add = F2(
 				var y = _v1.b;
 				return _Utils_update(
 					combined,
-					{x: combined.x + x, y: combined.y + y});
-			case 'Rotate':
+					{m: combined.m + x, n: combined.n + y});
+			case 2:
 				var rotation = transform.a;
 				return _Utils_update(
 					combined,
-					{rotate: combined.rotate + rotation});
+					{eP: combined.eP + rotation});
 			default:
 				var axis = transform.a;
-				if (axis.$ === 'Vertical') {
+				if (!axis) {
 					return _Utils_update(
 						combined,
-						{flipY: !combined.flipY});
+						{dP: !combined.dP});
 				} else {
 					return _Utils_update(
 						combined,
-						{flipX: !combined.flipX});
+						{dO: !combined.dO});
 				}
 		}
 	});
 var $lattyware$elm_fontawesome$FontAwesome$Transforms$Internal$baseSize = 16;
-var $lattyware$elm_fontawesome$FontAwesome$Transforms$Internal$meaninglessTransform = {flipX: false, flipY: false, rotate: 0, size: $lattyware$elm_fontawesome$FontAwesome$Transforms$Internal$baseSize, x: 0, y: 0};
+var $lattyware$elm_fontawesome$FontAwesome$Transforms$Internal$meaninglessTransform = {dO: false, dP: false, eP: 0, eV: $lattyware$elm_fontawesome$FontAwesome$Transforms$Internal$baseSize, m: 0, n: 0};
 var $lattyware$elm_fontawesome$FontAwesome$Transforms$Internal$combine = function (transforms) {
 	return A3($elm$core$List$foldl, $lattyware$elm_fontawesome$FontAwesome$Transforms$Internal$add, $lattyware$elm_fontawesome$FontAwesome$Transforms$Internal$meaninglessTransform, transforms);
 };
@@ -15376,20 +15346,20 @@ var $lattyware$elm_fontawesome$FontAwesome$Transforms$Internal$transformForSvg =
 	function (containerWidth, iconWidth, transform) {
 		var path = 'translate(' + ($elm$core$String$fromFloat((iconWidth / 2) * (-1)) + ' -256)');
 		var outer = 'translate(' + ($elm$core$String$fromFloat(containerWidth / 2) + ' 256)');
-		var innerTranslate = 'translate(' + ($elm$core$String$fromFloat(transform.x * 32) + (',' + ($elm$core$String$fromFloat(transform.y * 32) + ') ')));
-		var innerRotate = 'rotate(' + ($elm$core$String$fromFloat(transform.rotate) + ' 0 0)');
-		var flipY = transform.flipY ? (-1) : 1;
-		var scaleY = (transform.size / $lattyware$elm_fontawesome$FontAwesome$Transforms$Internal$baseSize) * flipY;
-		var flipX = transform.flipX ? (-1) : 1;
-		var scaleX = (transform.size / $lattyware$elm_fontawesome$FontAwesome$Transforms$Internal$baseSize) * flipX;
+		var innerTranslate = 'translate(' + ($elm$core$String$fromFloat(transform.m * 32) + (',' + ($elm$core$String$fromFloat(transform.n * 32) + ') ')));
+		var innerRotate = 'rotate(' + ($elm$core$String$fromFloat(transform.eP) + ' 0 0)');
+		var flipY = transform.dP ? (-1) : 1;
+		var scaleY = (transform.eV / $lattyware$elm_fontawesome$FontAwesome$Transforms$Internal$baseSize) * flipY;
+		var flipX = transform.dO ? (-1) : 1;
+		var scaleX = (transform.eV / $lattyware$elm_fontawesome$FontAwesome$Transforms$Internal$baseSize) * flipX;
 		var innerScale = 'scale(' + ($elm$core$String$fromFloat(scaleX) + (', ' + ($elm$core$String$fromFloat(scaleY) + ') ')));
 		return {
-			inner: $elm$svg$Svg$Attributes$transform(
+			cC: $elm$svg$Svg$Attributes$transform(
 				_Utils_ap(
 					innerTranslate,
 					_Utils_ap(innerScale, innerRotate))),
-			outer: $elm$svg$Svg$Attributes$transform(outer),
-			path: $elm$svg$Svg$Attributes$transform(path)
+			bX: $elm$svg$Svg$Attributes$transform(outer),
+			cQ: $elm$svg$Svg$Attributes$transform(path)
 		};
 	});
 var $elm$svg$Svg$Attributes$d = _VirtualDom_attribute('d');
@@ -15406,8 +15376,8 @@ var $lattyware$elm_fontawesome$FontAwesome$Svg$viewPath = F2(
 	});
 var $lattyware$elm_fontawesome$FontAwesome$Svg$viewPaths = F2(
 	function (attrs, _v0) {
-		var paths = _v0.paths;
-		if (paths.b.$ === 'Nothing') {
+		var paths = _v0.eD;
+		if (paths.b.$ === 1) {
 			var only = paths.a;
 			var _v2 = paths.b;
 			return A2($lattyware$elm_fontawesome$FontAwesome$Svg$viewPath, attrs, only);
@@ -15441,9 +15411,9 @@ var $lattyware$elm_fontawesome$FontAwesome$Svg$viewPaths = F2(
 	});
 var $lattyware$elm_fontawesome$FontAwesome$Svg$viewWithTransform = F3(
 	function (color, _v0, icon) {
-		var outer = _v0.outer;
-		var inner = _v0.inner;
-		var path = _v0.path;
+		var outer = _v0.bX;
+		var inner = _v0.cC;
+		var path = _v0.cQ;
 		return A2(
 			$elm$svg$Svg$g,
 			_List_fromArray(
@@ -15469,19 +15439,19 @@ var $lattyware$elm_fontawesome$FontAwesome$Svg$viewWithTransform = F3(
 	});
 var $lattyware$elm_fontawesome$FontAwesome$Svg$viewInColor = F2(
 	function (color, fullIcon) {
-		var icon = fullIcon.a.icon;
-		var transforms = fullIcon.a.transforms;
-		var id = fullIcon.a.id;
-		var outer = fullIcon.a.outer;
+		var icon = fullIcon.cB;
+		var transforms = fullIcon.bA;
+		var id = fullIcon.bK;
+		var outer = fullIcon.bX;
 		var combinedTransforms = $lattyware$elm_fontawesome$FontAwesome$Transforms$Internal$meaningfulTransform(transforms);
-		var _v0 = icon.size;
+		var _v0 = icon.eV;
 		var width = _v0.a;
 		var _v1 = $lattyware$elm_fontawesome$FontAwesome$Internal$topLevelDimensions(fullIcon);
 		var topLevelWidth = _v1.a;
-		if (combinedTransforms.$ === 'Just') {
+		if (!combinedTransforms.$) {
 			var meaningfulTransform = combinedTransforms.a;
 			var svgTransform = A3($lattyware$elm_fontawesome$FontAwesome$Transforms$Internal$transformForSvg, topLevelWidth, width, meaningfulTransform);
-			if (outer.$ === 'Just') {
+			if (!outer.$) {
 				var outerIcon = outer.a;
 				return A4($lattyware$elm_fontawesome$FontAwesome$Svg$viewMaskedWithTransform, color, svgTransform, icon, outerIcon);
 			} else {
@@ -15499,7 +15469,7 @@ var $lattyware$elm_fontawesome$FontAwesome$Svg$viewInColor = F2(
 	});
 var $lattyware$elm_fontawesome$FontAwesome$Svg$viewMaskedWithTransform = F4(
 	function (color, transforms, exclude, include) {
-		var id = include.a.id;
+		var id = include.bK;
 		var alwaysId = A2($elm$core$Maybe$withDefault, '', id);
 		var clipId = 'clip-' + alwaysId;
 		var maskId = 'mask-' + alwaysId;
@@ -15545,16 +15515,16 @@ var $lattyware$elm_fontawesome$FontAwesome$Svg$view = $lattyware$elm_fontawesome
 var $elm$svg$Svg$Attributes$viewBox = _VirtualDom_attribute('viewBox');
 var $lattyware$elm_fontawesome$FontAwesome$internalView = F2(
 	function (fullIcon, extraAttributes) {
-		var icon = fullIcon.a.icon;
-		var transforms = fullIcon.a.transforms;
-		var role = fullIcon.a.role;
-		var id = fullIcon.a.id;
-		var title = fullIcon.a.title;
-		var outer = fullIcon.a.outer;
-		var attributes = fullIcon.a.attributes;
+		var icon = fullIcon.cB;
+		var transforms = fullIcon.bA;
+		var role = fullIcon.b8;
+		var id = fullIcon.bK;
+		var title = fullIcon.e4;
+		var outer = fullIcon.bX;
+		var attributes = fullIcon.bl;
 		var contents = $lattyware$elm_fontawesome$FontAwesome$Svg$view(fullIcon);
 		var _v0 = function () {
-			if (title.$ === 'Just') {
+			if (!title.$) {
 				var givenTitle = title.a;
 				var titleId = A2($elm$core$Maybe$withDefault, '', id) + '-title';
 				return _Utils_Tuple2(
@@ -15589,7 +15559,7 @@ var $lattyware$elm_fontawesome$FontAwesome$internalView = F2(
 		var classes = _List_fromArray(
 			[
 				'svg-inline--fa',
-				'fa-' + icon.name,
+				'fa-' + icon.eg,
 				'fa-w-' + $elm$core$String$fromInt(aspectRatio)
 			]);
 		return A2(
@@ -15619,7 +15589,7 @@ var $lattyware$elm_fontawesome$FontAwesome$view = function (presentation) {
 };
 var $author$project$Components$App$Menu$menu = function (model) {
 	var highlightIfActive = function (panel) {
-		return A2($elm$core$List$member, panel, model.ui.openPanels) ? _List_fromArray(
+		return A2($elm$core$List$member, panel, model.fb.ex) ? _List_fromArray(
 			[
 				A2($elm$html$Html$Attributes$style, 'background-color', 'var(--primary_medium)')
 			]) : _List_Nil;
@@ -15641,10 +15611,10 @@ var $author$project$Components$App$Menu$menu = function (model) {
 							$elm$html$Html$Attributes$class('menu_button'),
 							$mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$onClick(
 							function (event) {
-								return A2($author$project$Logic$App$Msg$ViewPanel, $author$project$Logic$App$Types$PatternPanel, event.keys);
+								return A2($author$project$Logic$App$Msg$ViewPanel, 1, event.bp);
 							})
 						]),
-					highlightIfActive($author$project$Logic$App$Types$PatternPanel)),
+					highlightIfActive(1)),
 				_List_fromArray(
 					[
 						$lattyware$elm_fontawesome$FontAwesome$Styles$css,
@@ -15664,10 +15634,10 @@ var $author$project$Components$App$Menu$menu = function (model) {
 							$elm$html$Html$Attributes$class('menu_button'),
 							$mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$onClick(
 							function (event) {
-								return A2($author$project$Logic$App$Msg$ViewPanel, $author$project$Logic$App$Types$StackPanel, event.keys);
+								return A2($author$project$Logic$App$Msg$ViewPanel, 0, event.bp);
 							})
 						]),
-					highlightIfActive($author$project$Logic$App$Types$StackPanel)),
+					highlightIfActive(0)),
 				_List_fromArray(
 					[
 						$lattyware$elm_fontawesome$FontAwesome$Styles$css,
@@ -15687,10 +15657,10 @@ var $author$project$Components$App$Menu$menu = function (model) {
 							$elm$html$Html$Attributes$class('menu_button'),
 							$mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$onClick(
 							function (event) {
-								return A2($author$project$Logic$App$Msg$ViewPanel, $author$project$Logic$App$Types$ConfigHexPanel, event.keys);
+								return A2($author$project$Logic$App$Msg$ViewPanel, 2, event.bp);
 							})
 						]),
-					highlightIfActive($author$project$Logic$App$Types$ConfigHexPanel)),
+					highlightIfActive(2)),
 				_List_fromArray(
 					[
 						$lattyware$elm_fontawesome$FontAwesome$Styles$css,
@@ -15728,10 +15698,10 @@ var $author$project$Components$App$Menu$menu = function (model) {
 							$elm$html$Html$Attributes$class('menu_button'),
 							$mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$onClick(
 							function (event) {
-								return A2($author$project$Logic$App$Msg$ViewPanel, $author$project$Logic$App$Types$FilePanel, event.keys);
+								return A2($author$project$Logic$App$Msg$ViewPanel, 3, event.bp);
 							})
 						]),
-					highlightIfActive($author$project$Logic$App$Types$FilePanel)),
+					highlightIfActive(3)),
 				_List_fromArray(
 					[
 						$lattyware$elm_fontawesome$FontAwesome$Styles$css,
@@ -15763,61 +15733,61 @@ var $author$project$Components$App$Menu$menu = function (model) {
 };
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
 var $author$project$Logic$App$Msg$ChangeHeldItem = function (a) {
-	return {$: 'ChangeHeldItem', a: a};
+	return {$: 28, a: a};
 };
 var $elm$html$Html$label = _VirtualDom_node('label');
 var $elm$html$Html$option = _VirtualDom_node('option');
 var $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString = function (iota) {
 	switch (iota.$) {
-		case 'Null':
+		case 6:
 			return 'Null';
-		case 'Number':
+		case 0:
 			var number = iota.a;
 			return $elm$core$String$fromFloat(number);
-		case 'Vector':
+		case 1:
 			var _v1 = iota.a;
 			var x = _v1.a;
 			var y = _v1.b;
 			var z = _v1.c;
 			return 'Vector [' + ($elm$core$String$fromFloat(x) + (', ' + ($elm$core$String$fromFloat(y) + (', ' + ($elm$core$String$fromFloat(z) + ']')))));
-		case 'Boolean':
+		case 2:
 			var bool = iota.a;
 			return bool ? 'True' : 'False';
-		case 'Entity':
+		case 3:
 			return 'Entity';
-		case 'IotaList':
+		case 4:
 			var list = iota.a;
 			return 'dont do this';
-		case 'PatternIota':
+		case 5:
 			var pattern = iota.a;
-			return pattern.displayName;
-		case 'Garbage':
+			return pattern.dC;
+		case 7:
 			var mishap = iota.a;
 			var mishapMessage = function () {
-				switch (mishap.$) {
-					case 'InvalidPattern':
+				switch (mishap) {
+					case 0:
 						return 'Invalid Pattern';
-					case 'NotEnoughIotas':
+					case 1:
 						return 'Not Enough Iotas';
-					case 'IncorrectIota':
+					case 2:
 						return 'Incorrect Iota';
-					case 'VectorOutOfAmbit':
+					case 3:
 						return 'Vector Out of Ambit';
-					case 'EntityOutOfAmbit':
+					case 4:
 						return 'Entity Out of Ambit';
-					case 'EntityIsImmune':
+					case 5:
 						return 'Entity is Immune';
-					case 'MathematicalError':
+					case 6:
 						return 'Mathematical Error';
-					case 'IncorrectItem':
+					case 7:
 						return 'Incorrect Item';
-					case 'IncorrectBlock':
+					case 8:
 						return 'Incorrect Block';
-					case 'DelveTooDeep':
+					case 9:
 						return 'Delve Too Deep';
-					case 'TransgressOther':
+					case 10:
 						return 'Transgress Other';
-					case 'DisallowedAction':
+					case 11:
 						return 'Disallowed Action';
 					default:
 						return 'Catastrophic Failure';
@@ -15831,21 +15801,21 @@ var $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString = function
 };
 var $author$project$Settings$Theme$iotaColorMap = function (iota) {
 	switch (iota.$) {
-		case 'Null':
+		case 6:
 			return '#354C3F';
-		case 'Number':
+		case 0:
 			return '#4C3541';
-		case 'Vector':
+		case 1:
 			return '#4C3541';
-		case 'Boolean':
+		case 2:
 			return '#4B4C35';
-		case 'Entity':
+		case 3:
 			return '#354B4C';
-		case 'IotaList':
+		case 4:
 			return '#354C3F';
-		case 'PatternIota':
+		case 5:
 			return '#354C3F';
-		case 'Garbage':
+		case 7:
 			return '#4F3737';
 		default:
 			return '#4B4845';
@@ -15927,10 +15897,10 @@ var $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsHtmlMsg = F3(
 						$elm$core$Array$toList(list))));
 		};
 		switch (iota.$) {
-			case 'IotaList':
+			case 4:
 				var list = iota.a;
 				return renderList(list);
-			case 'OpenParenthesis':
+			case 8:
 				var list = iota.a;
 				return renderList(list);
 			default:
@@ -16111,8 +16081,8 @@ var $author$project$Components$App$Panels$ConfigHexPanel$heldItemSection = funct
 								$elm$html$Html$text('Content:')
 							])),
 					function () {
-						var _v0 = model.castingContext.heldItemContent;
-						if (_v0.$ === 'Just') {
+						var _v0 = model.cj.dQ;
+						if (!_v0.$) {
 							var iota = _v0.a;
 							return $author$project$Components$App$Panels$ConfigHexPanel$renderIotaBox(iota);
 						} else {
@@ -16149,8 +16119,8 @@ var $author$project$Components$App$Panels$ConfigHexPanel$ravenmindSection = func
 								$elm$html$Html$text('Ravenmind:')
 							])),
 					function () {
-						var _v0 = model.castingContext.ravenmind;
-						if (_v0.$ === 'Just') {
+						var _v0 = model.cj.eL;
+						if (!_v0.$) {
 							var iota = _v0.a;
 							return $author$project$Components$App$Panels$ConfigHexPanel$renderIotaBox(iota);
 						} else {
@@ -16163,7 +16133,7 @@ var $author$project$Components$App$Panels$Utils$visibilityToDisplayStyle = funct
 	return visibility ? A2($elm$html$Html$Attributes$style, 'display', 'flex') : A2($elm$html$Html$Attributes$style, 'display', 'none');
 };
 var $author$project$Components$App$Panels$ConfigHexPanel$configHexPanel = function (model) {
-	var visibility = A2($elm$core$List$member, $author$project$Logic$App$Types$ConfigHexPanel, model.ui.openPanels);
+	var visibility = A2($elm$core$List$member, 2, model.fb.ex);
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
@@ -16196,36 +16166,36 @@ var $author$project$Components$App$Panels$ConfigHexPanel$configHexPanel = functi
 			]));
 };
 var $author$project$Logic$App$Msg$InputPattern = function (a) {
-	return {$: 'InputPattern', a: a};
+	return {$: 12, a: a};
 };
 var $author$project$Logic$App$Msg$SelectNextSuggestion = function (a) {
-	return {$: 'SelectNextSuggestion', a: a};
+	return {$: 16, a: a};
 };
 var $author$project$Logic$App$Msg$SelectPreviousSuggestion = function (a) {
-	return {$: 'SelectPreviousSuggestion', a: a};
+	return {$: 15, a: a};
 };
 var $author$project$Logic$App$Msg$SetFocus = function (a) {
-	return {$: 'SetFocus', a: a};
+	return {$: 26, a: a};
 };
 var $author$project$Logic$App$Msg$UpdatePatternInputField = function (a) {
-	return {$: 'UpdatePatternInputField', a: a};
+	return {$: 11, a: a};
 };
 var $author$project$Logic$App$Msg$DragOver = F2(
 	function (a, b) {
-		return {$: 'DragOver', a: a, b: b};
+		return {$: 23, a: a, b: b};
 	});
-var $author$project$Logic$App$Msg$Drop = {$: 'Drop'};
-var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$MoveOnDrop = {$: 'MoveOnDrop'};
+var $author$project$Logic$App$Msg$Drop = {$: 25};
+var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$MoveOnDrop = 1;
 var $elm$core$Basics$always = F2(
 	function (a, _v0) {
 		return a;
 	});
 var $author$project$Components$App$Panels$PatternPanel$dropTargetConfig = {
-	dropEffect: $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$MoveOnDrop,
-	onDrop: $elm$core$Basics$always($author$project$Logic$App$Msg$Drop),
-	onEnter: $elm$core$Maybe$Nothing,
-	onLeave: $elm$core$Maybe$Nothing,
-	onOver: $author$project$Logic$App$Msg$DragOver
+	dI: 1,
+	en: $elm$core$Basics$always($author$project$Logic$App$Msg$Drop),
+	ep: $elm$core$Maybe$Nothing,
+	eq: $elm$core$Maybe$Nothing,
+	er: $author$project$Logic$App$Msg$DragOver
 };
 var $elm$html$Html$input = _VirtualDom_node('input');
 var $elm$html$Html$Events$keyCode = A2($elm$json$Json$Decode$field, 'keyCode', $elm$json$Json$Decode$int);
@@ -16237,11 +16207,11 @@ var $elm$html$Html$Events$onBlur = function (msg) {
 };
 var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$Event = F2(
 	function (dataTransfer, mouseEvent) {
-		return {dataTransfer: dataTransfer, mouseEvent: mouseEvent};
+		return {dy: dataTransfer, ec: mouseEvent};
 	});
 var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$DataTransfer = F3(
 	function (files, types, dropEffect) {
-		return {dropEffect: dropEffect, files: files, types: types};
+		return {dI: dropEffect, dN: files, bi: types};
 	});
 var $elm$file$File$decoder = _File_decoder;
 var $mpizenberg$elm_pointer_events$Internal$Decode$all = A2(
@@ -16294,9 +16264,9 @@ var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$on = F2(
 				$elm$json$Json$Decode$map,
 				function (ev) {
 					return {
-						message: tag(ev),
-						preventDefault: true,
-						stopPropagation: true
+						ah: tag(ev),
+						cU: true,
+						da: true
 					};
 				},
 				$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$eventDecoder));
@@ -16310,9 +16280,9 @@ var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$valuePreventedOn = F2(
 				$elm$json$Json$Decode$map,
 				function (value) {
 					return {
-						message: tag(value),
-						preventDefault: true,
-						stopPropagation: true
+						ah: tag(value),
+						cU: true,
+						da: true
 					};
 				},
 				$elm$json$Json$Decode$value));
@@ -16327,17 +16297,17 @@ var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$onDropTarget = functio
 				A2(
 					$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$valuePreventedOn,
 					'dragover',
-					config.onOver(config.dropEffect))),
+					config.er(config.dI))),
 				$elm$core$Maybe$Just(
-				A2($mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$on, 'drop', config.onDrop)),
+				A2($mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$on, 'drop', config.en)),
 				A2(
 				$elm$core$Maybe$map,
 				$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$on('dragenter'),
-				config.onEnter),
+				config.ep),
 				A2(
 				$elm$core$Maybe$map,
 				$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$on('dragleave'),
-				config.onLeave)
+				config.eq)
 			]));
 };
 var $elm$html$Html$Events$onFocus = function (msg) {
@@ -16436,12 +16406,12 @@ var $elm$html$Html$li = _VirtualDom_node('li');
 var $author$project$Components$App$PatternAutoComplete$autocompleteList = A2(
 	$elm$core$List$map,
 	function (pat) {
-		return _Utils_Tuple2(pat.displayName, pat.internalName);
+		return _Utils_Tuple2(pat.dC, pat.dZ);
 	},
 	$author$project$Logic$App$Patterns$PatternRegistry$patternRegistry);
 var $elm$core$String$toLower = _String_toLower;
 var $author$project$Components$App$PatternAutoComplete$patternInputSuggestionList = function (model) {
-	var inputValue = model.ui.patternInputField;
+	var inputValue = model.fb.cR;
 	return (inputValue !== '') ? $elm$core$List$unzip(
 		A2(
 			$elm$core$List$filter,
@@ -16457,7 +16427,7 @@ var $author$project$Components$App$PatternAutoComplete$patternInputSuggestionLis
 			$author$project$Components$App$PatternAutoComplete$autocompleteList)).a : _List_Nil;
 };
 var $author$project$Components$App$PatternAutoComplete$patternInputAutoComplete = function (model) {
-	var suggestionIndex = model.ui.suggestionIndex;
+	var suggestionIndex = model.fb.e$;
 	var getHighlightedOption = A2(
 		$elm$core$Maybe$withDefault,
 		'',
@@ -16498,15 +16468,15 @@ var $author$project$Components$App$PatternAutoComplete$patternInputAutoComplete 
 						A2(
 						$elm$html$Html$Attributes$style,
 						'left',
-						$elm$core$String$fromInt(model.ui.patternInputLocation.a) + 'px'),
+						$elm$core$String$fromInt(model.fb.b4.a) + 'px'),
 						A2(
 						$elm$html$Html$Attributes$style,
 						'top',
-						$elm$core$String$fromInt(model.ui.patternInputLocation.b) + 'px')
+						$elm$core$String$fromInt(model.fb.b4.b) + 'px')
 					]),
 				(_Utils_eq(
-					model.ui.patternInputLocation,
-					_Utils_Tuple2(0, 0)) || (model.ui.selectedInputID === '')) ? _List_fromArray(
+					model.fb.b4,
+					_Utils_Tuple2(0, 0)) || (model.fb.eS === '')) ? _List_fromArray(
 					[
 						A2($elm$html$Html$Attributes$style, 'display', 'none')
 					]) : _List_Nil),
@@ -16525,7 +16495,7 @@ var $lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$plus = A4(
 	_Utils_Tuple2('M432 256c0 17.69-14.33 32.01-32 32.01H256v144c0 17.69-14.33 31.99-32 31.99s-32-14.3-32-31.99v-144H48c-17.67 0-32-14.32-32-32.01s14.33-31.99 32-31.99H192v-144c0-17.69 14.33-32.01 32-32.01s32 14.32 32 32.01v144h144C417.7 224 432 238.3 432 256z', $elm$core$Maybe$Nothing));
 var $lattyware$elm_fontawesome$FontAwesome$Solid$plus = $lattyware$elm_fontawesome$FontAwesome$present($lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$plus);
 var $elm$virtual_dom$VirtualDom$MayPreventDefault = function (a) {
-	return {$: 'MayPreventDefault', a: a};
+	return {$: 2, a: a};
 };
 var $elm$html$Html$Events$preventDefaultOn = F2(
 	function (event, decoder) {
@@ -16536,31 +16506,31 @@ var $elm$html$Html$Events$preventDefaultOn = F2(
 	});
 var $author$project$Logic$App$Msg$RemoveFromPatternArray = F2(
 	function (a, b) {
-		return {$: 'RemoveFromPatternArray', a: a, b: b};
+		return {$: 7, a: a, b: b};
 	});
 var $author$project$Logic$App$Msg$SetInsertionPoint = F2(
 	function (a, b) {
-		return {$: 'SetInsertionPoint', a: a, b: b};
+		return {$: 34, a: a, b: b};
 	});
 var $author$project$Logic$App$Msg$UpdatePatternOuptut = F2(
 	function (a, b) {
-		return {$: 'UpdatePatternOuptut', a: a, b: b};
+		return {$: 33, a: a, b: b};
 	});
-var $author$project$Logic$App$Msg$DragEnd = {$: 'DragEnd'};
+var $author$project$Logic$App$Msg$DragEnd = {$: 22};
 var $author$project$Logic$App$Msg$DragStart = F3(
 	function (a, b, c) {
-		return {$: 'DragStart', a: a, b: b, c: c};
+		return {$: 21, a: a, b: b, c: c};
 	});
 var $author$project$Components$App$Panels$PatternPanel$draggedSourceConfig = function (id) {
 	return {
-		effectAllowed: {copy: false, link: false, move: true},
-		onDrag: $elm$core$Maybe$Nothing,
-		onEnd: $elm$core$Basics$always($author$project$Logic$App$Msg$DragEnd),
-		onStart: $author$project$Logic$App$Msg$DragStart(id)
+		dJ: {dv: false, d3: false, ee: true},
+		em: $elm$core$Maybe$Nothing,
+		eo: $elm$core$Basics$always($author$project$Logic$App$Msg$DragEnd),
+		es: $author$project$Logic$App$Msg$DragStart(id)
 	};
 };
 var $author$project$Logic$App$Utils$GetIotaValue$getIotaFromString = function (string) {
-	return (string === 'Null') ? $author$project$Logic$App$Types$Null : ((string === 'Entity') ? $author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset) : ((string === 'Vector') ? $author$project$Logic$App$Types$Vector(
+	return (string === 'Null') ? $author$project$Logic$App$Types$Null : ((string === 'Entity') ? $author$project$Logic$App$Types$Entity(0) : ((string === 'Vector') ? $author$project$Logic$App$Types$Vector(
 		_Utils_Tuple3(0, 0, 0)) : ((!_Utils_eq(
 		$elm$core$String$toFloat(string),
 		$elm$core$Maybe$Nothing)) ? $author$project$Logic$App$Types$Number(
@@ -16571,20 +16541,20 @@ var $author$project$Logic$App$Utils$GetIotaValue$getIotaFromString = function (s
 };
 var $author$project$Logic$App$Utils$GetIotaValue$getIotaTypeAsString = function (iota) {
 	switch (iota.$) {
-		case 'NullType':
+		case 6:
 			return 'Null';
-		case 'NumberType':
+		case 0:
 			return 'Number';
-		case 'VectorType':
+		case 1:
 			return 'Vector';
-		case 'BooleanType':
+		case 2:
 			return 'Boolean';
-		case 'EntityType':
+		case 3:
 			return 'Entity';
-		case 'IotaListType':
+		case 4:
 			var iotaType = iota.a;
 			return 'List: ' + $author$project$Logic$App$Utils$GetIotaValue$getIotaTypeAsString(iotaType);
-		case 'PatternType':
+		case 5:
 			return 'Pattern';
 		default:
 			return 'Garbage';
@@ -16662,9 +16632,9 @@ var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$valueOn = F2(
 				$elm$json$Json$Decode$map,
 				function (value) {
 					return {
-						message: tag(value),
-						preventDefault: false,
-						stopPropagation: true
+						ah: tag(value),
+						cU: false,
+						da: true
 					};
 				},
 				$elm$json$Json$Decode$value));
@@ -16681,13 +16651,13 @@ var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$onSourceDrag = functio
 				A2(
 					$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$valueOn,
 					'dragstart',
-					config.onStart(config.effectAllowed))),
+					config.es(config.dJ))),
 				$elm$core$Maybe$Just(
-				A2($mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$on, 'dragend', config.onEnd)),
+				A2($mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$on, 'dragend', config.eo)),
 				A2(
 				$elm$core$Maybe$map,
 				$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$on('drag'),
-				config.onDrag)
+				config.em)
 			]));
 };
 var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
@@ -16769,7 +16739,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F5(
 	function (patternList, dragoverIndex, dragstartIndex, overDragHandle, insertionPoint) {
 		var renderPattern = F2(
 			function (index, pattern) {
-				var activeOpacity = (!pattern.active) ? A2($elm$html$Html$Attributes$style, 'opacity', '50%') : A2($elm$html$Html$Attributes$style, '', '');
+				var activeOpacity = (!pattern.di) ? A2($elm$html$Html$Attributes$style, 'opacity', '50%') : A2($elm$html$Html$Attributes$style, '', '');
 				return _Utils_ap(
 					_Utils_eq(dragoverIndex, index) ? _List_fromArray(
 						[
@@ -16795,7 +16765,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F5(
 										$elm$core$String$fromInt(index)),
 										$mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$onClick(
 										function (event) {
-											return A2($author$project$Logic$App$Msg$SetInsertionPoint, index, event.keys);
+											return A2($author$project$Logic$App$Msg$SetInsertionPoint, index, event.bp);
 										})
 									]),
 								_Utils_ap(
@@ -16847,7 +16817,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F5(
 												]),
 											_List_fromArray(
 												[
-													$elm$html$Html$text(pattern.displayName)
+													$elm$html$Html$text(pattern.dC)
 												])),
 											A2(
 											$elm$html$Html$div,
@@ -16858,7 +16828,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F5(
 											_List_fromArray(
 												[$author$project$Components$Icon$MoveButton$moveButton]))
 										])),
-								($elm$core$List$length(pattern.outputOptions) > 0) ? A2(
+								($elm$core$List$length(pattern.bt) > 0) ? A2(
 									$elm$core$List$cons,
 									A2(
 										$elm$html$Html$div,
@@ -16885,7 +16855,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F5(
 															A2(
 																$elm$core$Maybe$withDefault,
 																_Utils_Tuple2($author$project$Logic$App$Types$NullType, $author$project$Logic$App$Types$Null),
-																pattern.selectedOutput).a)),
+																pattern.ak).a)),
 														$elm$html$Html$Events$onInput(
 														function (str) {
 															return A2(
@@ -16894,7 +16864,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F5(
 																_Utils_update(
 																	pattern,
 																	{
-																		selectedOutput: $elm$core$Maybe$Just(
+																		ak: $elm$core$Maybe$Just(
 																			_Utils_Tuple2(
 																				$author$project$Logic$App$Utils$GetIotaValue$getIotaTypeFromString(str),
 																				$author$project$Logic$App$Utils$GetIotaValue$getIotaFromString(str)))
@@ -16913,16 +16883,16 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F5(
 																	$author$project$Logic$App$Utils$GetIotaValue$getIotaTypeAsString(iota))
 																]));
 													},
-													pattern.outputOptions))
+													pattern.bt))
 											])),
 									function () {
-										var _v0 = pattern.selectedOutput;
+										var _v0 = pattern.ak;
 										_v0$3:
 										while (true) {
-											if (_v0.$ === 'Just') {
+											if (!_v0.$) {
 												switch (_v0.a.a.$) {
-													case 'VectorType':
-														if (_v0.a.b.$ === 'Vector') {
+													case 1:
+														if (_v0.a.b.$ === 1) {
 															var _v1 = _v0.a;
 															var _v2 = _v1.a;
 															var vector = _v1.b.a;
@@ -16962,7 +16932,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F5(
 																							_Utils_update(
 																								pattern,
 																								{
-																									selectedOutput: $elm$core$Maybe$Just(
+																									ak: $elm$core$Maybe$Just(
 																										_Utils_Tuple2(
 																											$author$project$Logic$App$Types$VectorType,
 																											$author$project$Logic$App$Types$Vector(
@@ -17009,7 +16979,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F5(
 																							_Utils_update(
 																								pattern,
 																								{
-																									selectedOutput: $elm$core$Maybe$Just(
+																									ak: $elm$core$Maybe$Just(
 																										_Utils_Tuple2(
 																											$author$project$Logic$App$Types$VectorType,
 																											$author$project$Logic$App$Types$Vector(
@@ -17056,7 +17026,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F5(
 																							_Utils_update(
 																								pattern,
 																								{
-																									selectedOutput: $elm$core$Maybe$Just(
+																									ak: $elm$core$Maybe$Just(
 																										_Utils_Tuple2(
 																											$author$project$Logic$App$Types$VectorType,
 																											$author$project$Logic$App$Types$Vector(
@@ -17076,8 +17046,8 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F5(
 														} else {
 															break _v0$3;
 														}
-													case 'NumberType':
-														if (_v0.a.b.$ === 'Number') {
+													case 0:
+														if (!_v0.a.b.$) {
 															var _v4 = _v0.a;
 															var _v5 = _v4.a;
 															var number = _v4.b.a;
@@ -17114,7 +17084,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F5(
 																							_Utils_update(
 																								pattern,
 																								{
-																									selectedOutput: $elm$core$Maybe$Just(
+																									ak: $elm$core$Maybe$Just(
 																										_Utils_Tuple2(
 																											$author$project$Logic$App$Types$NumberType,
 																											$author$project$Logic$App$Types$Number(
@@ -17137,14 +17107,14 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F5(
 																								$author$project$Logic$App$Utils$GetIotaValue$getIotaTypeAsString(iota))
 																							]));
 																				},
-																				pattern.outputOptions))
+																				pattern.bt))
 																		]))
 																]);
 														} else {
 															break _v0$3;
 														}
-													case 'IotaListType':
-														if ((_v0.a.a.a.$ === 'EntityType') && (_v0.a.b.$ === 'IotaList')) {
+													case 4:
+														if ((_v0.a.a.a.$ === 3) && (_v0.a.b.$ === 4)) {
 															var _v6 = _v0.a;
 															var _v7 = _v6.a.a;
 															return _List_fromArray(
@@ -17180,7 +17150,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F5(
 																							_Utils_update(
 																								pattern,
 																								{
-																									selectedOutput: $elm$core$Maybe$Just(
+																									ak: $elm$core$Maybe$Just(
 																										_Utils_Tuple2(
 																											$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
 																											$author$project$Logic$App$Types$IotaList(
@@ -17190,7 +17160,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F5(
 																														$elm$core$Maybe$withDefault,
 																														0,
 																														$elm$core$String$toInt(str)),
-																													$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset)))))
+																													$author$project$Logic$App$Types$Entity(0)))))
 																								}));
 																					})
 																				]),
@@ -17206,7 +17176,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F5(
 																								$author$project$Logic$App$Utils$GetIotaValue$getIotaTypeAsString(iota))
 																							]));
 																				},
-																				pattern.outputOptions))
+																				pattern.bt))
 																		]))
 																]);
 														} else {
@@ -17242,9 +17212,9 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F5(
 				]) : _List_Nil);
 	});
 var $author$project$Components$App$Panels$PatternPanel$patternPanel = function (model) {
-	var visibility = A2($elm$core$List$member, $author$project$Logic$App$Types$PatternPanel, model.ui.openPanels);
+	var visibility = A2($elm$core$List$member, 1, model.fb.ex);
 	var autocompleteTuple = $author$project$Components$App$PatternAutoComplete$patternInputAutoComplete(model);
-	var valueToSend = (autocompleteTuple.b !== '') ? autocompleteTuple.b : model.ui.patternInputField;
+	var valueToSend = (autocompleteTuple.b !== '') ? autocompleteTuple.b : model.fb.cR;
 	var detectKey = function (code) {
 		return ((code === 13) || (code === 9)) ? $elm$json$Json$Decode$succeed(
 			_Utils_Tuple2(
@@ -17288,7 +17258,7 @@ var $author$project$Components$App$Panels$PatternPanel$patternPanel = function (
 					$elm$html$Html$Attributes$id('pattern_draggable_container'),
 					$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$onDropTarget($author$project$Components$App$Panels$PatternPanel$dropTargetConfig)),
 				$elm$core$List$reverse(
-					A5($author$project$Components$App$Panels$PatternPanel$renderPatternList, model.patternArray, model.ui.mouseOverElementIndex, model.ui.dragging.b, model.ui.overDragHandle, model.insertionPoint))),
+					A5($author$project$Components$App$Panels$PatternPanel$renderPatternList, model.eE, model.fb.ed, model.fb.dF.b, model.fb.ey, model.dY))),
 				A2(
 				$elm$html$Html$div,
 				_List_fromArray(
@@ -17327,7 +17297,7 @@ var $author$project$Components$App$Panels$PatternPanel$patternPanel = function (
 												$author$project$Logic$App$Msg$SetFocus('add_pattern_input')),
 												$elm$html$Html$Events$onBlur(
 												$author$project$Logic$App$Msg$SetFocus('')),
-												$elm$html$Html$Attributes$value(model.ui.patternInputField),
+												$elm$html$Html$Attributes$value(model.fb.cR),
 												A2(
 												$elm$html$Html$Events$preventDefaultOn,
 												'keydown',
@@ -17358,10 +17328,10 @@ var $author$project$Components$App$Panels$PatternPanel$patternPanel = function (
 					]))
 			]));
 };
-var $author$project$Logic$App$Msg$RequestGridDrawingAsGIF = {$: 'RequestGridDrawingAsGIF'};
-var $author$project$Logic$App$Msg$RequestGridDrawingAsImage = {$: 'RequestGridDrawingAsImage'};
+var $author$project$Logic$App$Msg$RequestGridDrawingAsGIF = {$: 29};
+var $author$project$Logic$App$Msg$RequestGridDrawingAsImage = {$: 31};
 var $author$project$Components$App$Panels$FilePanel$saveExportPanel = function (model) {
-	var visibility = A2($elm$core$List$member, $author$project$Logic$App$Types$FilePanel, model.ui.openPanels);
+	var visibility = A2($elm$core$List$member, 3, model.fb.ex);
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
@@ -17388,7 +17358,7 @@ var $author$project$Components$App$Panels$FilePanel$saveExportPanel = function (
 					[
 						$elm$html$Html$Attributes$class('generic_button'),
 						$elm$html$Html$Events$onClick(
-						$author$project$Logic$App$Msg$ViewOverlay($author$project$Logic$App$Types$ImportTextOverlay))
+						$author$project$Logic$App$Msg$ViewOverlay(1))
 					]),
 				_List_fromArray(
 					[
@@ -17400,7 +17370,7 @@ var $author$project$Components$App$Panels$FilePanel$saveExportPanel = function (
 					[
 						$elm$html$Html$Attributes$class('generic_button'),
 						$elm$html$Html$Events$onClick(
-						$author$project$Logic$App$Msg$ViewOverlay($author$project$Logic$App$Types$ExportTextOverlay))
+						$author$project$Logic$App$Msg$ViewOverlay(2))
 					]),
 				_List_fromArray(
 					[
@@ -17440,7 +17410,7 @@ var $author$project$Components$App$Panels$StackPanel$renderStack = function (sta
 			A2($elm$core$Array$indexedMap, renderIota, stack)));
 };
 var $author$project$Components$App$Panels$StackPanel$stackPanel = function (model) {
-	var visibility = A2($elm$core$List$member, $author$project$Logic$App$Types$StackPanel, model.ui.openPanels);
+	var visibility = A2($elm$core$List$member, 0, model.fb.ex);
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
@@ -17467,7 +17437,7 @@ var $author$project$Components$App$Panels$StackPanel$stackPanel = function (mode
 					[
 						$elm$html$Html$Attributes$class('scroll_container')
 					]),
-				$author$project$Components$App$Panels$StackPanel$renderStack(model.stack))
+				$author$project$Components$App$Panels$StackPanel$renderStack(model.eW))
 			]));
 };
 var $author$project$Components$App$Panels$Panels$panels = function (model) {
@@ -17506,11 +17476,11 @@ var $elm$html$Html$Events$onMouseUp = function (msg) {
 };
 var $mpizenberg$elm_pointer_events$Html$Events$Extra$Touch$Event = F4(
 	function (keys, changedTouches, targetTouches, touches) {
-		return {changedTouches: changedTouches, keys: keys, targetTouches: targetTouches, touches: touches};
+		return {dr: changedTouches, bp: keys, e0: targetTouches, fa: touches};
 	});
 var $mpizenberg$elm_pointer_events$Html$Events$Extra$Touch$Touch = F4(
 	function (identifier, clientPos, pagePos, screenPos) {
-		return {clientPos: clientPos, identifier: identifier, pagePos: pagePos, screenPos: screenPos};
+		return {ds: clientPos, dS: identifier, eA: pagePos, eR: screenPos};
 	});
 var $mpizenberg$elm_pointer_events$Html$Events$Extra$Touch$touchDecoder = A5(
 	$elm$json$Json$Decode$map4,
@@ -17545,15 +17515,15 @@ var $mpizenberg$elm_pointer_events$Html$Events$Extra$Touch$onWithOptions = F3(
 				$elm$json$Json$Decode$map,
 				function (ev) {
 					return {
-						message: tag(ev),
-						preventDefault: options.preventDefault,
-						stopPropagation: options.stopPropagation
+						ah: tag(ev),
+						cU: options.cU,
+						da: options.da
 					};
 				},
 				$mpizenberg$elm_pointer_events$Html$Events$Extra$Touch$eventDecoder));
 	});
 var $author$project$Logic$App$Msg$SetGridScale = function (a) {
-	return {$: 'SetGridScale', a: a};
+	return {$: 8, a: a};
 };
 var $lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$arrowDownShortWide = A4(
 	$lattyware$elm_fontawesome$FontAwesome$IconDef,
@@ -17563,18 +17533,18 @@ var $lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$arrowDownShortWide 
 	_Utils_Tuple2('M320 224H416c17.67 0 32-14.33 32-32s-14.33-32-32-32h-95.1c-17.67 0-32 14.33-32 32S302.3 224 320 224zM320 352H480c17.67 0 32-14.33 32-32s-14.33-32-32-32h-159.1c-17.67 0-32 14.33-32 32S302.3 352 320 352zM320 96h32c17.67 0 31.1-14.33 31.1-32s-14.33-32-31.1-32h-32c-17.67 0-32 14.33-32 32S302.3 96 320 96zM544 416h-223.1c-17.67 0-32 14.33-32 32s14.33 32 32 32H544c17.67 0 32-14.33 32-32S561.7 416 544 416zM192.4 330.7L160 366.1V64.03C160 46.33 145.7 32 128 32S96 46.33 96 64.03v302L63.6 330.7c-6.312-6.883-14.94-10.38-23.61-10.38c-7.719 0-15.47 2.781-21.61 8.414c-13.03 11.95-13.9 32.22-1.969 45.27l87.1 96.09c12.12 13.26 35.06 13.26 47.19 0l87.1-96.09c11.94-13.05 11.06-33.31-1.969-45.27C224.6 316.8 204.4 317.7 192.4 330.7z', $elm$core$Maybe$Nothing));
 var $lattyware$elm_fontawesome$FontAwesome$Solid$arrowDownShortWide = $lattyware$elm_fontawesome$FontAwesome$present($lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$arrowDownShortWide);
 var $author$project$Logic$App$Msg$GridDown = function (a) {
-	return {$: 'GridDown', a: a};
+	return {$: 5, a: a};
 };
 var $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$onDown = A2($mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$onWithOptions, 'mousedown', $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$defaultOptions);
-var $mpizenberg$elm_pointer_events$Html$Events$Extra$Touch$defaultOptions = {preventDefault: true, stopPropagation: false};
+var $mpizenberg$elm_pointer_events$Html$Events$Extra$Touch$defaultOptions = {cU: true, da: false};
 var $mpizenberg$elm_pointer_events$Html$Events$Extra$Touch$onEnd = A2($mpizenberg$elm_pointer_events$Html$Events$Extra$Touch$onWithOptions, 'touchend', $mpizenberg$elm_pointer_events$Html$Events$Extra$Touch$defaultOptions);
 var $mpizenberg$elm_pointer_events$Html$Events$Extra$Touch$onStart = A2($mpizenberg$elm_pointer_events$Html$Events$Extra$Touch$onWithOptions, 'touchstart', $mpizenberg$elm_pointer_events$Html$Events$Extra$Touch$defaultOptions);
 var $author$project$Components$App$Grid$getGridpointFromOffsetCoordinates = F2(
 	function (grid_, offsetCoords) {
 		var checkMatchingOffsetCoords = function (point) {
 			return _Utils_eq(
-				_Utils_Tuple2(point.offsetX, point.offsetY),
-				_Utils_Tuple2(offsetCoords.offsetX, offsetCoords.offsetY));
+				_Utils_Tuple2(point.t, point.r),
+				_Utils_Tuple2(offsetCoords.t, offsetCoords.r));
 		};
 		return A2(
 			$elm$core$Maybe$withDefault,
@@ -17592,10 +17562,10 @@ var $author$project$Components$App$Grid$findLinkedPoints = F2(
 			function (pnt) {
 				return _Utils_Tuple3(
 					A2($author$project$Components$App$Grid$getGridpointFromOffsetCoordinates, grid_, pnt),
-					pnt.betweenOffsetValues,
-					pnt.color);
+					pnt.ap,
+					pnt.S);
 			},
-			point.connectedPoints);
+			point.H);
 		return A2(
 			$elm$core$List$map,
 			function (conPnt) {
@@ -17603,9 +17573,9 @@ var $author$project$Components$App$Grid$findLinkedPoints = F2(
 				var betweenOffsetValues = conPnt.b;
 				var color = conPnt.c;
 				return {
-					betweenOffsetValues: betweenOffsetValues,
-					color: color,
-					coordPair: {x1: conPntCoords.x, x2: point.x, y1: conPntCoords.y, y2: point.y}
+					ap: betweenOffsetValues,
+					S: color,
+					bI: {bC: conPntCoords.m, bD: point.m, bE: conPntCoords.n, bF: point.n}
 				};
 			},
 			connectedPoints);
@@ -17615,10 +17585,10 @@ var $elm$svg$Svg$Attributes$strokeLinecap = _VirtualDom_attribute('stroke-lineca
 var $elm$svg$Svg$Attributes$strokeLinejoin = _VirtualDom_attribute('stroke-linejoin');
 var $author$project$Components$App$Grid$renderLine = F4(
 	function (scale, color, coordinatePair, offsetsTuple) {
-		var y2 = coordinatePair.y2;
-		var y1 = coordinatePair.y1;
-		var x2 = coordinatePair.x2;
-		var x1 = coordinatePair.x1;
+		var y2 = coordinatePair.bF;
+		var y1 = coordinatePair.bE;
+		var x2 = coordinatePair.bD;
+		var x1 = coordinatePair.bC;
 		var run = x2 - x1;
 		var rise = y2 - y1;
 		var coordsList = function () {
@@ -17646,9 +17616,9 @@ var $author$project$Components$App$Grid$renderLine = F4(
 				]);
 		}();
 		var allPointsValid = (!_Utils_eq(
-			_Utils_Tuple2(coordinatePair.x1, coordinatePair.y1),
+			_Utils_Tuple2(coordinatePair.bC, coordinatePair.bE),
 			_Utils_Tuple2(0.0, 0.0))) && (!_Utils_eq(
-			_Utils_Tuple2(coordinatePair.x2, coordinatePair.y2),
+			_Utils_Tuple2(coordinatePair.bD, coordinatePair.bF),
 			_Utils_Tuple2(0.0, 0.0)));
 		return allPointsValid ? A2(
 			$elm$svg$Svg$path,
@@ -17672,32 +17642,32 @@ var $author$project$Components$App$Grid$renderLine = F4(
 			_List_Nil) : $elm$html$Html$text('');
 	});
 var $author$project$Components$App$Grid$renderActivePath = function (model) {
-	var points = model.grid.drawing.activePath;
+	var points = model.F.as.aC;
 	return A2(
 		$elm$core$List$map,
 		function (x) {
-			return A4($author$project$Components$App$Grid$renderLine, model.settings.gridScale, x.color, x.coordPair, x.betweenOffsetValues);
+			return A4($author$project$Components$App$Grid$renderLine, model.aP.aI, x.S, x.bI, x.ap);
 		},
 		A2(
 			$elm$core$List$concatMap,
-			$author$project$Components$App$Grid$findLinkedPoints(model.grid.points),
+			$author$project$Components$App$Grid$findLinkedPoints(model.F.b5),
 			points));
 };
 var $author$project$Components$App$Grid$renderDrawingLine = function (model) {
-	var mousePos = model.mousePos;
-	var gridOffset = model.window.width - model.grid.width;
-	var drawingMode = model.grid.drawing.drawingMode;
+	var mousePos = model.a5;
+	var gridOffset = model.bB.ac - model.F.ac;
+	var drawingMode = model.F.as.dG;
 	var activePoint = A2(
 		$elm$core$Maybe$withDefault,
 		$author$project$Components$App$Grid$emptyGridpoint,
-		$elm$core$List$head(model.grid.drawing.activePath));
+		$elm$core$List$head(model.F.as.aC));
 	return drawingMode ? _List_fromArray(
 		[
 			A4(
 			$author$project$Components$App$Grid$renderLine,
-			model.settings.gridScale,
+			model.aP.aI,
 			$author$project$Settings$Theme$accent2,
-			{x1: mousePos.a - gridOffset, x2: activePoint.x, y1: mousePos.b, y2: activePoint.y},
+			{bC: mousePos.a - gridOffset, bD: activePoint.m, bE: mousePos.b, bF: activePoint.n},
 			_Utils_Tuple3(
 				_Utils_Tuple2(0, 0),
 				_Utils_Tuple2(0, 0),
@@ -17705,11 +17675,11 @@ var $author$project$Components$App$Grid$renderDrawingLine = function (model) {
 		]) : _List_Nil;
 };
 var $author$project$Components$App$Grid$renderLines = function (model) {
-	var points = model.grid.drawnPoints;
+	var points = model.F.dH;
 	return A2(
 		$elm$core$List$map,
 		function (x) {
-			return A4($author$project$Components$App$Grid$renderLine, model.settings.gridScale, x.color, x.coordPair, x.betweenOffsetValues);
+			return A4($author$project$Components$App$Grid$renderLine, model.aP.aI, x.S, x.bI, x.ap);
 		},
 		A2(
 			$elm$core$List$concatMap,
@@ -17720,13 +17690,13 @@ var $author$project$Components$App$Grid$renderLines = function (model) {
 };
 var $author$project$Components$App$Grid$renderPoint = F4(
 	function (mousePos, gridOffset, scale, point) {
-		var pointScale = (!point.used) ? (A2(
+		var pointScale = (!point.am) ? (A2(
 			$elm$core$Basics$min,
 			1,
 			1 / (A2(
 				$author$project$Components$App$Grid$distanceBetweenCoordinates,
 				mousePos,
-				_Utils_Tuple2(point.x + gridOffset, point.y)) / 30)) * scale) : 0;
+				_Utils_Tuple2(point.m + gridOffset, point.n)) / 30)) * scale) : 0;
 		return (pointScale > 0.05) ? _List_fromArray(
 			[
 				A2(
@@ -17734,24 +17704,24 @@ var $author$project$Components$App$Grid$renderPoint = F4(
 				_List_fromArray(
 					[
 						$elm$svg$Svg$Attributes$width(
-						$elm$core$String$fromFloat(point.radius * 2)),
+						$elm$core$String$fromFloat(point.bw * 2)),
 						$elm$svg$Svg$Attributes$height(
-						$elm$core$String$fromFloat(point.radius * 2)),
+						$elm$core$String$fromFloat(point.bw * 2)),
 						$elm$svg$Svg$Attributes$viewBox('0 0 300 280'),
 						A2($elm$html$Html$Attributes$style, 'position', 'absolute'),
 						A2(
 						$elm$html$Html$Attributes$style,
 						'left',
-						$elm$core$String$fromFloat(point.x - (8 * scale)) + 'px'),
+						$elm$core$String$fromFloat(point.m - (8 * scale)) + 'px'),
 						A2(
 						$elm$html$Html$Attributes$style,
 						'top',
-						$elm$core$String$fromFloat(point.y - (8 * scale)) + 'px'),
+						$elm$core$String$fromFloat(point.n - (8 * scale)) + 'px'),
 						A2(
 						$elm$html$Html$Attributes$style,
 						'transform',
 						'scale(' + ($elm$core$String$fromFloat(pointScale) + ')')),
-						$elm$svg$Svg$Attributes$fill(point.color)
+						$elm$svg$Svg$Attributes$fill(point.S)
 					]),
 				_List_fromArray(
 					[
@@ -17892,16 +17862,16 @@ var $elm$core$List$take = F2(
 		return A3($elm$core$List$takeFast, 0, n, list);
 	});
 var $author$project$Components$App$Grid$renderPoints = function (model) {
-	var scale = model.settings.gridScale;
-	var mousePos = model.mousePos;
+	var scale = model.aP.aI;
+	var mousePos = model.a5;
 	var mouseOffsetCoordY = $elm$core$Basics$floor(
 		mousePos.b / $author$project$Components$App$Grid$verticalSpacing(scale));
 	var points = A2(
 		$elm$core$List$take,
 		14,
-		A2($elm$core$List$drop, mouseOffsetCoordY - 7, model.grid.points));
-	var gridWidth = model.grid.width;
-	var gridOffset = model.window.width - gridWidth;
+		A2($elm$core$List$drop, mouseOffsetCoordY - 7, model.F.b5));
+	var gridWidth = model.F.ac;
+	var gridOffset = model.bB.ac - gridWidth;
 	return A2(
 		$elm$core$List$concatMap,
 		A3($author$project$Components$App$Grid$renderPoint, mousePos, gridOffset, scale),
@@ -17914,13 +17884,13 @@ var $author$project$Logic$App$Utils$Utils$touchCoordinates = function (touchEven
 		A2(
 			$elm$core$Maybe$map,
 			function ($) {
-				return $.clientPos;
+				return $.ds;
 			},
-			$elm$core$List$head(touchEvent.changedTouches)));
+			$elm$core$List$head(touchEvent.dr)));
 };
 var $author$project$Components$App$Grid$grid = function (model) {
-	var scale = model.settings.gridScale;
-	var gridHeight = model.grid.height;
+	var scale = model.aP.aI;
+	var gridHeight = model.F.cy;
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
@@ -17930,7 +17900,7 @@ var $author$project$Components$App$Grid$grid = function (model) {
 				A2(
 					$elm$core$Basics$composeR,
 					function ($) {
-						return $.clientPos;
+						return $.ds;
 					},
 					$author$project$Logic$App$Msg$GridDown)),
 				$mpizenberg$elm_pointer_events$Html$Events$Extra$Touch$onStart(
@@ -17949,9 +17919,9 @@ var $author$project$Components$App$Grid$grid = function (model) {
 					_List_fromArray(
 						[
 							$elm$svg$Svg$Attributes$height(
-							$elm$core$String$fromFloat(model.grid.height)),
+							$elm$core$String$fromFloat(model.F.cy)),
 							$elm$svg$Svg$Attributes$width(
-							$elm$core$String$fromFloat(model.grid.width)),
+							$elm$core$String$fromFloat(model.F.ac)),
 							$elm$svg$Svg$Attributes$id('grid_drawing')
 						]),
 					_Utils_ap(
@@ -17973,8 +17943,8 @@ var $author$project$Logic$App$Utils$Utils$ifThenElse = F3(
 		return conditional ? a : b;
 	});
 var $author$project$Components$App$Timeline$renderPoints = function (model) {
-	var timelineLength = $elm$core$Array$length(model.timeline);
-	var spacing = (model.grid.width - 50) / (timelineLength - 1);
+	var timelineLength = $elm$core$Array$length(model.be);
+	var spacing = (model.F.ac - 50) / (timelineLength - 1);
 	var setSpecificAttributes = F2(
 		function (scale, index) {
 			return _Utils_eq(index, timelineLength - 1) ? _List_fromArray(
@@ -17982,7 +17952,7 @@ var $author$project$Components$App$Timeline$renderPoints = function (model) {
 					A2(
 					$elm$html$Html$Attributes$style,
 					'left',
-					$elm$core$String$fromFloat(model.grid.width - 30) + 'px'),
+					$elm$core$String$fromFloat(model.F.ac - 30) + 'px'),
 					A2(
 					$elm$html$Html$Attributes$style,
 					'transform',
@@ -18010,8 +17980,8 @@ var $author$project$Components$App$Timeline$renderPoints = function (model) {
 				]));
 		});
 	var currentTime = _Utils_eq(
-		model.timelineIndex,
-		$elm$core$Array$length(model.timeline));
+		model.aR,
+		$elm$core$Array$length(model.be));
 	return A2(
 		$elm$core$List$indexedMap,
 		F2(
@@ -18022,7 +17992,7 @@ var $author$project$Components$App$Timeline$renderPoints = function (model) {
 						[
 							A3(
 							$author$project$Logic$App$Utils$Utils$ifThenElse,
-							_Utils_eq(index, model.timelineIndex + 1) || (currentTime && _Utils_eq(index + 1, timelineLength)),
+							_Utils_eq(index, model.aR + 1) || (currentTime && _Utils_eq(index + 1, timelineLength)),
 							$elm$svg$Svg$Attributes$class('timeline_point_selected'),
 							$elm$svg$Svg$Attributes$class('timeline_point'))
 						]),
@@ -18040,7 +18010,7 @@ var $author$project$Components$App$Timeline$renderPoints = function (model) {
 										$elm$svg$Svg$Attributes$viewBox('0 0 300 280'),
 										A3(
 										$author$project$Logic$App$Utils$Utils$ifThenElse,
-										_Utils_eq(index, model.timelineIndex + 1) || (currentTime && _Utils_eq(index + 1, timelineLength)),
+										_Utils_eq(index, model.aR + 1) || (currentTime && _Utils_eq(index + 1, timelineLength)),
 										$elm$svg$Svg$Attributes$class('timeline_point_outline_selected'),
 										$elm$svg$Svg$Attributes$class('timeline_point_outline')),
 										A2($elm$html$Html$Attributes$style, 'position', 'absolute'),
@@ -18050,7 +18020,7 @@ var $author$project$Components$App$Timeline$renderPoints = function (model) {
 										$elm$core$String$fromInt(44) + 'px'),
 										A3(
 										$author$project$Logic$App$Utils$Utils$ifThenElse,
-										_Utils_eq(index, model.timelineIndex + 1) || (currentTime && _Utils_eq(index + 1, timelineLength)),
+										_Utils_eq(index, model.aR + 1) || (currentTime && _Utils_eq(index + 1, timelineLength)),
 										$elm$svg$Svg$Attributes$fill($author$project$Settings$Theme$accent2),
 										$elm$svg$Svg$Attributes$fill($author$project$Settings$Theme$accent1)),
 										$elm$html$Html$Events$onClick(
@@ -18079,7 +18049,7 @@ var $author$project$Components$App$Timeline$renderPoints = function (model) {
 										$elm$svg$Svg$Attributes$viewBox('0 0 300 280'),
 										A3(
 										$author$project$Logic$App$Utils$Utils$ifThenElse,
-										_Utils_eq(index, model.timelineIndex + 1) || (currentTime && _Utils_eq(index + 1, timelineLength)),
+										_Utils_eq(index, model.aR + 1) || (currentTime && _Utils_eq(index + 1, timelineLength)),
 										$elm$svg$Svg$Attributes$class('timeline_point_outline_selected'),
 										$elm$svg$Svg$Attributes$class('timeline_point_outline')),
 										A2($elm$html$Html$Attributes$style, 'position', 'absolute'),
@@ -18119,7 +18089,7 @@ var $author$project$Components$App$Timeline$renderPoints = function (model) {
 										$elm$core$String$fromInt(44) + 'px'),
 										A3(
 										$author$project$Logic$App$Utils$Utils$ifThenElse,
-										_Utils_eq(index, model.timelineIndex + 1) || (currentTime && _Utils_eq(index + 1, timelineLength)),
+										_Utils_eq(index, model.aR + 1) || (currentTime && _Utils_eq(index + 1, timelineLength)),
 										$elm$svg$Svg$Attributes$fill($author$project$Settings$Theme$accent2),
 										$elm$svg$Svg$Attributes$fill($author$project$Settings$Theme$accent1)),
 										$elm$html$Html$Events$onClick(
@@ -18160,10 +18130,10 @@ var $author$project$Components$App$Timeline$timeline = function (model) {
 				_Utils_update(
 					model,
 					{
-						timeline: ($elm$core$Array$length(model.timeline) < 2) ? A2(
+						be: ($elm$core$Array$length(model.be) < 2) ? A2(
 							$elm$core$Array$repeat,
 							2,
-							{patternIndex: -1, stack: $elm$core$Array$empty}) : model.timeline
+							{eF: -1, eW: $elm$core$Array$empty}) : model.be
 					}))));
 };
 var $author$project$Components$App$Right$right = function (model) {
@@ -18207,7 +18177,7 @@ var $author$project$Components$App$Right$right = function (model) {
 							[
 								$elm$html$Html$Attributes$id('zoom_out'),
 								$elm$html$Html$Events$onClick(
-								$author$project$Logic$App$Msg$SetGridScale(model.settings.gridScale - 0.1))
+								$author$project$Logic$App$Msg$SetGridScale(model.aP.aI - 0.1))
 							]),
 						_List_fromArray(
 							[
@@ -18225,7 +18195,7 @@ var $author$project$Components$App$Right$right = function (model) {
 							[
 								$elm$html$Html$Attributes$id('zoom_in'),
 								$elm$html$Html$Events$onClick(
-								$author$project$Logic$App$Msg$SetGridScale(model.settings.gridScale + 0.1))
+								$author$project$Logic$App$Msg$SetGridScale(model.aP.aI + 0.1))
 							]),
 						_List_fromArray(
 							[
@@ -18251,17 +18221,17 @@ var $author$project$Components$App$Content$content = function (model) {
 				A3(
 				$mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$onWithOptions,
 				'mousemove',
-				{preventDefault: false, stopPropagation: false},
+				{cU: false, da: false},
 				A2(
 					$elm$core$Basics$composeR,
 					function ($) {
-						return $.clientPos;
+						return $.ds;
 					},
 					$author$project$Logic$App$Msg$MouseMove)),
 				A3(
 				$mpizenberg$elm_pointer_events$Html$Events$Extra$Touch$onWithOptions,
 				'touchmove',
-				{preventDefault: false, stopPropagation: false},
+				{cU: false, da: false},
 				A2($elm$core$Basics$composeR, $author$project$Logic$App$Utils$Utils$touchCoordinates, $author$project$Logic$App$Msg$MouseMove)),
 				$elm$html$Html$Events$onMouseUp($author$project$Logic$App$Msg$MouseUp)
 			]),
@@ -18278,14 +18248,14 @@ var $author$project$Components$App$Content$content = function (model) {
 };
 var $author$project$Main$view = function (model) {
 	return {
-		body: _List_fromArray(
+		dn: _List_fromArray(
 			[
 				$author$project$Components$App$Content$content(model)
 			]),
-		title: 'Hex Studio'
+		e4: 'Hex Studio'
 	};
 };
 var $author$project$Main$main = $elm$browser$Browser$document(
-	{init: $author$project$Main$init, subscriptions: $author$project$Main$subscriptions, update: $author$project$Main$update, view: $author$project$Main$view});
+	{dX: $author$project$Main$init, e_: $author$project$Main$subscriptions, fc: $author$project$Main$update, fe: $author$project$Main$view});
 _Platform_export({'Main':{'init':$author$project$Main$main(
-	$elm$json$Json$Decode$succeed(_Utils_Tuple0))(0)}});}(this));
+	$elm$json$Json$Decode$succeed(0))(0)}});}(this));
