@@ -345,7 +345,7 @@ forEach stack ctx =
         }
 
     else
-        case ( Maybe.map getPatternList maybeIota1, Maybe.map getIotaList maybeIota2 ) of
+        case ( Maybe.map getIotaList maybeIota1, Maybe.map getIotaList maybeIota2 ) of
             ( Just iota1, Just iota2 ) ->
                 if iota1 == Nothing || iota2 == Nothing then
                     let

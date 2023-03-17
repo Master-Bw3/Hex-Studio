@@ -7298,30 +7298,6 @@ var $author$project$Logic$App$Patterns$OperatorUtils$getIotaList = function (iot
 		return $elm$core$Maybe$Nothing;
 	}
 };
-var $elm$core$List$all = F2(
-	function (isOkay, list) {
-		return !A2(
-			$elm$core$List$any,
-			A2($elm$core$Basics$composeL, $elm$core$Basics$not, isOkay),
-			list);
-	});
-var $author$project$Logic$App$Patterns$OperatorUtils$getPatternList = function (iota) {
-	if (iota.$ === 'IotaList') {
-		var list = iota.a;
-		return A2(
-			$elm$core$List$all,
-			function (i) {
-				if (i.$ === 'PatternIota') {
-					return true;
-				} else {
-					return false;
-				}
-			},
-			$elm$core$Array$toList(list)) ? $elm$core$Maybe$Just(iota) : $elm$core$Maybe$Nothing;
-	} else {
-		return $elm$core$Maybe$Nothing;
-	}
-};
 var $author$project$Logic$App$Patterns$OperatorUtils$getPatternOrIotaList = function (iota) {
 	switch (iota.$) {
 		case 'PatternIota':
@@ -7930,7 +7906,7 @@ var $author$project$Logic$App$Stack$EvalStack$forEach = F2(
 			};
 		} else {
 			var _v0 = _Utils_Tuple2(
-				A2($elm$core$Maybe$map, $author$project$Logic$App$Patterns$OperatorUtils$getPatternList, maybeIota1),
+				A2($elm$core$Maybe$map, $author$project$Logic$App$Patterns$OperatorUtils$getIotaList, maybeIota1),
 				A2($elm$core$Maybe$map, $author$project$Logic$App$Patterns$OperatorUtils$getIotaList, maybeIota2));
 			if ((_v0.a.$ === 'Just') && (_v0.b.$ === 'Just')) {
 				var iota1 = _v0.a.a;
@@ -9756,6 +9732,30 @@ var $author$project$Logic$App$Patterns$Math$cosine = F2(
 			});
 		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
 	});
+var $elm$core$List$all = F2(
+	function (isOkay, list) {
+		return !A2(
+			$elm$core$List$any,
+			A2($elm$core$Basics$composeL, $elm$core$Basics$not, isOkay),
+			list);
+	});
+var $author$project$Logic$App$Patterns$OperatorUtils$getPatternList = function (iota) {
+	if (iota.$ === 'IotaList') {
+		var list = iota.a;
+		return A2(
+			$elm$core$List$all,
+			function (i) {
+				if (i.$ === 'PatternIota') {
+					return true;
+				} else {
+					return false;
+				}
+			},
+			$elm$core$Array$toList(list)) ? $elm$core$Maybe$Just(iota) : $elm$core$Maybe$Nothing;
+	} else {
+		return $elm$core$Maybe$Nothing;
+	}
+};
 var $author$project$Logic$App$Patterns$Spells$craftArtifact = F3(
 	function (requiredItem, stack, ctx) {
 		var action = F3(
