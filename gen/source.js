@@ -5551,6 +5551,7 @@ var $author$project$Main$init = function (_v0) {
 			downloadSrc: '',
 			grid: {
 				drawing: {activePath: _List_Nil, drawingMode: false},
+				drawnPoints: _List_Nil,
 				height: 0,
 				points: _List_Nil,
 				width: 0
@@ -8083,8 +8084,8 @@ var $author$project$Logic$App$Stack$EvalStack$applyPatternsToStack = F3(
 			false,
 			false);
 	});
-var $author$project$Components$App$Grid$applyPathToGrid = F2(
-	function (gridPoints, pointsToAdd) {
+var $author$project$Components$App$Grid$applyUsedPointsToGrid = F2(
+	function (gridPoints, pointsToChange) {
 		var replace = function (pnt) {
 			var replacedPnt = $elm$core$List$head(
 				A2(
@@ -8094,12 +8095,11 @@ var $author$project$Components$App$Grid$applyPathToGrid = F2(
 							_Utils_Tuple2(activePnt.offsetX, activePnt.offsetY),
 							_Utils_Tuple2(pnt.offsetX, pnt.offsetY));
 					},
-					pointsToAdd));
+					pointsToChange));
 			if (replacedPnt.$ === 'Just') {
-				var point = replacedPnt.a;
 				return _Utils_update(
 					pnt,
-					{color: $author$project$Settings$Theme$accent2, connectedPoints: point.connectedPoints, used: true});
+					{used: true});
 			} else {
 				return pnt;
 			}
@@ -8461,6 +8461,33 @@ var $author$project$Logic$App$Grid$drawPattern = F3(
 				pathCoords));
 		return {bottomBound: bottomAndRightBound.bottom, points: grid, rightBound: bottomAndRightBound.right};
 	});
+var $author$project$Components$App$Grid$updateCoords = F2(
+	function (gridPoints, pointsToUpdate) {
+		var update = F2(
+			function (pnt, accumulator) {
+				var replacedPnt = $elm$core$List$head(
+					A2(
+						$elm$core$List$filter,
+						function (activePnt) {
+							return _Utils_eq(
+								_Utils_Tuple2(activePnt.offsetX, activePnt.offsetY),
+								_Utils_Tuple2(pnt.offsetX, pnt.offsetY));
+						},
+						$elm$core$List$concat(gridPoints)));
+				if (replacedPnt.$ === 'Just') {
+					var point = replacedPnt.a;
+					return A2(
+						$elm$core$List$cons,
+						_Utils_update(
+							pnt,
+							{color: $author$project$Settings$Theme$accent2, used: true, x: point.x, y: point.y}),
+						accumulator);
+				} else {
+					return accumulator;
+				}
+			});
+		return A3($elm$core$List$foldl, update, _List_Nil, pointsToUpdate);
+	});
 var $author$project$Logic$App$Grid$drawPatterns = F2(
 	function (patterns, grid) {
 		var gridOffsetWidth = (-6) + (2 * $elm$core$List$length(
@@ -8473,10 +8500,20 @@ var $author$project$Logic$App$Grid$drawPatterns = F2(
 				var attemptDrawPatternResult = A3($author$project$Logic$App$Grid$drawPattern, accumulator.xOffset, accumulator.yOffset, pattern);
 				var drawPatternResult = function () {
 					if (_Utils_cmp(attemptDrawPatternResult.rightBound, gridOffsetWidth) < 0) {
-						return {bottomBound: attemptDrawPatternResult.bottomBound, points: attemptDrawPatternResult.points, rightBound: attemptDrawPatternResult.rightBound, yOffset: accumulator.yOffset};
+						return {
+							bottomBound: attemptDrawPatternResult.bottomBound,
+							points: A2($author$project$Components$App$Grid$updateCoords, grid.points, attemptDrawPatternResult.points),
+							rightBound: attemptDrawPatternResult.rightBound,
+							yOffset: accumulator.yOffset
+						};
 					} else {
 						var drawPatternResultOld = A3($author$project$Logic$App$Grid$drawPattern, 0, accumulator.currentLowestY + 1, pattern);
-						return {bottomBound: drawPatternResultOld.bottomBound, points: drawPatternResultOld.points, rightBound: drawPatternResultOld.rightBound, yOffset: accumulator.currentLowestY + 1};
+						return {
+							bottomBound: drawPatternResultOld.bottomBound,
+							points: A2($author$project$Components$App$Grid$updateCoords, grid.points, drawPatternResultOld.points),
+							rightBound: drawPatternResultOld.rightBound,
+							yOffset: accumulator.currentLowestY + 1
+						};
 					}
 				}();
 				return {
@@ -8499,8 +8536,9 @@ var $author$project$Logic$App$Grid$drawPatterns = F2(
 			grid: _Utils_update(
 				grid,
 				{
+					drawnPoints: drawPatternsResult.points,
 					points: A2(
-						$author$project$Components$App$Grid$applyPathToGrid,
+						$author$project$Components$App$Grid$applyUsedPointsToGrid,
 						$author$project$Logic$App$Grid$clearGrid(grid.points),
 						drawPatternsResult.points)
 				}),
@@ -12651,6 +12689,34 @@ var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName = func
 		}
 	}
 };
+var $author$project$Components$App$Grid$applyPathToGrid = F2(
+	function (gridPoints, pointsToAdd) {
+		var replace = function (pnt) {
+			var replacedPnt = $elm$core$List$head(
+				A2(
+					$elm$core$List$filter,
+					function (activePnt) {
+						return _Utils_eq(
+							_Utils_Tuple2(activePnt.offsetX, activePnt.offsetY),
+							_Utils_Tuple2(pnt.offsetX, pnt.offsetY));
+					},
+					pointsToAdd));
+			if (replacedPnt.$ === 'Just') {
+				var point = replacedPnt.a;
+				return _Utils_update(
+					pnt,
+					{color: $author$project$Settings$Theme$accent2, connectedPoints: point.connectedPoints, used: true});
+			} else {
+				return pnt;
+			}
+		};
+		return A2(
+			$elm$core$List$map,
+			function (row) {
+				return A2($elm$core$List$map, replace, row);
+			},
+			gridPoints);
+	});
 var $author$project$Components$App$Grid$verticalSpacing = function (scale) {
 	return ($author$project$Components$App$Grid$spacing(scale) * $elm$core$Basics$sqrt(3.0)) / 2;
 };
@@ -12852,6 +12918,17 @@ var $author$project$Logic$App$Patterns$MetaActions$applyMetaAction = F2(
 					});
 		}
 	});
+var $elm$core$List$concatMap = F2(
+	function (f, list) {
+		return $elm$core$List$concat(
+			A2($elm$core$List$map, f, list));
+	});
+var $author$project$Components$App$Grid$generateDrawnPointsListFromPatternArray = function (patternArray) {
+	return A2(
+		$elm$core$List$concatMap,
+		$elm$core$Tuple$second,
+		$elm$core$Array$toList(patternArray));
+};
 var $author$project$Logic$App$Utils$GetAngleSignature$getAngleSignature = function (unflippedPath) {
 	var path = $elm$core$List$reverse(unflippedPath);
 	var getAngleLetter = F2(
@@ -13283,6 +13360,15 @@ var $author$project$Ports$GetGridDrawingAsImage$requestImage = _Platform_outgoin
 	function ($) {
 		return $elm$json$Json$Encode$null;
 	});
+var $author$project$Logic$App$Grid$sortPatterns = function (model) {
+	var drawPatternsResult = A2(
+		$author$project$Logic$App$Grid$drawPatterns,
+		A2($elm$core$Array$map, $elm$core$Tuple$first, model.patternArray),
+		model.grid);
+	return _Utils_update(
+		model,
+		{grid: drawPatternsResult.grid, patternArray: drawPatternsResult.patternArray});
+};
 var $elm$file$File$Download$string = F3(
 	function (name, mime, content) {
 		return A2(
@@ -13305,6 +13391,38 @@ var $elm_community$array_extra$Array$Extra$update = F2(
 					array);
 			}
 		};
+	});
+var $author$project$Components$App$Grid$updateUsedGridPoints = F5(
+	function (gridWidth, gridHeight, patternArray, maybeGrid, scale) {
+		updateUsedGridPoints:
+		while (true) {
+			var tail = A3(
+				$elm$core$Array$slice,
+				1,
+				$elm$core$Array$length(patternArray),
+				patternArray);
+			var oldGrid = _Utils_eq(maybeGrid, _List_Nil) ? A3($author$project$Components$App$Grid$generateGrid, gridWidth, gridHeight, scale) : maybeGrid;
+			var drawing = A2(
+				$elm$core$Maybe$withDefault,
+				_Utils_Tuple2($author$project$Logic$App$Patterns$PatternRegistry$unknownPattern, _List_Nil),
+				A2($elm$core$Array$get, 0, patternArray)).b;
+			var newGrid = A2($author$project$Components$App$Grid$applyUsedPointsToGrid, oldGrid, drawing);
+			if (!$elm$core$Array$length(tail)) {
+				return newGrid;
+			} else {
+				var $temp$gridWidth = gridWidth,
+					$temp$gridHeight = gridHeight,
+					$temp$patternArray = tail,
+					$temp$maybeGrid = newGrid,
+					$temp$scale = scale;
+				gridWidth = $temp$gridWidth;
+				gridHeight = $temp$gridHeight;
+				patternArray = $temp$patternArray;
+				maybeGrid = $temp$maybeGrid;
+				scale = $temp$scale;
+				continue updateUsedGridPoints;
+			}
+		}
 	});
 var $elm$random$Random$Seed = F2(
 	function (a, b) {
@@ -13438,12 +13556,7 @@ var $author$project$Components$App$Grid$updatemidLineOffsets = F2(
 						point.connectedPoints)
 				});
 		};
-		return A2(
-			$elm$core$List$map,
-			function (row) {
-				return A2($elm$core$List$map, updateOffsets, row);
-			},
-			grid_);
+		return A2($elm$core$List$map, updateOffsets, grid_);
 	});
 var $elm$file$File$Download$url = function (href) {
 	return A2(
@@ -13608,8 +13721,7 @@ var $author$project$Main$update = F2(
 							{
 								drawing: _Utils_update(
 									drawing,
-									{activePath: _List_Nil, drawingMode: false}),
-								points: A5($author$project$Components$App$Grid$updateGridPoints, grid.width, grid.height, newPatternArray, _List_Nil, settings.gridScale)
+									{activePath: _List_Nil, drawingMode: false})
 							});
 						return A2(
 							$author$project$Main$update,
@@ -13701,18 +13813,19 @@ var $author$project$Main$update = F2(
 			case 'SetGridScale':
 				var scale = msg.a;
 				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							grid: _Utils_update(
-								grid,
-								{
-									points: A5($author$project$Components$App$Grid$updateGridPoints, grid.width, grid.height, model.patternArray, _List_Nil, scale)
-								}),
-							settings: _Utils_update(
-								settings,
-								{gridScale: scale})
-						}),
+					$author$project$Logic$App$Grid$sortPatterns(
+						_Utils_update(
+							model,
+							{
+								grid: _Utils_update(
+									grid,
+									{
+										points: A5($author$project$Components$App$Grid$updateGridPoints, grid.width, grid.height, model.patternArray, _List_Nil, scale)
+									}),
+								settings: _Utils_update(
+									settings,
+									{gridScale: scale})
+							})),
 					$elm$core$Platform$Cmd$none);
 			case 'WindowResize':
 				return _Utils_Tuple2(
@@ -13731,7 +13844,7 @@ var $author$project$Main$update = F2(
 							])));
 			case 'Tick':
 				var newTime = msg.a;
-				var points = grid.points;
+				var drawnPoints = grid.drawnPoints;
 				var autocompleteIndex = (model.ui.patternInputField === '') ? 0 : model.ui.suggestionIndex;
 				return _Utils_Tuple2(
 					_Utils_update(
@@ -13740,9 +13853,9 @@ var $author$project$Main$update = F2(
 							grid: _Utils_update(
 								grid,
 								{
-									points: A2(
+									drawnPoints: A2(
 										$author$project$Components$App$Grid$updatemidLineOffsets,
-										points,
+										drawnPoints,
 										$elm$time$Time$posixToMillis(newTime))
 								}),
 							time: $elm$time$Time$posixToMillis(newTime),
@@ -14262,7 +14375,8 @@ var $author$project$Main$update = F2(
 							grid: _Utils_update(
 								grid,
 								{
-									points: A5($author$project$Components$App$Grid$updateGridPoints, grid.width, grid.height, newPatternArray, _List_Nil, settings.gridScale)
+									drawnPoints: $author$project$Components$App$Grid$generateDrawnPointsListFromPatternArray(newPatternArray),
+									points: A5($author$project$Components$App$Grid$updateUsedGridPoints, grid.width, grid.height, newPatternArray, _List_Nil, settings.gridScale)
 								}),
 							patternArray: newPatternArray,
 							stack: _Utils_eq(
@@ -17137,11 +17251,6 @@ var $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$onDown = A2($mpizenbe
 var $mpizenberg$elm_pointer_events$Html$Events$Extra$Touch$defaultOptions = {preventDefault: true, stopPropagation: false};
 var $mpizenberg$elm_pointer_events$Html$Events$Extra$Touch$onEnd = A2($mpizenberg$elm_pointer_events$Html$Events$Extra$Touch$onWithOptions, 'touchend', $mpizenberg$elm_pointer_events$Html$Events$Extra$Touch$defaultOptions);
 var $mpizenberg$elm_pointer_events$Html$Events$Extra$Touch$onStart = A2($mpizenberg$elm_pointer_events$Html$Events$Extra$Touch$onWithOptions, 'touchstart', $mpizenberg$elm_pointer_events$Html$Events$Extra$Touch$defaultOptions);
-var $elm$core$List$concatMap = F2(
-	function (f, list) {
-		return $elm$core$List$concat(
-			A2($elm$core$List$map, f, list));
-	});
 var $author$project$Components$App$Grid$getGridpointFromOffsetCoordinates = F2(
 	function (grid_, offsetCoords) {
 		var checkMatchingOffsetCoords = function (point) {
@@ -17278,7 +17387,7 @@ var $author$project$Components$App$Grid$renderDrawingLine = function (model) {
 		]) : _List_Nil;
 };
 var $author$project$Components$App$Grid$renderLines = function (model) {
-	var points = model.grid.points;
+	var points = model.grid.drawnPoints;
 	return A2(
 		$elm$core$List$map,
 		function (x) {
@@ -17286,8 +17395,10 @@ var $author$project$Components$App$Grid$renderLines = function (model) {
 		},
 		A2(
 			$elm$core$List$concatMap,
-			$author$project$Components$App$Grid$findLinkedPoints(points),
-			$elm$core$List$concat(points)));
+			$author$project$Components$App$Grid$findLinkedPoints(
+				_List_fromArray(
+					[points])),
+			points));
 };
 var $author$project$Components$App$Grid$renderPoint = F4(
 	function (mousePos, gridOffset, scale, point) {
@@ -17318,6 +17429,10 @@ var $author$project$Components$App$Grid$renderPoint = F4(
 						$elm$html$Html$Attributes$style,
 						'top',
 						$elm$core$String$fromFloat(point.y - (8 * scale)) + 'px'),
+						A2(
+						$elm$html$Html$Attributes$style,
+						'transform',
+						'scale(' + ($elm$core$String$fromFloat(pointScale) + ')')),
 						$elm$svg$Svg$Attributes$fill(point.color)
 					]),
 				_List_fromArray(

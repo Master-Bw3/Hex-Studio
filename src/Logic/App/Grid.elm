@@ -1,8 +1,9 @@
 module Logic.App.Grid exposing (..)
 
 import Array exposing (Array)
-import Components.App.Grid exposing (applyPathToGrid, emptyGridpoint)
+import Components.App.Grid exposing (applyPathToGrid, applyUsedPointsToGrid, emptyGridpoint, updateCoords)
 import List.Extra as List
+import Logic.App.Model exposing (Model)
 import Logic.App.Types exposing (Direction(..), Grid, GridPoint, Pattern)
 import Logic.App.Utils.DirectionMap exposing (directionMap)
 import Logic.App.Utils.LetterMap exposing (letterMap)
@@ -47,7 +48,7 @@ drawPatterns patterns grid =
                         { yOffset = accumulator.yOffset
                         , rightBound = attemptDrawPatternResult.rightBound
                         , bottomBound = attemptDrawPatternResult.bottomBound
-                        , points = attemptDrawPatternResult.points
+                        , points = updateCoords grid.points attemptDrawPatternResult.points
                         }
 
                     else
@@ -58,12 +59,12 @@ drawPatterns patterns grid =
                         { yOffset = accumulator.currentLowestY + 1
                         , rightBound = drawPatternResultOld.rightBound
                         , bottomBound = drawPatternResultOld.bottomBound
-                        , points = drawPatternResultOld.points
+                        , points = updateCoords grid.points drawPatternResultOld.points
                         }
             in
             { xOffset = drawPatternResult.rightBound + 1
             , yOffset = drawPatternResult.yOffset
-            , currentLowestY = (max accumulator.currentLowestY drawPatternResult.bottomBound)
+            , currentLowestY = max accumulator.currentLowestY drawPatternResult.bottomBound
             , points = accumulator.points ++ drawPatternResult.points
             , patternArray = unshift ( pattern, drawPatternResult.points ) accumulator.patternArray
             }
@@ -71,7 +72,15 @@ drawPatterns patterns grid =
         drawPatternsResult =
             Array.foldr addPatternToGrid { xOffset = 0, yOffset = 0, currentLowestY = 0, points = [], patternArray = Array.empty } patterns
     in
-    { grid = { grid | points = applyPathToGrid (clearGrid grid.points) drawPatternsResult.points }
+    { grid =
+        { grid
+            | drawnPoints = drawPatternsResult.points
+            , points = applyUsedPointsToGrid (clearGrid grid.points) drawPatternsResult.points
+        }
+
+    -- { grid
+    --     | points = applyPathToGrid (clearGrid grid.points) drawPatternsResult.points
+    -- }
     , patternArray = drawPatternsResult.patternArray
     }
 
@@ -226,3 +235,15 @@ drawPattern xOffset yOffset pattern =
                 |> Tuple.second
     in
     { points = grid, bottomBound = bottomAndRightBound.bottom, rightBound = bottomAndRightBound.right }
+
+
+sortPatterns : Model -> Model
+sortPatterns model =
+    let
+        drawPatternsResult =
+            drawPatterns (Array.map Tuple.first model.patternArray) model.grid
+    in
+    { model
+        | grid = drawPatternsResult.grid
+        , patternArray = drawPatternsResult.patternArray
+    }

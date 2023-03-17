@@ -2,14 +2,18 @@ module Components.App.Grid exposing
     ( addNearbyPoint
     , applyActivePathToGrid
     , applyPathToGrid
+    , applyUsedPointsToGrid
     , distanceBetweenCoordinates
     , emptyGridpoint
+    , generateDrawnPointsListFromPatternArray
     , generateGrid
     , getClosestPoint
     , getGridpointFromOffsetCoordinates
     , grid
     , spacing
+    , updateCoords
     , updateGridPoints
+    , updateUsedGridPoints
     , updatemidLineOffsets
     )
 
@@ -143,9 +147,9 @@ renderLines : Model -> List (Svg msg)
 renderLines model =
     let
         points =
-            model.grid.points
+            model.grid.drawnPoints
     in
-    List.map (\x -> renderLine model.settings.gridScale x.color x.coordPair x.betweenOffsetValues) (List.concatMap (findLinkedPoints points) (List.concat points))
+    List.map (\x -> renderLine model.settings.gridScale x.color x.coordPair x.betweenOffsetValues) (List.concatMap (findLinkedPoints [ points ]) points)
 
 
 renderLine : Float -> String -> CoordinatePair -> ( ( Int, Int ), ( Int, Int ), ( Int, Int ) ) -> Svg msg
@@ -281,6 +285,52 @@ applyPathToGrid gridPoints pointsToAdd =
     List.map (\row -> List.map replace row) gridPoints
 
 
+updateCoords : List (List GridPoint) -> List GridPoint -> List GridPoint
+updateCoords gridPoints pointsToUpdate =
+    let
+        update : GridPoint -> List GridPoint -> List GridPoint
+        update pnt accumulator =
+            let
+                replacedPnt =
+                    List.concat gridPoints
+                        |> List.filter (\activePnt -> ( activePnt.offsetX, activePnt.offsetY ) == ( pnt.offsetX, pnt.offsetY ))
+                        |> List.head
+            in
+            case replacedPnt of
+                Just point ->
+                    { pnt | used = True, color = accent2, x = point.x, y = point.y } :: accumulator
+
+                Nothing ->
+                    accumulator
+
+        --find matching points
+        --replace grid points with matching active points
+    in
+    List.foldl update [] pointsToUpdate
+
+
+applyUsedPointsToGrid : List (List GridPoint) -> List GridPoint -> List (List GridPoint)
+applyUsedPointsToGrid gridPoints pointsToChange =
+    let
+        replace : GridPoint -> GridPoint
+        replace pnt =
+            let
+                replacedPnt =
+                    List.head <| List.filter (\activePnt -> ( activePnt.offsetX, activePnt.offsetY ) == ( pnt.offsetX, pnt.offsetY )) pointsToChange
+            in
+            case replacedPnt of
+                Just _ ->
+                    { pnt | used = True }
+
+                Nothing ->
+                    pnt
+
+        --find matching points
+        --replace grid points with matching active points
+    in
+    List.map (\row -> List.map replace row) gridPoints
+
+
 renderPoint : ( Float, Float ) -> Float -> Float -> GridPoint -> List (Html msg)
 renderPoint mousePos gridOffset scale point =
     let
@@ -300,7 +350,7 @@ renderPoint mousePos gridOffset scale point =
             , Attr.style "left" (String.fromFloat (point.x - (8 * scale)) ++ "px")
             , Attr.style "top" (String.fromFloat (point.y - (8 * scale)) ++ "px")
 
-            -- , Attr.style "transform" ("scale(" ++ String.fromFloat pointScale ++ ")")
+            , Attr.style "transform" ("scale(" ++ String.fromFloat pointScale ++ ")")
             , fill point.color
             ]
             [ polygon [ points "300,150 225,280 75,280 0,150 75,20 225,20" ] []
@@ -491,6 +541,12 @@ generateGrid gridWidth gridHeight scale =
 -- TODO: Finish this
 
 
+generateDrawnPointsListFromPatternArray : Array ( Pattern, List GridPoint ) -> List GridPoint
+generateDrawnPointsListFromPatternArray patternArray =
+    Array.toList patternArray
+        |> List.concatMap Tuple.second
+
+
 updateGridPoints : Float -> Float -> Array ( Pattern, List GridPoint ) -> List (List GridPoint) -> Float -> List (List GridPoint)
 updateGridPoints gridWidth gridHeight patternArray maybeGrid scale =
     let
@@ -517,7 +573,33 @@ updateGridPoints gridWidth gridHeight patternArray maybeGrid scale =
         updateGridPoints gridWidth gridHeight tail newGrid scale
 
 
-updatemidLineOffsets : List (List GridPoint) -> Int -> List (List GridPoint)
+updateUsedGridPoints : Float -> Float -> Array ( Pattern, List GridPoint ) -> List (List GridPoint) -> Float -> List (List GridPoint)
+updateUsedGridPoints gridWidth gridHeight patternArray maybeGrid scale =
+    let
+        drawing =
+            Tuple.second <| Maybe.withDefault ( unknownPattern, [] ) <| Array.get 0 patternArray
+
+        oldGrid =
+            if maybeGrid == [] then
+                generateGrid gridWidth gridHeight scale
+
+            else
+                maybeGrid
+
+        newGrid =
+            applyUsedPointsToGrid oldGrid drawing
+
+        tail =
+            Array.slice 1 (Array.length patternArray) patternArray
+    in
+    if Array.length tail == 0 then
+        newGrid
+
+    else
+        updateUsedGridPoints gridWidth gridHeight tail newGrid scale
+
+
+updatemidLineOffsets : List GridPoint -> Int -> List GridPoint
 updatemidLineOffsets grid_ time =
     let
         randomNum seed =
@@ -561,4 +643,4 @@ updatemidLineOffsets grid_ time =
                         point.connectedPoints
             }
     in
-    List.map (\row -> List.map updateOffsets row) grid_
+    List.map updateOffsets grid_

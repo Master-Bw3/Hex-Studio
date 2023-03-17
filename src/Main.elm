@@ -31,6 +31,7 @@ import Settings.Theme exposing (..)
 import String exposing (fromInt)
 import Task
 import Time
+import Logic.App.Grid exposing (sortPatterns)
 
 
 main =
@@ -63,6 +64,7 @@ init _ =
             { height = 0
             , width = 0
             , points = []
+            , drawnPoints = []
             , drawing =
                 { drawingMode = False
                 , activePath = []
@@ -134,6 +136,7 @@ updatePatternArrayFromQueue model =
 
             drawPatternsResult =
                 drawPatterns patterns model.grid
+
         in
         if command == Cmd.none then
             updatePatternArrayFromQueue <|
@@ -273,8 +276,8 @@ update msg model =
 
                         newGrid =
                             { grid
-                                | points = updateGridPoints grid.width grid.height newPatternArray [] settings.gridScale
-                                , drawing = { drawing | drawingMode = False, activePath = [] }
+                                | --points = updateGridPoints grid.width grid.height newPatternArray [] settings.gridScale,
+                                  drawing = { drawing | drawingMode = False, activePath = [] }
                             }
                     in
                     update (SetTimelineIndex (Array.length stackResult.timeline + 1)) <|
@@ -341,7 +344,7 @@ update msg model =
                 }
 
         SetGridScale scale ->
-            ( { model | grid = { grid | points = updateGridPoints grid.width grid.height model.patternArray [] scale }, settings = { settings | gridScale = scale } }, Cmd.none )
+            (sortPatterns { model | grid = { grid | points = updateGridPoints grid.width grid.height model.patternArray [] scale }, settings = { settings | gridScale = scale } }, Cmd.none)
 
         WindowResize ->
             ( model, Cmd.batch [ Task.attempt GetGrid (getElement "hex_grid"), Task.attempt GetContentSize (getElement "content") ] )
@@ -355,12 +358,12 @@ update msg model =
                     else
                         model.ui.suggestionIndex
 
-                points =
-                    grid.points
+                drawnPoints =
+                    grid.drawnPoints
             in
             ( { model
                 | time = Time.posixToMillis newTime
-                , grid = { grid | points = updatemidLineOffsets points (Time.posixToMillis newTime) }
+                , grid = { grid | drawnPoints = updatemidLineOffsets drawnPoints (Time.posixToMillis newTime) }
                 , ui = { ui | suggestionIndex = autocompleteIndex }
               }
             , Cmd.batch
@@ -709,7 +712,13 @@ update msg model =
             ( { model
                 | timelineIndex = index
                 , patternArray = newPatternArray
-                , grid = { grid | points = updateGridPoints grid.width grid.height newPatternArray [] settings.gridScale }
+
+                -- , grid = { grid | points = updateUsedGridPoints grid.width grid.height newPatternArray [] settings.gridScale }
+                , grid =
+                    { grid
+                        | drawnPoints = generateDrawnPointsListFromPatternArray newPatternArray
+                        , points = updateUsedGridPoints grid.width grid.height newPatternArray [] settings.gridScale
+                    }
                 , stack =
                     if index == Array.length timeline then
                         model.stack

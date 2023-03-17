@@ -165,6 +165,7 @@ type alias Grid =
     { width : Float
     , height : Float
     , points : List (List GridPoint)
+    , drawnPoints : List GridPoint
     , drawing :
         { drawingMode : Bool
         , activePath : List GridPoint
