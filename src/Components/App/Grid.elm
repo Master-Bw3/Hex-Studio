@@ -3,14 +3,14 @@ module Components.App.Grid exposing
     , applyActivePathToGrid
     , applyPathToGrid
     , distanceBetweenCoordinates
+    , emptyGridpoint
     , generateGrid
     , getClosestPoint
+    , getGridpointFromOffsetCoordinates
     , grid
     , spacing
     , updateGridPoints
     , updatemidLineOffsets
-    , getGridpointFromOffsetCoordinates
-    , emptyGridpoint
     )
 
 import Array exposing (Array)
@@ -230,14 +230,19 @@ getGridpointFromOffsetCoordinates grid_ offsetCoords =
 renderPoints : Model -> List (Html msg)
 renderPoints model =
     let
+        mousePos =
+            model.mousePos
+
+        mouseOffsetCoordY =
+            floor (Tuple.second mousePos / verticalSpacing scale)
+
         points =
             model.grid.points
+                |> List.drop (mouseOffsetCoordY - 7)
+                |> List.take 14
 
         gridWidth =
             model.grid.width
-
-        mousePos =
-            model.mousePos
 
         gridOffset =
             model.window.width - gridWidth
@@ -294,7 +299,8 @@ renderPoint mousePos gridOffset scale point =
             , Attr.style "position" "absolute"
             , Attr.style "left" (String.fromFloat (point.x - (8 * scale)) ++ "px")
             , Attr.style "top" (String.fromFloat (point.y - (8 * scale)) ++ "px")
-            , Attr.style "transform" ("scale(" ++ String.fromFloat pointScale ++ ")")
+
+            -- , Attr.style "transform" ("scale(" ++ String.fromFloat pointScale ++ ")")
             , fill point.color
             ]
             [ polygon [ points "300,150 225,280 75,280 0,150 75,20 225,20" ] []
@@ -336,10 +342,8 @@ addNearbyPoint model =
             in
             ( (trimmedMagnitude * cos theta) + prevNode.x, (trimmedMagnitude * sin theta) + prevNode.y )
 
-        
-
         closestGridNode =
-            getClosestPoint ( Tuple.first trimmedMousePos +  gridOffset, Tuple.second trimmedMousePos ) modelGrid.points model
+            getClosestPoint ( Tuple.first trimmedMousePos + gridOffset, Tuple.second trimmedMousePos ) modelGrid.points model
 
         closestPoint =
             Maybe.withDefault closestGridNode (List.head <| List.filter (\point -> ( point.x, point.y ) == ( closestGridNode.x, closestGridNode.y )) <| modelGrid.drawing.activePath)
