@@ -554,6 +554,7 @@ update msg model =
                         resultArray
             in
             update (SetTimelineIndex (Array.length stackResult.timeline + 1)) <|
+                sortPatterns
                 { model
                     | ui = { ui | mouseOverElementIndex = -1, dragging = ( False, -1 ) }
                     , patternArray = newPatternArray

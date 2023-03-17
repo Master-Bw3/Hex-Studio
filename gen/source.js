@@ -14125,28 +14125,29 @@ var $author$project$Main$update = F2(
 					$author$project$Main$update,
 					$author$project$Logic$App$Msg$SetTimelineIndex(
 						$elm$core$Array$length(stackResult.timeline) + 1),
-					_Utils_update(
-						model,
-						{
-							castingContext: stackResult.ctx,
-							grid: _Utils_update(
-								grid,
-								{
-									points: A5($author$project$Components$App$Grid$updateGridPoints, grid.width, grid.height, newPatternArray, _List_Nil, settings.gridScale)
-								}),
-							patternArray: newPatternArray,
-							stack: newStack,
-							timeline: A2(
-								$author$project$Logic$App$Utils$Utils$unshift,
-								{patternIndex: -1, stack: $elm$core$Array$empty},
-								stackResult.timeline),
-							ui: _Utils_update(
-								ui,
-								{
-									dragging: _Utils_Tuple2(false, -1),
-									mouseOverElementIndex: -1
-								})
-						}));
+					$author$project$Logic$App$Grid$sortPatterns(
+						_Utils_update(
+							model,
+							{
+								castingContext: stackResult.ctx,
+								grid: _Utils_update(
+									grid,
+									{
+										points: A5($author$project$Components$App$Grid$updateGridPoints, grid.width, grid.height, newPatternArray, _List_Nil, settings.gridScale)
+									}),
+								patternArray: newPatternArray,
+								stack: newStack,
+								timeline: A2(
+									$author$project$Logic$App$Utils$Utils$unshift,
+									{patternIndex: -1, stack: $elm$core$Array$empty},
+									stackResult.timeline),
+								ui: _Utils_update(
+									ui,
+									{
+										dragging: _Utils_Tuple2(false, -1),
+										mouseOverElementIndex: -1
+									})
+							})));
 			case 'SetFocus':
 				var id = msg.a;
 				return _Utils_Tuple2(
