@@ -196,7 +196,7 @@ drawPattern xOffset yOffset pattern =
 
         pathCoords =
             String.split "" pattern.signature
-                |> List.foldl signatureToAngles [ East, East ]
+                |> List.foldl signatureToAngles [ pattern.startDirection, pattern.startDirection ]
                 |> List.reverse
                 |> List.map directionToCoord
                 |> List.foldl coordsToPathCoords []

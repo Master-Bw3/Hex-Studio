@@ -8393,7 +8393,7 @@ var $author$project$Logic$App$Grid$drawPattern = F3(
 						$elm$core$List$foldl,
 						signatureToAngles,
 						_List_fromArray(
-							[$author$project$Logic$App$Types$East, $author$project$Logic$App$Types$East]),
+							[pattern.startDirection, pattern.startDirection]),
 						A2($elm$core$String$split, '', pattern.signature)))));
 		var leftmostAndTopmostValues = A3(
 			$elm$core$List$foldl,
@@ -10754,7 +10754,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$noAction = F2(
 var $author$project$Logic$App$Patterns$PatternRegistry$metapatternRegistry = A2(
 	$elm$core$List$map,
 	function (pattern) {
-		return {action: pattern.action, active: true, color: $author$project$Settings$Theme$accent1, displayName: pattern.displayName, internalName: pattern.internalName, metaAction: pattern.metaAction, outputOptions: pattern.outputOptions, selectedOutput: pattern.selectedOutput, signature: pattern.signature};
+		return {action: pattern.action, active: true, color: $author$project$Settings$Theme$accent1, displayName: pattern.displayName, internalName: pattern.internalName, metaAction: pattern.metaAction, outputOptions: pattern.outputOptions, selectedOutput: pattern.selectedOutput, signature: pattern.signature, startDirection: $author$project$Logic$App$Types$East};
 	},
 	_List_fromArray(
 		[
@@ -11888,15 +11888,15 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 	A2(
 		$elm$core$List$map,
 		function (pattern) {
-			return {action: pattern.action, active: true, color: $author$project$Settings$Theme$accent1, displayName: pattern.displayName, internalName: pattern.internalName, metaAction: $author$project$Logic$App$Types$None, outputOptions: pattern.outputOptions, selectedOutput: pattern.selectedOutput, signature: pattern.signature};
+			return {action: pattern.action, active: true, color: $author$project$Settings$Theme$accent1, displayName: pattern.displayName, internalName: pattern.internalName, metaAction: $author$project$Logic$App$Types$None, outputOptions: pattern.outputOptions, selectedOutput: pattern.selectedOutput, signature: pattern.signature, startDirection: pattern.startDirection};
 		},
 		_List_fromArray(
 			[
-				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'interop/gravity/get', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wawawddew'},
-				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'interop/gravity/set', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wdwdwaaqw'},
-				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'interop/pehkui/get', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aawawwawwa'},
-				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'interop/pehkui/set', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddwdwwdwwd'},
-				{action: $author$project$Logic$App$Patterns$Selectors$getCaster, displayName: 'Mind\'s Reflection', internalName: 'get_caster', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaq'},
+				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'interop/gravity/get', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wawawddew', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'interop/gravity/set', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wdwdwaaqw', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'interop/pehkui/get', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aawawwawwa', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'interop/pehkui/set', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddwdwwdwwd', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Selectors$getCaster, displayName: 'Mind\'s Reflection', internalName: 'get_caster', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaq', startDirection: $author$project$Logic$App$Types$Northeast},
 				{
 				action: $author$project$Logic$App$Patterns$Misc$entityPos,
 				displayName: 'Compass\' Purification',
@@ -11908,7 +11908,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 						$author$project$Logic$App$Types$VectorType,
 						$author$project$Logic$App$Types$Vector(
 							_Utils_Tuple3(0, 0, 0)))),
-				signature: 'aa'
+				signature: 'aa',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$Misc$entityPos,
@@ -11921,7 +11922,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 						$author$project$Logic$App$Types$VectorType,
 						$author$project$Logic$App$Types$Vector(
 							_Utils_Tuple3(0, 0, 0)))),
-				signature: 'dd'
+				signature: 'dd',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$Misc$getEntityLook,
@@ -11934,7 +11936,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 						$author$project$Logic$App$Types$VectorType,
 						$author$project$Logic$App$Types$Vector(
 							_Utils_Tuple3(0, 0, 0)))),
-				signature: 'wa'
+				signature: 'wa',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$Misc$getEntityHeight,
@@ -11946,7 +11949,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$NumberType,
 						$author$project$Logic$App$Types$Number(0))),
-				signature: 'awq'
+				signature: 'awq',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$Misc$getEntityVelocity,
@@ -11959,7 +11963,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 						$author$project$Logic$App$Types$VectorType,
 						$author$project$Logic$App$Types$Vector(
 							_Utils_Tuple3(0, 0, 0)))),
-				signature: 'wq'
+				signature: 'wq',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$Misc$raycast,
@@ -11972,7 +11977,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 						$author$project$Logic$App$Types$VectorType,
 						$author$project$Logic$App$Types$Vector(
 							_Utils_Tuple3(0, 0, 0)))),
-				signature: 'wqaawdd'
+				signature: 'wqaawdd',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$Misc$raycastAxis,
@@ -11985,7 +11991,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 						$author$project$Logic$App$Types$VectorType,
 						$author$project$Logic$App$Types$Vector(
 							_Utils_Tuple3(0, 0, 0)))),
-				signature: 'weddwaa'
+				signature: 'weddwaa',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$Misc$raycastEntity,
@@ -11997,47 +12004,48 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$EntityType,
 						$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset))),
-				signature: 'weaqa'
+				signature: 'weaqa',
+				startDirection: $author$project$Logic$App$Types$East
 			},
-				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Waystone Reflection', internalName: 'circle/impetus_pos', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eaqwqae'},
-				{action: $author$project$Logic$App$Patterns$Circles$circleImpetusDirection, displayName: 'Lodestone Reflection', internalName: 'circle/impetus_dir', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eaqwqaewede'},
-				{action: $author$project$Logic$App$Patterns$Circles$circleBoundsMin, displayName: 'Lesser Fold Reflection', internalName: 'circle/bounds/min', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eaqwqaewdd'},
-				{action: $author$project$Logic$App$Patterns$Circles$circleBoundsMax, displayName: 'Greater Fold Reflection', internalName: 'circle/bounds/max', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqwqawaaqa'},
-				{action: $author$project$Logic$App$Patterns$Stack$swap, displayName: 'Jester\'s Gambit', internalName: 'swap', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aawdd'},
-				{action: $author$project$Logic$App$Patterns$Stack$rotate, displayName: 'Rotation Gambit', internalName: 'rotate', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aaeaa'},
-				{action: $author$project$Logic$App$Patterns$Stack$rotateReverse, displayName: 'Rotation Gambit II', internalName: 'rotate_reverse', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddqdd'},
-				{action: $author$project$Logic$App$Patterns$Stack$duplicate, displayName: 'Gemini Decomposition', internalName: 'duplicate', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aadaa'},
-				{action: $author$project$Logic$App$Patterns$Stack$over, displayName: 'Prospector\'s Gambit', internalName: 'over', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aaedd'},
-				{action: $author$project$Logic$App$Patterns$Stack$tuck, displayName: 'Undertaker\'s Gambit', internalName: 'tuck', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddqaa'},
-				{action: $author$project$Logic$App$Patterns$Stack$dup2, displayName: 'Dioscuri Gambit', internalName: 'two_dup', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aadadaaw'},
-				{action: $author$project$Logic$App$Patterns$Stack$stackLength, displayName: 'Flock\'s Reflection', internalName: 'stack_len', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qwaeawqaeaqa'},
-				{action: $author$project$Logic$App$Patterns$Stack$duplicateN, displayName: 'Gemini Gambit', internalName: 'duplicate_n', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aadaadaa'},
-				{action: $author$project$Logic$App$Patterns$Stack$fisherman, displayName: 'Fisherman\'s Gambit', internalName: 'fisherman', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddad'},
-				{action: $author$project$Logic$App$Patterns$Stack$fishermanCopy, displayName: 'Fisherman\'s Gambit II', internalName: 'fisherman/copy', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aada'},
-				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'swizzle', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaawdde'},
-				{action: $author$project$Logic$App$Patterns$Math$add, displayName: 'Additive Distillation', internalName: 'add', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waaw'},
-				{action: $author$project$Logic$App$Patterns$Math$subtract, displayName: 'Subtractive Distillation', internalName: 'sub', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wddw'},
-				{action: $author$project$Logic$App$Patterns$Math$mulDot, displayName: 'Multiplicative Distillation', internalName: 'mul_dot', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waqaw'},
-				{action: $author$project$Logic$App$Patterns$Math$divCross, displayName: 'Division Distillation', internalName: 'div_cross', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wdedw'},
-				{action: $author$project$Logic$App$Patterns$Math$absLen, displayName: 'Length Purification', internalName: 'abs_len', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wqaqw'},
-				{action: $author$project$Logic$App$Patterns$Math$powProj, displayName: 'Power Distillation', internalName: 'pow_proj', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wedew'},
-				{action: $author$project$Logic$App$Patterns$Math$floorAction, displayName: 'Floor Purification', internalName: 'floor', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ewq'},
-				{action: $author$project$Logic$App$Patterns$Math$ceilAction, displayName: 'Ceiling Purification', internalName: 'ceil', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qwe'},
-				{action: $author$project$Logic$App$Patterns$Math$constructVector, displayName: 'Vector Exaltation', internalName: 'construct_vec', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eqqqqq'},
-				{action: $author$project$Logic$App$Patterns$Math$deconstructVector, displayName: 'Vector Disintegration', internalName: 'deconstruct_vec', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qeeeee'},
-				{action: $author$project$Logic$App$Patterns$Math$coerceAxial, displayName: 'Axial Purification', internalName: 'coerce_axial', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqaww'},
-				{action: $author$project$Logic$App$Patterns$Math$andBool, displayName: 'Conjunction Distillation', internalName: 'and', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wdw'},
-				{action: $author$project$Logic$App$Patterns$Math$orBool, displayName: 'Disjunction Distillation', internalName: 'or', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waw'},
-				{action: $author$project$Logic$App$Patterns$Math$xorBool, displayName: 'Exclusion Distillation', internalName: 'xor', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dwa'},
-				{action: $author$project$Logic$App$Patterns$Math$greaterThan, displayName: 'Maximus Distillation', internalName: 'greater', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'e'},
-				{action: $author$project$Logic$App$Patterns$Math$lessThan, displayName: 'Minimus Distillation', internalName: 'less', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'q'},
-				{action: $author$project$Logic$App$Patterns$Math$greaterThanOrEqualTo, displayName: 'Maximus Distillation II', internalName: 'greater_eq', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ee'},
-				{action: $author$project$Logic$App$Patterns$Math$lessThanOrEqualTo, displayName: 'Minimus Distillation II', internalName: 'less_eq', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qq'},
-				{action: $author$project$Logic$App$Patterns$Math$equalTo, displayName: 'Equality Distillation', internalName: 'equals', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ad'},
-				{action: $author$project$Logic$App$Patterns$Math$notEqualTo, displayName: 'Inequality Distillation', internalName: 'not_equals', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'da'},
-				{action: $author$project$Logic$App$Patterns$Math$invertBool, displayName: 'Negation Purification', internalName: 'not', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dw'},
-				{action: $author$project$Logic$App$Patterns$Math$boolCoerce, displayName: 'Augur\'s Purification', internalName: 'bool_coerce', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aw'},
-				{action: $author$project$Logic$App$Patterns$Math$ifBool, displayName: 'Augur\'s Exaltation', internalName: 'if', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'awdd'},
+				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Waystone Reflection', internalName: 'circle/impetus_pos', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eaqwqae', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Circles$circleImpetusDirection, displayName: 'Lodestone Reflection', internalName: 'circle/impetus_dir', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eaqwqaewede', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Circles$circleBoundsMin, displayName: 'Lesser Fold Reflection', internalName: 'circle/bounds/min', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eaqwqaewdd', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Circles$circleBoundsMax, displayName: 'Greater Fold Reflection', internalName: 'circle/bounds/max', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqwqawaaqa', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Stack$swap, displayName: 'Jester\'s Gambit', internalName: 'swap', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aawdd', startDirection: $author$project$Logic$App$Types$Northeast},
+				{action: $author$project$Logic$App$Patterns$Stack$rotate, displayName: 'Rotation Gambit', internalName: 'rotate', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aaeaa', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Stack$rotateReverse, displayName: 'Rotation Gambit II', internalName: 'rotate_reverse', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddqdd', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Stack$duplicate, displayName: 'Gemini Decomposition', internalName: 'duplicate', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aadaa', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Stack$over, displayName: 'Prospector\'s Gambit', internalName: 'over', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aaedd', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Stack$tuck, displayName: 'Undertaker\'s Gambit', internalName: 'tuck', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddqaa', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Stack$dup2, displayName: 'Dioscuri Gambit', internalName: 'two_dup', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aadadaaw', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Stack$stackLength, displayName: 'Flock\'s Reflection', internalName: 'stack_len', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qwaeawqaeaqa', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Stack$duplicateN, displayName: 'Gemini Gambit', internalName: 'duplicate_n', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aadaadaa', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Stack$fisherman, displayName: 'Fisherman\'s Gambit', internalName: 'fisherman', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddad', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Stack$fishermanCopy, displayName: 'Fisherman\'s Gambit II', internalName: 'fisherman/copy', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aada', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'swizzle', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaawdde', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$add, displayName: 'Additive Distillation', internalName: 'add', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waaw', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$subtract, displayName: 'Subtractive Distillation', internalName: 'sub', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wddw', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$mulDot, displayName: 'Multiplicative Distillation', internalName: 'mul_dot', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waqaw', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$divCross, displayName: 'Division Distillation', internalName: 'div_cross', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wdedw', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$absLen, displayName: 'Length Purification', internalName: 'abs_len', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wqaqw', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$powProj, displayName: 'Power Distillation', internalName: 'pow_proj', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wedew', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$floorAction, displayName: 'Floor Purification', internalName: 'floor', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ewq', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$ceilAction, displayName: 'Ceiling Purification', internalName: 'ceil', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qwe', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$constructVector, displayName: 'Vector Exaltation', internalName: 'construct_vec', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eqqqqq', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$deconstructVector, displayName: 'Vector Disintegration', internalName: 'deconstruct_vec', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qeeeee', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$coerceAxial, displayName: 'Axial Purification', internalName: 'coerce_axial', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqaww', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$andBool, displayName: 'Conjunction Distillation', internalName: 'and', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wdw', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$orBool, displayName: 'Disjunction Distillation', internalName: 'or', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waw', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$xorBool, displayName: 'Exclusion Distillation', internalName: 'xor', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dwa', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$greaterThan, displayName: 'Maximus Distillation', internalName: 'greater', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'e', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$lessThan, displayName: 'Minimus Distillation', internalName: 'less', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'q', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$greaterThanOrEqualTo, displayName: 'Maximus Distillation II', internalName: 'greater_eq', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ee', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$lessThanOrEqualTo, displayName: 'Minimus Distillation II', internalName: 'less_eq', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qq', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$equalTo, displayName: 'Equality Distillation', internalName: 'equals', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ad', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$notEqualTo, displayName: 'Inequality Distillation', internalName: 'not_equals', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'da', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$invertBool, displayName: 'Negation Purification', internalName: 'not', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dw', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$boolCoerce, displayName: 'Augur\'s Purification', internalName: 'bool_coerce', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aw', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$ifBool, displayName: 'Augur\'s Exaltation', internalName: 'if', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'awdd', startDirection: $author$project$Logic$App$Types$East},
 				{
 				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
 					$author$project$Logic$App$Types$Number(0.5)),
@@ -12045,47 +12053,49 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 				internalName: 'random',
 				outputOptions: _List_Nil,
 				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'eqqq'
+				signature: 'eqqq',
+				startDirection: $author$project$Logic$App$Types$East
 			},
-				{action: $author$project$Logic$App$Patterns$Math$sine, displayName: 'Sine Purification', internalName: 'sin', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqaa'},
-				{action: $author$project$Logic$App$Patterns$Math$cosine, displayName: 'Cosine Purification', internalName: 'cos', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqad'},
-				{action: $author$project$Logic$App$Patterns$Math$tangent, displayName: 'Tangent Purification', internalName: 'tan', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wqqqqqadq'},
-				{action: $author$project$Logic$App$Patterns$Math$arcsin, displayName: 'Inverse Sine Purification', internalName: 'arcsin', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddeeeee'},
-				{action: $author$project$Logic$App$Patterns$Math$arccos, displayName: 'Inverse Cosine Purification', internalName: 'arccos', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'adeeeee'},
-				{action: $author$project$Logic$App$Patterns$Math$arctan, displayName: 'Inverse Tangent Purification', internalName: 'arctan', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eadeeeeew'},
-				{action: $author$project$Logic$App$Patterns$Math$logarithm, displayName: 'Logarithmic Distillation', internalName: 'logarithm', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eqaqe'},
-				{action: $author$project$Logic$App$Patterns$Math$modulo, displayName: 'Modulus Distillation', internalName: 'modulo', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'addwaad'},
-				{action: $author$project$Logic$App$Patterns$Math$andBit, displayName: 'Intersection Distillation', internalName: 'and_bit', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wdweaqa'},
-				{action: $author$project$Logic$App$Patterns$Math$orBit, displayName: 'Unifying Distillation', internalName: 'or_bit', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waweaqa'},
-				{action: $author$project$Logic$App$Patterns$Math$xorBit, displayName: 'Exclusionary Distillation', internalName: 'xor_bit', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dwaeaqa'},
-				{action: $author$project$Logic$App$Patterns$Math$notBit, displayName: 'Inversion Purification', internalName: 'not_bit', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dweaqa'},
-				{action: $author$project$Logic$App$Patterns$Math$toSet, displayName: 'Uniqueness Purification', internalName: 'to_set', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aweaqa'},
-				{action: $author$project$Logic$App$Patterns$Misc$print, displayName: 'Reveal', internalName: 'print', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'de'},
-				{action: $author$project$Logic$App$Patterns$Spells$explode, displayName: 'Explosion', internalName: 'explode', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aawaawaa'},
-				{action: $author$project$Logic$App$Patterns$Spells$explodeFire, displayName: 'Fireball', internalName: 'explode/fire', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddwddwdd'},
-				{action: $author$project$Logic$App$Patterns$Spells$addMotion, displayName: 'Impulse', internalName: 'add_motion', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'awqqqwaqw'},
-				{action: $author$project$Logic$App$Patterns$Spells$blink, displayName: 'Blink', internalName: 'blink', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'awqqqwaq'},
-				{action: $author$project$Logic$App$Patterns$Spells$breakBlock, displayName: 'Break Block', internalName: 'break_block', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaqqqqq'},
-				{action: $author$project$Logic$App$Patterns$Spells$placeBlock, displayName: 'Place Block', internalName: 'place_block', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eeeeede'},
-				{action: $author$project$Logic$App$Patterns$Spells$colorize, displayName: 'Internalize Pigment', internalName: 'colorize', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'awddwqawqwawq'},
-				{action: $author$project$Logic$App$Patterns$Spells$createWater, displayName: 'Create Water', internalName: 'create_water', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqawqadaq'},
-				{action: $author$project$Logic$App$Patterns$Spells$destroyWater, displayName: 'Destroy Liquid', internalName: 'destroy_water', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dedwedade'},
-				{action: $author$project$Logic$App$Patterns$Spells$ignite, displayName: 'Ignite Block', internalName: 'ignite', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aaqawawa'},
-				{action: $author$project$Logic$App$Patterns$Spells$extinguish, displayName: 'Extinguish Area', internalName: 'extinguish', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddedwdwd'},
-				{action: $author$project$Logic$App$Patterns$Spells$conjureBlock, displayName: 'Conjure Block', internalName: 'conjure_block', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqa'},
-				{action: $author$project$Logic$App$Patterns$Spells$conjureLight, displayName: 'Conjure Light', internalName: 'conjure_light', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqd'},
-				{action: $author$project$Logic$App$Patterns$Spells$bonemeal, displayName: 'Overgrow', internalName: 'bonemeal', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wqaqwawqaqw'},
-				{action: $author$project$Logic$App$Patterns$Spells$recharge, displayName: 'Recharge Item', internalName: 'recharge', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqwaeaeaeaeaea'},
-				{action: $author$project$Logic$App$Patterns$Spells$erase, displayName: 'Erase Item', internalName: 'erase', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qdqawwaww'},
-				{action: $author$project$Logic$App$Patterns$Spells$edify, displayName: 'Edify Sapling', internalName: 'edify', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wqaqwd'},
-				{action: $author$project$Logic$App$Patterns$Spells$beep, displayName: 'Make Note', internalName: 'beep', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'adaa'},
+				{action: $author$project$Logic$App$Patterns$Math$sine, displayName: 'Sine Purification', internalName: 'sin', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqaa', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$cosine, displayName: 'Cosine Purification', internalName: 'cos', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqad', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$tangent, displayName: 'Tangent Purification', internalName: 'tan', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wqqqqqadq', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$arcsin, displayName: 'Inverse Sine Purification', internalName: 'arcsin', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddeeeee', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$arccos, displayName: 'Inverse Cosine Purification', internalName: 'arccos', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'adeeeee', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$arctan, displayName: 'Inverse Tangent Purification', internalName: 'arctan', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eadeeeeew', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$logarithm, displayName: 'Logarithmic Distillation', internalName: 'logarithm', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eqaqe', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$modulo, displayName: 'Modulus Distillation', internalName: 'modulo', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'addwaad', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$andBit, displayName: 'Intersection Distillation', internalName: 'and_bit', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wdweaqa', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$orBit, displayName: 'Unifying Distillation', internalName: 'or_bit', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waweaqa', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$xorBit, displayName: 'Exclusionary Distillation', internalName: 'xor_bit', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dwaeaqa', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$notBit, displayName: 'Inversion Purification', internalName: 'not_bit', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dweaqa', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Math$toSet, displayName: 'Uniqueness Purification', internalName: 'to_set', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aweaqa', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Misc$print, displayName: 'Reveal', internalName: 'print', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'de', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Spells$explode, displayName: 'Explosion', internalName: 'explode', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aawaawaa', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Spells$explodeFire, displayName: 'Fireball', internalName: 'explode/fire', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddwddwdd', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Spells$addMotion, displayName: 'Impulse', internalName: 'add_motion', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'awqqqwaqw', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Spells$blink, displayName: 'Blink', internalName: 'blink', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'awqqqwaq', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Spells$breakBlock, displayName: 'Break Block', internalName: 'break_block', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaqqqqq', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Spells$placeBlock, displayName: 'Place Block', internalName: 'place_block', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eeeeede', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Spells$colorize, displayName: 'Internalize Pigment', internalName: 'colorize', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'awddwqawqwawq', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Spells$createWater, displayName: 'Create Water', internalName: 'create_water', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqawqadaq', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Spells$destroyWater, displayName: 'Destroy Liquid', internalName: 'destroy_water', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dedwedade', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Spells$ignite, displayName: 'Ignite Block', internalName: 'ignite', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aaqawawa', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Spells$extinguish, displayName: 'Extinguish Area', internalName: 'extinguish', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddedwdwd', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Spells$conjureBlock, displayName: 'Conjure Block', internalName: 'conjure_block', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqa', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Spells$conjureLight, displayName: 'Conjure Light', internalName: 'conjure_light', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqd', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Spells$bonemeal, displayName: 'Overgrow', internalName: 'bonemeal', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wqaqwawqaqw', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Spells$recharge, displayName: 'Recharge Item', internalName: 'recharge', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqwaeaeaeaeaea', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Spells$erase, displayName: 'Erase Item', internalName: 'erase', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qdqawwaww', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Spells$edify, displayName: 'Edify Sapling', internalName: 'edify', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wqaqwd', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Spells$beep, displayName: 'Make Note', internalName: 'beep', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'adaa', startDirection: $author$project$Logic$App$Types$East},
 				{
 				action: $author$project$Logic$App$Patterns$Spells$craftArtifact($author$project$Logic$App$Types$Cypher),
 				displayName: 'Craft Cypher',
 				internalName: 'craft/cypher',
 				outputOptions: _List_Nil,
 				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'waqqqqq'
+				signature: 'waqqqqq',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$Spells$craftArtifact($author$project$Logic$App$Types$Trinket),
@@ -12093,7 +12103,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 				internalName: 'craft/trinket',
 				outputOptions: _List_Nil,
 				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'wwaqqqqqeaqeaeqqqeaeq'
+				signature: 'wwaqqqqqeaqeaeqqqeaeq',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$Spells$craftArtifact($author$project$Logic$App$Types$Artifact),
@@ -12101,25 +12112,26 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 				internalName: 'craft/artifact',
 				outputOptions: _List_Nil,
 				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq'
+				signature: 'wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq',
+				startDirection: $author$project$Logic$App$Types$East
 			},
-				{action: $author$project$Logic$App$Patterns$Spells$potion, displayName: 'White Sun\'s Nadir', internalName: 'potion/weakness', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqaqwawaw'},
-				{action: $author$project$Logic$App$Patterns$Spells$potionFixedPotency, displayName: 'Blue Sun\'s Nadir', internalName: 'potion/levitation', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqawwawawd'},
-				{action: $author$project$Logic$App$Patterns$Spells$potion, displayName: 'Black Sun\'s Nadir', internalName: 'potion/wither', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqaewawawe'},
-				{action: $author$project$Logic$App$Patterns$Spells$potion, displayName: 'Red Sun\'s Nadir', internalName: 'potion/poison', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqadwawaww'},
-				{action: $author$project$Logic$App$Patterns$Spells$potion, displayName: 'Green Sun\'s Nadir', internalName: 'potion/slowness', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqadwawaw'},
-				{action: $author$project$Logic$App$Patterns$Spells$sentinelCreate, displayName: 'Summon Sentinel', internalName: 'sentinel/create', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waeawae'},
-				{action: $author$project$Logic$App$Patterns$Spells$sentinelDestroy, displayName: 'Banish Sentinel', internalName: 'sentinel/destroy', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qdwdqdw'},
-				{action: $author$project$Logic$App$Patterns$Spells$sentinelGetPos, displayName: 'Locate Sentinel', internalName: 'sentinel/get_pos', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waeawaede'},
-				{action: $author$project$Logic$App$Patterns$Spells$sentinelWayfind, displayName: 'Wayfind Sentinel', internalName: 'sentinel/wayfind', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waeawaedwa'},
-				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'akashic/read', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqwqqqqqaq'},
-				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'akashic/write', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eeeweeeeede'},
-				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Charon\'s Gambit', internalName: 'halt', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqdee'},
-				{action: $author$project$Logic$App$Patterns$ReadWrite$read, displayName: 'Scribe\'s Reflection', internalName: 'read', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqqqqq'},
-				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Chronicler\'s Purification', internalName: 'read/entity', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wawqwqwqwqwqw'},
-				{action: $author$project$Logic$App$Patterns$ReadWrite$write, displayName: 'Scribe\'s Gambit', internalName: 'write', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'deeeee'},
-				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Chronicler\'s Gambit', internalName: 'write/entity', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wdwewewewewew'},
-				{action: $author$project$Logic$App$Patterns$ReadWrite$readable, displayName: 'Auditor\'s Reflection', internalName: 'readable', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqqqqqe'},
+				{action: $author$project$Logic$App$Patterns$Spells$potion, displayName: 'White Sun\'s Nadir', internalName: 'potion/weakness', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqaqwawaw', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Spells$potionFixedPotency, displayName: 'Blue Sun\'s Nadir', internalName: 'potion/levitation', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqawwawawd', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Spells$potion, displayName: 'Black Sun\'s Nadir', internalName: 'potion/wither', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqaewawawe', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Spells$potion, displayName: 'Red Sun\'s Nadir', internalName: 'potion/poison', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqadwawaww', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Spells$potion, displayName: 'Green Sun\'s Nadir', internalName: 'potion/slowness', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqadwawaw', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Spells$sentinelCreate, displayName: 'Summon Sentinel', internalName: 'sentinel/create', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waeawae', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Spells$sentinelDestroy, displayName: 'Banish Sentinel', internalName: 'sentinel/destroy', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qdwdqdw', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Spells$sentinelGetPos, displayName: 'Locate Sentinel', internalName: 'sentinel/get_pos', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waeawaede', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Spells$sentinelWayfind, displayName: 'Wayfind Sentinel', internalName: 'sentinel/wayfind', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waeawaedwa', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'akashic/read', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqwqqqqqaq', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'akashic/write', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eeeweeeeede', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Charon\'s Gambit', internalName: 'halt', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqdee', startDirection: $author$project$Logic$App$Types$Southwest},
+				{action: $author$project$Logic$App$Patterns$ReadWrite$read, displayName: 'Scribe\'s Reflection', internalName: 'read', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqqqqq', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Chronicler\'s Purification', internalName: 'read/entity', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wawqwqwqwqwqw', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$ReadWrite$write, displayName: 'Scribe\'s Gambit', internalName: 'write', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'deeeee', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Chronicler\'s Gambit', internalName: 'write/entity', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wdwewewewewew', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$ReadWrite$readable, displayName: 'Auditor\'s Reflection', internalName: 'readable', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqqqqqe', startDirection: $author$project$Logic$App$Types$East},
 				{
 				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
 					$author$project$Logic$App$Types$Boolean(false)),
@@ -12127,9 +12139,10 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 				internalName: 'readable/entity',
 				outputOptions: _List_Nil,
 				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'wawqwqwqwqwqwew'
+				signature: 'wawqwqwqwqwqwew',
+				startDirection: $author$project$Logic$App$Types$East
 			},
-				{action: $author$project$Logic$App$Patterns$ReadWrite$writable, displayName: 'Assessor\'s Reflection', internalName: 'writable', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'deeeeeq'},
+				{action: $author$project$Logic$App$Patterns$ReadWrite$writable, displayName: 'Assessor\'s Reflection', internalName: 'writable', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'deeeeeq', startDirection: $author$project$Logic$App$Types$East},
 				{
 				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
 					$author$project$Logic$App$Types$Boolean(false)),
@@ -12137,17 +12150,19 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 				internalName: 'writable/entity',
 				outputOptions: _List_Nil,
 				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'wdwewewewewewqw'
+				signature: 'wdwewewewewewqw',
+				startDirection: $author$project$Logic$App$Types$East
 			},
-				{action: $author$project$Logic$App$Patterns$ReadWrite$readLocal, displayName: 'Muninn\'s Reflection', internalName: 'read/local', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qeewdweddw'},
-				{action: $author$project$Logic$App$Patterns$ReadWrite$writeLocal, displayName: 'Huginn\'s Gambit', internalName: 'write/local', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eqqwawqaaw'},
+				{action: $author$project$Logic$App$Patterns$ReadWrite$readLocal, displayName: 'Muninn\'s Reflection', internalName: 'read/local', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qeewdweddw', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$ReadWrite$writeLocal, displayName: 'Huginn\'s Gambit', internalName: 'write/local', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eqqwawqaaw', startDirection: $author$project$Logic$App$Types$East},
 				{
 				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant($author$project$Logic$App$Types$Null),
 				displayName: 'Nullary Reflection',
 				internalName: 'const/null',
 				outputOptions: _List_Nil,
 				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'd'
+				signature: 'd',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
@@ -12156,7 +12171,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 				internalName: 'const/true',
 				outputOptions: _List_Nil,
 				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'aqae'
+				signature: 'aqae',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
@@ -12165,7 +12181,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 				internalName: 'const/false',
 				outputOptions: _List_Nil,
 				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'dedq'
+				signature: 'dedq',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
@@ -12175,7 +12192,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 				internalName: 'const/vec/px',
 				outputOptions: _List_Nil,
 				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'qqqqqea'
+				signature: 'qqqqqea',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
@@ -12185,7 +12203,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 				internalName: 'const/vec/py',
 				outputOptions: _List_Nil,
 				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'qqqqqew'
+				signature: 'qqqqqew',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
@@ -12195,7 +12214,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 				internalName: 'const/vec/pz',
 				outputOptions: _List_Nil,
 				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'qqqqqed'
+				signature: 'qqqqqed',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
@@ -12205,7 +12225,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 				internalName: 'const/vec/nx',
 				outputOptions: _List_Nil,
 				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'eeeeeqa'
+				signature: 'eeeeeqa',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
@@ -12215,7 +12236,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 				internalName: 'const/vec/ny',
 				outputOptions: _List_Nil,
 				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'eeeeeqw'
+				signature: 'eeeeeqw',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
@@ -12225,7 +12247,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 				internalName: 'const/vec/nz',
 				outputOptions: _List_Nil,
 				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'eeeeeqd'
+				signature: 'eeeeeqd',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
@@ -12235,7 +12258,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 				internalName: 'const/vec/0',
 				outputOptions: _List_Nil,
 				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'qqqqq'
+				signature: 'qqqqq',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
@@ -12244,7 +12268,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 				internalName: 'const/double/pi',
 				outputOptions: _List_Nil,
 				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'qdwdq'
+				signature: 'qdwdq',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
@@ -12253,7 +12278,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 				internalName: 'const/double/tau',
 				outputOptions: _List_Nil,
 				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'eawae'
+				signature: 'eawae',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
@@ -12262,7 +12288,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 				internalName: 'const/double/e',
 				outputOptions: _List_Nil,
 				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'aaq'
+				signature: 'aaq',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$Selectors$getEntity,
@@ -12274,7 +12301,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$EntityType,
 						$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset))),
-				signature: 'qqqqqdaqa'
+				signature: 'qqqqqdaqa',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$Selectors$getEntity,
@@ -12286,7 +12314,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$EntityType,
 						$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset))),
-				signature: 'qqqqqdaqaawa'
+				signature: 'qqqqqdaqaawa',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$Selectors$getEntity,
@@ -12298,7 +12327,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$EntityType,
 						$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset))),
-				signature: 'qqqqqdaqaawq'
+				signature: 'qqqqqdaqaawq',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$Selectors$getEntity,
@@ -12310,7 +12340,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$EntityType,
 						$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset))),
-				signature: 'qqqqqdaqaaww'
+				signature: 'qqqqqdaqaaww',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$Selectors$getEntity,
@@ -12322,7 +12353,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$EntityType,
 						$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset))),
-				signature: 'qqqqqdaqaawe'
+				signature: 'qqqqqdaqaawe',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$Selectors$getEntity,
@@ -12334,7 +12366,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$EntityType,
 						$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset))),
-				signature: 'qqqqqdaqaawd'
+				signature: 'qqqqqdaqaawd',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
@@ -12348,7 +12381,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
 						$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-				signature: 'qqqqqwded'
+				signature: 'qqqqqwded',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
@@ -12362,7 +12396,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
 						$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-				signature: 'qqqqqwdeddwa'
+				signature: 'qqqqqwdeddwa',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
@@ -12376,7 +12411,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
 						$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-				signature: 'eeeeewaqaawa'
+				signature: 'eeeeewaqaawa',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
@@ -12390,7 +12426,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
 						$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-				signature: 'qqqqqwdeddwq'
+				signature: 'qqqqqwdeddwq',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
@@ -12404,7 +12441,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
 						$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-				signature: 'eeeeewaqaawq'
+				signature: 'eeeeewaqaawq',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
@@ -12418,7 +12456,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
 						$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-				signature: 'qqqqqwdeddww'
+				signature: 'qqqqqwdeddww',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
@@ -12432,7 +12471,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
 						$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-				signature: 'eeeeewaqaaww'
+				signature: 'eeeeewaqaaww',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
@@ -12446,7 +12486,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
 						$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-				signature: 'qqqqqwdeddwe'
+				signature: 'qqqqqwdeddwe',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
@@ -12460,7 +12501,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
 						$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-				signature: 'eeeeewaqaawe'
+				signature: 'eeeeewaqaawe',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
@@ -12474,7 +12516,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
 						$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-				signature: 'qqqqqwdeddwd'
+				signature: 'qqqqqwdeddwd',
+				startDirection: $author$project$Logic$App$Types$East
 			},
 				{
 				action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
@@ -12488,13 +12531,14 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 					_Utils_Tuple2(
 						$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
 						$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-				signature: 'eeeeewaqaawd'
+				signature: 'eeeeewaqaawd',
+				startDirection: $author$project$Logic$App$Types$East
 			},
-				{action: $author$project$Logic$App$Patterns$Lists$append, displayName: 'Integration Distillation', internalName: 'append', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'edqde'},
-				{action: $author$project$Logic$App$Patterns$Lists$concat, displayName: 'Combination Distillation', internalName: 'concat', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaeaq'},
-				{action: $author$project$Logic$App$Patterns$Lists$index, displayName: 'Selection Distillation', internalName: 'index', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'deeed'},
-				{action: $author$project$Logic$App$Patterns$Lists$listSize, displayName: 'Abacus Purification', internalName: 'list_size', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqaeaq'},
-				{action: $author$project$Logic$App$Patterns$Lists$singleton, displayName: 'Single\'s Purification', internalName: 'singleton', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'adeeed'},
+				{action: $author$project$Logic$App$Patterns$Lists$append, displayName: 'Integration Distillation', internalName: 'append', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'edqde', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Lists$concat, displayName: 'Combination Distillation', internalName: 'concat', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaeaq', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Lists$index, displayName: 'Selection Distillation', internalName: 'index', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'deeed', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Lists$listSize, displayName: 'Abacus Purification', internalName: 'list_size', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqaeaq', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Lists$singleton, displayName: 'Single\'s Purification', internalName: 'singleton', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'adeeed', startDirection: $author$project$Logic$App$Types$East},
 				{
 				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
 					$author$project$Logic$App$Types$IotaList($elm$core$Array$empty)),
@@ -12502,18 +12546,19 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 				internalName: 'empty_list',
 				outputOptions: _List_Nil,
 				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'qqaeaae'
+				signature: 'qqaeaae',
+				startDirection: $author$project$Logic$App$Types$East
 			},
-				{action: $author$project$Logic$App$Patterns$Lists$reverseList, displayName: 'Retrograde Purification', internalName: 'reverse_list', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqaede'},
-				{action: $author$project$Logic$App$Patterns$Lists$lastNList, displayName: 'Flock\'s Gambit', internalName: 'last_n_list', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ewdqdwe'},
-				{action: $author$project$Logic$App$Patterns$Lists$splat, displayName: 'Flock\'s Disintegration', internalName: 'splat', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qwaeawq'},
-				{action: $author$project$Logic$App$Patterns$Lists$indexOf, displayName: 'Locator\'s Distillation', internalName: 'index_of', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dedqde'},
-				{action: $author$project$Logic$App$Patterns$Lists$listRemove, displayName: 'Excisor\'s Distillation', internalName: 'list_remove', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'edqdewaqa'},
-				{action: $author$project$Logic$App$Patterns$Lists$slice, displayName: 'Selection Exaltation', internalName: 'slice', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaeaqwded'},
-				{action: $author$project$Logic$App$Patterns$Lists$modifyinPlace, displayName: 'Surgeon\'s Exaltation', internalName: 'modify_in_place', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wqaeaqw'},
-				{action: $author$project$Logic$App$Patterns$Lists$construct, displayName: 'Speaker\'s Distillation', internalName: 'construct', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddewedd'},
-				{action: $author$project$Logic$App$Patterns$Lists$deconstruct, displayName: 'Speaker\'s Decomposition', internalName: 'deconstruct', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aaqwqaa'},
-				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Consideration', internalName: 'escape', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqaw'},
+				{action: $author$project$Logic$App$Patterns$Lists$reverseList, displayName: 'Retrograde Purification', internalName: 'reverse_list', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqaede', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Lists$lastNList, displayName: 'Flock\'s Gambit', internalName: 'last_n_list', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ewdqdwe', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Lists$splat, displayName: 'Flock\'s Disintegration', internalName: 'splat', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qwaeawq', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Lists$indexOf, displayName: 'Locator\'s Distillation', internalName: 'index_of', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dedqde', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Lists$listRemove, displayName: 'Excisor\'s Distillation', internalName: 'list_remove', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'edqdewaqa', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Lists$slice, displayName: 'Selection Exaltation', internalName: 'slice', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaeaqwded', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Lists$modifyinPlace, displayName: 'Surgeon\'s Exaltation', internalName: 'modify_in_place', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wqaeaqw', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Lists$construct, displayName: 'Speaker\'s Distillation', internalName: 'construct', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddewedd', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$Lists$deconstruct, displayName: 'Speaker\'s Decomposition', internalName: 'deconstruct', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aaqwqaa', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Consideration', internalName: 'escape', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqaw', startDirection: $author$project$Logic$App$Types$West},
 				{
 				action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
 					$author$project$Logic$App$Types$OpenParenthesis($elm$core$Array$empty)),
@@ -12521,11 +12566,12 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 				internalName: 'open_paren',
 				outputOptions: _List_Nil,
 				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: 'qqq'
+				signature: 'qqq',
+				startDirection: $author$project$Logic$App$Types$West
 			},
-				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Retrospection', internalName: 'close_paren', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eee'},
-				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Hermes\' Gambit', internalName: 'eval', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'deaqq'},
-				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Thoth\'s Gambit', internalName: 'for_each', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dadad'}
+				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Retrospection', internalName: 'close_paren', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eee', startDirection: $author$project$Logic$App$Types$East},
+				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Hermes\' Gambit', internalName: 'eval', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'deaqq', startDirection: $author$project$Logic$App$Types$Southeast},
+				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Thoth\'s Gambit', internalName: 'for_each', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dadad', startDirection: $author$project$Logic$App$Types$Northeast}
 			])));
 var $elm$json$Json$Encode$float = _Json_wrap;
 var $author$project$Ports$HexNumGen$sendNumber = _Platform_outgoingPort('sendNumber', $elm$json$Json$Encode$float);
@@ -12552,7 +12598,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$unknownPattern = {
 	metaAction: $author$project$Logic$App$Types$None,
 	outputOptions: _List_Nil,
 	selectedOutput: $elm$core$Maybe$Nothing,
-	signature: ''
+	signature: '',
+	startDirection: $author$project$Logic$App$Types$East
 };
 var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName = function (name) {
 	var _v0 = $elm$core$List$head(
@@ -12597,7 +12644,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName = func
 					metaAction: $author$project$Logic$App$Types$None,
 					outputOptions: _List_Nil,
 					selectedOutput: $elm$core$Maybe$Nothing,
-					signature: ''
+					signature: '',
+					startDirection: $author$project$Logic$App$Types$East
 				},
 				$elm$core$Platform$Cmd$none) : _Utils_Tuple2($author$project$Logic$App$Patterns$PatternRegistry$unknownPattern, $elm$core$Platform$Cmd$none);
 		}
@@ -12925,7 +12973,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$numberLiteralGenerator = 
 			metaAction: $author$project$Logic$App$Types$None,
 			outputOptions: _List_Nil,
 			selectedOutput: $elm$core$Maybe$Nothing,
-			signature: angleSignature
+			signature: angleSignature,
+			startDirection: $author$project$Logic$App$Types$Southeast
 		};
 	});
 var $author$project$Logic$App$Patterns$PatternRegistry$parseBookkeeper = function (signature) {
@@ -12941,7 +12990,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$parseBookkeeper = functio
 			metaAction: $author$project$Logic$App$Types$None,
 			outputOptions: _List_Nil,
 			selectedOutput: $elm$core$Maybe$Nothing,
-			signature: signature
+			signature: signature,
+			startDirection: $author$project$Logic$App$Types$East
 		};
 	} else {
 		var parseSignature = F2(
@@ -13028,7 +13078,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$parseBookkeeper = functio
 				metaAction: $author$project$Logic$App$Types$None,
 				outputOptions: _List_Nil,
 				selectedOutput: $elm$core$Maybe$Nothing,
-				signature: signature
+				signature: signature,
+				startDirection: $author$project$Logic$App$Types$East
 			};
 		} else {
 			return $author$project$Logic$App$Patterns$PatternRegistry$unknownPattern;

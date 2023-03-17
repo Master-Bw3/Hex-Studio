@@ -37,6 +37,7 @@ type MetaActionMsg
 
 type alias Pattern =
     { signature : String
+    , startDirection : Direction
     , action : Array Iota -> CastingContext -> ActionResult
     , metaAction : MetaActionMsg
     , displayName : String
@@ -176,4 +177,6 @@ type Overlay
     | ImportTextOverlay
     | ExportTextOverlay
 
-type alias Timeline = Array ({stack : Array Iota, patternIndex : Int})
+
+type alias Timeline =
+    Array { stack : Array Iota, patternIndex : Int }
