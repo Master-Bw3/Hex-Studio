@@ -5558,6 +5558,7 @@ var $author$project$Main$init = function (_v0) {
 			},
 			importQueue: _List_Nil,
 			insertionPoint: 0,
+			lastEvent: $elm$core$Maybe$Nothing,
 			mousePos: _Utils_Tuple2(0.0, 0.0),
 			patternArray: $elm$core$Array$empty,
 			settings: {gridScale: 1.0},
@@ -5594,6 +5595,9 @@ var $author$project$Main$init = function (_v0) {
 					$elm$browser$Browser$Dom$getElement('content'))
 				])));
 };
+var $author$project$Logic$App$Msg$HandleKeyboardEvent = function (a) {
+	return {$: 'HandleKeyboardEvent', a: a};
+};
 var $author$project$Logic$App$Msg$RecieveGeneratedNumberLiteral = function (a) {
 	return {$: 'RecieveGeneratedNumberLiteral', a: a};
 };
@@ -5622,6 +5626,338 @@ var $elm$core$Basics$composeR = F3(
 		return g(
 			f(x));
 	});
+var $Gizra$elm_keyboard_event$Keyboard$Event$KeyboardEvent = F7(
+	function (altKey, ctrlKey, key, keyCode, metaKey, repeat, shiftKey) {
+		return {altKey: altKey, ctrlKey: ctrlKey, key: key, keyCode: keyCode, metaKey: metaKey, repeat: repeat, shiftKey: shiftKey};
+	});
+var $elm$json$Json$Decode$bool = _Json_decodeBool;
+var $elm$json$Json$Decode$andThen = _Json_andThen;
+var $elm$json$Json$Decode$fail = _Json_fail;
+var $elm$json$Json$Decode$field = _Json_decodeField;
+var $elm$json$Json$Decode$oneOf = _Json_oneOf;
+var $elm$json$Json$Decode$maybe = function (decoder) {
+	return $elm$json$Json$Decode$oneOf(
+		_List_fromArray(
+			[
+				A2($elm$json$Json$Decode$map, $elm$core$Maybe$Just, decoder),
+				$elm$json$Json$Decode$succeed($elm$core$Maybe$Nothing)
+			]));
+};
+var $elm$json$Json$Decode$string = _Json_decodeString;
+var $Gizra$elm_keyboard_event$Keyboard$Event$decodeKey = $elm$json$Json$Decode$maybe(
+	A2(
+		$elm$json$Json$Decode$andThen,
+		function (key) {
+			return $elm$core$String$isEmpty(key) ? $elm$json$Json$Decode$fail('empty key') : $elm$json$Json$Decode$succeed(key);
+		},
+		A2($elm$json$Json$Decode$field, 'key', $elm$json$Json$Decode$string)));
+var $elm$json$Json$Decode$int = _Json_decodeInt;
+var $Gizra$elm_keyboard_event$Keyboard$Event$decodeNonZero = A2(
+	$elm$json$Json$Decode$andThen,
+	function (code) {
+		return (!code) ? $elm$json$Json$Decode$fail('code was zero') : $elm$json$Json$Decode$succeed(code);
+	},
+	$elm$json$Json$Decode$int);
+var $Gizra$elm_keyboard_event$Keyboard$Event$decodeKeyCode = $elm$json$Json$Decode$oneOf(
+	_List_fromArray(
+		[
+			A2($elm$json$Json$Decode$field, 'keyCode', $Gizra$elm_keyboard_event$Keyboard$Event$decodeNonZero),
+			A2($elm$json$Json$Decode$field, 'which', $Gizra$elm_keyboard_event$Keyboard$Event$decodeNonZero),
+			A2($elm$json$Json$Decode$field, 'charCode', $Gizra$elm_keyboard_event$Keyboard$Event$decodeNonZero),
+			$elm$json$Json$Decode$succeed(0)
+		]));
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$A = {$: 'A'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Add = {$: 'Add'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Alt = {$: 'Alt'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Ambiguous = function (a) {
+	return {$: 'Ambiguous', a: a};
+};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$B = {$: 'B'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Backspace = {$: 'Backspace'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$C = {$: 'C'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$CapsLock = {$: 'CapsLock'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$ChromeSearch = {$: 'ChromeSearch'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Command = {$: 'Command'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Ctrl = function (a) {
+	return {$: 'Ctrl', a: a};
+};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$D = {$: 'D'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Decimal = {$: 'Decimal'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Delete = {$: 'Delete'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Divide = {$: 'Divide'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Down = {$: 'Down'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$E = {$: 'E'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Eight = {$: 'Eight'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$End = {$: 'End'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Enter = {$: 'Enter'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Escape = {$: 'Escape'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F = {$: 'F'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F1 = {$: 'F1'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F10 = {$: 'F10'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F11 = {$: 'F11'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F12 = {$: 'F12'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F2 = {$: 'F2'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F3 = {$: 'F3'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F4 = {$: 'F4'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F5 = {$: 'F5'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F6 = {$: 'F6'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F7 = {$: 'F7'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F8 = {$: 'F8'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$F9 = {$: 'F9'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Five = {$: 'Five'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Four = {$: 'Four'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$G = {$: 'G'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$H = {$: 'H'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Home = {$: 'Home'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$I = {$: 'I'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Insert = {$: 'Insert'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$J = {$: 'J'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$K = {$: 'K'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$L = {$: 'L'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Left = {$: 'Left'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$M = {$: 'M'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Multiply = {$: 'Multiply'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$N = {$: 'N'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Nine = {$: 'Nine'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumLock = {$: 'NumLock'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadEight = {$: 'NumpadEight'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadFive = {$: 'NumpadFive'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadFour = {$: 'NumpadFour'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadNine = {$: 'NumpadNine'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadOne = {$: 'NumpadOne'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadSeven = {$: 'NumpadSeven'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadSix = {$: 'NumpadSix'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadThree = {$: 'NumpadThree'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadTwo = {$: 'NumpadTwo'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadZero = {$: 'NumpadZero'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$O = {$: 'O'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$One = {$: 'One'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$P = {$: 'P'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$PageDown = {$: 'PageDown'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$PageUp = {$: 'PageUp'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$PauseBreak = {$: 'PauseBreak'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$PrintScreen = {$: 'PrintScreen'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Q = {$: 'Q'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$R = {$: 'R'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Right = {$: 'Right'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$S = {$: 'S'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$ScrollLock = {$: 'ScrollLock'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Seven = {$: 'Seven'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Shift = function (a) {
+	return {$: 'Shift', a: a};
+};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Six = {$: 'Six'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Spacebar = {$: 'Spacebar'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Subtract = {$: 'Subtract'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$T = {$: 'T'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Tab = {$: 'Tab'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Three = {$: 'Three'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Two = {$: 'Two'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$U = {$: 'U'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Unknown = function (a) {
+	return {$: 'Unknown', a: a};
+};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Up = {$: 'Up'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$V = {$: 'V'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$W = {$: 'W'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Windows = {$: 'Windows'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$X = {$: 'X'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Y = {$: 'Y'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Z = {$: 'Z'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$Zero = {$: 'Zero'};
+var $SwiftsNamesake$proper_keyboard$Keyboard$Key$fromCode = function (keyCode) {
+	switch (keyCode) {
+		case 8:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Backspace;
+		case 9:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Tab;
+		case 13:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Enter;
+		case 16:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Shift($elm$core$Maybe$Nothing);
+		case 17:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Ctrl($elm$core$Maybe$Nothing);
+		case 18:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Alt;
+		case 19:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$PauseBreak;
+		case 20:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$CapsLock;
+		case 27:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Escape;
+		case 32:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Spacebar;
+		case 33:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$PageUp;
+		case 34:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$PageDown;
+		case 35:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$End;
+		case 36:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Home;
+		case 37:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Left;
+		case 38:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Up;
+		case 39:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Right;
+		case 40:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Down;
+		case 44:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$PrintScreen;
+		case 45:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Insert;
+		case 46:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Delete;
+		case 48:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Zero;
+		case 49:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$One;
+		case 50:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Two;
+		case 51:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Three;
+		case 52:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Four;
+		case 53:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Five;
+		case 54:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Six;
+		case 55:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Seven;
+		case 56:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Eight;
+		case 57:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Nine;
+		case 65:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$A;
+		case 66:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$B;
+		case 67:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$C;
+		case 68:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$D;
+		case 69:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$E;
+		case 70:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$F;
+		case 71:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$G;
+		case 72:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$H;
+		case 73:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$I;
+		case 74:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$J;
+		case 75:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$K;
+		case 76:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$L;
+		case 77:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$M;
+		case 78:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$N;
+		case 79:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$O;
+		case 80:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$P;
+		case 81:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Q;
+		case 82:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$R;
+		case 83:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$S;
+		case 84:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$T;
+		case 85:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$U;
+		case 86:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$V;
+		case 87:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$W;
+		case 88:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$X;
+		case 89:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Y;
+		case 90:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Z;
+		case 91:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Ambiguous(
+				_List_fromArray(
+					[$SwiftsNamesake$proper_keyboard$Keyboard$Key$Windows, $SwiftsNamesake$proper_keyboard$Keyboard$Key$Command, $SwiftsNamesake$proper_keyboard$Keyboard$Key$ChromeSearch]));
+		case 96:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadZero;
+		case 97:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadOne;
+		case 98:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadTwo;
+		case 99:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadThree;
+		case 100:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadFour;
+		case 101:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadFive;
+		case 102:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadSix;
+		case 103:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadSeven;
+		case 104:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadEight;
+		case 105:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumpadNine;
+		case 106:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Multiply;
+		case 107:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Add;
+		case 109:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Subtract;
+		case 110:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Decimal;
+		case 111:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Divide;
+		case 112:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$F1;
+		case 113:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$F2;
+		case 114:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$F3;
+		case 115:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$F4;
+		case 116:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$F5;
+		case 117:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$F6;
+		case 118:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$F7;
+		case 119:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$F8;
+		case 120:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$F9;
+		case 121:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$F10;
+		case 122:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$F11;
+		case 123:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$F12;
+		case 144:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$NumLock;
+		case 145:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$ScrollLock;
+		default:
+			return $SwiftsNamesake$proper_keyboard$Keyboard$Key$Unknown(keyCode);
+	}
+};
+var $elm$json$Json$Decode$map7 = _Json_map7;
+var $Gizra$elm_keyboard_event$Keyboard$Event$decodeKeyboardEvent = A8(
+	$elm$json$Json$Decode$map7,
+	$Gizra$elm_keyboard_event$Keyboard$Event$KeyboardEvent,
+	A2($elm$json$Json$Decode$field, 'altKey', $elm$json$Json$Decode$bool),
+	A2($elm$json$Json$Decode$field, 'ctrlKey', $elm$json$Json$Decode$bool),
+	$Gizra$elm_keyboard_event$Keyboard$Event$decodeKey,
+	A2($elm$json$Json$Decode$map, $SwiftsNamesake$proper_keyboard$Keyboard$Key$fromCode, $Gizra$elm_keyboard_event$Keyboard$Event$decodeKeyCode),
+	A2($elm$json$Json$Decode$field, 'metaKey', $elm$json$Json$Decode$bool),
+	A2($elm$json$Json$Decode$field, 'repeat', $elm$json$Json$Decode$bool),
+	A2($elm$json$Json$Decode$field, 'shiftKey', $elm$json$Json$Decode$bool));
 var $elm$json$Json$Decode$decodeValue = _Json_run;
 var $elm$time$Time$Every = F2(
 	function (a, b) {
@@ -6033,63 +6369,10 @@ var $elm$time$Time$every = F2(
 		return $elm$time$Time$subscription(
 			A2($elm$time$Time$Every, interval, tagger));
 	});
-var $elm$json$Json$Decode$field = _Json_decodeField;
-var $author$project$Logic$App$Msg$NoOp = {$: 'NoOp'};
-var $author$project$Logic$App$Msg$SetTimelineIndex = function (a) {
-	return {$: 'SetTimelineIndex', a: a};
-};
-var $elm$core$Array$length = function (_v0) {
-	var len = _v0.a;
-	return len;
-};
-var $elm$core$Basics$min = F2(
-	function (x, y) {
-		return (_Utils_cmp(x, y) < 0) ? x : y;
-	});
-var $elm$core$Array$repeat = F2(
-	function (n, e) {
-		return A2(
-			$elm$core$Array$initialize,
-			n,
-			function (_v0) {
-				return e;
-			});
-	});
-var $author$project$Main$keyPressHandler = F2(
-	function (model, keyValue) {
-		var timeline = ($elm$core$Array$length(model.timeline) < 2) ? A2(
-			$elm$core$Array$repeat,
-			2,
-			{patternIndex: -1, stack: $elm$core$Array$empty}) : model.timeline;
-		switch (keyValue) {
-			case 'ArrowLeft':
-				return $author$project$Logic$App$Msg$SetTimelineIndex(
-					A2(
-						$elm$core$Basics$min,
-						$elm$core$Array$length(timeline) - 3,
-						A2($elm$core$Basics$max, -1, model.timelineIndex - 1)));
-			case 'ArrowRight':
-				return $author$project$Logic$App$Msg$SetTimelineIndex(
-					A2(
-						$elm$core$Basics$min,
-						$elm$core$Array$length(timeline) - 2,
-						model.timelineIndex + 1));
-			default:
-				return $author$project$Logic$App$Msg$NoOp;
-		}
-	});
-var $elm$json$Json$Decode$string = _Json_decodeString;
-var $author$project$Main$keyDecoder = function (model) {
-	return A2(
-		$elm$json$Json$Decode$map,
-		$author$project$Main$keyPressHandler(model),
-		A2($elm$json$Json$Decode$field, 'key', $elm$json$Json$Decode$string));
-};
 var $author$project$Logic$App$Types$ElementLocation = F5(
 	function (element, left, bottom, top, right) {
 		return {bottom: bottom, element: element, left: left, right: right, top: top};
 	});
-var $elm$json$Json$Decode$int = _Json_decodeInt;
 var $elm$json$Json$Decode$map5 = _Json_map5;
 var $author$project$Main$locationDecoder = A6(
 	$elm$json$Json$Decode$map5,
@@ -6322,7 +6605,6 @@ var $elm$json$Json$Decode$list = _Json_decodeList;
 var $author$project$Ports$GetElementBoundingBoxById$recieveBoundingBoxes = _Platform_incomingPort(
 	'recieveBoundingBoxes',
 	$elm$json$Json$Decode$list($elm$json$Json$Decode$value));
-var $elm$json$Json$Decode$bool = _Json_decodeBool;
 var $author$project$Ports$CheckMouseOverDragHandle$recieveCheckMouseOverDragHandle = _Platform_incomingPort('recieveCheckMouseOverDragHandle', $elm$json$Json$Decode$bool);
 var $author$project$Ports$GetGridDrawingAsGif$recieveGIF = _Platform_incomingPort('recieveGIF', $elm$json$Json$Decode$string);
 var $author$project$Ports$GetGridDrawingAsImage$recieveImage = _Platform_incomingPort('recieveImage', $elm$json$Json$Decode$string);
@@ -6338,7 +6620,7 @@ var $author$project$Main$subscriptions = function (model) {
 					})),
 				A2($elm$time$Time$every, 100, $author$project$Logic$App$Msg$Tick),
 				$elm$browser$Browser$Events$onKeyDown(
-				$author$project$Main$keyDecoder(model)),
+				A2($elm$json$Json$Decode$map, $author$project$Logic$App$Msg$HandleKeyboardEvent, $Gizra$elm_keyboard_event$Keyboard$Event$decodeKeyboardEvent)),
 				$author$project$Ports$HexNumGen$recieveNumber($author$project$Logic$App$Msg$RecieveGeneratedNumberLiteral),
 				$author$project$Ports$GetElementBoundingBoxById$recieveBoundingBox(
 				A2(
@@ -6360,6 +6642,9 @@ var $author$project$Logic$App$Types$Artifact = {$: 'Artifact'};
 var $author$project$Logic$App$Types$Cypher = {$: 'Cypher'};
 var $author$project$Logic$App$Types$Focus = {$: 'Focus'};
 var $author$project$Logic$App$Types$Pie = {$: 'Pie'};
+var $author$project$Logic$App$Msg$SetTimelineIndex = function (a) {
+	return {$: 'SetTimelineIndex', a: a};
+};
 var $author$project$Logic$App$Types$Spellbook = {$: 'Spellbook'};
 var $author$project$Logic$App$Types$Trinket = {$: 'Trinket'};
 var $author$project$Settings$Theme$accent2 = '#D8B8E0';
@@ -6476,6 +6761,10 @@ var $author$project$Components$App$Grid$getClosestPoint = F3(
 					$elm$core$List$sortWith,
 					distanceComparison,
 					$elm$core$List$concat(points))));
+	});
+var $elm$core$Basics$min = F2(
+	function (x, y) {
+		return (_Utils_cmp(x, y) < 0) ? x : y;
 	});
 var $elm$core$Basics$neq = _Utils_notEqual;
 var $elm$core$Basics$not = _Basics_not;
@@ -6815,6 +7104,10 @@ var $elm$core$Array$append = F2(
 						bTree)));
 		}
 	});
+var $elm$core$Array$length = function (_v0) {
+	var len = _v0.a;
+	return len;
+};
 var $elm$core$Array$push = F2(
 	function (a, array) {
 		var tail = array.d;
@@ -8574,6 +8867,15 @@ var $elm_community$array_extra$Array$Extra$map2 = F3(
 				combineAb,
 				$elm$core$Array$toList(aArray),
 				$elm$core$Array$toList(bArray)));
+	});
+var $elm$core$Array$repeat = F2(
+	function (n, e) {
+		return A2(
+			$elm$core$Array$initialize,
+			n,
+			function (_v0) {
+				return e;
+			});
 	});
 var $author$project$Logic$App$Patterns$Misc$mask = F3(
 	function (maskCode, stack, ctx) {
@@ -13566,186 +13868,48 @@ var $elm$file$File$Download$url = function (href) {
 };
 var $author$project$Main$update = F2(
 	function (msg, model) {
-		var ui = model.ui;
-		var settings = model.settings;
-		var patternArray = model.patternArray;
-		var grid = model.grid;
-		var drawing = model.grid.drawing;
-		var castingContext = model.castingContext;
-		switch (msg.$) {
-			case 'NoOp':
-				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
-			case 'ViewPanel':
-				var panel = msg.a;
-				var keys = msg.b;
-				return (!keys.shift) ? _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							ui: _Utils_update(
-								ui,
-								{
-									openPanels: _List_fromArray(
-										[panel])
-								})
-						}),
-					$elm$core$Platform$Cmd$none) : _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							ui: _Utils_update(
-								ui,
-								{
-									openPanels: _Utils_ap(
-										ui.openPanels,
-										_List_fromArray(
-											[panel]))
-								})
-						}),
-					$elm$core$Platform$Cmd$none);
-			case 'GetGrid':
-				if (msg.a.$ === 'Ok') {
-					var element = msg.a.a;
-					return _Utils_Tuple2(
+		update:
+		while (true) {
+			var ui = model.ui;
+			var settings = model.settings;
+			var patternArray = model.patternArray;
+			var grid = model.grid;
+			var drawing = model.grid.drawing;
+			var castingContext = model.castingContext;
+			switch (msg.$) {
+				case 'NoOp':
+					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+				case 'ViewPanel':
+					var panel = msg.a;
+					var keys = msg.b;
+					return (!keys.shift) ? _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
-								grid: _Utils_update(
-									grid,
+								ui: _Utils_update(
+									ui,
 									{
-										height: element.element.height,
-										points: A5($author$project$Components$App$Grid$updateGridPoints, element.element.width, element.element.height, model.patternArray, _List_Nil, model.settings.gridScale),
-										width: element.element.width
+										openPanels: _List_fromArray(
+											[panel])
+									})
+							}),
+						$elm$core$Platform$Cmd$none) : _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								ui: _Utils_update(
+									ui,
+									{
+										openPanels: _Utils_ap(
+											ui.openPanels,
+											_List_fromArray(
+												[panel]))
 									})
 							}),
 						$elm$core$Platform$Cmd$none);
-				} else {
-					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
-				}
-			case 'GetContentSize':
-				if (msg.a.$ === 'Ok') {
-					var element = msg.a.a;
-					return _Utils_Tuple2(
-						_Utils_update(
-							model,
-							{
-								window: {height: element.element.height, width: element.element.width}
-							}),
-						$elm$core$Platform$Cmd$none);
-				} else {
-					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
-				}
-			case 'MouseMove':
-				var _v1 = msg.a;
-				var x = _v1.a;
-				var y = _v1.b;
-				return drawing.drawingMode ? _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							grid: _Utils_update(
-								grid,
-								{
-									drawing: _Utils_update(
-										drawing,
-										{
-											activePath: $author$project$Components$App$Grid$addNearbyPoint(model)
-										})
-								}),
-							mousePos: _Utils_Tuple2(x, y)
-						}),
-					$elm$core$Platform$Cmd$none) : _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							mousePos: _Utils_Tuple2(x, y)
-						}),
-					$elm$core$Platform$Cmd$none);
-			case 'GridDown':
-				var _v2 = msg.a;
-				var x = _v2.a;
-				var y = _v2.b;
-				var mousePos = _Utils_Tuple2(x, y);
-				var closestPoint = A3($author$project$Components$App$Grid$getClosestPoint, mousePos, grid.points, model);
-				return (!closestPoint.used) ? _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							grid: _Utils_update(
-								grid,
-								{
-									drawing: _Utils_update(
-										drawing,
-										{
-											activePath: _List_fromArray(
-												[closestPoint]),
-											drawingMode: true
-										})
-								}),
-							mousePos: mousePos
-						}),
-					$elm$core$Platform$Cmd$none) : _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
-			case 'MouseUp':
-				if (drawing.drawingMode) {
-					if ($elm$core$List$length(drawing.activePath) > 1) {
-						var newPattern = $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature(
-							$author$project$Logic$App$Utils$GetAngleSignature$getAngleSignature(drawing.activePath));
-						var newUncoloredPatternArray = A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, model.insertionPoint);
-						var stackResult = A3(
-							$author$project$Logic$App$Stack$EvalStack$applyPatternsToStack,
-							$elm$core$Array$empty,
-							castingContext,
-							$elm$core$List$reverse(
-								A2(
-									$elm$core$List$map,
-									function (x) {
-										return x.a;
-									},
-									$elm$core$Array$toList(
-										A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, model.insertionPoint)))));
-						var newStack = stackResult.stack;
-						var resultArray = stackResult.resultArray;
-						var newPatternArray = A3(
-							$elm_community$array_extra$Array$Extra$map2,
-							F2(
-								function (patternTuple, result) {
-									return $author$project$Logic$App$PatternList$PatternArray$updateDrawingColors(
-										_Utils_Tuple2(
-											A2($author$project$Logic$App$PatternList$PatternArray$applyColorToPatternFromResult, patternTuple.a, result),
-											patternTuple.b));
-								}),
-							newUncoloredPatternArray,
-							resultArray);
-						var newGrid = _Utils_update(
-							grid,
-							{
-								drawing: _Utils_update(
-									drawing,
-									{activePath: _List_Nil, drawingMode: false})
-							});
-						return A2(
-							$author$project$Main$update,
-							$author$project$Logic$App$Msg$SetTimelineIndex(
-								$elm$core$Array$length(stackResult.timeline) + 1),
-							A2(
-								$author$project$Logic$App$Patterns$MetaActions$applyMetaAction,
-								_Utils_update(
-									model,
-									{
-										castingContext: stackResult.ctx,
-										grid: newGrid,
-										insertionPoint: (_Utils_cmp(
-											model.insertionPoint,
-											$elm$core$Array$length(model.patternArray)) > 0) ? 0 : model.insertionPoint,
-										patternArray: newPatternArray,
-										stack: newStack,
-										timeline: A2(
-											$author$project$Logic$App$Utils$Utils$unshift,
-											{patternIndex: -1, stack: $elm$core$Array$empty},
-											stackResult.timeline)
-									}),
-								newPattern.metaAction));
-					} else {
+				case 'GetGrid':
+					if (msg.a.$ === 'Ok') {
+						var element = msg.a.a;
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
@@ -13753,379 +13917,653 @@ var $author$project$Main$update = F2(
 									grid: _Utils_update(
 										grid,
 										{
-											drawing: _Utils_update(
-												drawing,
-												{activePath: _List_Nil, drawingMode: false})
+											height: element.element.height,
+											points: A5($author$project$Components$App$Grid$updateGridPoints, element.element.width, element.element.height, model.patternArray, _List_Nil, model.settings.gridScale),
+											width: element.element.width
 										})
 								}),
 							$elm$core$Platform$Cmd$none);
+					} else {
+						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 					}
-				} else {
-					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
-				}
-			case 'RemoveFromPatternArray':
-				var startIndex = msg.a;
-				var endIndex = msg.b;
-				var newUncoloredPatternArray = A3($author$project$Logic$App$Utils$Utils$removeFromArray, startIndex, endIndex, model.patternArray);
-				var stackResult = A3(
-					$author$project$Logic$App$Stack$EvalStack$applyPatternsToStack,
-					$elm$core$Array$empty,
-					castingContext,
-					$elm$core$List$reverse(
-						$elm$core$List$unzip(
-							$elm$core$Array$toList(newUncoloredPatternArray)).a));
-				var resultArray = stackResult.resultArray;
-				var newStack = stackResult.stack;
-				var newPatternArray = A3(
-					$elm_community$array_extra$Array$Extra$map2,
-					F2(
-						function (patternTuple, result) {
-							return $author$project$Logic$App$PatternList$PatternArray$updateDrawingColors(
-								_Utils_Tuple2(
-									A2($author$project$Logic$App$PatternList$PatternArray$applyColorToPatternFromResult, patternTuple.a, result),
-									patternTuple.b));
-						}),
-					newUncoloredPatternArray,
-					resultArray);
-				return A2(
-					$author$project$Main$update,
-					$author$project$Logic$App$Msg$SetTimelineIndex(
-						$elm$core$Array$length(stackResult.timeline) + 1),
-					_Utils_update(
-						model,
-						{
-							castingContext: stackResult.ctx,
-							grid: _Utils_update(
-								grid,
+				case 'GetContentSize':
+					if (msg.a.$ === 'Ok') {
+						var element = msg.a.a;
+						return _Utils_Tuple2(
+							_Utils_update(
+								model,
 								{
-									points: A5($author$project$Components$App$Grid$updateGridPoints, grid.width, grid.height, newPatternArray, _List_Nil, settings.gridScale)
+									window: {height: element.element.height, width: element.element.width}
 								}),
-							insertionPoint: (_Utils_cmp(
-								model.insertionPoint,
-								$elm$core$Array$length(newPatternArray)) > 0) ? 0 : ((_Utils_cmp(model.insertionPoint, endIndex) < 0) ? A2($elm$core$Basics$max, model.insertionPoint, 0) : A2($elm$core$Basics$max, model.insertionPoint - 1, 0)),
-							patternArray: newPatternArray,
-							stack: newStack,
-							timeline: A2(
-								$author$project$Logic$App$Utils$Utils$unshift,
-								{patternIndex: -1, stack: $elm$core$Array$empty},
-								stackResult.timeline)
-						}));
-			case 'SetGridScale':
-				var scale = msg.a;
-				return _Utils_Tuple2(
-					$author$project$Logic$App$Grid$sortPatterns(
+							$elm$core$Platform$Cmd$none);
+					} else {
+						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+					}
+				case 'MouseMove':
+					var _v1 = msg.a;
+					var x = _v1.a;
+					var y = _v1.b;
+					return drawing.drawingMode ? _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
 								grid: _Utils_update(
 									grid,
 									{
-										points: A5($author$project$Components$App$Grid$updateGridPoints, grid.width, grid.height, model.patternArray, _List_Nil, scale)
+										drawing: _Utils_update(
+											drawing,
+											{
+												activePath: $author$project$Components$App$Grid$addNearbyPoint(model)
+											})
 									}),
-								settings: _Utils_update(
-									settings,
-									{gridScale: scale})
-							})),
-					$elm$core$Platform$Cmd$none);
-			case 'WindowResize':
-				return _Utils_Tuple2(
-					model,
-					$elm$core$Platform$Cmd$batch(
-						_List_fromArray(
-							[
-								A2(
-								$elm$core$Task$attempt,
-								$author$project$Logic$App$Msg$GetGrid,
-								$elm$browser$Browser$Dom$getElement('hex_grid')),
-								A2(
-								$elm$core$Task$attempt,
-								$author$project$Logic$App$Msg$GetContentSize,
-								$elm$browser$Browser$Dom$getElement('content'))
-							])));
-			case 'Tick':
-				var newTime = msg.a;
-				var drawnPoints = grid.drawnPoints;
-				var autocompleteIndex = (model.ui.patternInputField === '') ? 0 : model.ui.suggestionIndex;
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							grid: _Utils_update(
+								mousePos: _Utils_Tuple2(x, y)
+							}),
+						$elm$core$Platform$Cmd$none) : _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								mousePos: _Utils_Tuple2(x, y)
+							}),
+						$elm$core$Platform$Cmd$none);
+				case 'GridDown':
+					var _v2 = msg.a;
+					var x = _v2.a;
+					var y = _v2.b;
+					var mousePos = _Utils_Tuple2(x, y);
+					var closestPoint = A3($author$project$Components$App$Grid$getClosestPoint, mousePos, grid.points, model);
+					return (!closestPoint.used) ? _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								grid: _Utils_update(
+									grid,
+									{
+										drawing: _Utils_update(
+											drawing,
+											{
+												activePath: _List_fromArray(
+													[closestPoint]),
+												drawingMode: true
+											})
+									}),
+								mousePos: mousePos
+							}),
+						$elm$core$Platform$Cmd$none) : _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+				case 'MouseUp':
+					if (drawing.drawingMode) {
+						if ($elm$core$List$length(drawing.activePath) > 1) {
+							var newPattern = $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature(
+								$author$project$Logic$App$Utils$GetAngleSignature$getAngleSignature(drawing.activePath));
+							var newUncoloredPatternArray = A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, model.insertionPoint);
+							var stackResult = A3(
+								$author$project$Logic$App$Stack$EvalStack$applyPatternsToStack,
+								$elm$core$Array$empty,
+								castingContext,
+								$elm$core$List$reverse(
+									A2(
+										$elm$core$List$map,
+										function (x) {
+											return x.a;
+										},
+										$elm$core$Array$toList(
+											A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, model.insertionPoint)))));
+							var newStack = stackResult.stack;
+							var resultArray = stackResult.resultArray;
+							var newPatternArray = A3(
+								$elm_community$array_extra$Array$Extra$map2,
+								F2(
+									function (patternTuple, result) {
+										return $author$project$Logic$App$PatternList$PatternArray$updateDrawingColors(
+											_Utils_Tuple2(
+												A2($author$project$Logic$App$PatternList$PatternArray$applyColorToPatternFromResult, patternTuple.a, result),
+												patternTuple.b));
+									}),
+								newUncoloredPatternArray,
+								resultArray);
+							var newGrid = _Utils_update(
 								grid,
 								{
-									drawnPoints: A2(
-										$author$project$Components$App$Grid$updatemidLineOffsets,
-										drawnPoints,
-										$elm$time$Time$posixToMillis(newTime))
-								}),
-							time: $elm$time$Time$posixToMillis(newTime),
-							ui: _Utils_update(
-								ui,
-								{suggestionIndex: autocompleteIndex})
-						}),
-					$elm$core$Platform$Cmd$batch(
-						_List_fromArray(
-							[
-								$author$project$Ports$GetElementBoundingBoxById$requestBoundingBox('#add_pattern_input'),
-								$author$project$Ports$CheckMouseOverDragHandle$requestCheckMouseOverDragHandle(_Utils_Tuple0),
-								$author$project$Ports$GetElementBoundingBoxById$requestBoundingBoxes(
-								$elm$core$Array$toList(
+									drawing: _Utils_update(
+										drawing,
+										{activePath: _List_Nil, drawingMode: false})
+								});
+							return A2(
+								$author$project$Main$update,
+								$author$project$Logic$App$Msg$SetTimelineIndex(
+									$elm$core$Array$length(stackResult.timeline) + 1),
+								A2(
+									$author$project$Logic$App$Patterns$MetaActions$applyMetaAction,
+									_Utils_update(
+										model,
+										{
+											castingContext: stackResult.ctx,
+											grid: newGrid,
+											insertionPoint: (_Utils_cmp(
+												model.insertionPoint,
+												$elm$core$Array$length(model.patternArray)) > 0) ? 0 : model.insertionPoint,
+											patternArray: newPatternArray,
+											stack: newStack,
+											timeline: A2(
+												$author$project$Logic$App$Utils$Utils$unshift,
+												{patternIndex: -1, stack: $elm$core$Array$empty},
+												stackResult.timeline)
+										}),
+									newPattern.metaAction));
+						} else {
+							return _Utils_Tuple2(
+								_Utils_update(
+									model,
+									{
+										grid: _Utils_update(
+											grid,
+											{
+												drawing: _Utils_update(
+													drawing,
+													{activePath: _List_Nil, drawingMode: false})
+											})
+									}),
+								$elm$core$Platform$Cmd$none);
+						}
+					} else {
+						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+					}
+				case 'RemoveFromPatternArray':
+					var startIndex = msg.a;
+					var endIndex = msg.b;
+					var newUncoloredPatternArray = A3($author$project$Logic$App$Utils$Utils$removeFromArray, startIndex, endIndex, model.patternArray);
+					var stackResult = A3(
+						$author$project$Logic$App$Stack$EvalStack$applyPatternsToStack,
+						$elm$core$Array$empty,
+						castingContext,
+						$elm$core$List$reverse(
+							$elm$core$List$unzip(
+								$elm$core$Array$toList(newUncoloredPatternArray)).a));
+					var resultArray = stackResult.resultArray;
+					var newStack = stackResult.stack;
+					var newPatternArray = A3(
+						$elm_community$array_extra$Array$Extra$map2,
+						F2(
+							function (patternTuple, result) {
+								return $author$project$Logic$App$PatternList$PatternArray$updateDrawingColors(
+									_Utils_Tuple2(
+										A2($author$project$Logic$App$PatternList$PatternArray$applyColorToPatternFromResult, patternTuple.a, result),
+										patternTuple.b));
+							}),
+						newUncoloredPatternArray,
+						resultArray);
+					return A2(
+						$author$project$Main$update,
+						$author$project$Logic$App$Msg$SetTimelineIndex(
+							$elm$core$Array$length(stackResult.timeline) + 1),
+						_Utils_update(
+							model,
+							{
+								castingContext: stackResult.ctx,
+								grid: _Utils_update(
+									grid,
+									{
+										points: A5($author$project$Components$App$Grid$updateGridPoints, grid.width, grid.height, newPatternArray, _List_Nil, settings.gridScale)
+									}),
+								insertionPoint: (_Utils_cmp(
+									model.insertionPoint,
+									$elm$core$Array$length(newPatternArray)) > 0) ? 0 : ((_Utils_cmp(model.insertionPoint, endIndex) < 0) ? A2($elm$core$Basics$max, model.insertionPoint, 0) : A2($elm$core$Basics$max, model.insertionPoint - 1, 0)),
+								patternArray: newPatternArray,
+								stack: newStack,
+								timeline: A2(
+									$author$project$Logic$App$Utils$Utils$unshift,
+									{patternIndex: -1, stack: $elm$core$Array$empty},
+									stackResult.timeline)
+							}));
+				case 'SetGridScale':
+					var scale = msg.a;
+					return _Utils_Tuple2(
+						$author$project$Logic$App$Grid$sortPatterns(
+							_Utils_update(
+								model,
+								{
+									grid: _Utils_update(
+										grid,
+										{
+											points: A5($author$project$Components$App$Grid$updateGridPoints, grid.width, grid.height, model.patternArray, _List_Nil, scale)
+										}),
+									settings: _Utils_update(
+										settings,
+										{gridScale: scale})
+								})),
+						$elm$core$Platform$Cmd$none);
+				case 'WindowResize':
+					return _Utils_Tuple2(
+						model,
+						$elm$core$Platform$Cmd$batch(
+							_List_fromArray(
+								[
 									A2(
-										$elm$core$Array$indexedMap,
-										F2(
-											function (index, _v3) {
-												return '[data-index=\"' + ($elm$core$String$fromInt(index) + '\"]');
-											}),
-										model.patternArray)))
-							])));
-			case 'UpdatePatternInputField':
-				var text = msg.a;
-				return _Utils_Tuple2(
-					_Utils_update(
+									$elm$core$Task$attempt,
+									$author$project$Logic$App$Msg$GetGrid,
+									$elm$browser$Browser$Dom$getElement('hex_grid')),
+									A2(
+									$elm$core$Task$attempt,
+									$author$project$Logic$App$Msg$GetContentSize,
+									$elm$browser$Browser$Dom$getElement('content'))
+								])));
+				case 'Tick':
+					var newTime = msg.a;
+					var drawnPoints = grid.drawnPoints;
+					var autocompleteIndex = (model.ui.patternInputField === '') ? 0 : model.ui.suggestionIndex;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								grid: _Utils_update(
+									grid,
+									{
+										drawnPoints: A2(
+											$author$project$Components$App$Grid$updatemidLineOffsets,
+											drawnPoints,
+											$elm$time$Time$posixToMillis(newTime))
+									}),
+								time: $elm$time$Time$posixToMillis(newTime),
+								ui: _Utils_update(
+									ui,
+									{suggestionIndex: autocompleteIndex})
+							}),
+						$elm$core$Platform$Cmd$batch(
+							_List_fromArray(
+								[
+									$author$project$Ports$GetElementBoundingBoxById$requestBoundingBox('#add_pattern_input'),
+									$author$project$Ports$CheckMouseOverDragHandle$requestCheckMouseOverDragHandle(_Utils_Tuple0),
+									$author$project$Ports$GetElementBoundingBoxById$requestBoundingBoxes(
+									$elm$core$Array$toList(
+										A2(
+											$elm$core$Array$indexedMap,
+											F2(
+												function (index, _v3) {
+													return '[data-index=\"' + ($elm$core$String$fromInt(index) + '\"]');
+												}),
+											model.patternArray)))
+								])));
+				case 'UpdatePatternInputField':
+					var text = msg.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								ui: _Utils_update(
+									ui,
+									{patternInputField: text})
+							}),
+						$elm$core$Platform$Cmd$none);
+				case 'InputPattern':
+					var name = msg.a;
+					var newImportQueue = (name !== '') ? A2(
+						$elm$core$List$cons,
+						$author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName(name),
+						model.importQueue) : model.importQueue;
+					return $author$project$Main$updatePatternArrayFromQueue(
+						_Utils_update(
+							model,
+							{importQueue: newImportQueue}));
+				case 'SendNumberLiteralToGenerate':
+					var number = msg.a;
+					return _Utils_Tuple2(
 						model,
-						{
-							ui: _Utils_update(
-								ui,
-								{patternInputField: text})
-						}),
-					$elm$core$Platform$Cmd$none);
-			case 'InputPattern':
-				var name = msg.a;
-				var newImportQueue = (name !== '') ? A2(
-					$elm$core$List$cons,
-					$author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName(name),
-					model.importQueue) : model.importQueue;
-				return $author$project$Main$updatePatternArrayFromQueue(
-					_Utils_update(
+						$author$project$Ports$HexNumGen$sendNumber(number));
+				case 'RecieveGeneratedNumberLiteral':
+					var signature = msg.a;
+					var newPattern = $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature(signature);
+					return $author$project$Main$updatePatternArrayFromQueue(
+						_Utils_update(
+							model,
+							{
+								importQueue: A2(
+									$elm$core$List$cons,
+									_Utils_Tuple2(newPattern, $elm$core$Platform$Cmd$none),
+									model.importQueue)
+							}));
+				case 'SelectPreviousSuggestion':
+					var suggestLength = msg.a;
+					var newIndex = (model.ui.suggestionIndex <= 0) ? (A2($elm$core$Basics$min, 3, suggestLength) - 1) : (model.ui.suggestionIndex - 1);
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								ui: _Utils_update(
+									ui,
+									{suggestionIndex: newIndex})
+							}),
+						$elm$core$Platform$Cmd$none);
+				case 'SelectNextSuggestion':
+					var suggestLength = msg.a;
+					var newIndex = (_Utils_cmp(
+						model.ui.suggestionIndex,
+						A2($elm$core$Basics$min, 3, suggestLength) - 1) > -1) ? 0 : (model.ui.suggestionIndex + 1);
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								ui: _Utils_update(
+									ui,
+									{suggestionIndex: newIndex})
+							}),
+						$elm$core$Platform$Cmd$none);
+				case 'SelectFirstSuggestion':
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								ui: _Utils_update(
+									ui,
+									{suggestionIndex: 0})
+							}),
+						$elm$core$Platform$Cmd$none);
+				case 'RequestInputBoundingBox':
+					var id = msg.a;
+					return _Utils_Tuple2(
 						model,
-						{importQueue: newImportQueue}));
-			case 'SendNumberLiteralToGenerate':
-				var number = msg.a;
-				return _Utils_Tuple2(
-					model,
-					$author$project$Ports$HexNumGen$sendNumber(number));
-			case 'RecieveGeneratedNumberLiteral':
-				var signature = msg.a;
-				var newPattern = $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature(signature);
-				return $author$project$Main$updatePatternArrayFromQueue(
-					_Utils_update(
-						model,
-						{
-							importQueue: A2(
-								$elm$core$List$cons,
-								_Utils_Tuple2(newPattern, $elm$core$Platform$Cmd$none),
-								model.importQueue)
-						}));
-			case 'SelectPreviousSuggestion':
-				var suggestLength = msg.a;
-				var newIndex = (model.ui.suggestionIndex <= 0) ? (A2($elm$core$Basics$min, 3, suggestLength) - 1) : (model.ui.suggestionIndex - 1);
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							ui: _Utils_update(
-								ui,
-								{suggestionIndex: newIndex})
-						}),
-					$elm$core$Platform$Cmd$none);
-			case 'SelectNextSuggestion':
-				var suggestLength = msg.a;
-				var newIndex = (_Utils_cmp(
-					model.ui.suggestionIndex,
-					A2($elm$core$Basics$min, 3, suggestLength) - 1) > -1) ? 0 : (model.ui.suggestionIndex + 1);
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							ui: _Utils_update(
-								ui,
-								{suggestionIndex: newIndex})
-						}),
-					$elm$core$Platform$Cmd$none);
-			case 'SelectFirstSuggestion':
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							ui: _Utils_update(
-								ui,
-								{suggestionIndex: 0})
-						}),
-					$elm$core$Platform$Cmd$none);
-			case 'RequestInputBoundingBox':
-				var id = msg.a;
-				return _Utils_Tuple2(
-					model,
-					$author$project$Ports$GetElementBoundingBoxById$requestBoundingBox(id));
-			case 'RecieveInputBoundingBox':
-				var result = msg.a;
-				if (result.$ === 'Ok') {
-					var value = result.a;
-					return (value.element === '#add_pattern_input') ? _Utils_Tuple2(
+						$author$project$Ports$GetElementBoundingBoxById$requestBoundingBox(id));
+				case 'RecieveInputBoundingBox':
+					var result = msg.a;
+					if (result.$ === 'Ok') {
+						var value = result.a;
+						return (value.element === '#add_pattern_input') ? _Utils_Tuple2(
+							_Utils_update(
+								model,
+								{
+									ui: _Utils_update(
+										ui,
+										{
+											patternInputLocation: _Utils_Tuple2(value.left, value.bottom)
+										})
+								}),
+							$elm$core$Platform$Cmd$none) : _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+					} else {
+						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+					}
+				case 'RecieveInputBoundingBoxes':
+					var resultList = msg.a;
+					var handleResult = function (result) {
+						if (result.$ === 'Ok') {
+							var value = result.a;
+							return (value.top + value.bottom) / 2;
+						} else {
+							return 0.0;
+						}
+					};
+					return _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
 								ui: _Utils_update(
 									ui,
 									{
-										patternInputLocation: _Utils_Tuple2(value.left, value.bottom)
+										patternElementMiddleLocations: A2($elm$core$List$map, handleResult, resultList)
 									})
 							}),
-						$elm$core$Platform$Cmd$none) : _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
-				} else {
-					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
-				}
-			case 'RecieveInputBoundingBoxes':
-				var resultList = msg.a;
-				var handleResult = function (result) {
-					if (result.$ === 'Ok') {
-						var value = result.a;
-						return (value.top + value.bottom) / 2;
-					} else {
-						return 0.0;
-					}
-				};
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							ui: _Utils_update(
-								ui,
-								{
-									patternElementMiddleLocations: A2($elm$core$List$map, handleResult, resultList)
-								})
-						}),
-					$elm$core$Platform$Cmd$none);
-			case 'DragStart':
-				var index = msg.a;
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							ui: _Utils_update(
-								ui,
-								{
-									dragging: _Utils_Tuple2(true, index),
-									mouseOverElementIndex: index
-								})
-						}),
-					$elm$core$Platform$Cmd$none);
-			case 'DragEnd':
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							ui: _Utils_update(
-								ui,
-								{
-									dragging: _Utils_Tuple2(false, -1),
-									mouseOverElementIndex: -1
-								})
-						}),
-					$elm$core$Platform$Cmd$none);
-			case 'DragOver':
-				var eventJson = msg.b;
-				var event = A2($elm$json$Json$Decode$decodeValue, $author$project$Main$mouseMoveDecoder, eventJson);
-				var mousePos = function () {
-					if (event.$ === 'Ok') {
-						var value = event.a;
-						return _Utils_Tuple2(value.pageX, value.pageY);
-					} else {
-						return _Utils_Tuple2(0.0, 0.0);
-					}
-				}();
-				var closestElementToMouseY = A2(
-					$elm$core$Maybe$withDefault,
-					_Utils_Tuple2(
-						$elm$core$List$length(model.ui.patternElementMiddleLocations),
-						0),
-					$elm$core$List$head(
-						A2(
-							$elm$core$List$sortWith,
-							F2(
-								function (a, b) {
-									var _v6 = A2($elm$core$Basics$compare, a.b, b.b);
-									switch (_v6.$) {
-										case 'LT':
-											return $elm$core$Basics$LT;
-										case 'EQ':
-											return $elm$core$Basics$EQ;
-										default:
-											return $elm$core$Basics$GT;
-									}
-								}),
+						$elm$core$Platform$Cmd$none);
+				case 'DragStart':
+					var index = msg.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								ui: _Utils_update(
+									ui,
+									{
+										dragging: _Utils_Tuple2(true, index),
+										mouseOverElementIndex: index
+									})
+							}),
+						$elm$core$Platform$Cmd$none);
+				case 'DragEnd':
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								ui: _Utils_update(
+									ui,
+									{
+										dragging: _Utils_Tuple2(false, -1),
+										mouseOverElementIndex: -1
+									})
+							}),
+						$elm$core$Platform$Cmd$none);
+				case 'DragOver':
+					var eventJson = msg.b;
+					var event = A2($elm$json$Json$Decode$decodeValue, $author$project$Main$mouseMoveDecoder, eventJson);
+					var mousePos = function () {
+						if (event.$ === 'Ok') {
+							var value = event.a;
+							return _Utils_Tuple2(value.pageX, value.pageY);
+						} else {
+							return _Utils_Tuple2(0.0, 0.0);
+						}
+					}();
+					var closestElementToMouseY = A2(
+						$elm$core$Maybe$withDefault,
+						_Utils_Tuple2(
+							$elm$core$List$length(model.ui.patternElementMiddleLocations),
+							0),
+						$elm$core$List$head(
 							A2(
-								$elm$core$List$filter,
-								function (element) {
-									return element.b > 0;
-								},
+								$elm$core$List$sortWith,
+								F2(
+									function (a, b) {
+										var _v6 = A2($elm$core$Basics$compare, a.b, b.b);
+										switch (_v6.$) {
+											case 'LT':
+												return $elm$core$Basics$LT;
+											case 'EQ':
+												return $elm$core$Basics$EQ;
+											default:
+												return $elm$core$Basics$GT;
+										}
+									}),
 								A2(
-									$elm$core$List$indexedMap,
-									F2(
-										function (index, yPos) {
-											return _Utils_Tuple2(index, mousePos.b - yPos);
+									$elm$core$List$filter,
+									function (element) {
+										return element.b > 0;
+									},
+									A2(
+										$elm$core$List$indexedMap,
+										F2(
+											function (index, yPos) {
+												return _Utils_Tuple2(index, mousePos.b - yPos);
+											}),
+										model.ui.patternElementMiddleLocations))))).a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								mousePos: mousePos,
+								ui: _Utils_update(
+									ui,
+									{mouseOverElementIndex: closestElementToMouseY})
+							}),
+						$elm$core$Platform$Cmd$none);
+				case 'Drag':
+					var event = msg.a;
+					var mouseEvent = event.mouseEvent;
+					var mousePos = mouseEvent.clientPos;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{mousePos: mousePos}),
+						$elm$core$Platform$Cmd$none);
+				case 'Drop':
+					var originIndex = model.ui.dragging.b;
+					var index = (_Utils_cmp(model.ui.mouseOverElementIndex, originIndex) > 0) ? (model.ui.mouseOverElementIndex - 1) : model.ui.mouseOverElementIndex;
+					var newUncoloredPatternArray = function () {
+						var _v8 = A2($elm$core$Array$get, originIndex, patternArray);
+						if (_v8.$ === 'Just') {
+							var element = _v8.a;
+							return A3(
+								$elm_community$array_extra$Array$Extra$insertAt,
+								index,
+								element,
+								A3($author$project$Logic$App$Utils$Utils$removeFromArray, originIndex, originIndex + 1, model.patternArray));
+						} else {
+							return patternArray;
+						}
+					}();
+					var stackResult = A3(
+						$author$project$Logic$App$Stack$EvalStack$applyPatternsToStack,
+						$elm$core$Array$empty,
+						castingContext,
+						$elm$core$List$reverse(
+							$elm$core$List$unzip(
+								$elm$core$Array$toList(newUncoloredPatternArray)).a));
+					var newStack = stackResult.stack;
+					var resultArray = stackResult.resultArray;
+					var newPatternArray = A3(
+						$elm_community$array_extra$Array$Extra$map2,
+						F2(
+							function (patternTuple, result) {
+								return $author$project$Logic$App$PatternList$PatternArray$updateDrawingColors(
+									_Utils_Tuple2(
+										A2($author$project$Logic$App$PatternList$PatternArray$applyColorToPatternFromResult, patternTuple.a, result),
+										patternTuple.b));
+							}),
+						newUncoloredPatternArray,
+						resultArray);
+					return A2(
+						$author$project$Main$update,
+						$author$project$Logic$App$Msg$SetTimelineIndex(
+							$elm$core$Array$length(stackResult.timeline) + 1),
+						$author$project$Logic$App$Grid$sortPatterns(
+							_Utils_update(
+								model,
+								{
+									castingContext: stackResult.ctx,
+									grid: _Utils_update(
+										grid,
+										{
+											points: A5($author$project$Components$App$Grid$updateGridPoints, grid.width, grid.height, newPatternArray, _List_Nil, settings.gridScale)
 										}),
-									model.ui.patternElementMiddleLocations))))).a;
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							mousePos: mousePos,
-							ui: _Utils_update(
-								ui,
-								{mouseOverElementIndex: closestElementToMouseY})
-						}),
-					$elm$core$Platform$Cmd$none);
-			case 'Drag':
-				var event = msg.a;
-				var mouseEvent = event.mouseEvent;
-				var mousePos = mouseEvent.clientPos;
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{mousePos: mousePos}),
-					$elm$core$Platform$Cmd$none);
-			case 'Drop':
-				var originIndex = model.ui.dragging.b;
-				var index = (_Utils_cmp(model.ui.mouseOverElementIndex, originIndex) > 0) ? (model.ui.mouseOverElementIndex - 1) : model.ui.mouseOverElementIndex;
-				var newUncoloredPatternArray = function () {
-					var _v8 = A2($elm$core$Array$get, originIndex, patternArray);
-					if (_v8.$ === 'Just') {
-						var element = _v8.a;
-						return A3(
-							$elm_community$array_extra$Array$Extra$insertAt,
-							index,
-							element,
-							A3($author$project$Logic$App$Utils$Utils$removeFromArray, originIndex, originIndex + 1, model.patternArray));
-					} else {
-						return patternArray;
-					}
-				}();
-				var stackResult = A3(
-					$author$project$Logic$App$Stack$EvalStack$applyPatternsToStack,
-					$elm$core$Array$empty,
-					castingContext,
-					$elm$core$List$reverse(
-						$elm$core$List$unzip(
-							$elm$core$Array$toList(newUncoloredPatternArray)).a));
-				var newStack = stackResult.stack;
-				var resultArray = stackResult.resultArray;
-				var newPatternArray = A3(
-					$elm_community$array_extra$Array$Extra$map2,
-					F2(
-						function (patternTuple, result) {
-							return $author$project$Logic$App$PatternList$PatternArray$updateDrawingColors(
-								_Utils_Tuple2(
-									A2($author$project$Logic$App$PatternList$PatternArray$applyColorToPatternFromResult, patternTuple.a, result),
-									patternTuple.b));
-						}),
-					newUncoloredPatternArray,
-					resultArray);
-				return A2(
-					$author$project$Main$update,
-					$author$project$Logic$App$Msg$SetTimelineIndex(
-						$elm$core$Array$length(stackResult.timeline) + 1),
-					$author$project$Logic$App$Grid$sortPatterns(
+									patternArray: newPatternArray,
+									stack: newStack,
+									timeline: A2(
+										$author$project$Logic$App$Utils$Utils$unshift,
+										{patternIndex: -1, stack: $elm$core$Array$empty},
+										stackResult.timeline),
+									ui: _Utils_update(
+										ui,
+										{
+											dragging: _Utils_Tuple2(false, -1),
+											mouseOverElementIndex: -1
+										})
+								})));
+				case 'SetFocus':
+					var id = msg.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								ui: _Utils_update(
+									ui,
+									{selectedInputID: id})
+							}),
+						$elm$core$Platform$Cmd$none);
+				case 'RecieveMouseOverHandle':
+					var bool = msg.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								ui: _Utils_update(
+									ui,
+									{overDragHandle: bool})
+							}),
+						$elm$core$Platform$Cmd$none);
+				case 'ChangeHeldItem':
+					var itemString = msg.a;
+					var item = function () {
+						switch (itemString) {
+							case 'Trinket':
+								return $author$project$Logic$App$Types$Trinket;
+							case 'Cypher':
+								return $author$project$Logic$App$Types$Cypher;
+							case 'Artifact':
+								return $author$project$Logic$App$Types$Artifact;
+							case 'Spellbook':
+								return $author$project$Logic$App$Types$Spellbook;
+							case 'Focus':
+								return $author$project$Logic$App$Types$Focus;
+							case 'Pie':
+								return $author$project$Logic$App$Types$Pie;
+							default:
+								return $author$project$Logic$App$Types$NoItem;
+						}
+					}();
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								castingContext: _Utils_update(
+									castingContext,
+									{heldItem: item, heldItemContent: $elm$core$Maybe$Nothing})
+							}),
+						$elm$core$Platform$Cmd$none);
+				case 'RequestGridDrawingAsGIF':
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{downloadSrc: ''}),
+						$author$project$Ports$GetGridDrawingAsGif$requestGIF(_Utils_Tuple0));
+				case 'RecieveGridDrawingAsGIF':
+					var src = msg.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{downloadSrc: src}),
+						$elm$file$File$Download$url(src));
+				case 'RequestGridDrawingAsImage':
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{downloadSrc: ''}),
+						$author$project$Ports$GetGridDrawingAsImage$requestImage(_Utils_Tuple0));
+				case 'RecieveGridDrawingAsImage':
+					var src = msg.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{downloadSrc: src}),
+						$elm$file$File$Download$url(src));
+				case 'UpdatePatternOuptut':
+					var index = msg.a;
+					var replacementPattern = msg.b;
+					var newUncoloredPatternArray = A3(
+						$elm_community$array_extra$Array$Extra$update,
+						index,
+						function (patternTuple) {
+							var d = patternTuple.b;
+							return _Utils_Tuple2(replacementPattern, d);
+						},
+						model.patternArray);
+					var stackResult = A3(
+						$author$project$Logic$App$Stack$EvalStack$applyPatternsToStack,
+						$elm$core$Array$empty,
+						castingContext,
+						$elm$core$List$reverse(
+							$elm$core$List$unzip(
+								$elm$core$Array$toList(newUncoloredPatternArray)).a));
+					var resultArray = stackResult.resultArray;
+					var newStack = stackResult.stack;
+					var newPatternArray = A3(
+						$elm_community$array_extra$Array$Extra$map2,
+						F2(
+							function (patternTuple, result) {
+								return $author$project$Logic$App$PatternList$PatternArray$updateDrawingColors(
+									_Utils_Tuple2(
+										A2($author$project$Logic$App$PatternList$PatternArray$applyColorToPatternFromResult, patternTuple.a, result),
+										patternTuple.b));
+							}),
+						newUncoloredPatternArray,
+						resultArray);
+					return A2(
+						$author$project$Main$update,
+						$author$project$Logic$App$Msg$SetTimelineIndex(
+							$elm$core$Array$length(stackResult.timeline) + 1),
 						_Utils_update(
 							model,
 							{
@@ -14140,263 +14578,165 @@ var $author$project$Main$update = F2(
 								timeline: A2(
 									$author$project$Logic$App$Utils$Utils$unshift,
 									{patternIndex: -1, stack: $elm$core$Array$empty},
-									stackResult.timeline),
+									stackResult.timeline)
+							}));
+				case 'SetInsertionPoint':
+					var index = msg.a;
+					var keys = msg.b;
+					return keys.shift ? (_Utils_eq(model.insertionPoint, index) ? _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{insertionPoint: 0}),
+						$elm$core$Platform$Cmd$none) : _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{insertionPoint: index}),
+						$elm$core$Platform$Cmd$none)) : _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+				case 'SetImportInputValue':
+					var string = msg.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
 								ui: _Utils_update(
 									ui,
-									{
-										dragging: _Utils_Tuple2(false, -1),
-										mouseOverElementIndex: -1
-									})
-							})));
-			case 'SetFocus':
-				var id = msg.a;
-				return _Utils_Tuple2(
-					_Utils_update(
+									{importInput: string})
+							}),
+						$elm$core$Platform$Cmd$none);
+				case 'ImportText':
+					var string = msg.a;
+					var importQueue = $author$project$Logic$App$ImportExport$ImportParser$parseInput(string);
+					return $author$project$Main$updatePatternArrayFromQueue(
+						_Utils_update(
+							model,
+							{
+								importQueue: importQueue,
+								ui: _Utils_update(
+									ui,
+									{importInput: '', openOverlay: $author$project$Logic$App$Types$NoOverlay})
+							}));
+				case 'ViewOverlay':
+					var overlay = msg.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								ui: _Utils_update(
+									ui,
+									{openOverlay: overlay})
+							}),
+						$elm$core$Platform$Cmd$none);
+				case 'Download':
+					var string = msg.a;
+					return _Utils_Tuple2(
 						model,
-						{
-							ui: _Utils_update(
-								ui,
-								{selectedInputID: id})
-						}),
-					$elm$core$Platform$Cmd$none);
-			case 'RecieveMouseOverHandle':
-				var bool = msg.a;
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							ui: _Utils_update(
-								ui,
-								{overDragHandle: bool})
-						}),
-					$elm$core$Platform$Cmd$none);
-			case 'ChangeHeldItem':
-				var itemString = msg.a;
-				var item = function () {
-					switch (itemString) {
-						case 'Trinket':
-							return $author$project$Logic$App$Types$Trinket;
-						case 'Cypher':
-							return $author$project$Logic$App$Types$Cypher;
-						case 'Artifact':
-							return $author$project$Logic$App$Types$Artifact;
-						case 'Spellbook':
-							return $author$project$Logic$App$Types$Spellbook;
-						case 'Focus':
-							return $author$project$Logic$App$Types$Focus;
-						case 'Pie':
-							return $author$project$Logic$App$Types$Pie;
-						default:
-							return $author$project$Logic$App$Types$NoItem;
-					}
-				}();
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							castingContext: _Utils_update(
-								castingContext,
-								{heldItem: item, heldItemContent: $elm$core$Maybe$Nothing})
-						}),
-					$elm$core$Platform$Cmd$none);
-			case 'RequestGridDrawingAsGIF':
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{downloadSrc: ''}),
-					$author$project$Ports$GetGridDrawingAsGif$requestGIF(_Utils_Tuple0));
-			case 'RecieveGridDrawingAsGIF':
-				var src = msg.a;
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{downloadSrc: src}),
-					$elm$file$File$Download$url(src));
-			case 'RequestGridDrawingAsImage':
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{downloadSrc: ''}),
-					$author$project$Ports$GetGridDrawingAsImage$requestImage(_Utils_Tuple0));
-			case 'RecieveGridDrawingAsImage':
-				var src = msg.a;
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{downloadSrc: src}),
-					$elm$file$File$Download$url(src));
-			case 'UpdatePatternOuptut':
-				var index = msg.a;
-				var replacementPattern = msg.b;
-				var newUncoloredPatternArray = A3(
-					$elm_community$array_extra$Array$Extra$update,
-					index,
-					function (patternTuple) {
-						var d = patternTuple.b;
-						return _Utils_Tuple2(replacementPattern, d);
-					},
-					model.patternArray);
-				var stackResult = A3(
-					$author$project$Logic$App$Stack$EvalStack$applyPatternsToStack,
-					$elm$core$Array$empty,
-					castingContext,
-					$elm$core$List$reverse(
-						$elm$core$List$unzip(
-							$elm$core$Array$toList(newUncoloredPatternArray)).a));
-				var resultArray = stackResult.resultArray;
-				var newStack = stackResult.stack;
-				var newPatternArray = A3(
-					$elm_community$array_extra$Array$Extra$map2,
-					F2(
-						function (patternTuple, result) {
-							return $author$project$Logic$App$PatternList$PatternArray$updateDrawingColors(
-								_Utils_Tuple2(
-									A2($author$project$Logic$App$PatternList$PatternArray$applyColorToPatternFromResult, patternTuple.a, result),
-									patternTuple.b));
-						}),
-					newUncoloredPatternArray,
-					resultArray);
-				return A2(
-					$author$project$Main$update,
-					$author$project$Logic$App$Msg$SetTimelineIndex(
-						$elm$core$Array$length(stackResult.timeline) + 1),
-					_Utils_update(
-						model,
-						{
-							castingContext: stackResult.ctx,
-							grid: _Utils_update(
-								grid,
-								{
-									points: A5($author$project$Components$App$Grid$updateGridPoints, grid.width, grid.height, newPatternArray, _List_Nil, settings.gridScale)
-								}),
-							patternArray: newPatternArray,
-							stack: newStack,
-							timeline: A2(
-								$author$project$Logic$App$Utils$Utils$unshift,
-								{patternIndex: -1, stack: $elm$core$Array$empty},
-								stackResult.timeline)
-						}));
-			case 'SetInsertionPoint':
-				var index = msg.a;
-				var keys = msg.b;
-				return keys.shift ? (_Utils_eq(model.insertionPoint, index) ? _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{insertionPoint: 0}),
-					$elm$core$Platform$Cmd$none) : _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{insertionPoint: index}),
-					$elm$core$Platform$Cmd$none)) : _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
-			case 'SetImportInputValue':
-				var string = msg.a;
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							ui: _Utils_update(
-								ui,
-								{importInput: string})
-						}),
-					$elm$core$Platform$Cmd$none);
-			case 'ImportText':
-				var string = msg.a;
-				var importQueue = $author$project$Logic$App$ImportExport$ImportParser$parseInput(string);
-				return $author$project$Main$updatePatternArrayFromQueue(
-					_Utils_update(
-						model,
-						{
-							importQueue: importQueue,
-							ui: _Utils_update(
-								ui,
-								{importInput: '', openOverlay: $author$project$Logic$App$Types$NoOverlay})
-						}));
-			case 'ViewOverlay':
-				var overlay = msg.a;
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							ui: _Utils_update(
-								ui,
-								{openOverlay: overlay})
-						}),
-					$elm$core$Platform$Cmd$none);
-			case 'Download':
-				var string = msg.a;
-				return _Utils_Tuple2(
-					model,
-					A3($elm$file$File$Download$string, 'Hex.hexcasting', 'text/plain', string));
-			default:
-				var index = msg.a;
-				var timeline = ($elm$core$Array$length(model.timeline) < 2) ? A2(
-					$elm$core$Array$repeat,
-					2,
-					{patternIndex: -1, stack: $elm$core$Array$empty}) : model.timeline;
-				var timelinePatternIndex = (index >= 0) ? A2(
-					$elm$core$Maybe$withDefault,
-					$elm$core$Array$length(timeline),
-					A2(
-						$elm$core$Maybe$andThen,
-						function (x) {
-							return $elm$core$Maybe$Just(x.patternIndex);
-						},
+						A3($elm$file$File$Download$string, 'Hex.hexcasting', 'text/plain', string));
+				case 'SetTimelineIndex':
+					var index = msg.a;
+					var timeline = ($elm$core$Array$length(model.timeline) < 2) ? A2(
+						$elm$core$Array$repeat,
+						2,
+						{patternIndex: -1, stack: $elm$core$Array$empty}) : model.timeline;
+					var timelinePatternIndex = (index >= 0) ? A2(
+						$elm$core$Maybe$withDefault,
+						$elm$core$Array$length(timeline),
 						A2(
-							$elm$core$Array$get,
-							index,
-							$elm_community$array_extra$Array$Extra$reverse(timeline)))) : (-1);
-				var newPatternArray = $elm_community$array_extra$Array$Extra$reverse(
-					$elm$core$Array$fromList(
-						A2(
-							$elm$core$List$map,
-							function (indexTuple) {
-								var patternIndex = indexTuple.a;
-								var tuple = indexTuple.b;
-								return $author$project$Logic$App$PatternList$PatternArray$updateDrawingColors(
-									function () {
-										var pat = tuple.a;
-										var draw = tuple.b;
-										return (_Utils_cmp(timelinePatternIndex, patternIndex) < 0) ? _Utils_Tuple2(
-											_Utils_update(
-												pat,
-												{active: false}),
-											draw) : _Utils_Tuple2(
-											_Utils_update(
-												pat,
-												{active: true}),
-											draw);
-									}());
+							$elm$core$Maybe$andThen,
+							function (x) {
+								return $elm$core$Maybe$Just(x.patternIndex);
 							},
-							$elm$core$Array$toIndexedList(
-								$elm_community$array_extra$Array$Extra$reverse(model.patternArray)))));
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							grid: _Utils_update(
-								grid,
-								{
-									drawnPoints: $author$project$Components$App$Grid$generateDrawnPointsListFromPatternArray(newPatternArray),
-									points: A5($author$project$Components$App$Grid$updateUsedGridPoints, grid.width, grid.height, newPatternArray, _List_Nil, settings.gridScale)
-								}),
-							patternArray: newPatternArray,
-							stack: _Utils_eq(
+							A2(
+								$elm$core$Array$get,
 								index,
-								$elm$core$Array$length(timeline)) ? model.stack : A2(
-								$elm$core$Maybe$withDefault,
-								$elm$core$Array$empty,
-								A2(
-									$elm$core$Maybe$andThen,
-									function (x) {
-										return $elm$core$Maybe$Just(x.stack);
-									},
+								$elm_community$array_extra$Array$Extra$reverse(timeline)))) : (-1);
+					var newPatternArray = $elm_community$array_extra$Array$Extra$reverse(
+						$elm$core$Array$fromList(
+							A2(
+								$elm$core$List$map,
+								function (indexTuple) {
+									var patternIndex = indexTuple.a;
+									var tuple = indexTuple.b;
+									return $author$project$Logic$App$PatternList$PatternArray$updateDrawingColors(
+										function () {
+											var pat = tuple.a;
+											var draw = tuple.b;
+											return (_Utils_cmp(timelinePatternIndex, patternIndex) < 0) ? _Utils_Tuple2(
+												_Utils_update(
+													pat,
+													{active: false}),
+												draw) : _Utils_Tuple2(
+												_Utils_update(
+													pat,
+													{active: true}),
+												draw);
+										}());
+								},
+								$elm$core$Array$toIndexedList(
+									$elm_community$array_extra$Array$Extra$reverse(model.patternArray)))));
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								grid: _Utils_update(
+									grid,
+									{
+										drawnPoints: $author$project$Components$App$Grid$generateDrawnPointsListFromPatternArray(newPatternArray),
+										points: A5($author$project$Components$App$Grid$updateUsedGridPoints, grid.width, grid.height, newPatternArray, _List_Nil, settings.gridScale)
+									}),
+								patternArray: newPatternArray,
+								stack: _Utils_eq(
+									index,
+									$elm$core$Array$length(timeline)) ? model.stack : A2(
+									$elm$core$Maybe$withDefault,
+									$elm$core$Array$empty,
 									A2(
-										$elm$core$Array$get,
-										index,
-										$elm_community$array_extra$Array$Extra$reverse(timeline)))),
-							timelineIndex: index
-						}),
-					$elm$core$Platform$Cmd$none);
+										$elm$core$Maybe$andThen,
+										function (x) {
+											return $elm$core$Maybe$Just(x.stack);
+										},
+										A2(
+											$elm$core$Array$get,
+											index,
+											$elm_community$array_extra$Array$Extra$reverse(timeline)))),
+								timelineIndex: index
+							}),
+						$elm$core$Platform$Cmd$none);
+				default:
+					var event = msg.a;
+					var timeline = ($elm$core$Array$length(model.timeline) < 2) ? A2(
+						$elm$core$Array$repeat,
+						2,
+						{patternIndex: -1, stack: $elm$core$Array$empty}) : model.timeline;
+					if (event.altKey && _Utils_eq(
+						event.key,
+						$elm$core$Maybe$Just('ArrowRight'))) {
+						var $temp$msg = $author$project$Logic$App$Msg$SetTimelineIndex(
+							A2(
+								$elm$core$Basics$min,
+								$elm$core$Array$length(timeline) - 2,
+								model.timelineIndex + 1)),
+							$temp$model = model;
+						msg = $temp$msg;
+						model = $temp$model;
+						continue update;
+					} else {
+						if (event.altKey && _Utils_eq(
+							event.key,
+							$elm$core$Maybe$Just('ArrowLeft'))) {
+							var $temp$msg = $author$project$Logic$App$Msg$SetTimelineIndex(
+								A2(
+									$elm$core$Basics$min,
+									$elm$core$Array$length(timeline) - 3,
+									A2($elm$core$Basics$max, -1, model.timelineIndex - 1))),
+								$temp$model = model;
+							msg = $temp$msg;
+							model = $temp$model;
+							continue update;
+						} else {
+							return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+						}
+					}
+			}
 		}
 	});
 var $author$project$Main$updatePatternArrayFromQueue = function (model) {
@@ -15870,7 +16210,6 @@ var $author$project$Logic$App$Msg$SetFocus = function (a) {
 var $author$project$Logic$App$Msg$UpdatePatternInputField = function (a) {
 	return {$: 'UpdatePatternInputField', a: a};
 };
-var $elm$json$Json$Decode$andThen = _Json_andThen;
 var $author$project$Logic$App$Msg$DragOver = F2(
 	function (a, b) {
 		return {$: 'DragOver', a: a, b: b};
@@ -15888,7 +16227,6 @@ var $author$project$Components$App$Panels$PatternPanel$dropTargetConfig = {
 	onLeave: $elm$core$Maybe$Nothing,
 	onOver: $author$project$Logic$App$Msg$DragOver
 };
-var $elm$json$Json$Decode$fail = _Json_fail;
 var $elm$html$Html$input = _VirtualDom_node('input');
 var $elm$html$Html$Events$keyCode = A2($elm$json$Json$Decode$field, 'keyCode', $elm$json$Json$Decode$int);
 var $elm$html$Html$Events$onBlur = function (msg) {

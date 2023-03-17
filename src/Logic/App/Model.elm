@@ -6,6 +6,7 @@ import Logic.App.Types exposing (Grid)
 import Logic.App.Msg exposing (Msg)
 import Logic.App.Types exposing (Overlay)
 import Logic.App.Types exposing (Timeline)
+import Keyboard.Event exposing (KeyboardEvent)
 
 
 type alias Model =
@@ -40,4 +41,5 @@ type alias Model =
     , importQueue : List (Pattern, Cmd Msg)
     , timeline : Timeline
     , timelineIndex : Int
+    , lastEvent : Maybe KeyboardEvent
     }

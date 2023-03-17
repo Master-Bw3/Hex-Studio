@@ -10,7 +10,8 @@ import Components.App.Grid exposing (..)
 import File.Download as Download
 import Html exposing (..)
 import Json.Decode exposing (Decoder)
-import Logic.App.Grid exposing (drawPattern, drawPatterns)
+import Keyboard.Event exposing (KeyboardEvent, decodeKeyboardEvent)
+import Logic.App.Grid exposing (drawPattern, drawPatterns, sortPatterns)
 import Logic.App.ImportExport.ImportParser exposing (parseInput)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (..)
@@ -31,7 +32,6 @@ import Settings.Theme exposing (..)
 import String exposing (fromInt)
 import Task
 import Time
-import Logic.App.Grid exposing (sortPatterns)
 
 
 main =
@@ -89,6 +89,7 @@ init _ =
       , importQueue = []
       , timeline = Array.empty
       , timelineIndex = 0
+      , lastEvent = Nothing
       }
     , Cmd.batch [ Task.attempt GetGrid (getElement "hex_grid"), Task.attempt GetContentSize (getElement "content") ]
     )
@@ -136,7 +137,6 @@ updatePatternArrayFromQueue model =
 
             drawPatternsResult =
                 drawPatterns patterns model.grid
-
         in
         if command == Cmd.none then
             updatePatternArrayFromQueue <|
@@ -344,7 +344,7 @@ update msg model =
                 }
 
         SetGridScale scale ->
-            (sortPatterns { model | grid = { grid | points = updateGridPoints grid.width grid.height model.patternArray [] scale }, settings = { settings | gridScale = scale } }, Cmd.none)
+            ( sortPatterns { model | grid = { grid | points = updateGridPoints grid.width grid.height model.patternArray [] scale }, settings = { settings | gridScale = scale } }, Cmd.none )
 
         WindowResize ->
             ( model, Cmd.batch [ Task.attempt GetGrid (getElement "hex_grid"), Task.attempt GetContentSize (getElement "content") ] )
@@ -555,14 +555,14 @@ update msg model =
             in
             update (SetTimelineIndex (Array.length stackResult.timeline + 1)) <|
                 sortPatterns
-                { model
-                    | ui = { ui | mouseOverElementIndex = -1, dragging = ( False, -1 ) }
-                    , patternArray = newPatternArray
-                    , grid = { grid | points = updateGridPoints grid.width grid.height newPatternArray [] settings.gridScale }
-                    , stack = newStack
-                    , castingContext = stackResult.ctx
-                    , timeline = unshift { stack = Array.empty, patternIndex = -1 } stackResult.timeline
-                }
+                    { model
+                        | ui = { ui | mouseOverElementIndex = -1, dragging = ( False, -1 ) }
+                        , patternArray = newPatternArray
+                        , grid = { grid | points = updateGridPoints grid.width grid.height newPatternArray [] settings.gridScale }
+                        , stack = newStack
+                        , castingContext = stackResult.ctx
+                        , timeline = unshift { stack = Array.empty, patternIndex = -1 } stackResult.timeline
+                    }
 
         SetFocus id ->
             ( { model | ui = { ui | selectedInputID = id } }, Cmd.none )
@@ -733,6 +733,24 @@ update msg model =
             , Cmd.none
             )
 
+        HandleKeyboardEvent event ->
+            let
+                timeline =
+                    if Array.length model.timeline < 2 then
+                        Array.repeat 2 { stack = Array.empty, patternIndex = -1 }
+
+                    else
+                        model.timeline
+            in
+            if event.altKey == True && event.key == Just "ArrowRight" then
+                update (SetTimelineIndex <| min (Array.length timeline - 2) <| model.timelineIndex + 1) model
+
+            else if event.altKey == True && event.key == Just "ArrowLeft" then
+                update (SetTimelineIndex <| min (Array.length timeline - 3) <| max -1 <| model.timelineIndex - 1) model
+
+            else
+                ( model, Cmd.none )
+
 
 
 -- argg : List (List (GridPoint)) -> (Float, Float) -> List (List (GridPoint))
@@ -746,7 +764,7 @@ subscriptions model =
     Sub.batch
         [ Browser.Events.onResize (\_ _ -> WindowResize)
         , Time.every 100 Tick
-        , Browser.Events.onKeyDown (keyDecoder model)
+        , Browser.Events.onKeyDown (Json.Decode.map HandleKeyboardEvent decodeKeyboardEvent)
         , HexNumGen.recieveNumber RecieveGeneratedNumberLiteral
         , GetElementBoundingBoxById.recieveBoundingBox (Json.Decode.decodeValue locationDecoder >> RecieveInputBoundingBox)
         , GetElementBoundingBoxById.recieveBoundingBoxes (List.map (Json.Decode.decodeValue locationDecoder) >> RecieveInputBoundingBoxes)
@@ -754,32 +772,6 @@ subscriptions model =
         , GetGridDrawingAsGif.recieveGIF RecieveGridDrawingAsGIF
         , GetGridDrawingAsImage.recieveImage RecieveGridDrawingAsImage
         ]
-
-
-keyDecoder : Model -> Json.Decode.Decoder Msg
-keyDecoder model =
-    Json.Decode.map (keyPressHandler model) (Json.Decode.field "key" Json.Decode.string)
-
-
-keyPressHandler model keyValue =
-    let
-        timeline =
-            if Array.length model.timeline < 2 then
-                Array.repeat 2 { stack = Array.empty, patternIndex = -1 }
-
-            else
-                model.timeline
-    in
-    case keyValue of
-        "ArrowLeft" ->
-            --idk where these weird constants are coming from either
-            SetTimelineIndex <| min (Array.length timeline - 3) <| max -1 <| model.timelineIndex - 1
-
-        "ArrowRight" ->
-            SetTimelineIndex <| min (Array.length timeline - 2) <| model.timelineIndex + 1
-
-        _ ->
-            NoOp
 
 
 mouseMoveDecoder : Decoder MouseMoveData

@@ -9,6 +9,7 @@ import Html.Events.Extra.Drag as Drag
 import Json.Decode exposing (Value)
 import Logic.App.Types exposing (Pattern)
 import Logic.App.Types exposing (Overlay)
+import Keyboard.Event exposing (KeyboardEvent)
 
 type Msg
     = NoOp
@@ -51,6 +52,7 @@ type Msg
     | ViewOverlay Overlay
     | Download String
     | SetTimelineIndex Int
+    | HandleKeyboardEvent KeyboardEvent
 
 type alias MouseMoveData =
     { pageX : Int
