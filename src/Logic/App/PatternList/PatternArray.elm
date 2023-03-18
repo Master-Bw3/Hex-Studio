@@ -2,9 +2,11 @@ module Logic.App.PatternList.PatternArray exposing (addToPatternArray, applyColo
 
 import Array exposing (Array)
 import Array.Extra as Array
+import Dict exposing (Dict)
 import Html.Attributes exposing (name)
 import Logic.App.Model exposing (Model)
-import Logic.App.Types exposing (ApplyToStackResult(..), GridPoint, Pattern)
+import Logic.App.Patterns.PatternRegistry exposing (getPatternFromName, getPatternFromSignature)
+import Logic.App.Types exposing (ApplyToStackResult(..), Direction, GridPoint, Iota, Pattern)
 import Ports.HexNumGen as HexNumGen
 import Settings.Theme exposing (accent1, accent4, accent5)
 
@@ -12,7 +14,7 @@ import Settings.Theme exposing (accent1, accent4, accent5)
 addToPatternArray : Model -> Pattern -> Int -> Array ( Pattern, List GridPoint )
 addToPatternArray model pattern index =
     let
-        patternList =
+        patternArray =
             model.patternArray
 
         drawing =
@@ -21,7 +23,7 @@ addToPatternArray model pattern index =
         patternDrawingPair =
             ( pattern, drawing.activePath )
     in
-    Array.insertAt index (updateDrawingColors patternDrawingPair) patternList
+    Array.insertAt index (updateDrawingColors patternDrawingPair) patternArray
 
 
 updateDrawingColors : ( Pattern, List GridPoint ) -> ( Pattern, List GridPoint )

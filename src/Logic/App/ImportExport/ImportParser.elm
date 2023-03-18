@@ -8,14 +8,14 @@ import Regex
 import String exposing (String)
 
 
-parseInput input savedIotas =
+parseInput input macros =
     let
         getPatternFromString string =
             if string == "{" then
-                getPatternFromName (Just savedIotas) "open_paren"
+                getPatternFromName (Just macros) "open_paren"
 
             else if string == "}" then
-                getPatternFromName (Just savedIotas) "close_paren"
+                getPatternFromName (Just macros) "close_paren"
 
             else if Regex.contains numberValuePattern string then
                 Regex.find numberValuePattern string
@@ -24,7 +24,7 @@ parseInput input savedIotas =
                     |> Maybe.withDefault ""
                     |> String.dropLeft 1
                     |> String.trim
-                    |> getPatternFromName (Just savedIotas)
+                    |> getPatternFromName (Just macros)
 
             else if Regex.contains bookkeepersValuePattern string then
                 Regex.find bookkeepersValuePattern string
@@ -33,10 +33,10 @@ parseInput input savedIotas =
                     |> Maybe.withDefault ""
                     |> String.dropLeft 1
                     |> String.trim
-                    |> getPatternFromName (Just savedIotas)
+                    |> getPatternFromName (Just macros)
 
             else
-                getPatternFromName (Just savedIotas) string
+                getPatternFromName (Just macros) string
     in
     input
         |> String.split "\n"

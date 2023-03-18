@@ -44,7 +44,7 @@ unknownPattern =
 
 
 getPatternFromSignature : Maybe (Dict String ( String, Direction, Iota )) -> String -> Pattern
-getPatternFromSignature maybeSavedIotas signature =
+getPatternFromSignature maybeMacros signature =
     case List.head <| List.filter (\regPattern -> regPattern.signature == signature) patternRegistry of
         Just a ->
             a
@@ -65,15 +65,15 @@ getPatternFromSignature maybeSavedIotas signature =
                     parseBookkeeperResult
 
                 else
-                    case maybeSavedIotas of
-                        Just savedIotas ->
-                            case Dict.get signature savedIotas of
+                    case maybeMacros of
+                        Just macros ->
+                            case Dict.get signature macros of
                                 Just value ->
                                     case value of
-                                        ( displayName, direction, iota ) ->
+                                        ( displayName, direction, _ ) ->
                                             { signature = signature
-                                            , internalName = "mask"
-                                            , action = makeConstant iota
+                                            , internalName = ""
+                                            , action = noAction
                                             , metaAction = None
                                             , displayName = displayName
                                             , color = accent1
@@ -91,7 +91,7 @@ getPatternFromSignature maybeSavedIotas signature =
 
 
 getPatternFromName : Maybe (Dict String ( String, Direction, Iota )) -> String -> ( Pattern, Cmd msg )
-getPatternFromName maybeSavedIotas name =
+getPatternFromName maybeMacros name =
     case List.head <| List.filter (\regPattern -> regPattern.displayName == name || regPattern.internalName == name || regPattern.signature == name) patternRegistry of
         Just a ->
             ( a, Cmd.none )
@@ -129,15 +129,15 @@ getPatternFromName maybeSavedIotas name =
                         )
 
                     else
-                        case maybeSavedIotas of
-                            Just savedIotas ->
-                                case Dict.get name savedIotas of
+                        case maybeMacros of
+                            Just macros ->
+                                case Dict.get name macros of
                                     Just value ->
                                         case value of
-                                            ( displayName, direction, iota ) ->
+                                            ( displayName, direction, _ ) ->
                                                 ( { signature = name
-                                                  , internalName = "mask"
-                                                  , action = makeConstant iota
+                                                  , internalName = ""
+                                                  , action = noAction
                                                   , metaAction = None
                                                   , displayName = displayName
                                                   , color = accent1
@@ -151,14 +151,14 @@ getPatternFromName maybeSavedIotas name =
 
                                     Nothing ->
                                         if Regex.contains Logic.App.Utils.RegexPatterns.angleSignaturePattern name then
-                                            ( getPatternFromSignature maybeSavedIotas name, Cmd.none )
+                                            ( getPatternFromSignature maybeMacros name, Cmd.none )
 
                                         else
                                             ( unknownPattern, Cmd.none )
 
                             Nothing ->
                                 if Regex.contains Logic.App.Utils.RegexPatterns.angleSignaturePattern name then
-                                    ( getPatternFromSignature maybeSavedIotas name, Cmd.none )
+                                    ( getPatternFromSignature maybeMacros name, Cmd.none )
 
                                 else
                                     ( unknownPattern, Cmd.none )
@@ -427,7 +427,7 @@ patternRegistry =
     , { signature = "eee", internalName = "close_paren", action = noAction, displayName = "Retrospection", outputOptions = [], selectedOutput = Nothing, startDirection = East }
     , { signature = "deaqq", internalName = "eval", action = noAction, displayName = "Hermes' Gambit", outputOptions = [], selectedOutput = Nothing, startDirection = Southeast }
     , { signature = "dadad", internalName = "for_each", action = noAction, displayName = "Thoth's Gambit", outputOptions = [], selectedOutput = Nothing, startDirection = Northeast }
-    , { signature = "awaawa", internalName = "save_iota", action = saveIota, displayName = "Save Iota", outputOptions = [], selectedOutput = Nothing, startDirection = Southeast }
+    , { signature = "awaawa", internalName = "save_macro", action = saveMacro, displayName = "Save Macro", outputOptions = [], selectedOutput = Nothing, startDirection = Southeast }
     ]
         |> List.map
             (\pattern ->

@@ -1,4 +1,4 @@
-module Components.App.Panels.LibraryPanel exposing (..)
+module Components.App.Panels.MacroPanel exposing (..)
 
 import Array exposing (Array)
 import Components.App.Panels.Utils exposing (visibilityToDisplayStyle)
@@ -25,8 +25,8 @@ libraryPanel model =
         visibility =
             List.member LibraryPanel model.ui.openPanels
     in
-    div [ id "library_panel", class "panel", visibilityToDisplayStyle visibility ]
-        (h1 [ class "panel_title" ] [ text "Saved Iotas" ]
+    div [ id "macro_panel", class "panel", visibilityToDisplayStyle visibility ]
+        (h1 [ class "panel_title" ] [ text "Macros" ]
             :: renderDict model
         )
 
@@ -51,7 +51,7 @@ renderDict model =
                             :: renderIotaBox iota
                         )
     in
-    Dict.map renderEntry model.castingContext.savedIotas
+    Dict.map renderEntry model.castingContext.macros
         |> Dict.values
         |> List.intersperse (div [ class "divider" ] [])
 

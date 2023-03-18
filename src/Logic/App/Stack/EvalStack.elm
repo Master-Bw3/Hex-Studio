@@ -2,6 +2,7 @@ module Logic.App.Stack.EvalStack exposing (..)
 
 import Array exposing (Array)
 import Array.Extra as Array
+import Dict
 import List.Extra as List
 import Logic.App.Patterns.OperatorUtils exposing (getIotaList, getPatternList, getPatternOrIotaList, mapNothingToMissingIota, moveNothingsToFront)
 import Logic.App.Types exposing (ActionResult, ApplyToStackResult(..), CastingContext, Iota(..), IotaType(..), Mishap(..), Pattern, Timeline)
@@ -179,12 +180,19 @@ applyPatternToStack stack ctx pattern index =
                 else
                     { stack = addToIntroList, result = Considered, ctx = ctx, considerNext = False, timeline = Array.fromList [ { stack = addToIntroList, patternIndex = index } ] }
 
-            else if pattern.internalName == "open_paren" then
-                { stack = addToIntroList, result = Considered, ctx = ctx, considerNext = False, timeline = Array.fromList [ { stack = addToIntroList, patternIndex = index } ] }
-
             else
-                { stack = addToIntroList, result = Considered, ctx = ctx, considerNext = False, timeline = Array.fromList [ { stack = addToIntroList, patternIndex = index } ] }
+                case Dict.get pattern.signature ctx.macros of
+                    Just ( _, _, IotaList iotaList ) ->
+                        let
+                            newStack =
+                                Array.set 0 (OpenParenthesis (Array.append list iotaList)) stack
+                        in
+                        { stack = newStack, result = Considered, ctx = ctx, considerNext = False, timeline = Array.fromList [ { stack = newStack, patternIndex = index } ] }
 
+                    _ ->
+                        { stack = addToIntroList, result = Considered, ctx = ctx, considerNext = False, timeline = Array.fromList [ { stack = addToIntroList, patternIndex = index } ] }
+
+        -- if no intro on top \/
         _ ->
             if pattern.internalName == "escape" then
                 { stack = stack, result = Succeeded, ctx = ctx, considerNext = True, timeline = Array.fromList [ { stack = stack, patternIndex = index } ] }
@@ -237,23 +245,46 @@ applyPatternToStack stack ctx pattern index =
                     }
 
             else
-                let
-                    actionResult =
+                case Dict.get pattern.signature ctx.macros of
+                    Just ( _, _, iota ) ->
                         let
-                            preActionResult =
-                                pattern.action stack ctx
+                            actionResult =
+                                eval (unshift iota stack) ctx
                         in
-                        if preActionResult.success == True && isJust pattern.selectedOutput then
-                            { preActionResult | stack = unshift (Tuple.second <| Maybe.withDefault ( NullType, Null ) pattern.selectedOutput) preActionResult.stack }
+                        if actionResult.success == True then
+                            { stack = actionResult.stack
+                            , result = Succeeded
+                            , ctx = actionResult.ctx
+                            , considerNext = False
+                            , timeline = Array.map (\x -> { stack = x, patternIndex = index }) actionResult.allStackStates
+                            }
 
                         else
-                            preActionResult
-                in
-                if actionResult.success == True then
-                    { stack = actionResult.stack, result = Succeeded, ctx = actionResult.ctx, considerNext = False, timeline = Array.fromList [ { stack = actionResult.stack, patternIndex = index } ] }
+                            { stack = actionResult.stack
+                            , result = Failed
+                            , ctx = actionResult.ctx
+                            , considerNext = False
+                            , timeline = Array.map (\x -> { stack = x, patternIndex = index }) actionResult.allStackStates
+                            }
 
-                else
-                    { stack = actionResult.stack, result = Failed, ctx = actionResult.ctx, considerNext = False, timeline = Array.fromList [ { stack = actionResult.stack, patternIndex = index } ] }
+                    Nothing ->
+                        let
+                            actionResult =
+                                let
+                                    preActionResult =
+                                        pattern.action stack ctx
+                                in
+                                if preActionResult.success == True && isJust pattern.selectedOutput then
+                                    { preActionResult | stack = unshift (Tuple.second <| Maybe.withDefault ( NullType, Null ) pattern.selectedOutput) preActionResult.stack }
+
+                                else
+                                    preActionResult
+                        in
+                        if actionResult.success == True then
+                            { stack = actionResult.stack, result = Succeeded, ctx = actionResult.ctx, considerNext = False, timeline = Array.fromList [ { stack = actionResult.stack, patternIndex = index } ] }
+
+                        else
+                            { stack = actionResult.stack, result = Failed, ctx = actionResult.ctx, considerNext = False, timeline = Array.fromList [ { stack = actionResult.stack, patternIndex = index } ] }
 
 
 addEscapedIotaToStack : Array Iota -> Iota -> Array Iota

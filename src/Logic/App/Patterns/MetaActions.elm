@@ -7,7 +7,7 @@ import Dict
 import Logic.App.Grid exposing (drawPatterns)
 import Logic.App.Model exposing (Model)
 import Logic.App.PatternList.PatternArray exposing (applyColorToPatternFromResult, updateDrawingColors)
-import Logic.App.Patterns.PatternRegistry exposing (getPatternFromName)
+import Logic.App.Patterns.PatternRegistry exposing (getPatternFromName, unknownPattern)
 import Logic.App.Stack.EvalStack exposing (ApplyResult, applyPatternsToStack)
 import Logic.App.Types exposing (ApplyToStackResult(..), Iota(..), MetaActionMsg(..))
 import Logic.App.Utils.Utils exposing (unshift)
@@ -89,7 +89,7 @@ applyMetaAction model metaActionMsg =
             let
                 newUncoloredPatternArray =
                     model.patternArray
-                        |> Array.removeAt 0
+                        |> Array.removeAt model.insertionPoint
                         |> Array.push ( Tuple.first (getPatternFromName Nothing "open_paren"), [] )
                         |> unshift ( Tuple.first (getPatternFromName Nothing "close_paren"), [] )
 

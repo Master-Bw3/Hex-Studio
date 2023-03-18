@@ -48,7 +48,7 @@ menu model =
             , Icon.layerGroup |> Icon.styled [ Icon.sm ] |> Icon.view
             ]
         , button
-            ([ id "library_menu_button"
+            ([ id "macro_menu_button"
              , class "menu_button"
              , onClick (\event -> ViewPanel LibraryPanel event.keys)
              ]

@@ -83,7 +83,7 @@ init _ =
             { heldItem = NoItem
             , heldItemContent = Nothing
             , ravenmind = Nothing
-            , savedIotas = Dict.empty
+            , macros = Dict.empty
             }
       , time = 0
       , downloadSrc = ""
@@ -108,7 +108,7 @@ updatePatternArrayFromQueue model =
                 model.castingContext
 
             stackResult =
-                Debug.log "ok" <| applyPatternsToStack Array.empty castingContext (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern model.insertionPoint))
+                applyPatternsToStack Array.empty castingContext (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern model.insertionPoint))
 
             getPattern =
                 List.head model.importQueue
@@ -260,7 +260,7 @@ update msg model =
                             stackResult.resultArray
 
                         newPattern =
-                            getPatternFromSignature (Just model.castingContext.savedIotas) <| getAngleSignature drawing.activePath
+                            getPatternFromSignature (Just model.castingContext.macros) <| getAngleSignature drawing.activePath
 
                         newUncoloredPatternArray =
                             addToPatternArray
@@ -281,23 +281,25 @@ update msg model =
                                 | --points = updateGridPoints grid.width grid.height newPatternArray [] settings.gridScale,
                                   drawing = { drawing | drawingMode = False, activePath = [] }
                             }
-                    in
-                    update (SetTimelineIndex (Array.length stackResult.timeline + 1)) <|
-                        applyMetaAction
-                            { model
-                                | patternArray = newPatternArray
-                                , grid = newGrid
-                                , stack = newStack
-                                , castingContext = stackResult.ctx
-                                , timeline = unshift { stack = Array.empty, patternIndex = -1 } stackResult.timeline
-                                , insertionPoint =
-                                    if model.insertionPoint > Array.length model.patternArray then
-                                        0
 
-                                    else
-                                        model.insertionPoint
-                            }
-                            newPattern.metaAction
+                        newModel =
+                            applyMetaAction
+                                { model
+                                    | patternArray = newPatternArray
+                                    , grid = newGrid
+                                    , stack = newStack
+                                    , castingContext = stackResult.ctx
+                                    , timeline = unshift { stack = Array.empty, patternIndex = -1 } stackResult.timeline
+                                    , insertionPoint =
+                                        if model.insertionPoint > Array.length model.patternArray then
+                                            0
+
+                                        else
+                                            model.insertionPoint
+                                }
+                                newPattern.metaAction
+                    in
+                    update (SetTimelineIndex (Array.length newModel.timeline)) <| newModel
 
                 else
                     ( { model | grid = { grid | drawing = { drawing | drawingMode = False, activePath = [] } } }, Cmd.none )
@@ -384,7 +386,7 @@ update msg model =
             let
                 newImportQueue =
                     if name /= "" then
-                        getPatternFromName (Just model.castingContext.savedIotas) name :: model.importQueue
+                        getPatternFromName (Just model.castingContext.macros) name :: model.importQueue
 
                     else
                         model.importQueue
@@ -397,7 +399,7 @@ update msg model =
         RecieveGeneratedNumberLiteral signature ->
             let
                 newPattern =
-                    getPatternFromSignature (Just model.castingContext.savedIotas) signature
+                    getPatternFromSignature (Just model.castingContext.macros) signature
             in
             updatePatternArrayFromQueue
                 { model
@@ -665,7 +667,7 @@ update msg model =
         ImportText string ->
             let
                 importQueue =
-                    parseInput string model.castingContext.savedIotas
+                    parseInput string model.castingContext.macros
             in
             updatePatternArrayFromQueue { model | importQueue = importQueue, ui = { ui | openOverlay = NoOverlay, importInput = "" } }
 

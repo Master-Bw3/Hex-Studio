@@ -145,7 +145,7 @@ type alias CastingContext =
     { heldItem : HeldItem
     , heldItemContent : Maybe Iota
     , ravenmind : Maybe Iota
-    , savedIotas : Dict String ( String, Direction, Iota )
+    , macros : Dict String ( String, Direction, Iota )
     }
 
 
