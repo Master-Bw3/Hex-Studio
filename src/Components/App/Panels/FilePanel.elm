@@ -5,10 +5,10 @@ import Components.App.Panels.Utils exposing (visibilityToDisplayStyle)
 import Html exposing (..)
 import Html.Attributes exposing (alt, attribute, class, download, href, id, src, style)
 import Html.Events exposing (onClick, onInput)
+import Logic.App.ImportExport.ExportAsGiveCommand exposing (exportAsGiveCommand)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (Msg(..))
-import Logic.App.Types exposing (Iota(..), Panel(..))
-import Logic.App.Types exposing (Overlay(..))
+import Logic.App.Types exposing (Iota(..), Overlay(..), Panel(..))
 
 
 
@@ -67,10 +67,12 @@ saveExportPanel model =
         , visibilityToDisplayStyle visibility
         ]
         [ h1 [ class "panel_title" ] [ text "File" ]
+
         -- , button [ class "generic_button" ] [ text " • Save Project" ]
         -- , button [ class "generic_button" ] [ text " • Load Project" ]
         , button [ class "generic_button", onClick (ViewOverlay ImportTextOverlay) ] [ text " • Import Patterns" ]
         , button [ class "generic_button", onClick (ViewOverlay ExportTextOverlay) ] [ text " • Export Patterns" ]
+        , button [ class "generic_button", onClick (ViewOverlay ExportTextOverlay) ] [ text " • Export Give Command" ]
         , button [ class "generic_button", onClick RequestGridDrawingAsImage ] [ text " • Export Image" ]
         , button [ class "generic_button", onClick RequestGridDrawingAsGIF ] [ text " • Export Gif" ]
         ]

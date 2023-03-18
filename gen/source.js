@@ -14999,6 +14999,63 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 			$elm$json$Json$Encode$string(string));
 	});
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
+var $author$project$Logic$App$ImportExport$ExportAsGiveCommand$exportAsGiveCommand = function (patternArray) {
+	var singatureList = A2(
+		$elm$core$List$map,
+		function (pattern) {
+			return pattern.signature;
+		},
+		$elm$core$List$reverse(
+			$elm$core$Array$toList(patternArray)));
+	var patternStartString = '{\"hexcasting:type\": \"hexcasting:pattern\", \"hexcasting:data\": {angles: [B; ';
+	var patternEndString = '], start_dir: 0b}}';
+	var mapAngleToBytes = function (angle) {
+		switch (angle) {
+			case 'w':
+				return '0B';
+			case 'e':
+				return '1B';
+			case 'd':
+				return '2B';
+			case 'a':
+				return '4B';
+			case 'q':
+				return '5B';
+			default:
+				return '3B';
+		}
+	};
+	var commandStartString = '/give @p hexcasting:focus{data: {\"hexcasting:type\": \"hexcasting:list\", \"hexcasting:data\": [';
+	var commandEndString = ']}} 1';
+	return $elm$core$String$concat(
+		_List_fromArray(
+			[
+				commandStartString,
+				A2(
+				$elm$core$String$join,
+				', ',
+				A2(
+					$elm$core$List$map,
+					function (signature) {
+						return $elm$core$String$concat(
+							_List_fromArray(
+								[
+									patternStartString,
+									A2(
+									$elm$core$String$join,
+									', ',
+									A2(
+										$elm$core$List$map,
+										mapAngleToBytes,
+										A2($elm$core$String$split, '', signature))),
+									patternEndString
+								]));
+					},
+					singatureList)),
+				commandEndString
+			]));
+};
+var $elm$core$Debug$log = _Debug_log;
 var $author$project$Logic$App$ImportExport$ExportAsText$exportPatternsAsLineList = function (patternArray) {
 	var mapPatternToLine = F2(
 		function (pattern, accumulator) {
@@ -15012,8 +15069,8 @@ var $author$project$Logic$App$ImportExport$ExportAsText$exportPatternsAsLineList
 							_List_fromArray(
 								[string])));
 				});
-			var _v0 = pattern.internalName;
-			switch (_v0) {
+			var _v1 = pattern.internalName;
+			switch (_v1) {
 				case 'open_paren':
 					return _Utils_Tuple2(
 						indentDepth + 1,
@@ -15037,6 +15094,10 @@ var $author$project$Logic$App$ImportExport$ExportAsText$exportPatternsAsLineList
 							lines));
 			}
 		});
+	var _v0 = A2(
+		$elm$core$Debug$log,
+		'give',
+		$author$project$Logic$App$ImportExport$ExportAsGiveCommand$exportAsGiveCommand(patternArray));
 	return A2(
 		$elm$core$String$join,
 		'\n',
@@ -17733,6 +17794,18 @@ var $author$project$Components$App$Panels$FilePanel$saveExportPanel = function (
 				_List_fromArray(
 					[
 						$elm$html$Html$text(' • Export Patterns')
+					])),
+				A2(
+				$elm$html$Html$button,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('generic_button'),
+						$elm$html$Html$Events$onClick(
+						$author$project$Logic$App$Msg$ViewOverlay($author$project$Logic$App$Types$ExportTextOverlay))
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text(' • Export Give Command')
 					])),
 				A2(
 				$elm$html$Html$button,
