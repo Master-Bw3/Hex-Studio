@@ -13,8 +13,8 @@ import Logic.App.Types exposing (ApplyToStackResult(..), Iota(..), MetaActionMsg
 import Logic.App.Utils.Utils exposing (unshift)
 
 
-applyMetaAction : ApplyToStackResult -> Model -> MetaActionMsg -> Model
-applyMetaAction prevResult model metaActionMsg =
+applyMetaAction : Model -> MetaActionMsg -> Model
+applyMetaAction model metaActionMsg =
     let
         grid =
             model.grid
@@ -123,25 +123,3 @@ applyMetaAction prevResult model metaActionMsg =
                 , castingContext = stackResult.ctx
                 , timeline = unshift { stack = Array.empty, patternIndex = -1 } stackResult.timeline
             }
-
-        SaveIota ->
-            case ( Array.get 0 model.patternArray, Array.get 0 model.stack, Array.get 1 model.stack ) of
-                ( Just ( pattern, _ ), Just (PatternIota key _), Just value ) ->
-                    if prevResult == Succeeded then
-                        { model
-                            | patternArray = Array.removeAt 0 model.patternArray
-                            , savedIotas = Dict.insert key.signature ( "Unnamed Pattern", key.startDirection, value ) model.savedIotas
-                            , timeline = Array.removeAt 0 model.timeline
-                            , insertionPoint =
-                                if model.insertionPoint >= Array.length model.patternArray - 1 then
-                                    0
-
-                                else
-                                    model.insertionPoint
-                        }
-
-                    else
-                        model
-
-                _ ->
-                    model

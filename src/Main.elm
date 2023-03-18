@@ -48,7 +48,6 @@ init : () -> ( Model, Cmd Msg )
 init _ =
     ( { stack = Array.empty
       , patternArray = Array.empty
-      , savedIotas = Dict.empty
       , ui =
             { openPanels = [ PatternPanel ]
             , patternInputField = ""
@@ -84,6 +83,7 @@ init _ =
             { heldItem = NoItem
             , heldItemContent = Nothing
             , ravenmind = Nothing
+            , savedIotas = Dict.empty
             }
       , time = 0
       , downloadSrc = ""
@@ -142,7 +142,7 @@ updatePatternArrayFromQueue model =
         in
         if command == Cmd.none then
             updatePatternArrayFromQueue <|
-                applyMetaAction (Maybe.withDefault Failed (Array.get 0 stackResult.resultArray))
+                applyMetaAction
                     { model
                         | patternArray = drawPatternsResult.patternArray
                         , ui = { ui | patternInputField = "" }
@@ -260,7 +260,7 @@ update msg model =
                             stackResult.resultArray
 
                         newPattern =
-                            getPatternFromSignature (Just model.savedIotas) <| getAngleSignature drawing.activePath
+                            getPatternFromSignature (Just model.castingContext.savedIotas) <| getAngleSignature drawing.activePath
 
                         newUncoloredPatternArray =
                             addToPatternArray
@@ -283,7 +283,7 @@ update msg model =
                             }
                     in
                     update (SetTimelineIndex (Array.length stackResult.timeline + 1)) <|
-                        applyMetaAction (Maybe.withDefault Failed (Array.get 0 resultArray))
+                        applyMetaAction
                             { model
                                 | patternArray = newPatternArray
                                 , grid = newGrid
@@ -384,7 +384,7 @@ update msg model =
             let
                 newImportQueue =
                     if name /= "" then
-                        getPatternFromName (Just model.savedIotas) name :: model.importQueue
+                        getPatternFromName (Just model.castingContext.savedIotas) name :: model.importQueue
 
                     else
                         model.importQueue
@@ -397,7 +397,7 @@ update msg model =
         RecieveGeneratedNumberLiteral signature ->
             let
                 newPattern =
-                    getPatternFromSignature (Just model.savedIotas) signature
+                    getPatternFromSignature (Just model.castingContext.savedIotas) signature
             in
             updatePatternArrayFromQueue
                 { model
@@ -665,7 +665,7 @@ update msg model =
         ImportText string ->
             let
                 importQueue =
-                    parseInput string model.savedIotas
+                    parseInput string model.castingContext.savedIotas
             in
             updatePatternArrayFromQueue { model | importQueue = importQueue, ui = { ui | openOverlay = NoOverlay, importInput = "" } }
 

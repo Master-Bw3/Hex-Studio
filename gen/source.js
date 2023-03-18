@@ -5549,7 +5549,7 @@ var $elm$core$Basics$negate = function (n) {
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
 		{
-			castingContext: {heldItem: $author$project$Logic$App$Types$NoItem, heldItemContent: $elm$core$Maybe$Nothing, ravenmind: $elm$core$Maybe$Nothing},
+			castingContext: {heldItem: $author$project$Logic$App$Types$NoItem, heldItemContent: $elm$core$Maybe$Nothing, ravenmind: $elm$core$Maybe$Nothing, savedIotas: $elm$core$Dict$empty},
 			downloadSrc: '',
 			grid: {
 				drawing: {activePath: _List_Nil, drawingMode: false},
@@ -5563,7 +5563,6 @@ var $author$project$Main$init = function (_v0) {
 			lastEvent: $elm$core$Maybe$Nothing,
 			mousePos: _Utils_Tuple2(0.0, 0.0),
 			patternArray: $elm$core$Array$empty,
-			savedIotas: $elm$core$Dict$empty,
 			settings: {gridScale: 1.0},
 			stack: $elm$core$Array$empty,
 			time: 0,
@@ -6641,7 +6640,6 @@ var $author$project$Main$subscriptions = function (model) {
 };
 var $author$project$Logic$App$Types$Artifact = {$: 'Artifact'};
 var $author$project$Logic$App$Types$Cypher = {$: 'Cypher'};
-var $author$project$Logic$App$Types$Failed = {$: 'Failed'};
 var $author$project$Logic$App$Types$Focus = {$: 'Focus'};
 var $author$project$Logic$App$Types$Pie = {$: 'Pie'};
 var $author$project$Logic$App$Msg$SetTimelineIndex = function (a) {
@@ -7400,13 +7398,13 @@ var $author$project$Logic$App$PatternList$PatternArray$applyColorToPatternFromRe
 					{color: $author$project$Settings$Theme$accent5});
 		}
 	});
-var $author$project$Logic$App$Types$Succeeded = {$: 'Succeeded'};
 var $author$project$Logic$App$Types$PatternIota = F2(
 	function (a, b) {
 		return {$: 'PatternIota', a: a, b: b};
 	});
 var $author$project$Logic$App$Types$CatastrophicFailure = {$: 'CatastrophicFailure'};
 var $author$project$Logic$App$Types$Considered = {$: 'Considered'};
+var $author$project$Logic$App$Types$Failed = {$: 'Failed'};
 var $author$project$Logic$App$Types$Garbage = function (a) {
 	return {$: 'Garbage', a: a};
 };
@@ -7420,6 +7418,7 @@ var $author$project$Logic$App$Types$NullType = {$: 'NullType'};
 var $author$project$Logic$App$Types$OpenParenthesis = function (a) {
 	return {$: 'OpenParenthesis', a: a};
 };
+var $author$project$Logic$App$Types$Succeeded = {$: 'Succeeded'};
 var $elm$core$Array$getHelp = F3(
 	function (shift, index, tree) {
 		getHelp:
@@ -11278,80 +11277,10 @@ var $author$project$Logic$App$Patterns$Math$logarithm = F2(
 var $author$project$Logic$App$Types$Backspace = {$: 'Backspace'};
 var $author$project$Logic$App$Types$ClearPatterns = {$: 'ClearPatterns'};
 var $author$project$Logic$App$Types$Reset = {$: 'Reset'};
-var $author$project$Logic$App$Types$SaveIota = {$: 'SaveIota'};
 var $author$project$Logic$App$Types$Wrap = {$: 'Wrap'};
 var $author$project$Logic$App$Patterns$PatternRegistry$noAction = F2(
 	function (stack, ctx) {
 		return {ctx: ctx, stack: stack, success: true};
-	});
-var $author$project$Logic$App$Patterns$OperatorUtils$getPatternIota = function (iota) {
-	if (iota.$ === 'PatternIota') {
-		return $elm$core$Maybe$Just(iota);
-	} else {
-		return $elm$core$Maybe$Nothing;
-	}
-};
-var $author$project$Logic$App$Patterns$Misc$saveIota = F2(
-	function (stack, ctx) {
-		var newStack = A3(
-			$elm$core$Array$slice,
-			2,
-			$elm$core$Array$length(stack),
-			stack);
-		var maybeIota2 = A2($elm$core$Array$get, 0, stack);
-		var maybeIota1 = A2($elm$core$Array$get, 1, stack);
-		if (_Utils_eq(maybeIota1, $elm$core$Maybe$Nothing) || _Utils_eq(maybeIota2, $elm$core$Maybe$Nothing)) {
-			return {
-				ctx: ctx,
-				stack: A2(
-					$elm$core$Array$append,
-					A2(
-						$elm$core$Array$map,
-						$author$project$Logic$App$Patterns$OperatorUtils$mapNothingToMissingIota,
-						$elm$core$Array$fromList(
-							$author$project$Logic$App$Patterns$OperatorUtils$moveNothingsToFront(
-								_List_fromArray(
-									[maybeIota1, maybeIota2])))),
-					newStack),
-				success: false
-			};
-		} else {
-			var _v0 = _Utils_Tuple2(
-				A2($elm$core$Maybe$map, $author$project$Logic$App$Patterns$OperatorUtils$getAny, maybeIota1),
-				A2($elm$core$Maybe$map, $author$project$Logic$App$Patterns$OperatorUtils$getPatternIota, maybeIota2));
-			if ((_v0.a.$ === 'Just') && (_v0.b.$ === 'Just')) {
-				var iota1 = _v0.a.a;
-				var iota2 = _v0.b.a;
-				return (_Utils_eq(iota1, $elm$core$Maybe$Nothing) || _Utils_eq(iota2, $elm$core$Maybe$Nothing)) ? {
-					ctx: ctx,
-					stack: A2(
-						$elm$core$Array$append,
-						$elm$core$Array$fromList(
-							_List_fromArray(
-								[
-									A2(
-									$elm$core$Maybe$withDefault,
-									$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
-									iota1),
-									A2(
-									$elm$core$Maybe$withDefault,
-									$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$IncorrectIota),
-									iota2)
-								])),
-						newStack),
-					success: false
-				} : {ctx: ctx, stack: stack, success: true};
-			} else {
-				return {
-					ctx: ctx,
-					stack: A2(
-						$author$project$Logic$App$Utils$Utils$unshift,
-						$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure),
-						newStack),
-					success: false
-				};
-			}
-		}
 	});
 var $author$project$Logic$App$Patterns$PatternRegistry$metapatternRegistry = A2(
 	$elm$core$List$map,
@@ -11363,8 +11292,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$metapatternRegistry = A2(
 			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Clear', internalName: 'clearPatterns', metaAction: $author$project$Logic$App$Types$ClearPatterns, outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqq'},
 			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Reset', internalName: 'resetApp', metaAction: $author$project$Logic$App$Types$Reset, outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqa'},
 			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Backspace', internalName: 'backspace', metaAction: $author$project$Logic$App$Types$Backspace, outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qa'},
-			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Wrap', internalName: 'wrap', metaAction: $author$project$Logic$App$Types$Wrap, outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qwqqqwq'},
-			{action: $author$project$Logic$App$Patterns$Misc$saveIota, displayName: 'Save Iota', internalName: 'save_iota', metaAction: $author$project$Logic$App$Types$SaveIota, outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'awaawa'}
+			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Wrap', internalName: 'wrap', metaAction: $author$project$Logic$App$Types$Wrap, outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qwqqqwq'}
 		]));
 var $author$project$Logic$App$Patterns$OperatorUtils$getPositiveInteger = function (iota) {
 	if (iota.$ === 'Number') {
@@ -11952,6 +11880,44 @@ var $author$project$Logic$App$Patterns$Stack$rotateReverse = F2(
 					ctx);
 			});
 		return A6($author$project$Logic$App$Patterns$OperatorUtils$action3Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
+	});
+var $author$project$Logic$App$Patterns$OperatorUtils$getPatternIota = function (iota) {
+	if (iota.$ === 'PatternIota') {
+		return $elm$core$Maybe$Just(iota);
+	} else {
+		return $elm$core$Maybe$Nothing;
+	}
+};
+var $author$project$Logic$App$Patterns$Misc$saveIota = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (iota1, iota2, context) {
+				var _v0 = _Utils_Tuple2(iota1, iota2);
+				if (_v0.b.$ === 'PatternIota') {
+					var value = _v0.a;
+					var _v1 = _v0.b;
+					var key = _v1.a;
+					return _Utils_Tuple2(
+						$elm$core$Array$empty,
+						_Utils_update(
+							context,
+							{
+								savedIotas: A3(
+									$elm$core$Dict$insert,
+									key.signature,
+									_Utils_Tuple3('Unnamed Pattern', key.startDirection, value),
+									context.savedIotas)
+							}));
+				} else {
+					return _Utils_Tuple2(
+						A2(
+							$elm$core$Array$repeat,
+							1,
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure)),
+						ctx);
+				}
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getPatternIota, action);
 	});
 var $author$project$Logic$App$Patterns$Spells$sentinelCreate = F2(
 	function (stack, ctx) {
@@ -13174,7 +13140,8 @@ var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = _Utils_
 			},
 				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Retrospection', internalName: 'close_paren', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eee', startDirection: $author$project$Logic$App$Types$East},
 				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Hermes\' Gambit', internalName: 'eval', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'deaqq', startDirection: $author$project$Logic$App$Types$Southeast},
-				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Thoth\'s Gambit', internalName: 'for_each', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dadad', startDirection: $author$project$Logic$App$Types$Northeast}
+				{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Thoth\'s Gambit', internalName: 'for_each', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dadad', startDirection: $author$project$Logic$App$Types$Northeast},
+				{action: $author$project$Logic$App$Patterns$Misc$saveIota, displayName: 'Save Iota', internalName: 'save_iota', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'awaawa', startDirection: $author$project$Logic$App$Types$Southeast}
 			])));
 var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature = F2(
 	function (maybeSavedIotas, signature) {
@@ -13418,8 +13385,8 @@ var $author$project$Components$App$Grid$updateGridPoints = F5(
 			}
 		}
 	});
-var $author$project$Logic$App$Patterns$MetaActions$applyMetaAction = F3(
-	function (prevResult, model, metaActionMsg) {
+var $author$project$Logic$App$Patterns$MetaActions$applyMetaAction = F2(
+	function (model, metaActionMsg) {
 		var settings = model.settings;
 		var grid = model.grid;
 		var castingContext = model.castingContext;
@@ -13501,7 +13468,7 @@ var $author$project$Logic$App$Patterns$MetaActions$applyMetaAction = F3(
 							{patternIndex: -1, stack: $elm$core$Array$empty},
 							stackResult.timeline)
 					});
-			case 'Wrap':
+			default:
 				var newUncoloredPatternArray = A2(
 					$author$project$Logic$App$Utils$Utils$unshift,
 					_Utils_Tuple2(
@@ -13552,34 +13519,6 @@ var $author$project$Logic$App$Patterns$MetaActions$applyMetaAction = F3(
 							{patternIndex: -1, stack: $elm$core$Array$empty},
 							stackResult.timeline)
 					});
-			default:
-				var _v1 = _Utils_Tuple3(
-					A2($elm$core$Array$get, 0, model.patternArray),
-					A2($elm$core$Array$get, 0, model.stack),
-					A2($elm$core$Array$get, 1, model.stack));
-				if ((((_v1.a.$ === 'Just') && (_v1.b.$ === 'Just')) && (_v1.b.a.$ === 'PatternIota')) && (_v1.c.$ === 'Just')) {
-					var _v2 = _v1.a.a;
-					var pattern = _v2.a;
-					var _v3 = _v1.b.a;
-					var key = _v3.a;
-					var value = _v1.c.a;
-					return _Utils_eq(prevResult, $author$project$Logic$App$Types$Succeeded) ? _Utils_update(
-						model,
-						{
-							insertionPoint: (_Utils_cmp(
-								model.insertionPoint,
-								$elm$core$Array$length(model.patternArray) - 1) > -1) ? 0 : model.insertionPoint,
-							patternArray: A2($elm_community$array_extra$Array$Extra$removeAt, 0, model.patternArray),
-							savedIotas: A3(
-								$elm$core$Dict$insert,
-								key.signature,
-								_Utils_Tuple3('Unnamed Pattern', key.startDirection, value),
-								model.savedIotas),
-							timeline: A2($elm_community$array_extra$Array$Extra$removeAt, 0, model.timeline)
-						}) : model;
-				} else {
-					return model;
-				}
 		}
 	});
 var $elm$core$List$concatMap = F2(
@@ -14181,7 +14120,7 @@ var $author$project$Main$update = F2(
 						if ($elm$core$List$length(drawing.activePath) > 1) {
 							var newPattern = A2(
 								$author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature,
-								$elm$core$Maybe$Just(model.savedIotas),
+								$elm$core$Maybe$Just(model.castingContext.savedIotas),
 								$author$project$Logic$App$Utils$GetAngleSignature$getAngleSignature(drawing.activePath));
 							var newUncoloredPatternArray = A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, model.insertionPoint);
 							var stackResult = A3(
@@ -14220,12 +14159,8 @@ var $author$project$Main$update = F2(
 								$author$project$Main$update,
 								$author$project$Logic$App$Msg$SetTimelineIndex(
 									$elm$core$Array$length(stackResult.timeline) + 1),
-								A3(
+								A2(
 									$author$project$Logic$App$Patterns$MetaActions$applyMetaAction,
-									A2(
-										$elm$core$Maybe$withDefault,
-										$author$project$Logic$App$Types$Failed,
-										A2($elm$core$Array$get, 0, resultArray)),
 									_Utils_update(
 										model,
 										{
@@ -14392,7 +14327,7 @@ var $author$project$Main$update = F2(
 						$elm$core$List$cons,
 						A2(
 							$author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName,
-							$elm$core$Maybe$Just(model.savedIotas),
+							$elm$core$Maybe$Just(model.castingContext.savedIotas),
 							name),
 						model.importQueue) : model.importQueue;
 					return $author$project$Main$updatePatternArrayFromQueue(
@@ -14408,7 +14343,7 @@ var $author$project$Main$update = F2(
 					var signature = msg.a;
 					var newPattern = A2(
 						$author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature,
-						$elm$core$Maybe$Just(model.savedIotas),
+						$elm$core$Maybe$Just(model.castingContext.savedIotas),
 						signature);
 					return $author$project$Main$updatePatternArrayFromQueue(
 						_Utils_update(
@@ -14804,7 +14739,7 @@ var $author$project$Main$update = F2(
 						$elm$core$Platform$Cmd$none);
 				case 'ImportText':
 					var string = msg.a;
-					var importQueue = A2($author$project$Logic$App$ImportExport$ImportParser$parseInput, string, model.savedIotas);
+					var importQueue = A2($author$project$Logic$App$ImportExport$ImportParser$parseInput, string, model.castingContext.savedIotas);
 					return $author$project$Main$updatePatternArrayFromQueue(
 						_Utils_update(
 							model,
@@ -14983,12 +14918,8 @@ var $author$project$Main$updatePatternArrayFromQueue = function (model) {
 			newPatternArray);
 		var drawPatternsResult = A2($author$project$Logic$App$Grid$drawPatterns, patterns, model.grid);
 		return _Utils_eq(command, $elm$core$Platform$Cmd$none) ? $author$project$Main$updatePatternArrayFromQueue(
-			A3(
+			A2(
 				$author$project$Logic$App$Patterns$MetaActions$applyMetaAction,
-				A2(
-					$elm$core$Maybe$withDefault,
-					$author$project$Logic$App$Types$Failed,
-					A2($elm$core$Array$get, 0, stackResult.resultArray)),
 				_Utils_update(
 					model,
 					{
@@ -16561,7 +16492,7 @@ var $author$project$Components$App$Panels$LibraryPanel$renderDict = function (mo
 				]),
 			_List_Nil),
 		$elm$core$Dict$values(
-			A2($elm$core$Dict$map, renderEntry, model.savedIotas)));
+			A2($elm$core$Dict$map, renderEntry, model.castingContext.savedIotas)));
 };
 var $author$project$Components$App$Panels$LibraryPanel$libraryPanel = function (model) {
 	var visibility = A2($elm$core$List$member, $author$project$Logic$App$Types$LibraryPanel, model.ui.openPanels);

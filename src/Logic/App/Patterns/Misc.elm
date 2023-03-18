@@ -2,8 +2,9 @@ module Logic.App.Patterns.Misc exposing (..)
 
 import Array exposing (Array)
 import Array.Extra as Array
+import Dict exposing (Dict)
 import Html.Attributes exposing (action)
-import Logic.App.Patterns.OperatorUtils exposing (action1Input, getAny, getEntity, getPatternIota, getVector, mapNothingToMissingIota, moveNothingsToFront, nanOrInfinityCheck, spell1Input, spell2Inputs)
+import Logic.App.Patterns.OperatorUtils exposing (action1Input, action2Inputs, getAny, getEntity, getPatternIota, getVector, mapNothingToMissingIota, moveNothingsToFront, nanOrInfinityCheck, spell1Input, spell2Inputs)
 import Logic.App.Types exposing (ActionResult, CastingContext, EntityType(..), Iota(..), Mishap(..))
 import Logic.App.Utils.Utils exposing (isJust, unshift)
 
@@ -89,43 +90,12 @@ mask maskCode stack ctx =
 saveIota : Array Iota -> CastingContext -> ActionResult
 saveIota stack ctx =
     let
-        maybeIota1 =
-            Array.get 1 stack
+        action iota1 iota2 context =
+            case ( iota1, iota2 ) of
+                ( value, PatternIota key _) ->
+                    ( Array.empty, { context | savedIotas = Dict.insert key.signature ( "Unnamed Pattern", key.startDirection, value ) context.savedIotas } )
 
-        maybeIota2 =
-            Array.get 0 stack
-
-        newStack =
-            Array.slice 2 (Array.length stack) stack
+                _ ->
+                    ( Array.repeat 1 <| Garbage CatastrophicFailure, ctx )
     in
-    if maybeIota1 == Nothing || maybeIota2 == Nothing then
-        { stack = Array.append (Array.map mapNothingToMissingIota <| Array.fromList <| moveNothingsToFront [ maybeIota1, maybeIota2 ]) newStack
-        , ctx = ctx
-        , success = False
-        }
-
-    else
-        case ( Maybe.map getAny maybeIota1, Maybe.map getPatternIota maybeIota2 ) of
-            ( Just iota1, Just iota2 ) ->
-                if iota1 == Nothing || iota2 == Nothing then
-                    { stack =
-                        Array.append
-                            (Array.fromList
-                                [ Maybe.withDefault (Garbage IncorrectIota) iota1
-                                , Maybe.withDefault (Garbage IncorrectIota) iota2
-                                ]
-                            )
-                            newStack
-                    , ctx = ctx
-                    , success = False
-                    }
-
-                else
-                    { stack = stack, ctx = ctx, success = True }
-
-            _ ->
-                -- this should never happen
-                { stack = unshift (Garbage CatastrophicFailure) newStack
-                , ctx = ctx
-                , success = False
-                }
+    action2Inputs stack ctx getAny getPatternIota action

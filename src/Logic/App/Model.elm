@@ -14,7 +14,6 @@ import Logic.App.Types exposing (Direction)
 type alias Model =
     { stack : Array Iota
     , patternArray : Array ( Pattern, List GridPoint )
-    , savedIotas : Dict String (String, Direction, Iota)
     , ui :
         { openPanels : List Panel
         , patternInputField : String

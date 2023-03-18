@@ -51,7 +51,7 @@ renderDict model =
                             :: renderIotaBox iota
                         )
     in
-    Dict.map renderEntry model.savedIotas
+    Dict.map renderEntry model.castingContext.savedIotas
         |> Dict.values
         |> List.intersperse (div [ class "divider" ] [])
 

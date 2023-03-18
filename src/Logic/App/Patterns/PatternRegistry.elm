@@ -427,6 +427,7 @@ patternRegistry =
     , { signature = "eee", internalName = "close_paren", action = noAction, displayName = "Retrospection", outputOptions = [], selectedOutput = Nothing, startDirection = East }
     , { signature = "deaqq", internalName = "eval", action = noAction, displayName = "Hermes' Gambit", outputOptions = [], selectedOutput = Nothing, startDirection = Southeast }
     , { signature = "dadad", internalName = "for_each", action = noAction, displayName = "Thoth's Gambit", outputOptions = [], selectedOutput = Nothing, startDirection = Northeast }
+    , { signature = "awaawa", internalName = "save_iota", action = saveIota, displayName = "Save Iota", outputOptions = [], selectedOutput = Nothing, startDirection = Southeast }
     ]
         |> List.map
             (\pattern ->
@@ -451,7 +452,6 @@ metapatternRegistry =
     , { signature = "qqqqqa", internalName = "resetApp", action = noAction, metaAction = Reset, displayName = "Reset", outputOptions = [], selectedOutput = Nothing }
     , { signature = "qa", internalName = "backspace", action = noAction, metaAction = Backspace, displayName = "Backspace", outputOptions = [], selectedOutput = Nothing }
     , { signature = "qwqqqwq", internalName = "wrap", action = noAction, metaAction = Wrap, displayName = "Wrap", outputOptions = [], selectedOutput = Nothing }
-    , { signature = "awaawa", internalName = "save_iota", action = saveIota, metaAction = SaveIota, displayName = "Save Iota", outputOptions = [], selectedOutput = Nothing }
     ]
         |> List.map
             (\pattern ->

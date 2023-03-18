@@ -1,6 +1,7 @@
 module Logic.App.Types exposing (..)
 
 import Array exposing (Array)
+import Dict exposing (Dict)
 
 
 type Panel
@@ -34,8 +35,6 @@ type MetaActionMsg
     | Reset
     | Backspace
     | Wrap
-    | SaveIota
-
 
 type alias Pattern =
     { signature : String
@@ -146,6 +145,7 @@ type alias CastingContext =
     { heldItem : HeldItem
     , heldItemContent : Maybe Iota
     , ravenmind : Maybe Iota
+    , savedIotas : Dict String ( String, Direction, Iota )
     }
 
 
