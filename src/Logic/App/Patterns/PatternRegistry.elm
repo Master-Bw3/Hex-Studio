@@ -2,6 +2,7 @@ module Logic.App.Patterns.PatternRegistry exposing (getPatternFromName, getPatte
 
 import Array exposing (Array)
 import Array.Extra as Array
+import Dict exposing (Dict)
 import FontAwesome.Solid exposing (signature)
 import Html exposing (i)
 import Logic.App.Patterns.Circles exposing (..)
@@ -42,8 +43,8 @@ unknownPattern =
     }
 
 
-getPatternFromSignature : String -> Pattern
-getPatternFromSignature signature =
+getPatternFromSignature : Maybe (Dict String ( String, Direction, Iota )) -> String -> Pattern
+getPatternFromSignature maybeSavedIotas signature =
     case List.head <| List.filter (\regPattern -> regPattern.signature == signature) patternRegistry of
         Just a ->
             a
@@ -64,11 +65,33 @@ getPatternFromSignature signature =
                     parseBookkeeperResult
 
                 else
-                    { unknownPattern | signature = signature, displayName = "Pattern " ++ "\"" ++ signature ++ "\"" }
+                    case maybeSavedIotas of
+                        Just savedIotas ->
+                            case Dict.get signature savedIotas of
+                                Just value ->
+                                    case value of
+                                        ( displayName, direction, iota ) ->
+                                            { signature = signature
+                                            , internalName = "mask"
+                                            , action = makeConstant iota
+                                            , metaAction = None
+                                            , displayName = displayName
+                                            , color = accent1
+                                            , outputOptions = []
+                                            , active = True
+                                            , selectedOutput = Nothing
+                                            , startDirection = direction
+                                            }
+
+                                Nothing ->
+                                    { unknownPattern | signature = signature, displayName = "Pattern " ++ "\"" ++ signature ++ "\"" }
+
+                        Nothing ->
+                            { unknownPattern | signature = signature, displayName = "Pattern " ++ "\"" ++ signature ++ "\"" }
 
 
-getPatternFromName : String -> ( Pattern, Cmd msg )
-getPatternFromName name =
+getPatternFromName : Maybe (Dict String ( String, Direction, Iota )) -> String -> ( Pattern, Cmd msg )
+getPatternFromName maybeSavedIotas name =
     case List.head <| List.filter (\regPattern -> regPattern.displayName == name || regPattern.internalName == name || regPattern.signature == name) patternRegistry of
         Just a ->
             ( a, Cmd.none )
@@ -106,14 +129,55 @@ getPatternFromName name =
                         )
 
                     else
-                        ( unknownPattern, Cmd.none )
+                        case maybeSavedIotas of
+                            Just savedIotas ->
+                                case Dict.get name savedIotas of
+                                    Just value ->
+                                        case value of
+                                            ( displayName, direction, iota ) ->
+                                                ( { signature = name
+                                                  , internalName = "mask"
+                                                  , action = makeConstant iota
+                                                  , metaAction = None
+                                                  , displayName = displayName
+                                                  , color = accent1
+                                                  , outputOptions = []
+                                                  , active = True
+                                                  , selectedOutput = Nothing
+                                                  , startDirection = direction
+                                                  }
+                                                , Cmd.none
+                                                )
+
+                                    Nothing ->
+                                        if Regex.contains Logic.App.Utils.RegexPatterns.angleSignaturePattern name then
+                                            ( getPatternFromSignature maybeSavedIotas name, Cmd.none )
+
+                                        else
+                                            ( unknownPattern, Cmd.none )
+
+                            Nothing ->
+                                if Regex.contains Logic.App.Utils.RegexPatterns.angleSignaturePattern name then
+                                    ( getPatternFromSignature maybeSavedIotas name, Cmd.none )
+
+                                else
+                                    ( unknownPattern, Cmd.none )
 
 
 parseBookkeeper : String -> Pattern
 parseBookkeeper signature =
     if signature == "" then
-        { signature = signature, internalName = "mask", action = mask [ "-" ], metaAction = None, displayName = "Bookkeeper's -", color = accent1, outputOptions = [], selectedOutput = Nothing, active = True,  startDirection = East
- }
+        { signature = signature
+        , internalName = "mask"
+        , action = mask [ "-" ]
+        , metaAction = None
+        , displayName = "Bookkeeper's -"
+        , color = accent1
+        , outputOptions = []
+        , selectedOutput = Nothing
+        , active = True
+        , startDirection = East
+        }
 
     else
         let
@@ -195,7 +259,6 @@ parseBookkeeper signature =
                 , selectedOutput = Nothing
                 , active = True
                 , startDirection = East -- Todo: make this southeast if starting with v
-
                 }
 
             Err _ ->
@@ -388,6 +451,7 @@ metapatternRegistry =
     , { signature = "qqqqqa", internalName = "resetApp", action = noAction, metaAction = Reset, displayName = "Reset", outputOptions = [], selectedOutput = Nothing }
     , { signature = "qa", internalName = "backspace", action = noAction, metaAction = Backspace, displayName = "Backspace", outputOptions = [], selectedOutput = Nothing }
     , { signature = "qwqqqwq", internalName = "wrap", action = noAction, metaAction = Wrap, displayName = "Wrap", outputOptions = [], selectedOutput = Nothing }
+    , { signature = "awaawa", internalName = "save_iota", action = saveIota, metaAction = SaveIota, displayName = "Save Iota", outputOptions = [], selectedOutput = Nothing }
     ]
         |> List.map
             (\pattern ->
@@ -449,5 +513,4 @@ numberLiteralGenerator angleSignature isNegative =
     , selectedOutput = Nothing
     , active = True
     , startDirection = Southeast
-
     }

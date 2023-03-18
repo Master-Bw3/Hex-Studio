@@ -251,6 +251,16 @@ getPatternOrIotaList iota =
             Nothing
 
 
+getPatternIota : Iota -> Maybe Iota
+getPatternIota iota =
+    case iota of
+        PatternIota _ _ ->
+            Just iota
+
+        _ ->
+            Nothing
+
+
 getNumberOrVector : Iota -> Maybe Iota
 getNumberOrVector iota =
     case iota of

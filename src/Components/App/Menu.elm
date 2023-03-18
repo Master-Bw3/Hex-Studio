@@ -48,6 +48,16 @@ menu model =
             , Icon.layerGroup |> Icon.styled [ Icon.sm ] |> Icon.view
             ]
         , button
+            ([ id "library_menu_button"
+             , class "menu_button"
+             , onClick (\event -> ViewPanel LibraryPanel event.keys)
+             ]
+                ++ highlightIfActive LibraryPanel
+            )
+            [ Icon.css
+            , Icon.book |> Icon.styled [ Icon.sm ] |> Icon.view
+            ]
+        , button
             ([ id "config_hex_menu_button"
              , class "menu_button"
              , onClick (\event -> ViewPanel ConfigHexPanel event.keys)

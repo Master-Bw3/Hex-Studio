@@ -8,6 +8,7 @@ import Html.Attributes exposing (class, id)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (Msg)
 import Components.App.Panels.FilePanel exposing (saveExportPanel)
+import Components.App.Panels.LibraryPanel exposing (libraryPanel)
 
 
 panels : Model -> Html Msg
@@ -17,4 +18,5 @@ panels model =
         , stackPanel model
         , configHexPanel model
         , saveExportPanel model
+        , libraryPanel model
         ]

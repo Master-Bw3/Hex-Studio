@@ -3,17 +3,18 @@ module Logic.App.Patterns.MetaActions exposing (..)
 import Array
 import Array.Extra as Array
 import Components.App.Grid exposing (updateGridPoints)
+import Dict
+import Logic.App.Grid exposing (drawPatterns)
 import Logic.App.Model exposing (Model)
 import Logic.App.PatternList.PatternArray exposing (applyColorToPatternFromResult, updateDrawingColors)
 import Logic.App.Patterns.PatternRegistry exposing (getPatternFromName)
-import Logic.App.Stack.EvalStack exposing (applyPatternsToStack)
-import Logic.App.Types exposing (Iota(..), MetaActionMsg(..))
+import Logic.App.Stack.EvalStack exposing (ApplyResult, applyPatternsToStack)
+import Logic.App.Types exposing (ApplyToStackResult(..), Iota(..), MetaActionMsg(..))
 import Logic.App.Utils.Utils exposing (unshift)
-import Logic.App.Grid exposing (drawPatterns)
 
 
-applyMetaAction : Model -> MetaActionMsg -> Model
-applyMetaAction model metaActionMsg =
+applyMetaAction : ApplyToStackResult -> Model -> MetaActionMsg -> Model
+applyMetaAction prevResult model metaActionMsg =
     let
         grid =
             model.grid
@@ -89,8 +90,8 @@ applyMetaAction model metaActionMsg =
                 newUncoloredPatternArray =
                     model.patternArray
                         |> Array.removeAt 0
-                        |> Array.push ( Tuple.first (getPatternFromName "open_paren"), [] )
-                        |> unshift ( Tuple.first (getPatternFromName "close_paren"), [] )
+                        |> Array.push ( Tuple.first (getPatternFromName Nothing "open_paren"), [] )
+                        |> unshift ( Tuple.first (getPatternFromName Nothing "close_paren"), [] )
 
                 stackResult =
                     applyPatternsToStack Array.empty castingContext (List.reverse <| Tuple.first <| List.unzip <| Array.toList newUncoloredPatternArray)
@@ -122,3 +123,25 @@ applyMetaAction model metaActionMsg =
                 , castingContext = stackResult.ctx
                 , timeline = unshift { stack = Array.empty, patternIndex = -1 } stackResult.timeline
             }
+
+        SaveIota ->
+            case ( Array.get 0 model.patternArray, Array.get 0 model.stack, Array.get 1 model.stack ) of
+                ( Just ( pattern, _ ), Just (PatternIota key _), Just value ) ->
+                    if prevResult == Succeeded then
+                        { model
+                            | patternArray = Array.removeAt 0 model.patternArray
+                            , savedIotas = Dict.insert key.signature ( "Unnamed Pattern", key.startDirection, value ) model.savedIotas
+                            , timeline = Array.removeAt 0 model.timeline
+                            , insertionPoint =
+                                if model.insertionPoint >= Array.length model.patternArray - 1 then
+                                    0
+
+                                else
+                                    model.insertionPoint
+                        }
+
+                    else
+                        model
+
+                _ ->
+                    model

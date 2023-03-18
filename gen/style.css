@@ -114,7 +114,8 @@ body {
 
 #stack_menu_button svg,
 #config_hex_menu_button svg,
-#save_export_menu_button svg {
+#save_export_menu_button svg,
+#library_menu_button svg {
     transform: scaleY(286%) scaleX(316%);
 }
 
@@ -551,7 +552,6 @@ button {
     border-radius: 5px;
 }
 
-
 .output_option_box {
     display: grid;
 }
@@ -561,7 +561,6 @@ button {
     flex-direction: column;
     gap: 10px;
 }
-
 
 .output_option_box {
     width: 270px;
@@ -669,7 +668,18 @@ button {
     display: block;
 }
 
-.timeline_point:hover, .timeline_point_selected {
+.timeline_point:hover,
+.timeline_point_selected {
     z-index: 10000;
+}
 
+.saved_iota_title {
+    display: flex;
+    align-items: center;
+}
+
+.saved_iota_title .add_button {
+    margin-top: 0;
+    color: rgba(255, 255, 255, 0.6);
+    margin-left: 10px;
 }

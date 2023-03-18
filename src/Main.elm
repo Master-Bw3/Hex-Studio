@@ -7,6 +7,7 @@ import Browser.Dom exposing (getElement)
 import Browser.Events
 import Components.App.Content exposing (content)
 import Components.App.Grid exposing (..)
+import Dict exposing (Dict)
 import File.Download as Download
 import Html exposing (..)
 import Json.Decode exposing (Decoder)
@@ -47,6 +48,7 @@ init : () -> ( Model, Cmd Msg )
 init _ =
     ( { stack = Array.empty
       , patternArray = Array.empty
+      , savedIotas = Dict.empty
       , ui =
             { openPanels = [ PatternPanel ]
             , patternInputField = ""
@@ -106,7 +108,7 @@ updatePatternArrayFromQueue model =
                 model.castingContext
 
             stackResult =
-                applyPatternsToStack Array.empty castingContext (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern model.insertionPoint))
+                Debug.log "ok" <| applyPatternsToStack Array.empty castingContext (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern model.insertionPoint))
 
             getPattern =
                 List.head model.importQueue
@@ -140,7 +142,7 @@ updatePatternArrayFromQueue model =
         in
         if command == Cmd.none then
             updatePatternArrayFromQueue <|
-                applyMetaAction
+                applyMetaAction (Maybe.withDefault Failed (Array.get 0 stackResult.resultArray))
                     { model
                         | patternArray = drawPatternsResult.patternArray
                         , ui = { ui | patternInputField = "" }
@@ -258,7 +260,7 @@ update msg model =
                             stackResult.resultArray
 
                         newPattern =
-                            getPatternFromSignature <| getAngleSignature drawing.activePath
+                            getPatternFromSignature (Just model.savedIotas) <| getAngleSignature drawing.activePath
 
                         newUncoloredPatternArray =
                             addToPatternArray
@@ -281,7 +283,7 @@ update msg model =
                             }
                     in
                     update (SetTimelineIndex (Array.length stackResult.timeline + 1)) <|
-                        applyMetaAction
+                        applyMetaAction (Maybe.withDefault Failed (Array.get 0 resultArray))
                             { model
                                 | patternArray = newPatternArray
                                 , grid = newGrid
@@ -382,7 +384,7 @@ update msg model =
             let
                 newImportQueue =
                     if name /= "" then
-                        getPatternFromName name :: model.importQueue
+                        getPatternFromName (Just model.savedIotas) name :: model.importQueue
 
                     else
                         model.importQueue
@@ -395,7 +397,7 @@ update msg model =
         RecieveGeneratedNumberLiteral signature ->
             let
                 newPattern =
-                    getPatternFromSignature signature
+                    getPatternFromSignature (Just model.savedIotas) signature
             in
             updatePatternArrayFromQueue
                 { model
@@ -663,7 +665,7 @@ update msg model =
         ImportText string ->
             let
                 importQueue =
-                    parseInput string
+                    parseInput string model.savedIotas
             in
             updatePatternArrayFromQueue { model | importQueue = importQueue, ui = { ui | openOverlay = NoOverlay, importInput = "" } }
 

@@ -17,3 +17,7 @@ bookkeepersValuePattern =
 
 bookkeepersPattern =
     Maybe.withDefault Regex.never <| Regex.fromString "^[v-]+$"
+
+
+angleSignaturePattern =
+    Maybe.withDefault Regex.never <| Regex.fromString "^[qawed]+$"

@@ -8,6 +8,7 @@ type Panel
     | PatternPanel
     | ConfigHexPanel
     | FilePanel
+    | LibraryPanel
 
 
 type HeldItem
@@ -33,6 +34,7 @@ type MetaActionMsg
     | Reset
     | Backspace
     | Wrap
+    | SaveIota
 
 
 type alias Pattern =
