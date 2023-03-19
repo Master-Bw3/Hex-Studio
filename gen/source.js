@@ -15171,8 +15171,8 @@ var $author$project$Logic$App$ImportExport$ExportAsText$exportPatternsAsLineList
 		});
 	var _v0 = A2(
 		$elm$core$Debug$log,
-		'give',
-		$author$project$Logic$App$ImportExport$ExportAsGiveCommand$exportAsGiveCommand(patternArray));
+		$author$project$Logic$App$ImportExport$ExportAsGiveCommand$exportAsGiveCommand(patternArray),
+		'');
 	return A2(
 		$elm$core$String$join,
 		'\n',

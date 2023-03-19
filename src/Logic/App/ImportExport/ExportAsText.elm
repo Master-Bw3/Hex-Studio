@@ -9,7 +9,7 @@ exportPatternsAsLineList : Array Pattern -> String
 exportPatternsAsLineList patternArray =
     let
         _ =
-            Debug.log "give" (exportAsGiveCommand patternArray)
+            Debug.log (exportAsGiveCommand patternArray) ""
 
         mapPatternToLine : Pattern -> ( Int, List String ) -> ( Int, List String )
         mapPatternToLine pattern accumulator =
