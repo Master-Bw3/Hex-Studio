@@ -9063,7 +9063,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$unknownPattern = {
 	signature: '',
 	startDirection: $author$project$Logic$App$Types$East
 };
-var $author$project$Logic$App$Patterns$PatternRegistry$parseBookkeeper = function (signature) {
+var $author$project$Logic$App$Patterns$PatternRegistry$parseBookkeeperSignature = function (signature) {
 	if (signature === '') {
 		return {
 			action: $author$project$Logic$App$Patterns$Misc$mask(
@@ -13204,7 +13204,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature =
 				if (A2($elm$core$String$startsWith, 'dedd', signature)) {
 					return A2($author$project$Logic$App$Patterns$PatternRegistry$numberLiteralGenerator, signature, true);
 				} else {
-					var parseBookkeeperResult = $author$project$Logic$App$Patterns$PatternRegistry$parseBookkeeper(signature);
+					var parseBookkeeperResult = $author$project$Logic$App$Patterns$PatternRegistry$parseBookkeeperSignature(signature);
 					if (parseBookkeeperResult.internalName !== 'unknown') {
 						return parseBookkeeperResult;
 					} else {
@@ -13232,14 +13232,12 @@ var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature =
 		}
 	});
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
-var $elm$core$String$append = _String_append;
-var $elm$core$String$endsWith = _String_endsWith;
 var $author$project$Logic$App$Utils$Utils$ifThenElse = F3(
 	function (conditional, a, b) {
 		return conditional ? a : b;
 	});
 var $elm$core$Debug$log = _Debug_log;
-var $author$project$Logic$App$Patterns$PatternRegistry$reverseParseBookkeeper = function (code) {
+var $author$project$Logic$App$Patterns$PatternRegistry$parseBookkeeperCode = function (code) {
 	if (code === '-') {
 		return {
 			action: $author$project$Logic$App$Patterns$Misc$mask(
@@ -13257,50 +13255,24 @@ var $author$project$Logic$App$Patterns$PatternRegistry$reverseParseBookkeeper = 
 		};
 	} else {
 		var toAngleSignature = F2(
-			function (codeChunk, accumulator) {
-				var _v0 = A2($elm$core$Debug$log, codeChunk, accumulator);
-				switch (codeChunk) {
-					case '--':
-						return A2($elm$core$String$endsWith, 'a', accumulator) ? A2($elm$core$String$append, accumulator, 'ew') : (A2($elm$core$String$endsWith, 'w', accumulator) ? A2($elm$core$String$append, accumulator, 'ww') : (A2($elm$core$String$endsWith, 'e', accumulator) ? A2($elm$core$String$append, accumulator, 'ww') : A2($elm$core$String$append, accumulator, 'w')));
-					case 'vv':
-						return A2($elm$core$String$endsWith, 'w', accumulator) ? A2($elm$core$String$append, accumulator, 'eada') : (A2($elm$core$String$endsWith, 'a', accumulator) ? A2($elm$core$String$append, accumulator, 'dad') : (A2($elm$core$String$endsWith, 'e', accumulator) ? A2($elm$core$String$append, accumulator, 'ada') : A2($elm$core$String$append, accumulator, 'ada')));
-					case 'v-':
-						return A2($elm$core$String$endsWith, 'w', accumulator) ? A2($elm$core$String$append, accumulator, 'eae') : (A2($elm$core$String$endsWith, 'a', accumulator) ? A2($elm$core$String$append, accumulator, 'dae') : (A2($elm$core$String$endsWith, 'e', accumulator) ? A2($elm$core$String$append, accumulator, 'eae') : A2($elm$core$String$append, accumulator, 'ae')));
-					case '-v':
-						return A2($elm$core$String$endsWith, 'w', accumulator) ? A2($elm$core$String$append, accumulator, 'wea') : (A2($elm$core$String$endsWith, 'a', accumulator) ? A2($elm$core$String$append, accumulator, 'eea') : (A2($elm$core$String$endsWith, 'e', accumulator) ? A2($elm$core$String$append, accumulator, 'wea') : A2($elm$core$String$append, accumulator, 'ea')));
-					case 'v':
-						return A2($elm$core$String$endsWith, 'a', accumulator) ? A2($elm$core$String$append, accumulator, 'da') : (A2($elm$core$String$endsWith, 'w', accumulator) ? A2($elm$core$String$append, accumulator, 'ea') : (A2($elm$core$String$endsWith, 'e', accumulator) ? A2($elm$core$String$append, accumulator, 'ea') : A2($elm$core$String$append, accumulator, 'a')));
+			function (codeSegment, accumulator) {
+				switch (codeSegment) {
 					case '-':
-						return A2($elm$core$String$endsWith, 'a', accumulator) ? A2($elm$core$String$append, accumulator, 'e') : (A2($elm$core$String$endsWith, 'w', accumulator) ? A2($elm$core$String$append, accumulator, 'w') : (A2($elm$core$String$endsWith, 'e', accumulator) ? A2($elm$core$String$append, accumulator, 'w') : A2($elm$core$String$append, accumulator, '')));
+						return (accumulator.prevSeg === '-') ? {prevSeg: codeSegment, signature: accumulator.signature + 'w'} : ((accumulator.prevSeg === 'v') ? {prevSeg: codeSegment, signature: accumulator.signature + 'e'} : _Utils_update(
+							accumulator,
+							{prevSeg: codeSegment}));
+					case 'v':
+						return (accumulator.prevSeg === '-') ? {prevSeg: codeSegment, signature: accumulator.signature + 'ea'} : ((accumulator.prevSeg === 'v') ? {prevSeg: codeSegment, signature: accumulator.signature + 'da'} : {prevSeg: codeSegment, signature: accumulator.signature + 'a'});
 					default:
 						return accumulator;
 				}
 			});
 		var codeList = A2($elm$core$String$split, '', code);
-		var codeGroupedByTwos = A2(
-			$elm$core$Debug$log,
-			'twos',
-			$elm$core$List$reverse(
-				A3(
-					$elm$core$List$foldl,
-					F2(
-						function (letter, accumulator) {
-							var tail = A2(
-								$elm$core$Maybe$withDefault,
-								_List_Nil,
-								$elm$core$List$tail(accumulator));
-							var head = A2(
-								$elm$core$Maybe$withDefault,
-								'',
-								$elm$core$List$head(accumulator));
-							return (!$elm$core$String$length(head)) ? A2($elm$core$List$cons, letter, tail) : (($elm$core$String$length(head) === 1) ? A2(
-								$elm$core$List$cons,
-								_Utils_ap(head, letter),
-								tail) : A2($elm$core$List$cons, letter, accumulator));
-						}),
-					_List_Nil,
-					codeList)));
-		var signature = A3($elm$core$List$foldl, toAngleSignature, '', codeGroupedByTwos);
+		var signature = A3(
+			$elm$core$List$foldl,
+			toAngleSignature,
+			{prevSeg: '', signature: ''},
+			codeList).signature;
 		return {
 			action: $author$project$Logic$App$Patterns$Misc$mask(
 				A2($elm$core$String$split, '', code)),
@@ -13359,7 +13331,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName = F2(
 					regexMatch,
 					$elm$core$String$trim(name))) {
 					return _Utils_Tuple2(
-						$author$project$Logic$App$Patterns$PatternRegistry$reverseParseBookkeeper(name),
+						$author$project$Logic$App$Patterns$PatternRegistry$parseBookkeeperCode(name),
 						$elm$core$Platform$Cmd$none);
 				} else {
 					if (maybeMacros.$ === 'Just') {

@@ -59,7 +59,7 @@ getPatternFromSignature maybeMacros signature =
             else
                 let
                     parseBookkeeperResult =
-                        parseBookkeeper signature
+                        parseBookkeeperSignature signature
                 in
                 if parseBookkeeperResult.internalName /= "unknown" then
                     parseBookkeeperResult
@@ -111,7 +111,7 @@ getPatternFromName maybeMacros name =
                                 |> String.trim
                     in
                     if regexMatch == String.trim name then
-                        ( reverseParseBookkeeper name, Cmd.none )
+                        ( parseBookkeeperCode name, Cmd.none )
 
                     else
                         case maybeMacros of
@@ -149,8 +149,8 @@ getPatternFromName maybeMacros name =
                                     ( unknownPattern, Cmd.none )
 
 
-reverseParseBookkeeper : String -> Pattern
-reverseParseBookkeeper code =
+parseBookkeeperCode : String -> Pattern
+parseBookkeeperCode code =
     -- I'm very good at naming things
     if code == "-" then
         { signature = ""
@@ -169,121 +169,33 @@ reverseParseBookkeeper code =
         let
             codeList =
                 String.split "" code
+            toAngleSignature codeSegment accumulator =
+                case codeSegment of
+                    "-" ->
+                        if accumulator.prevSeg == "-"  then
+                            {prevSeg = codeSegment, signature = accumulator.signature ++ "w"}
 
-            codeGroupedByTwos =
-                Debug.log "twos" <|
-                    List.reverse <|
-                        List.foldl
-                            (\letter accumulator ->
-                                let
-                                    head =
-                                        Maybe.withDefault "" (List.head accumulator)
-
-                                    tail =
-                                        Maybe.withDefault [] (List.tail accumulator)
-                                in
-                                if String.length head == 0 then
-                                    letter :: tail
-
-                                else if String.length head == 1 then
-                                    (head ++ letter) :: tail
-
-                                else
-                                    letter :: accumulator
-                            )
-                            []
-                            codeList
-
-            toAngleSignature codeChunk accumulator =
-                -- this function is slightly cursed
-                let
-                    _ =
-                        Debug.log codeChunk accumulator
-                in
-                case codeChunk of
-                    "--" ->
-                        if String.endsWith "a" accumulator then
-                            String.append accumulator "ew"
-
-                        else if String.endsWith "w" accumulator then
-                            String.append accumulator "ww"
-
-                        else if String.endsWith "e" accumulator then
-                            String.append accumulator "ww"
+                        else if accumulator.prevSeg == "v"  then
+                            {prevSeg = codeSegment, signature = accumulator.signature ++ "e"}
 
                         else
-                            String.append accumulator "w"
-
-                    "vv" ->
-                        if String.endsWith "w" accumulator then
-                            String.append accumulator "eada"
-
-                        else if String.endsWith "a" accumulator then
-                            String.append accumulator "dad"
-
-                        else if String.endsWith "e" accumulator then
-                            String.append accumulator "ada"
-
-                        else
-                            String.append accumulator "ada"
-
-                    "v-" ->
-                        if String.endsWith "w" accumulator then
-                            String.append accumulator "eae"
-
-                        else if String.endsWith "a" accumulator then
-                            String.append accumulator "dae"
-
-                        else if String.endsWith "e" accumulator then
-                            String.append accumulator "eae"
-
-                        else
-                            String.append accumulator "ae"
-
-                    "-v" ->
-                        if String.endsWith "w" accumulator then
-                            String.append accumulator "wea"
-
-                        else if String.endsWith "a" accumulator then
-                            String.append accumulator "eea"
-
-                        else if String.endsWith "e" accumulator then
-                            String.append accumulator "wea"
-
-                        else
-                            String.append accumulator "ea"
+                            {accumulator | prevSeg = codeSegment}
 
                     "v" ->
-                        if String.endsWith "a" accumulator then
-                            String.append accumulator "da"
+                        if accumulator.prevSeg == "-"  then
+                            {prevSeg = codeSegment, signature = accumulator.signature ++ "ea"}
 
-                        else if String.endsWith "w" accumulator then
-                            String.append accumulator "ea"
-
-                        else if String.endsWith "e" accumulator then
-                            String.append accumulator "ea"
+                        else if accumulator.prevSeg == "v"  then
+                            {prevSeg = codeSegment, signature = accumulator.signature ++ "da"}
 
                         else
-                            String.append accumulator "a"
-
-                    "-" ->
-                        if String.endsWith "a" accumulator then
-                            String.append accumulator "e"
-
-                        else if String.endsWith "w" accumulator then
-                            String.append accumulator "w"
-
-                        else if String.endsWith "e" accumulator then
-                            String.append accumulator "w"
-
-                        else
-                            String.append accumulator ""
+                            {prevSeg = codeSegment, signature = accumulator.signature ++ "a"}
 
                     _ ->
                         accumulator
 
             signature =
-                List.foldl toAngleSignature "" codeGroupedByTwos
+                (List.foldl toAngleSignature {prevSeg = "", signature = ""} codeList).signature
         in
         { signature = Debug.log "signature" signature
         , internalName = "mask"
@@ -298,8 +210,8 @@ reverseParseBookkeeper code =
         }
 
 
-parseBookkeeper : String -> Pattern
-parseBookkeeper signature =
+parseBookkeeperSignature : String -> Pattern
+parseBookkeeperSignature signature =
     if signature == "" then
         { signature = signature
         , internalName = "mask"
