@@ -223,7 +223,6 @@ applyPatternToStack stack ctx pattern index =
                     }
 
             else if pattern.internalName == "for_each" then
-                --special cases for eval and for_each because they need to return multiple stack states for the timeline
                 let
                     actionResult =
                         forEach stack ctx

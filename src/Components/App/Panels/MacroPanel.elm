@@ -17,6 +17,7 @@ import Logic.App.Msg exposing (Msg(..))
 import Logic.App.Types exposing (Iota(..), Panel(..))
 import Logic.App.Utils.GetIotaValue exposing (getIotaValueAsHtmlMsg, getIotaValueAsString)
 import Settings.Theme exposing (iotaColorMap)
+import Html.Events exposing (onInput)
 
 
 libraryPanel : Model -> Html Msg
@@ -39,7 +40,13 @@ renderDict model =
                 ( displayName, _, iota ) ->
                     div [ class "stored_iota_container" ]
                         (div [ class "saved_iota_title" ]
-                            [ p [ class "stored_iota_label" ] [ text (displayName ++ " (\"" ++ signature ++ "\")") ]
+                            [ input
+                                [ class "stored_iota_label"
+                                , style "margin-right" "0"
+                                , Html.Attributes.value (displayName)
+                                , onInput (ChangeMacroName signature)
+                                ]
+                                []
                             , button
                                 [ class "add_button"
                                 , onClick (InputPattern signature)

@@ -53,6 +53,7 @@ type Msg
     | Download String
     | SetTimelineIndex Int
     | HandleKeyboardEvent KeyboardEvent
+    | ChangeMacroName String String
 
 type alias MouseMoveData =
     { pageX : Int

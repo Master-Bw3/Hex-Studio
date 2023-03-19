@@ -4,10 +4,9 @@ import Array exposing (Array)
 import Array.Extra as Array
 import Dict exposing (Dict)
 import Html.Attributes exposing (action)
-import Logic.App.Patterns.OperatorUtils exposing (action1Input, action2Inputs, getAny, getEntity, getPatternIota, getVector, mapNothingToMissingIota, moveNothingsToFront, nanOrInfinityCheck, spell1Input, spell2Inputs)
+import Logic.App.Patterns.OperatorUtils exposing (action1Input, action2Inputs, getAny, getEntity, getIotaList, getPatternIota, getVector, mapNothingToMissingIota, moveNothingsToFront, nanOrInfinityCheck, spell1Input, spell2Inputs)
 import Logic.App.Types exposing (ActionResult, CastingContext, EntityType(..), Iota(..), Mishap(..))
 import Logic.App.Utils.Utils exposing (isJust, unshift)
-import Logic.App.Patterns.OperatorUtils exposing (getIotaList)
 
 
 numberLiteral : Float -> Array Iota -> CastingContext -> ActionResult
@@ -93,8 +92,22 @@ saveMacro stack ctx =
     let
         action iota1 iota2 context =
             case ( iota1, iota2 ) of
-                ( value, PatternIota key _) ->
-                    ( Array.empty, { context | macros = Dict.insert key.signature ( "Unnamed Macro", key.startDirection, value ) context.macros } )
+                ( value, PatternIota key _ ) ->
+                    ( Array.empty
+                    , { context
+                        | macros =
+                            Dict.update key.signature
+                                (\val ->
+                                    case val of
+                                        Just ( displayName, _, _ ) ->
+                                            Just ( displayName, key.startDirection, value )
+
+                                        Nothing ->
+                                            Just ( "Unnamed Macro", key.startDirection, value )
+                                )
+                                context.macros
+                      }
+                    )
 
                 _ ->
                     ( Array.repeat 1 <| Garbage CatastrophicFailure, ctx )

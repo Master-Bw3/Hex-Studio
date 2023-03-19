@@ -755,6 +755,22 @@ update msg model =
             else
                 ( model, Cmd.none )
 
+        ChangeMacroName signature newName ->
+            let
+                updatedMacroDict =
+                    Debug.log "hi" <|
+                    Dict.update signature
+                        (Maybe.map
+                            (\value ->
+                                case value of
+                                    ( _, direction, iota ) ->
+                                        ( newName, direction, iota )
+                            )
+                        )
+                        model.castingContext.macros
+            in
+            ( { model | castingContext = { castingContext | macros = updatedMacroDict } }, Cmd.none )
+
 
 
 -- argg : List (List (GridPoint)) -> (Float, Float) -> List (List (GridPoint))
