@@ -6,13 +6,16 @@ import Browser
 import Browser.Dom exposing (getElement)
 import Browser.Events
 import Components.App.Content exposing (content)
+import Components.App.ContextMenu.Configs as Configs
+import Components.App.ContextMenu.ContextMenu exposing (..)
 import Components.App.Grid exposing (..)
+import ContextMenu
 import Dict exposing (Dict)
 import File.Download as Download
 import Html exposing (..)
 import Json.Decode exposing (Decoder)
-import Keyboard.Event exposing (KeyboardEvent, decodeKeyboardEvent)
-import Logic.App.Grid exposing (drawPattern, drawPatterns, sortPatterns)
+import Keyboard.Event exposing (decodeKeyboardEvent)
+import Logic.App.Grid exposing (drawPatterns, sortPatterns)
 import Logic.App.ImportExport.ImportParser exposing (parseInput)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (..)
@@ -22,7 +25,6 @@ import Logic.App.Patterns.PatternRegistry exposing (..)
 import Logic.App.Stack.EvalStack exposing (applyPatternsToStack)
 import Logic.App.Types exposing (..)
 import Logic.App.Utils.GetAngleSignature exposing (getAngleSignature)
-import Logic.App.Utils.GetIotaValue exposing (getIotaFromString)
 import Logic.App.Utils.Utils exposing (removeFromArray, unshift)
 import Ports.CheckMouseOverDragHandle as CheckMouseOverDragHandle
 import Ports.GetElementBoundingBoxById as GetElementBoundingBoxById
@@ -46,6 +48,10 @@ main =
 
 init : () -> ( Model, Cmd Msg )
 init _ =
+    let
+        ( contextMenu, msg ) =
+            ContextMenu.init
+    in
     ( { stack = Array.empty
       , patternArray = Array.empty
       , ui =
@@ -92,8 +98,11 @@ init _ =
       , timeline = Array.empty
       , timelineIndex = 0
       , lastEvent = Nothing
+      , contextMenu = contextMenu
+      , config = Configs.winChrome
+      , message = ""
       }
-    , Cmd.batch [ Task.attempt GetGrid (getElement "hex_grid"), Task.attempt GetContentSize (getElement "content") ]
+    , Cmd.batch [ Task.attempt GetGrid (getElement "hex_grid"), Task.attempt GetContentSize (getElement "content"), Cmd.map ContextMenuMsg msg ]
     )
 
 
@@ -759,17 +768,31 @@ update msg model =
             let
                 updatedMacroDict =
                     Debug.log "hi" <|
-                    Dict.update signature
-                        (Maybe.map
-                            (\value ->
-                                case value of
-                                    ( _, direction, iota ) ->
-                                        ( newName, direction, iota )
+                        Dict.update signature
+                            (Maybe.map
+                                (\value ->
+                                    case value of
+                                        ( _, direction, iota ) ->
+                                            ( newName, direction, iota )
+                                )
                             )
-                        )
-                        model.castingContext.macros
+                            model.castingContext.macros
             in
             ( { model | castingContext = { castingContext | macros = updatedMacroDict } }, Cmd.none )
+
+        ContextMenuMsg message ->
+            let
+                ( contextMenu, cmd ) =
+                    ContextMenu.update message model.contextMenu
+            in
+            ( { model | contextMenu = contextMenu }
+            , Cmd.map ContextMenuMsg cmd
+            )
+
+        ContextMenuItemSelected message ->
+            ( { model | message = "Item[" ++ String.fromInt message ++ "] was clicked." }
+            , Cmd.none
+            )
 
 
 
@@ -791,6 +814,7 @@ subscriptions model =
         , CheckMouseOverDragHandle.recieveCheckMouseOverDragHandle RecieveMouseOverHandle
         , GetGridDrawingAsGif.recieveGIF RecieveGridDrawingAsGIF
         , GetGridDrawingAsImage.recieveImage RecieveGridDrawingAsImage
+        , Sub.map ContextMenuMsg (ContextMenu.subscriptions model.contextMenu)
         ]
 
 
@@ -814,5 +838,12 @@ locationDecoder =
 
 view model =
     { title = "Hex Studio"
-    , body = [ content model ]
+    , body =
+        [ content model
+        , ContextMenu.view
+            model.config
+            ContextMenuMsg
+            toItemGroups
+            model.contextMenu
+        ]
     }

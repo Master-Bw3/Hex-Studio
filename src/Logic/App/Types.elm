@@ -36,6 +36,7 @@ type MetaActionMsg
     | Backspace
     | Wrap
 
+
 type alias Pattern =
     { signature : String
     , startDirection : Direction
@@ -183,3 +184,7 @@ type Overlay
 
 type alias Timeline =
     Array { stack : Array Iota, patternIndex : Int }
+
+
+type ContextMenuContext
+    = PatternItem Bool Bool Int --is active, is macro, index

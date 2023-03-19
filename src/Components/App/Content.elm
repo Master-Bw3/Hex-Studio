@@ -1,5 +1,6 @@
 module Components.App.Content exposing (content)
 
+import Components.App.ContextMenu.ContextMenu exposing (objectStyles)
 import Components.App.LeftBox exposing (leftBox)
 import Components.App.Overlays.ExportTextOverlay exposing (exportTextOverlay)
 import Components.App.Overlays.ImportTextOverlay exposing (importTextOverlay)
@@ -12,6 +13,7 @@ import Html.Events.Extra.Mouse as MouseEvent
 import Html.Events.Extra.Touch as TouchEvent
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (Msg(..))
+import Logic.App.Types exposing (ContextMenuContext(..))
 import Logic.App.Utils.Utils exposing (touchCoordinates)
 
 

@@ -1,14 +1,12 @@
 module Logic.App.Model exposing (..)
 
 import Array exposing (Array)
-import Logic.App.Types exposing (CastingContext, GridPoint, HeldItem, Iota, Panel, Pattern)
-import Logic.App.Types exposing (Grid)
-import Logic.App.Msg exposing (Msg)
-import Logic.App.Types exposing (Overlay)
-import Logic.App.Types exposing (Timeline)
-import Keyboard.Event exposing (KeyboardEvent)
 import Dict exposing (Dict)
-import Logic.App.Types exposing (Direction)
+import Keyboard.Event exposing (KeyboardEvent)
+import Logic.App.Msg exposing (Msg)
+import Logic.App.Types exposing (CastingContext, Direction, Grid, GridPoint, HeldItem, Iota, Overlay, Panel, Pattern, Timeline)
+import ContextMenu exposing (ContextMenu)
+import Logic.App.Types exposing (ContextMenuContext)
 
 
 type alias Model =
@@ -28,7 +26,6 @@ type alias Model =
         , openOverlay : Overlay
         }
     , grid : Grid
-        
     , mousePos : ( Float, Float )
     , window :
         { width : Float
@@ -40,8 +37,11 @@ type alias Model =
     , time : Int
     , downloadSrc : String
     , insertionPoint : Int
-    , importQueue : List (Pattern, Cmd Msg)
+    , importQueue : List ( Pattern, Cmd Msg )
     , timeline : Timeline
     , timelineIndex : Int
     , lastEvent : Maybe KeyboardEvent
+    , contextMenu : ContextMenu ContextMenuContext
+    , config : ContextMenu.Config
+    , message : String
     }

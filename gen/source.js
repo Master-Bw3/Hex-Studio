@@ -5506,6 +5506,9 @@ var $elm$core$Task$perform = F2(
 				A2($elm$core$Task$map, toMessage, task)));
 	});
 var $elm$browser$Browser$document = _Browser_document;
+var $author$project$Logic$App$Msg$ContextMenuMsg = function (a) {
+	return {$: 'ContextMenuMsg', a: a};
+};
 var $author$project$Logic$App$Msg$GetContentSize = function (a) {
 	return {$: 'GetContentSize', a: a};
 };
@@ -5543,13 +5546,36 @@ var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Dict$RBEmpty_elm_builtin = {$: 'RBEmpty_elm_builtin'};
 var $elm$core$Dict$empty = $elm$core$Dict$RBEmpty_elm_builtin;
 var $elm$browser$Browser$Dom$getElement = _Browser_getElement;
+var $jinjor$elm_contextmenu$ContextMenu$ContextMenu = function (a) {
+	return {$: 'ContextMenu', a: a};
+};
+var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
+var $jinjor$elm_contextmenu$ContextMenu$init = _Utils_Tuple2(
+	$jinjor$elm_contextmenu$ContextMenu$ContextMenu(
+		{closeOnDehover: false, openState: $elm$core$Maybe$Nothing}),
+	$elm$core$Platform$Cmd$none);
+var $elm$core$Platform$Cmd$map = _Platform_map;
 var $elm$core$Basics$negate = function (n) {
 	return -n;
 };
+var $jinjor$elm_contextmenu$ContextMenu$Arrow = {$: 'Arrow'};
+var $jinjor$elm_contextmenu$ContextMenu$Mirror = {$: 'Mirror'};
+var $jinjor$elm_contextmenu$ContextMenu$RightBottom = {$: 'RightBottom'};
+var $jinjor$elm_contextmenu$ContextMenu$Shift = {$: 'Shift'};
+var $jinjor$elm_contextmenu$ContextMenu$Pointer = {$: 'Pointer'};
+var $jinjor$elm_contextmenu$ContextMenu$defaultConfig = {containerColor: 'white', cursor: $jinjor$elm_contextmenu$ContextMenu$Pointer, direction: $jinjor$elm_contextmenu$ContextMenu$RightBottom, fontFamily: 'initial', hoverColor: 'rgb(240 240 240)', invertText: false, overflowX: $jinjor$elm_contextmenu$ContextMenu$Mirror, overflowY: $jinjor$elm_contextmenu$ContextMenu$Mirror, rounded: false, width: 300};
+var $author$project$Components$App$ContextMenu$Configs$winChrome = _Utils_update(
+	$jinjor$elm_contextmenu$ContextMenu$defaultConfig,
+	{containerColor: '#ffffff', cursor: $jinjor$elm_contextmenu$ContextMenu$Arrow, direction: $jinjor$elm_contextmenu$ContextMenu$RightBottom, hoverColor: '#c7c5c5', invertText: false, overflowX: $jinjor$elm_contextmenu$ContextMenu$Shift, overflowY: $jinjor$elm_contextmenu$ContextMenu$Mirror, rounded: false});
 var $author$project$Main$init = function (_v0) {
+	var _v1 = $jinjor$elm_contextmenu$ContextMenu$init;
+	var contextMenu = _v1.a;
+	var msg = _v1.b;
 	return _Utils_Tuple2(
 		{
 			castingContext: {heldItem: $author$project$Logic$App$Types$NoItem, heldItemContent: $elm$core$Maybe$Nothing, macros: $elm$core$Dict$empty, ravenmind: $elm$core$Maybe$Nothing},
+			config: $author$project$Components$App$ContextMenu$Configs$winChrome,
+			contextMenu: contextMenu,
 			downloadSrc: '',
 			grid: {
 				drawing: {activePath: _List_Nil, drawingMode: false},
@@ -5561,6 +5587,7 @@ var $author$project$Main$init = function (_v0) {
 			importQueue: _List_Nil,
 			insertionPoint: 0,
 			lastEvent: $elm$core$Maybe$Nothing,
+			message: '',
 			mousePos: _Utils_Tuple2(0.0, 0.0),
 			patternArray: $elm$core$Array$empty,
 			settings: {gridScale: 1.0},
@@ -5594,7 +5621,8 @@ var $author$project$Main$init = function (_v0) {
 					A2(
 					$elm$core$Task$attempt,
 					$author$project$Logic$App$Msg$GetContentSize,
-					$elm$browser$Browser$Dom$getElement('content'))
+					$elm$browser$Browser$Dom$getElement('content')),
+					A2($elm$core$Platform$Cmd$map, $author$project$Logic$App$Msg$ContextMenuMsg, msg)
 				])));
 };
 var $author$project$Logic$App$Msg$HandleKeyboardEvent = function (a) {
@@ -6382,6 +6410,7 @@ var $author$project$Main$locationDecoder = A6(
 	A2($elm$json$Json$Decode$field, 'bottom', $elm$json$Json$Decode$int),
 	A2($elm$json$Json$Decode$field, 'top', $elm$json$Json$Decode$int),
 	A2($elm$json$Json$Decode$field, 'right', $elm$json$Json$Decode$int));
+var $elm$core$Platform$Sub$map = _Platform_map;
 var $elm$browser$Browser$Events$Document = {$: 'Document'};
 var $elm$browser$Browser$Events$MySub = F3(
 	function (a, b, c) {
@@ -6609,6 +6638,29 @@ var $author$project$Ports$CheckMouseOverDragHandle$recieveCheckMouseOverDragHand
 var $author$project$Ports$GetGridDrawingAsGif$recieveGIF = _Platform_incomingPort('recieveGIF', $elm$json$Json$Decode$string);
 var $author$project$Ports$GetGridDrawingAsImage$recieveImage = _Platform_incomingPort('recieveImage', $elm$json$Json$Decode$string);
 var $author$project$Ports$HexNumGen$recieveNumber = _Platform_incomingPort('recieveNumber', $elm$json$Json$Decode$string);
+var $jinjor$elm_contextmenu$ContextMenu$Close = {$: 'Close'};
+var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
+var $elm$browser$Browser$Events$onMouseDown = A2($elm$browser$Browser$Events$on, $elm$browser$Browser$Events$Document, 'mousedown');
+var $jinjor$elm_contextmenu$ContextMenu$Container = {$: 'Container'};
+var $elm$core$Basics$neq = _Utils_notEqual;
+var $jinjor$elm_contextmenu$ContextMenu$shouldCloseOnClick = F2(
+	function (closeOnDehover, openState) {
+		if (openState.$ === 'Just') {
+			var hover = openState.a.hover;
+			return closeOnDehover ? false : (!_Utils_eq(hover, $jinjor$elm_contextmenu$ContextMenu$Container));
+		} else {
+			return true;
+		}
+	});
+var $jinjor$elm_contextmenu$ContextMenu$subscriptions = function (_v0) {
+	var model = _v0.a;
+	return $elm$core$Platform$Sub$batch(
+		_List_fromArray(
+			[
+				A2($jinjor$elm_contextmenu$ContextMenu$shouldCloseOnClick, model.closeOnDehover, model.openState) ? $elm$browser$Browser$Events$onMouseDown(
+				$elm$json$Json$Decode$succeed($jinjor$elm_contextmenu$ContextMenu$Close)) : $elm$core$Platform$Sub$none
+			]));
+};
 var $author$project$Main$subscriptions = function (model) {
 	return $elm$core$Platform$Sub$batch(
 		_List_fromArray(
@@ -6635,7 +6687,11 @@ var $author$project$Main$subscriptions = function (model) {
 					$author$project$Logic$App$Msg$RecieveInputBoundingBoxes)),
 				$author$project$Ports$CheckMouseOverDragHandle$recieveCheckMouseOverDragHandle($author$project$Logic$App$Msg$RecieveMouseOverHandle),
 				$author$project$Ports$GetGridDrawingAsGif$recieveGIF($author$project$Logic$App$Msg$RecieveGridDrawingAsGIF),
-				$author$project$Ports$GetGridDrawingAsImage$recieveImage($author$project$Logic$App$Msg$RecieveGridDrawingAsImage)
+				$author$project$Ports$GetGridDrawingAsImage$recieveImage($author$project$Logic$App$Msg$RecieveGridDrawingAsImage),
+				A2(
+				$elm$core$Platform$Sub$map,
+				$author$project$Logic$App$Msg$ContextMenuMsg,
+				$jinjor$elm_contextmenu$ContextMenu$subscriptions(model.contextMenu))
 			]));
 };
 var $author$project$Logic$App$Types$Artifact = {$: 'Artifact'};
@@ -6766,7 +6822,6 @@ var $elm$core$Basics$min = F2(
 	function (x, y) {
 		return (_Utils_cmp(x, y) < 0) ? x : y;
 	});
-var $elm$core$Basics$neq = _Utils_notEqual;
 var $elm$core$Basics$not = _Basics_not;
 var $elm$core$Basics$sin = _Basics_sin;
 var $author$project$Components$App$Grid$spacing = function (scale) {
@@ -13708,7 +13763,6 @@ try {
 	};
 } catch ($) {
 	throw 'Some top-level definitions from `Logic.App.Patterns.PatternRegistry` are causing infinite recursion:\n\n  ┌─────┐\n  │    getPatternFromSignature\n  │     ↓\n  │    patternRegistry\n  │     ↓\n  │    saveMacro\n  └─────┘\n\nThese errors are very tricky, so read https://elm-lang.org/0.19.1/bad-recursion to learn how to fix it!';}
-var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Logic$App$Utils$Utils$ifThenElse = F3(
 	function (conditional, a, b) {
 		return conditional ? a : b;
@@ -14361,6 +14415,145 @@ var $elm_community$array_extra$Array$Extra$update = F2(
 					array);
 			}
 		};
+	});
+var $jinjor$elm_contextmenu$ContextMenu$None = {$: 'None'};
+var $jinjor$elm_contextmenu$ContextMenu$Open = F3(
+	function (a, b, c) {
+		return {$: 'Open', a: a, b: b, c: c};
+	});
+var $jinjor$elm_contextmenu$ContextMenu$setHoverState = F2(
+	function (hover, openState) {
+		return A2(
+			$elm$core$Maybe$map,
+			function (_v0) {
+				var mouse = _v0.mouse;
+				var window = _v0.window;
+				var context = _v0.context;
+				return {context: context, hover: hover, mouse: mouse, window: window};
+			},
+			openState);
+	});
+var $jinjor$elm_contextmenu$ContextMenu$enterContainer = function (openState) {
+	return A2($jinjor$elm_contextmenu$ContextMenu$setHoverState, $jinjor$elm_contextmenu$ContextMenu$Container, openState);
+};
+var $jinjor$elm_contextmenu$ContextMenu$ItemIndex = function (a) {
+	return {$: 'ItemIndex', a: a};
+};
+var $jinjor$elm_contextmenu$ContextMenu$enterItem = F2(
+	function (index, openState) {
+		return A2(
+			$jinjor$elm_contextmenu$ContextMenu$setHoverState,
+			$jinjor$elm_contextmenu$ContextMenu$ItemIndex(index),
+			openState);
+	});
+var $jinjor$elm_contextmenu$ContextMenu$leaveContainer = function (openState) {
+	return A2($jinjor$elm_contextmenu$ContextMenu$setHoverState, $jinjor$elm_contextmenu$ContextMenu$None, openState);
+};
+var $jinjor$elm_contextmenu$ContextMenu$leaveItem = function (openState) {
+	return A2($jinjor$elm_contextmenu$ContextMenu$setHoverState, $jinjor$elm_contextmenu$ContextMenu$Container, openState);
+};
+var $jinjor$elm_contextmenu$ContextMenu$Size = F2(
+	function (width, height) {
+		return {height: height, width: width};
+	});
+var $elm$browser$Browser$Dom$getViewport = _Browser_withWindow(_Browser_getViewport);
+var $jinjor$elm_contextmenu$ContextMenu$windowSize = A2(
+	$elm$core$Task$map,
+	function (v) {
+		return A2($jinjor$elm_contextmenu$ContextMenu$Size, v.viewport.width, v.viewport.height);
+	},
+	$elm$browser$Browser$Dom$getViewport);
+var $jinjor$elm_contextmenu$ContextMenu$update = F2(
+	function (msg, _v0) {
+		update:
+		while (true) {
+			var model = _v0.a;
+			switch (msg.$) {
+				case 'NoOp':
+					return _Utils_Tuple2(
+						$jinjor$elm_contextmenu$ContextMenu$ContextMenu(model),
+						$elm$core$Platform$Cmd$none);
+				case 'RequestOpen':
+					var context = msg.a;
+					var mouse = msg.b;
+					return _Utils_Tuple2(
+						$jinjor$elm_contextmenu$ContextMenu$ContextMenu(model),
+						A2(
+							$elm$core$Task$perform,
+							A2($jinjor$elm_contextmenu$ContextMenu$Open, context, mouse),
+							$jinjor$elm_contextmenu$ContextMenu$windowSize));
+				case 'Open':
+					var context = msg.a;
+					var mouse = msg.b;
+					var window = msg.c;
+					return _Utils_Tuple2(
+						$jinjor$elm_contextmenu$ContextMenu$ContextMenu(
+							_Utils_update(
+								model,
+								{
+									openState: $elm$core$Maybe$Just(
+										{context: context, hover: $jinjor$elm_contextmenu$ContextMenu$None, mouse: mouse, window: window})
+								})),
+						$elm$core$Platform$Cmd$none);
+				case 'Close':
+					return _Utils_Tuple2(
+						$jinjor$elm_contextmenu$ContextMenu$ContextMenu(
+							_Utils_update(
+								model,
+								{openState: $elm$core$Maybe$Nothing})),
+						$elm$core$Platform$Cmd$none);
+				case 'EnterItem':
+					var index = msg.a;
+					return _Utils_Tuple2(
+						$jinjor$elm_contextmenu$ContextMenu$ContextMenu(
+							_Utils_update(
+								model,
+								{
+									openState: A2($jinjor$elm_contextmenu$ContextMenu$enterItem, index, model.openState)
+								})),
+						$elm$core$Platform$Cmd$none);
+				case 'LeaveItem':
+					return _Utils_Tuple2(
+						$jinjor$elm_contextmenu$ContextMenu$ContextMenu(
+							_Utils_update(
+								model,
+								{
+									openState: $jinjor$elm_contextmenu$ContextMenu$leaveItem(model.openState)
+								})),
+						$elm$core$Platform$Cmd$none);
+				case 'EnterContainer':
+					return _Utils_Tuple2(
+						$jinjor$elm_contextmenu$ContextMenu$ContextMenu(
+							_Utils_update(
+								model,
+								{
+									openState: $jinjor$elm_contextmenu$ContextMenu$enterContainer(model.openState)
+								})),
+						$elm$core$Platform$Cmd$none);
+				default:
+					if (model.closeOnDehover) {
+						var $temp$msg = $jinjor$elm_contextmenu$ContextMenu$Close,
+							$temp$_v0 = $jinjor$elm_contextmenu$ContextMenu$ContextMenu(
+							_Utils_update(
+								model,
+								{
+									openState: $jinjor$elm_contextmenu$ContextMenu$leaveContainer(model.openState)
+								}));
+						msg = $temp$msg;
+						_v0 = $temp$_v0;
+						continue update;
+					} else {
+						return _Utils_Tuple2(
+							$jinjor$elm_contextmenu$ContextMenu$ContextMenu(
+								_Utils_update(
+									model,
+									{
+										openState: $jinjor$elm_contextmenu$ContextMenu$leaveContainer(model.openState)
+									})),
+							$elm$core$Platform$Cmd$none);
+					}
+			}
+		}
 	});
 var $author$project$Components$App$Grid$updateUsedGridPoints = F5(
 	function (gridWidth, gridHeight, patternArray, maybeGrid, scale) {
@@ -15413,7 +15606,7 @@ var $author$project$Main$update = F2(
 							return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 						}
 					}
-				default:
+				case 'ChangeMacroName':
 					var signature = msg.a;
 					var newName = msg.b;
 					var updatedMacroDict = A2(
@@ -15436,6 +15629,25 @@ var $author$project$Main$update = F2(
 								castingContext: _Utils_update(
 									castingContext,
 									{macros: updatedMacroDict})
+							}),
+						$elm$core$Platform$Cmd$none);
+				case 'ContextMenuMsg':
+					var message = msg.a;
+					var _v14 = A2($jinjor$elm_contextmenu$ContextMenu$update, message, model.contextMenu);
+					var contextMenu = _v14.a;
+					var cmd = _v14.b;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{contextMenu: contextMenu}),
+						A2($elm$core$Platform$Cmd$map, $author$project$Logic$App$Msg$ContextMenuMsg, cmd));
+				default:
+					var message = msg.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								message: 'Item[' + ($elm$core$String$fromInt(message) + '] was clicked.')
 							}),
 						$elm$core$Platform$Cmd$none);
 			}
@@ -17479,6 +17691,10 @@ var $elm$html$Html$Events$preventDefaultOn = F2(
 			event,
 			$elm$virtual_dom$VirtualDom$MayPreventDefault(decoder));
 	});
+var $author$project$Logic$App$Types$PatternItem = F3(
+	function (a, b, c) {
+		return {$: 'PatternItem', a: a, b: b, c: c};
+	});
 var $author$project$Logic$App$Msg$RemoveFromPatternArray = F2(
 	function (a, b) {
 		return {$: 'RemoveFromPatternArray', a: a, b: b};
@@ -17635,6 +17851,46 @@ var $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$onSourceDrag = functio
 				config.onDrag)
 			]));
 };
+var $jinjor$elm_contextmenu$ContextMenu$NoOp = {$: 'NoOp'};
+var $jinjor$elm_contextmenu$ContextMenu$RequestOpen = F2(
+	function (a, b) {
+		return {$: 'RequestOpen', a: a, b: b};
+	});
+var $jinjor$elm_contextmenu$ContextMenu$Position = F2(
+	function (x, y) {
+		return {x: x, y: y};
+	});
+var $jinjor$elm_contextmenu$ContextMenu$position = A3(
+	$elm$json$Json$Decode$map2,
+	$jinjor$elm_contextmenu$ContextMenu$Position,
+	A2($elm$json$Json$Decode$field, 'clientX', $elm$json$Json$Decode$float),
+	A2($elm$json$Json$Decode$field, 'clientY', $elm$json$Json$Decode$float));
+var $jinjor$elm_contextmenu$ContextMenu$openIf = F3(
+	function (condition, transform, context) {
+		return condition ? A2(
+			$elm$html$Html$Events$custom,
+			'contextmenu',
+			A2(
+				$elm$json$Json$Decode$map,
+				function (msg) {
+					return {message: msg, preventDefault: true, stopPropagation: true};
+				},
+				A2(
+					$elm$json$Json$Decode$map,
+					transform,
+					A2(
+						$elm$json$Json$Decode$map,
+						$jinjor$elm_contextmenu$ContextMenu$RequestOpen(context),
+						$jinjor$elm_contextmenu$ContextMenu$position)))) : A2(
+			$elm$html$Html$Events$on,
+			'contextmenu',
+			$elm$json$Json$Decode$succeed(
+				transform($jinjor$elm_contextmenu$ContextMenu$NoOp)));
+	});
+var $jinjor$elm_contextmenu$ContextMenu$open = F2(
+	function (transform, context) {
+		return A3($jinjor$elm_contextmenu$ContextMenu$openIf, true, transform, context);
+	});
 var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
 var $elm$svg$Svg$style = $elm$svg$Svg$trustedNode('style');
 var $elm$svg$Svg$Attributes$x1 = _VirtualDom_attribute('x1');
@@ -17710,10 +17966,12 @@ var $author$project$Components$Icon$XButton$xButton = A2(
 						]))
 				]))
 		]));
-var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F5(
-	function (patternList, dragoverIndex, dragstartIndex, overDragHandle, insertionPoint) {
+var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F6(
+	function (patternList, dragoverIndex, dragstartIndex, overDragHandle, insertionPoint, macroDict) {
 		var renderPattern = F2(
 			function (index, pattern) {
+				var isMacro = $author$project$Logic$App$Utils$Utils$isJust(
+					A2($elm$core$Dict$get, pattern.signature, macroDict));
 				var activeOpacity = (!pattern.active) ? A2($elm$html$Html$Attributes$style, 'opacity', '50%') : A2($elm$html$Html$Attributes$style, '', '');
 				return _Utils_ap(
 					_Utils_eq(dragoverIndex, index) ? _List_fromArray(
@@ -17738,10 +17996,19 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F5(
 										$elm$html$Html$Attributes$attribute,
 										'data-index',
 										$elm$core$String$fromInt(index)),
+										A3(
+										$author$project$Logic$App$Utils$Utils$ifThenElse,
+										isMacro,
+										A2($elm$html$Html$Attributes$style, 'background-color', '#4C3541'),
+										A2($elm$html$Html$Attributes$style, 'background-color', 'var(--primary_lightest)')),
 										$mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$onClick(
 										function (event) {
 											return A2($author$project$Logic$App$Msg$SetInsertionPoint, index, event.keys);
-										})
+										}),
+										A2(
+										$jinjor$elm_contextmenu$ContextMenu$open,
+										$author$project$Logic$App$Msg$ContextMenuMsg,
+										A3($author$project$Logic$App$Types$PatternItem, pattern.active, isMacro, index))
 									]),
 								_Utils_ap(
 									overDragHandle ? $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$onSourceDrag(
@@ -18233,7 +18500,7 @@ var $author$project$Components$App$Panels$PatternPanel$patternPanel = function (
 					$elm$html$Html$Attributes$id('pattern_draggable_container'),
 					$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$onDropTarget($author$project$Components$App$Panels$PatternPanel$dropTargetConfig)),
 				$elm$core$List$reverse(
-					A5($author$project$Components$App$Panels$PatternPanel$renderPatternList, model.patternArray, model.ui.mouseOverElementIndex, model.ui.dragging.b, model.ui.overDragHandle, model.insertionPoint))),
+					A6($author$project$Components$App$Panels$PatternPanel$renderPatternList, model.patternArray, model.ui.mouseOverElementIndex, model.ui.dragging.b, model.ui.overDragHandle, model.insertionPoint, model.castingContext.macros))),
 				A2(
 				$elm$html$Html$div,
 				_List_fromArray(
@@ -19230,11 +19497,459 @@ var $author$project$Components$App$Content$content = function (model) {
 				$author$project$Components$App$Overlays$ImportTextOverlay$importTextOverlay(model),
 				$author$project$Components$App$Overlays$ExportTextOverlay$exportTextOverlay(model))));
 };
+var $author$project$Logic$App$Msg$ContextMenuItemSelected = function (a) {
+	return {$: 'ContextMenuItemSelected', a: a};
+};
+var $jinjor$elm_contextmenu$ContextMenu$Item = function (a) {
+	return {$: 'Item', a: a};
+};
+var $jinjor$elm_contextmenu$ContextMenu$Text = function (a) {
+	return {$: 'Text', a: a};
+};
+var $jinjor$elm_contextmenu$ContextMenu$defaultItemHeight = 20;
+var $jinjor$elm_contextmenu$ContextMenu$item = function (s) {
+	return $jinjor$elm_contextmenu$ContextMenu$Item(
+		{
+			content: $jinjor$elm_contextmenu$ContextMenu$Text(s),
+			disabled: false,
+			height: $elm$core$Basics$floor($jinjor$elm_contextmenu$ContextMenu$defaultItemHeight),
+			icon: $elm$core$Maybe$Nothing,
+			shortcut: ''
+		});
+};
+var $author$project$Components$App$ContextMenu$ContextMenu$toItemGroups = function (context) {
+	var isActive = context.a;
+	var isMacro = context.b;
+	var index = context.c;
+	return _List_fromArray(
+		[
+			_Utils_ap(
+			_List_fromArray(
+				[
+					_Utils_Tuple2(
+					$jinjor$elm_contextmenu$ContextMenu$item('Set Insertion Point Above'),
+					$author$project$Logic$App$Msg$ContextMenuItemSelected(0)),
+					_Utils_Tuple2(
+					$jinjor$elm_contextmenu$ContextMenu$item('Set Insertion Point Below'),
+					$author$project$Logic$App$Msg$ContextMenuItemSelected(1)),
+					A3(
+					$author$project$Logic$App$Utils$Utils$ifThenElse,
+					isActive,
+					_Utils_Tuple2(
+						$jinjor$elm_contextmenu$ContextMenu$item('Disable Pattern'),
+						$author$project$Logic$App$Msg$ContextMenuItemSelected(2)),
+					_Utils_Tuple2(
+						$jinjor$elm_contextmenu$ContextMenu$item('Enable Pattern'),
+						$author$project$Logic$App$Msg$ContextMenuItemSelected(2)))
+				]),
+			A3(
+				$author$project$Logic$App$Utils$Utils$ifThenElse,
+				isMacro,
+				_List_fromArray(
+					[
+						_Utils_Tuple2(
+						$jinjor$elm_contextmenu$ContextMenu$item('Expand Macro'),
+						$author$project$Logic$App$Msg$ContextMenuItemSelected(2))
+					]),
+				_List_Nil))
+		]);
+};
+var $jinjor$elm_contextmenu$ContextMenu$EnterContainer = {$: 'EnterContainer'};
+var $jinjor$elm_contextmenu$ContextMenu$LeaveContainer = {$: 'LeaveContainer'};
+var $jinjor$elm_contextmenu$ContextMenu$containerBorderWidth = 1;
+var $jinjor$elm_contextmenu$ContextMenu$containerPadding = 4;
+var $jinjor$elm_contextmenu$ContextMenu$partitionMargin = 6;
+var $jinjor$elm_contextmenu$ContextMenu$partitionWidth = 1;
+var $elm$core$List$sum = function (numbers) {
+	return A3($elm$core$List$foldl, $elm$core$Basics$add, 0, numbers);
+};
+var $jinjor$elm_contextmenu$ContextMenu$calculateMenuHeight = function (groups) {
+	var partitions = ($elm$core$List$length(groups) - 1) * (($jinjor$elm_contextmenu$ContextMenu$partitionMargin * 2) + $jinjor$elm_contextmenu$ContextMenu$partitionWidth);
+	var items = $elm$core$List$sum(
+		A2(
+			$elm$core$List$map,
+			function (items_) {
+				return $elm$core$List$sum(
+					A2(
+						$elm$core$List$map,
+						function (_v0) {
+							var item_ = _v0.a;
+							return item_.height;
+						},
+						items_));
+			},
+			groups));
+	var containerPaddings = $jinjor$elm_contextmenu$ContextMenu$containerPadding * 2;
+	var containerBorders = $jinjor$elm_contextmenu$ContextMenu$containerBorderWidth * 2;
+	return ((containerBorders + containerPaddings) + partitions) + items;
+};
+var $jinjor$elm_contextmenu$ContextMenu$calculateX = F5(
+	function (direction, overflow, windowWidth, menuWidth, x) {
+		return A2(
+			$elm$core$Basics$max,
+			0,
+			function () {
+				if (direction.$ === 'LeftBottom') {
+					return ((x - menuWidth) < 0) ? (_Utils_eq(overflow, $jinjor$elm_contextmenu$ContextMenu$Shift) ? 0 : x) : (x - menuWidth);
+				} else {
+					return (_Utils_cmp(x + menuWidth, windowWidth) > 0) ? (_Utils_eq(overflow, $jinjor$elm_contextmenu$ContextMenu$Shift) ? (windowWidth - menuWidth) : (x - menuWidth)) : x;
+				}
+			}());
+	});
+var $jinjor$elm_contextmenu$ContextMenu$calculateY = F4(
+	function (overflow, windowHeight, menuHeight, y) {
+		return A2(
+			$elm$core$Basics$max,
+			0,
+			(_Utils_cmp(y + menuHeight, windowHeight) > 0) ? (_Utils_eq(overflow, $jinjor$elm_contextmenu$ContextMenu$Shift) ? (windowHeight - menuHeight) : (y - menuHeight)) : y);
+	});
+var $jinjor$elm_contextmenu$Styles$borderColor = '#ccc';
+var $jinjor$elm_contextmenu$Styles$px = function (n) {
+	return $elm$core$String$fromFloat(n) + 'px';
+};
+var $jinjor$elm_contextmenu$Styles$container = F9(
+	function (containerColor, borderWidth, padding, rounded, width, left, top, fontFamily, fontSize) {
+		return _List_fromArray(
+			[
+				A2($elm$html$Html$Attributes$style, 'border-style', 'solid'),
+				A2(
+				$elm$html$Html$Attributes$style,
+				'border-width',
+				$jinjor$elm_contextmenu$Styles$px(borderWidth)),
+				A2($elm$html$Html$Attributes$style, 'border-color', $jinjor$elm_contextmenu$Styles$borderColor),
+				A2($elm$html$Html$Attributes$style, 'position', 'fixed'),
+				A2(
+				$elm$html$Html$Attributes$style,
+				'top',
+				$jinjor$elm_contextmenu$Styles$px(top)),
+				A2(
+				$elm$html$Html$Attributes$style,
+				'left',
+				$jinjor$elm_contextmenu$Styles$px(left)),
+				A2(
+				$elm$html$Html$Attributes$style,
+				'width',
+				$jinjor$elm_contextmenu$Styles$px(width)),
+				A2(
+				$elm$html$Html$Attributes$style,
+				'z-index',
+				$elm$core$String$fromFloat(2147483647 - 10)),
+				A2($elm$html$Html$Attributes$style, 'background-color', containerColor),
+				A2($elm$html$Html$Attributes$style, 'cursor', 'default'),
+				A2($elm$html$Html$Attributes$style, 'box-shadow', '0px 3px 8px 0px rgba(0,0,0,0.3)'),
+				A2(
+				$elm$html$Html$Attributes$style,
+				'padding',
+				$jinjor$elm_contextmenu$Styles$px(padding) + ' 0'),
+				A2(
+				$elm$html$Html$Attributes$style,
+				'border-radius',
+				rounded ? $jinjor$elm_contextmenu$Styles$px(padding) : ''),
+				A2($elm$html$Html$Attributes$style, 'font-family', fontFamily),
+				A2(
+				$elm$html$Html$Attributes$style,
+				'font-size',
+				$jinjor$elm_contextmenu$Styles$px(fontSize))
+			]);
+	});
+var $jinjor$elm_contextmenu$ContextMenu$fontSize = 13;
+var $jinjor$elm_contextmenu$ContextMenu$getItemIndex = function (hover) {
+	if (hover.$ === 'ItemIndex') {
+		var index = hover.a;
+		return $elm$core$Maybe$Just(index);
+	} else {
+		return $elm$core$Maybe$Nothing;
+	}
+};
+var $jinjor$elm_contextmenu$ContextMenu$EnterItem = function (a) {
+	return {$: 'EnterItem', a: a};
+};
+var $jinjor$elm_contextmenu$ContextMenu$LeaveItem = {$: 'LeaveItem'};
+var $jinjor$elm_contextmenu$ContextMenu$disabledTextColor = 'rgb(200, 200, 200)';
+var $jinjor$elm_contextmenu$Styles$icon = function (size) {
+	return _List_fromArray(
+		[
+			A2($elm$html$Html$Attributes$style, 'position', 'absolute'),
+			A2(
+			$elm$html$Html$Attributes$style,
+			'margin-left',
+			$jinjor$elm_contextmenu$Styles$px((-size) - 4)),
+			A2($elm$html$Html$Attributes$style, 'top', '2px')
+		]);
+};
+var $elm$virtual_dom$VirtualDom$map = _VirtualDom_map;
+var $elm$html$Html$map = $elm$virtual_dom$VirtualDom$map;
+var $elm$html$Html$Events$onMouseDown = function (msg) {
+	return A2(
+		$elm$html$Html$Events$on,
+		'mousedown',
+		$elm$json$Json$Decode$succeed(msg));
+};
+var $elm$html$Html$Events$onMouseEnter = function (msg) {
+	return A2(
+		$elm$html$Html$Events$on,
+		'mouseenter',
+		$elm$json$Json$Decode$succeed(msg));
+};
+var $elm$html$Html$Events$onMouseLeave = function (msg) {
+	return A2(
+		$elm$html$Html$Events$on,
+		'mouseleave',
+		$elm$json$Json$Decode$succeed(msg));
+};
+var $jinjor$elm_contextmenu$Styles$row = F8(
+	function (hoverColor, disabledTextColor, invertText, usePointer, lineHeight, hovered, disabled, hasShortCut) {
+		return _List_fromArray(
+			[
+				A2($elm$html$Html$Attributes$style, 'position', 'relative'),
+				A2($elm$html$Html$Attributes$style, 'padding', '0 18px 0 28px'),
+				A2(
+				$elm$html$Html$Attributes$style,
+				'background-color',
+				hovered ? hoverColor : ''),
+				A2(
+				$elm$html$Html$Attributes$style,
+				'height',
+				$jinjor$elm_contextmenu$Styles$px(lineHeight)),
+				A2(
+				$elm$html$Html$Attributes$style,
+				'color',
+				disabled ? disabledTextColor : ((hovered && invertText) ? '#fff' : '')),
+				A2(
+				$elm$html$Html$Attributes$style,
+				'cursor',
+				((!disabled) && usePointer) ? 'pointer' : ''),
+				A2($elm$html$Html$Attributes$style, 'display', 'flex'),
+				A2(
+				$elm$html$Html$Attributes$style,
+				'justify-content',
+				hasShortCut ? 'space-between' : '')
+			]);
+	});
+var $jinjor$elm_contextmenu$Styles$shortcut = F3(
+	function (color, lineHeight, hovered) {
+		return _List_fromArray(
+			[
+				A2(
+				$elm$html$Html$Attributes$style,
+				'line-height',
+				$jinjor$elm_contextmenu$Styles$px(lineHeight)),
+				A2(
+				$elm$html$Html$Attributes$style,
+				'color',
+				hovered ? '' : color)
+			]);
+	});
+var $jinjor$elm_contextmenu$ContextMenu$shortcutTextColor = 'rgb(200, 200, 200)';
+var $jinjor$elm_contextmenu$Styles$text = function (lineHeight) {
+	return _List_fromArray(
+		[
+			A2(
+			$elm$html$Html$Attributes$style,
+			'line-height',
+			$jinjor$elm_contextmenu$Styles$px(lineHeight)),
+			A2($elm$html$Html$Attributes$style, 'text-overflow', 'ellipsis'),
+			A2($elm$html$Html$Attributes$style, 'overflow', 'hidden'),
+			A2($elm$html$Html$Attributes$style, 'white-space', 'nowrap')
+		]);
+};
+var $jinjor$elm_contextmenu$ContextMenu$itemView = F6(
+	function (config, transform, hoverIndex, groupIndex, index, _v0) {
+		var item_ = _v0.a.a;
+		var msg = _v0.b;
+		var icon_ = function () {
+			var _v2 = item_.icon;
+			if (_v2.$ === 'Just') {
+				var _v3 = _v2.a;
+				var icon__ = _v3.a;
+				var color = _v3.b;
+				return A2(
+					$elm$html$Html$map,
+					$elm$core$Basics$never,
+					A2(
+						$elm$html$Html$div,
+						$jinjor$elm_contextmenu$Styles$icon($jinjor$elm_contextmenu$ContextMenu$fontSize),
+						_List_fromArray(
+							[
+								A2(
+								icon__,
+								item_.disabled ? $jinjor$elm_contextmenu$ContextMenu$disabledTextColor : color,
+								$elm$core$Basics$floor($jinjor$elm_contextmenu$ContextMenu$fontSize))
+							])));
+			} else {
+				return $elm$html$Html$text('');
+			}
+		}();
+		var hovered = _Utils_eq(
+			hoverIndex,
+			$elm$core$Maybe$Just(
+				_Utils_Tuple2(groupIndex, index)));
+		var shortCut = A2(
+			$elm$html$Html$div,
+			A3($jinjor$elm_contextmenu$Styles$shortcut, $jinjor$elm_contextmenu$ContextMenu$shortcutTextColor, item_.height, hovered),
+			_List_fromArray(
+				[
+					$elm$html$Html$text(item_.shortcut)
+				]));
+		var styles = A8(
+			$jinjor$elm_contextmenu$Styles$row,
+			config.hoverColor,
+			$jinjor$elm_contextmenu$ContextMenu$disabledTextColor,
+			config.invertText,
+			_Utils_eq(config.cursor, $jinjor$elm_contextmenu$ContextMenu$Pointer),
+			item_.height,
+			hovered,
+			item_.disabled,
+			$elm$core$String$trim(item_.shortcut) !== '');
+		var events = item_.disabled ? _List_Nil : _List_fromArray(
+			[
+				$elm$html$Html$Events$onMouseEnter(
+				transform(
+					$jinjor$elm_contextmenu$ContextMenu$EnterItem(
+						_Utils_Tuple2(groupIndex, index)))),
+				$elm$html$Html$Events$onMouseLeave(
+				transform($jinjor$elm_contextmenu$ContextMenu$LeaveItem)),
+				$elm$html$Html$Events$onMouseDown(msg)
+			]);
+		var content = function () {
+			var _v1 = item_.content;
+			if (_v1.$ === 'Text') {
+				var s = _v1.a;
+				return A2(
+					$elm$html$Html$div,
+					$jinjor$elm_contextmenu$Styles$text(item_.height),
+					_List_fromArray(
+						[
+							$elm$html$Html$text(s)
+						]));
+			} else {
+				var toHtml = _v1.a;
+				return toHtml(item_.disabled);
+			}
+		}();
+		return A2(
+			$elm$html$Html$div,
+			_Utils_ap(styles, events),
+			_List_fromArray(
+				[
+					icon_,
+					A2($elm$html$Html$map, $elm$core$Basics$never, content),
+					shortCut
+				]));
+	});
+var $jinjor$elm_contextmenu$ContextMenu$itemGroupView = F5(
+	function (config, transform, hoverIndex, groupIndex, items) {
+		return A2(
+			$elm$core$List$indexedMap,
+			A4($jinjor$elm_contextmenu$ContextMenu$itemView, config, transform, hoverIndex, groupIndex),
+			items);
+	});
+var $elm$html$Html$hr = _VirtualDom_node('hr');
+var $jinjor$elm_contextmenu$Styles$partition = F2(
+	function (borderWidth, margin) {
+		return _List_fromArray(
+			[
+				A2($elm$html$Html$Attributes$style, 'border-bottom-style', 'solid'),
+				A2(
+				$elm$html$Html$Attributes$style,
+				'border-bottom-width',
+				$jinjor$elm_contextmenu$Styles$px(1)),
+				A2($elm$html$Html$Attributes$style, 'border-bottom-color', $jinjor$elm_contextmenu$Styles$borderColor),
+				A2($elm$html$Html$Attributes$style, 'border-top', 'none'),
+				A2(
+				$elm$html$Html$Attributes$style,
+				'margin',
+				$jinjor$elm_contextmenu$Styles$px(margin) + ' 0')
+			]);
+	});
+var $jinjor$elm_contextmenu$ContextMenu$partition = A2(
+	$elm$html$Html$hr,
+	A2($jinjor$elm_contextmenu$Styles$partition, $jinjor$elm_contextmenu$ContextMenu$partitionWidth, $jinjor$elm_contextmenu$ContextMenu$partitionMargin),
+	_List_Nil);
+var $jinjor$elm_contextmenu$ContextMenu$joinGroupsWithPartition = function (groups) {
+	return A3(
+		$elm$core$List$foldr,
+		F2(
+			function (group, prev) {
+				if (prev.$ === 'Just') {
+					var items = prev.a;
+					return $elm$core$Maybe$Just(
+						_Utils_ap(
+							group,
+							A2($elm$core$List$cons, $jinjor$elm_contextmenu$ContextMenu$partition, items)));
+				} else {
+					return $elm$core$Maybe$Just(group);
+				}
+			}),
+		$elm$core$Maybe$Nothing,
+		groups);
+};
+var $jinjor$elm_contextmenu$ContextMenu$menuWidthWithBorders = function (menuWidth) {
+	return menuWidth + ($jinjor$elm_contextmenu$ContextMenu$containerBorderWidth * 2);
+};
+var $jinjor$elm_contextmenu$ContextMenu$view = F4(
+	function (config, transform, toItemGroups, _v0) {
+		var model = _v0.a;
+		var _v1 = model.openState;
+		if (_v1.$ === 'Just') {
+			var mouse = _v1.a.mouse;
+			var window = _v1.a.window;
+			var hover = _v1.a.hover;
+			var context = _v1.a.context;
+			var groups = toItemGroups(context);
+			var groupsView = A2(
+				$elm$core$List$indexedMap,
+				A3(
+					$jinjor$elm_contextmenu$ContextMenu$itemGroupView,
+					config,
+					transform,
+					$jinjor$elm_contextmenu$ContextMenu$getItemIndex(hover)),
+				groups);
+			var itemGroups = A2(
+				$elm$core$List$map,
+				$elm$core$List$map($elm$core$Tuple$first),
+				groups);
+			var _v2 = $jinjor$elm_contextmenu$ContextMenu$joinGroupsWithPartition(groupsView);
+			if (_v2.$ === 'Just') {
+				var items = _v2.a;
+				var y_ = A4(
+					$jinjor$elm_contextmenu$ContextMenu$calculateY,
+					config.overflowY,
+					window.height,
+					$jinjor$elm_contextmenu$ContextMenu$calculateMenuHeight(itemGroups),
+					mouse.y);
+				var x_ = A5(
+					$jinjor$elm_contextmenu$ContextMenu$calculateX,
+					config.direction,
+					config.overflowX,
+					window.width,
+					$jinjor$elm_contextmenu$ContextMenu$menuWidthWithBorders(config.width),
+					mouse.x);
+				return A2(
+					$elm$html$Html$div,
+					_Utils_ap(
+						A9($jinjor$elm_contextmenu$Styles$container, config.containerColor, $jinjor$elm_contextmenu$ContextMenu$containerBorderWidth, $jinjor$elm_contextmenu$ContextMenu$containerPadding, config.rounded, config.width, x_, y_, config.fontFamily, $jinjor$elm_contextmenu$ContextMenu$fontSize),
+						_List_fromArray(
+							[
+								$elm$html$Html$Events$onMouseEnter(
+								transform($jinjor$elm_contextmenu$ContextMenu$EnterContainer)),
+								$elm$html$Html$Events$onMouseLeave(
+								transform($jinjor$elm_contextmenu$ContextMenu$LeaveContainer))
+							])),
+					items);
+			} else {
+				return $elm$html$Html$text('');
+			}
+		} else {
+			return $elm$html$Html$text('');
+		}
+	});
 var $author$project$Main$view = function (model) {
 	return {
 		body: _List_fromArray(
 			[
-				$author$project$Components$App$Content$content(model)
+				$author$project$Components$App$Content$content(model),
+				A4($jinjor$elm_contextmenu$ContextMenu$view, model.config, $author$project$Logic$App$Msg$ContextMenuMsg, $author$project$Components$App$ContextMenu$ContextMenu$toItemGroups, model.contextMenu)
 			]),
 		title: 'Hex Studio'
 	};

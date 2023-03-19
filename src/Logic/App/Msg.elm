@@ -1,23 +1,23 @@
 module Logic.App.Msg exposing (..)
-import Logic.App.Types exposing (Panel)
-import Html.Events.Extra.Mouse exposing (Keys)
+
 import Browser.Dom
-import Time
-import Json.Decode
-import Logic.App.Types exposing (ElementLocation)
 import Html.Events.Extra.Drag as Drag
+import Html.Events.Extra.Mouse exposing (Keys)
 import Json.Decode exposing (Value)
-import Logic.App.Types exposing (Pattern)
-import Logic.App.Types exposing (Overlay)
 import Keyboard.Event exposing (KeyboardEvent)
+import Logic.App.Types exposing (ElementLocation, Overlay, Panel, Pattern)
+import Time
+import Logic.App.Types exposing (ContextMenuContext)
+import ContextMenu
+
 
 type Msg
     = NoOp
     | ViewPanel Panel Keys
     | GetGrid (Result Browser.Dom.Error Browser.Dom.Element)
     | GetContentSize (Result Browser.Dom.Error Browser.Dom.Element)
-    | MouseMove (Float, Float)
-    | GridDown (Float, Float)
+    | MouseMove ( Float, Float )
+    | GridDown ( Float, Float )
     | MouseUp
     | RemoveFromPatternArray Int Int
     | SetGridScale Float
@@ -54,6 +54,9 @@ type Msg
     | SetTimelineIndex Int
     | HandleKeyboardEvent KeyboardEvent
     | ChangeMacroName String String
+    | ContextMenuMsg (ContextMenu.Msg ContextMenuContext)
+    | ContextMenuItemSelected Int
+
 
 type alias MouseMoveData =
     { pageX : Int

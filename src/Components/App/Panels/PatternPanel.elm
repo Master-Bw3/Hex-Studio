@@ -6,6 +6,7 @@ import Components.App.PatternAutoComplete exposing (..)
 import Components.Icon.MoveButton exposing (moveButton)
 import Components.Icon.ParagraphDropdown exposing (paragraphDropdown)
 import Components.Icon.XButton exposing (xButton)
+import ContextMenu
 import FontAwesome as Icon exposing (Icon)
 import FontAwesome.Attributes as Icon
 import FontAwesome.Brands as Icon
@@ -21,10 +22,14 @@ import Json.Decode as Json exposing (Decoder, at, float, int, map4)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (MouseMoveData, Msg(..))
 import Logic.App.Patterns.PatternRegistry exposing (patternRegistry)
-import Logic.App.Types exposing (EntityType(..), GridPoint, Iota(..), IotaType(..), Panel(..), Pattern)
+import Logic.App.Types exposing (ContextMenuContext(..), EntityType(..), GridPoint, Iota(..), IotaType(..), Panel(..), Pattern)
 import Logic.App.Utils.GetIotaValue exposing (getIotaFromString, getIotaTypeAsString, getIotaTypeFromString)
+import Logic.App.Utils.Utils exposing (isJust)
 import Settings.Theme exposing (accent1, accent2)
 import String exposing (fromInt)
+import Dict
+import Dict exposing (Dict)
+import Logic.App.Utils.Utils exposing (ifThenElse)
 
 
 patternPanel : Model -> Html Msg
@@ -69,6 +74,7 @@ patternPanel model =
                     (Tuple.second model.ui.dragging)
                     model.ui.overDragHandle
                     model.insertionPoint
+                    model.castingContext.macros
                 )
             )
         , div
@@ -124,8 +130,8 @@ draggedSourceConfig id =
     }
 
 
-renderPatternList : Array ( Pattern, List GridPoint ) -> Int -> Int -> Bool -> Int -> List (Html Msg)
-renderPatternList patternList dragoverIndex dragstartIndex overDragHandle insertionPoint =
+renderPatternList : Array ( Pattern, List GridPoint ) -> Int -> Int -> Bool -> Int -> Dict String v -> List (Html Msg)
+renderPatternList patternList dragoverIndex dragstartIndex overDragHandle insertionPoint macroDict =
     let
         patterns : List Pattern
         patterns =
@@ -134,6 +140,8 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle insert
         renderPattern : Int -> Pattern -> List (Html Msg)
         renderPattern index pattern =
             let
+                isMacro =
+                    isJust (Dict.get pattern.signature macroDict)
                 activeOpacity =
                     if pattern.active == False then
                         style "opacity" "50%"
@@ -150,7 +158,9 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle insert
                 ++ [ div
                         ([ class "outer_box"
                          , attribute "data-index" <| fromInt index
+                         , ifThenElse isMacro (style "background-color" "#4C3541")  (style "background-color" "var(--primary_lightest)")
                          , MouseEvents.onClick (\event -> SetInsertionPoint index event.keys)
+                         , ContextMenu.open ContextMenuMsg (PatternItem pattern.active isMacro index)
                          ]
                             ++ (if overDragHandle then
                                     onSourceDrag (draggedSourceConfig index)
