@@ -8901,9 +8901,6 @@ var $author$project$Logic$App$Utils$RegexPatterns$bookkeepersPattern = A2(
 	$elm$core$Maybe$withDefault,
 	$elm$regex$Regex$never,
 	$elm$regex$Regex$fromString('^[v-]+$'));
-var $elm$core$String$concat = function (strings) {
-	return A2($elm$core$String$join, '', strings);
-};
 var $elm$regex$Regex$contains = _Regex_contains;
 var $elm$regex$Regex$find = _Regex_findAtMost(_Regex_infinity);
 var $author$project$Logic$App$Patterns$PatternRegistry$noAction = F2(
@@ -8967,6 +8964,9 @@ var $author$project$Logic$App$Patterns$PatternRegistry$numberLiteralGenerator = 
 			startDirection: $author$project$Logic$App$Types$Southeast
 		};
 	});
+var $elm$core$String$concat = function (strings) {
+	return A2($elm$core$String$join, '', strings);
+};
 var $elm_community$array_extra$Array$Extra$map2 = F3(
 	function (combineAb, aArray, bArray) {
 		return $elm$core$Array$fromList(
@@ -9071,7 +9071,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$parseBookkeeper = functio
 					['-'])),
 			active: true,
 			color: $author$project$Settings$Theme$accent1,
-			displayName: 'Bookkeeper\'s -',
+			displayName: 'Bookkeeper\'s Gambit: -',
 			internalName: 'mask',
 			metaAction: $author$project$Logic$App$Types$None,
 			outputOptions: _List_Nil,
@@ -13232,6 +13232,94 @@ var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature =
 		}
 	});
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
+var $elm$core$String$append = _String_append;
+var $elm$core$String$endsWith = _String_endsWith;
+var $author$project$Logic$App$Utils$Utils$ifThenElse = F3(
+	function (conditional, a, b) {
+		return conditional ? a : b;
+	});
+var $elm$core$Debug$log = _Debug_log;
+var $author$project$Logic$App$Patterns$PatternRegistry$reverseParseBookkeeper = function (code) {
+	if (code === '-') {
+		return {
+			action: $author$project$Logic$App$Patterns$Misc$mask(
+				_List_fromArray(
+					['-'])),
+			active: true,
+			color: $author$project$Settings$Theme$accent1,
+			displayName: 'Bookkeeper\'s Gambit: -',
+			internalName: 'mask',
+			metaAction: $author$project$Logic$App$Types$None,
+			outputOptions: _List_Nil,
+			selectedOutput: $elm$core$Maybe$Nothing,
+			signature: '',
+			startDirection: $author$project$Logic$App$Types$East
+		};
+	} else {
+		var toAngleSignature = F2(
+			function (codeChunk, accumulator) {
+				var _v0 = A2($elm$core$Debug$log, codeChunk, accumulator);
+				switch (codeChunk) {
+					case '--':
+						return A2($elm$core$String$endsWith, 'a', accumulator) ? A2($elm$core$String$append, accumulator, 'ew') : (A2($elm$core$String$endsWith, 'w', accumulator) ? A2($elm$core$String$append, accumulator, 'ww') : (A2($elm$core$String$endsWith, 'e', accumulator) ? A2($elm$core$String$append, accumulator, 'ww') : A2($elm$core$String$append, accumulator, 'w')));
+					case 'vv':
+						return A2($elm$core$String$endsWith, 'w', accumulator) ? A2($elm$core$String$append, accumulator, 'eada') : (A2($elm$core$String$endsWith, 'a', accumulator) ? A2($elm$core$String$append, accumulator, 'dad') : (A2($elm$core$String$endsWith, 'e', accumulator) ? A2($elm$core$String$append, accumulator, 'ada') : A2($elm$core$String$append, accumulator, 'ada')));
+					case 'v-':
+						return A2($elm$core$String$endsWith, 'w', accumulator) ? A2($elm$core$String$append, accumulator, 'eae') : (A2($elm$core$String$endsWith, 'a', accumulator) ? A2($elm$core$String$append, accumulator, 'dae') : (A2($elm$core$String$endsWith, 'e', accumulator) ? A2($elm$core$String$append, accumulator, 'eae') : A2($elm$core$String$append, accumulator, 'ae')));
+					case '-v':
+						return A2($elm$core$String$endsWith, 'w', accumulator) ? A2($elm$core$String$append, accumulator, 'wea') : (A2($elm$core$String$endsWith, 'a', accumulator) ? A2($elm$core$String$append, accumulator, 'eea') : (A2($elm$core$String$endsWith, 'e', accumulator) ? A2($elm$core$String$append, accumulator, 'wea') : A2($elm$core$String$append, accumulator, 'ea')));
+					case 'v':
+						return A2($elm$core$String$endsWith, 'a', accumulator) ? A2($elm$core$String$append, accumulator, 'da') : (A2($elm$core$String$endsWith, 'w', accumulator) ? A2($elm$core$String$append, accumulator, 'ea') : (A2($elm$core$String$endsWith, 'e', accumulator) ? A2($elm$core$String$append, accumulator, 'ea') : A2($elm$core$String$append, accumulator, 'a')));
+					case '-':
+						return A2($elm$core$String$endsWith, 'a', accumulator) ? A2($elm$core$String$append, accumulator, 'e') : (A2($elm$core$String$endsWith, 'w', accumulator) ? A2($elm$core$String$append, accumulator, 'w') : (A2($elm$core$String$endsWith, 'e', accumulator) ? A2($elm$core$String$append, accumulator, 'w') : A2($elm$core$String$append, accumulator, '')));
+					default:
+						return accumulator;
+				}
+			});
+		var codeList = A2($elm$core$String$split, '', code);
+		var codeGroupedByTwos = A2(
+			$elm$core$Debug$log,
+			'twos',
+			$elm$core$List$reverse(
+				A3(
+					$elm$core$List$foldl,
+					F2(
+						function (letter, accumulator) {
+							var tail = A2(
+								$elm$core$Maybe$withDefault,
+								_List_Nil,
+								$elm$core$List$tail(accumulator));
+							var head = A2(
+								$elm$core$Maybe$withDefault,
+								'',
+								$elm$core$List$head(accumulator));
+							return (!$elm$core$String$length(head)) ? A2($elm$core$List$cons, letter, tail) : (($elm$core$String$length(head) === 1) ? A2(
+								$elm$core$List$cons,
+								_Utils_ap(head, letter),
+								tail) : A2($elm$core$List$cons, letter, accumulator));
+						}),
+					_List_Nil,
+					codeList)));
+		var signature = A3($elm$core$List$foldl, toAngleSignature, '', codeGroupedByTwos);
+		return {
+			action: $author$project$Logic$App$Patterns$Misc$mask(
+				A2($elm$core$String$split, '', code)),
+			active: true,
+			color: $author$project$Settings$Theme$accent1,
+			displayName: 'Bookkeeper\'s Gambit: ' + code,
+			internalName: 'mask',
+			metaAction: $author$project$Logic$App$Types$None,
+			outputOptions: _List_Nil,
+			selectedOutput: $elm$core$Maybe$Nothing,
+			signature: A2($elm$core$Debug$log, 'signature', signature),
+			startDirection: A3(
+				$author$project$Logic$App$Utils$Utils$ifThenElse,
+				A2($elm$core$String$startsWith, 'v', code),
+				$author$project$Logic$App$Types$Southeast,
+				$author$project$Logic$App$Types$East)
+		};
+	}
+};
 var $elm$json$Json$Encode$float = _Json_wrap;
 var $author$project$Ports$HexNumGen$sendNumber = _Platform_outgoingPort('sendNumber', $elm$json$Json$Encode$float);
 var $elm$core$String$toFloat = _String_toFloat;
@@ -13267,23 +13355,11 @@ var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName = F2(
 									return x.match;
 								},
 								A2($elm$regex$Regex$find, $author$project$Logic$App$Utils$RegexPatterns$bookkeepersPattern, name)))));
-				var maskCode = A2($elm$core$String$split, '', regexMatch);
 				if (_Utils_eq(
 					regexMatch,
 					$elm$core$String$trim(name))) {
 					return _Utils_Tuple2(
-						{
-							action: $author$project$Logic$App$Patterns$Misc$mask(maskCode),
-							active: true,
-							color: $author$project$Settings$Theme$accent1,
-							displayName: 'Bookkeeper\'s Gambit: ' + $elm$core$String$concat(maskCode),
-							internalName: 'mask',
-							metaAction: $author$project$Logic$App$Types$None,
-							outputOptions: _List_Nil,
-							selectedOutput: $elm$core$Maybe$Nothing,
-							signature: '',
-							startDirection: $author$project$Logic$App$Types$East
-						},
+						$author$project$Logic$App$Patterns$PatternRegistry$reverseParseBookkeeper(name),
 						$elm$core$Platform$Cmd$none);
 				} else {
 					if (maybeMacros.$ === 'Just') {
@@ -15055,7 +15131,6 @@ var $author$project$Logic$App$ImportExport$ExportAsGiveCommand$exportAsGiveComma
 				commandEndString
 			]));
 };
-var $elm$core$Debug$log = _Debug_log;
 var $author$project$Logic$App$ImportExport$ExportAsText$exportPatternsAsLineList = function (patternArray) {
 	var mapPatternToLine = F2(
 		function (pattern, accumulator) {
@@ -18370,10 +18445,6 @@ var $lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$minus = A4(
 	_Utils_Tuple2(448, 512),
 	_Utils_Tuple2('M400 288h-352c-17.69 0-32-14.32-32-32.01s14.31-31.99 32-31.99h352c17.69 0 32 14.3 32 31.99S417.7 288 400 288z', $elm$core$Maybe$Nothing));
 var $lattyware$elm_fontawesome$FontAwesome$Solid$minus = $lattyware$elm_fontawesome$FontAwesome$present($lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$minus);
-var $author$project$Logic$App$Utils$Utils$ifThenElse = F3(
-	function (conditional, a, b) {
-		return conditional ? a : b;
-	});
 var $author$project$Components$App$Timeline$renderPoints = function (model) {
 	var timelineLength = $elm$core$Array$length(model.timeline);
 	var spacing = (model.grid.width - 50) / (timelineLength - 1);

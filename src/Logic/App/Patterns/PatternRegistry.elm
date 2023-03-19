@@ -17,7 +17,7 @@ import Logic.App.Patterns.Stack exposing (..)
 import Logic.App.Stack.EvalStack exposing (applyPatternToStack, applyPatternsToStack, applyToStackStopAtErrorOrHalt)
 import Logic.App.Types exposing (ActionResult, ApplyToStackResult(..), CastingContext, Direction(..), EntityType(..), HeldItem(..), Iota(..), IotaType(..), MetaActionMsg(..), Mishap(..), Pattern)
 import Logic.App.Utils.RegexPatterns exposing (bookkeepersPattern)
-import Logic.App.Utils.Utils exposing (unshift)
+import Logic.App.Utils.Utils exposing (ifThenElse, unshift)
 import Ports.HexNumGen as HexNumGen
 import Regex
 import Settings.Theme exposing (..)
@@ -109,24 +109,9 @@ getPatternFromName maybeMacros name =
                                 |> List.head
                                 |> Maybe.withDefault ""
                                 |> String.trim
-
-                        maskCode =
-                            String.split "" regexMatch
                     in
                     if regexMatch == String.trim name then
-                        ( { signature = ""
-                          , internalName = "mask"
-                          , action = mask maskCode
-                          , metaAction = None
-                          , displayName = "Bookkeeper's Gambit: " ++ String.concat maskCode
-                          , color = accent1
-                          , outputOptions = []
-                          , active = True
-                          , selectedOutput = Nothing
-                          , startDirection = East -- Todo: make this southeast if starting with v
-                          }
-                        , Cmd.none
-                        )
+                        ( reverseParseBookkeeper name, Cmd.none )
 
                     else
                         case maybeMacros of
@@ -164,6 +149,155 @@ getPatternFromName maybeMacros name =
                                     ( unknownPattern, Cmd.none )
 
 
+reverseParseBookkeeper : String -> Pattern
+reverseParseBookkeeper code =
+    -- I'm very good at naming things
+    if code == "-" then
+        { signature = ""
+        , internalName = "mask"
+        , action = mask [ "-" ]
+        , metaAction = None
+        , displayName = "Bookkeeper's Gambit: -"
+        , color = accent1
+        , outputOptions = []
+        , selectedOutput = Nothing
+        , active = True
+        , startDirection = East
+        }
+
+    else
+        let
+            codeList =
+                String.split "" code
+
+            codeGroupedByTwos =
+                Debug.log "twos" <|
+                    List.reverse <|
+                        List.foldl
+                            (\letter accumulator ->
+                                let
+                                    head =
+                                        Maybe.withDefault "" (List.head accumulator)
+
+                                    tail =
+                                        Maybe.withDefault [] (List.tail accumulator)
+                                in
+                                if String.length head == 0 then
+                                    letter :: tail
+
+                                else if String.length head == 1 then
+                                    (head ++ letter) :: tail
+
+                                else
+                                    letter :: accumulator
+                            )
+                            []
+                            codeList
+
+            toAngleSignature codeChunk accumulator =
+                -- this function is slightly cursed
+                let
+                    _ =
+                        Debug.log codeChunk accumulator
+                in
+                case codeChunk of
+                    "--" ->
+                        if String.endsWith "a" accumulator then
+                            String.append accumulator "ew"
+
+                        else if String.endsWith "w" accumulator then
+                            String.append accumulator "ww"
+
+                        else if String.endsWith "e" accumulator then
+                            String.append accumulator "ww"
+
+                        else
+                            String.append accumulator "w"
+
+                    "vv" ->
+                        if String.endsWith "w" accumulator then
+                            String.append accumulator "eada"
+
+                        else if String.endsWith "a" accumulator then
+                            String.append accumulator "dad"
+
+                        else if String.endsWith "e" accumulator then
+                            String.append accumulator "ada"
+
+                        else
+                            String.append accumulator "ada"
+
+                    "v-" ->
+                        if String.endsWith "w" accumulator then
+                            String.append accumulator "eae"
+
+                        else if String.endsWith "a" accumulator then
+                            String.append accumulator "dae"
+
+                        else if String.endsWith "e" accumulator then
+                            String.append accumulator "eae"
+
+                        else
+                            String.append accumulator "ae"
+
+                    "-v" ->
+                        if String.endsWith "w" accumulator then
+                            String.append accumulator "wea"
+
+                        else if String.endsWith "a" accumulator then
+                            String.append accumulator "eea"
+
+                        else if String.endsWith "e" accumulator then
+                            String.append accumulator "wea"
+
+                        else
+                            String.append accumulator "ea"
+
+                    "v" ->
+                        if String.endsWith "a" accumulator then
+                            String.append accumulator "da"
+
+                        else if String.endsWith "w" accumulator then
+                            String.append accumulator "ea"
+
+                        else if String.endsWith "e" accumulator then
+                            String.append accumulator "ea"
+
+                        else
+                            String.append accumulator "a"
+
+                    "-" ->
+                        if String.endsWith "a" accumulator then
+                            String.append accumulator "e"
+
+                        else if String.endsWith "w" accumulator then
+                            String.append accumulator "w"
+
+                        else if String.endsWith "e" accumulator then
+                            String.append accumulator "w"
+
+                        else
+                            String.append accumulator ""
+
+                    _ ->
+                        accumulator
+
+            signature =
+                List.foldl toAngleSignature "" codeGroupedByTwos
+        in
+        { signature = Debug.log "signature" signature
+        , internalName = "mask"
+        , action = mask (String.split "" code)
+        , metaAction = None
+        , displayName = "Bookkeeper's Gambit: " ++ code
+        , color = accent1
+        , outputOptions = []
+        , selectedOutput = Nothing
+        , active = True
+        , startDirection = ifThenElse (String.startsWith "v" code) Southeast East
+        }
+
+
 parseBookkeeper : String -> Pattern
 parseBookkeeper signature =
     if signature == "" then
@@ -171,7 +305,7 @@ parseBookkeeper signature =
         , internalName = "mask"
         , action = mask [ "-" ]
         , metaAction = None
-        , displayName = "Bookkeeper's -"
+        , displayName = "Bookkeeper's Gambit: -"
         , color = accent1
         , outputOptions = []
         , selectedOutput = Nothing
