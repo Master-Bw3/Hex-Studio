@@ -815,13 +815,6 @@ update msg model =
             updatePatternArrayFromQueue index { model | importQueue = patterns, patternArray = removeFromArray index (index + 1) model.patternArray }
 
 
-
--- argg : List (List (GridPoint)) -> (Float, Float) -> List (List (GridPoint))
--- argg points mousePos =
---     List.map (\x -> (List.map (\y -> {y | connectedPoints = [{x = Tuple.first mousePos - 380.0, y = Tuple.second mousePos}]}) x)) points
--- SUBSCRIPTIONS
-
-
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
