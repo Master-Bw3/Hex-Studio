@@ -106,8 +106,8 @@ init _ =
     )
 
 
-updatePatternArrayFromQueue : Model -> ( Model, Cmd Msg )
-updatePatternArrayFromQueue model =
+updatePatternArrayFromQueue : Int -> Model -> ( Model, Cmd Msg )
+updatePatternArrayFromQueue insertionPoint model =
     if List.length model.importQueue > 0 then
         let
             ui =
@@ -117,7 +117,7 @@ updatePatternArrayFromQueue model =
                 model.castingContext
 
             stackResult =
-                applyPatternsToStack Array.empty castingContext (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern model.insertionPoint))
+                applyPatternsToStack Array.empty castingContext (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern insertionPoint))
 
             getPattern =
                 List.head model.importQueue
@@ -133,7 +133,7 @@ updatePatternArrayFromQueue model =
                 addToPatternArray
                     model
                     newPattern
-                    model.insertionPoint
+                    insertionPoint
 
             newPatternArray =
                 Array.map2
@@ -150,7 +150,7 @@ updatePatternArrayFromQueue model =
                 drawPatterns patterns model.grid
         in
         if command == Cmd.none then
-            updatePatternArrayFromQueue <|
+            updatePatternArrayFromQueue insertionPoint <|
                 applyMetaAction
                     { model
                         | patternArray = drawPatternsResult.patternArray
@@ -400,7 +400,7 @@ update msg model =
                     else
                         model.importQueue
             in
-            updatePatternArrayFromQueue { model | importQueue = newImportQueue }
+            updatePatternArrayFromQueue model.insertionPoint { model | importQueue = newImportQueue }
 
         SendNumberLiteralToGenerate number ->
             ( model, HexNumGen.sendNumber number )
@@ -410,7 +410,7 @@ update msg model =
                 newPattern =
                     getPatternFromSignature (Just model.castingContext.macros) signature
             in
-            updatePatternArrayFromQueue
+            updatePatternArrayFromQueue model.insertionPoint
                 { model
                     | importQueue = ( newPattern, Cmd.none ) :: model.importQueue
                 }
@@ -661,12 +661,11 @@ update msg model =
 
         SetInsertionPoint index ->
             Debug.log "e" <|
-            if model.insertionPoint == index then
-                ( { model | insertionPoint = 0 }, Cmd.none )
+                if model.insertionPoint == index then
+                    ( { model | insertionPoint = 0 }, Cmd.none )
 
-            else
-                ( { model | insertionPoint = index }, Cmd.none )
-
+                else
+                    ( { model | insertionPoint = index }, Cmd.none )
 
         SetImportInputValue string ->
             ( { model | ui = { ui | importInput = string } }, Cmd.none )
@@ -676,7 +675,7 @@ update msg model =
                 importQueue =
                     parseInput string model.castingContext.macros
             in
-            updatePatternArrayFromQueue { model | importQueue = importQueue, ui = { ui | openOverlay = NoOverlay, importInput = "" } }
+            updatePatternArrayFromQueue model.insertionPoint { model | importQueue = importQueue, ui = { ui | openOverlay = NoOverlay, importInput = "" } }
 
         ViewOverlay overlay ->
             ( { model | ui = { ui | openOverlay = overlay } }, Cmd.none )
@@ -791,6 +790,29 @@ update msg model =
             ( { model | message = "Item[" ++ String.fromInt message ++ "] was clicked." }
             , Cmd.none
             )
+
+        ExpandMacro sig index ->
+            let
+                patterns =
+                    List.map (\pat -> ( pat, Cmd.none )) <|
+                        case Dict.get sig model.castingContext.macros of
+                            Just ( _, _, IotaList patternList ) ->
+                                Array.toList <|
+                                    Array.map
+                                        (\iota ->
+                                            case iota of
+                                                PatternIota pattern _ ->
+                                                    pattern
+
+                                                _ ->
+                                                    unknownPattern
+                                        )
+                                        patternList
+
+                            _ ->
+                                []
+            in
+            updatePatternArrayFromQueue index { model | importQueue = patterns, patternArray = removeFromArray index (index + 1) model.patternArray }
 
 
 

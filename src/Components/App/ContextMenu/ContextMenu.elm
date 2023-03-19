@@ -33,7 +33,7 @@ objectStyles =
 toItemGroups : ContextMenuContext -> List (List ( ContextMenu.Item, Msg ))
 toItemGroups context =
     case context of
-        PatternItem isActive isMacro index ->
+        PatternItem isActive isMacro pattern index ->
             [ [ ( ContextMenu.item "Set Insertion Point Above", SetInsertionPoint (index + 1) )
               , ( ContextMenu.item "Set Insertion Point Below", SetInsertionPoint index )
               , ifThenElse isActive
@@ -41,6 +41,6 @@ toItemGroups context =
                     ( ContextMenu.item "Enable Pattern", ContextMenuItemSelected 2 )
               ]
                 ++ ifThenElse isMacro
-                    [ ( ContextMenu.item "Expand Macro", ContextMenuItemSelected 2 ) ]
+                    [ ( ContextMenu.item "Expand Macro", ExpandMacro pattern.signature index ) ]
                     []
             ]

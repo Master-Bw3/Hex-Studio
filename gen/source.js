@@ -15066,7 +15066,9 @@ var $author$project$Main$update = F2(
 							$elm$core$Maybe$Just(model.castingContext.macros),
 							name),
 						model.importQueue) : model.importQueue;
-					return $author$project$Main$updatePatternArrayFromQueue(
+					return A2(
+						$author$project$Main$updatePatternArrayFromQueue,
+						model.insertionPoint,
 						_Utils_update(
 							model,
 							{importQueue: newImportQueue}));
@@ -15081,7 +15083,9 @@ var $author$project$Main$update = F2(
 						$author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature,
 						$elm$core$Maybe$Just(model.castingContext.macros),
 						signature);
-					return $author$project$Main$updatePatternArrayFromQueue(
+					return A2(
+						$author$project$Main$updatePatternArrayFromQueue,
+						model.insertionPoint,
 						_Utils_update(
 							model,
 							{
@@ -15478,7 +15482,9 @@ var $author$project$Main$update = F2(
 				case 'ImportText':
 					var string = msg.a;
 					var importQueue = A2($author$project$Logic$App$ImportExport$ImportParser$parseInput, string, model.castingContext.macros);
-					return $author$project$Main$updatePatternArrayFromQueue(
+					return A2(
+						$author$project$Main$updatePatternArrayFromQueue,
+						model.insertionPoint,
 						_Utils_update(
 							model,
 							{
@@ -15643,7 +15649,7 @@ var $author$project$Main$update = F2(
 							model,
 							{contextMenu: contextMenu}),
 						A2($elm$core$Platform$Cmd$map, $author$project$Logic$App$Msg$ContextMenuMsg, cmd));
-				default:
+				case 'ContextMenuItemSelected':
 					var message = msg.a;
 					return _Utils_Tuple2(
 						_Utils_update(
@@ -15652,93 +15658,134 @@ var $author$project$Main$update = F2(
 								message: 'Item[' + ($elm$core$String$fromInt(message) + '] was clicked.')
 							}),
 						$elm$core$Platform$Cmd$none);
+				default:
+					var sig = msg.a;
+					var index = msg.b;
+					var patterns = A2(
+						$elm$core$List$map,
+						function (pat) {
+							return _Utils_Tuple2(pat, $elm$core$Platform$Cmd$none);
+						},
+						function () {
+							var _v15 = A2($elm$core$Dict$get, sig, model.castingContext.macros);
+							if ((_v15.$ === 'Just') && (_v15.a.c.$ === 'IotaList')) {
+								var _v16 = _v15.a;
+								var patternList = _v16.c.a;
+								return $elm$core$Array$toList(
+									A2(
+										$elm$core$Array$map,
+										function (iota) {
+											if (iota.$ === 'PatternIota') {
+												var pattern = iota.a;
+												return pattern;
+											} else {
+												return $author$project$Logic$App$Patterns$PatternRegistry$unknownPattern;
+											}
+										},
+										patternList));
+							} else {
+								return _List_Nil;
+							}
+						}());
+					return A2(
+						$author$project$Main$updatePatternArrayFromQueue,
+						index,
+						_Utils_update(
+							model,
+							{
+								importQueue: patterns,
+								patternArray: A3($author$project$Logic$App$Utils$Utils$removeFromArray, index, index + 1, model.patternArray)
+							}));
 			}
 		}
 	});
-var $author$project$Main$updatePatternArrayFromQueue = function (model) {
-	if ($elm$core$List$length(model.importQueue) > 0) {
-		var ui = model.ui;
-		var getPattern = A2(
-			$elm$core$Maybe$withDefault,
-			_Utils_Tuple2($author$project$Logic$App$Patterns$PatternRegistry$unknownPattern, $elm$core$Platform$Cmd$none),
-			$elm$core$List$head(model.importQueue));
-		var newPattern = getPattern.a;
-		var newUncoloredPatternArray = A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, model.insertionPoint);
-		var command = getPattern.b;
-		var castingContext = model.castingContext;
-		var stackResult = A3(
-			$author$project$Logic$App$Stack$EvalStack$applyPatternsToStack,
-			$elm$core$Array$empty,
-			castingContext,
-			$elm$core$List$reverse(
+var $author$project$Main$updatePatternArrayFromQueue = F2(
+	function (insertionPoint, model) {
+		if ($elm$core$List$length(model.importQueue) > 0) {
+			var ui = model.ui;
+			var getPattern = A2(
+				$elm$core$Maybe$withDefault,
+				_Utils_Tuple2($author$project$Logic$App$Patterns$PatternRegistry$unknownPattern, $elm$core$Platform$Cmd$none),
+				$elm$core$List$head(model.importQueue));
+			var newPattern = getPattern.a;
+			var newUncoloredPatternArray = A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, insertionPoint);
+			var command = getPattern.b;
+			var castingContext = model.castingContext;
+			var stackResult = A3(
+				$author$project$Logic$App$Stack$EvalStack$applyPatternsToStack,
+				$elm$core$Array$empty,
+				castingContext,
+				$elm$core$List$reverse(
+					A2(
+						$elm$core$List$map,
+						function (x) {
+							return x.a;
+						},
+						$elm$core$Array$toList(
+							A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, insertionPoint)))));
+			var newPatternArray = A3(
+				$elm_community$array_extra$Array$Extra$map2,
+				F2(
+					function (patternTuple, result) {
+						return $author$project$Logic$App$PatternList$PatternArray$updateDrawingColors(
+							_Utils_Tuple2(
+								A2($author$project$Logic$App$PatternList$PatternArray$applyColorToPatternFromResult, patternTuple.a, result),
+								patternTuple.b));
+					}),
+				newUncoloredPatternArray,
+				stackResult.resultArray);
+			var patterns = A2(
+				$elm$core$Array$map,
+				function (x) {
+					return x.a;
+				},
+				newPatternArray);
+			var drawPatternsResult = A2($author$project$Logic$App$Grid$drawPatterns, patterns, model.grid);
+			return _Utils_eq(command, $elm$core$Platform$Cmd$none) ? A2(
+				$author$project$Main$updatePatternArrayFromQueue,
+				insertionPoint,
 				A2(
-					$elm$core$List$map,
-					function (x) {
-						return x.a;
-					},
-					$elm$core$Array$toList(
-						A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, model.insertionPoint)))));
-		var newPatternArray = A3(
-			$elm_community$array_extra$Array$Extra$map2,
-			F2(
-				function (patternTuple, result) {
-					return $author$project$Logic$App$PatternList$PatternArray$updateDrawingColors(
-						_Utils_Tuple2(
-							A2($author$project$Logic$App$PatternList$PatternArray$applyColorToPatternFromResult, patternTuple.a, result),
-							patternTuple.b));
-				}),
-			newUncoloredPatternArray,
-			stackResult.resultArray);
-		var patterns = A2(
-			$elm$core$Array$map,
-			function (x) {
-				return x.a;
-			},
-			newPatternArray);
-		var drawPatternsResult = A2($author$project$Logic$App$Grid$drawPatterns, patterns, model.grid);
-		return _Utils_eq(command, $elm$core$Platform$Cmd$none) ? $author$project$Main$updatePatternArrayFromQueue(
-			A2(
-				$author$project$Logic$App$Patterns$MetaActions$applyMetaAction,
+					$author$project$Logic$App$Patterns$MetaActions$applyMetaAction,
+					_Utils_update(
+						model,
+						{
+							castingContext: stackResult.ctx,
+							grid: drawPatternsResult.grid,
+							importQueue: A2(
+								$elm$core$Maybe$withDefault,
+								_List_Nil,
+								$elm$core$List$tail(model.importQueue)),
+							insertionPoint: (_Utils_cmp(
+								model.insertionPoint,
+								$elm$core$Array$length(model.patternArray)) > 0) ? 0 : model.insertionPoint,
+							patternArray: drawPatternsResult.patternArray,
+							stack: stackResult.stack,
+							timeline: A2(
+								$author$project$Logic$App$Utils$Utils$unshift,
+								{patternIndex: -1, stack: $elm$core$Array$empty},
+								stackResult.timeline),
+							ui: _Utils_update(
+								ui,
+								{patternInputField: ''})
+						}),
+					newPattern.metaAction)) : _Utils_Tuple2(
 				_Utils_update(
 					model,
 					{
-						castingContext: stackResult.ctx,
-						grid: drawPatternsResult.grid,
 						importQueue: A2(
 							$elm$core$Maybe$withDefault,
 							_List_Nil,
-							$elm$core$List$tail(model.importQueue)),
-						insertionPoint: (_Utils_cmp(
-							model.insertionPoint,
-							$elm$core$Array$length(model.patternArray)) > 0) ? 0 : model.insertionPoint,
-						patternArray: drawPatternsResult.patternArray,
-						stack: stackResult.stack,
-						timeline: A2(
-							$author$project$Logic$App$Utils$Utils$unshift,
-							{patternIndex: -1, stack: $elm$core$Array$empty},
-							stackResult.timeline),
-						ui: _Utils_update(
-							ui,
-							{patternInputField: ''})
+							$elm$core$List$tail(model.importQueue))
 					}),
-				newPattern.metaAction)) : _Utils_Tuple2(
-			_Utils_update(
-				model,
-				{
-					importQueue: A2(
-						$elm$core$Maybe$withDefault,
-						_List_Nil,
-						$elm$core$List$tail(model.importQueue))
-				}),
-			command);
-	} else {
-		return A2(
-			$author$project$Main$update,
-			$author$project$Logic$App$Msg$SetTimelineIndex(
-				$elm$core$Array$length(model.timeline)),
-			model);
-	}
-};
+				command);
+		} else {
+			return A2(
+				$author$project$Main$update,
+				$author$project$Logic$App$Msg$SetTimelineIndex(
+					$elm$core$Array$length(model.timeline)),
+				model);
+		}
+	});
 var $author$project$Logic$App$Msg$MouseMove = function (a) {
 	return {$: 'MouseMove', a: a};
 };
@@ -17694,9 +17741,9 @@ var $elm$html$Html$Events$preventDefaultOn = F2(
 			$elm$virtual_dom$VirtualDom$MayPreventDefault(decoder));
 	});
 var $author$project$Logic$App$Msg$NoOp = {$: 'NoOp'};
-var $author$project$Logic$App$Types$PatternItem = F3(
-	function (a, b, c) {
-		return {$: 'PatternItem', a: a, b: b, c: c};
+var $author$project$Logic$App$Types$PatternItem = F4(
+	function (a, b, c, d) {
+		return {$: 'PatternItem', a: a, b: b, c: c, d: d};
 	});
 var $author$project$Logic$App$Msg$RemoveFromPatternArray = F2(
 	function (a, b) {
@@ -18149,7 +18196,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F6(
 										A2(
 										$jinjor$elm_contextmenu$ContextMenu$open,
 										$author$project$Logic$App$Msg$ContextMenuMsg,
-										A3($author$project$Logic$App$Types$PatternItem, pattern.active, isMacro, index))
+										A4($author$project$Logic$App$Types$PatternItem, pattern.active, isMacro, pattern, index))
 									]),
 								overDragHandle ? $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$onSourceDrag(
 									$author$project$Components$App$Panels$PatternPanel$draggedSourceConfig(index)) : _Utils_ap(
@@ -19521,6 +19568,10 @@ var $author$project$Components$App$Content$content = function (model) {
 var $author$project$Logic$App$Msg$ContextMenuItemSelected = function (a) {
 	return {$: 'ContextMenuItemSelected', a: a};
 };
+var $author$project$Logic$App$Msg$ExpandMacro = F2(
+	function (a, b) {
+		return {$: 'ExpandMacro', a: a, b: b};
+	});
 var $jinjor$elm_contextmenu$ContextMenu$Item = function (a) {
 	return {$: 'Item', a: a};
 };
@@ -19541,7 +19592,8 @@ var $jinjor$elm_contextmenu$ContextMenu$item = function (s) {
 var $author$project$Components$App$ContextMenu$ContextMenu$toItemGroups = function (context) {
 	var isActive = context.a;
 	var isMacro = context.b;
-	var index = context.c;
+	var pattern = context.c;
+	var index = context.d;
 	return _List_fromArray(
 		[
 			_Utils_ap(
@@ -19570,7 +19622,7 @@ var $author$project$Components$App$ContextMenu$ContextMenu$toItemGroups = functi
 					[
 						_Utils_Tuple2(
 						$jinjor$elm_contextmenu$ContextMenu$item('Expand Macro'),
-						$author$project$Logic$App$Msg$ContextMenuItemSelected(2))
+						A2($author$project$Logic$App$Msg$ExpandMacro, pattern.signature, index))
 					]),
 				_List_Nil))
 		]);

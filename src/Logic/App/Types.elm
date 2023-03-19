@@ -187,4 +187,4 @@ type alias Timeline =
 
 
 type ContextMenuContext
-    = PatternItem Bool Bool Int --is active, is macro, index
+    = PatternItem Bool Bool Pattern Int --is active, is macro, pattern, index

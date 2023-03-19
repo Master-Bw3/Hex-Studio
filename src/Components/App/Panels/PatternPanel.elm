@@ -159,7 +159,7 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle insert
                          , attribute "data-index" <| fromInt index
                          , ifThenElse isMacro (style "background-color" "#4C3541") (style "background-color" "var(--primary_lightest)")
                          , MouseEvents.onClick (\event -> ifThenElse event.keys.shift (SetInsertionPoint index) NoOp)
-                         , ContextMenu.open ContextMenuMsg (PatternItem pattern.active isMacro index)
+                         , ContextMenu.open ContextMenuMsg (PatternItem pattern.active isMacro pattern index)
                          ]
                             ++ (if overDragHandle then
                                     onSourceDrag (draggedSourceConfig index)

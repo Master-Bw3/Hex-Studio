@@ -56,6 +56,7 @@ type Msg
     | ChangeMacroName String String
     | ContextMenuMsg (ContextMenu.Msg ContextMenuContext)
     | ContextMenuItemSelected Int
+    | ExpandMacro String Int
 
 
 type alias MouseMoveData =
