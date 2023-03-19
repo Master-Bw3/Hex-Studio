@@ -87,29 +87,4 @@ mask maskCode stack ctx =
         }
 
 
-saveMacro : Array Iota -> CastingContext -> ActionResult
-saveMacro stack ctx =
-    let
-        action iota1 iota2 context =
-            case ( iota1, iota2 ) of
-                ( value, PatternIota key _ ) ->
-                    ( Array.empty
-                    , { context
-                        | macros =
-                            Dict.update key.signature
-                                (\val ->
-                                    case val of
-                                        Just ( displayName, _, _ ) ->
-                                            Just ( displayName, key.startDirection, value )
 
-                                        Nothing ->
-                                            Just ( "Unnamed Macro", key.startDirection, value )
-                                )
-                                context.macros
-                      }
-                    )
-
-                _ ->
-                    ( Array.repeat 1 <| Garbage CatastrophicFailure, ctx )
-    in
-    action2Inputs stack ctx getIotaList getPatternIota action

@@ -9,7 +9,7 @@ import Logic.App.Patterns.Circles exposing (..)
 import Logic.App.Patterns.Lists exposing (..)
 import Logic.App.Patterns.Math exposing (..)
 import Logic.App.Patterns.Misc exposing (..)
-import Logic.App.Patterns.OperatorUtils exposing (action1Input, getAny, getIotaList, getPatternList, getPatternOrIotaList, makeConstant, mapNothingToMissingIota, moveNothingsToFront)
+import Logic.App.Patterns.OperatorUtils exposing (action1Input, getAny, getIotaList, getPatternIota, getPatternList, getPatternOrIotaList, makeConstant, mapNothingToMissingIota, moveNothingsToFront, nanOrInfinityCheck)
 import Logic.App.Patterns.ReadWrite exposing (..)
 import Logic.App.Patterns.Selectors exposing (..)
 import Logic.App.Patterns.Spells exposing (..)
@@ -169,33 +169,34 @@ parseBookkeeperCode code =
         let
             codeList =
                 String.split "" code
+
             toAngleSignature codeSegment accumulator =
                 case codeSegment of
                     "-" ->
-                        if accumulator.prevSeg == "-"  then
-                            {prevSeg = codeSegment, signature = accumulator.signature ++ "w"}
+                        if accumulator.prevSeg == "-" then
+                            { prevSeg = codeSegment, signature = accumulator.signature ++ "w" }
 
-                        else if accumulator.prevSeg == "v"  then
-                            {prevSeg = codeSegment, signature = accumulator.signature ++ "e"}
+                        else if accumulator.prevSeg == "v" then
+                            { prevSeg = codeSegment, signature = accumulator.signature ++ "e" }
 
                         else
-                            {accumulator | prevSeg = codeSegment}
+                            { accumulator | prevSeg = codeSegment }
 
                     "v" ->
-                        if accumulator.prevSeg == "-"  then
-                            {prevSeg = codeSegment, signature = accumulator.signature ++ "ea"}
+                        if accumulator.prevSeg == "-" then
+                            { prevSeg = codeSegment, signature = accumulator.signature ++ "ea" }
 
-                        else if accumulator.prevSeg == "v"  then
-                            {prevSeg = codeSegment, signature = accumulator.signature ++ "da"}
+                        else if accumulator.prevSeg == "v" then
+                            { prevSeg = codeSegment, signature = accumulator.signature ++ "da" }
 
                         else
-                            {prevSeg = codeSegment, signature = accumulator.signature ++ "a"}
+                            { prevSeg = codeSegment, signature = accumulator.signature ++ "a" }
 
                     _ ->
                         accumulator
 
             signature =
-                (List.foldl toAngleSignature {prevSeg = "", signature = ""} codeList).signature
+                (List.foldl toAngleSignature { prevSeg = "", signature = "" } codeList).signature
         in
         { signature = Debug.log "signature" signature
         , internalName = "mask"
@@ -560,3 +561,93 @@ numberLiteralGenerator angleSignature isNegative =
     , active = True
     , startDirection = Southeast
     }
+
+
+saveMacro : Array Iota -> CastingContext -> ActionResult
+saveMacro stack ctx =
+    let
+        action iota1 iota2 context =
+            case ( iota1, iota2 ) of
+                ( value, PatternIota key _ ) ->
+                    ( Array.empty
+                    , { context
+                        | macros =
+                            Dict.update key.signature
+                                (\val ->
+                                    case val of
+                                        Just ( displayName, _, _ ) ->
+                                            Just ( displayName, key.startDirection, value )
+
+                                        Nothing ->
+                                            Just ( "Unnamed Macro", key.startDirection, value )
+                                )
+                                context.macros
+                      }
+                    )
+
+                _ ->
+                    ( Array.repeat 1 <| Garbage CatastrophicFailure, ctx )
+
+        maybeIota1 =
+            Array.get 1 stack
+
+        maybeIota2 =
+            Array.get 0 stack
+
+        newStack =
+            Array.slice 2 (Array.length stack) stack
+
+        getUnusedPatternIota iota =
+            case iota of
+                PatternIota pattern _ ->
+                    if (getPatternFromSignature Nothing pattern.signature).internalName == "unknown" then
+                        Just iota
+
+                    else
+                        Nothing
+
+                _ ->
+                    Nothing
+    in
+    if maybeIota1 == Nothing || maybeIota2 == Nothing then
+        { stack = Array.append (Array.map mapNothingToMissingIota <| Array.fromList <| moveNothingsToFront [ maybeIota1, maybeIota2 ]) newStack
+        , ctx = ctx
+        , success = False
+        }
+
+    else
+        case ( Maybe.map getIotaList maybeIota1, Maybe.map getUnusedPatternIota maybeIota2 ) of
+            ( Just iota1, Just iota2 ) ->
+                if iota1 == Nothing || iota2 == Nothing then
+                    { stack =
+                        Array.append
+                            (Array.fromList
+                                [ Maybe.withDefault (Garbage IncorrectIota) iota1
+                                , Maybe.withDefault (Garbage IncorrectIota) iota2
+                                ]
+                            )
+                            newStack
+                    , ctx = ctx
+                    , success = False
+                    }
+
+                else
+                    let
+                        actionResult =
+                            action
+                                (Maybe.withDefault (Garbage IncorrectIota) iota1)
+                                (Maybe.withDefault (Garbage IncorrectIota) iota2)
+                                ctx
+                    in
+                    if nanOrInfinityCheck (Tuple.first actionResult) then
+                        { stack = unshift (Garbage MathematicalError) stack, ctx = Tuple.second actionResult, success = False }
+
+                    else
+                        { stack = Array.append (Tuple.first actionResult) newStack, ctx = Tuple.second actionResult, success = True }
+
+            _ ->
+                -- this should never happen
+                { stack = unshift (Garbage CatastrophicFailure) newStack
+                , ctx = ctx
+                , success = False
+                }
