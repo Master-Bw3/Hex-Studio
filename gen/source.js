@@ -8044,7 +8044,7 @@ var $author$project$Logic$App$Stack$EvalStack$applyToStackLoop = F7(
 									resultArray: A2($author$project$Logic$App$Utils$Utils$unshift, applyResult.result, resultArray),
 									stack: applyResult.stack,
 									timeline: A2(
-										$elm$core$Array$push,
+										$author$project$Logic$App$Utils$Utils$unshift,
 										{patternIndex: currentIndex, stack: applyResult.stack},
 										timeline)
 								};
@@ -8065,7 +8065,7 @@ var $author$project$Logic$App$Stack$EvalStack$applyToStackLoop = F7(
 							$elm$core$List$tail(patterns)),
 							$temp$currentIndex = currentIndex + 1,
 							$temp$timeline = A2(
-							$elm$core$Array$push,
+							$author$project$Logic$App$Utils$Utils$unshift,
 							{patternIndex: currentIndex, stack: applyResult.a},
 							timeline),
 							$temp$considerThis = false,

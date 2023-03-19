@@ -93,7 +93,7 @@ applyToStackLoop stackResultTuple ctx patterns currentIndex timeline considerThi
                     , ctx = applyResult.ctx
                     , error = True
                     , halted = False
-                    , timeline = Array.push { stack = applyResult.stack, patternIndex = currentIndex } timeline
+                    , timeline = unshift { stack = applyResult.stack, patternIndex = currentIndex } timeline
                     }
 
         Just iota ->
@@ -107,7 +107,7 @@ applyToStackLoop stackResultTuple ctx patterns currentIndex timeline considerThi
                     ctx
                     (Maybe.withDefault [] <| List.tail patterns)
                     (currentIndex + 1)
-                    (Array.push { stack = Tuple.first applyResult, patternIndex = currentIndex } timeline)
+                    (unshift { stack = Tuple.first applyResult, patternIndex = currentIndex } timeline)
                     False
                     stopAtErrorOrHalt
 
