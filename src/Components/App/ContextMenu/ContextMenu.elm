@@ -37,8 +37,8 @@ toItemGroups context =
             [ [ ( ContextMenu.item "Set Insertion Point Above", SetInsertionPoint (index + 1) )
               , ( ContextMenu.item "Set Insertion Point Below", SetInsertionPoint index )
               , ifThenElse isActive
-                    ( ContextMenu.item "Disable Pattern", ContextMenuItemSelected 2 )
-                    ( ContextMenu.item "Enable Pattern", ContextMenuItemSelected 2 )
+                    ( ContextMenu.item "Disable Pattern", NoOp )
+                    ( ContextMenu.item "Enable Pattern", NoOp )
               ]
                 ++ ifThenElse isMacro
                     [ ( ContextMenu.item "Expand Macro", ExpandMacro pattern.signature index ) ]

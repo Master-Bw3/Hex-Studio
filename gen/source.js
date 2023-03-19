@@ -15649,15 +15649,6 @@ var $author$project$Main$update = F2(
 							model,
 							{contextMenu: contextMenu}),
 						A2($elm$core$Platform$Cmd$map, $author$project$Logic$App$Msg$ContextMenuMsg, cmd));
-				case 'ContextMenuItemSelected':
-					var message = msg.a;
-					return _Utils_Tuple2(
-						_Utils_update(
-							model,
-							{
-								message: 'Item[' + ($elm$core$String$fromInt(message) + '] was clicked.')
-							}),
-						$elm$core$Platform$Cmd$none);
 				default:
 					var sig = msg.a;
 					var index = msg.b;
@@ -19565,9 +19556,6 @@ var $author$project$Components$App$Content$content = function (model) {
 				$author$project$Components$App$Overlays$ImportTextOverlay$importTextOverlay(model),
 				$author$project$Components$App$Overlays$ExportTextOverlay$exportTextOverlay(model))));
 };
-var $author$project$Logic$App$Msg$ContextMenuItemSelected = function (a) {
-	return {$: 'ContextMenuItemSelected', a: a};
-};
 var $author$project$Logic$App$Msg$ExpandMacro = F2(
 	function (a, b) {
 		return {$: 'ExpandMacro', a: a, b: b};
@@ -19610,10 +19598,10 @@ var $author$project$Components$App$ContextMenu$ContextMenu$toItemGroups = functi
 					isActive,
 					_Utils_Tuple2(
 						$jinjor$elm_contextmenu$ContextMenu$item('Disable Pattern'),
-						$author$project$Logic$App$Msg$ContextMenuItemSelected(2)),
+						$author$project$Logic$App$Msg$NoOp),
 					_Utils_Tuple2(
 						$jinjor$elm_contextmenu$ContextMenu$item('Enable Pattern'),
-						$author$project$Logic$App$Msg$ContextMenuItemSelected(2)))
+						$author$project$Logic$App$Msg$NoOp))
 				]),
 			A3(
 				$author$project$Logic$App$Utils$Utils$ifThenElse,

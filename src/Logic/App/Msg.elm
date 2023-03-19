@@ -55,7 +55,6 @@ type Msg
     | HandleKeyboardEvent KeyboardEvent
     | ChangeMacroName String String
     | ContextMenuMsg (ContextMenu.Msg ContextMenuContext)
-    | ContextMenuItemSelected Int
     | ExpandMacro String Int
 
 

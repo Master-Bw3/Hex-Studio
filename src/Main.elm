@@ -786,11 +786,6 @@ update msg model =
             , Cmd.map ContextMenuMsg cmd
             )
 
-        ContextMenuItemSelected message ->
-            ( { model | message = "Item[" ++ String.fromInt message ++ "] was clicked." }
-            , Cmd.none
-            )
-
         ExpandMacro sig index ->
             let
                 patterns =
