@@ -265,16 +265,7 @@ button {
     outline: inherit;
 }
 
-.outer_box {
-    animation: blink 1.5s steps(1, end);
-    animation-iteration-count: infinite;
-}
 
-@keyframes blink {
-    50% {
-        border-color: transparent;
-    }
-}
 
 .outer_box .x_button {
     display: flex;
@@ -681,4 +672,20 @@ button {
     margin-top: 0;
     color: rgba(255, 255, 255, 0.6);
     margin-left: 10px;
+}
+
+.insertion_point {
+    background-color: #7D8599;
+    animation: blink 1.5s steps(1, end);
+    animation-iteration-count: infinite;
+    width: 100%;
+    height: 1px;
+    margin-bottom: 2px;
+
+}
+
+@keyframes blink {
+    50% {
+        background-color: transparent;
+    }
 }

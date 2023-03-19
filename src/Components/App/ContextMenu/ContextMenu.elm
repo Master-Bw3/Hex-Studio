@@ -34,8 +34,8 @@ toItemGroups : ContextMenuContext -> List (List ( ContextMenu.Item, Msg ))
 toItemGroups context =
     case context of
         PatternItem isActive isMacro index ->
-            [ [ ( ContextMenu.item "Set Insertion Point Above", ContextMenuItemSelected 0 )
-              , ( ContextMenu.item "Set Insertion Point Below", ContextMenuItemSelected 1 )
+            [ [ ( ContextMenu.item "Set Insertion Point Above", SetInsertionPoint (index + 1) )
+              , ( ContextMenu.item "Set Insertion Point Below", SetInsertionPoint index )
               , ifThenElse isActive
                     ( ContextMenu.item "Disable Pattern", ContextMenuItemSelected 2 )
                     ( ContextMenu.item "Enable Pattern", ContextMenuItemSelected 2 )

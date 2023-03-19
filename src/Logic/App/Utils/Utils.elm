@@ -60,3 +60,10 @@ ifThenElse conditional a b =
 
     else
         b
+
+
+insert : Int -> b -> List b -> List b
+insert i value list =
+    List.drop i list
+        |> (::) value
+        |> (++) (List.take i list)

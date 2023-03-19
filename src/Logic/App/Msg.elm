@@ -46,7 +46,7 @@ type Msg
     | RequestGridDrawingAsImage
     | RecieveGridDrawingAsImage String
     | UpdatePatternOuptut Int Pattern
-    | SetInsertionPoint Int Keys
+    | SetInsertionPoint Int
     | SetImportInputValue String
     | ImportText String
     | ViewOverlay Overlay

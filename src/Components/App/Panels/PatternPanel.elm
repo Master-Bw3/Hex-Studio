@@ -7,6 +7,7 @@ import Components.Icon.MoveButton exposing (moveButton)
 import Components.Icon.ParagraphDropdown exposing (paragraphDropdown)
 import Components.Icon.XButton exposing (xButton)
 import ContextMenu
+import Dict exposing (Dict)
 import FontAwesome as Icon exposing (Icon)
 import FontAwesome.Attributes as Icon
 import FontAwesome.Brands as Icon
@@ -24,12 +25,9 @@ import Logic.App.Msg exposing (MouseMoveData, Msg(..))
 import Logic.App.Patterns.PatternRegistry exposing (patternRegistry)
 import Logic.App.Types exposing (ContextMenuContext(..), EntityType(..), GridPoint, Iota(..), IotaType(..), Panel(..), Pattern)
 import Logic.App.Utils.GetIotaValue exposing (getIotaFromString, getIotaTypeAsString, getIotaTypeFromString)
-import Logic.App.Utils.Utils exposing (isJust)
+import Logic.App.Utils.Utils exposing (ifThenElse, insert, isJust)
 import Settings.Theme exposing (accent1, accent2)
 import String exposing (fromInt)
-import Dict
-import Dict exposing (Dict)
-import Logic.App.Utils.Utils exposing (ifThenElse)
 
 
 patternPanel : Model -> Html Msg
@@ -142,6 +140,7 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle insert
             let
                 isMacro =
                     isJust (Dict.get pattern.signature macroDict)
+
                 activeOpacity =
                     if pattern.active == False then
                         style "opacity" "50%"
@@ -158,8 +157,8 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle insert
                 ++ [ div
                         ([ class "outer_box"
                          , attribute "data-index" <| fromInt index
-                         , ifThenElse isMacro (style "background-color" "#4C3541")  (style "background-color" "var(--primary_lightest)")
-                         , MouseEvents.onClick (\event -> SetInsertionPoint index event.keys)
+                         , ifThenElse isMacro (style "background-color" "#4C3541") (style "background-color" "var(--primary_lightest)")
+                         , MouseEvents.onClick (\event -> ifThenElse event.keys.shift (SetInsertionPoint index) NoOp)
                          , ContextMenu.open ContextMenuMsg (PatternItem pattern.active isMacro index)
                          ]
                             ++ (if overDragHandle then
@@ -179,12 +178,6 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle insert
                                             else
                                                 []
                                            )
-                               )
-                            ++ (if index == insertionPoint && index /= 0 then
-                                    [ style "border-bottom" ("1px solid " ++ "#7D8599") ]
-
-                                else
-                                    []
                                )
                         )
                         (div [ class "inner_box" ]
@@ -297,11 +290,18 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle insert
                                )
                         )
                    ]
-    in
-    List.concat (List.indexedMap renderPattern patterns)
-        ++ (if dragoverIndex > List.length patterns - 1 then
-                [ div [ class "seperator" ] [] ]
 
-            else
-                []
-           )
+        list =
+            List.concat (List.indexedMap renderPattern patterns)
+                ++ (if dragoverIndex > List.length patterns - 1 then
+                        [ div [ class "seperator" ] [] ]
+
+                    else
+                        []
+                   )
+    in
+    if insertionPoint /= 0 then
+        insert insertionPoint (div [ class "insertion_point" ] []) list
+
+    else
+        list

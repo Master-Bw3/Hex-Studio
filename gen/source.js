@@ -15452,16 +15452,18 @@ var $author$project$Main$update = F2(
 							}));
 				case 'SetInsertionPoint':
 					var index = msg.a;
-					var keys = msg.b;
-					return keys.shift ? (_Utils_eq(model.insertionPoint, index) ? _Utils_Tuple2(
-						_Utils_update(
-							model,
-							{insertionPoint: 0}),
-						$elm$core$Platform$Cmd$none) : _Utils_Tuple2(
-						_Utils_update(
-							model,
-							{insertionPoint: index}),
-						$elm$core$Platform$Cmd$none)) : _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+					return A2(
+						$elm$core$Debug$log,
+						'e',
+						_Utils_eq(model.insertionPoint, index) ? _Utils_Tuple2(
+							_Utils_update(
+								model,
+								{insertionPoint: 0}),
+							$elm$core$Platform$Cmd$none) : _Utils_Tuple2(
+							_Utils_update(
+								model,
+								{insertionPoint: index}),
+							$elm$core$Platform$Cmd$none));
 				case 'SetImportInputValue':
 					var string = msg.a;
 					return _Utils_Tuple2(
@@ -17691,6 +17693,7 @@ var $elm$html$Html$Events$preventDefaultOn = F2(
 			event,
 			$elm$virtual_dom$VirtualDom$MayPreventDefault(decoder));
 	});
+var $author$project$Logic$App$Msg$NoOp = {$: 'NoOp'};
 var $author$project$Logic$App$Types$PatternItem = F3(
 	function (a, b, c) {
 		return {$: 'PatternItem', a: a, b: b, c: c};
@@ -17699,10 +17702,9 @@ var $author$project$Logic$App$Msg$RemoveFromPatternArray = F2(
 	function (a, b) {
 		return {$: 'RemoveFromPatternArray', a: a, b: b};
 	});
-var $author$project$Logic$App$Msg$SetInsertionPoint = F2(
-	function (a, b) {
-		return {$: 'SetInsertionPoint', a: a, b: b};
-	});
+var $author$project$Logic$App$Msg$SetInsertionPoint = function (a) {
+	return {$: 'SetInsertionPoint', a: a};
+};
 var $author$project$Logic$App$Msg$UpdatePatternOuptut = F2(
 	function (a, b) {
 		return {$: 'UpdatePatternOuptut', a: a, b: b};
@@ -17756,6 +17758,141 @@ var $author$project$Logic$App$Utils$GetIotaValue$getIotaTypeFromString = functio
 		$elm$core$String$toFloat(string),
 		$elm$core$Maybe$Nothing)) ? $author$project$Logic$App$Types$NumberType : $author$project$Logic$App$Types$NullType)));
 };
+var $elm$core$List$takeReverse = F3(
+	function (n, list, kept) {
+		takeReverse:
+		while (true) {
+			if (n <= 0) {
+				return kept;
+			} else {
+				if (!list.b) {
+					return kept;
+				} else {
+					var x = list.a;
+					var xs = list.b;
+					var $temp$n = n - 1,
+						$temp$list = xs,
+						$temp$kept = A2($elm$core$List$cons, x, kept);
+					n = $temp$n;
+					list = $temp$list;
+					kept = $temp$kept;
+					continue takeReverse;
+				}
+			}
+		}
+	});
+var $elm$core$List$takeTailRec = F2(
+	function (n, list) {
+		return $elm$core$List$reverse(
+			A3($elm$core$List$takeReverse, n, list, _List_Nil));
+	});
+var $elm$core$List$takeFast = F3(
+	function (ctr, n, list) {
+		if (n <= 0) {
+			return _List_Nil;
+		} else {
+			var _v0 = _Utils_Tuple2(n, list);
+			_v0$1:
+			while (true) {
+				_v0$5:
+				while (true) {
+					if (!_v0.b.b) {
+						return list;
+					} else {
+						if (_v0.b.b.b) {
+							switch (_v0.a) {
+								case 1:
+									break _v0$1;
+								case 2:
+									var _v2 = _v0.b;
+									var x = _v2.a;
+									var _v3 = _v2.b;
+									var y = _v3.a;
+									return _List_fromArray(
+										[x, y]);
+								case 3:
+									if (_v0.b.b.b.b) {
+										var _v4 = _v0.b;
+										var x = _v4.a;
+										var _v5 = _v4.b;
+										var y = _v5.a;
+										var _v6 = _v5.b;
+										var z = _v6.a;
+										return _List_fromArray(
+											[x, y, z]);
+									} else {
+										break _v0$5;
+									}
+								default:
+									if (_v0.b.b.b.b && _v0.b.b.b.b.b) {
+										var _v7 = _v0.b;
+										var x = _v7.a;
+										var _v8 = _v7.b;
+										var y = _v8.a;
+										var _v9 = _v8.b;
+										var z = _v9.a;
+										var _v10 = _v9.b;
+										var w = _v10.a;
+										var tl = _v10.b;
+										return (ctr > 1000) ? A2(
+											$elm$core$List$cons,
+											x,
+											A2(
+												$elm$core$List$cons,
+												y,
+												A2(
+													$elm$core$List$cons,
+													z,
+													A2(
+														$elm$core$List$cons,
+														w,
+														A2($elm$core$List$takeTailRec, n - 4, tl))))) : A2(
+											$elm$core$List$cons,
+											x,
+											A2(
+												$elm$core$List$cons,
+												y,
+												A2(
+													$elm$core$List$cons,
+													z,
+													A2(
+														$elm$core$List$cons,
+														w,
+														A3($elm$core$List$takeFast, ctr + 1, n - 4, tl)))));
+									} else {
+										break _v0$5;
+									}
+							}
+						} else {
+							if (_v0.a === 1) {
+								break _v0$1;
+							} else {
+								break _v0$5;
+							}
+						}
+					}
+				}
+				return list;
+			}
+			var _v1 = _v0.b;
+			var x = _v1.a;
+			return _List_fromArray(
+				[x]);
+		}
+	});
+var $elm$core$List$take = F2(
+	function (n, list) {
+		return A3($elm$core$List$takeFast, 0, n, list);
+	});
+var $author$project$Logic$App$Utils$Utils$insert = F3(
+	function (i, value, list) {
+		return _Utils_ap(
+			A2($elm$core$List$take, i, list),
+			A2(
+				$elm$core$List$cons,
+				value,
+				A2($elm$core$List$drop, i, list)));
+	});
 var $author$project$Components$Icon$MoveButton$moveButton = A2(
 	$elm$svg$Svg$svg,
 	_List_fromArray(
@@ -18003,33 +18140,32 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F6(
 										A2($elm$html$Html$Attributes$style, 'background-color', 'var(--primary_lightest)')),
 										$mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$onClick(
 										function (event) {
-											return A2($author$project$Logic$App$Msg$SetInsertionPoint, index, event.keys);
+											return A3(
+												$author$project$Logic$App$Utils$Utils$ifThenElse,
+												event.keys.shift,
+												$author$project$Logic$App$Msg$SetInsertionPoint(index),
+												$author$project$Logic$App$Msg$NoOp);
 										}),
 										A2(
 										$jinjor$elm_contextmenu$ContextMenu$open,
 										$author$project$Logic$App$Msg$ContextMenuMsg,
 										A3($author$project$Logic$App$Types$PatternItem, pattern.active, isMacro, index))
 									]),
-								_Utils_ap(
-									overDragHandle ? $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$onSourceDrag(
-										$author$project$Components$App$Panels$PatternPanel$draggedSourceConfig(index)) : _Utils_ap(
-										_List_Nil,
-										_Utils_ap(
-											_Utils_eq(index, dragstartIndex) ? _List_fromArray(
-												[
-													A2($elm$html$Html$Attributes$style, 'opacity', '40%')
-												]) : _List_fromArray(
-												[
-													A2($elm$html$Html$Attributes$style, 'opacity', '100%')
-												]),
-											_Utils_eq(dragoverIndex, index) ? _List_fromArray(
-												[
-													$elm$html$Html$Attributes$class('dragover')
-												]) : _List_Nil)),
-									(_Utils_eq(index, insertionPoint) && (!(!index))) ? _List_fromArray(
-										[
-											A2($elm$html$Html$Attributes$style, 'border-bottom', '1px solid ' + '#7D8599')
-										]) : _List_Nil)),
+								overDragHandle ? $mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$onSourceDrag(
+									$author$project$Components$App$Panels$PatternPanel$draggedSourceConfig(index)) : _Utils_ap(
+									_List_Nil,
+									_Utils_ap(
+										_Utils_eq(index, dragstartIndex) ? _List_fromArray(
+											[
+												A2($elm$html$Html$Attributes$style, 'opacity', '40%')
+											]) : _List_fromArray(
+											[
+												A2($elm$html$Html$Attributes$style, 'opacity', '100%')
+											]),
+										_Utils_eq(dragoverIndex, index) ? _List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('dragover')
+											]) : _List_Nil))),
 							A2(
 								$elm$core$List$cons,
 								A2(
@@ -18437,7 +18573,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F6(
 			});
 		var patterns = $elm$core$List$unzip(
 			$elm$core$Array$toList(patternList)).a;
-		return _Utils_ap(
+		var list = _Utils_ap(
 			$elm$core$List$concat(
 				A2($elm$core$List$indexedMap, renderPattern, patterns)),
 			(_Utils_cmp(
@@ -18452,6 +18588,17 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F6(
 						]),
 					_List_Nil)
 				]) : _List_Nil);
+		return (!(!insertionPoint)) ? A3(
+			$author$project$Logic$App$Utils$Utils$insert,
+			insertionPoint,
+			A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('insertion_point')
+					]),
+				_List_Nil),
+			list) : list;
 	});
 var $author$project$Components$App$Panels$PatternPanel$patternPanel = function (model) {
 	var visibility = A2($elm$core$List$member, $author$project$Logic$App$Types$PatternPanel, model.ui.openPanels);
@@ -18990,132 +19137,6 @@ var $author$project$Components$App$Grid$renderPoint = F4(
 					]))
 			]) : _List_Nil;
 	});
-var $elm$core$List$takeReverse = F3(
-	function (n, list, kept) {
-		takeReverse:
-		while (true) {
-			if (n <= 0) {
-				return kept;
-			} else {
-				if (!list.b) {
-					return kept;
-				} else {
-					var x = list.a;
-					var xs = list.b;
-					var $temp$n = n - 1,
-						$temp$list = xs,
-						$temp$kept = A2($elm$core$List$cons, x, kept);
-					n = $temp$n;
-					list = $temp$list;
-					kept = $temp$kept;
-					continue takeReverse;
-				}
-			}
-		}
-	});
-var $elm$core$List$takeTailRec = F2(
-	function (n, list) {
-		return $elm$core$List$reverse(
-			A3($elm$core$List$takeReverse, n, list, _List_Nil));
-	});
-var $elm$core$List$takeFast = F3(
-	function (ctr, n, list) {
-		if (n <= 0) {
-			return _List_Nil;
-		} else {
-			var _v0 = _Utils_Tuple2(n, list);
-			_v0$1:
-			while (true) {
-				_v0$5:
-				while (true) {
-					if (!_v0.b.b) {
-						return list;
-					} else {
-						if (_v0.b.b.b) {
-							switch (_v0.a) {
-								case 1:
-									break _v0$1;
-								case 2:
-									var _v2 = _v0.b;
-									var x = _v2.a;
-									var _v3 = _v2.b;
-									var y = _v3.a;
-									return _List_fromArray(
-										[x, y]);
-								case 3:
-									if (_v0.b.b.b.b) {
-										var _v4 = _v0.b;
-										var x = _v4.a;
-										var _v5 = _v4.b;
-										var y = _v5.a;
-										var _v6 = _v5.b;
-										var z = _v6.a;
-										return _List_fromArray(
-											[x, y, z]);
-									} else {
-										break _v0$5;
-									}
-								default:
-									if (_v0.b.b.b.b && _v0.b.b.b.b.b) {
-										var _v7 = _v0.b;
-										var x = _v7.a;
-										var _v8 = _v7.b;
-										var y = _v8.a;
-										var _v9 = _v8.b;
-										var z = _v9.a;
-										var _v10 = _v9.b;
-										var w = _v10.a;
-										var tl = _v10.b;
-										return (ctr > 1000) ? A2(
-											$elm$core$List$cons,
-											x,
-											A2(
-												$elm$core$List$cons,
-												y,
-												A2(
-													$elm$core$List$cons,
-													z,
-													A2(
-														$elm$core$List$cons,
-														w,
-														A2($elm$core$List$takeTailRec, n - 4, tl))))) : A2(
-											$elm$core$List$cons,
-											x,
-											A2(
-												$elm$core$List$cons,
-												y,
-												A2(
-													$elm$core$List$cons,
-													z,
-													A2(
-														$elm$core$List$cons,
-														w,
-														A3($elm$core$List$takeFast, ctr + 1, n - 4, tl)))));
-									} else {
-										break _v0$5;
-									}
-							}
-						} else {
-							if (_v0.a === 1) {
-								break _v0$1;
-							} else {
-								break _v0$5;
-							}
-						}
-					}
-				}
-				return list;
-			}
-			var _v1 = _v0.b;
-			var x = _v1.a;
-			return _List_fromArray(
-				[x]);
-		}
-	});
-var $elm$core$List$take = F2(
-	function (n, list) {
-		return A3($elm$core$List$takeFast, 0, n, list);
-	});
 var $author$project$Components$App$Grid$renderPoints = function (model) {
 	var scale = model.settings.gridScale;
 	var mousePos = model.mousePos;
@@ -19528,10 +19549,10 @@ var $author$project$Components$App$ContextMenu$ContextMenu$toItemGroups = functi
 				[
 					_Utils_Tuple2(
 					$jinjor$elm_contextmenu$ContextMenu$item('Set Insertion Point Above'),
-					$author$project$Logic$App$Msg$ContextMenuItemSelected(0)),
+					$author$project$Logic$App$Msg$SetInsertionPoint(index + 1)),
 					_Utils_Tuple2(
 					$jinjor$elm_contextmenu$ContextMenu$item('Set Insertion Point Below'),
-					$author$project$Logic$App$Msg$ContextMenuItemSelected(1)),
+					$author$project$Logic$App$Msg$SetInsertionPoint(index)),
 					A3(
 					$author$project$Logic$App$Utils$Utils$ifThenElse,
 					isActive,

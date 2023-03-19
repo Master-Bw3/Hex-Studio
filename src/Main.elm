@@ -659,16 +659,14 @@ update msg model =
                     , timeline = unshift { stack = Array.empty, patternIndex = -1 } stackResult.timeline
                 }
 
-        SetInsertionPoint index keys ->
-            if keys.shift then
-                if model.insertionPoint == index then
-                    ( { model | insertionPoint = 0 }, Cmd.none )
-
-                else
-                    ( { model | insertionPoint = index }, Cmd.none )
+        SetInsertionPoint index ->
+            Debug.log "e" <|
+            if model.insertionPoint == index then
+                ( { model | insertionPoint = 0 }, Cmd.none )
 
             else
-                ( model, Cmd.none )
+                ( { model | insertionPoint = index }, Cmd.none )
+
 
         SetImportInputValue string ->
             ( { model | ui = { ui | importInput = string } }, Cmd.none )
