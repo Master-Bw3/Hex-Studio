@@ -16689,7 +16689,8 @@ var $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsHtmlMsg = F3(
 										$elm$html$Html$div,
 										_List_fromArray(
 											[
-												$elm$html$Html$Attributes$class('text')
+												$elm$html$Html$Attributes$class('text'),
+												A2($elm$html$Html$Attributes$style, 'margin-right', '6.8px')
 											]),
 										_List_fromArray(
 											[
@@ -16768,7 +16769,8 @@ var $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsHtmlMsg = F3(
 										$elm$html$Html$div,
 										_List_fromArray(
 											[
-												$elm$html$Html$Attributes$class('text')
+												$elm$html$Html$Attributes$class('text'),
+												A2($elm$html$Html$Attributes$style, 'margin-right', '6.8px')
 											]),
 										_List_fromArray(
 											[
