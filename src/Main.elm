@@ -274,7 +274,8 @@ update msg model =
                         directionlessPattern =
                             getPatternFromSignature (Just model.castingContext.macros) signature
 
-                        newPattern = {directionlessPattern | startDirection = startDir}
+                        newPattern =
+                            { directionlessPattern | startDirection = startDir }
 
                         newUncoloredPatternArray =
                             addToPatternArray
