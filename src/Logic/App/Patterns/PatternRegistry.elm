@@ -135,11 +135,37 @@ getPatternFromName maybeMacros name =
                                                 )
 
                                     Nothing ->
-                                        if Regex.contains Logic.App.Utils.RegexPatterns.angleSignaturePattern name then
-                                            ( getPatternFromSignature maybeMacros name, Cmd.none )
+                                        case
+                                            Dict.toList macros
+                                                |> List.filter
+                                                    (\x ->
+                                                        case x of
+                                                            (_, ( displayName, _, _ )) ->
+                                                                displayName == name
+                                                    )
+                                                |> List.head
+                                        of
+                                            Just (signature, ( displayName, direction, _ )) ->
+                                                ( { signature = signature
+                                                  , internalName = ""
+                                                  , action = noAction
+                                                  , metaAction = None
+                                                  , displayName = displayName
+                                                  , color = accent1
+                                                  , outputOptions = []
+                                                  , active = True
+                                                  , selectedOutput = Nothing
+                                                  , startDirection = direction
+                                                  }
+                                                , Cmd.none
+                                                )
 
-                                        else
-                                            ( unknownPattern, Cmd.none )
+                                            Nothing ->
+                                                if Regex.contains Logic.App.Utils.RegexPatterns.angleSignaturePattern name then
+                                                    ( getPatternFromSignature maybeMacros name, Cmd.none )
+
+                                                else
+                                                    ( unknownPattern, Cmd.none )
 
                             Nothing ->
                                 if Regex.contains Logic.App.Utils.RegexPatterns.angleSignaturePattern name then

@@ -13891,9 +13891,29 @@ var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName = F2(
 								{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, active: true, color: $author$project$Settings$Theme$accent1, displayName: displayName, internalName: '', metaAction: $author$project$Logic$App$Types$None, outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: name, startDirection: direction},
 								$elm$core$Platform$Cmd$none);
 						} else {
-							return A2($elm$regex$Regex$contains, $author$project$Logic$App$Utils$RegexPatterns$angleSignaturePattern, name) ? _Utils_Tuple2(
-								A2($author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature, maybeMacros, name),
-								$elm$core$Platform$Cmd$none) : _Utils_Tuple2($author$project$Logic$App$Patterns$PatternRegistry$unknownPattern, $elm$core$Platform$Cmd$none);
+							var _v5 = $elm$core$List$head(
+								A2(
+									$elm$core$List$filter,
+									function (x) {
+										var _v7 = x.b;
+										var displayName = _v7.a;
+										return _Utils_eq(displayName, name);
+									},
+									$elm$core$Dict$toList(macros)));
+							if (_v5.$ === 'Just') {
+								var _v8 = _v5.a;
+								var signature = _v8.a;
+								var _v9 = _v8.b;
+								var displayName = _v9.a;
+								var direction = _v9.b;
+								return _Utils_Tuple2(
+									{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, active: true, color: $author$project$Settings$Theme$accent1, displayName: displayName, internalName: '', metaAction: $author$project$Logic$App$Types$None, outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: signature, startDirection: direction},
+									$elm$core$Platform$Cmd$none);
+							} else {
+								return A2($elm$regex$Regex$contains, $author$project$Logic$App$Utils$RegexPatterns$angleSignaturePattern, name) ? _Utils_Tuple2(
+									A2($author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature, maybeMacros, name),
+									$elm$core$Platform$Cmd$none) : _Utils_Tuple2($author$project$Logic$App$Patterns$PatternRegistry$unknownPattern, $elm$core$Platform$Cmd$none);
+							}
 						}
 					} else {
 						return A2($elm$regex$Regex$contains, $author$project$Logic$App$Utils$RegexPatterns$angleSignaturePattern, name) ? _Utils_Tuple2(
@@ -15598,18 +15618,15 @@ var $author$project$Main$update = F2(
 							}));
 				case 'SetInsertionPoint':
 					var index = msg.a;
-					return A2(
-						$elm$core$Debug$log,
-						'e',
-						_Utils_eq(model.insertionPoint, index) ? _Utils_Tuple2(
-							_Utils_update(
-								model,
-								{insertionPoint: 0}),
-							$elm$core$Platform$Cmd$none) : _Utils_Tuple2(
-							_Utils_update(
-								model,
-								{insertionPoint: index}),
-							$elm$core$Platform$Cmd$none));
+					return _Utils_eq(model.insertionPoint, index) ? _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{insertionPoint: 0}),
+						$elm$core$Platform$Cmd$none) : _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{insertionPoint: index}),
+						$elm$core$Platform$Cmd$none);
 				case 'SetImportInputValue':
 					var string = msg.a;
 					return _Utils_Tuple2(

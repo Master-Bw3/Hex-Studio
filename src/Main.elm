@@ -669,7 +669,6 @@ update msg model =
                 }
 
         SetInsertionPoint index ->
-            Debug.log "e" <|
                 if model.insertionPoint == index then
                     ( { model | insertionPoint = 0 }, Cmd.none )
 
