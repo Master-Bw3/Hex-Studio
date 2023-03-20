@@ -98,20 +98,20 @@ getIotaValueAsString iota =
 
         --fix later
         IotaList list ->
-            "dont do this"
+            (++) "List: " <|
+                String.join ", " <|
+                    List.map
+                        (\item ->
+                            case item of
+                                PatternIota pattern _ ->
+                                    pattern.displayName
 
-        -- (++) "List: " <|
-        --     String.join "| " <|
-        --         List.map
-        --             (\item ->
-        --                 case item of
-        --                     PatternIota pattern _ ->
-        --                         pattern.displayName
-        --                     x ->
-        --                         getIotaValueAsString x
-        --             )
-        --         <|
-        --             Array.toList list
+                                x ->
+                                    getIotaValueAsString x
+                        )
+                    <|
+                        Array.toList list
+
         PatternIota pattern _ ->
             pattern.displayName
 
@@ -161,7 +161,19 @@ getIotaValueAsString iota =
             "Garbage (" ++ mishapMessage ++ ")"
 
         OpenParenthesis list ->
-            "dont do this"
+            (++) "List: " <|
+                String.join ", " <|
+                    List.map
+                        (\item ->
+                            case item of
+                                PatternIota pattern _ ->
+                                    pattern.displayName
+
+                                x ->
+                                    getIotaValueAsString x
+                        )
+                    <|
+                        Array.toList list
 
 
 

@@ -6696,13 +6696,16 @@ var $author$project$Main$subscriptions = function (model) {
 };
 var $author$project$Logic$App$Types$Artifact = {$: 'Artifact'};
 var $author$project$Logic$App$Types$Cypher = {$: 'Cypher'};
+var $author$project$Logic$App$Types$East = {$: 'East'};
 var $author$project$Logic$App$Types$Focus = {$: 'Focus'};
+var $author$project$Logic$App$Types$None = {$: 'None'};
 var $author$project$Logic$App$Types$Pie = {$: 'Pie'};
 var $author$project$Logic$App$Msg$SetTimelineIndex = function (a) {
 	return {$: 'SetTimelineIndex', a: a};
 };
 var $author$project$Logic$App$Types$Spellbook = {$: 'Spellbook'};
 var $author$project$Logic$App$Types$Trinket = {$: 'Trinket'};
+var $author$project$Settings$Theme$accent1 = '#BAC5E2';
 var $author$project$Settings$Theme$accent2 = '#D8B8E0';
 var $elm$core$List$any = F2(
 	function (isOkay, list) {
@@ -7433,7 +7436,6 @@ var $elm$core$Maybe$andThen = F2(
 			return $elm$core$Maybe$Nothing;
 		}
 	});
-var $author$project$Settings$Theme$accent1 = '#BAC5E2';
 var $author$project$Settings$Theme$accent4 = '#dd6666';
 var $author$project$Settings$Theme$accent5 = '#E0E3B8';
 var $author$project$Logic$App$PatternList$PatternArray$applyColorToPatternFromResult = F2(
@@ -7736,9 +7738,9 @@ var $elm_community$array_extra$Array$Extra$reverseToList = A2($elm$core$Array$fo
 var $elm_community$array_extra$Array$Extra$reverse = A2($elm$core$Basics$composeR, $elm_community$array_extra$Array$Extra$reverseToList, $elm$core$Array$fromList);
 var $author$project$Logic$App$Stack$EvalStack$applyPatternToStack = F4(
 	function (stack, ctx, pattern, index) {
-		var _v11 = A2($elm$core$Array$get, 0, stack);
-		if ((_v11.$ === 'Just') && (_v11.a.$ === 'OpenParenthesis')) {
-			var list = _v11.a.a;
+		var _v13 = A2($elm$core$Array$get, 0, stack);
+		if ((_v13.$ === 'Just') && (_v13.a.$ === 'OpenParenthesis')) {
+			var list = _v13.a.a;
 			var numberOfOpenParen = 1 + $elm$core$Array$length(
 				A2(
 					$elm$core$Array$filter,
@@ -7824,10 +7826,10 @@ var $author$project$Logic$App$Stack$EvalStack$applyPatternToStack = F4(
 						};
 					}
 				} else {
-					var _v13 = A2($elm$core$Dict$get, pattern.signature, ctx.macros);
-					if ((_v13.$ === 'Just') && (_v13.a.c.$ === 'IotaList')) {
-						var _v14 = _v13.a;
-						var iotaList = _v14.c.a;
+					var _v15 = A2($elm$core$Dict$get, pattern.signature, ctx.macros);
+					if ((_v15.$ === 'Just') && (_v15.a.c.$ === 'IotaList')) {
+						var _v16 = _v15.a;
+						var iotaList = _v16.c.a;
 						var newStack = A3(
 							$elm$core$Array$set,
 							0,
@@ -7942,10 +7944,10 @@ var $author$project$Logic$App$Stack$EvalStack$applyPatternToStack = F4(
 									actionResult.allStackStates)
 							};
 						} else {
-							var _v17 = A2($elm$core$Dict$get, pattern.signature, ctx.macros);
-							if (_v17.$ === 'Just') {
-								var _v18 = _v17.a;
-								var iota = _v18.c;
+							var _v19 = A2($elm$core$Dict$get, pattern.signature, ctx.macros);
+							if (_v19.$ === 'Just') {
+								var _v20 = _v19.a;
+								var iota = _v20.c;
 								var actionResult = A2(
 									$author$project$Logic$App$Stack$EvalStack$eval,
 									A2($author$project$Logic$App$Utils$Utils$unshift, iota, stack),
@@ -8022,6 +8024,22 @@ var $author$project$Logic$App$Stack$EvalStack$applyToStackLoop = F7(
 		while (true) {
 			var stack = stackResultTuple.a;
 			var resultArray = stackResultTuple.b;
+			var iota = function () {
+				var _v11 = $elm$core$List$head(patterns);
+				if ((_v11.$ === 'Just') && (_v11.a.$ === 'PatternIota')) {
+					var _v12 = _v11.a;
+					var pattern = _v12.a;
+					var considered = _v12.b;
+					return (pattern.internalName === 'constant') ? A2(
+						$elm$core$Array$get,
+						0,
+						A2(pattern.action, $elm$core$Array$empty, ctx).stack) : $elm$core$Maybe$Just(
+						A2($author$project$Logic$App$Types$PatternIota, pattern, considered));
+				} else {
+					var head = _v11;
+					return head;
+				}
+			}();
 			var introspection = function () {
 				var _v10 = A2($elm$core$Array$get, 0, stack);
 				if ((_v10.$ === 'Just') && (_v10.a.$ === 'OpenParenthesis')) {
@@ -8030,12 +8048,11 @@ var $author$project$Logic$App$Stack$EvalStack$applyToStackLoop = F7(
 					return false;
 				}
 			}();
-			var _v8 = $elm$core$List$head(patterns);
-			if (_v8.$ === 'Nothing') {
+			if (iota.$ === 'Nothing') {
 				return {ctx: ctx, error: false, halted: false, resultArray: resultArray, stack: stack, timeline: timeline};
 			} else {
-				if (_v8.a.$ === 'PatternIota') {
-					var _v9 = _v8.a;
+				if (iota.a.$ === 'PatternIota') {
+					var _v9 = iota.a;
 					var pattern = _v9.a;
 					if (considerThis) {
 						var applyResult = _Utils_Tuple2(
@@ -8107,10 +8124,10 @@ var $author$project$Logic$App$Stack$EvalStack$applyToStackLoop = F7(
 						}
 					}
 				} else {
-					var iota = _v8.a;
+					var iota_ = iota.a;
 					if (considerThis || introspection) {
 						var applyResult = _Utils_Tuple2(
-							A2($author$project$Logic$App$Stack$EvalStack$addEscapedIotaToStack, stack, iota),
+							A2($author$project$Logic$App$Stack$EvalStack$addEscapedIotaToStack, stack, iota_),
 							A2($author$project$Logic$App$Utils$Utils$unshift, $author$project$Logic$App$Types$Considered, resultArray));
 						var $temp$stackResultTuple = applyResult,
 							$temp$ctx = ctx,
@@ -8516,7 +8533,6 @@ var $author$project$Logic$App$Grid$clearGrid = function (points) {
 		},
 		points);
 };
-var $author$project$Logic$App$Types$East = {$: 'East'};
 var $author$project$Logic$App$Types$ErrorDirection = {$: 'ErrorDirection'};
 var $author$project$Logic$App$Types$Northeast = {$: 'Northeast'};
 var $author$project$Logic$App$Types$Northwest = {$: 'Northwest'};
@@ -8935,7 +8951,6 @@ var $author$project$Logic$App$Grid$drawPatterns = F2(
 			patternArray: drawPatternsResult.patternArray
 		};
 	});
-var $author$project$Logic$App$Types$None = {$: 'None'};
 var $elm$regex$Regex$Match = F4(
 	function (match, index, number, submatches) {
 		return {index: index, match: match, number: number, submatches: submatches};
@@ -14211,6 +14226,96 @@ var $author$project$Logic$App$Utils$GetAngleSignature$getAngleSignatureAndStartD
 			$author$project$Logic$App$Types$East,
 			$elm$core$List$head(directionList)));
 };
+var $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString = function (iota) {
+	switch (iota.$) {
+		case 'Null':
+			return 'Null';
+		case 'Number':
+			var number = iota.a;
+			return $elm$core$String$fromFloat(number);
+		case 'Vector':
+			var _v1 = iota.a;
+			var x = _v1.a;
+			var y = _v1.b;
+			var z = _v1.c;
+			return 'Vector [' + ($elm$core$String$fromFloat(x) + (', ' + ($elm$core$String$fromFloat(y) + (', ' + ($elm$core$String$fromFloat(z) + ']')))));
+		case 'Boolean':
+			var bool = iota.a;
+			return bool ? 'True' : 'False';
+		case 'Entity':
+			return 'Entity';
+		case 'IotaList':
+			var list = iota.a;
+			return 'List: ' + A2(
+				$elm$core$String$join,
+				', ',
+				A2(
+					$elm$core$List$map,
+					function (item) {
+						if (item.$ === 'PatternIota') {
+							var pattern = item.a;
+							return pattern.displayName;
+						} else {
+							var x = item;
+							return $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString(x);
+						}
+					},
+					$elm$core$Array$toList(list)));
+		case 'PatternIota':
+			var pattern = iota.a;
+			return pattern.displayName;
+		case 'Garbage':
+			var mishap = iota.a;
+			var mishapMessage = function () {
+				switch (mishap.$) {
+					case 'InvalidPattern':
+						return 'Invalid Pattern';
+					case 'NotEnoughIotas':
+						return 'Not Enough Iotas';
+					case 'IncorrectIota':
+						return 'Incorrect Iota';
+					case 'VectorOutOfAmbit':
+						return 'Vector Out of Ambit';
+					case 'EntityOutOfAmbit':
+						return 'Entity Out of Ambit';
+					case 'EntityIsImmune':
+						return 'Entity is Immune';
+					case 'MathematicalError':
+						return 'Mathematical Error';
+					case 'IncorrectItem':
+						return 'Incorrect Item';
+					case 'IncorrectBlock':
+						return 'Incorrect Block';
+					case 'DelveTooDeep':
+						return 'Delve Too Deep';
+					case 'TransgressOther':
+						return 'Transgress Other';
+					case 'DisallowedAction':
+						return 'Disallowed Action';
+					default:
+						return 'Catastrophic Failure';
+				}
+			}();
+			return 'Garbage (' + (mishapMessage + ')');
+		default:
+			var list = iota.a;
+			return 'List: ' + A2(
+				$elm$core$String$join,
+				', ',
+				A2(
+					$elm$core$List$map,
+					function (item) {
+						if (item.$ === 'PatternIota') {
+							var pattern = item.a;
+							return pattern.displayName;
+						} else {
+							var x = item;
+							return $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString(x);
+						}
+					},
+					$elm$core$Array$toList(list)));
+	}
+};
 var $elm$core$Elm$JsArray$indexedMap = _JsArray_indexedMap;
 var $elm$core$Array$indexedMap = F2(
 	function (func, _v0) {
@@ -15697,7 +15802,19 @@ var $author$project$Main$update = F2(
 												var pattern = iota.a;
 												return pattern;
 											} else {
-												return $author$project$Logic$App$Patterns$PatternRegistry$unknownPattern;
+												var i = iota;
+												return {
+													action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(i),
+													active: true,
+													color: $author$project$Settings$Theme$accent1,
+													displayName: 'Constant: ' + $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString(i),
+													internalName: 'constant',
+													metaAction: $author$project$Logic$App$Types$None,
+													outputOptions: _List_Nil,
+													selectedOutput: $elm$core$Maybe$Nothing,
+													signature: '',
+													startDirection: $author$project$Logic$App$Types$East
+												};
 											}
 										},
 										patternList));
@@ -16839,68 +16956,6 @@ var $author$project$Logic$App$Msg$ChangeHeldItem = function (a) {
 };
 var $elm$html$Html$label = _VirtualDom_node('label');
 var $elm$html$Html$option = _VirtualDom_node('option');
-var $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString = function (iota) {
-	switch (iota.$) {
-		case 'Null':
-			return 'Null';
-		case 'Number':
-			var number = iota.a;
-			return $elm$core$String$fromFloat(number);
-		case 'Vector':
-			var _v1 = iota.a;
-			var x = _v1.a;
-			var y = _v1.b;
-			var z = _v1.c;
-			return 'Vector [' + ($elm$core$String$fromFloat(x) + (', ' + ($elm$core$String$fromFloat(y) + (', ' + ($elm$core$String$fromFloat(z) + ']')))));
-		case 'Boolean':
-			var bool = iota.a;
-			return bool ? 'True' : 'False';
-		case 'Entity':
-			return 'Entity';
-		case 'IotaList':
-			var list = iota.a;
-			return 'dont do this';
-		case 'PatternIota':
-			var pattern = iota.a;
-			return pattern.displayName;
-		case 'Garbage':
-			var mishap = iota.a;
-			var mishapMessage = function () {
-				switch (mishap.$) {
-					case 'InvalidPattern':
-						return 'Invalid Pattern';
-					case 'NotEnoughIotas':
-						return 'Not Enough Iotas';
-					case 'IncorrectIota':
-						return 'Incorrect Iota';
-					case 'VectorOutOfAmbit':
-						return 'Vector Out of Ambit';
-					case 'EntityOutOfAmbit':
-						return 'Entity Out of Ambit';
-					case 'EntityIsImmune':
-						return 'Entity is Immune';
-					case 'MathematicalError':
-						return 'Mathematical Error';
-					case 'IncorrectItem':
-						return 'Incorrect Item';
-					case 'IncorrectBlock':
-						return 'Incorrect Block';
-					case 'DelveTooDeep':
-						return 'Delve Too Deep';
-					case 'TransgressOther':
-						return 'Transgress Other';
-					case 'DisallowedAction':
-						return 'Disallowed Action';
-					default:
-						return 'Catastrophic Failure';
-				}
-			}();
-			return 'Garbage (' + (mishapMessage + ')');
-		default:
-			var list = iota.a;
-			return 'dont do this';
-	}
-};
 var $author$project$Settings$Theme$iotaColorMap = function (iota) {
 	switch (iota.$) {
 		case 'Null':

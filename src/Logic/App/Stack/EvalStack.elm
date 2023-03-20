@@ -49,8 +49,20 @@ applyToStackLoop stackResultTuple ctx patterns currentIndex timeline considerThi
 
                 _ ->
                     False
+
+        iota =
+            case List.head patterns of
+                Just (PatternIota pattern considered) ->
+                    if pattern.internalName == "constant" then
+                        Array.get 0 (pattern.action Array.empty ctx).stack
+
+                    else
+                        Just (PatternIota pattern considered)
+
+                head ->
+                    head
     in
-    case List.head patterns of
+    case iota of
         Nothing ->
             { stack = stack, resultArray = resultArray, ctx = ctx, error = False, halted = False, timeline = timeline }
 
@@ -96,11 +108,11 @@ applyToStackLoop stackResultTuple ctx patterns currentIndex timeline considerThi
                     , timeline = unshift { stack = applyResult.stack, patternIndex = currentIndex } timeline
                     }
 
-        Just iota ->
+        Just iota_ ->
             if considerThis || introspection then
                 let
                     applyResult =
-                        ( addEscapedIotaToStack stack iota, unshift Considered resultArray )
+                        ( addEscapedIotaToStack stack iota_, unshift Considered resultArray )
                 in
                 applyToStackLoop
                     applyResult

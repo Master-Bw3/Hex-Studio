@@ -35,6 +35,9 @@ import Settings.Theme exposing (..)
 import String exposing (fromInt)
 import Task
 import Time
+import Logic.App.Utils.GetIotaValue exposing (getIotaTypeAsString)
+import Logic.App.Utils.GetIotaValue exposing (getIotaValueAsString)
+import Logic.App.Patterns.OperatorUtils exposing (makeConstant)
 
 
 main =
@@ -801,8 +804,18 @@ update msg model =
                                                 PatternIota pattern _ ->
                                                     pattern
 
-                                                _ ->
-                                                    unknownPattern
+                                                i ->
+                                                    { signature = ""
+                                                    , startDirection = East
+                                                    , action = makeConstant i
+                                                    , metaAction = None
+                                                    , displayName = "Constant: " ++ getIotaValueAsString i
+                                                    , internalName = "constant"
+                                                    , color = accent1
+                                                    , outputOptions = []
+                                                    , selectedOutput = Nothing
+                                                    , active = True
+                                                    }
                                         )
                                         patternList
 
