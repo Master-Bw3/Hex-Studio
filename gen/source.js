@@ -14123,7 +14123,7 @@ var $elm$core$List$concatMap = F2(
 		return $elm$core$List$concat(
 			A2($elm$core$List$map, f, list));
 	});
-var $author$project$Components$App$Grid$generateDrawnPointsListFromPatternArray = function (patternArray) {
+var $author$project$Components$App$Grid$genDrawnPointsFromPatternArray = function (patternArray) {
 	return A2(
 		$elm$core$List$concatMap,
 		$elm$core$Tuple$second,
@@ -14383,6 +14383,26 @@ var $author$project$Ports$GetGridDrawingAsImage$requestImage = _Platform_outgoin
 	'requestImage',
 	function ($) {
 		return $elm$json$Json$Encode$null;
+	});
+var $author$project$Logic$App$PatternList$PatternArray$setDrawingColor = F2(
+	function (drawing, color) {
+		return A2(
+			$elm$core$List$map,
+			function (pnt) {
+				return _Utils_update(
+					pnt,
+					{
+						connectedPoints: A2(
+							$elm$core$List$map,
+							function (conPnt) {
+								return _Utils_update(
+									conPnt,
+									{color: color});
+							},
+							pnt.connectedPoints)
+					});
+			},
+			drawing);
 	});
 var $author$project$Logic$App$Grid$sortPatterns = function (model) {
 	var drawPatternsResult = A2(
@@ -15527,27 +15547,18 @@ var $author$project$Main$update = F2(
 								$elm$core$Array$get,
 								index,
 								$elm_community$array_extra$Array$Extra$reverse(timeline)))) : (-1);
-					var newPatternArray = $elm_community$array_extra$Array$Extra$reverse(
+					var greyDrawingsPatternArray = $elm_community$array_extra$Array$Extra$reverse(
 						$elm$core$Array$fromList(
 							A2(
 								$elm$core$List$map,
 								function (indexTuple) {
 									var patternIndex = indexTuple.a;
 									var tuple = indexTuple.b;
-									return $author$project$Logic$App$PatternList$PatternArray$updateDrawingColors(
-										function () {
-											var pat = tuple.a;
-											var draw = tuple.b;
-											return (_Utils_cmp(timelinePatternIndex, patternIndex) < 0) ? _Utils_Tuple2(
-												_Utils_update(
-													pat,
-													{active: false}),
-												draw) : _Utils_Tuple2(
-												_Utils_update(
-													pat,
-													{active: true}),
-												draw);
-										}());
+									var pat = tuple.a;
+									var draw = tuple.b;
+									return (_Utils_cmp(timelinePatternIndex, patternIndex) < 0) ? _Utils_Tuple2(
+										pat,
+										A2($author$project$Logic$App$PatternList$PatternArray$setDrawingColor, draw, 'gray')) : tuple;
 								},
 								$elm$core$Array$toIndexedList(
 									$elm_community$array_extra$Array$Extra$reverse(model.patternArray)))));
@@ -15558,10 +15569,9 @@ var $author$project$Main$update = F2(
 								grid: _Utils_update(
 									grid,
 									{
-										drawnPoints: $author$project$Components$App$Grid$generateDrawnPointsListFromPatternArray(newPatternArray),
-										points: A5($author$project$Components$App$Grid$updateUsedGridPoints, grid.width, grid.height, newPatternArray, _List_Nil, settings.gridScale)
+										drawnPoints: $author$project$Components$App$Grid$genDrawnPointsFromPatternArray(greyDrawingsPatternArray),
+										points: A5($author$project$Components$App$Grid$updateUsedGridPoints, grid.width, grid.height, greyDrawingsPatternArray, _List_Nil, settings.gridScale)
 									}),
-								patternArray: newPatternArray,
 								stack: _Utils_eq(
 									index,
 									$elm$core$Array$length(timeline)) ? model.stack : A2(
@@ -18141,13 +18151,15 @@ var $author$project$Components$Icon$XButton$xButton = A2(
 						]))
 				]))
 		]));
-var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F6(
-	function (patternList, dragoverIndex, dragstartIndex, overDragHandle, insertionPoint, macroDict) {
+var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F7(
+	function (patternList, dragoverIndex, dragstartIndex, overDragHandle, insertionPoint, macroDict, timelineIndex) {
 		var renderPattern = F2(
 			function (index, pattern) {
+				var opacity = ((!pattern.active) || (_Utils_cmp(
+					($elm$core$Array$length(patternList) - index) - 1,
+					timelineIndex) > 0)) ? A2($elm$html$Html$Attributes$style, 'opacity', '50%') : A2($elm$html$Html$Attributes$style, '', '');
 				var isMacro = $author$project$Logic$App$Utils$Utils$isJust(
 					A2($elm$core$Dict$get, pattern.signature, macroDict));
-				var activeOpacity = (!pattern.active) ? A2($elm$html$Html$Attributes$style, 'opacity', '50%') : A2($elm$html$Html$Attributes$style, '', '');
 				return _Utils_ap(
 					_Utils_eq(dragoverIndex, index) ? _List_fromArray(
 						[
@@ -18229,7 +18241,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F6(
 											_List_fromArray(
 												[
 													$elm$html$Html$Attributes$class('text'),
-													activeOpacity
+													opacity
 												]),
 											_List_fromArray(
 												[
@@ -18251,7 +18263,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F6(
 										_List_fromArray(
 											[
 												$elm$html$Html$Attributes$class('output_option_box'),
-												activeOpacity
+												opacity
 											]),
 										_List_fromArray(
 											[
@@ -18323,7 +18335,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F6(
 																		[
 																			$elm$html$Html$Attributes$class('output_option_box'),
 																			A2($elm$html$Html$Attributes$style, 'grid-template-columns', '2.1fr 3fr'),
-																			activeOpacity
+																			opacity
 																		]),
 																	_List_fromArray(
 																		[
@@ -18370,7 +18382,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F6(
 																		[
 																			$elm$html$Html$Attributes$class('output_option_box'),
 																			A2($elm$html$Html$Attributes$style, 'grid-template-columns', '2.1fr 3fr'),
-																			activeOpacity
+																			opacity
 																		]),
 																	_List_fromArray(
 																		[
@@ -18417,7 +18429,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F6(
 																		[
 																			$elm$html$Html$Attributes$class('output_option_box'),
 																			A2($elm$html$Html$Attributes$style, 'grid-template-columns', '2.1fr 3fr'),
-																			activeOpacity
+																			opacity
 																		]),
 																	_List_fromArray(
 																		[
@@ -18475,7 +18487,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F6(
 																		[
 																			$elm$html$Html$Attributes$class('output_option_box'),
 																			A2($elm$html$Html$Attributes$style, 'grid-template-columns', '2.1fr 3fr'),
-																			activeOpacity
+																			opacity
 																		]),
 																	_List_fromArray(
 																		[
@@ -18541,7 +18553,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F6(
 																		[
 																			$elm$html$Html$Attributes$class('output_option_box'),
 																			A2($elm$html$Html$Attributes$style, 'grid-template-columns', '2.1fr 3fr'),
-																			activeOpacity
+																			opacity
 																		]),
 																	_List_fromArray(
 																		[
@@ -18685,7 +18697,7 @@ var $author$project$Components$App$Panels$PatternPanel$patternPanel = function (
 					$elm$html$Html$Attributes$id('pattern_draggable_container'),
 					$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$onDropTarget($author$project$Components$App$Panels$PatternPanel$dropTargetConfig)),
 				$elm$core$List$reverse(
-					A6($author$project$Components$App$Panels$PatternPanel$renderPatternList, model.patternArray, model.ui.mouseOverElementIndex, model.ui.dragging.b, model.ui.overDragHandle, model.insertionPoint, model.castingContext.macros))),
+					A7($author$project$Components$App$Panels$PatternPanel$renderPatternList, model.patternArray, model.ui.mouseOverElementIndex, model.ui.dragging.b, model.ui.overDragHandle, model.insertionPoint, model.castingContext.macros, model.timelineIndex))),
 				A2(
 				$elm$html$Html$div,
 				_List_fromArray(

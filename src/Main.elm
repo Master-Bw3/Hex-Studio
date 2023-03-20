@@ -19,7 +19,7 @@ import Logic.App.Grid exposing (drawPatterns, sortPatterns)
 import Logic.App.ImportExport.ImportParser exposing (parseInput)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (..)
-import Logic.App.PatternList.PatternArray exposing (addToPatternArray, applyColorToPatternFromResult, updateDrawingColors)
+import Logic.App.PatternList.PatternArray exposing (addToPatternArray, applyColorToPatternFromResult, setDrawingColor, updateDrawingColors)
 import Logic.App.Patterns.MetaActions exposing (applyMetaAction)
 import Logic.App.Patterns.PatternRegistry exposing (..)
 import Logic.App.Stack.EvalStack exposing (applyPatternsToStack)
@@ -702,33 +702,29 @@ update msg model =
                     else
                         -1
 
-                newPatternArray =
+                greyDrawingsPatternArray =
                     Array.reverse <|
                         Array.fromList <|
                             List.map
                                 (\indexTuple ->
                                     case indexTuple of
                                         ( patternIndex, tuple ) ->
-                                            updateDrawingColors <|
-                                                case tuple of
-                                                    ( pat, draw ) ->
-                                                        if timelinePatternIndex < patternIndex then
-                                                            ( { pat | active = False }, draw )
+                                            case tuple of
+                                                ( pat, draw ) ->
+                                                    if timelinePatternIndex < patternIndex then
+                                                        ( pat, setDrawingColor draw "gray" )
 
-                                                        else
-                                                            ( { pat | active = True }, draw )
+                                                    else
+                                                        tuple
                                 )
                                 (Array.toIndexedList <| Array.reverse model.patternArray)
             in
             ( { model
                 | timelineIndex = index
-                , patternArray = newPatternArray
-
-                -- , grid = { grid | points = updateUsedGridPoints grid.width grid.height newPatternArray [] settings.gridScale }
                 , grid =
                     { grid
-                        | drawnPoints = generateDrawnPointsListFromPatternArray newPatternArray
-                        , points = updateUsedGridPoints grid.width grid.height newPatternArray [] settings.gridScale
+                        | drawnPoints = genDrawnPointsFromPatternArray greyDrawingsPatternArray
+                        , points = updateUsedGridPoints grid.width grid.height greyDrawingsPatternArray [] settings.gridScale
                     }
                 , stack =
                     if index == Array.length timeline then

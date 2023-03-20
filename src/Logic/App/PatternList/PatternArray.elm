@@ -1,4 +1,4 @@
-module Logic.App.PatternList.PatternArray exposing (addToPatternArray, applyColorToPatternFromResult, updateDrawingColors)
+module Logic.App.PatternList.PatternArray exposing (addToPatternArray, applyColorToPatternFromResult, updateDrawingColors, setDrawingColor)
 
 import Array exposing (Array)
 import Array.Extra as Array
@@ -49,6 +49,25 @@ updateDrawingColors patternTuple =
         )
         (Tuple.second patternTuple)
     )
+
+
+setDrawingColor : List GridPoint -> String -> List GridPoint
+setDrawingColor drawing color =
+    List.map
+        (\pnt ->
+            { pnt
+                | connectedPoints =
+                    List.map
+                        (\conPnt ->
+                            { conPnt
+                                | color =
+                                    color
+                            }
+                        )
+                        pnt.connectedPoints
+            }
+        )
+        drawing
 
 
 applyColorToPatternFromResult : Pattern -> ApplyToStackResult -> Pattern

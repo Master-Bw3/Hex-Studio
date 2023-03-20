@@ -5,7 +5,7 @@ module Components.App.Grid exposing
     , applyUsedPointsToGrid
     , distanceBetweenCoordinates
     , emptyGridpoint
-    , generateDrawnPointsListFromPatternArray
+    , genDrawnPointsFromPatternArray
     , generateGrid
     , getClosestPoint
     , getGridpointFromOffsetCoordinates
@@ -349,7 +349,6 @@ renderPoint mousePos gridOffset scale point =
             , Attr.style "position" "absolute"
             , Attr.style "left" (String.fromFloat (point.x - (8 * scale)) ++ "px")
             , Attr.style "top" (String.fromFloat (point.y - (8 * scale)) ++ "px")
-
             , Attr.style "transform" ("scale(" ++ String.fromFloat pointScale ++ ")")
             , fill point.color
             ]
@@ -541,8 +540,8 @@ generateGrid gridWidth gridHeight scale =
 -- TODO: Finish this
 
 
-generateDrawnPointsListFromPatternArray : Array ( Pattern, List GridPoint ) -> List GridPoint
-generateDrawnPointsListFromPatternArray patternArray =
+genDrawnPointsFromPatternArray : Array ( Pattern, List GridPoint ) -> List GridPoint
+genDrawnPointsFromPatternArray patternArray =
     Array.toList patternArray
         |> List.concatMap Tuple.second
 
