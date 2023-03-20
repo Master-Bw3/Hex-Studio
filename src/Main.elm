@@ -24,7 +24,7 @@ import Logic.App.Patterns.MetaActions exposing (applyMetaAction)
 import Logic.App.Patterns.PatternRegistry exposing (..)
 import Logic.App.Stack.EvalStack exposing (applyPatternsToStack)
 import Logic.App.Types exposing (..)
-import Logic.App.Utils.GetAngleSignature exposing (getAngleSignature)
+import Logic.App.Utils.GetAngleSignature exposing (getAngleSignatureAndStartDir)
 import Logic.App.Utils.Utils exposing (removeFromArray, unshift)
 import Ports.CheckMouseOverDragHandle as CheckMouseOverDragHandle
 import Ports.GetElementBoundingBoxById as GetElementBoundingBoxById
@@ -268,8 +268,13 @@ update msg model =
                         resultArray =
                             stackResult.resultArray
 
-                        newPattern =
-                            getPatternFromSignature (Just model.castingContext.macros) <| getAngleSignature drawing.activePath
+                        ( signature, startDir ) =
+                            getAngleSignatureAndStartDir drawing.activePath
+
+                        directionlessPattern =
+                            getPatternFromSignature (Just model.castingContext.macros) signature
+
+                        newPattern = {directionlessPattern | startDirection = startDir}
 
                         newUncoloredPatternArray =
                             addToPatternArray

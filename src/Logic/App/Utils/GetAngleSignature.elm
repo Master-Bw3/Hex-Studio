@@ -1,15 +1,11 @@
-module Logic.App.Utils.GetAngleSignature exposing (getAngleSignature)
+module Logic.App.Utils.GetAngleSignature exposing (getAngleSignatureAndStartDir)
 
-import Logic.App.Types exposing (IntCoordinatePair)
+import Logic.App.Types exposing (Direction(..), IntCoordinatePair)
 import Logic.App.Utils.DirectionMap exposing (directionMap)
-import Logic.App.Types exposing (Direction(..))
 import Logic.App.Utils.LetterMap exposing (letterMap)
 
 
--- get an angle signature from a path (list of connected gridPoints)
-
-
-getAngleSignature unflippedPath =
+getAngleSignatureAndStartDir unflippedPath =
     let
         path =
             List.reverse unflippedPath
@@ -25,9 +21,8 @@ getAngleSignature unflippedPath =
             directionMap
                 |> List.filter (\x -> Tuple.second x == directionVector { x1 = Tuple.first point1, y1 = Tuple.second point1, x2 = Tuple.first point2, y2 = Tuple.second point2 })
                 |> List.head
-                |> Maybe.withDefault ( ErrorDirection, ( 404, 0 ) )
-                --Todo: make this ^ less jank
-                |> Tuple.first
+                |> Maybe.andThen (\x -> Just (Tuple.first x))
+                |> Maybe.withDefault ErrorDirection
 
         directionList =
             List.map2
@@ -39,12 +34,13 @@ getAngleSignature unflippedPath =
             letterMap
                 |> List.filter (\x -> Tuple.second x == ( direction1, direction2 ))
                 |> List.head
-                |> Maybe.withDefault ( "", ( ErrorDirection, ErrorDirection ) )
-                --Todo: make this ^ less jank
-                |> Tuple.first
+                |> Maybe.andThen (\x -> Just (Tuple.first x))
+                |> Maybe.withDefault ""
     in
-    String.concat <|
+    ( String.concat <|
         List.map2
             (\dir1 dir2 -> getAngleLetter dir1 dir2)
             directionList
             (Maybe.withDefault [] <| List.tail directionList)
+    , Maybe.withDefault East (List.head directionList)
+    )

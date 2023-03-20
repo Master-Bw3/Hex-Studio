@@ -14129,24 +14129,27 @@ var $author$project$Components$App$Grid$genDrawnPointsFromPatternArray = functio
 		$elm$core$Tuple$second,
 		$elm$core$Array$toList(patternArray));
 };
-var $author$project$Logic$App$Utils$GetAngleSignature$getAngleSignature = function (unflippedPath) {
+var $author$project$Logic$App$Utils$GetAngleSignature$getAngleSignatureAndStartDir = function (unflippedPath) {
 	var path = $elm$core$List$reverse(unflippedPath);
 	var getAngleLetter = F2(
 		function (direction1, direction2) {
 			return A2(
 				$elm$core$Maybe$withDefault,
-				_Utils_Tuple2(
-					'',
-					_Utils_Tuple2($author$project$Logic$App$Types$ErrorDirection, $author$project$Logic$App$Types$ErrorDirection)),
-				$elm$core$List$head(
-					A2(
-						$elm$core$List$filter,
-						function (x) {
-							return _Utils_eq(
-								x.b,
-								_Utils_Tuple2(direction1, direction2));
-						},
-						$author$project$Logic$App$Utils$LetterMap$letterMap))).a;
+				'',
+				A2(
+					$elm$core$Maybe$andThen,
+					function (x) {
+						return $elm$core$Maybe$Just(x.a);
+					},
+					$elm$core$List$head(
+						A2(
+							$elm$core$List$filter,
+							function (x) {
+								return _Utils_eq(
+									x.b,
+									_Utils_Tuple2(direction1, direction2));
+							},
+							$author$project$Logic$App$Utils$LetterMap$letterMap))));
 		});
 	var directionVector = function (_v0) {
 		var x1 = _v0.x1;
@@ -14159,19 +14162,22 @@ var $author$project$Logic$App$Utils$GetAngleSignature$getAngleSignature = functi
 		function (point1, point2) {
 			return A2(
 				$elm$core$Maybe$withDefault,
-				_Utils_Tuple2(
-					$author$project$Logic$App$Types$ErrorDirection,
-					_Utils_Tuple2(404, 0)),
-				$elm$core$List$head(
-					A2(
-						$elm$core$List$filter,
-						function (x) {
-							return _Utils_eq(
-								x.b,
-								directionVector(
-									{x1: point1.a, x2: point2.a, y1: point1.b, y2: point2.b}));
-						},
-						$author$project$Logic$App$Utils$DirectionMap$directionMap))).a;
+				$author$project$Logic$App$Types$ErrorDirection,
+				A2(
+					$elm$core$Maybe$andThen,
+					function (x) {
+						return $elm$core$Maybe$Just(x.a);
+					},
+					$elm$core$List$head(
+						A2(
+							$elm$core$List$filter,
+							function (x) {
+								return _Utils_eq(
+									x.b,
+									directionVector(
+										{x1: point1.a, x2: point2.a, y1: point1.b, y2: point2.b}));
+							},
+							$author$project$Logic$App$Utils$DirectionMap$directionMap))));
 		});
 	var directionList = A3(
 		$elm$core$List$map2,
@@ -14187,18 +14193,23 @@ var $author$project$Logic$App$Utils$GetAngleSignature$getAngleSignature = functi
 			$elm$core$Maybe$withDefault,
 			_List_Nil,
 			$elm$core$List$tail(path)));
-	return $elm$core$String$concat(
-		A3(
-			$elm$core$List$map2,
-			F2(
-				function (dir1, dir2) {
-					return A2(getAngleLetter, dir1, dir2);
-				}),
-			directionList,
-			A2(
-				$elm$core$Maybe$withDefault,
-				_List_Nil,
-				$elm$core$List$tail(directionList))));
+	return _Utils_Tuple2(
+		$elm$core$String$concat(
+			A3(
+				$elm$core$List$map2,
+				F2(
+					function (dir1, dir2) {
+						return A2(getAngleLetter, dir1, dir2);
+					}),
+				directionList,
+				A2(
+					$elm$core$Maybe$withDefault,
+					_List_Nil,
+					$elm$core$List$tail(directionList)))),
+		A2(
+			$elm$core$Maybe$withDefault,
+			$author$project$Logic$App$Types$East,
+			$elm$core$List$head(directionList)));
 };
 var $elm$core$Elm$JsArray$indexedMap = _JsArray_indexedMap;
 var $elm$core$Array$indexedMap = F2(
@@ -14873,10 +14884,23 @@ var $author$project$Main$update = F2(
 				case 'MouseUp':
 					if (drawing.drawingMode) {
 						if ($elm$core$List$length(drawing.activePath) > 1) {
-							var newPattern = A2(
+							var newGrid = _Utils_update(
+								grid,
+								{
+									drawing: _Utils_update(
+										drawing,
+										{activePath: _List_Nil, drawingMode: false})
+								});
+							var _v3 = $author$project$Logic$App$Utils$GetAngleSignature$getAngleSignatureAndStartDir(drawing.activePath);
+							var signature = _v3.a;
+							var startDir = _v3.b;
+							var directionlessPattern = A2(
 								$author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature,
 								$elm$core$Maybe$Just(model.castingContext.macros),
-								$author$project$Logic$App$Utils$GetAngleSignature$getAngleSignature(drawing.activePath));
+								signature);
+							var newPattern = _Utils_update(
+								directionlessPattern,
+								{startDirection: startDir});
 							var newUncoloredPatternArray = A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, model.insertionPoint);
 							var stackResult = A3(
 								$author$project$Logic$App$Stack$EvalStack$applyPatternsToStack,
@@ -14903,13 +14927,6 @@ var $author$project$Main$update = F2(
 									}),
 								newUncoloredPatternArray,
 								resultArray);
-							var newGrid = _Utils_update(
-								grid,
-								{
-									drawing: _Utils_update(
-										drawing,
-										{activePath: _List_Nil, drawingMode: false})
-								});
 							var newModel = A2(
 								$author$project$Logic$App$Patterns$MetaActions$applyMetaAction,
 								_Utils_update(
@@ -15061,7 +15078,7 @@ var $author$project$Main$update = F2(
 										A2(
 											$elm$core$Array$indexedMap,
 											F2(
-												function (index, _v3) {
+												function (index, _v4) {
 													return '[data-index=\"' + ($elm$core$String$fromInt(index) + '\"]');
 												}),
 											model.patternArray)))
@@ -15242,8 +15259,8 @@ var $author$project$Main$update = F2(
 								$elm$core$List$sortWith,
 								F2(
 									function (a, b) {
-										var _v6 = A2($elm$core$Basics$compare, a.b, b.b);
-										switch (_v6.$) {
+										var _v7 = A2($elm$core$Basics$compare, a.b, b.b);
+										switch (_v7.$) {
 											case 'LT':
 												return $elm$core$Basics$LT;
 											case 'EQ':
@@ -15287,9 +15304,9 @@ var $author$project$Main$update = F2(
 					var originIndex = model.ui.dragging.b;
 					var index = (_Utils_cmp(model.ui.mouseOverElementIndex, originIndex) > 0) ? (model.ui.mouseOverElementIndex - 1) : model.ui.mouseOverElementIndex;
 					var newUncoloredPatternArray = function () {
-						var _v8 = A2($elm$core$Array$get, originIndex, patternArray);
-						if (_v8.$ === 'Just') {
-							var element = _v8.a;
+						var _v9 = A2($elm$core$Array$get, originIndex, patternArray);
+						if (_v9.$ === 'Just') {
+							var element = _v9.a;
 							return A3(
 								$elm_community$array_extra$Array$Extra$insertAt,
 								index,
@@ -15651,9 +15668,9 @@ var $author$project$Main$update = F2(
 						$elm$core$Platform$Cmd$none);
 				case 'ContextMenuMsg':
 					var message = msg.a;
-					var _v14 = A2($jinjor$elm_contextmenu$ContextMenu$update, message, model.contextMenu);
-					var contextMenu = _v14.a;
-					var cmd = _v14.b;
+					var _v15 = A2($jinjor$elm_contextmenu$ContextMenu$update, message, model.contextMenu);
+					var contextMenu = _v15.a;
+					var cmd = _v15.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -15668,10 +15685,10 @@ var $author$project$Main$update = F2(
 							return _Utils_Tuple2(pat, $elm$core$Platform$Cmd$none);
 						},
 						function () {
-							var _v15 = A2($elm$core$Dict$get, sig, model.castingContext.macros);
-							if ((_v15.$ === 'Just') && (_v15.a.c.$ === 'IotaList')) {
-								var _v16 = _v15.a;
-								var patternList = _v16.c.a;
+							var _v16 = A2($elm$core$Dict$get, sig, model.castingContext.macros);
+							if ((_v16.$ === 'Just') && (_v16.a.c.$ === 'IotaList')) {
+								var _v17 = _v16.a;
+								var patternList = _v17.c.a;
 								return $elm$core$Array$toList(
 									A2(
 										$elm$core$Array$map,
