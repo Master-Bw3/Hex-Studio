@@ -11,7 +11,9 @@ import Components.App.ContextMenu.ContextMenu exposing (..)
 import Components.App.Grid exposing (..)
 import ContextMenu
 import Dict exposing (Dict)
+import File
 import File.Download as Download
+import File.Select
 import Html exposing (..)
 import Json.Decode exposing (Decoder)
 import Json.Encode
@@ -411,10 +413,10 @@ update msg model =
                         model.importQueue
 
                 encoded =
-                    Debug.log "encoded" <| encodeProjectData <| modelToProjectData model
+                    encodeProjectData <| modelToProjectData model
 
                 _ =
-                    Debug.log "decoded " <| unsimplifyProjectData <| decodeProjectData encoded
+                    unsimplifyProjectData <| decodeProjectData encoded
             in
             updatePatternArrayFromQueue model.insertionPoint { model | importQueue = newImportQueue }
 
@@ -692,11 +694,36 @@ update msg model =
             in
             updatePatternArrayFromQueue model.insertionPoint { model | importQueue = importQueue, ui = { ui | openOverlay = NoOverlay, importInput = "" } }
 
+        SelectProjectFile ->
+            ( model, File.Select.file [] ImportProjectFile )
+
+        ImportProjectFile file ->
+            ( model, Task.perform ImportProject (File.toString file) )
+
+        ImportProject encoded ->
+            let
+                projectData =
+                    decodeProjectData encoded
+                        |> unsimplifyProjectData
+
+                importQueue =
+                    Array.map (\pattern -> ( pattern, Cmd.none )) projectData.patternArray
+                        |> Array.toList
+                        |> List.reverse
+            in
+            updatePatternArrayFromQueue model.insertionPoint
+                { model
+                    | castingContext = projectData.castingContext
+                    , patternArray = Array.empty
+                    , importQueue = importQueue
+                    , ui = { ui | openOverlay = NoOverlay, importInput = "" }
+                }
+
         ViewOverlay overlay ->
             ( { model | ui = { ui | openOverlay = overlay } }, Cmd.none )
 
-        Download string ->
-            ( model, Download.string "Hex.hexcasting" "text/plain" string )
+        Download text name ->
+            ( model, Download.string name "text/plain" text )
 
         SetTimelineIndex index ->
             let
@@ -775,7 +802,6 @@ update msg model =
         ChangeMacroName signature newName ->
             let
                 updatedMacroDict =
-                    Debug.log "hi" <|
                         Dict.update signature
                             (Maybe.map
                                 (\value ->

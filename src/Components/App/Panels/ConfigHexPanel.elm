@@ -3,11 +3,12 @@ module Components.App.Panels.ConfigHexPanel exposing (..)
 import Array exposing (Array)
 import Components.App.Panels.Utils exposing (visibilityToDisplayStyle)
 import Html exposing (..)
-import Html.Attributes exposing (class, id, style)
+import Html.Attributes exposing (class, id, style, value)
 import Html.Events exposing (onInput)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (Msg(..))
 import Logic.App.Types exposing (Iota(..), Panel(..))
+import Logic.App.Utils.GetHeldItemAsString exposing (getHeldItemAsString)
 import Logic.App.Utils.GetIotaValue exposing (getIotaValueAsHtmlMsg)
 import Settings.Theme exposing (iotaColorMap)
 
@@ -38,7 +39,10 @@ heldItemSection model =
             [ class "input_label_box"
             ]
             [ label [] [ text "Held Item:" ]
-            , select [ onInput ChangeHeldItem ]
+            , select
+                [ onInput ChangeHeldItem
+                , value <| getHeldItemAsString model.castingContext.heldItem
+                ]
                 [ option [] [ text "Nothing" ]
                 , option [] [ text "Trinket" ]
                 , option [] [ text "Cypher" ]
@@ -63,7 +67,7 @@ heldItemSection model =
 
 renderIotaBox : Iota -> List (Html msg)
 renderIotaBox iota =
-    [ div [] (getIotaValueAsHtmlMsg 0 iota 0)]
+    [ div [] (getIotaValueAsHtmlMsg 0 iota 0) ]
 
 
 ravenmindSection : Model -> Html Msg

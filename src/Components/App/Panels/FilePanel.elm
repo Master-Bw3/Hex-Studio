@@ -2,10 +2,12 @@ module Components.App.Panels.FilePanel exposing (..)
 
 import Array exposing (Array)
 import Components.App.Panels.Utils exposing (visibilityToDisplayStyle)
+import File.Select
 import Html exposing (..)
 import Html.Attributes exposing (alt, attribute, class, download, href, id, src, style)
 import Html.Events exposing (onClick, onInput)
 import Logic.App.ImportExport.ExportAsGiveCommand exposing (exportAsGiveCommand)
+import Logic.App.ImportExport.ImportExportProject exposing (encodeProjectData, modelToProjectData)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (Msg(..))
 import Logic.App.Types exposing (Iota(..), Overlay(..), Panel(..))
@@ -70,9 +72,15 @@ saveExportPanel model =
 
         -- , button [ class "generic_button" ] [ text " • Save Project" ]
         -- , button [ class "generic_button" ] [ text " • Load Project" ]
+        , button [ class "generic_button", onClick SelectProjectFile ] [ text " • Import Project" ]
+        , button [ class "generic_button", onClick (Download (encodeProjectData <| modelToProjectData model) "Project.hex") ] [ text " • Export Project" ]
+        , div [ class "seperator" ] []
+
+        --
         , button [ class "generic_button", onClick (ViewOverlay ImportTextOverlay) ] [ text " • Import Patterns" ]
         , button [ class "generic_button", onClick (ViewOverlay ExportTextOverlay) ] [ text " • Export Patterns" ]
-        , button [ class "generic_button", onClick (ViewOverlay ExportTextOverlay) ] [ text " • Export Give Command" ]
+        , div [ class "seperator" ] []
+        -- , button [ class "generic_button", onClick (ViewOverlay ExportTextOverlay) ] [ text " • Export Give Command" ]
         , button [ class "generic_button", onClick RequestGridDrawingAsImage ] [ text " • Export Image" ]
         , button [ class "generic_button", onClick RequestGridDrawingAsGIF ] [ text " • Export Gif" ]
         ]

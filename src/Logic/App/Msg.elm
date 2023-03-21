@@ -1,14 +1,14 @@
 module Logic.App.Msg exposing (..)
 
 import Browser.Dom
+import ContextMenu
+import File exposing (File)
 import Html.Events.Extra.Drag as Drag
 import Html.Events.Extra.Mouse exposing (Keys)
 import Json.Decode exposing (Value)
 import Keyboard.Event exposing (KeyboardEvent)
-import Logic.App.Types exposing (ElementLocation, Overlay, Panel, Pattern)
+import Logic.App.Types exposing (ContextMenuContext, ElementLocation, Overlay, Panel, Pattern)
 import Time
-import Logic.App.Types exposing (ContextMenuContext)
-import ContextMenu
 
 
 type Msg
@@ -49,8 +49,11 @@ type Msg
     | SetInsertionPoint Int
     | SetImportInputValue String
     | ImportText String
+    | SelectProjectFile
+    | ImportProjectFile File
+    | ImportProject String
     | ViewOverlay Overlay
-    | Download String
+    | Download String String
     | SetTimelineIndex Int
     | HandleKeyboardEvent KeyboardEvent
     | ChangeMacroName String String

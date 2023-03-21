@@ -32,7 +32,7 @@ exportTextOverlay model =
             , div [ id "import_overlay_button_container" ]
                 [ button
                     [ class "import_overlay_button"
-                    , onClick (Download patternText)
+                    , onClick (Download patternText "Hex.hexcasting")
                     ]
                     [ text "Download" ]
                 , button

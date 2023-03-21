@@ -140,12 +140,12 @@ getPatternFromName maybeMacros name =
                                                 |> List.filter
                                                     (\x ->
                                                         case x of
-                                                            (_, ( displayName, _, _ )) ->
+                                                            ( _, ( displayName, _, _ ) ) ->
                                                                 displayName == name
                                                     )
                                                 |> List.head
                                         of
-                                            Just (signature, ( displayName, direction, _ )) ->
+                                            Just ( signature, ( displayName, direction, _ ) ) ->
                                                 ( { signature = signature
                                                   , internalName = ""
                                                   , action = noAction
@@ -224,7 +224,7 @@ parseBookkeeperCode code =
             signature =
                 (List.foldl toAngleSignature { prevSeg = "", signature = "" } codeList).signature
         in
-        { signature = Debug.log "signature" signature
+        { signature = signature
         , internalName = "mask"
         , action = mask (String.split "" code)
         , metaAction = None

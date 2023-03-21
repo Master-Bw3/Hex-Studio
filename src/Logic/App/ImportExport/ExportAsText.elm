@@ -1,16 +1,12 @@
 module Logic.App.ImportExport.ExportAsText exposing (..)
 
 import Array exposing (Array)
-import Logic.App.ImportExport.ExportAsGiveCommand exposing (exportAsGiveCommand)
 import Logic.App.Types exposing (Pattern)
 
 
 exportPatternsAsLineList : Array Pattern -> String
 exportPatternsAsLineList patternArray =
     let
-        _ =
-            Debug.log (exportAsGiveCommand patternArray) ""
-
         mapPatternToLine : Pattern -> ( Int, List String ) -> ( Int, List String )
         mapPatternToLine pattern accumulator =
             let

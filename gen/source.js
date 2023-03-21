@@ -6876,6 +6876,12 @@ var $author$project$Logic$App$Types$Artifact = {$: 'Artifact'};
 var $author$project$Logic$App$Types$Cypher = {$: 'Cypher'};
 var $author$project$Logic$App$Types$East = {$: 'East'};
 var $author$project$Logic$App$Types$Focus = {$: 'Focus'};
+var $author$project$Logic$App$Msg$ImportProject = function (a) {
+	return {$: 'ImportProject', a: a};
+};
+var $author$project$Logic$App$Msg$ImportProjectFile = function (a) {
+	return {$: 'ImportProjectFile', a: a};
+};
 var $author$project$Logic$App$Types$None = {$: 'None'};
 var $author$project$Logic$App$Types$Pie = {$: 'Pie'};
 var $author$project$Logic$App$Msg$SetTimelineIndex = function (a) {
@@ -13959,7 +13965,6 @@ var $author$project$Logic$App$Utils$Utils$ifThenElse = F3(
 	function (conditional, a, b) {
 		return conditional ? a : b;
 	});
-var $elm$core$Debug$log = _Debug_log;
 var $author$project$Logic$App$Patterns$PatternRegistry$parseBookkeeperCode = function (code) {
 	if (code === '-') {
 		return {
@@ -14006,7 +14011,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$parseBookkeeperCode = fun
 			metaAction: $author$project$Logic$App$Types$None,
 			outputOptions: _List_Nil,
 			selectedOutput: $elm$core$Maybe$Nothing,
-			signature: A2($elm$core$Debug$log, 'signature', signature),
+			signature: signature,
 			startDirection: A3(
 				$author$project$Logic$App$Utils$Utils$ifThenElse,
 				A2($elm$core$String$startsWith, 'v', code),
@@ -16252,6 +16257,13 @@ var $MartinSStewart$elm_serialize$Serialize$encodeToString = function (codec) {
 var $author$project$Logic$App$ImportExport$ImportExportProject$encodeProjectData = function (projectData) {
 	return A2($MartinSStewart$elm_serialize$Serialize$encodeToString, $author$project$Logic$App$ImportExport$ImportExportProject$projectCodec, projectData);
 };
+var $elm$file$File$Select$file = F2(
+	function (mimes, toMsg) {
+		return A2(
+			$elm$core$Task$perform,
+			toMsg,
+			_File_uploadOne(mimes));
+	});
 var $elm$core$List$concatMap = F2(
 	function (f, list) {
 		return $elm$core$List$concat(
@@ -16716,6 +16728,7 @@ var $elm$file$File$Download$string = F3(
 			$elm$core$Basics$never,
 			A3(_File_download, name, mime, content));
 	});
+var $elm$file$File$toString = _File_toString;
 var $author$project$Logic$App$ImportExport$ImportExportProject$unSimplifyPattern = F2(
 	function (macros, simplifiedPattern) {
 		var pattern = A2(
@@ -17482,16 +17495,10 @@ var $author$project$Main$update = F2(
 							$elm$core$Maybe$Just(model.castingContext.macros),
 							name),
 						model.importQueue) : model.importQueue;
-					var encoded = A2(
-						$elm$core$Debug$log,
-						'encoded',
-						$author$project$Logic$App$ImportExport$ImportExportProject$encodeProjectData(
-							$author$project$Logic$App$ImportExport$ImportExportProject$modelToProjectData(model)));
-					var _v5 = A2(
-						$elm$core$Debug$log,
-						'decoded ',
-						$author$project$Logic$App$ImportExport$ImportExportProject$unsimplifyProjectData(
-							$author$project$Logic$App$ImportExport$ImportExportProject$decodeProjectData(encoded)));
+					var encoded = $author$project$Logic$App$ImportExport$ImportExportProject$encodeProjectData(
+						$author$project$Logic$App$ImportExport$ImportExportProject$modelToProjectData(model));
+					var _v5 = $author$project$Logic$App$ImportExport$ImportExportProject$unsimplifyProjectData(
+						$author$project$Logic$App$ImportExport$ImportExportProject$decodeProjectData(encoded));
 					return A2(
 						$author$project$Main$updatePatternArrayFromQueue,
 						model.insertionPoint,
@@ -17916,6 +17923,43 @@ var $author$project$Main$update = F2(
 									ui,
 									{importInput: '', openOverlay: $author$project$Logic$App$Types$NoOverlay})
 							}));
+				case 'SelectProjectFile':
+					return _Utils_Tuple2(
+						model,
+						A2($elm$file$File$Select$file, _List_Nil, $author$project$Logic$App$Msg$ImportProjectFile));
+				case 'ImportProjectFile':
+					var file = msg.a;
+					return _Utils_Tuple2(
+						model,
+						A2(
+							$elm$core$Task$perform,
+							$author$project$Logic$App$Msg$ImportProject,
+							$elm$file$File$toString(file)));
+				case 'ImportProject':
+					var encoded = msg.a;
+					var projectData = $author$project$Logic$App$ImportExport$ImportExportProject$unsimplifyProjectData(
+						$author$project$Logic$App$ImportExport$ImportExportProject$decodeProjectData(encoded));
+					var importQueue = $elm$core$List$reverse(
+						$elm$core$Array$toList(
+							A2(
+								$elm$core$Array$map,
+								function (pattern) {
+									return _Utils_Tuple2(pattern, $elm$core$Platform$Cmd$none);
+								},
+								projectData.patternArray)));
+					return A2(
+						$author$project$Main$updatePatternArrayFromQueue,
+						model.insertionPoint,
+						_Utils_update(
+							model,
+							{
+								castingContext: projectData.castingContext,
+								importQueue: importQueue,
+								patternArray: $elm$core$Array$empty,
+								ui: _Utils_update(
+									ui,
+									{importInput: '', openOverlay: $author$project$Logic$App$Types$NoOverlay})
+							}));
 				case 'ViewOverlay':
 					var overlay = msg.a;
 					return _Utils_Tuple2(
@@ -17928,10 +17972,11 @@ var $author$project$Main$update = F2(
 							}),
 						$elm$core$Platform$Cmd$none);
 				case 'Download':
-					var string = msg.a;
+					var text = msg.a;
+					var name = msg.b;
 					return _Utils_Tuple2(
 						model,
-						A3($elm$file$File$Download$string, 'Hex.hexcasting', 'text/plain', string));
+						A3($elm$file$File$Download$string, name, 'text/plain', text));
 				case 'SetTimelineIndex':
 					var index = msg.a;
 					var timeline = ($elm$core$Array$length(model.timeline) < 2) ? A2(
@@ -18030,19 +18075,16 @@ var $author$project$Main$update = F2(
 				case 'ChangeMacroName':
 					var signature = msg.a;
 					var newName = msg.b;
-					var updatedMacroDict = A2(
-						$elm$core$Debug$log,
-						'hi',
-						A3(
-							$elm$core$Dict$update,
-							signature,
-							$elm$core$Maybe$map(
-								function (value) {
-									var direction = value.b;
-									var iota = value.c;
-									return _Utils_Tuple3(newName, direction, iota);
-								}),
-							model.castingContext.macros));
+					var updatedMacroDict = A3(
+						$elm$core$Dict$update,
+						signature,
+						$elm$core$Maybe$map(
+							function (value) {
+								var direction = value.b;
+								var iota = value.c;
+								return _Utils_Tuple3(newName, direction, iota);
+							}),
+						model.castingContext.macros);
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -18207,9 +18249,10 @@ var $author$project$Logic$App$Msg$MouseMove = function (a) {
 };
 var $author$project$Logic$App$Msg$MouseUp = {$: 'MouseUp'};
 var $elm$html$Html$div = _VirtualDom_node('div');
-var $author$project$Logic$App$Msg$Download = function (a) {
-	return {$: 'Download', a: a};
-};
+var $author$project$Logic$App$Msg$Download = F2(
+	function (a, b) {
+		return {$: 'Download', a: a, b: b};
+	});
 var $author$project$Logic$App$Types$ExportTextOverlay = {$: 'ExportTextOverlay'};
 var $author$project$Logic$App$Msg$SetImportInputValue = function (a) {
 	return {$: 'SetImportInputValue', a: a};
@@ -18226,62 +18269,6 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 			$elm$json$Json$Encode$string(string));
 	});
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
-var $author$project$Logic$App$ImportExport$ExportAsGiveCommand$exportAsGiveCommand = function (patternArray) {
-	var singatureList = A2(
-		$elm$core$List$map,
-		function (pattern) {
-			return pattern.signature;
-		},
-		$elm$core$List$reverse(
-			$elm$core$Array$toList(patternArray)));
-	var patternStartString = '{\"hexcasting:type\": \"hexcasting:pattern\", \"hexcasting:data\": {angles: [B; ';
-	var patternEndString = '], start_dir: 0b}}';
-	var mapAngleToBytes = function (angle) {
-		switch (angle) {
-			case 'w':
-				return '0B';
-			case 'e':
-				return '1B';
-			case 'd':
-				return '2B';
-			case 'a':
-				return '4B';
-			case 'q':
-				return '5B';
-			default:
-				return '3B';
-		}
-	};
-	var commandStartString = '/give @p hexcasting:focus{data: {\"hexcasting:type\": \"hexcasting:list\", \"hexcasting:data\": [';
-	var commandEndString = ']}} 1';
-	return $elm$core$String$concat(
-		_List_fromArray(
-			[
-				commandStartString,
-				A2(
-				$elm$core$String$join,
-				', ',
-				A2(
-					$elm$core$List$map,
-					function (signature) {
-						return $elm$core$String$concat(
-							_List_fromArray(
-								[
-									patternStartString,
-									A2(
-									$elm$core$String$join,
-									', ',
-									A2(
-										$elm$core$List$map,
-										mapAngleToBytes,
-										A2($elm$core$String$split, '', signature))),
-									patternEndString
-								]));
-					},
-					singatureList)),
-				commandEndString
-			]));
-};
 var $author$project$Logic$App$ImportExport$ExportAsText$exportPatternsAsLineList = function (patternArray) {
 	var mapPatternToLine = F2(
 		function (pattern, accumulator) {
@@ -18295,8 +18282,8 @@ var $author$project$Logic$App$ImportExport$ExportAsText$exportPatternsAsLineList
 							_List_fromArray(
 								[string])));
 				});
-			var _v1 = pattern.internalName;
-			switch (_v1) {
+			var _v0 = pattern.internalName;
+			switch (_v0) {
 				case 'open_paren':
 					return _Utils_Tuple2(
 						indentDepth + 1,
@@ -18320,10 +18307,6 @@ var $author$project$Logic$App$ImportExport$ExportAsText$exportPatternsAsLineList
 							lines));
 			}
 		});
-	var _v0 = A2(
-		$elm$core$Debug$log,
-		$author$project$Logic$App$ImportExport$ExportAsGiveCommand$exportAsGiveCommand(patternArray),
-		'');
 	return A2(
 		$elm$core$String$join,
 		'\n',
@@ -18435,7 +18418,7 @@ var $author$project$Components$App$Overlays$ExportTextOverlay$exportTextOverlay 
 									[
 										$elm$html$Html$Attributes$class('import_overlay_button'),
 										$elm$html$Html$Events$onClick(
-										$author$project$Logic$App$Msg$Download(patternText))
+										A2($author$project$Logic$App$Msg$Download, patternText, 'Hex.hexcasting'))
 									]),
 								_List_fromArray(
 									[
@@ -19235,6 +19218,24 @@ var $elm$html$Html$h1 = _VirtualDom_node('h1');
 var $author$project$Logic$App$Msg$ChangeHeldItem = function (a) {
 	return {$: 'ChangeHeldItem', a: a};
 };
+var $author$project$Logic$App$Utils$GetHeldItemAsString$getHeldItemAsString = function (heldItem) {
+	switch (heldItem.$) {
+		case 'Trinket':
+			return 'Trinket';
+		case 'Cypher':
+			return 'Cypher';
+		case 'Artifact':
+			return 'Artifact';
+		case 'Spellbook':
+			return 'Spellbook';
+		case 'Focus':
+			return 'Focus';
+		case 'Pie':
+			return 'Pie';
+		default:
+			return 'NoItem';
+	}
+};
 var $elm$html$Html$label = _VirtualDom_node('label');
 var $elm$html$Html$option = _VirtualDom_node('option');
 var $author$project$Settings$Theme$iotaColorMap = function (iota) {
@@ -19447,7 +19448,9 @@ var $author$project$Components$App$Panels$ConfigHexPanel$heldItemSection = funct
 						$elm$html$Html$select,
 						_List_fromArray(
 							[
-								$elm$html$Html$Events$onInput($author$project$Logic$App$Msg$ChangeHeldItem)
+								$elm$html$Html$Events$onInput($author$project$Logic$App$Msg$ChangeHeldItem),
+								$elm$html$Html$Attributes$value(
+								$author$project$Logic$App$Utils$GetHeldItemAsString$getHeldItemAsString(model.castingContext.heldItem))
 							]),
 						_List_fromArray(
 							[
@@ -21122,6 +21125,7 @@ var $author$project$Components$App$Panels$PatternPanel$patternPanel = function (
 };
 var $author$project$Logic$App$Msg$RequestGridDrawingAsGIF = {$: 'RequestGridDrawingAsGIF'};
 var $author$project$Logic$App$Msg$RequestGridDrawingAsImage = {$: 'RequestGridDrawingAsImage'};
+var $author$project$Logic$App$Msg$SelectProjectFile = {$: 'SelectProjectFile'};
 var $author$project$Components$App$Panels$FilePanel$saveExportPanel = function (model) {
 	var visibility = A2($elm$core$List$member, $author$project$Logic$App$Types$FilePanel, model.ui.openPanels);
 	return A2(
@@ -21149,6 +21153,40 @@ var $author$project$Components$App$Panels$FilePanel$saveExportPanel = function (
 				_List_fromArray(
 					[
 						$elm$html$Html$Attributes$class('generic_button'),
+						$elm$html$Html$Events$onClick($author$project$Logic$App$Msg$SelectProjectFile)
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text(' • Import Project')
+					])),
+				A2(
+				$elm$html$Html$button,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('generic_button'),
+						$elm$html$Html$Events$onClick(
+						A2(
+							$author$project$Logic$App$Msg$Download,
+							$author$project$Logic$App$ImportExport$ImportExportProject$encodeProjectData(
+								$author$project$Logic$App$ImportExport$ImportExportProject$modelToProjectData(model)),
+							'Project.hex'))
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text(' • Export Project')
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('seperator')
+					]),
+				_List_Nil),
+				A2(
+				$elm$html$Html$button,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('generic_button'),
 						$elm$html$Html$Events$onClick(
 						$author$project$Logic$App$Msg$ViewOverlay($author$project$Logic$App$Types$ImportTextOverlay))
 					]),
@@ -21169,17 +21207,12 @@ var $author$project$Components$App$Panels$FilePanel$saveExportPanel = function (
 						$elm$html$Html$text(' • Export Patterns')
 					])),
 				A2(
-				$elm$html$Html$button,
+				$elm$html$Html$div,
 				_List_fromArray(
 					[
-						$elm$html$Html$Attributes$class('generic_button'),
-						$elm$html$Html$Events$onClick(
-						$author$project$Logic$App$Msg$ViewOverlay($author$project$Logic$App$Types$ExportTextOverlay))
+						$elm$html$Html$Attributes$class('seperator')
 					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text(' • Export Give Command')
-					])),
+				_List_Nil),
 				A2(
 				$elm$html$Html$button,
 				_List_fromArray(
