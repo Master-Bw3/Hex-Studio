@@ -14,17 +14,21 @@ import Dict exposing (Dict)
 import File.Download as Download
 import Html exposing (..)
 import Json.Decode exposing (Decoder)
+import Json.Encode
 import Keyboard.Event exposing (decodeKeyboardEvent)
 import Logic.App.Grid exposing (drawPatterns, sortPatterns)
+import Logic.App.ImportExport.ImportExportProject exposing (decodePatternArray, encodePatternArray)
 import Logic.App.ImportExport.ImportParser exposing (parseInput)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (..)
 import Logic.App.PatternList.PatternArray exposing (addToPatternArray, applyColorToPatternFromResult, setDrawingColor, updateDrawingColors)
 import Logic.App.Patterns.MetaActions exposing (applyMetaAction)
+import Logic.App.Patterns.OperatorUtils exposing (makeConstant)
 import Logic.App.Patterns.PatternRegistry exposing (..)
 import Logic.App.Stack.EvalStack exposing (applyPatternsToStack)
 import Logic.App.Types exposing (..)
 import Logic.App.Utils.GetAngleSignature exposing (getAngleSignatureAndStartDir)
+import Logic.App.Utils.GetIotaValue exposing (getIotaTypeAsString, getIotaValueAsString)
 import Logic.App.Utils.Utils exposing (removeFromArray, unshift)
 import Ports.CheckMouseOverDragHandle as CheckMouseOverDragHandle
 import Ports.GetElementBoundingBoxById as GetElementBoundingBoxById
@@ -35,9 +39,6 @@ import Settings.Theme exposing (..)
 import String exposing (fromInt)
 import Task
 import Time
-import Logic.App.Utils.GetIotaValue exposing (getIotaTypeAsString)
-import Logic.App.Utils.GetIotaValue exposing (getIotaValueAsString)
-import Logic.App.Patterns.OperatorUtils exposing (makeConstant)
 
 
 main =
@@ -408,6 +409,12 @@ update msg model =
 
                     else
                         model.importQueue
+
+                encoded =
+                    Debug.log "encoded" <| encodePatternArray model
+
+                _ =
+                    Debug.log "decoded " <| decodePatternArray encoded
             in
             updatePatternArrayFromQueue model.insertionPoint { model | importQueue = newImportQueue }
 
@@ -669,11 +676,11 @@ update msg model =
                 }
 
         SetInsertionPoint index ->
-                if model.insertionPoint == index then
-                    ( { model | insertionPoint = 0 }, Cmd.none )
+            if model.insertionPoint == index then
+                ( { model | insertionPoint = 0 }, Cmd.none )
 
-                else
-                    ( { model | insertionPoint = index }, Cmd.none )
+            else
+                ( { model | insertionPoint = index }, Cmd.none )
 
         SetImportInputValue string ->
             ( { model | ui = { ui | importInput = string } }, Cmd.none )
