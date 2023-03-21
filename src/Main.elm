@@ -17,7 +17,7 @@ import Json.Decode exposing (Decoder)
 import Json.Encode
 import Keyboard.Event exposing (decodeKeyboardEvent)
 import Logic.App.Grid exposing (drawPatterns, sortPatterns)
-import Logic.App.ImportExport.ImportExportProject exposing (decodePatternArray, encodePatternArray)
+import Logic.App.ImportExport.ImportExportProject exposing (decodeProjectData, encodeProjectData, modelToProjectData, unsimplifyProjectData)
 import Logic.App.ImportExport.ImportParser exposing (parseInput)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (..)
@@ -411,10 +411,10 @@ update msg model =
                         model.importQueue
 
                 encoded =
-                    Debug.log "encoded" <| encodePatternArray model
+                    Debug.log "encoded" <| encodeProjectData <| modelToProjectData model
 
                 _ =
-                    Debug.log "decoded " <| decodePatternArray encoded
+                    Debug.log "decoded " <| unsimplifyProjectData <| decodeProjectData encoded
             in
             updatePatternArrayFromQueue model.insertionPoint { model | importQueue = newImportQueue }
 

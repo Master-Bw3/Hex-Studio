@@ -24,9 +24,6 @@ type HeldItem
 
 type EntityType
     = Unset
-    | Player
-    | Chicken
-    | Minecart
 
 
 type MetaActionMsg
@@ -89,7 +86,7 @@ type Iota
     | Boolean Bool
     | Entity EntityType
     | IotaList (Array Iota)
-    | PatternIota Pattern Bool -- bool is for if pattern was from consideration (not sure if this bool is even used anymore)
+    | PatternIota Pattern Bool
     | Null
     | Garbage Mishap
     | OpenParenthesis (Array Iota)

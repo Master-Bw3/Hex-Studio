@@ -11,7 +11,7 @@ getCaster : Array Iota -> CastingContext -> ActionResult
 getCaster stack ctx =
     let
         action _ =
-            ( Entity Player
+            ( Entity Unset
                 |> Array.repeat 1
             , ctx
             )
