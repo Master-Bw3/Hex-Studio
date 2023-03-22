@@ -14774,9 +14774,9 @@ var $MartinSStewart$elm_serialize$Serialize$decodeFromString = F2(
 			return $elm$core$Result$Err($MartinSStewart$elm_serialize$Serialize$DataCorrupted);
 		}
 	});
-var $author$project$Logic$App$ImportExport$ImportExportProject$ProjectData = F2(
-	function (patternArray, castingContext) {
-		return {castingContext: castingContext, patternArray: patternArray};
+var $author$project$Logic$App$ImportExport$ImportExportProject$ProjectData = F3(
+	function (patternArray, castingContext, projectName) {
+		return {castingContext: castingContext, patternArray: patternArray, projectName: projectName};
 	});
 var $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedCastingContext = F4(
 	function (heldItem, heldItemContent, ravenmind, macros) {
@@ -15926,16 +15926,22 @@ var $author$project$Logic$App$ImportExport$ImportExportProject$projectCodec = $M
 	A3(
 		$MartinSStewart$elm_serialize$Serialize$field,
 		function ($) {
-			return $.castingContext;
+			return $.projectName;
 		},
-		$author$project$Logic$App$ImportExport$ImportExportProject$castingContextCodec,
+		$MartinSStewart$elm_serialize$Serialize$string,
 		A3(
 			$MartinSStewart$elm_serialize$Serialize$field,
 			function ($) {
-				return $.patternArray;
+				return $.castingContext;
 			},
-			$author$project$Logic$App$ImportExport$ImportExportProject$patternArrayCodec,
-			$MartinSStewart$elm_serialize$Serialize$record($author$project$Logic$App$ImportExport$ImportExportProject$ProjectData))));
+			$author$project$Logic$App$ImportExport$ImportExportProject$castingContextCodec,
+			A3(
+				$MartinSStewart$elm_serialize$Serialize$field,
+				function ($) {
+					return $.patternArray;
+				},
+				$author$project$Logic$App$ImportExport$ImportExportProject$patternArrayCodec,
+				$MartinSStewart$elm_serialize$Serialize$record($author$project$Logic$App$ImportExport$ImportExportProject$ProjectData)))));
 var $elm$core$Result$toMaybe = function (result) {
 	if (result.$ === 'Ok') {
 		var v = result.a;
@@ -16433,7 +16439,8 @@ var $author$project$Logic$App$ImportExport$ImportExportProject$unsimplifyProject
 		patternArray: A2(
 			$elm$core$Array$map,
 			$author$project$Logic$App$ImportExport$ImportExportProject$unSimplifyPattern(castingContext.macros),
-			projectData.patternArray)
+			projectData.patternArray),
+		projectName: projectData.projectName
 	};
 };
 var $elm_community$array_extra$Array$Extra$update = F2(
@@ -17565,14 +17572,7 @@ var $author$project$Main$update = F2(
 							model.insertionPoint,
 							_Utils_update(
 								model,
-								{
-									castingContext: projectData.castingContext,
-									importQueue: importQueue,
-									patternArray: $elm$core$Array$empty,
-									ui: _Utils_update(
-										ui,
-										{importInput: '', openOverlay: $author$project$Logic$App$Types$NoOverlay})
-								}));
+								{castingContext: projectData.castingContext, importQueue: importQueue, patternArray: $elm$core$Array$empty, projectName: projectData.projectName, stack: $elm$core$Array$empty}));
 					} else {
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 					}
@@ -21122,7 +21122,8 @@ var $author$project$Logic$App$ImportExport$ImportExportProject$modelToProjectDat
 			function (patternTuple) {
 				return $author$project$Logic$App$ImportExport$ImportExportProject$simplifyPattern(patternTuple.a);
 			},
-			model.patternArray)
+			model.patternArray),
+		projectName: model.projectName
 	};
 };
 var $author$project$Components$App$Panels$FilePanel$saveExportPanel = function (model) {

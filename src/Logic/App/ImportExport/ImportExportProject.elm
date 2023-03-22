@@ -366,7 +366,7 @@ castingContextCodec =
 
 
 type alias ProjectData =
-    { patternArray : Array SimplifiedPattern, castingContext : SimplifiedCastingContext }
+    { patternArray : Array SimplifiedPattern, castingContext : SimplifiedCastingContext, projectName : String }
 
 
 projectCodec : S.Codec e ProjectData
@@ -374,6 +374,7 @@ projectCodec =
     S.record ProjectData
         |> S.field .patternArray patternArrayCodec
         |> S.field .castingContext castingContextCodec
+        |> S.field .projectName S.string
         |> S.finishRecord
 
 
@@ -381,6 +382,7 @@ modelToProjectData : Model -> ProjectData
 modelToProjectData model =
     { patternArray = Array.map (\patternTuple -> simplifyPattern (Tuple.first patternTuple)) model.patternArray
     , castingContext = simplifyCastingContext model.castingContext
+    , projectName = model.projectName
     }
 
 
@@ -395,7 +397,7 @@ decodeProjectData encodedProjectData =
 
 
 
-unsimplifyProjectData : ProjectData -> { patternArray : Array Pattern, castingContext : CastingContext }
+unsimplifyProjectData : ProjectData -> { patternArray : Array Pattern, castingContext : CastingContext, projectName : String }
 unsimplifyProjectData projectData =
     let
         castingContext =
@@ -403,158 +405,5 @@ unsimplifyProjectData projectData =
     in
     { patternArray = Array.map (unSimplifyPattern castingContext.macros) projectData.patternArray
     , castingContext = castingContext
+    , projectName = projectData.projectName
     }
-
-
-
--- encodePatternArray : Model -> String
--- encodePatternArray model =
---     S.encodeToString patternArrayCodec <| Array.map (\patternTuple -> simplifyPattern (Tuple.first patternTuple)) model.patternArray
--- decodePatternArray : String -> Array SimplifiedPattern
--- decodePatternArray encoded =
---     case S.decodeFromString patternArrayCodec encoded of
---         Ok patternArray ->
---             patternArray
---         Err _ ->
---             Array.empty
-{-
-   exportProject : Model -> Encode.Value
-   exportProject model =
-       let
-           contextToJsonObject context =
-               [ ( "heldItem", encodeHeldItem context.heldItem )
-               , ( "heldItemContent"
-                 , case context.heldItemContent of
-                       Just iota ->
-                           encodeIota iota
-
-                       Nothing ->
-                           Encode.null
-                 )
-               , ( "ravenmind"
-                 , case context.ravenmind of
-                       Just iota ->
-                           encodeIota iota
-
-                       Nothing ->
-                           Encode.null
-                 )
-               , ( "macros", encodeMacros context.macros )
-               ]
-       in
-       Encode.object
-           [ ( "patternArray"
-             , Encode.list
-                   Encode.object
-                   (List.map
-                       (\tuple -> patternToKeyValPair (Tuple.first tuple))
-                       (Array.toList model.patternArray)
-                   )
-             )
-           , ( "castingContext", Encode.object (contextToJsonObject model.castingContext) )
-           ]
-
-
-   encodeIota : Iota -> Encode.Value
-   encodeIota iota =
-       iotaToKeyValPair iota
-           |> Encode.object
-
-
-   iotaToKeyValPair : Iota -> List ( String, Encode.Value )
-   iotaToKeyValPair iota =
-       case iota of
-           Vector ( x, y, z ) ->
-               [ ( "Vector", Encode.list Encode.float [ x, y, z ] ) ]
-
-           Number number ->
-               [ ( "Number", Encode.float number ) ]
-
-           Boolean bool ->
-               [ ( "Boolean", Encode.bool bool ) ]
-
-           Entity _ ->
-               [ ( "Entity", Encode.null ) ]
-
-           IotaList list ->
-               [ ( "IotaList", Encode.list Encode.object <| List.map iotaToKeyValPair <| Array.toList list ) ]
-
-           PatternIota pattern _ ->
-               [ ( "Pattern", Encode.object <| patternToKeyValPair pattern ) ]
-
-           Null ->
-               [ ( "Null", Encode.null ) ]
-
-           Garbage _ ->
-               [ ( "Garbage", Encode.null ) ]
-
-           OpenParenthesis list ->
-               [ ( "OpenParenthesis", Encode.list Encode.object <| List.map iotaToKeyValPair <| Array.toList list ) ]
-
-
-   encodeHeldItem : HeldItem -> Encode.Value
-   encodeHeldItem item =
-       case item of
-           Trinket ->
-               Encode.string "Trinkt"
-
-           Artifact ->
-               Encode.string "Artifact"
-
-           Cypher ->
-               Encode.string "Cypher"
-
-           Focus ->
-               Encode.string "Focus"
-
-           Spellbook ->
-               Encode.string "Spellbook"
-
-           Pie ->
-               Encode.string "Pie"
-
-           NoItem ->
-               Encode.string "NoItem"
-
-
-   patternToKeyValPair : Pattern -> List ( String, Encode.Value )
-   patternToKeyValPair pattern =
-       [ ( "signature", Encode.string pattern.signature )
-
-       -- , ( "startDirection", Encode.string pattern.startDirection )
-       -- , ( "action", pattern.action )
-       -- , ( "metaAction", pattern.metaAction )
-       -- , ( "displayName", pattern.displayName )
-       , ( "internalName", Encode.string pattern.internalName )
-
-       -- , ( "color", pattern.color )
-       -- , ( "outputOptions", pattern.outputOptions )
-       , ( "selectedOutput"
-         , case pattern.selectedOutput of
-               Just ( _, iota ) ->
-                   encodeIota iota
-
-               Nothing ->
-                   Encode.null
-         )
-       , ( "active", Encode.bool pattern.active )
-       ]
-
-
-   encodeMacros : Dict String ( String, Direction, Iota ) -> Encode.Value
-   encodeMacros macros =
-       Dict.toList macros
-           |> List.map
-               (\macro ->
-                   case macro of
-                       ( key, ( displayName, startDirection, iota ) ) ->
-                           [ ( key
-                             , Encode.object
-                                   [ ( "displayName", Encode.string displayName )
-                                   , ( "iota", encodeIota iota )
-                                   ]
-                             )
-                           ]
-               )
-           |> Encode.list Encode.object
--}

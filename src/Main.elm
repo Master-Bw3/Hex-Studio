@@ -712,9 +712,10 @@ update msg model =
                     updatePatternArrayFromQueue model.insertionPoint
                         { model
                             | castingContext = projectData.castingContext
+                            , projectName = projectData.projectName
                             , patternArray = Array.empty
+                            , stack = Array.empty
                             , importQueue = importQueue
-                            , ui = { ui | openOverlay = NoOverlay, importInput = "" }
                         }
 
                 Nothing ->
