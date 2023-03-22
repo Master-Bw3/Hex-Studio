@@ -389,14 +389,10 @@ encodeProjectData projectData =
     S.encodeToString projectCodec projectData
 
 
-decodeProjectData : String -> ProjectData
+decodeProjectData : String -> Maybe ProjectData
 decodeProjectData encodedProjectData =
-    case S.decodeFromString projectCodec encodedProjectData of
-        Ok projectData ->
-            projectData
+   Result.toMaybe <| S.decodeFromString projectCodec encodedProjectData
 
-        Err _ ->
-            Debug.todo "branch 'Err _' not implemented"
 
 
 unsimplifyProjectData : ProjectData -> { patternArray : Array Pattern, castingContext : CastingContext }

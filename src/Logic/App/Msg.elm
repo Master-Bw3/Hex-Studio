@@ -53,12 +53,13 @@ type Msg
     | ImportProjectFile File
     | ImportProject String
     | ViewOverlay Overlay
-    | Download String String
+    | Download String String String
     | SetTimelineIndex Int
     | HandleKeyboardEvent KeyboardEvent
     | ChangeMacroName String String
     | ContextMenuMsg (ContextMenu.Msg ContextMenuContext)
     | ExpandMacro String Int
+    | SetProjectName String
 
 
 type alias MouseMoveData =

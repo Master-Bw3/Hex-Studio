@@ -21,7 +21,7 @@ getAngleSignatureAndStartDir unflippedPath =
             directionMap
                 |> List.filter (\x -> Tuple.second x == directionVector { x1 = Tuple.first point1, y1 = Tuple.second point1, x2 = Tuple.first point2, y2 = Tuple.second point2 })
                 |> List.head
-                |> Maybe.andThen (\x -> Just (Tuple.first x))
+                |> Maybe.map Tuple.first
                 |> Maybe.withDefault ErrorDirection
 
         directionList =
@@ -34,7 +34,7 @@ getAngleSignatureAndStartDir unflippedPath =
             letterMap
                 |> List.filter (\x -> Tuple.second x == ( direction1, direction2 ))
                 |> List.head
-                |> Maybe.andThen (\x -> Just (Tuple.first x))
+                |> Maybe.map Tuple.first
                 |> Maybe.withDefault ""
     in
     ( String.concat <|

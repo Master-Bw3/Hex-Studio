@@ -40,6 +40,7 @@ type alias Model =
     , importQueue : List ( Pattern, Cmd Msg )
     , timeline : Timeline
     , timelineIndex : Int
+    , projectName : String
     , lastEvent : Maybe KeyboardEvent
     , contextMenu : ContextMenu ContextMenuContext
     , config : ContextMenu.Config

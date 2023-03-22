@@ -107,6 +107,7 @@ init _ =
       , contextMenu = contextMenu
       , config = Configs.winChrome
       , message = ""
+      , projectName = "Untitled"
       }
     , Cmd.batch [ Task.attempt GetGrid (getElement "hex_grid"), Task.attempt GetContentSize (getElement "content"), Cmd.map ContextMenuMsg msg ]
     )
@@ -411,12 +412,6 @@ update msg model =
 
                     else
                         model.importQueue
-
-                encoded =
-                    encodeProjectData <| modelToProjectData model
-
-                _ =
-                    unsimplifyProjectData <| decodeProjectData encoded
             in
             updatePatternArrayFromQueue model.insertionPoint { model | importQueue = newImportQueue }
 
@@ -702,28 +697,34 @@ update msg model =
 
         ImportProject encoded ->
             let
-                projectData =
+                maybeProjectData =
                     decodeProjectData encoded
-                        |> unsimplifyProjectData
-
-                importQueue =
-                    Array.map (\pattern -> ( pattern, Cmd.none )) projectData.patternArray
-                        |> Array.toList
-                        |> List.reverse
+                        |> Maybe.map unsimplifyProjectData
             in
-            updatePatternArrayFromQueue model.insertionPoint
-                { model
-                    | castingContext = projectData.castingContext
-                    , patternArray = Array.empty
-                    , importQueue = importQueue
-                    , ui = { ui | openOverlay = NoOverlay, importInput = "" }
-                }
+            case maybeProjectData of
+                Just projectData ->
+                    let
+                        importQueue =
+                            Array.map (\pattern -> ( pattern, Cmd.none )) projectData.patternArray
+                                |> Array.toList
+                                |> List.reverse
+                    in
+                    updatePatternArrayFromQueue model.insertionPoint
+                        { model
+                            | castingContext = projectData.castingContext
+                            , patternArray = Array.empty
+                            , importQueue = importQueue
+                            , ui = { ui | openOverlay = NoOverlay, importInput = "" }
+                        }
+
+                Nothing ->
+                    ( model, Cmd.none )
 
         ViewOverlay overlay ->
             ( { model | ui = { ui | openOverlay = overlay } }, Cmd.none )
 
-        Download text name ->
-            ( model, Download.string name "text/plain" text )
+        Download text name mimeType ->
+            ( model, Download.string name mimeType text )
 
         SetTimelineIndex index ->
             let
@@ -738,7 +739,7 @@ update msg model =
                     if index >= 0 then
                         Array.reverse timeline
                             |> Array.get index
-                            |> Maybe.andThen (\x -> Just x.patternIndex)
+                            |> Maybe.map .patternIndex
                             |> Maybe.withDefault (Array.length timeline)
 
                     else
@@ -775,7 +776,7 @@ update msg model =
                     else
                         Array.reverse timeline
                             |> Array.get index
-                            |> Maybe.andThen (\x -> Just x.stack)
+                            |> Maybe.map .stack
                             |> Maybe.withDefault Array.empty
               }
             , Cmd.none
@@ -802,15 +803,15 @@ update msg model =
         ChangeMacroName signature newName ->
             let
                 updatedMacroDict =
-                        Dict.update signature
-                            (Maybe.map
-                                (\value ->
-                                    case value of
-                                        ( _, direction, iota ) ->
-                                            ( newName, direction, iota )
-                                )
+                    Dict.update signature
+                        (Maybe.map
+                            (\value ->
+                                case value of
+                                    ( _, direction, iota ) ->
+                                        ( newName, direction, iota )
                             )
-                            model.castingContext.macros
+                        )
+                        model.castingContext.macros
             in
             ( { model | castingContext = { castingContext | macros = updatedMacroDict } }, Cmd.none )
 
@@ -855,6 +856,9 @@ update msg model =
                                 []
             in
             updatePatternArrayFromQueue index { model | importQueue = patterns, patternArray = removeFromArray index (index + 1) model.patternArray }
+
+        SetProjectName name ->
+            ( { model | projectName = name }, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg

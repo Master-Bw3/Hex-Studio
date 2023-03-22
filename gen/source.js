@@ -5768,6 +5768,7 @@ var $author$project$Main$init = function (_v0) {
 			message: '',
 			mousePos: _Utils_Tuple2(0.0, 0.0),
 			patternArray: $elm$core$Array$empty,
+			projectName: 'Untitled',
 			settings: {gridScale: 1.0},
 			stack: $elm$core$Array$empty,
 			time: 0,
@@ -7610,15 +7611,6 @@ var $author$project$Logic$App$PatternList$PatternArray$addToPatternArray = F3(
 			index,
 			$author$project$Logic$App$PatternList$PatternArray$updateDrawingColors(patternDrawingPair),
 			patternArray);
-	});
-var $elm$core$Maybe$andThen = F2(
-	function (callback, maybeValue) {
-		if (maybeValue.$ === 'Just') {
-			var value = maybeValue.a;
-			return callback(value);
-		} else {
-			return $elm$core$Maybe$Nothing;
-		}
 	});
 var $author$project$Settings$Theme$accent4 = '#dd6666';
 var $author$project$Settings$Theme$accent5 = '#E0E3B8';
@@ -15944,318 +15936,17 @@ var $author$project$Logic$App$ImportExport$ImportExportProject$projectCodec = $M
 			},
 			$author$project$Logic$App$ImportExport$ImportExportProject$patternArrayCodec,
 			$MartinSStewart$elm_serialize$Serialize$record($author$project$Logic$App$ImportExport$ImportExportProject$ProjectData))));
-var $elm$core$Debug$todo = _Debug_todo;
+var $elm$core$Result$toMaybe = function (result) {
+	if (result.$ === 'Ok') {
+		var v = result.a;
+		return $elm$core$Maybe$Just(v);
+	} else {
+		return $elm$core$Maybe$Nothing;
+	}
+};
 var $author$project$Logic$App$ImportExport$ImportExportProject$decodeProjectData = function (encodedProjectData) {
-	var _v0 = A2($MartinSStewart$elm_serialize$Serialize$decodeFromString, $author$project$Logic$App$ImportExport$ImportExportProject$projectCodec, encodedProjectData);
-	if (_v0.$ === 'Ok') {
-		var projectData = _v0.a;
-		return projectData;
-	} else {
-		return _Debug_todo(
-			'Logic.App.ImportExport.ImportExportProject',
-			{
-				start: {line: 399, column: 13},
-				end: {line: 399, column: 23}
-			})('branch \'Err _\' not implemented');
-	}
-};
-var $MartinSStewart$elm_serialize$Serialize$encodeToBytes = F2(
-	function (codec, value) {
-		return $elm$bytes$Bytes$Encode$encode(
-			$elm$bytes$Bytes$Encode$sequence(
-				_List_fromArray(
-					[
-						$elm$bytes$Bytes$Encode$unsignedInt8($MartinSStewart$elm_serialize$Serialize$version),
-						A2($MartinSStewart$elm_serialize$Serialize$getBytesEncoderHelper, codec, value)
-					])));
-	});
-var $elm$core$String$cons = _String_cons;
-var $elm$core$String$fromChar = function (_char) {
-	return A2($elm$core$String$cons, _char, '');
-};
-var $danfishgold$base64_bytes$Decode$lowest6BitsMask = 63;
-var $elm$core$Char$fromCode = _Char_fromCode;
-var $danfishgold$base64_bytes$Decode$unsafeToChar = function (n) {
-	if (n <= 25) {
-		return $elm$core$Char$fromCode(65 + n);
-	} else {
-		if (n <= 51) {
-			return $elm$core$Char$fromCode(97 + (n - 26));
-		} else {
-			if (n <= 61) {
-				return $elm$core$Char$fromCode(48 + (n - 52));
-			} else {
-				switch (n) {
-					case 62:
-						return _Utils_chr('+');
-					case 63:
-						return _Utils_chr('/');
-					default:
-						return _Utils_chr('\u0000');
-				}
-			}
-		}
-	}
-};
-var $danfishgold$base64_bytes$Decode$bitsToChars = F2(
-	function (bits, missing) {
-		var s = $danfishgold$base64_bytes$Decode$unsafeToChar(bits & $danfishgold$base64_bytes$Decode$lowest6BitsMask);
-		var r = $danfishgold$base64_bytes$Decode$unsafeToChar((bits >>> 6) & $danfishgold$base64_bytes$Decode$lowest6BitsMask);
-		var q = $danfishgold$base64_bytes$Decode$unsafeToChar((bits >>> 12) & $danfishgold$base64_bytes$Decode$lowest6BitsMask);
-		var p = $danfishgold$base64_bytes$Decode$unsafeToChar(bits >>> 18);
-		switch (missing) {
-			case 0:
-				return A2(
-					$elm$core$String$cons,
-					p,
-					A2(
-						$elm$core$String$cons,
-						q,
-						A2(
-							$elm$core$String$cons,
-							r,
-							$elm$core$String$fromChar(s))));
-			case 1:
-				return A2(
-					$elm$core$String$cons,
-					p,
-					A2(
-						$elm$core$String$cons,
-						q,
-						A2($elm$core$String$cons, r, '=')));
-			case 2:
-				return A2(
-					$elm$core$String$cons,
-					p,
-					A2($elm$core$String$cons, q, '=='));
-			default:
-				return '';
-		}
-	});
-var $danfishgold$base64_bytes$Decode$bitsToCharSpecialized = F4(
-	function (bits1, bits2, bits3, accum) {
-		var z = $danfishgold$base64_bytes$Decode$unsafeToChar((bits3 >>> 6) & $danfishgold$base64_bytes$Decode$lowest6BitsMask);
-		var y = $danfishgold$base64_bytes$Decode$unsafeToChar((bits3 >>> 12) & $danfishgold$base64_bytes$Decode$lowest6BitsMask);
-		var x = $danfishgold$base64_bytes$Decode$unsafeToChar(bits3 >>> 18);
-		var w = $danfishgold$base64_bytes$Decode$unsafeToChar(bits3 & $danfishgold$base64_bytes$Decode$lowest6BitsMask);
-		var s = $danfishgold$base64_bytes$Decode$unsafeToChar(bits1 & $danfishgold$base64_bytes$Decode$lowest6BitsMask);
-		var r = $danfishgold$base64_bytes$Decode$unsafeToChar((bits1 >>> 6) & $danfishgold$base64_bytes$Decode$lowest6BitsMask);
-		var q = $danfishgold$base64_bytes$Decode$unsafeToChar((bits1 >>> 12) & $danfishgold$base64_bytes$Decode$lowest6BitsMask);
-		var p = $danfishgold$base64_bytes$Decode$unsafeToChar(bits1 >>> 18);
-		var d = $danfishgold$base64_bytes$Decode$unsafeToChar(bits2 & $danfishgold$base64_bytes$Decode$lowest6BitsMask);
-		var c = $danfishgold$base64_bytes$Decode$unsafeToChar((bits2 >>> 6) & $danfishgold$base64_bytes$Decode$lowest6BitsMask);
-		var b = $danfishgold$base64_bytes$Decode$unsafeToChar((bits2 >>> 12) & $danfishgold$base64_bytes$Decode$lowest6BitsMask);
-		var a = $danfishgold$base64_bytes$Decode$unsafeToChar(bits2 >>> 18);
-		return A2(
-			$elm$core$String$cons,
-			x,
-			A2(
-				$elm$core$String$cons,
-				y,
-				A2(
-					$elm$core$String$cons,
-					z,
-					A2(
-						$elm$core$String$cons,
-						w,
-						A2(
-							$elm$core$String$cons,
-							a,
-							A2(
-								$elm$core$String$cons,
-								b,
-								A2(
-									$elm$core$String$cons,
-									c,
-									A2(
-										$elm$core$String$cons,
-										d,
-										A2(
-											$elm$core$String$cons,
-											p,
-											A2(
-												$elm$core$String$cons,
-												q,
-												A2(
-													$elm$core$String$cons,
-													r,
-													A2($elm$core$String$cons, s, accum))))))))))));
-	});
-var $danfishgold$base64_bytes$Decode$decode18Help = F5(
-	function (a, b, c, d, e) {
-		var combined6 = ((255 & d) << 16) | e;
-		var combined5 = d >>> 8;
-		var combined4 = 16777215 & c;
-		var combined3 = ((65535 & b) << 8) | (c >>> 24);
-		var combined2 = ((255 & a) << 16) | (b >>> 16);
-		var combined1 = a >>> 8;
-		return A4(
-			$danfishgold$base64_bytes$Decode$bitsToCharSpecialized,
-			combined3,
-			combined2,
-			combined1,
-			A4($danfishgold$base64_bytes$Decode$bitsToCharSpecialized, combined6, combined5, combined4, ''));
-	});
-var $elm$bytes$Bytes$Decode$map5 = F6(
-	function (func, _v0, _v1, _v2, _v3, _v4) {
-		var decodeA = _v0.a;
-		var decodeB = _v1.a;
-		var decodeC = _v2.a;
-		var decodeD = _v3.a;
-		var decodeE = _v4.a;
-		return $elm$bytes$Bytes$Decode$Decoder(
-			F2(
-				function (bites, offset) {
-					var _v5 = A2(decodeA, bites, offset);
-					var aOffset = _v5.a;
-					var a = _v5.b;
-					var _v6 = A2(decodeB, bites, aOffset);
-					var bOffset = _v6.a;
-					var b = _v6.b;
-					var _v7 = A2(decodeC, bites, bOffset);
-					var cOffset = _v7.a;
-					var c = _v7.b;
-					var _v8 = A2(decodeD, bites, cOffset);
-					var dOffset = _v8.a;
-					var d = _v8.b;
-					var _v9 = A2(decodeE, bites, dOffset);
-					var eOffset = _v9.a;
-					var e = _v9.b;
-					return _Utils_Tuple2(
-						eOffset,
-						A5(func, a, b, c, d, e));
-				}));
-	});
-var $danfishgold$base64_bytes$Decode$u16BE = $elm$bytes$Bytes$Decode$unsignedInt16($elm$bytes$Bytes$BE);
-var $danfishgold$base64_bytes$Decode$u32BE = $elm$bytes$Bytes$Decode$unsignedInt32($elm$bytes$Bytes$BE);
-var $danfishgold$base64_bytes$Decode$decode18Bytes = A6($elm$bytes$Bytes$Decode$map5, $danfishgold$base64_bytes$Decode$decode18Help, $danfishgold$base64_bytes$Decode$u32BE, $danfishgold$base64_bytes$Decode$u32BE, $danfishgold$base64_bytes$Decode$u32BE, $danfishgold$base64_bytes$Decode$u32BE, $danfishgold$base64_bytes$Decode$u16BE);
-var $elm$bytes$Bytes$Decode$map3 = F4(
-	function (func, _v0, _v1, _v2) {
-		var decodeA = _v0.a;
-		var decodeB = _v1.a;
-		var decodeC = _v2.a;
-		return $elm$bytes$Bytes$Decode$Decoder(
-			F2(
-				function (bites, offset) {
-					var _v3 = A2(decodeA, bites, offset);
-					var aOffset = _v3.a;
-					var a = _v3.b;
-					var _v4 = A2(decodeB, bites, aOffset);
-					var bOffset = _v4.a;
-					var b = _v4.b;
-					var _v5 = A2(decodeC, bites, bOffset);
-					var cOffset = _v5.a;
-					var c = _v5.b;
-					return _Utils_Tuple2(
-						cOffset,
-						A3(func, a, b, c));
-				}));
-	});
-var $danfishgold$base64_bytes$Decode$loopHelp = function (_v0) {
-	var remaining = _v0.remaining;
-	var string = _v0.string;
-	if (remaining >= 18) {
-		return A2(
-			$elm$bytes$Bytes$Decode$map,
-			function (result) {
-				return $elm$bytes$Bytes$Decode$Loop(
-					{
-						remaining: remaining - 18,
-						string: _Utils_ap(string, result)
-					});
-			},
-			$danfishgold$base64_bytes$Decode$decode18Bytes);
-	} else {
-		if (remaining >= 3) {
-			var helper = F3(
-				function (a, b, c) {
-					var combined = ((a << 16) | (b << 8)) | c;
-					return $elm$bytes$Bytes$Decode$Loop(
-						{
-							remaining: remaining - 3,
-							string: _Utils_ap(
-								string,
-								A2($danfishgold$base64_bytes$Decode$bitsToChars, combined, 0))
-						});
-				});
-			return A4($elm$bytes$Bytes$Decode$map3, helper, $elm$bytes$Bytes$Decode$unsignedInt8, $elm$bytes$Bytes$Decode$unsignedInt8, $elm$bytes$Bytes$Decode$unsignedInt8);
-		} else {
-			if (!remaining) {
-				return $elm$bytes$Bytes$Decode$succeed(
-					$elm$bytes$Bytes$Decode$Done(string));
-			} else {
-				if (remaining === 2) {
-					var helper = F2(
-						function (a, b) {
-							var combined = (a << 16) | (b << 8);
-							return $elm$bytes$Bytes$Decode$Done(
-								_Utils_ap(
-									string,
-									A2($danfishgold$base64_bytes$Decode$bitsToChars, combined, 1)));
-						});
-					return A3($elm$bytes$Bytes$Decode$map2, helper, $elm$bytes$Bytes$Decode$unsignedInt8, $elm$bytes$Bytes$Decode$unsignedInt8);
-				} else {
-					return A2(
-						$elm$bytes$Bytes$Decode$map,
-						function (a) {
-							return $elm$bytes$Bytes$Decode$Done(
-								_Utils_ap(
-									string,
-									A2($danfishgold$base64_bytes$Decode$bitsToChars, a << 16, 2)));
-						},
-						$elm$bytes$Bytes$Decode$unsignedInt8);
-				}
-			}
-		}
-	}
-};
-var $danfishgold$base64_bytes$Decode$decoder = function (width) {
-	return A2(
-		$elm$bytes$Bytes$Decode$loop,
-		{remaining: width, string: ''},
-		$danfishgold$base64_bytes$Decode$loopHelp);
-};
-var $elm$bytes$Bytes$width = _Bytes_width;
-var $danfishgold$base64_bytes$Decode$fromBytes = function (bytes) {
-	return A2(
-		$elm$bytes$Bytes$Decode$decode,
-		$danfishgold$base64_bytes$Decode$decoder(
-			$elm$bytes$Bytes$width(bytes)),
-		bytes);
-};
-var $danfishgold$base64_bytes$Base64$fromBytes = $danfishgold$base64_bytes$Decode$fromBytes;
-var $MartinSStewart$elm_serialize$Serialize$replaceForUrl = A2(
-	$elm$core$Maybe$withDefault,
-	$elm$regex$Regex$never,
-	$elm$regex$Regex$fromString('[\\+/=]'));
-var $MartinSStewart$elm_serialize$Serialize$replaceBase64Chars = function () {
-	var replaceChar = function (rematch) {
-		var _v0 = rematch.match;
-		switch (_v0) {
-			case '+':
-				return '-';
-			case '/':
-				return '_';
-			default:
-				return '';
-		}
-	};
-	return A2(
-		$elm$core$Basics$composeR,
-		$danfishgold$base64_bytes$Base64$fromBytes,
-		A2(
-			$elm$core$Basics$composeR,
-			$elm$core$Maybe$withDefault(''),
-			A2($elm$regex$Regex$replace, $MartinSStewart$elm_serialize$Serialize$replaceForUrl, replaceChar)));
-}();
-var $MartinSStewart$elm_serialize$Serialize$encodeToString = function (codec) {
-	return A2(
-		$elm$core$Basics$composeR,
-		$MartinSStewart$elm_serialize$Serialize$encodeToBytes(codec),
-		$MartinSStewart$elm_serialize$Serialize$replaceBase64Chars);
-};
-var $author$project$Logic$App$ImportExport$ImportExportProject$encodeProjectData = function (projectData) {
-	return A2($MartinSStewart$elm_serialize$Serialize$encodeToString, $author$project$Logic$App$ImportExport$ImportExportProject$projectCodec, projectData);
+	return $elm$core$Result$toMaybe(
+		A2($MartinSStewart$elm_serialize$Serialize$decodeFromString, $author$project$Logic$App$ImportExport$ImportExportProject$projectCodec, encodedProjectData));
 };
 var $elm$file$File$Select$file = F2(
 	function (mimes, toMsg) {
@@ -16283,10 +15974,8 @@ var $author$project$Logic$App$Utils$GetAngleSignature$getAngleSignatureAndStartD
 				$elm$core$Maybe$withDefault,
 				'',
 				A2(
-					$elm$core$Maybe$andThen,
-					function (x) {
-						return $elm$core$Maybe$Just(x.a);
-					},
+					$elm$core$Maybe$map,
+					$elm$core$Tuple$first,
 					$elm$core$List$head(
 						A2(
 							$elm$core$List$filter,
@@ -16310,10 +15999,8 @@ var $author$project$Logic$App$Utils$GetAngleSignature$getAngleSignatureAndStartD
 				$elm$core$Maybe$withDefault,
 				$author$project$Logic$App$Types$ErrorDirection,
 				A2(
-					$elm$core$Maybe$andThen,
-					function (x) {
-						return $elm$core$Maybe$Just(x.a);
-					},
+					$elm$core$Maybe$map,
+					$elm$core$Tuple$first,
 					$elm$core$List$head(
 						A2(
 							$elm$core$List$filter,
@@ -16484,80 +16171,6 @@ var $elm$core$Array$indexedMap = F2(
 			true,
 			A3($elm$core$Elm$JsArray$foldl, helper, initialBuilder, tree));
 	});
-var $author$project$Logic$App$ImportExport$ImportExportProject$simplifyPattern = function (pattern) {
-	return {active: pattern.active, signature: pattern.signature, startDirection: pattern.startDirection};
-};
-var $author$project$Logic$App$ImportExport$ImportExportProject$simplifyIota = function (iota) {
-	switch (iota.$) {
-		case 'Vector':
-			var vector = iota.a;
-			return $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedVector(vector);
-		case 'Number':
-			var number = iota.a;
-			return $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedNumber(number);
-		case 'Boolean':
-			var _boolean = iota.a;
-			return $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedBoolean(_boolean);
-		case 'Entity':
-			var entity = iota.a;
-			return $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedEntity(entity);
-		case 'IotaList':
-			var list = iota.a;
-			return $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedIotaList(
-				A2($elm$core$Array$map, $author$project$Logic$App$ImportExport$ImportExportProject$simplifyIota, list));
-		case 'PatternIota':
-			var pattern = iota.a;
-			var considered = iota.b;
-			return A2(
-				$author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedPatternIota,
-				$author$project$Logic$App$ImportExport$ImportExportProject$simplifyPattern(pattern),
-				considered);
-		case 'Null':
-			return $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedNull;
-		case 'Garbage':
-			var mishap = iota.a;
-			return $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedGarbage(mishap);
-		default:
-			var list = iota.a;
-			return $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedOpenParenthesis(
-				A2($elm$core$Array$map, $author$project$Logic$App$ImportExport$ImportExportProject$simplifyIota, list));
-	}
-};
-var $author$project$Logic$App$ImportExport$ImportExportProject$simplifyCastingContext = function (castingContext) {
-	return {
-		heldItem: castingContext.heldItem,
-		heldItemContent: A2($elm$core$Maybe$map, $author$project$Logic$App$ImportExport$ImportExportProject$simplifyIota, castingContext.heldItemContent),
-		macros: $elm$core$Dict$fromList(
-			A2(
-				$elm$core$List$map,
-				function (entry) {
-					var signature = entry.a;
-					var _v1 = entry.b;
-					var displayName = _v1.a;
-					var startDirection = _v1.b;
-					var iota = _v1.c;
-					return _Utils_Tuple2(
-						signature,
-						_Utils_Tuple3(
-							displayName,
-							startDirection,
-							$author$project$Logic$App$ImportExport$ImportExportProject$simplifyIota(iota)));
-				},
-				$elm$core$Dict$toList(castingContext.macros))),
-		ravenmind: A2($elm$core$Maybe$map, $author$project$Logic$App$ImportExport$ImportExportProject$simplifyIota, castingContext.ravenmind)
-	};
-};
-var $author$project$Logic$App$ImportExport$ImportExportProject$modelToProjectData = function (model) {
-	return {
-		castingContext: $author$project$Logic$App$ImportExport$ImportExportProject$simplifyCastingContext(model.castingContext),
-		patternArray: A2(
-			$elm$core$Array$map,
-			function (patternTuple) {
-				return $author$project$Logic$App$ImportExport$ImportExportProject$simplifyPattern(patternTuple.a);
-			},
-			model.patternArray)
-	};
-};
 var $author$project$Logic$App$Msg$MouseMoveData = F4(
 	function (pageX, pageY, offsetHeight, offsetWidth) {
 		return {offsetHeight: offsetHeight, offsetWidth: offsetWidth, pageX: pageX, pageY: pageY};
@@ -17495,10 +17108,6 @@ var $author$project$Main$update = F2(
 							$elm$core$Maybe$Just(model.castingContext.macros),
 							name),
 						model.importQueue) : model.importQueue;
-					var encoded = $author$project$Logic$App$ImportExport$ImportExportProject$encodeProjectData(
-						$author$project$Logic$App$ImportExport$ImportExportProject$modelToProjectData(model));
-					var _v5 = $author$project$Logic$App$ImportExport$ImportExportProject$unsimplifyProjectData(
-						$author$project$Logic$App$ImportExport$ImportExportProject$decodeProjectData(encoded));
 					return A2(
 						$author$project$Main$updatePatternArrayFromQueue,
 						model.insertionPoint,
@@ -17655,8 +17264,8 @@ var $author$project$Main$update = F2(
 								$elm$core$List$sortWith,
 								F2(
 									function (a, b) {
-										var _v8 = A2($elm$core$Basics$compare, a.b, b.b);
-										switch (_v8.$) {
+										var _v7 = A2($elm$core$Basics$compare, a.b, b.b);
+										switch (_v7.$) {
 											case 'LT':
 												return $elm$core$Basics$LT;
 											case 'EQ':
@@ -17700,9 +17309,9 @@ var $author$project$Main$update = F2(
 					var originIndex = model.ui.dragging.b;
 					var index = (_Utils_cmp(model.ui.mouseOverElementIndex, originIndex) > 0) ? (model.ui.mouseOverElementIndex - 1) : model.ui.mouseOverElementIndex;
 					var newUncoloredPatternArray = function () {
-						var _v10 = A2($elm$core$Array$get, originIndex, patternArray);
-						if (_v10.$ === 'Just') {
-							var element = _v10.a;
+						var _v9 = A2($elm$core$Array$get, originIndex, patternArray);
+						if (_v9.$ === 'Just') {
+							var element = _v9.a;
 							return A3(
 								$elm_community$array_extra$Array$Extra$insertAt,
 								index,
@@ -17937,29 +17546,36 @@ var $author$project$Main$update = F2(
 							$elm$file$File$toString(file)));
 				case 'ImportProject':
 					var encoded = msg.a;
-					var projectData = $author$project$Logic$App$ImportExport$ImportExportProject$unsimplifyProjectData(
+					var maybeProjectData = A2(
+						$elm$core$Maybe$map,
+						$author$project$Logic$App$ImportExport$ImportExportProject$unsimplifyProjectData,
 						$author$project$Logic$App$ImportExport$ImportExportProject$decodeProjectData(encoded));
-					var importQueue = $elm$core$List$reverse(
-						$elm$core$Array$toList(
-							A2(
-								$elm$core$Array$map,
-								function (pattern) {
-									return _Utils_Tuple2(pattern, $elm$core$Platform$Cmd$none);
-								},
-								projectData.patternArray)));
-					return A2(
-						$author$project$Main$updatePatternArrayFromQueue,
-						model.insertionPoint,
-						_Utils_update(
-							model,
-							{
-								castingContext: projectData.castingContext,
-								importQueue: importQueue,
-								patternArray: $elm$core$Array$empty,
-								ui: _Utils_update(
-									ui,
-									{importInput: '', openOverlay: $author$project$Logic$App$Types$NoOverlay})
-							}));
+					if (maybeProjectData.$ === 'Just') {
+						var projectData = maybeProjectData.a;
+						var importQueue = $elm$core$List$reverse(
+							$elm$core$Array$toList(
+								A2(
+									$elm$core$Array$map,
+									function (pattern) {
+										return _Utils_Tuple2(pattern, $elm$core$Platform$Cmd$none);
+									},
+									projectData.patternArray)));
+						return A2(
+							$author$project$Main$updatePatternArrayFromQueue,
+							model.insertionPoint,
+							_Utils_update(
+								model,
+								{
+									castingContext: projectData.castingContext,
+									importQueue: importQueue,
+									patternArray: $elm$core$Array$empty,
+									ui: _Utils_update(
+										ui,
+										{importInput: '', openOverlay: $author$project$Logic$App$Types$NoOverlay})
+								}));
+					} else {
+						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+					}
 				case 'ViewOverlay':
 					var overlay = msg.a;
 					return _Utils_Tuple2(
@@ -17974,9 +17590,10 @@ var $author$project$Main$update = F2(
 				case 'Download':
 					var text = msg.a;
 					var name = msg.b;
+					var mimeType = msg.c;
 					return _Utils_Tuple2(
 						model,
-						A3($elm$file$File$Download$string, name, 'text/plain', text));
+						A3($elm$file$File$Download$string, name, mimeType, text));
 				case 'SetTimelineIndex':
 					var index = msg.a;
 					var timeline = ($elm$core$Array$length(model.timeline) < 2) ? A2(
@@ -17987,9 +17604,9 @@ var $author$project$Main$update = F2(
 						$elm$core$Maybe$withDefault,
 						$elm$core$Array$length(timeline),
 						A2(
-							$elm$core$Maybe$andThen,
-							function (x) {
-								return $elm$core$Maybe$Just(x.patternIndex);
+							$elm$core$Maybe$map,
+							function ($) {
+								return $.patternIndex;
 							},
 							A2(
 								$elm$core$Array$get,
@@ -18026,9 +17643,9 @@ var $author$project$Main$update = F2(
 									$elm$core$Maybe$withDefault,
 									$elm$core$Array$empty,
 									A2(
-										$elm$core$Maybe$andThen,
-										function (x) {
-											return $elm$core$Maybe$Just(x.stack);
+										$elm$core$Maybe$map,
+										function ($) {
+											return $.stack;
 										},
 										A2(
 											$elm$core$Array$get,
@@ -18104,7 +17721,7 @@ var $author$project$Main$update = F2(
 							model,
 							{contextMenu: contextMenu}),
 						A2($elm$core$Platform$Cmd$map, $author$project$Logic$App$Msg$ContextMenuMsg, cmd));
-				default:
+				case 'ExpandMacro':
 					var sig = msg.a;
 					var index = msg.b;
 					var patterns = A2(
@@ -18154,6 +17771,13 @@ var $author$project$Main$update = F2(
 								importQueue: patterns,
 								patternArray: A3($author$project$Logic$App$Utils$Utils$removeFromArray, index, index + 1, model.patternArray)
 							}));
+				default:
+					var name = msg.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{projectName: name}),
+						$elm$core$Platform$Cmd$none);
 			}
 		}
 	});
@@ -18249,9 +17873,9 @@ var $author$project$Logic$App$Msg$MouseMove = function (a) {
 };
 var $author$project$Logic$App$Msg$MouseUp = {$: 'MouseUp'};
 var $elm$html$Html$div = _VirtualDom_node('div');
-var $author$project$Logic$App$Msg$Download = F2(
-	function (a, b) {
-		return {$: 'Download', a: a, b: b};
+var $author$project$Logic$App$Msg$Download = F3(
+	function (a, b, c) {
+		return {$: 'Download', a: a, b: b, c: c};
 	});
 var $author$project$Logic$App$Types$ExportTextOverlay = {$: 'ExportTextOverlay'};
 var $author$project$Logic$App$Msg$SetImportInputValue = function (a) {
@@ -18418,7 +18042,7 @@ var $author$project$Components$App$Overlays$ExportTextOverlay$exportTextOverlay 
 									[
 										$elm$html$Html$Attributes$class('import_overlay_button'),
 										$elm$html$Html$Events$onClick(
-										A2($author$project$Logic$App$Msg$Download, patternText, 'Hex.hexcasting'))
+										A3($author$project$Logic$App$Msg$Download, patternText, 'Hex.hexcasting', 'text/plain'))
 									]),
 								_List_fromArray(
 									[
@@ -21126,6 +20750,381 @@ var $author$project$Components$App$Panels$PatternPanel$patternPanel = function (
 var $author$project$Logic$App$Msg$RequestGridDrawingAsGIF = {$: 'RequestGridDrawingAsGIF'};
 var $author$project$Logic$App$Msg$RequestGridDrawingAsImage = {$: 'RequestGridDrawingAsImage'};
 var $author$project$Logic$App$Msg$SelectProjectFile = {$: 'SelectProjectFile'};
+var $author$project$Logic$App$Msg$SetProjectName = function (a) {
+	return {$: 'SetProjectName', a: a};
+};
+var $MartinSStewart$elm_serialize$Serialize$encodeToBytes = F2(
+	function (codec, value) {
+		return $elm$bytes$Bytes$Encode$encode(
+			$elm$bytes$Bytes$Encode$sequence(
+				_List_fromArray(
+					[
+						$elm$bytes$Bytes$Encode$unsignedInt8($MartinSStewart$elm_serialize$Serialize$version),
+						A2($MartinSStewart$elm_serialize$Serialize$getBytesEncoderHelper, codec, value)
+					])));
+	});
+var $elm$core$String$cons = _String_cons;
+var $elm$core$String$fromChar = function (_char) {
+	return A2($elm$core$String$cons, _char, '');
+};
+var $danfishgold$base64_bytes$Decode$lowest6BitsMask = 63;
+var $elm$core$Char$fromCode = _Char_fromCode;
+var $danfishgold$base64_bytes$Decode$unsafeToChar = function (n) {
+	if (n <= 25) {
+		return $elm$core$Char$fromCode(65 + n);
+	} else {
+		if (n <= 51) {
+			return $elm$core$Char$fromCode(97 + (n - 26));
+		} else {
+			if (n <= 61) {
+				return $elm$core$Char$fromCode(48 + (n - 52));
+			} else {
+				switch (n) {
+					case 62:
+						return _Utils_chr('+');
+					case 63:
+						return _Utils_chr('/');
+					default:
+						return _Utils_chr('\u0000');
+				}
+			}
+		}
+	}
+};
+var $danfishgold$base64_bytes$Decode$bitsToChars = F2(
+	function (bits, missing) {
+		var s = $danfishgold$base64_bytes$Decode$unsafeToChar(bits & $danfishgold$base64_bytes$Decode$lowest6BitsMask);
+		var r = $danfishgold$base64_bytes$Decode$unsafeToChar((bits >>> 6) & $danfishgold$base64_bytes$Decode$lowest6BitsMask);
+		var q = $danfishgold$base64_bytes$Decode$unsafeToChar((bits >>> 12) & $danfishgold$base64_bytes$Decode$lowest6BitsMask);
+		var p = $danfishgold$base64_bytes$Decode$unsafeToChar(bits >>> 18);
+		switch (missing) {
+			case 0:
+				return A2(
+					$elm$core$String$cons,
+					p,
+					A2(
+						$elm$core$String$cons,
+						q,
+						A2(
+							$elm$core$String$cons,
+							r,
+							$elm$core$String$fromChar(s))));
+			case 1:
+				return A2(
+					$elm$core$String$cons,
+					p,
+					A2(
+						$elm$core$String$cons,
+						q,
+						A2($elm$core$String$cons, r, '=')));
+			case 2:
+				return A2(
+					$elm$core$String$cons,
+					p,
+					A2($elm$core$String$cons, q, '=='));
+			default:
+				return '';
+		}
+	});
+var $danfishgold$base64_bytes$Decode$bitsToCharSpecialized = F4(
+	function (bits1, bits2, bits3, accum) {
+		var z = $danfishgold$base64_bytes$Decode$unsafeToChar((bits3 >>> 6) & $danfishgold$base64_bytes$Decode$lowest6BitsMask);
+		var y = $danfishgold$base64_bytes$Decode$unsafeToChar((bits3 >>> 12) & $danfishgold$base64_bytes$Decode$lowest6BitsMask);
+		var x = $danfishgold$base64_bytes$Decode$unsafeToChar(bits3 >>> 18);
+		var w = $danfishgold$base64_bytes$Decode$unsafeToChar(bits3 & $danfishgold$base64_bytes$Decode$lowest6BitsMask);
+		var s = $danfishgold$base64_bytes$Decode$unsafeToChar(bits1 & $danfishgold$base64_bytes$Decode$lowest6BitsMask);
+		var r = $danfishgold$base64_bytes$Decode$unsafeToChar((bits1 >>> 6) & $danfishgold$base64_bytes$Decode$lowest6BitsMask);
+		var q = $danfishgold$base64_bytes$Decode$unsafeToChar((bits1 >>> 12) & $danfishgold$base64_bytes$Decode$lowest6BitsMask);
+		var p = $danfishgold$base64_bytes$Decode$unsafeToChar(bits1 >>> 18);
+		var d = $danfishgold$base64_bytes$Decode$unsafeToChar(bits2 & $danfishgold$base64_bytes$Decode$lowest6BitsMask);
+		var c = $danfishgold$base64_bytes$Decode$unsafeToChar((bits2 >>> 6) & $danfishgold$base64_bytes$Decode$lowest6BitsMask);
+		var b = $danfishgold$base64_bytes$Decode$unsafeToChar((bits2 >>> 12) & $danfishgold$base64_bytes$Decode$lowest6BitsMask);
+		var a = $danfishgold$base64_bytes$Decode$unsafeToChar(bits2 >>> 18);
+		return A2(
+			$elm$core$String$cons,
+			x,
+			A2(
+				$elm$core$String$cons,
+				y,
+				A2(
+					$elm$core$String$cons,
+					z,
+					A2(
+						$elm$core$String$cons,
+						w,
+						A2(
+							$elm$core$String$cons,
+							a,
+							A2(
+								$elm$core$String$cons,
+								b,
+								A2(
+									$elm$core$String$cons,
+									c,
+									A2(
+										$elm$core$String$cons,
+										d,
+										A2(
+											$elm$core$String$cons,
+											p,
+											A2(
+												$elm$core$String$cons,
+												q,
+												A2(
+													$elm$core$String$cons,
+													r,
+													A2($elm$core$String$cons, s, accum))))))))))));
+	});
+var $danfishgold$base64_bytes$Decode$decode18Help = F5(
+	function (a, b, c, d, e) {
+		var combined6 = ((255 & d) << 16) | e;
+		var combined5 = d >>> 8;
+		var combined4 = 16777215 & c;
+		var combined3 = ((65535 & b) << 8) | (c >>> 24);
+		var combined2 = ((255 & a) << 16) | (b >>> 16);
+		var combined1 = a >>> 8;
+		return A4(
+			$danfishgold$base64_bytes$Decode$bitsToCharSpecialized,
+			combined3,
+			combined2,
+			combined1,
+			A4($danfishgold$base64_bytes$Decode$bitsToCharSpecialized, combined6, combined5, combined4, ''));
+	});
+var $elm$bytes$Bytes$Decode$map5 = F6(
+	function (func, _v0, _v1, _v2, _v3, _v4) {
+		var decodeA = _v0.a;
+		var decodeB = _v1.a;
+		var decodeC = _v2.a;
+		var decodeD = _v3.a;
+		var decodeE = _v4.a;
+		return $elm$bytes$Bytes$Decode$Decoder(
+			F2(
+				function (bites, offset) {
+					var _v5 = A2(decodeA, bites, offset);
+					var aOffset = _v5.a;
+					var a = _v5.b;
+					var _v6 = A2(decodeB, bites, aOffset);
+					var bOffset = _v6.a;
+					var b = _v6.b;
+					var _v7 = A2(decodeC, bites, bOffset);
+					var cOffset = _v7.a;
+					var c = _v7.b;
+					var _v8 = A2(decodeD, bites, cOffset);
+					var dOffset = _v8.a;
+					var d = _v8.b;
+					var _v9 = A2(decodeE, bites, dOffset);
+					var eOffset = _v9.a;
+					var e = _v9.b;
+					return _Utils_Tuple2(
+						eOffset,
+						A5(func, a, b, c, d, e));
+				}));
+	});
+var $danfishgold$base64_bytes$Decode$u16BE = $elm$bytes$Bytes$Decode$unsignedInt16($elm$bytes$Bytes$BE);
+var $danfishgold$base64_bytes$Decode$u32BE = $elm$bytes$Bytes$Decode$unsignedInt32($elm$bytes$Bytes$BE);
+var $danfishgold$base64_bytes$Decode$decode18Bytes = A6($elm$bytes$Bytes$Decode$map5, $danfishgold$base64_bytes$Decode$decode18Help, $danfishgold$base64_bytes$Decode$u32BE, $danfishgold$base64_bytes$Decode$u32BE, $danfishgold$base64_bytes$Decode$u32BE, $danfishgold$base64_bytes$Decode$u32BE, $danfishgold$base64_bytes$Decode$u16BE);
+var $elm$bytes$Bytes$Decode$map3 = F4(
+	function (func, _v0, _v1, _v2) {
+		var decodeA = _v0.a;
+		var decodeB = _v1.a;
+		var decodeC = _v2.a;
+		return $elm$bytes$Bytes$Decode$Decoder(
+			F2(
+				function (bites, offset) {
+					var _v3 = A2(decodeA, bites, offset);
+					var aOffset = _v3.a;
+					var a = _v3.b;
+					var _v4 = A2(decodeB, bites, aOffset);
+					var bOffset = _v4.a;
+					var b = _v4.b;
+					var _v5 = A2(decodeC, bites, bOffset);
+					var cOffset = _v5.a;
+					var c = _v5.b;
+					return _Utils_Tuple2(
+						cOffset,
+						A3(func, a, b, c));
+				}));
+	});
+var $danfishgold$base64_bytes$Decode$loopHelp = function (_v0) {
+	var remaining = _v0.remaining;
+	var string = _v0.string;
+	if (remaining >= 18) {
+		return A2(
+			$elm$bytes$Bytes$Decode$map,
+			function (result) {
+				return $elm$bytes$Bytes$Decode$Loop(
+					{
+						remaining: remaining - 18,
+						string: _Utils_ap(string, result)
+					});
+			},
+			$danfishgold$base64_bytes$Decode$decode18Bytes);
+	} else {
+		if (remaining >= 3) {
+			var helper = F3(
+				function (a, b, c) {
+					var combined = ((a << 16) | (b << 8)) | c;
+					return $elm$bytes$Bytes$Decode$Loop(
+						{
+							remaining: remaining - 3,
+							string: _Utils_ap(
+								string,
+								A2($danfishgold$base64_bytes$Decode$bitsToChars, combined, 0))
+						});
+				});
+			return A4($elm$bytes$Bytes$Decode$map3, helper, $elm$bytes$Bytes$Decode$unsignedInt8, $elm$bytes$Bytes$Decode$unsignedInt8, $elm$bytes$Bytes$Decode$unsignedInt8);
+		} else {
+			if (!remaining) {
+				return $elm$bytes$Bytes$Decode$succeed(
+					$elm$bytes$Bytes$Decode$Done(string));
+			} else {
+				if (remaining === 2) {
+					var helper = F2(
+						function (a, b) {
+							var combined = (a << 16) | (b << 8);
+							return $elm$bytes$Bytes$Decode$Done(
+								_Utils_ap(
+									string,
+									A2($danfishgold$base64_bytes$Decode$bitsToChars, combined, 1)));
+						});
+					return A3($elm$bytes$Bytes$Decode$map2, helper, $elm$bytes$Bytes$Decode$unsignedInt8, $elm$bytes$Bytes$Decode$unsignedInt8);
+				} else {
+					return A2(
+						$elm$bytes$Bytes$Decode$map,
+						function (a) {
+							return $elm$bytes$Bytes$Decode$Done(
+								_Utils_ap(
+									string,
+									A2($danfishgold$base64_bytes$Decode$bitsToChars, a << 16, 2)));
+						},
+						$elm$bytes$Bytes$Decode$unsignedInt8);
+				}
+			}
+		}
+	}
+};
+var $danfishgold$base64_bytes$Decode$decoder = function (width) {
+	return A2(
+		$elm$bytes$Bytes$Decode$loop,
+		{remaining: width, string: ''},
+		$danfishgold$base64_bytes$Decode$loopHelp);
+};
+var $elm$bytes$Bytes$width = _Bytes_width;
+var $danfishgold$base64_bytes$Decode$fromBytes = function (bytes) {
+	return A2(
+		$elm$bytes$Bytes$Decode$decode,
+		$danfishgold$base64_bytes$Decode$decoder(
+			$elm$bytes$Bytes$width(bytes)),
+		bytes);
+};
+var $danfishgold$base64_bytes$Base64$fromBytes = $danfishgold$base64_bytes$Decode$fromBytes;
+var $MartinSStewart$elm_serialize$Serialize$replaceForUrl = A2(
+	$elm$core$Maybe$withDefault,
+	$elm$regex$Regex$never,
+	$elm$regex$Regex$fromString('[\\+/=]'));
+var $MartinSStewart$elm_serialize$Serialize$replaceBase64Chars = function () {
+	var replaceChar = function (rematch) {
+		var _v0 = rematch.match;
+		switch (_v0) {
+			case '+':
+				return '-';
+			case '/':
+				return '_';
+			default:
+				return '';
+		}
+	};
+	return A2(
+		$elm$core$Basics$composeR,
+		$danfishgold$base64_bytes$Base64$fromBytes,
+		A2(
+			$elm$core$Basics$composeR,
+			$elm$core$Maybe$withDefault(''),
+			A2($elm$regex$Regex$replace, $MartinSStewart$elm_serialize$Serialize$replaceForUrl, replaceChar)));
+}();
+var $MartinSStewart$elm_serialize$Serialize$encodeToString = function (codec) {
+	return A2(
+		$elm$core$Basics$composeR,
+		$MartinSStewart$elm_serialize$Serialize$encodeToBytes(codec),
+		$MartinSStewart$elm_serialize$Serialize$replaceBase64Chars);
+};
+var $author$project$Logic$App$ImportExport$ImportExportProject$encodeProjectData = function (projectData) {
+	return A2($MartinSStewart$elm_serialize$Serialize$encodeToString, $author$project$Logic$App$ImportExport$ImportExportProject$projectCodec, projectData);
+};
+var $author$project$Logic$App$ImportExport$ImportExportProject$simplifyPattern = function (pattern) {
+	return {active: pattern.active, signature: pattern.signature, startDirection: pattern.startDirection};
+};
+var $author$project$Logic$App$ImportExport$ImportExportProject$simplifyIota = function (iota) {
+	switch (iota.$) {
+		case 'Vector':
+			var vector = iota.a;
+			return $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedVector(vector);
+		case 'Number':
+			var number = iota.a;
+			return $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedNumber(number);
+		case 'Boolean':
+			var _boolean = iota.a;
+			return $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedBoolean(_boolean);
+		case 'Entity':
+			var entity = iota.a;
+			return $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedEntity(entity);
+		case 'IotaList':
+			var list = iota.a;
+			return $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedIotaList(
+				A2($elm$core$Array$map, $author$project$Logic$App$ImportExport$ImportExportProject$simplifyIota, list));
+		case 'PatternIota':
+			var pattern = iota.a;
+			var considered = iota.b;
+			return A2(
+				$author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedPatternIota,
+				$author$project$Logic$App$ImportExport$ImportExportProject$simplifyPattern(pattern),
+				considered);
+		case 'Null':
+			return $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedNull;
+		case 'Garbage':
+			var mishap = iota.a;
+			return $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedGarbage(mishap);
+		default:
+			var list = iota.a;
+			return $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedOpenParenthesis(
+				A2($elm$core$Array$map, $author$project$Logic$App$ImportExport$ImportExportProject$simplifyIota, list));
+	}
+};
+var $author$project$Logic$App$ImportExport$ImportExportProject$simplifyCastingContext = function (castingContext) {
+	return {
+		heldItem: castingContext.heldItem,
+		heldItemContent: A2($elm$core$Maybe$map, $author$project$Logic$App$ImportExport$ImportExportProject$simplifyIota, castingContext.heldItemContent),
+		macros: $elm$core$Dict$fromList(
+			A2(
+				$elm$core$List$map,
+				function (entry) {
+					var signature = entry.a;
+					var _v1 = entry.b;
+					var displayName = _v1.a;
+					var startDirection = _v1.b;
+					var iota = _v1.c;
+					return _Utils_Tuple2(
+						signature,
+						_Utils_Tuple3(
+							displayName,
+							startDirection,
+							$author$project$Logic$App$ImportExport$ImportExportProject$simplifyIota(iota)));
+				},
+				$elm$core$Dict$toList(castingContext.macros))),
+		ravenmind: A2($elm$core$Maybe$map, $author$project$Logic$App$ImportExport$ImportExportProject$simplifyIota, castingContext.ravenmind)
+	};
+};
+var $author$project$Logic$App$ImportExport$ImportExportProject$modelToProjectData = function (model) {
+	return {
+		castingContext: $author$project$Logic$App$ImportExport$ImportExportProject$simplifyCastingContext(model.castingContext),
+		patternArray: A2(
+			$elm$core$Array$map,
+			function (patternTuple) {
+				return $author$project$Logic$App$ImportExport$ImportExportProject$simplifyPattern(patternTuple.a);
+			},
+			model.patternArray)
+	};
+};
 var $author$project$Components$App$Panels$FilePanel$saveExportPanel = function (model) {
 	var visibility = A2($elm$core$List$member, $author$project$Logic$App$Types$FilePanel, model.ui.openPanels);
 	return A2(
@@ -21149,6 +21148,37 @@ var $author$project$Components$App$Panels$FilePanel$saveExportPanel = function (
 						$elm$html$Html$text('File')
 					])),
 				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('input_label_box')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$label,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$elm$html$Html$text('Project Name:')
+							])),
+						A2(
+						$elm$html$Html$input,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$value(model.projectName),
+								$elm$html$Html$Events$onInput($author$project$Logic$App$Msg$SetProjectName)
+							]),
+						_List_Nil)
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('seperator')
+					]),
+				_List_Nil),
+				A2(
 				$elm$html$Html$button,
 				_List_fromArray(
 					[
@@ -21165,11 +21195,12 @@ var $author$project$Components$App$Panels$FilePanel$saveExportPanel = function (
 					[
 						$elm$html$Html$Attributes$class('generic_button'),
 						$elm$html$Html$Events$onClick(
-						A2(
+						A3(
 							$author$project$Logic$App$Msg$Download,
 							$author$project$Logic$App$ImportExport$ImportExportProject$encodeProjectData(
 								$author$project$Logic$App$ImportExport$ImportExportProject$modelToProjectData(model)),
-							'Project.hex'))
+							model.projectName + '.hex',
+							'text/plain'))
 					]),
 				_List_fromArray(
 					[
