@@ -265,8 +265,6 @@ button {
     outline: inherit;
 }
 
-
-
 .outer_box .x_button {
     display: flex;
     align-items: center;
@@ -565,7 +563,7 @@ button {
 .divider {
     background-color: var(--primary_lighter);
     width: 95%;
-    height: 0.1em;
+    height: 2px;
     align-self: center;
     margin-top: 0.5em;
     margin-bottom: 0.5em;
@@ -675,17 +673,50 @@ button {
 }
 
 .insertion_point {
-    background-color: #7D8599;
+    background-color: #7d8599;
     animation: blink 1.5s steps(1, end);
     animation-iteration-count: infinite;
     width: 100%;
     height: 1px;
     margin-bottom: 2px;
-
 }
 
 @keyframes blink {
     50% {
         background-color: transparent;
     }
+}
+
+.show_macro_button {
+    margin: 2px;
+    width: 1em;
+    align-self: flex-start;
+    margin-top: 6px;
+    opacity: 0;
+    z-index: 1;
+}
+
+.show_macro_button ~ .iota_box::before {
+    content: '';
+    border: solid rgba(255, 255, 255, 0.6);
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+    position: absolute;
+    transform: translate(-0.9em, 12px) rotate(-135deg);
+}
+.show_macro_button:hover ~ .iota_box::before {
+    border-color: rgba(255, 255, 255, 0.85);
+}
+
+.show_macro_button:checked ~ .iota_box::before {
+    transform: translate(-0.9em, 12px) rotate(45deg);
+}
+
+#macro_panel .iota_box {
+    flex-grow: 1;
+}
+
+.show_macro_button:not(:checked) ~ .iota_box > .outer_box:not(:first-child) {
+    display: none;
 }

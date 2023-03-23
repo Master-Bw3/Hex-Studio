@@ -19258,25 +19258,6 @@ var $elm$core$List$intersperse = F2(
 			return A2($elm$core$List$cons, hd, spersed);
 		}
 	});
-var $elm$core$Dict$map = F2(
-	function (func, dict) {
-		if (dict.$ === 'RBEmpty_elm_builtin') {
-			return $elm$core$Dict$RBEmpty_elm_builtin;
-		} else {
-			var color = dict.a;
-			var key = dict.b;
-			var value = dict.c;
-			var left = dict.d;
-			var right = dict.e;
-			return A5(
-				$elm$core$Dict$RBNode_elm_builtin,
-				color,
-				key,
-				A2(func, key, value),
-				A2($elm$core$Dict$map, func, left),
-				A2($elm$core$Dict$map, func, right));
-		}
-	});
 var $lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$plus = A4(
 	$lattyware$elm_fontawesome$FontAwesome$IconDef,
 	'fas',
@@ -19284,79 +19265,122 @@ var $lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$plus = A4(
 	_Utils_Tuple2(448, 512),
 	_Utils_Tuple2('M432 256c0 17.69-14.33 32.01-32 32.01H256v144c0 17.69-14.33 31.99-32 31.99s-32-14.3-32-31.99v-144H48c-17.67 0-32-14.32-32-32.01s14.33-31.99 32-31.99H192v-144c0-17.69 14.33-32.01 32-32.01s32 14.32 32 32.01v144h144C417.7 224 432 238.3 432 256z', $elm$core$Maybe$Nothing));
 var $lattyware$elm_fontawesome$FontAwesome$Solid$plus = $lattyware$elm_fontawesome$FontAwesome$present($lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$plus);
+var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
+var $lattyware$elm_fontawesome$FontAwesome$Attributes$xs = $elm$svg$Svg$Attributes$class('fa-xs');
 var $author$project$Components$App$Panels$MacroPanel$renderIotaBox = function (iota) {
 	return _List_fromArray(
 		[
 			A2(
 			$elm$html$Html$div,
-			_List_Nil,
-			A3($author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsHtmlMsg, 0, iota, 0))
+			_List_fromArray(
+				[
+					A2($elm$html$Html$Attributes$style, 'display', 'flex')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$input,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('show_macro_button'),
+							$elm$html$Html$Attributes$type_('checkbox')
+						]),
+					_List_fromArray(
+						[
+							$lattyware$elm_fontawesome$FontAwesome$Styles$css,
+							$lattyware$elm_fontawesome$FontAwesome$view(
+							A2(
+								$lattyware$elm_fontawesome$FontAwesome$styled,
+								_List_fromArray(
+									[$lattyware$elm_fontawesome$FontAwesome$Attributes$xs]),
+								$lattyware$elm_fontawesome$FontAwesome$Solid$plus))
+						])),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('iota_box')
+						]),
+					A3($author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsHtmlMsg, 0, iota, 0))
+				]))
 		]);
 };
-var $elm$core$Dict$values = function (dict) {
-	return A3(
-		$elm$core$Dict$foldr,
-		F3(
-			function (key, value, valueList) {
-				return A2($elm$core$List$cons, value, valueList);
-			}),
-		_List_Nil,
-		dict);
-};
-var $lattyware$elm_fontawesome$FontAwesome$Attributes$xs = $elm$svg$Svg$Attributes$class('fa-xs');
-var $author$project$Components$App$Panels$MacroPanel$renderDict = function (model) {
-	var renderEntry = F2(
-		function (signature, value) {
-			var displayName = value.a;
-			var iota = value.c;
-			return A2(
-				$elm$html$Html$div,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$class('stored_iota_container')
-					]),
+var $author$project$Components$App$Panels$MacroPanel$unnamedToTop = F2(
+	function (a, b) {
+		var _v0 = _Utils_Tuple2(a, b);
+		var _v1 = _v0.a;
+		var _v2 = _v1.b;
+		var aName = _v2.a;
+		var _v3 = _v0.b;
+		var _v4 = _v3.b;
+		var bName = _v4.a;
+		var _v5 = A2(
+			$elm$core$Basics$compare,
+			A3($author$project$Logic$App$Utils$Utils$ifThenElse, aName === 'Unnamed Macro', 1, 0),
+			A3($author$project$Logic$App$Utils$Utils$ifThenElse, bName === 'Unnamed Macro', 1, 0));
+		switch (_v5.$) {
+			case 'LT':
+				return $elm$core$Basics$GT;
+			case 'EQ':
+				return $elm$core$Basics$EQ;
+			default:
+				return $elm$core$Basics$LT;
+		}
+	});
+var $author$project$Components$App$Panels$MacroPanel$renderMacroDict = function (model) {
+	var renderEntry = function (entry) {
+		var signature = entry.a;
+		var _v1 = entry.b;
+		var displayName = _v1.a;
+		var iota = _v1.c;
+		return A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('stored_iota_container')
+				]),
+			A2(
+				$elm$core$List$cons,
 				A2(
-					$elm$core$List$cons,
-					A2(
-						$elm$html$Html$div,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$class('saved_iota_title')
-							]),
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$input,
-								_List_fromArray(
-									[
-										$elm$html$Html$Attributes$class('stored_iota_label'),
-										A2($elm$html$Html$Attributes$style, 'margin-right', '0'),
-										$elm$html$Html$Attributes$value(displayName),
-										$elm$html$Html$Events$onInput(
-										$author$project$Logic$App$Msg$ChangeMacroName(signature))
-									]),
-								_List_Nil),
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Attributes$class('add_button'),
-										$elm$html$Html$Events$onClick(
-										$author$project$Logic$App$Msg$InputPattern(signature))
-									]),
-								_List_fromArray(
-									[
-										$lattyware$elm_fontawesome$FontAwesome$Styles$css,
-										$lattyware$elm_fontawesome$FontAwesome$view(
-										A2(
-											$lattyware$elm_fontawesome$FontAwesome$styled,
-											_List_fromArray(
-												[$lattyware$elm_fontawesome$FontAwesome$Attributes$xs]),
-											$lattyware$elm_fontawesome$FontAwesome$Solid$plus))
-									]))
-							])),
-					$author$project$Components$App$Panels$MacroPanel$renderIotaBox(iota)));
-		});
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('saved_iota_title')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$input,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('stored_iota_label'),
+									A2($elm$html$Html$Attributes$style, 'margin-right', '0'),
+									$elm$html$Html$Attributes$value(displayName),
+									$elm$html$Html$Events$onInput(
+									$author$project$Logic$App$Msg$ChangeMacroName(signature))
+								]),
+							_List_Nil),
+							A2(
+							$elm$html$Html$button,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('add_button'),
+									$elm$html$Html$Events$onClick(
+									$author$project$Logic$App$Msg$InputPattern(signature))
+								]),
+							_List_fromArray(
+								[
+									$lattyware$elm_fontawesome$FontAwesome$Styles$css,
+									$lattyware$elm_fontawesome$FontAwesome$view(
+									A2(
+										$lattyware$elm_fontawesome$FontAwesome$styled,
+										_List_fromArray(
+											[$lattyware$elm_fontawesome$FontAwesome$Attributes$xs]),
+										$lattyware$elm_fontawesome$FontAwesome$Solid$plus))
+								]))
+						])),
+				$author$project$Components$App$Panels$MacroPanel$renderIotaBox(iota)));
+	};
 	return A2(
 		$elm$core$List$intersperse,
 		A2(
@@ -19366,10 +19390,15 @@ var $author$project$Components$App$Panels$MacroPanel$renderDict = function (mode
 					$elm$html$Html$Attributes$class('divider')
 				]),
 			_List_Nil),
-		$elm$core$Dict$values(
-			A2($elm$core$Dict$map, renderEntry, model.castingContext.macros)));
+		A2(
+			$elm$core$List$map,
+			renderEntry,
+			A2(
+				$elm$core$List$sortWith,
+				$author$project$Components$App$Panels$MacroPanel$unnamedToTop,
+				$elm$core$Dict$toList(model.castingContext.macros))));
 };
-var $author$project$Components$App$Panels$MacroPanel$libraryPanel = function (model) {
+var $author$project$Components$App$Panels$MacroPanel$macroPanel = function (model) {
 	var visibility = A2($elm$core$List$member, $author$project$Logic$App$Types$LibraryPanel, model.ui.openPanels);
 	return A2(
 		$elm$html$Html$div,
@@ -19391,7 +19420,7 @@ var $author$project$Components$App$Panels$MacroPanel$libraryPanel = function (mo
 					[
 						$elm$html$Html$text('Macros')
 					])),
-			$author$project$Components$App$Panels$MacroPanel$renderDict(model)));
+			$author$project$Components$App$Panels$MacroPanel$renderMacroDict(model)));
 };
 var $author$project$Logic$App$Msg$SelectNextSuggestion = function (a) {
 	return {$: 'SelectNextSuggestion', a: a};
@@ -20056,7 +20085,6 @@ var $jinjor$elm_contextmenu$ContextMenu$open = F2(
 	function (transform, context) {
 		return A3($jinjor$elm_contextmenu$ContextMenu$openIf, true, transform, context);
 	});
-var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
 var $elm$svg$Svg$style = $elm$svg$Svg$trustedNode('style');
 var $elm$svg$Svg$Attributes$x1 = _VirtualDom_attribute('x1');
 var $author$project$Components$Icon$XButton$xButton = A2(
@@ -21322,7 +21350,7 @@ var $author$project$Components$App$Panels$Panels$panels = function (model) {
 				$author$project$Components$App$Panels$StackPanel$stackPanel(model),
 				$author$project$Components$App$Panels$ConfigHexPanel$configHexPanel(model),
 				$author$project$Components$App$Panels$FilePanel$saveExportPanel(model),
-				$author$project$Components$App$Panels$MacroPanel$libraryPanel(model)
+				$author$project$Components$App$Panels$MacroPanel$macroPanel(model)
 			]));
 };
 var $author$project$Components$App$LeftBox$leftBox = function (model) {
