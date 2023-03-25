@@ -370,7 +370,9 @@ update msg model =
                 }
 
         SetGridScale scale ->
-            ( sortPatterns { model | grid = { grid | points = updateGridPoints grid.width grid.height model.patternArray [] scale }, settings = { settings | gridScale = scale } }, Cmd.none )
+            update
+                (SetTimelineIndex model.timelineIndex)
+                (sortPatterns { model | grid = { grid | points = updateGridPoints grid.width grid.height model.patternArray [] scale }, settings = { settings | gridScale = scale } })
 
         WindowResize ->
             ( model, Cmd.batch [ Task.attempt GetGrid (getElement "hex_grid"), Task.attempt GetContentSize (getElement "content") ] )
