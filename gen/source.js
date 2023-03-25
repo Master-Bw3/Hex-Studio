@@ -19305,28 +19305,6 @@ var $author$project$Components$App$Panels$MacroPanel$renderIotaBox = function (i
 				]))
 		]);
 };
-var $author$project$Components$App$Panels$MacroPanel$unnamedToTop = F2(
-	function (a, b) {
-		var _v0 = _Utils_Tuple2(a, b);
-		var _v1 = _v0.a;
-		var _v2 = _v1.b;
-		var aName = _v2.a;
-		var _v3 = _v0.b;
-		var _v4 = _v3.b;
-		var bName = _v4.a;
-		var _v5 = A2(
-			$elm$core$Basics$compare,
-			A3($author$project$Logic$App$Utils$Utils$ifThenElse, aName === 'Unnamed Macro', 1, 0),
-			A3($author$project$Logic$App$Utils$Utils$ifThenElse, bName === 'Unnamed Macro', 1, 0));
-		switch (_v5.$) {
-			case 'LT':
-				return $elm$core$Basics$GT;
-			case 'EQ':
-				return $elm$core$Basics$EQ;
-			default:
-				return $elm$core$Basics$LT;
-		}
-	});
 var $author$project$Components$App$Panels$MacroPanel$renderMacroDict = function (model) {
 	var renderEntry = function (entry) {
 		var signature = entry.a;
@@ -19393,10 +19371,7 @@ var $author$project$Components$App$Panels$MacroPanel$renderMacroDict = function 
 		A2(
 			$elm$core$List$map,
 			renderEntry,
-			A2(
-				$elm$core$List$sortWith,
-				$author$project$Components$App$Panels$MacroPanel$unnamedToTop,
-				$elm$core$Dict$toList(model.castingContext.macros))));
+			$elm$core$Dict$toList(model.castingContext.macros)));
 };
 var $author$project$Components$App$Panels$MacroPanel$macroPanel = function (model) {
 	var visibility = A2($elm$core$List$member, $author$project$Logic$App$Types$LibraryPanel, model.ui.openPanels);

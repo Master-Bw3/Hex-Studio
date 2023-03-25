@@ -59,31 +59,13 @@ renderMacroDict model =
                         )
     in
     Dict.toList model.castingContext.macros
-        |> List.sortWith unnamedToTop
         |> List.map renderEntry
         |> List.intersperse (div [ class "divider" ] [])
 
 
-unnamedToTop : ( a, ( String, b, c ) ) -> ( d, ( String, e, f ) ) -> Order
-unnamedToTop a b =
-    case ( a, b ) of
-        ( ( _, ( aName, _, _ ) ), ( _, ( bName, _, _ ) ) ) ->
-            case
-                compare (ifThenElse (aName == "Unnamed Macro") 1 0) (ifThenElse (bName == "Unnamed Macro") 1 0)
-            of
-                LT ->
-                    GT
-
-                EQ ->
-                    EQ
-
-                GT ->
-                    LT
-
-
 renderIotaBox : Iota -> List (Html msg)
 renderIotaBox iota =
-    [ div [style "display" "flex"]
+    [ div [ style "display" "flex" ]
         [ input
             [ class "show_macro_button"
             , type_ "checkbox"
