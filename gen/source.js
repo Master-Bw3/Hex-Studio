@@ -16348,6 +16348,25 @@ var $elm$file$File$Download$string = F3(
 			A3(_File_download, name, mime, content));
 	});
 var $elm$file$File$toString = _File_toString;
+var $elm$core$Dict$map = F2(
+	function (func, dict) {
+		if (dict.$ === 'RBEmpty_elm_builtin') {
+			return $elm$core$Dict$RBEmpty_elm_builtin;
+		} else {
+			var color = dict.a;
+			var key = dict.b;
+			var value = dict.c;
+			var left = dict.d;
+			var right = dict.e;
+			return A5(
+				$elm$core$Dict$RBNode_elm_builtin,
+				color,
+				key,
+				A2(func, key, value),
+				A2($elm$core$Dict$map, func, left),
+				A2($elm$core$Dict$map, func, right));
+		}
+	});
 var $author$project$Logic$App$ImportExport$ImportExportProject$unSimplifyPattern = F2(
 	function (macros, simplifiedPattern) {
 		var pattern = A2(
@@ -16402,23 +16421,57 @@ var $author$project$Logic$App$ImportExport$ImportExportProject$unSimplifyIota = 
 		}
 	});
 var $author$project$Logic$App$ImportExport$ImportExportProject$unSimplifyCastingContext = function (simplifiedCastingContext) {
-	var macros = $elm$core$Dict$fromList(
-		A2(
-			$elm$core$List$map,
-			function (entry) {
-				var signature = entry.a;
-				var _v1 = entry.b;
-				var displayName = _v1.a;
-				var startDirection = _v1.b;
-				var iota = _v1.c;
-				return _Utils_Tuple2(
-					signature,
-					_Utils_Tuple3(
-						displayName,
-						startDirection,
-						A2($author$project$Logic$App$ImportExport$ImportExportProject$unSimplifyIota, $elm$core$Dict$empty, iota)));
-			},
-			$elm$core$Dict$toList(simplifiedCastingContext.macros)));
+	var macrosLayer1 = A2(
+		$elm$core$Dict$map,
+		F2(
+			function (_v4, macro) {
+				var displayName = macro.a;
+				var startDirection = macro.b;
+				var iota = macro.c;
+				return _Utils_Tuple3(
+					displayName,
+					startDirection,
+					A2($author$project$Logic$App$ImportExport$ImportExportProject$unSimplifyIota, $elm$core$Dict$empty, iota));
+			}),
+		simplifiedCastingContext.macros);
+	var macros = A2(
+		$elm$core$Dict$map,
+		F2(
+			function (_v0, macro) {
+				var displayName = macro.a;
+				var startDirection = macro.b;
+				var iota = macro.c;
+				return _Utils_Tuple3(
+					displayName,
+					startDirection,
+					function () {
+						if (iota.$ === 'IotaList') {
+							var iotaList = iota.a;
+							return $author$project$Logic$App$Types$IotaList(
+								A2(
+									$elm$core$Array$map,
+									function (i) {
+										if (i.$ === 'PatternIota') {
+											var pattern = i.a;
+											var considered = i.b;
+											return A2(
+												$author$project$Logic$App$Types$PatternIota,
+												A2(
+													$author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature,
+													$elm$core$Maybe$Just(macrosLayer1),
+													pattern.signature),
+												considered);
+										} else {
+											return i;
+										}
+									},
+									iotaList));
+						} else {
+							return iota;
+						}
+					}());
+			}),
+		macrosLayer1);
 	return {
 		heldItem: simplifiedCastingContext.heldItem,
 		heldItemContent: A2(

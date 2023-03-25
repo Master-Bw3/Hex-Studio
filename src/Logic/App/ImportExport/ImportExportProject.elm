@@ -338,15 +338,43 @@ simplifyCastingContext castingContext =
 unSimplifyCastingContext : SimplifiedCastingContext -> CastingContext
 unSimplifyCastingContext simplifiedCastingContext =
     let
+        macrosLayer1 =
+            Dict.map
+                (\_ macro ->
+                    case macro of
+                        ( displayName, startDirection, iota ) ->
+                            ( displayName, startDirection, unSimplifyIota Dict.empty iota )
+                )
+                simplifiedCastingContext.macros
+
+        macros : Dict String ( String, Direction, Iota )
         macros =
-            Dict.fromList <|
-                List.map
-                    (\entry ->
-                        case entry of
-                            ( signature, ( displayName, startDirection, iota ) ) ->
-                                ( signature, ( displayName, startDirection, unSimplifyIota Dict.empty iota ) )
-                    )
-                    (Dict.toList simplifiedCastingContext.macros)
+            --this is to fix macros inside of macros not showing the macro name
+            Dict.map
+                (\_ macro ->
+                    case macro of
+                        ( displayName, startDirection, iota ) ->
+                            ( displayName
+                            , startDirection
+                            , case iota of
+                                IotaList iotaList ->
+                                    IotaList <|
+                                        Array.map
+                                            (\i ->
+                                                case i of
+                                                    PatternIota pattern considered ->
+                                                        PatternIota (getPatternFromSignature (Just macrosLayer1) pattern.signature) considered
+
+                                                    _ ->
+                                                        i
+                                            )
+                                            iotaList
+
+                                _ ->
+                                    iota
+                            )
+                )
+                macrosLayer1
     in
     { heldItem = simplifiedCastingContext.heldItem
     , heldItemContent = Maybe.map (unSimplifyIota macros) simplifiedCastingContext.heldItemContent
@@ -393,8 +421,7 @@ encodeProjectData projectData =
 
 decodeProjectData : String -> Maybe ProjectData
 decodeProjectData encodedProjectData =
-   Result.toMaybe <| S.decodeFromString projectCodec encodedProjectData
-
+    Result.toMaybe <| S.decodeFromString projectCodec encodedProjectData
 
 
 unsimplifyProjectData : ProjectData -> { patternArray : Array Pattern, castingContext : CastingContext, projectName : String }
