@@ -8002,40 +8002,17 @@ var $author$project$Logic$App$Stack$EvalStack$applyPatternToStack = F4(
 						};
 					}
 				} else {
-					var _v15 = A2($elm$core$Dict$get, pattern.signature, ctx.macros);
-					if ((_v15.$ === 'Just') && (_v15.a.c.$ === 'IotaList')) {
-						var _v16 = _v15.a;
-						var iotaList = _v16.c.a;
-						var newStack = A3(
-							$elm$core$Array$set,
-							0,
-							$author$project$Logic$App$Types$OpenParenthesis(
-								A2($elm$core$Array$append, list, iotaList)),
-							stack);
-						return {
-							considerNext: false,
-							ctx: ctx,
-							result: $author$project$Logic$App$Types$Considered,
-							stack: newStack,
-							timeline: $elm$core$Array$fromList(
-								_List_fromArray(
-									[
-										{patternIndex: index, stack: newStack}
-									]))
-						};
-					} else {
-						return {
-							considerNext: false,
-							ctx: ctx,
-							result: $author$project$Logic$App$Types$Considered,
-							stack: addToIntroList,
-							timeline: $elm$core$Array$fromList(
-								_List_fromArray(
-									[
-										{patternIndex: index, stack: addToIntroList}
-									]))
-						};
-					}
+					return {
+						considerNext: false,
+						ctx: ctx,
+						result: $author$project$Logic$App$Types$Considered,
+						stack: addToIntroList,
+						timeline: $elm$core$Array$fromList(
+							_List_fromArray(
+								[
+									{patternIndex: index, stack: addToIntroList}
+								]))
+					};
 				}
 			}
 		} else {
@@ -8120,10 +8097,10 @@ var $author$project$Logic$App$Stack$EvalStack$applyPatternToStack = F4(
 									actionResult.allStackStates)
 							};
 						} else {
-							var _v19 = A2($elm$core$Dict$get, pattern.signature, ctx.macros);
-							if (_v19.$ === 'Just') {
-								var _v20 = _v19.a;
-								var iota = _v20.c;
+							var _v17 = A2($elm$core$Dict$get, pattern.signature, ctx.macros);
+							if (_v17.$ === 'Just') {
+								var _v18 = _v17.a;
+								var iota = _v18.c;
 								var actionResult = A2(
 									$author$project$Logic$App$Stack$EvalStack$eval,
 									A2($author$project$Logic$App$Utils$Utils$unshift, iota, stack),
@@ -8200,7 +8177,7 @@ var $author$project$Logic$App$Stack$EvalStack$applyToStackLoop = F7(
 		while (true) {
 			var stack = stackResultTuple.a;
 			var resultArray = stackResultTuple.b;
-			var iota = function () {
+			var maybeIota = function () {
 				var _v11 = $elm$core$List$head(patterns);
 				if ((_v11.$ === 'Just') && (_v11.a.$ === 'PatternIota')) {
 					var _v12 = _v11.a;
@@ -8224,11 +8201,11 @@ var $author$project$Logic$App$Stack$EvalStack$applyToStackLoop = F7(
 					return false;
 				}
 			}();
-			if (iota.$ === 'Nothing') {
+			if (maybeIota.$ === 'Nothing') {
 				return {ctx: ctx, error: false, halted: false, resultArray: resultArray, stack: stack, timeline: timeline};
 			} else {
-				if (iota.a.$ === 'PatternIota') {
-					var _v9 = iota.a;
+				if (maybeIota.a.$ === 'PatternIota') {
+					var _v9 = maybeIota.a;
 					var pattern = _v9.a;
 					if (considerThis) {
 						var applyResult = _Utils_Tuple2(
@@ -8300,10 +8277,10 @@ var $author$project$Logic$App$Stack$EvalStack$applyToStackLoop = F7(
 						}
 					}
 				} else {
-					var iota_ = iota.a;
+					var iota = maybeIota.a;
 					if (considerThis || introspection) {
 						var applyResult = _Utils_Tuple2(
-							A2($author$project$Logic$App$Stack$EvalStack$addEscapedIotaToStack, stack, iota_),
+							A2($author$project$Logic$App$Stack$EvalStack$addEscapedIotaToStack, stack, iota),
 							A2($author$project$Logic$App$Utils$Utils$unshift, $author$project$Logic$App$Types$Considered, resultArray));
 						var $temp$stackResultTuple = applyResult,
 							$temp$ctx = ctx,
@@ -18044,62 +18021,6 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 			$elm$json$Json$Encode$string(string));
 	});
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
-var $author$project$Logic$App$ImportExport$ExportAsGiveCommand$exportAsGiveCommand = function (patternArray) {
-	var singatureList = A2(
-		$elm$core$List$map,
-		function (pattern) {
-			return pattern.signature;
-		},
-		$elm$core$List$reverse(
-			$elm$core$Array$toList(patternArray)));
-	var patternStartString = '{\"hexcasting:type\": \"hexcasting:pattern\", \"hexcasting:data\": {angles: [B; ';
-	var patternEndString = '], start_dir: 0b}}';
-	var mapAngleToBytes = function (angle) {
-		switch (angle) {
-			case 'w':
-				return '0B';
-			case 'e':
-				return '1B';
-			case 'd':
-				return '2B';
-			case 'a':
-				return '4B';
-			case 'q':
-				return '5B';
-			default:
-				return '3B';
-		}
-	};
-	var commandStartString = '/give @p hexcasting:focus{data: {\"hexcasting:type\": \"hexcasting:list\", \"hexcasting:data\": [';
-	var commandEndString = ']}} 1';
-	return $elm$core$String$concat(
-		_List_fromArray(
-			[
-				commandStartString,
-				A2(
-				$elm$core$String$join,
-				', ',
-				A2(
-					$elm$core$List$map,
-					function (signature) {
-						return $elm$core$String$concat(
-							_List_fromArray(
-								[
-									patternStartString,
-									A2(
-									$elm$core$String$join,
-									', ',
-									A2(
-										$elm$core$List$map,
-										mapAngleToBytes,
-										A2($elm$core$String$split, '', signature))),
-									patternEndString
-								]));
-					},
-					singatureList)),
-				commandEndString
-			]));
-};
 var $author$project$Logic$App$ImportExport$ExportAsText$exportPatternsAsLineList = function (patternArray) {
 	var mapPatternToLine = F2(
 		function (pattern, accumulator) {
@@ -18204,8 +18125,7 @@ var $author$project$Components$App$Overlays$ExportTextOverlay$exportTextOverlay 
 		return _List_Nil;
 	} else {
 		var patternText = $author$project$Logic$App$ImportExport$ExportAsText$exportPatternsAsLineList(
-			A2($elm$core$Array$map, $elm$core$Tuple$first, model.patternArray)) + ('\n-----------------------\n' + $author$project$Logic$App$ImportExport$ExportAsGiveCommand$exportAsGiveCommand(
-			A2($elm$core$Array$map, $elm$core$Tuple$first, model.patternArray)));
+			A2($elm$core$Array$map, $elm$core$Tuple$first, model.patternArray));
 		return _List_fromArray(
 			[
 				A2(

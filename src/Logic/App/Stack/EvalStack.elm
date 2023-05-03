@@ -50,7 +50,7 @@ applyToStackLoop stackResultTuple ctx patterns currentIndex timeline considerThi
                 _ ->
                     False
 
-        iota =
+        maybeIota =
             case List.head patterns of
                 Just (PatternIota pattern considered) ->
                     if pattern.internalName == "constant" then
@@ -62,7 +62,7 @@ applyToStackLoop stackResultTuple ctx patterns currentIndex timeline considerThi
                 head ->
                     head
     in
-    case iota of
+    case maybeIota of
         Nothing ->
             { stack = stack, resultArray = resultArray, ctx = ctx, error = False, halted = False, timeline = timeline }
 
@@ -108,11 +108,11 @@ applyToStackLoop stackResultTuple ctx patterns currentIndex timeline considerThi
                     , timeline = unshift { stack = applyResult.stack, patternIndex = currentIndex } timeline
                     }
 
-        Just iota_ ->
+        Just iota ->
             if considerThis || introspection then
                 let
                     applyResult =
-                        ( addEscapedIotaToStack stack iota_, unshift Considered resultArray )
+                        ( addEscapedIotaToStack stack iota, unshift Considered resultArray )
                 in
                 applyToStackLoop
                     applyResult
@@ -130,6 +130,7 @@ applyToStackLoop stackResultTuple ctx patterns currentIndex timeline considerThi
 applyPatternToStack : Array Iota -> CastingContext -> Pattern -> Int -> { stack : Array Iota, result : ApplyToStackResult, ctx : CastingContext, considerNext : Bool, timeline : Timeline }
 applyPatternToStack stack ctx pattern index =
     case Array.get 0 stack of
+        -- if intro on top of stack
         Just (OpenParenthesis list) ->
             let
                 numberOfCloseParen =
@@ -193,19 +194,10 @@ applyPatternToStack stack ctx pattern index =
                     { stack = addToIntroList, result = Considered, ctx = ctx, considerNext = False, timeline = Array.fromList [ { stack = addToIntroList, patternIndex = index } ] }
 
             else
-                case Dict.get pattern.signature ctx.macros of
-                    Just ( _, _, IotaList iotaList ) ->
-                        let
-                            newStack =
-                                Array.set 0 (OpenParenthesis (Array.append list iotaList)) stack
-                        in
-                        { stack = newStack, result = Considered, ctx = ctx, considerNext = False, timeline = Array.fromList [ { stack = newStack, patternIndex = index } ] }
+                { stack = addToIntroList, result = Considered, ctx = ctx, considerNext = False, timeline = Array.fromList [ { stack = addToIntroList, patternIndex = index } ] }
 
-                    _ ->
-                        { stack = addToIntroList, result = Considered, ctx = ctx, considerNext = False, timeline = Array.fromList [ { stack = addToIntroList, patternIndex = index } ] }
-
-        -- if no intro on top \/
         _ ->
+            -- if no intro on top
             if pattern.internalName == "escape" then
                 { stack = stack, result = Succeeded, ctx = ctx, considerNext = True, timeline = Array.fromList [ { stack = stack, patternIndex = index } ] }
 
