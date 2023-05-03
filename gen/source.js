@@ -19473,8 +19473,6 @@ var $lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$plus = A4(
 	_Utils_Tuple2(448, 512),
 	_Utils_Tuple2('M432 256c0 17.69-14.33 32.01-32 32.01H256v144c0 17.69-14.33 31.99-32 31.99s-32-14.3-32-31.99v-144H48c-17.67 0-32-14.32-32-32.01s14.33-31.99 32-31.99H192v-144c0-17.69 14.33-32.01 32-32.01s32 14.32 32 32.01v144h144C417.7 224 432 238.3 432 256z', $elm$core$Maybe$Nothing));
 var $lattyware$elm_fontawesome$FontAwesome$Solid$plus = $lattyware$elm_fontawesome$FontAwesome$present($lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$plus);
-var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
-var $lattyware$elm_fontawesome$FontAwesome$Attributes$xs = $elm$svg$Svg$Attributes$class('fa-xs');
 var $author$project$Components$App$Panels$MacroPanel$renderIotaBox = function (iota) {
 	return _List_fromArray(
 		[
@@ -19487,23 +19485,6 @@ var $author$project$Components$App$Panels$MacroPanel$renderIotaBox = function (i
 			_List_fromArray(
 				[
 					A2(
-					$elm$html$Html$input,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('show_macro_button'),
-							$elm$html$Html$Attributes$type_('checkbox')
-						]),
-					_List_fromArray(
-						[
-							$lattyware$elm_fontawesome$FontAwesome$Styles$css,
-							$lattyware$elm_fontawesome$FontAwesome$view(
-							A2(
-								$lattyware$elm_fontawesome$FontAwesome$styled,
-								_List_fromArray(
-									[$lattyware$elm_fontawesome$FontAwesome$Attributes$xs]),
-								$lattyware$elm_fontawesome$FontAwesome$Solid$plus))
-						])),
-					A2(
 					$elm$html$Html$div,
 					_List_fromArray(
 						[
@@ -19513,6 +19494,7 @@ var $author$project$Components$App$Panels$MacroPanel$renderIotaBox = function (i
 				]))
 		]);
 };
+var $lattyware$elm_fontawesome$FontAwesome$Attributes$xs = $elm$svg$Svg$Attributes$class('fa-xs');
 var $author$project$Components$App$Panels$MacroPanel$renderMacroDict = function (model) {
 	var renderEntry = function (entry) {
 		var signature = entry.a;
@@ -20268,6 +20250,7 @@ var $jinjor$elm_contextmenu$ContextMenu$open = F2(
 	function (transform, context) {
 		return A3($jinjor$elm_contextmenu$ContextMenu$openIf, true, transform, context);
 	});
+var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
 var $elm$svg$Svg$style = $elm$svg$Svg$trustedNode('style');
 var $elm$svg$Svg$Attributes$x1 = _VirtualDom_attribute('x1');
 var $author$project$Components$Icon$XButton$xButton = A2(

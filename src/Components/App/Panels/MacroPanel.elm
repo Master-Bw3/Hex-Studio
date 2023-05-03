@@ -66,14 +66,7 @@ renderMacroDict model =
 renderIotaBox : Iota -> List (Html msg)
 renderIotaBox iota =
     [ div [ style "display" "flex" ]
-        [ input
-            [ class "show_macro_button"
-            , type_ "checkbox"
-            ]
-            [ Icon.css
-            , Icon.plus |> Icon.styled [ Icon.xs ] |> Icon.view
-            ]
-        , div [ class "iota_box" ] (getIotaValueAsHtmlMsg 0 iota 0)
+        [ div [ class "iota_box" ] (getIotaValueAsHtmlMsg 0 iota 0)
         ]
     ]
 
