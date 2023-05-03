@@ -12433,6 +12433,102 @@ var $author$project$Logic$App$Patterns$Math$tangent = F2(
 			});
 		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
 	});
+var $author$project$Logic$App$Patterns$ReadWrite$tempReadChronical = F2(
+	function (stack, ctx) {
+		var action = F2(
+			function (_v1, context) {
+				return _Utils_Tuple2(
+					function () {
+						var _v0 = context.heldItem;
+						switch (_v0.$) {
+							case 'NoItem':
+								return $elm$core$Array$empty;
+							case 'Trinket':
+								return $elm$core$Array$empty;
+							case 'Cypher':
+								return $elm$core$Array$empty;
+							case 'Artifact':
+								return $elm$core$Array$empty;
+							case 'Focus':
+								return $elm$core$Array$fromList(
+									_List_fromArray(
+										[
+											A2($elm$core$Maybe$withDefault, $author$project$Logic$App$Types$Null, context.heldItemContent)
+										]));
+							case 'Spellbook':
+								return $elm$core$Array$fromList(
+									_List_fromArray(
+										[
+											A2($elm$core$Maybe$withDefault, $author$project$Logic$App$Types$Null, context.heldItemContent)
+										]));
+							default:
+								return $elm$core$Array$fromList(
+									_List_fromArray(
+										[
+											$author$project$Logic$App$Types$Number($elm$core$Basics$pi)
+										]));
+						}
+					}(),
+					context);
+			});
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, action);
+	});
+var $author$project$Logic$App$Patterns$ReadWrite$tempWriteChronical = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (_v1, iota, context) {
+				var _v0 = context.heldItem;
+				switch (_v0.$) {
+					case 'NoItem':
+						return _Utils_Tuple2(
+							$elm$core$Array$fromList(
+								_List_fromArray(
+									[iota])),
+							context);
+					case 'Trinket':
+						return _Utils_Tuple2(
+							$elm$core$Array$fromList(
+								_List_fromArray(
+									[iota])),
+							context);
+					case 'Cypher':
+						return _Utils_Tuple2(
+							$elm$core$Array$fromList(
+								_List_fromArray(
+									[iota])),
+							context);
+					case 'Artifact':
+						return _Utils_Tuple2(
+							$elm$core$Array$fromList(
+								_List_fromArray(
+									[iota])),
+							context);
+					case 'Focus':
+						return _Utils_Tuple2(
+							$elm$core$Array$empty,
+							_Utils_update(
+								context,
+								{
+									heldItemContent: $elm$core$Maybe$Just(iota)
+								}));
+					case 'Spellbook':
+						return _Utils_Tuple2(
+							$elm$core$Array$empty,
+							_Utils_update(
+								context,
+								{
+									heldItemContent: $elm$core$Maybe$Just(iota)
+								}));
+					default:
+						return _Utils_Tuple2(
+							$elm$core$Array$fromList(
+								_List_fromArray(
+									[iota])),
+							context);
+				}
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
+	});
 var $author$project$Logic$App$Patterns$Math$toSet = F2(
 	function (stack, ctx) {
 		var constructSet = F2(
@@ -13499,9 +13595,9 @@ function $author$project$Logic$App$Patterns$PatternRegistry$cyclic$patternRegist
 					{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'akashic/write', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eeeweeeeede', startDirection: $author$project$Logic$App$Types$East},
 					{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Charon\'s Gambit', internalName: 'halt', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqdee', startDirection: $author$project$Logic$App$Types$Southwest},
 					{action: $author$project$Logic$App$Patterns$ReadWrite$read, displayName: 'Scribe\'s Reflection', internalName: 'read', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqqqqq', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Chronicler\'s Purification', internalName: 'read/entity', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wawqwqwqwqwqw', startDirection: $author$project$Logic$App$Types$East},
+					{action: $author$project$Logic$App$Patterns$ReadWrite$tempReadChronical, displayName: 'Chronicler\'s Purification', internalName: 'read/entity', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wawqwqwqwqwqw', startDirection: $author$project$Logic$App$Types$East},
 					{action: $author$project$Logic$App$Patterns$ReadWrite$write, displayName: 'Scribe\'s Gambit', internalName: 'write', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'deeeee', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Chronicler\'s Gambit', internalName: 'write/entity', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wdwewewewewew', startDirection: $author$project$Logic$App$Types$East},
+					{action: $author$project$Logic$App$Patterns$ReadWrite$tempWriteChronical, displayName: 'Chronicler\'s Gambit', internalName: 'write/entity', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wdwewewewewew', startDirection: $author$project$Logic$App$Types$East},
 					{action: $author$project$Logic$App$Patterns$ReadWrite$readable, displayName: 'Auditor\'s Reflection', internalName: 'readable', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqqqqqe', startDirection: $author$project$Logic$App$Types$East},
 					{
 					action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
@@ -17082,21 +17178,23 @@ var $author$project$Main$update = F2(
 							}));
 				case 'SetGridScale':
 					var scale = msg.a;
-					return _Utils_Tuple2(
-						$author$project$Logic$App$Grid$sortPatterns(
-							_Utils_update(
-								model,
-								{
-									grid: _Utils_update(
-										grid,
-										{
-											points: A5($author$project$Components$App$Grid$updateGridPoints, grid.width, grid.height, model.patternArray, _List_Nil, scale)
-										}),
-									settings: _Utils_update(
-										settings,
-										{gridScale: scale})
-								})),
-						$elm$core$Platform$Cmd$none);
+					var $temp$msg = $author$project$Logic$App$Msg$SetTimelineIndex(model.timelineIndex),
+						$temp$model = $author$project$Logic$App$Grid$sortPatterns(
+						_Utils_update(
+							model,
+							{
+								grid: _Utils_update(
+									grid,
+									{
+										points: A5($author$project$Components$App$Grid$updateGridPoints, grid.width, grid.height, model.patternArray, _List_Nil, scale)
+									}),
+								settings: _Utils_update(
+									settings,
+									{gridScale: scale})
+							}));
+					msg = $temp$msg;
+					model = $temp$model;
+					continue update;
 				case 'WindowResize':
 					return _Utils_Tuple2(
 						model,
@@ -17946,6 +18044,62 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 			$elm$json$Json$Encode$string(string));
 	});
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
+var $author$project$Logic$App$ImportExport$ExportAsGiveCommand$exportAsGiveCommand = function (patternArray) {
+	var singatureList = A2(
+		$elm$core$List$map,
+		function (pattern) {
+			return pattern.signature;
+		},
+		$elm$core$List$reverse(
+			$elm$core$Array$toList(patternArray)));
+	var patternStartString = '{\"hexcasting:type\": \"hexcasting:pattern\", \"hexcasting:data\": {angles: [B; ';
+	var patternEndString = '], start_dir: 0b}}';
+	var mapAngleToBytes = function (angle) {
+		switch (angle) {
+			case 'w':
+				return '0B';
+			case 'e':
+				return '1B';
+			case 'd':
+				return '2B';
+			case 'a':
+				return '4B';
+			case 'q':
+				return '5B';
+			default:
+				return '3B';
+		}
+	};
+	var commandStartString = '/give @p hexcasting:focus{data: {\"hexcasting:type\": \"hexcasting:list\", \"hexcasting:data\": [';
+	var commandEndString = ']}} 1';
+	return $elm$core$String$concat(
+		_List_fromArray(
+			[
+				commandStartString,
+				A2(
+				$elm$core$String$join,
+				', ',
+				A2(
+					$elm$core$List$map,
+					function (signature) {
+						return $elm$core$String$concat(
+							_List_fromArray(
+								[
+									patternStartString,
+									A2(
+									$elm$core$String$join,
+									', ',
+									A2(
+										$elm$core$List$map,
+										mapAngleToBytes,
+										A2($elm$core$String$split, '', signature))),
+									patternEndString
+								]));
+					},
+					singatureList)),
+				commandEndString
+			]));
+};
 var $author$project$Logic$App$ImportExport$ExportAsText$exportPatternsAsLineList = function (patternArray) {
 	var mapPatternToLine = F2(
 		function (pattern, accumulator) {
@@ -18050,7 +18204,8 @@ var $author$project$Components$App$Overlays$ExportTextOverlay$exportTextOverlay 
 		return _List_Nil;
 	} else {
 		var patternText = $author$project$Logic$App$ImportExport$ExportAsText$exportPatternsAsLineList(
-			A2($elm$core$Array$map, $elm$core$Tuple$first, model.patternArray));
+			A2($elm$core$Array$map, $elm$core$Tuple$first, model.patternArray)) + ('\n-----------------------\n' + $author$project$Logic$App$ImportExport$ExportAsGiveCommand$exportAsGiveCommand(
+			A2($elm$core$Array$map, $elm$core$Tuple$first, model.patternArray)));
 		return _List_fromArray(
 			[
 				A2(
@@ -20187,13 +20342,31 @@ var $author$project$Components$Icon$XButton$xButton = A2(
 						]))
 				]))
 		]));
-var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F7(
-	function (patternList, dragoverIndex, dragstartIndex, overDragHandle, insertionPoint, macroDict, timelineIndex) {
+var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F8(
+	function (patternList, dragoverIndex, dragstartIndex, overDragHandle, insertionPoint, macroDict, timeline, timelineIndex) {
+		var patterns = $elm$core$List$unzip(
+			$elm$core$Array$toList(patternList)).a;
+		var fixedTimeline = ($elm$core$Array$length(timeline) < 2) ? A2(
+			$elm$core$Array$repeat,
+			2,
+			{patternIndex: -1, stack: $elm$core$Array$empty}) : timeline;
+		var timelinePatternIndex = (timelineIndex >= 0) ? A2(
+			$elm$core$Maybe$withDefault,
+			$elm$core$Array$length(timeline),
+			A2(
+				$elm$core$Maybe$map,
+				function ($) {
+					return $.patternIndex;
+				},
+				A2(
+					$elm$core$Array$get,
+					timelineIndex,
+					$elm_community$array_extra$Array$Extra$reverse(fixedTimeline)))) : (-1);
 		var renderPattern = F2(
 			function (index, pattern) {
 				var opacity = ((!pattern.active) || (_Utils_cmp(
 					($elm$core$Array$length(patternList) - index) - 1,
-					timelineIndex) > 0)) ? A2($elm$html$Html$Attributes$style, 'opacity', '50%') : A2($elm$html$Html$Attributes$style, '', '');
+					timelinePatternIndex) > 0)) ? A2($elm$html$Html$Attributes$style, 'opacity', '50%') : A2($elm$html$Html$Attributes$style, '', '');
 				var isMacro = $author$project$Logic$App$Utils$Utils$isJust(
 					A2($elm$core$Dict$get, pattern.signature, macroDict));
 				return _Utils_ap(
@@ -20657,8 +20830,6 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F7(
 									}()) : _List_Nil))
 						]));
 			});
-		var patterns = $elm$core$List$unzip(
-			$elm$core$Array$toList(patternList)).a;
 		var list = _Utils_ap(
 			$elm$core$List$concat(
 				A2($elm$core$List$indexedMap, renderPattern, patterns)),
@@ -20733,7 +20904,7 @@ var $author$project$Components$App$Panels$PatternPanel$patternPanel = function (
 					$elm$html$Html$Attributes$id('pattern_draggable_container'),
 					$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$onDropTarget($author$project$Components$App$Panels$PatternPanel$dropTargetConfig)),
 				$elm$core$List$reverse(
-					A7($author$project$Components$App$Panels$PatternPanel$renderPatternList, model.patternArray, model.ui.mouseOverElementIndex, model.ui.dragging.b, model.ui.overDragHandle, model.insertionPoint, model.castingContext.macros, model.timelineIndex))),
+					A8($author$project$Components$App$Panels$PatternPanel$renderPatternList, model.patternArray, model.ui.mouseOverElementIndex, model.ui.dragging.b, model.ui.overDragHandle, model.insertionPoint, model.castingContext.macros, model.timeline, model.timelineIndex))),
 				A2(
 				$elm$html$Html$div,
 				_List_fromArray(

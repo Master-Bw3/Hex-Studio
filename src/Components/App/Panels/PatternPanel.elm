@@ -1,6 +1,7 @@
 module Components.App.Panels.PatternPanel exposing (patternPanel)
 
 import Array exposing (Array(..))
+import Array.Extra as Array
 import Components.App.Panels.Utils exposing (visibilityToDisplayStyle)
 import Components.App.PatternAutoComplete exposing (..)
 import Components.Icon.MoveButton exposing (moveButton)
@@ -23,7 +24,7 @@ import Json.Decode as Json exposing (Decoder, at, float, int, map4)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (MouseMoveData, Msg(..))
 import Logic.App.Patterns.PatternRegistry exposing (patternRegistry)
-import Logic.App.Types exposing (ContextMenuContext(..), EntityType(..), GridPoint, Iota(..), IotaType(..), Panel(..), Pattern)
+import Logic.App.Types exposing (ContextMenuContext(..), EntityType(..), GridPoint, Iota(..), IotaType(..), Panel(..), Pattern, Timeline)
 import Logic.App.Utils.GetIotaValue exposing (getIotaFromString, getIotaTypeAsString, getIotaTypeFromString)
 import Logic.App.Utils.Utils exposing (ifThenElse, insert, isJust)
 import Settings.Theme exposing (accent1, accent2)
@@ -73,6 +74,7 @@ patternPanel model =
                     model.ui.overDragHandle
                     model.insertionPoint
                     model.castingContext.macros
+                    model.timeline
                     model.timelineIndex
                 )
             )
@@ -129,9 +131,26 @@ draggedSourceConfig id =
     }
 
 
-renderPatternList : Array ( Pattern, List GridPoint ) -> Int -> Int -> Bool -> Int -> Dict String v -> Int -> List (Html Msg)
-renderPatternList patternList dragoverIndex dragstartIndex overDragHandle insertionPoint macroDict timelineIndex =
+renderPatternList : Array ( Pattern, List GridPoint ) -> Int -> Int -> Bool -> Int -> Dict String v -> Timeline -> Int -> List (Html Msg)
+renderPatternList patternList dragoverIndex dragstartIndex overDragHandle insertionPoint macroDict timeline timelineIndex =
     let
+        fixedTimeline =
+            if Array.length timeline < 2 then
+                Array.repeat 2 { stack = Array.empty, patternIndex = -1 }
+
+            else
+                timeline
+
+        timelinePatternIndex =
+            if timelineIndex >= 0 then
+                Array.reverse fixedTimeline
+                    |> Array.get timelineIndex
+                    |> Maybe.map .patternIndex
+                    |> Maybe.withDefault (Array.length timeline)
+
+            else
+                -1
+
         patterns : List Pattern
         patterns =
             Tuple.first <| List.unzip <| Array.toList patternList
@@ -143,7 +162,7 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle insert
                     isJust (Dict.get pattern.signature macroDict)
 
                 opacity =
-                    if pattern.active == False ||  Array.length patternList - index - 1 > timelineIndex then
+                    if pattern.active == False || Array.length patternList - index - 1 > timelinePatternIndex then
                         style "opacity" "50%"
 
                     else

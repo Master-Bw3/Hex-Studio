@@ -4,6 +4,7 @@ import Array exposing (Array)
 import Html exposing (Html, button, div, p, span, text, textarea)
 import Html.Attributes exposing (class, id, style, value)
 import Html.Events exposing (onClick, onInput)
+import Logic.App.ImportExport.ExportAsGiveCommand exposing (exportAsGiveCommand)
 import Logic.App.ImportExport.ExportAsText exposing (exportPatternsAsLineList)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (Msg(..))
@@ -18,7 +19,9 @@ exportTextOverlay model =
     else
         let
             patternText =
-                exportPatternsAsLineList <| Array.map Tuple.first model.patternArray
+                (exportPatternsAsLineList <| Array.map Tuple.first model.patternArray)
+                    ++ "\n-----------------------\n"
+                    ++ (exportAsGiveCommand <| Array.map Tuple.first model.patternArray)
         in
         [ div [ class "overlay" ]
             [ div
