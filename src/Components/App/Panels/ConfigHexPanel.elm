@@ -3,15 +3,21 @@ module Components.App.Panels.ConfigHexPanel exposing (..)
 import Array exposing (Array)
 import Components.App.Panels.Utils exposing (visibilityToDisplayStyle)
 import Dict
+import FontAwesome as Icon exposing (Icon)
+import FontAwesome.Attributes as Icon
+import FontAwesome.Brands as Icon
+import FontAwesome.Layering as Icon
+import FontAwesome.Solid as Icon
+import FontAwesome.Styles as Icon
 import Html exposing (..)
 import Html.Attributes exposing (class, id, style, value)
-import Html.Events exposing (onInput)
+import Html.Events exposing (onClick, onInput)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (Msg(..))
 import Logic.App.Types exposing (Iota(..), Panel(..))
+import Logic.App.Utils.EntityContext exposing (getPlayerHeldItem, getPlayerHeldItemContent)
 import Logic.App.Utils.GetHeldItemAsString exposing (getHeldItemAsString)
 import Logic.App.Utils.GetIotaValue exposing (getIotaValueAsHtmlMsg)
-import Logic.App.Utils.EntityContext exposing (getPlayerHeldItem, getPlayerHeldItemContent)
 import Settings.Theme exposing (iotaColorMap)
 
 
@@ -97,7 +103,13 @@ entitiesSection model =
             case entry of
                 ( name, { heldItem, heldItemContent } ) ->
                     div [ id "entity_section" ]
-                        [ label [ class "stored_iota_label" ] [ text <| name ++ ":" ]
+                        [ div [ style "display" "flex" ]
+                            [ button [ class "stored_iota_label", onClick (RemoveEntity name) ]
+                                [ Icon.css
+                                , Icon.trash |> Icon.styled [ Icon.sm ] |> Icon.view
+                                ]
+                            , label [ class "stored_iota_label" ] [ text <| name ++ ":" ]
+                            ]
                         , div [ id "held_item_section" ]
                             [ div
                                 [ class "input_label_box"
@@ -130,8 +142,19 @@ entitiesSection model =
                         ]
     in
     div [ id "entities_section" ]
-        (h1 [ class "entities_label" ] [ text "Entities:" ]
-            :: List.map generateEntitySection
+        ([ h1 [ class "entities_label" ] [ text "Entities:" ]
+         , div [class "input_label_box"]
+            [ input [value model.ui.entityInputField, onInput UpdateEntityInputField] []
+            , button
+                [ class "add_button"
+                , onClick (AddEntity model.ui.entityInputField)
+                ]
+                [ Icon.css
+                , Icon.plus |> Icon.styled [ Icon.sm ] |> Icon.view
+                ]
+            ]
+         ]
+            ++ List.map generateEntitySection
                 (List.filter
                     (\entry ->
                         case entry of

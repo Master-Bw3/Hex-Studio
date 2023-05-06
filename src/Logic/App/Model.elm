@@ -23,6 +23,7 @@ type alias Model =
         , patternElementMiddleLocations : List Float
         , importInput : String
         , openOverlay : Overlay
+        , entityInputField : String
         }
     , grid : Grid
     , mousePos : ( Float, Float )

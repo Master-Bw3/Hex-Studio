@@ -5910,6 +5910,7 @@ var $author$project$Main$init = function (_v0) {
 			timelineIndex: 0,
 			ui: {
 				dragging: _Utils_Tuple2(false, -1),
+				entityInputField: '',
 				importInput: '',
 				mouseOverElementIndex: -1,
 				openOverlay: $author$project$Logic$App$Types$NoOverlay,
@@ -18103,12 +18104,53 @@ var $author$project$Main$update = F2(
 								importQueue: patterns,
 								patternArray: A3($author$project$Logic$App$Utils$Utils$removeFromArray, index, index + 1, model.patternArray)
 							}));
-				default:
+				case 'SetProjectName':
 					var name = msg.a;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{projectName: name}),
+						$elm$core$Platform$Cmd$none);
+				case 'RemoveEntity':
+					var name = msg.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								castingContext: _Utils_update(
+									castingContext,
+									{
+										entities: A2($elm$core$Dict$remove, name, castingContext.entities)
+									})
+							}),
+						$elm$core$Platform$Cmd$none);
+				case 'AddEntity':
+					var name = msg.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								castingContext: _Utils_update(
+									castingContext,
+									{
+										entities: A3(
+											$elm$core$Dict$insert,
+											name,
+											{heldItem: $author$project$Logic$App$Types$NoItem, heldItemContent: $elm$core$Maybe$Nothing},
+											castingContext.entities)
+									})
+							}),
+						$elm$core$Platform$Cmd$none);
+				default:
+					var string = msg.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								ui: _Utils_update(
+									ui,
+									{entityInputField: string})
+							}),
 						$elm$core$Platform$Cmd$none);
 			}
 		}
@@ -19227,10 +19269,19 @@ var $author$project$Components$App$Menu$menu = function (model) {
 					]))
 			]));
 };
+var $author$project$Logic$App$Msg$AddEntity = function (a) {
+	return {$: 'AddEntity', a: a};
+};
 var $author$project$Logic$App$Msg$ChangeHeldItem = F2(
 	function (a, b) {
 		return {$: 'ChangeHeldItem', a: a, b: b};
 	});
+var $author$project$Logic$App$Msg$RemoveEntity = function (a) {
+	return {$: 'RemoveEntity', a: a};
+};
+var $author$project$Logic$App$Msg$UpdateEntityInputField = function (a) {
+	return {$: 'UpdateEntityInputField', a: a};
+};
 var $author$project$Logic$App$Utils$GetHeldItemAsString$getHeldItemAsString = function (heldItem) {
 	switch (heldItem.$) {
 		case 'Trinket':
@@ -19250,8 +19301,16 @@ var $author$project$Logic$App$Utils$GetHeldItemAsString$getHeldItemAsString = fu
 	}
 };
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
+var $elm$html$Html$input = _VirtualDom_node('input');
 var $elm$html$Html$label = _VirtualDom_node('label');
 var $elm$html$Html$option = _VirtualDom_node('option');
+var $lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$plus = A4(
+	$lattyware$elm_fontawesome$FontAwesome$IconDef,
+	'fas',
+	'plus',
+	_Utils_Tuple2(448, 512),
+	_Utils_Tuple2('M432 256c0 17.69-14.33 32.01-32 32.01H256v144c0 17.69-14.33 31.99-32 31.99s-32-14.3-32-31.99v-144H48c-17.67 0-32-14.32-32-32.01s14.33-31.99 32-31.99H192v-144c0-17.69 14.33-32.01 32-32.01s32 14.32 32 32.01v144h144C417.7 224 432 238.3 432 256z', $elm$core$Maybe$Nothing));
+var $lattyware$elm_fontawesome$FontAwesome$Solid$plus = $lattyware$elm_fontawesome$FontAwesome$present($lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$plus);
 var $author$project$Settings$Theme$iotaColorMap = function (iota) {
 	switch (iota.$) {
 		case 'Null':
@@ -19434,6 +19493,13 @@ var $author$project$Components$App$Panels$ConfigHexPanel$renderIotaBox = functio
 		]);
 };
 var $elm$html$Html$select = _VirtualDom_node('select');
+var $lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$trash = A4(
+	$lattyware$elm_fontawesome$FontAwesome$IconDef,
+	'fas',
+	'trash',
+	_Utils_Tuple2(448, 512),
+	_Utils_Tuple2('M135.2 17.69C140.6 6.848 151.7 0 163.8 0H284.2C296.3 0 307.4 6.848 312.8 17.69L320 32H416C433.7 32 448 46.33 448 64C448 81.67 433.7 96 416 96H32C14.33 96 0 81.67 0 64C0 46.33 14.33 32 32 32H128L135.2 17.69zM394.8 466.1C393.2 492.3 372.3 512 346.9 512H101.1C75.75 512 54.77 492.3 53.19 466.1L31.1 128H416L394.8 466.1z', $elm$core$Maybe$Nothing));
+var $lattyware$elm_fontawesome$FontAwesome$Solid$trash = $lattyware$elm_fontawesome$FontAwesome$present($lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$trash);
 var $author$project$Components$App$Panels$ConfigHexPanel$entitiesSection = function (model) {
 	var generateEntitySection = function (entry) {
 		var name = entry.a;
@@ -19448,14 +19514,41 @@ var $author$project$Components$App$Panels$ConfigHexPanel$entitiesSection = funct
 			_List_fromArray(
 				[
 					A2(
-					$elm$html$Html$label,
+					$elm$html$Html$div,
 					_List_fromArray(
 						[
-							$elm$html$Html$Attributes$class('stored_iota_label')
+							A2($elm$html$Html$Attributes$style, 'display', 'flex')
 						]),
 					_List_fromArray(
 						[
-							$elm$html$Html$text(name + ':')
+							A2(
+							$elm$html$Html$button,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('stored_iota_label'),
+									$elm$html$Html$Events$onClick(
+									$author$project$Logic$App$Msg$RemoveEntity(name))
+								]),
+							_List_fromArray(
+								[
+									$lattyware$elm_fontawesome$FontAwesome$Styles$css,
+									$lattyware$elm_fontawesome$FontAwesome$view(
+									A2(
+										$lattyware$elm_fontawesome$FontAwesome$styled,
+										_List_fromArray(
+											[$lattyware$elm_fontawesome$FontAwesome$Attributes$sm]),
+										$lattyware$elm_fontawesome$FontAwesome$Solid$trash))
+								])),
+							A2(
+							$elm$html$Html$label,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('stored_iota_label')
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text(name + ':')
+								]))
 						])),
 					A2(
 					$elm$html$Html$div,
@@ -19577,18 +19670,55 @@ var $author$project$Components$App$Panels$ConfigHexPanel$entitiesSection = funct
 			[
 				$elm$html$Html$Attributes$id('entities_section')
 			]),
-		A2(
-			$elm$core$List$cons,
-			A2(
-				$elm$html$Html$h1,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$class('entities_label')
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text('Entities:')
-					])),
+		_Utils_ap(
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$h1,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('entities_label')
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Entities:')
+						])),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('input_label_box')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$input,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$value(model.ui.entityInputField),
+									$elm$html$Html$Events$onInput($author$project$Logic$App$Msg$UpdateEntityInputField)
+								]),
+							_List_Nil),
+							A2(
+							$elm$html$Html$button,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('add_button'),
+									$elm$html$Html$Events$onClick(
+									$author$project$Logic$App$Msg$AddEntity(model.ui.entityInputField))
+								]),
+							_List_fromArray(
+								[
+									$lattyware$elm_fontawesome$FontAwesome$Styles$css,
+									$lattyware$elm_fontawesome$FontAwesome$view(
+									A2(
+										$lattyware$elm_fontawesome$FontAwesome$styled,
+										_List_fromArray(
+											[$lattyware$elm_fontawesome$FontAwesome$Attributes$sm]),
+										$lattyware$elm_fontawesome$FontAwesome$Solid$plus))
+								]))
+						]))
+				]),
 			A2(
 				$elm$core$List$map,
 				generateEntitySection,
@@ -19805,7 +19935,6 @@ var $author$project$Logic$App$Msg$ChangeMacroName = F2(
 var $author$project$Logic$App$Msg$InputPattern = function (a) {
 	return {$: 'InputPattern', a: a};
 };
-var $elm$html$Html$input = _VirtualDom_node('input');
 var $elm$core$List$intersperse = F2(
 	function (sep, xs) {
 		if (!xs.b) {
@@ -19824,13 +19953,6 @@ var $elm$core$List$intersperse = F2(
 			return A2($elm$core$List$cons, hd, spersed);
 		}
 	});
-var $lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$plus = A4(
-	$lattyware$elm_fontawesome$FontAwesome$IconDef,
-	'fas',
-	'plus',
-	_Utils_Tuple2(448, 512),
-	_Utils_Tuple2('M432 256c0 17.69-14.33 32.01-32 32.01H256v144c0 17.69-14.33 31.99-32 31.99s-32-14.3-32-31.99v-144H48c-17.67 0-32-14.32-32-32.01s14.33-31.99 32-31.99H192v-144c0-17.69 14.33-32.01 32-32.01s32 14.32 32 32.01v144h144C417.7 224 432 238.3 432 256z', $elm$core$Maybe$Nothing));
-var $lattyware$elm_fontawesome$FontAwesome$Solid$plus = $lattyware$elm_fontawesome$FontAwesome$present($lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$plus);
 var $author$project$Components$App$Panels$MacroPanel$renderIotaBox = function (iota) {
 	return _List_fromArray(
 		[

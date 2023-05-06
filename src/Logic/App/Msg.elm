@@ -60,7 +60,9 @@ type Msg
     | ContextMenuMsg (ContextMenu.Msg ContextMenuContext)
     | ExpandMacro String Int
     | SetProjectName String
-
+    | RemoveEntity String
+    | AddEntity String
+    | UpdateEntityInputField String
 
 type alias MouseMoveData =
     { pageX : Int

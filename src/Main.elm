@@ -74,6 +74,7 @@ init _ =
             , overDragHandle = False
             , importInput = ""
             , openOverlay = NoOverlay
+            , entityInputField = ""
             }
       , grid =
             { height = 0
@@ -95,7 +96,7 @@ init _ =
             }
       , castingContext =
             { ravenmind = Nothing
-            , entities = Dict.fromList [("Caster", { heldItem = NoItem, heldItemContent = Nothing }), ("OwO", { heldItem = NoItem, heldItemContent = Nothing })]--Dict.singleton "Caster" { heldItem = NoItem, heldItemContent = Nothing }
+            , entities = Dict.fromList [ ( "Caster", { heldItem = NoItem, heldItemContent = Nothing } ), ( "OwO", { heldItem = NoItem, heldItemContent = Nothing } ) ] --Dict.singleton "Caster" { heldItem = NoItem, heldItemContent = Nothing }
             , macros = Dict.empty
             }
       , time = 0
@@ -865,6 +866,15 @@ update msg model =
 
         SetProjectName name ->
             ( { model | projectName = name }, Cmd.none )
+
+        RemoveEntity name ->
+            ( { model | castingContext = { castingContext | entities = Dict.remove name castingContext.entities } }, Cmd.none )
+
+        AddEntity name ->
+            ( { model | castingContext = { castingContext | entities = Dict.insert name { heldItem = NoItem, heldItemContent = Nothing } castingContext.entities } }, Cmd.none )
+
+        UpdateEntityInputField string ->
+            ( { model | ui = { ui | entityInputField = string } }, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
