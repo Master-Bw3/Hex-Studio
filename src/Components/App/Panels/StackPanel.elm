@@ -17,7 +17,7 @@ stackPanel model =
             List.member StackPanel model.ui.openPanels
     in
     div [ id "stack_panel", class "panel", visibilityToDisplayStyle visibility ]
-        [ h1 [ class "panel_title" ] [ text "Stack ∧" ]
+        [ h1 [ class "panel_title" ] [ text "Stack" ]
         , div
             [ class "scroll_container" ]
             (renderStack model.stack)

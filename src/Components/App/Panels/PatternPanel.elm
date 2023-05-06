@@ -64,7 +64,7 @@ patternPanel model =
         [ h1
             [ class "panel_title"
             ]
-            [ text "Pattern Order ∨" ]
+            [ text "Patterns" ]
         , div
             (id "pattern_draggable_container" :: onDropTarget dropTargetConfig)
             (List.reverse
