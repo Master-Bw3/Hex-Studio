@@ -2,16 +2,13 @@ module Components.App.Grid exposing
     ( addNearbyPoint
     , applyActivePathToGrid
     , applyPathToGrid
-    , applyUsedPointsToGrid
     , distanceBetweenCoordinates
-    , emptyGridpoint
     , genDrawnPointsFromPatternArray
     , generateGrid
     , getClosestPoint
     , getGridpointFromOffsetCoordinates
     , grid
     , spacing
-    , updateCoords
     , updateGridPoints
     , updateUsedGridPoints
     , updatemidLineOffsets
@@ -22,6 +19,7 @@ import Html exposing (..)
 import Html.Attributes as Attr
 import Html.Events.Extra.Mouse as MouseEvent
 import Html.Events.Extra.Touch as TouchEvent
+import Logic.App.Grid exposing (emptyGridpoint, applyUsedPointsToGrid)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (Msg(..))
 import Logic.App.Patterns.PatternRegistry exposing (unknownPattern)
@@ -44,18 +42,6 @@ spacing scale =
 
 verticalSpacing scale =
     (spacing scale * sqrt 3.0) / 2
-
-
-emptyGridpoint =
-    { x = 0
-    , y = 0
-    , offsetX = 0
-    , offsetY = 0
-    , radius = 0
-    , used = False
-    , color = ""
-    , connectedPoints = []
-    }
 
 
 grid : Model -> Html Msg
@@ -275,52 +261,6 @@ applyPathToGrid gridPoints pointsToAdd =
             case replacedPnt of
                 Just point ->
                     { pnt | used = True, connectedPoints = point.connectedPoints, color = accent2 }
-
-                Nothing ->
-                    pnt
-
-        --find matching points
-        --replace grid points with matching active points
-    in
-    List.map (\row -> List.map replace row) gridPoints
-
-
-updateCoords : List (List GridPoint) -> List GridPoint -> List GridPoint
-updateCoords gridPoints pointsToUpdate =
-    let
-        update : GridPoint -> List GridPoint -> List GridPoint
-        update pnt accumulator =
-            let
-                replacedPnt =
-                    List.concat gridPoints
-                        |> List.filter (\activePnt -> ( activePnt.offsetX, activePnt.offsetY ) == ( pnt.offsetX, pnt.offsetY ))
-                        |> List.head
-            in
-            case replacedPnt of
-                Just point ->
-                    { pnt | used = True, color = accent2, x = point.x, y = point.y } :: accumulator
-
-                Nothing ->
-                    accumulator
-
-        --find matching points
-        --replace grid points with matching active points
-    in
-    List.foldl update [] pointsToUpdate
-
-
-applyUsedPointsToGrid : List (List GridPoint) -> List GridPoint -> List (List GridPoint)
-applyUsedPointsToGrid gridPoints pointsToChange =
-    let
-        replace : GridPoint -> GridPoint
-        replace pnt =
-            let
-                replacedPnt =
-                    List.head <| List.filter (\activePnt -> ( activePnt.offsetX, activePnt.offsetY ) == ( pnt.offsetX, pnt.offsetY )) pointsToChange
-            in
-            case replacedPnt of
-                Just _ ->
-                    { pnt | used = True }
 
                 Nothing ->
                     pnt

@@ -1,14 +1,71 @@
 module Logic.App.Grid exposing (..)
 
 import Array exposing (Array)
-import Components.App.Grid exposing (applyUsedPointsToGrid, emptyGridpoint, updateCoords)
 import List.Extra as List
 import Logic.App.Model exposing (Model)
 import Logic.App.Types exposing (Direction(..), Grid, GridPoint, Pattern)
 import Logic.App.Utils.DirectionMap exposing (directionMap)
 import Logic.App.Utils.LetterMap exposing (letterMap)
 import Logic.App.Utils.Utils exposing (unshift)
-import Settings.Theme exposing (accent1)
+import Settings.Theme exposing (accent1, accent2)
+
+
+updateCoords : List (List GridPoint) -> List GridPoint -> List GridPoint
+updateCoords gridPoints pointsToUpdate =
+    let
+        update : GridPoint -> List GridPoint -> List GridPoint
+        update pnt accumulator =
+            let
+                replacedPnt =
+                    List.concat gridPoints
+                        |> List.filter (\activePnt -> ( activePnt.offsetX, activePnt.offsetY ) == ( pnt.offsetX, pnt.offsetY ))
+                        |> List.head
+            in
+            case replacedPnt of
+                Just point ->
+                    { pnt | used = True, color = accent2, x = point.x, y = point.y } :: accumulator
+
+                Nothing ->
+                    accumulator
+
+        --find matching points
+        --replace grid points with matching active points
+    in
+    List.foldl update [] pointsToUpdate
+
+
+applyUsedPointsToGrid : List (List GridPoint) -> List GridPoint -> List (List GridPoint)
+applyUsedPointsToGrid gridPoints pointsToChange =
+    let
+        replace : GridPoint -> GridPoint
+        replace pnt =
+            let
+                replacedPnt =
+                    List.head <| List.filter (\activePnt -> ( activePnt.offsetX, activePnt.offsetY ) == ( pnt.offsetX, pnt.offsetY )) pointsToChange
+            in
+            case replacedPnt of
+                Just _ ->
+                    { pnt | used = True }
+
+                Nothing ->
+                    pnt
+
+        --find matching points
+        --replace grid points with matching active points
+    in
+    List.map (\row -> List.map replace row) gridPoints
+
+
+emptyGridpoint =
+    { x = 0
+    , y = 0
+    , offsetX = 0
+    , offsetY = 0
+    , radius = 0
+    , used = False
+    , color = ""
+    , connectedPoints = []
+    }
 
 
 clearGrid : List (List GridPoint) -> List (List GridPoint)
@@ -247,3 +304,47 @@ sortPatterns model =
         | grid = drawPatternsResult.grid
         , patternArray = drawPatternsResult.patternArray
     }
+
+
+gridpointToMidpoints : GridPoint -> List ( Float, Float )
+gridpointToMidpoints gridPoint =
+    List.map
+        (\connection ->
+            ( toFloat (gridPoint.offsetX + connection.offsetX) / 2
+            , toFloat (gridPoint.offsetY + connection.offsetY) / 2
+            )
+        )
+        gridPoint.connectedPoints
+
+
+
+-- returns the points relative to the geometric center of the shape
+
+
+centerMidpoints : List ( Float, Float ) -> List ( Float, Float )
+centerMidpoints points =
+    let
+        getLeftmostAndTopmostValues coord accumulator =
+            ( min (Tuple.first coord) (Tuple.first accumulator), min (Tuple.second coord) (Tuple.second accumulator) )
+
+        leftmostAndTopmostValues =
+            List.foldl getLeftmostAndTopmostValues ( 0.0, 0.0 ) points
+
+        getRightmostAndBottommostValues coord accumulator =
+            ( max (Tuple.first coord) (Tuple.first accumulator), max (Tuple.second coord) (Tuple.second accumulator) )
+
+        rightmostAndBottommostValues =
+            List.foldl getRightmostAndBottommostValues ( 0.0, 0.0 ) points
+
+        center =
+            ( (Tuple.first leftmostAndTopmostValues + Tuple.first rightmostAndBottommostValues) / 2
+            , (Tuple.second leftmostAndTopmostValues + Tuple.second rightmostAndBottommostValues) / 2
+            )
+    in
+    List.map
+        (\point ->
+            ( Tuple.first point - Tuple.first center
+            , Tuple.second point - Tuple.second center
+            )
+        )
+        points

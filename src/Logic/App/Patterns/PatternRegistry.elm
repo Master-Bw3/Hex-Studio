@@ -4,6 +4,7 @@ import Array exposing (Array)
 import Array.Extra as Array
 import Dict exposing (Dict)
 import FontAwesome.Solid exposing (signature)
+import Logic.App.Grid exposing (centerMidpoints, drawPattern, gridpointToMidpoints)
 import Logic.App.Patterns.Circles exposing (..)
 import Logic.App.Patterns.Lists exposing (..)
 import Logic.App.Patterns.Math exposing (..)
@@ -18,6 +19,7 @@ import Logic.App.Utils.RegexPatterns exposing (bookkeepersPattern)
 import Logic.App.Utils.Utils exposing (ifThenElse, unshift)
 import Ports.HexNumGen as HexNumGen
 import Regex
+import Set exposing (Set)
 import Settings.Theme exposing (..)
 
 
@@ -63,6 +65,29 @@ getPatternFromSignature maybeMacros signature =
                     parseBookkeeperResult
 
                 else
+                    let
+                        getGreatSpell =
+                            let
+                                getCenterdMidpoints sig direction =
+                                    (drawPattern 0 0 { unknownPattern | signature = sig, startDirection = direction }).points
+                                        |> List.concatMap gridpointToMidpoints
+                                        |> centerMidpoints
+                                        |> Set.fromList
+
+                                greatSpellMatches =
+                                    List.concatMap
+                                        (\direction ->
+                                            List.filter
+                                                (\greatSpell ->
+                                                    Set.isEmpty <|
+                                                        Set.diff (getCenterdMidpoints signature direction) (getCenterdMidpoints greatSpell.signature East)
+                                                )
+                                                greatSpellRegistry
+                                        )
+                                        [ Northeast, East, Southeast, Southwest, West, Northwest ]
+                            in
+                            Maybe.withDefault { unknownPattern | signature = signature, displayName = "Pattern " ++ "\"" ++ signature ++ "\"" } <| List.head greatSpellMatches
+                    in
                     case maybeMacros of
                         Just macros ->
                             case Dict.get signature macros of
@@ -82,10 +107,10 @@ getPatternFromSignature maybeMacros signature =
                                             }
 
                                 Nothing ->
-                                    { unknownPattern | signature = signature, displayName = "Pattern " ++ "\"" ++ signature ++ "\"" }
+                                    getGreatSpell
 
                         Nothing ->
-                            { unknownPattern | signature = signature, displayName = "Pattern " ++ "\"" ++ signature ++ "\"" }
+                            getGreatSpell
 
 
 getPatternFromName : Maybe (Dict String ( String, Direction, Iota )) -> String -> ( Pattern, Cmd msg )
@@ -336,6 +361,38 @@ parseBookkeeperSignature signature =
                 unknownPattern
 
 
+greatSpellRegistry : List Pattern
+greatSpellRegistry =
+    [ { signature = "qdwedadedae", internalName = "create_lava", action = noAction, displayName = "Create Lava", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    , { signature = "qqqqaawawaedd", internalName = "potion/regeneration", action = noAction, displayName = "White Sun's Zenith", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    , { signature = "qqqaawawaeqdd", internalName = "potion/night_vision", action = noAction, displayName = "Blue Sun's Zenith", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    , { signature = "qqaawawaeqqdd", internalName = "potion/absorption", action = noAction, displayName = "Black Sun's Zenith", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    , { signature = "qaawawaeqqqdd", internalName = "potion/haste", action = noAction, displayName = "Red Sun's Zenith", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    , { signature = "aawawaeqqqqdd", internalName = "potion/strength", action = noAction, displayName = "Green Sun's Zenith", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    , { signature = "waadwawdaaweewq", internalName = "lightning", action = noAction, displayName = "Summon Lightning", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    , { signature = "wwweeewwweewdawdwad", internalName = "summon_rain", action = noAction, displayName = "Summon Rain", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    , { signature = "eeewwweeewwaqqddqdqd", internalName = "dispel_rain", action = noAction, displayName = "Dispel Rain", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    , { signature = "wwwqqqwwwqqeqqwwwqqwqqdqqqqqdqq", internalName = "teleport", action = noAction, displayName = "Greater Teleport", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    , { signature = "waeawaeqqqwqwqqwq", internalName = "sentinel/create/great", action = noAction, displayName = "Summon Greater Sentinel", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    , { signature = "aqqqaqwwaqqqqqeqaqqqawwqwqwqwqwqw", internalName = "craft/battery", action = noAction, displayName = "Craft Phial", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    , { signature = "qeqwqwqwqwqeqaeqeaqeqaeqaqded", internalName = "brainsweep", action = noAction, displayName = "Flay Mind", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    ]
+        |> List.map
+            (\pattern ->
+                { signature = pattern.signature
+                , startDirection = pattern.startDirection
+                , internalName = pattern.internalName
+                , action = pattern.action
+                , metaAction = None
+                , displayName = pattern.displayName
+                , outputOptions = pattern.outputOptions
+                , selectedOutput = pattern.selectedOutput
+                , color = accent1
+                , active = True
+                }
+            )
+
+
 patternRegistry : List Pattern
 patternRegistry =
     [ { signature = "wawawddew", internalName = "interop/gravity/get", action = noAction, displayName = "", outputOptions = [], selectedOutput = Nothing, startDirection = East }
@@ -514,6 +571,7 @@ patternRegistry =
                 , active = True
                 }
             )
+        |> (++) greatSpellRegistry
         |> (++) metapatternRegistry
 
 

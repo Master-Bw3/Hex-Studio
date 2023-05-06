@@ -6942,7 +6942,7 @@ var $author$project$Components$App$Grid$distanceBetweenCoordinates = F2(
 		return $elm$core$Basics$sqrt(
 			A2($elm$core$Basics$pow, x1 - x2, 2) + A2($elm$core$Basics$pow, y1 - y2, 2));
 	});
-var $author$project$Components$App$Grid$emptyGridpoint = {color: '', connectedPoints: _List_Nil, offsetX: 0, offsetY: 0, radius: 0, used: false, x: 0, y: 0};
+var $author$project$Logic$App$Grid$emptyGridpoint = {color: '', connectedPoints: _List_Nil, offsetX: 0, offsetY: 0, radius: 0, used: false, x: 0, y: 0};
 var $elm$core$List$filter = F2(
 	function (isGood, list) {
 		return A3(
@@ -7011,7 +7011,7 @@ var $author$project$Components$App$Grid$getClosestPoint = F3(
 			});
 		return A2(
 			$elm$core$Maybe$withDefault,
-			$author$project$Components$App$Grid$emptyGridpoint,
+			$author$project$Logic$App$Grid$emptyGridpoint,
 			$elm$core$List$head(
 				A2(
 					$elm$core$List$sortWith,
@@ -7045,11 +7045,11 @@ var $author$project$Components$App$Grid$addNearbyPoint = function (model) {
 		$elm$core$List$tail(modelGrid.drawing.activePath));
 	var prevPrevNode = A2(
 		$elm$core$Maybe$withDefault,
-		$author$project$Components$App$Grid$emptyGridpoint,
+		$author$project$Logic$App$Grid$emptyGridpoint,
 		$elm$core$List$head(otherNodes));
 	var prevGridNode = A2(
 		$elm$core$Maybe$withDefault,
-		$author$project$Components$App$Grid$emptyGridpoint,
+		$author$project$Logic$App$Grid$emptyGridpoint,
 		$elm$core$List$head(modelGrid.drawing.activePath));
 	var prevNode = A2(
 		$elm$core$Maybe$withDefault,
@@ -8656,7 +8656,7 @@ var $author$project$Logic$App$Stack$EvalStack$applyPatternsToStack = F3(
 			false,
 			false);
 	});
-var $author$project$Components$App$Grid$applyUsedPointsToGrid = F2(
+var $author$project$Logic$App$Grid$applyUsedPointsToGrid = F2(
 	function (gridPoints, pointsToChange) {
 		var replace = function (pnt) {
 			var replacedPnt = $elm$core$List$head(
@@ -8835,7 +8835,7 @@ var $author$project$Logic$App$Grid$drawPattern = F3(
 			});
 		var pointConnectionToGridPoint = function (point) {
 			return _Utils_update(
-				$author$project$Components$App$Grid$emptyGridpoint,
+				$author$project$Logic$App$Grid$emptyGridpoint,
 				{color: point.color, offsetX: point.offsetX, offsetY: point.offsetY, used: true});
 		};
 		var gridpointToPointConnection = function (point) {
@@ -9009,7 +9009,7 @@ var $author$project$Logic$App$Grid$drawPattern = F3(
 		var grid = A3(
 			$elm$core$List$foldr,
 			connectPoints,
-			_Utils_Tuple2($author$project$Components$App$Grid$emptyGridpoint, _List_Nil),
+			_Utils_Tuple2($author$project$Logic$App$Grid$emptyGridpoint, _List_Nil),
 			A2(
 				$elm$core$List$map,
 				function (x) {
@@ -9032,7 +9032,7 @@ var $author$project$Logic$App$Grid$drawPattern = F3(
 				pathCoords));
 		return {bottomBound: bottomAndRightBound.bottom, points: grid, rightBound: bottomAndRightBound.right};
 	});
-var $author$project$Components$App$Grid$updateCoords = F2(
+var $author$project$Logic$App$Grid$updateCoords = F2(
 	function (gridPoints, pointsToUpdate) {
 		var update = F2(
 			function (pnt, accumulator) {
@@ -9073,7 +9073,7 @@ var $author$project$Logic$App$Grid$drawPatterns = F2(
 					if (_Utils_cmp(attemptDrawPatternResult.rightBound, gridOffsetWidth) < 0) {
 						return {
 							bottomBound: attemptDrawPatternResult.bottomBound,
-							points: A2($author$project$Components$App$Grid$updateCoords, grid.points, attemptDrawPatternResult.points),
+							points: A2($author$project$Logic$App$Grid$updateCoords, grid.points, attemptDrawPatternResult.points),
 							rightBound: attemptDrawPatternResult.rightBound,
 							yOffset: accumulator.yOffset
 						};
@@ -9081,7 +9081,7 @@ var $author$project$Logic$App$Grid$drawPatterns = F2(
 						var drawPatternResultOld = A3($author$project$Logic$App$Grid$drawPattern, 0, accumulator.currentLowestY + 1, pattern);
 						return {
 							bottomBound: drawPatternResultOld.bottomBound,
-							points: A2($author$project$Components$App$Grid$updateCoords, grid.points, drawPatternResultOld.points),
+							points: A2($author$project$Logic$App$Grid$updateCoords, grid.points, drawPatternResultOld.points),
 							rightBound: drawPatternResultOld.rightBound,
 							yOffset: accumulator.currentLowestY + 1
 						};
@@ -9109,7 +9109,7 @@ var $author$project$Logic$App$Grid$drawPatterns = F2(
 				{
 					drawnPoints: drawPatternsResult.points,
 					points: A2(
-						$author$project$Components$App$Grid$applyUsedPointsToGrid,
+						$author$project$Logic$App$Grid$applyUsedPointsToGrid,
 						$author$project$Logic$App$Grid$clearGrid(grid.points),
 						drawPatternsResult.points)
 				}),
@@ -10065,6 +10065,37 @@ var $author$project$Logic$App$Patterns$Math$ceilAction = F2(
 			});
 		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
 	});
+var $author$project$Logic$App$Grid$centerMidpoints = function (points) {
+	var getRightmostAndBottommostValues = F2(
+		function (coord, accumulator) {
+			return _Utils_Tuple2(
+				A2($elm$core$Basics$max, coord.a, accumulator.a),
+				A2($elm$core$Basics$max, coord.b, accumulator.b));
+		});
+	var rightmostAndBottommostValues = A3(
+		$elm$core$List$foldl,
+		getRightmostAndBottommostValues,
+		_Utils_Tuple2(0.0, 0.0),
+		points);
+	var getLeftmostAndTopmostValues = F2(
+		function (coord, accumulator) {
+			return _Utils_Tuple2(
+				A2($elm$core$Basics$min, coord.a, accumulator.a),
+				A2($elm$core$Basics$min, coord.b, accumulator.b));
+		});
+	var leftmostAndTopmostValues = A3(
+		$elm$core$List$foldl,
+		getLeftmostAndTopmostValues,
+		_Utils_Tuple2(0.0, 0.0),
+		points);
+	var center = _Utils_Tuple2((leftmostAndTopmostValues.a + rightmostAndBottommostValues.a) / 2, (leftmostAndTopmostValues.b + rightmostAndBottommostValues.b) / 2);
+	return A2(
+		$elm$core$List$map,
+		function (point) {
+			return _Utils_Tuple2(point.a - center.a, point.b - center.b);
+		},
+		points);
+};
 var $author$project$Logic$App$Patterns$OperatorUtils$actionNoInput = F3(
 	function (stack, ctx, action) {
 		var actionResult = action(ctx);
@@ -10199,6 +10230,11 @@ var $author$project$Logic$App$Patterns$Lists$concat = F2(
 					ctx);
 			});
 		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getIotaList, $author$project$Logic$App$Patterns$OperatorUtils$getIotaList, action);
+	});
+var $elm$core$List$concatMap = F2(
+	function (f, list) {
+		return $elm$core$List$concat(
+			A2($elm$core$List$map, f, list));
 	});
 var $author$project$Logic$App$Patterns$Spells$conjureBlock = F2(
 	function (stack, ctx) {
@@ -10837,6 +10873,27 @@ var $author$project$Logic$App$Patterns$Spells$destroyWater = F2(
 	function (stack, ctx) {
 		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
 	});
+var $elm$core$Set$Set_elm_builtin = function (a) {
+	return {$: 'Set_elm_builtin', a: a};
+};
+var $elm$core$Dict$diff = F2(
+	function (t1, t2) {
+		return A3(
+			$elm$core$Dict$foldl,
+			F3(
+				function (k, v, t) {
+					return A2($elm$core$Dict$remove, k, t);
+				}),
+			t1,
+			t2);
+	});
+var $elm$core$Set$diff = F2(
+	function (_v0, _v1) {
+		var dict1 = _v0.a;
+		var dict2 = _v1.a;
+		return $elm$core$Set$Set_elm_builtin(
+			A2($elm$core$Dict$diff, dict1, dict2));
+	});
 var $ianmackenzie$elm_geometry$Vector3d$cross = F2(
 	function (_v0, _v1) {
 		var v2 = _v0.a;
@@ -11284,6 +11341,16 @@ var $author$project$Logic$App$Patterns$Math$floorAction = F2(
 			});
 		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
 	});
+var $elm$core$Set$empty = $elm$core$Set$Set_elm_builtin($elm$core$Dict$empty);
+var $elm$core$Set$insert = F2(
+	function (key, _v0) {
+		var dict = _v0.a;
+		return $elm$core$Set$Set_elm_builtin(
+			A3($elm$core$Dict$insert, key, _Utils_Tuple0, dict));
+	});
+var $elm$core$Set$fromList = function (list) {
+	return A3($elm$core$List$foldl, $elm$core$Set$insert, $elm$core$Set$empty, list);
+};
 var $author$project$Logic$App$Types$Entity = function (a) {
 	return {$: 'Entity', a: a};
 };
@@ -11315,6 +11382,31 @@ var $author$project$Logic$App$Patterns$Misc$getEntityVelocity = F2(
 	function (stack, ctx) {
 		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity);
 	});
+var $author$project$Logic$App$Patterns$PatternRegistry$noAction = F2(
+	function (stack, ctx) {
+		return {ctx: ctx, stack: stack, success: true};
+	});
+var $author$project$Logic$App$Patterns$PatternRegistry$greatSpellRegistry = A2(
+	$elm$core$List$map,
+	function (pattern) {
+		return {action: pattern.action, active: true, color: $author$project$Settings$Theme$accent1, displayName: pattern.displayName, internalName: pattern.internalName, metaAction: $author$project$Logic$App$Types$None, outputOptions: pattern.outputOptions, selectedOutput: pattern.selectedOutput, signature: pattern.signature, startDirection: pattern.startDirection};
+	},
+	_List_fromArray(
+		[
+			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Create Lava', internalName: 'create_lava', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qdwedadedae', startDirection: $author$project$Logic$App$Types$East},
+			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'White Sun\'s Zenith', internalName: 'potion/regeneration', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqaawawaedd', startDirection: $author$project$Logic$App$Types$East},
+			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Blue Sun\'s Zenith', internalName: 'potion/night_vision', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqaawawaeqdd', startDirection: $author$project$Logic$App$Types$East},
+			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Black Sun\'s Zenith', internalName: 'potion/absorption', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqaawawaeqqdd', startDirection: $author$project$Logic$App$Types$East},
+			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Red Sun\'s Zenith', internalName: 'potion/haste', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaawawaeqqqdd', startDirection: $author$project$Logic$App$Types$East},
+			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Green Sun\'s Zenith', internalName: 'potion/strength', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aawawaeqqqqdd', startDirection: $author$project$Logic$App$Types$East},
+			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Summon Lightning', internalName: 'lightning', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waadwawdaaweewq', startDirection: $author$project$Logic$App$Types$East},
+			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Summon Rain', internalName: 'summon_rain', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wwweeewwweewdawdwad', startDirection: $author$project$Logic$App$Types$East},
+			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Dispel Rain', internalName: 'dispel_rain', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eeewwweeewwaqqddqdqd', startDirection: $author$project$Logic$App$Types$East},
+			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Greater Teleport', internalName: 'teleport', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wwwqqqwwwqqeqqwwwqqwqqdqqqqqdqq', startDirection: $author$project$Logic$App$Types$East},
+			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Summon Greater Sentinel', internalName: 'sentinel/create/great', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waeawaeqqqwqwqqwq', startDirection: $author$project$Logic$App$Types$East},
+			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Craft Phial', internalName: 'craft/battery', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqqqaqwwaqqqqqeqaqqqawwqwqwqwqwqw', startDirection: $author$project$Logic$App$Types$East},
+			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Flay Mind', internalName: 'brainsweep', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qeqwqwqwqwqeqaeqeaqeqaeqaqded', startDirection: $author$project$Logic$App$Types$East}
+		]));
 var $author$project$Logic$App$Patterns$Math$greaterThan = F2(
 	function (stack, ctx) {
 		var action = F3(
@@ -11367,6 +11459,14 @@ var $author$project$Logic$App$Patterns$Math$greaterThanOrEqualTo = F2(
 			});
 		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
 	});
+var $author$project$Logic$App$Grid$gridpointToMidpoints = function (gridPoint) {
+	return A2(
+		$elm$core$List$map,
+		function (connection) {
+			return _Utils_Tuple2((gridPoint.offsetX + connection.offsetX) / 2, (gridPoint.offsetY + connection.offsetY) / 2);
+		},
+		gridPoint.connectedPoints);
+};
 var $author$project$Logic$App$Patterns$Math$ifBool = F2(
 	function (stack, ctx) {
 		var action = F4(
@@ -11484,6 +11584,17 @@ var $author$project$Logic$App$Patterns$Math$invertBool = F2(
 			});
 		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getBoolean, action);
 	});
+var $elm$core$Dict$isEmpty = function (dict) {
+	if (dict.$ === 'RBEmpty_elm_builtin') {
+		return true;
+	} else {
+		return false;
+	}
+};
+var $elm$core$Set$isEmpty = function (_v0) {
+	var dict = _v0.a;
+	return $elm$core$Dict$isEmpty(dict);
+};
 var $author$project$Logic$App$Patterns$Lists$lastNList = F2(
 	function (stack, ctx) {
 		var newStack = A3(
@@ -11705,10 +11816,6 @@ var $author$project$Logic$App$Types$Backspace = {$: 'Backspace'};
 var $author$project$Logic$App$Types$ClearPatterns = {$: 'ClearPatterns'};
 var $author$project$Logic$App$Types$Reset = {$: 'Reset'};
 var $author$project$Logic$App$Types$Wrap = {$: 'Wrap'};
-var $author$project$Logic$App$Patterns$PatternRegistry$noAction = F2(
-	function (stack, ctx) {
-		return {ctx: ctx, stack: stack, success: true};
-	});
 var $author$project$Logic$App$Patterns$PatternRegistry$metapatternRegistry = A2(
 	$elm$core$List$map,
 	function (pattern) {
@@ -13294,6 +13401,45 @@ var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature =
 					if (parseBookkeeperResult.internalName !== 'unknown') {
 						return parseBookkeeperResult;
 					} else {
+						var getGreatSpell = function () {
+							var getCenterdMidpoints = F2(
+								function (sig, direction) {
+									return $elm$core$Set$fromList(
+										$author$project$Logic$App$Grid$centerMidpoints(
+											A2(
+												$elm$core$List$concatMap,
+												$author$project$Logic$App$Grid$gridpointToMidpoints,
+												A3(
+													$author$project$Logic$App$Grid$drawPattern,
+													0,
+													0,
+													_Utils_update(
+														$author$project$Logic$App$Patterns$PatternRegistry$unknownPattern,
+														{signature: sig, startDirection: direction})).points)));
+								});
+							var greatSpellMatches = A2(
+								$elm$core$List$concatMap,
+								function (direction) {
+									return A2(
+										$elm$core$List$filter,
+										function (greatSpell) {
+											return $elm$core$Set$isEmpty(
+												A2(
+													$elm$core$Set$diff,
+													A2(getCenterdMidpoints, signature, direction),
+													A2(getCenterdMidpoints, greatSpell.signature, $author$project$Logic$App$Types$East)));
+										},
+										$author$project$Logic$App$Patterns$PatternRegistry$greatSpellRegistry);
+								},
+								_List_fromArray(
+									[$author$project$Logic$App$Types$Northeast, $author$project$Logic$App$Types$East, $author$project$Logic$App$Types$Southeast, $author$project$Logic$App$Types$Southwest, $author$project$Logic$App$Types$West, $author$project$Logic$App$Types$Northwest]));
+							return A2(
+								$elm$core$Maybe$withDefault,
+								_Utils_update(
+									$author$project$Logic$App$Patterns$PatternRegistry$unknownPattern,
+									{displayName: 'Pattern ' + ('\"' + (signature + '\"')), signature: signature}),
+								$elm$core$List$head(greatSpellMatches));
+						}();
 						if (maybeMacros.$ === 'Just') {
 							var macros = maybeMacros.a;
 							var _v8 = A2($elm$core$Dict$get, signature, macros);
@@ -13303,14 +13449,10 @@ var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature =
 								var direction = value.b;
 								return {action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, active: true, color: $author$project$Settings$Theme$accent1, displayName: displayName, internalName: '', metaAction: $author$project$Logic$App$Types$None, outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: signature, startDirection: direction};
 							} else {
-								return _Utils_update(
-									$author$project$Logic$App$Patterns$PatternRegistry$unknownPattern,
-									{displayName: 'Pattern ' + ('\"' + (signature + '\"')), signature: signature});
+								return getGreatSpell;
 							}
 						} else {
-							return _Utils_update(
-								$author$project$Logic$App$Patterns$PatternRegistry$unknownPattern,
-								{displayName: 'Pattern ' + ('\"' + (signature + '\"')), signature: signature});
+							return getGreatSpell;
 						}
 					}
 				}
@@ -13453,681 +13595,683 @@ var $author$project$Logic$App$Patterns$PatternRegistry$saveMacro = F2(
 function $author$project$Logic$App$Patterns$PatternRegistry$cyclic$patternRegistry() {
 	return _Utils_ap(
 		$author$project$Logic$App$Patterns$PatternRegistry$metapatternRegistry,
-		A2(
-			$elm$core$List$map,
-			function (pattern) {
-				return {action: pattern.action, active: true, color: $author$project$Settings$Theme$accent1, displayName: pattern.displayName, internalName: pattern.internalName, metaAction: $author$project$Logic$App$Types$None, outputOptions: pattern.outputOptions, selectedOutput: pattern.selectedOutput, signature: pattern.signature, startDirection: pattern.startDirection};
-			},
-			_List_fromArray(
-				[
-					{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'interop/gravity/get', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wawawddew', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'interop/gravity/set', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wdwdwaaqw', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'interop/pehkui/get', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aawawwawwa', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'interop/pehkui/set', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddwdwwdwwd', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Selectors$getCaster, displayName: 'Mind\'s Reflection', internalName: 'get_caster', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaq', startDirection: $author$project$Logic$App$Types$Northeast},
-					{
-					action: $author$project$Logic$App$Patterns$Misc$entityPos,
-					displayName: 'Compass\' Purification',
-					internalName: 'entity_pos/eye',
-					outputOptions: _List_fromArray(
-						[$author$project$Logic$App$Types$VectorType]),
-					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2(
-							$author$project$Logic$App$Types$VectorType,
+		_Utils_ap(
+			$author$project$Logic$App$Patterns$PatternRegistry$greatSpellRegistry,
+			A2(
+				$elm$core$List$map,
+				function (pattern) {
+					return {action: pattern.action, active: true, color: $author$project$Settings$Theme$accent1, displayName: pattern.displayName, internalName: pattern.internalName, metaAction: $author$project$Logic$App$Types$None, outputOptions: pattern.outputOptions, selectedOutput: pattern.selectedOutput, signature: pattern.signature, startDirection: pattern.startDirection};
+				},
+				_List_fromArray(
+					[
+						{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'interop/gravity/get', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wawawddew', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'interop/gravity/set', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wdwdwaaqw', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'interop/pehkui/get', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aawawwawwa', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'interop/pehkui/set', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddwdwwdwwd', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Selectors$getCaster, displayName: 'Mind\'s Reflection', internalName: 'get_caster', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaq', startDirection: $author$project$Logic$App$Types$Northeast},
+						{
+						action: $author$project$Logic$App$Patterns$Misc$entityPos,
+						displayName: 'Compass\' Purification',
+						internalName: 'entity_pos/eye',
+						outputOptions: _List_fromArray(
+							[$author$project$Logic$App$Types$VectorType]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2(
+								$author$project$Logic$App$Types$VectorType,
+								$author$project$Logic$App$Types$Vector(
+									_Utils_Tuple3(0, 0, 0)))),
+						signature: 'aa',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$Misc$entityPos,
+						displayName: 'Compass\' Purification II',
+						internalName: 'entity_pos/foot',
+						outputOptions: _List_fromArray(
+							[$author$project$Logic$App$Types$VectorType]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2(
+								$author$project$Logic$App$Types$VectorType,
+								$author$project$Logic$App$Types$Vector(
+									_Utils_Tuple3(0, 0, 0)))),
+						signature: 'dd',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$Misc$getEntityLook,
+						displayName: 'Alidade\'s Purification',
+						internalName: 'get_entity_look',
+						outputOptions: _List_fromArray(
+							[$author$project$Logic$App$Types$VectorType]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2(
+								$author$project$Logic$App$Types$VectorType,
+								$author$project$Logic$App$Types$Vector(
+									_Utils_Tuple3(0, 0, 0)))),
+						signature: 'wa',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$Misc$getEntityHeight,
+						displayName: 'Stadiometer\'s Purification',
+						internalName: 'get_entity_height',
+						outputOptions: _List_fromArray(
+							[$author$project$Logic$App$Types$NumberType]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2(
+								$author$project$Logic$App$Types$NumberType,
+								$author$project$Logic$App$Types$Number(0))),
+						signature: 'awq',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$Misc$getEntityVelocity,
+						displayName: 'Pace Purification',
+						internalName: 'get_entity_velocity',
+						outputOptions: _List_fromArray(
+							[$author$project$Logic$App$Types$VectorType]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2(
+								$author$project$Logic$App$Types$VectorType,
+								$author$project$Logic$App$Types$Vector(
+									_Utils_Tuple3(0, 0, 0)))),
+						signature: 'wq',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$Misc$raycast,
+						displayName: 'Archer\'s Distillation',
+						internalName: 'raycast',
+						outputOptions: _List_fromArray(
+							[$author$project$Logic$App$Types$VectorType, $author$project$Logic$App$Types$NullType]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2(
+								$author$project$Logic$App$Types$VectorType,
+								$author$project$Logic$App$Types$Vector(
+									_Utils_Tuple3(0, 0, 0)))),
+						signature: 'wqaawdd',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$Misc$raycastAxis,
+						displayName: 'Architect\'s Distillation',
+						internalName: 'raycast/axis',
+						outputOptions: _List_fromArray(
+							[$author$project$Logic$App$Types$VectorType, $author$project$Logic$App$Types$NullType]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2(
+								$author$project$Logic$App$Types$VectorType,
+								$author$project$Logic$App$Types$Vector(
+									_Utils_Tuple3(0, 0, 0)))),
+						signature: 'weddwaa',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$Misc$raycastEntity,
+						displayName: 'Scout\'s Distillation',
+						internalName: 'raycast/entity',
+						outputOptions: _List_fromArray(
+							[$author$project$Logic$App$Types$EntityType, $author$project$Logic$App$Types$NullType]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2($author$project$Logic$App$Types$NullType, $author$project$Logic$App$Types$Null)),
+						signature: 'weaqa',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Waystone Reflection', internalName: 'circle/impetus_pos', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eaqwqae', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Circles$circleImpetusDirection, displayName: 'Lodestone Reflection', internalName: 'circle/impetus_dir', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eaqwqaewede', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Circles$circleBoundsMin, displayName: 'Lesser Fold Reflection', internalName: 'circle/bounds/min', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eaqwqaewdd', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Circles$circleBoundsMax, displayName: 'Greater Fold Reflection', internalName: 'circle/bounds/max', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqwqawaaqa', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Stack$swap, displayName: 'Jester\'s Gambit', internalName: 'swap', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aawdd', startDirection: $author$project$Logic$App$Types$Northeast},
+						{action: $author$project$Logic$App$Patterns$Stack$rotate, displayName: 'Rotation Gambit', internalName: 'rotate', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aaeaa', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Stack$rotateReverse, displayName: 'Rotation Gambit II', internalName: 'rotate_reverse', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddqdd', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Stack$duplicate, displayName: 'Gemini Decomposition', internalName: 'duplicate', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aadaa', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Stack$over, displayName: 'Prospector\'s Gambit', internalName: 'over', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aaedd', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Stack$tuck, displayName: 'Undertaker\'s Gambit', internalName: 'tuck', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddqaa', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Stack$dup2, displayName: 'Dioscuri Gambit', internalName: 'two_dup', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aadadaaw', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Stack$stackLength, displayName: 'Flock\'s Reflection', internalName: 'stack_len', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qwaeawqaeaqa', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Stack$duplicateN, displayName: 'Gemini Gambit', internalName: 'duplicate_n', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aadaadaa', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Stack$fisherman, displayName: 'Fisherman\'s Gambit', internalName: 'fisherman', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddad', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Stack$fishermanCopy, displayName: 'Fisherman\'s Gambit II', internalName: 'fisherman/copy', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aada', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'swizzle', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaawdde', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$add, displayName: 'Additive Distillation', internalName: 'add', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waaw', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$subtract, displayName: 'Subtractive Distillation', internalName: 'sub', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wddw', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$mulDot, displayName: 'Multiplicative Distillation', internalName: 'mul_dot', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waqaw', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$divCross, displayName: 'Division Distillation', internalName: 'div_cross', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wdedw', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$absLen, displayName: 'Length Purification', internalName: 'abs_len', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wqaqw', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$powProj, displayName: 'Power Distillation', internalName: 'pow_proj', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wedew', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$floorAction, displayName: 'Floor Purification', internalName: 'floor', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ewq', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$ceilAction, displayName: 'Ceiling Purification', internalName: 'ceil', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qwe', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$constructVector, displayName: 'Vector Exaltation', internalName: 'construct_vec', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eqqqqq', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$deconstructVector, displayName: 'Vector Disintegration', internalName: 'deconstruct_vec', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qeeeee', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$coerceAxial, displayName: 'Axial Purification', internalName: 'coerce_axial', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqaww', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$andBool, displayName: 'Conjunction Distillation', internalName: 'and', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wdw', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$orBool, displayName: 'Disjunction Distillation', internalName: 'or', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waw', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$xorBool, displayName: 'Exclusion Distillation', internalName: 'xor', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dwa', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$greaterThan, displayName: 'Maximus Distillation', internalName: 'greater', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'e', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$lessThan, displayName: 'Minimus Distillation', internalName: 'less', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'q', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$greaterThanOrEqualTo, displayName: 'Maximus Distillation II', internalName: 'greater_eq', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ee', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$lessThanOrEqualTo, displayName: 'Minimus Distillation II', internalName: 'less_eq', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qq', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$equalTo, displayName: 'Equality Distillation', internalName: 'equals', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ad', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$notEqualTo, displayName: 'Inequality Distillation', internalName: 'not_equals', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'da', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$invertBool, displayName: 'Negation Purification', internalName: 'not', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dw', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$boolCoerce, displayName: 'Augur\'s Purification', internalName: 'bool_coerce', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aw', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$ifBool, displayName: 'Augur\'s Exaltation', internalName: 'if', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'awdd', startDirection: $author$project$Logic$App$Types$East},
+						{
+						action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
+							$author$project$Logic$App$Types$Number(0.5)),
+						displayName: 'Entropy Reflection',
+						internalName: 'random',
+						outputOptions: _List_Nil,
+						selectedOutput: $elm$core$Maybe$Nothing,
+						signature: 'eqqq',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{action: $author$project$Logic$App$Patterns$Math$sine, displayName: 'Sine Purification', internalName: 'sin', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqaa', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$cosine, displayName: 'Cosine Purification', internalName: 'cos', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqad', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$tangent, displayName: 'Tangent Purification', internalName: 'tan', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wqqqqqadq', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$arcsin, displayName: 'Inverse Sine Purification', internalName: 'arcsin', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddeeeee', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$arccos, displayName: 'Inverse Cosine Purification', internalName: 'arccos', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'adeeeee', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$arctan, displayName: 'Inverse Tangent Purification', internalName: 'arctan', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eadeeeeew', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$logarithm, displayName: 'Logarithmic Distillation', internalName: 'logarithm', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eqaqe', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$modulo, displayName: 'Modulus Distillation', internalName: 'modulo', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'addwaad', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$andBit, displayName: 'Intersection Distillation', internalName: 'and_bit', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wdweaqa', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$orBit, displayName: 'Unifying Distillation', internalName: 'or_bit', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waweaqa', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$xorBit, displayName: 'Exclusionary Distillation', internalName: 'xor_bit', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dwaeaqa', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$notBit, displayName: 'Inversion Purification', internalName: 'not_bit', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dweaqa', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Math$toSet, displayName: 'Uniqueness Purification', internalName: 'to_set', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aweaqa', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Misc$print, displayName: 'Reveal', internalName: 'print', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'de', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Spells$explode, displayName: 'Explosion', internalName: 'explode', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aawaawaa', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Spells$explodeFire, displayName: 'Fireball', internalName: 'explode/fire', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddwddwdd', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Spells$addMotion, displayName: 'Impulse', internalName: 'add_motion', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'awqqqwaqw', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Spells$blink, displayName: 'Blink', internalName: 'blink', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'awqqqwaq', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Spells$breakBlock, displayName: 'Break Block', internalName: 'break_block', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaqqqqq', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Spells$placeBlock, displayName: 'Place Block', internalName: 'place_block', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eeeeede', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Spells$colorize, displayName: 'Internalize Pigment', internalName: 'colorize', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'awddwqawqwawq', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Spells$createWater, displayName: 'Create Water', internalName: 'create_water', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqawqadaq', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Spells$destroyWater, displayName: 'Destroy Liquid', internalName: 'destroy_water', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dedwedade', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Spells$ignite, displayName: 'Ignite Block', internalName: 'ignite', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aaqawawa', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Spells$extinguish, displayName: 'Extinguish Area', internalName: 'extinguish', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddedwdwd', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Spells$conjureBlock, displayName: 'Conjure Block', internalName: 'conjure_block', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqa', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Spells$conjureLight, displayName: 'Conjure Light', internalName: 'conjure_light', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqd', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Spells$bonemeal, displayName: 'Overgrow', internalName: 'bonemeal', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wqaqwawqaqw', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Spells$recharge, displayName: 'Recharge Item', internalName: 'recharge', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqwaeaeaeaeaea', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Spells$erase, displayName: 'Erase Item', internalName: 'erase', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qdqawwaww', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Spells$edify, displayName: 'Edify Sapling', internalName: 'edify', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wqaqwd', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Spells$beep, displayName: 'Make Note', internalName: 'beep', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'adaa', startDirection: $author$project$Logic$App$Types$East},
+						{
+						action: $author$project$Logic$App$Patterns$Spells$craftArtifact($author$project$Logic$App$Types$Cypher),
+						displayName: 'Craft Cypher',
+						internalName: 'craft/cypher',
+						outputOptions: _List_Nil,
+						selectedOutput: $elm$core$Maybe$Nothing,
+						signature: 'waqqqqq',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$Spells$craftArtifact($author$project$Logic$App$Types$Trinket),
+						displayName: 'Craft Trinket',
+						internalName: 'craft/trinket',
+						outputOptions: _List_Nil,
+						selectedOutput: $elm$core$Maybe$Nothing,
+						signature: 'wwaqqqqqeaqeaeqqqeaeq',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$Spells$craftArtifact($author$project$Logic$App$Types$Artifact),
+						displayName: 'Craft Artifact',
+						internalName: 'craft/artifact',
+						outputOptions: _List_Nil,
+						selectedOutput: $elm$core$Maybe$Nothing,
+						signature: 'wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{action: $author$project$Logic$App$Patterns$Spells$potion, displayName: 'White Sun\'s Nadir', internalName: 'potion/weakness', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqaqwawaw', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Spells$potionFixedPotency, displayName: 'Blue Sun\'s Nadir', internalName: 'potion/levitation', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqawwawawd', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Spells$potion, displayName: 'Black Sun\'s Nadir', internalName: 'potion/wither', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqaewawawe', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Spells$potion, displayName: 'Red Sun\'s Nadir', internalName: 'potion/poison', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqadwawaww', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Spells$potion, displayName: 'Green Sun\'s Nadir', internalName: 'potion/slowness', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqadwawaw', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Spells$sentinelCreate, displayName: 'Summon Sentinel', internalName: 'sentinel/create', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waeawae', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Spells$sentinelDestroy, displayName: 'Banish Sentinel', internalName: 'sentinel/destroy', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qdwdqdw', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Spells$sentinelGetPos, displayName: 'Locate Sentinel', internalName: 'sentinel/get_pos', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waeawaede', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Spells$sentinelWayfind, displayName: 'Wayfind Sentinel', internalName: 'sentinel/wayfind', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waeawaedwa', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'akashic/read', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqwqqqqqaq', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'akashic/write', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eeeweeeeede', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Charon\'s Gambit', internalName: 'halt', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqdee', startDirection: $author$project$Logic$App$Types$Southwest},
+						{action: $author$project$Logic$App$Patterns$ReadWrite$read, displayName: 'Scribe\'s Reflection', internalName: 'read', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqqqqq', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$ReadWrite$readChronical, displayName: 'Chronicler\'s Purification', internalName: 'read/entity', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wawqwqwqwqwqw', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$ReadWrite$write, displayName: 'Scribe\'s Gambit', internalName: 'write', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'deeeee', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$ReadWrite$writeChronical, displayName: 'Chronicler\'s Gambit', internalName: 'write/entity', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wdwewewewewew', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$ReadWrite$readable, displayName: 'Auditor\'s Reflection', internalName: 'readable', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqqqqqe', startDirection: $author$project$Logic$App$Types$East},
+						{
+						action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
+							$author$project$Logic$App$Types$Boolean(false)),
+						displayName: 'Auditor\'s Purification',
+						internalName: 'readable/entity',
+						outputOptions: _List_Nil,
+						selectedOutput: $elm$core$Maybe$Nothing,
+						signature: 'wawqwqwqwqwqwew',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{action: $author$project$Logic$App$Patterns$ReadWrite$writable, displayName: 'Assessor\'s Reflection', internalName: 'writable', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'deeeeeq', startDirection: $author$project$Logic$App$Types$East},
+						{
+						action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
+							$author$project$Logic$App$Types$Boolean(false)),
+						displayName: 'Assessor\'s Purification',
+						internalName: 'writable/entity',
+						outputOptions: _List_Nil,
+						selectedOutput: $elm$core$Maybe$Nothing,
+						signature: 'wdwewewewewewqw',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{action: $author$project$Logic$App$Patterns$ReadWrite$readLocal, displayName: 'Muninn\'s Reflection', internalName: 'read/local', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qeewdweddw', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$ReadWrite$writeLocal, displayName: 'Huginn\'s Gambit', internalName: 'write/local', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eqqwawqaaw', startDirection: $author$project$Logic$App$Types$East},
+						{
+						action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant($author$project$Logic$App$Types$Null),
+						displayName: 'Nullary Reflection',
+						internalName: 'const/null',
+						outputOptions: _List_Nil,
+						selectedOutput: $elm$core$Maybe$Nothing,
+						signature: 'd',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
+							$author$project$Logic$App$Types$Boolean(true)),
+						displayName: 'True Reflection',
+						internalName: 'const/true',
+						outputOptions: _List_Nil,
+						selectedOutput: $elm$core$Maybe$Nothing,
+						signature: 'aqae',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
+							$author$project$Logic$App$Types$Boolean(false)),
+						displayName: 'False Reflection',
+						internalName: 'const/false',
+						outputOptions: _List_Nil,
+						selectedOutput: $elm$core$Maybe$Nothing,
+						signature: 'dedq',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
 							$author$project$Logic$App$Types$Vector(
-								_Utils_Tuple3(0, 0, 0)))),
-					signature: 'aa',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$Misc$entityPos,
-					displayName: 'Compass\' Purification II',
-					internalName: 'entity_pos/foot',
-					outputOptions: _List_fromArray(
-						[$author$project$Logic$App$Types$VectorType]),
-					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2(
-							$author$project$Logic$App$Types$VectorType,
+								_Utils_Tuple3(1, 0, 0))),
+						displayName: 'Vector Reflection +X',
+						internalName: 'const/vec/px',
+						outputOptions: _List_Nil,
+						selectedOutput: $elm$core$Maybe$Nothing,
+						signature: 'qqqqqea',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
 							$author$project$Logic$App$Types$Vector(
-								_Utils_Tuple3(0, 0, 0)))),
-					signature: 'dd',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$Misc$getEntityLook,
-					displayName: 'Alidade\'s Purification',
-					internalName: 'get_entity_look',
-					outputOptions: _List_fromArray(
-						[$author$project$Logic$App$Types$VectorType]),
-					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2(
-							$author$project$Logic$App$Types$VectorType,
+								_Utils_Tuple3(0, 1, 0))),
+						displayName: 'Vector Reflection +Y',
+						internalName: 'const/vec/py',
+						outputOptions: _List_Nil,
+						selectedOutput: $elm$core$Maybe$Nothing,
+						signature: 'qqqqqew',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
 							$author$project$Logic$App$Types$Vector(
-								_Utils_Tuple3(0, 0, 0)))),
-					signature: 'wa',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$Misc$getEntityHeight,
-					displayName: 'Stadiometer\'s Purification',
-					internalName: 'get_entity_height',
-					outputOptions: _List_fromArray(
-						[$author$project$Logic$App$Types$NumberType]),
-					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2(
-							$author$project$Logic$App$Types$NumberType,
-							$author$project$Logic$App$Types$Number(0))),
-					signature: 'awq',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$Misc$getEntityVelocity,
-					displayName: 'Pace Purification',
-					internalName: 'get_entity_velocity',
-					outputOptions: _List_fromArray(
-						[$author$project$Logic$App$Types$VectorType]),
-					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2(
-							$author$project$Logic$App$Types$VectorType,
+								_Utils_Tuple3(0, 0, 1))),
+						displayName: 'Vector Reflection +Z',
+						internalName: 'const/vec/pz',
+						outputOptions: _List_Nil,
+						selectedOutput: $elm$core$Maybe$Nothing,
+						signature: 'qqqqqed',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
 							$author$project$Logic$App$Types$Vector(
-								_Utils_Tuple3(0, 0, 0)))),
-					signature: 'wq',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$Misc$raycast,
-					displayName: 'Archer\'s Distillation',
-					internalName: 'raycast',
-					outputOptions: _List_fromArray(
-						[$author$project$Logic$App$Types$VectorType, $author$project$Logic$App$Types$NullType]),
-					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2(
-							$author$project$Logic$App$Types$VectorType,
+								_Utils_Tuple3(-1, 0, 0))),
+						displayName: 'Vector Reflection -X',
+						internalName: 'const/vec/nx',
+						outputOptions: _List_Nil,
+						selectedOutput: $elm$core$Maybe$Nothing,
+						signature: 'eeeeeqa',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
 							$author$project$Logic$App$Types$Vector(
-								_Utils_Tuple3(0, 0, 0)))),
-					signature: 'wqaawdd',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$Misc$raycastAxis,
-					displayName: 'Architect\'s Distillation',
-					internalName: 'raycast/axis',
-					outputOptions: _List_fromArray(
-						[$author$project$Logic$App$Types$VectorType, $author$project$Logic$App$Types$NullType]),
-					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2(
-							$author$project$Logic$App$Types$VectorType,
+								_Utils_Tuple3(0, -1, 0))),
+						displayName: 'Vector Reflection -Y',
+						internalName: 'const/vec/ny',
+						outputOptions: _List_Nil,
+						selectedOutput: $elm$core$Maybe$Nothing,
+						signature: 'eeeeeqw',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
 							$author$project$Logic$App$Types$Vector(
-								_Utils_Tuple3(0, 0, 0)))),
-					signature: 'weddwaa',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$Misc$raycastEntity,
-					displayName: 'Scout\'s Distillation',
-					internalName: 'raycast/entity',
-					outputOptions: _List_fromArray(
-						[$author$project$Logic$App$Types$EntityType, $author$project$Logic$App$Types$NullType]),
-					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2($author$project$Logic$App$Types$NullType, $author$project$Logic$App$Types$Null)),
-					signature: 'weaqa',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Waystone Reflection', internalName: 'circle/impetus_pos', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eaqwqae', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Circles$circleImpetusDirection, displayName: 'Lodestone Reflection', internalName: 'circle/impetus_dir', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eaqwqaewede', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Circles$circleBoundsMin, displayName: 'Lesser Fold Reflection', internalName: 'circle/bounds/min', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eaqwqaewdd', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Circles$circleBoundsMax, displayName: 'Greater Fold Reflection', internalName: 'circle/bounds/max', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqwqawaaqa', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Stack$swap, displayName: 'Jester\'s Gambit', internalName: 'swap', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aawdd', startDirection: $author$project$Logic$App$Types$Northeast},
-					{action: $author$project$Logic$App$Patterns$Stack$rotate, displayName: 'Rotation Gambit', internalName: 'rotate', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aaeaa', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Stack$rotateReverse, displayName: 'Rotation Gambit II', internalName: 'rotate_reverse', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddqdd', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Stack$duplicate, displayName: 'Gemini Decomposition', internalName: 'duplicate', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aadaa', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Stack$over, displayName: 'Prospector\'s Gambit', internalName: 'over', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aaedd', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Stack$tuck, displayName: 'Undertaker\'s Gambit', internalName: 'tuck', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddqaa', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Stack$dup2, displayName: 'Dioscuri Gambit', internalName: 'two_dup', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aadadaaw', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Stack$stackLength, displayName: 'Flock\'s Reflection', internalName: 'stack_len', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qwaeawqaeaqa', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Stack$duplicateN, displayName: 'Gemini Gambit', internalName: 'duplicate_n', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aadaadaa', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Stack$fisherman, displayName: 'Fisherman\'s Gambit', internalName: 'fisherman', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddad', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Stack$fishermanCopy, displayName: 'Fisherman\'s Gambit II', internalName: 'fisherman/copy', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aada', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'swizzle', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaawdde', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$add, displayName: 'Additive Distillation', internalName: 'add', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waaw', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$subtract, displayName: 'Subtractive Distillation', internalName: 'sub', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wddw', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$mulDot, displayName: 'Multiplicative Distillation', internalName: 'mul_dot', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waqaw', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$divCross, displayName: 'Division Distillation', internalName: 'div_cross', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wdedw', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$absLen, displayName: 'Length Purification', internalName: 'abs_len', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wqaqw', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$powProj, displayName: 'Power Distillation', internalName: 'pow_proj', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wedew', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$floorAction, displayName: 'Floor Purification', internalName: 'floor', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ewq', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$ceilAction, displayName: 'Ceiling Purification', internalName: 'ceil', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qwe', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$constructVector, displayName: 'Vector Exaltation', internalName: 'construct_vec', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eqqqqq', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$deconstructVector, displayName: 'Vector Disintegration', internalName: 'deconstruct_vec', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qeeeee', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$coerceAxial, displayName: 'Axial Purification', internalName: 'coerce_axial', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqaww', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$andBool, displayName: 'Conjunction Distillation', internalName: 'and', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wdw', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$orBool, displayName: 'Disjunction Distillation', internalName: 'or', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waw', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$xorBool, displayName: 'Exclusion Distillation', internalName: 'xor', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dwa', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$greaterThan, displayName: 'Maximus Distillation', internalName: 'greater', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'e', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$lessThan, displayName: 'Minimus Distillation', internalName: 'less', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'q', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$greaterThanOrEqualTo, displayName: 'Maximus Distillation II', internalName: 'greater_eq', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ee', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$lessThanOrEqualTo, displayName: 'Minimus Distillation II', internalName: 'less_eq', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qq', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$equalTo, displayName: 'Equality Distillation', internalName: 'equals', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ad', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$notEqualTo, displayName: 'Inequality Distillation', internalName: 'not_equals', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'da', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$invertBool, displayName: 'Negation Purification', internalName: 'not', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dw', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$boolCoerce, displayName: 'Augur\'s Purification', internalName: 'bool_coerce', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aw', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$ifBool, displayName: 'Augur\'s Exaltation', internalName: 'if', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'awdd', startDirection: $author$project$Logic$App$Types$East},
-					{
-					action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
-						$author$project$Logic$App$Types$Number(0.5)),
-					displayName: 'Entropy Reflection',
-					internalName: 'random',
-					outputOptions: _List_Nil,
-					selectedOutput: $elm$core$Maybe$Nothing,
-					signature: 'eqqq',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{action: $author$project$Logic$App$Patterns$Math$sine, displayName: 'Sine Purification', internalName: 'sin', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqaa', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$cosine, displayName: 'Cosine Purification', internalName: 'cos', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqad', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$tangent, displayName: 'Tangent Purification', internalName: 'tan', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wqqqqqadq', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$arcsin, displayName: 'Inverse Sine Purification', internalName: 'arcsin', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddeeeee', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$arccos, displayName: 'Inverse Cosine Purification', internalName: 'arccos', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'adeeeee', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$arctan, displayName: 'Inverse Tangent Purification', internalName: 'arctan', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eadeeeeew', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$logarithm, displayName: 'Logarithmic Distillation', internalName: 'logarithm', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eqaqe', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$modulo, displayName: 'Modulus Distillation', internalName: 'modulo', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'addwaad', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$andBit, displayName: 'Intersection Distillation', internalName: 'and_bit', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wdweaqa', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$orBit, displayName: 'Unifying Distillation', internalName: 'or_bit', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waweaqa', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$xorBit, displayName: 'Exclusionary Distillation', internalName: 'xor_bit', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dwaeaqa', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$notBit, displayName: 'Inversion Purification', internalName: 'not_bit', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dweaqa', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Math$toSet, displayName: 'Uniqueness Purification', internalName: 'to_set', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aweaqa', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Misc$print, displayName: 'Reveal', internalName: 'print', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'de', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Spells$explode, displayName: 'Explosion', internalName: 'explode', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aawaawaa', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Spells$explodeFire, displayName: 'Fireball', internalName: 'explode/fire', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddwddwdd', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Spells$addMotion, displayName: 'Impulse', internalName: 'add_motion', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'awqqqwaqw', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Spells$blink, displayName: 'Blink', internalName: 'blink', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'awqqqwaq', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Spells$breakBlock, displayName: 'Break Block', internalName: 'break_block', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaqqqqq', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Spells$placeBlock, displayName: 'Place Block', internalName: 'place_block', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eeeeede', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Spells$colorize, displayName: 'Internalize Pigment', internalName: 'colorize', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'awddwqawqwawq', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Spells$createWater, displayName: 'Create Water', internalName: 'create_water', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqawqadaq', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Spells$destroyWater, displayName: 'Destroy Liquid', internalName: 'destroy_water', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dedwedade', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Spells$ignite, displayName: 'Ignite Block', internalName: 'ignite', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aaqawawa', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Spells$extinguish, displayName: 'Extinguish Area', internalName: 'extinguish', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddedwdwd', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Spells$conjureBlock, displayName: 'Conjure Block', internalName: 'conjure_block', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqa', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Spells$conjureLight, displayName: 'Conjure Light', internalName: 'conjure_light', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqd', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Spells$bonemeal, displayName: 'Overgrow', internalName: 'bonemeal', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wqaqwawqaqw', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Spells$recharge, displayName: 'Recharge Item', internalName: 'recharge', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqwaeaeaeaeaea', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Spells$erase, displayName: 'Erase Item', internalName: 'erase', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qdqawwaww', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Spells$edify, displayName: 'Edify Sapling', internalName: 'edify', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wqaqwd', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Spells$beep, displayName: 'Make Note', internalName: 'beep', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'adaa', startDirection: $author$project$Logic$App$Types$East},
-					{
-					action: $author$project$Logic$App$Patterns$Spells$craftArtifact($author$project$Logic$App$Types$Cypher),
-					displayName: 'Craft Cypher',
-					internalName: 'craft/cypher',
-					outputOptions: _List_Nil,
-					selectedOutput: $elm$core$Maybe$Nothing,
-					signature: 'waqqqqq',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$Spells$craftArtifact($author$project$Logic$App$Types$Trinket),
-					displayName: 'Craft Trinket',
-					internalName: 'craft/trinket',
-					outputOptions: _List_Nil,
-					selectedOutput: $elm$core$Maybe$Nothing,
-					signature: 'wwaqqqqqeaqeaeqqqeaeq',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$Spells$craftArtifact($author$project$Logic$App$Types$Artifact),
-					displayName: 'Craft Artifact',
-					internalName: 'craft/artifact',
-					outputOptions: _List_Nil,
-					selectedOutput: $elm$core$Maybe$Nothing,
-					signature: 'wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{action: $author$project$Logic$App$Patterns$Spells$potion, displayName: 'White Sun\'s Nadir', internalName: 'potion/weakness', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqaqwawaw', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Spells$potionFixedPotency, displayName: 'Blue Sun\'s Nadir', internalName: 'potion/levitation', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqawwawawd', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Spells$potion, displayName: 'Black Sun\'s Nadir', internalName: 'potion/wither', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqaewawawe', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Spells$potion, displayName: 'Red Sun\'s Nadir', internalName: 'potion/poison', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqadwawaww', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Spells$potion, displayName: 'Green Sun\'s Nadir', internalName: 'potion/slowness', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqqadwawaw', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Spells$sentinelCreate, displayName: 'Summon Sentinel', internalName: 'sentinel/create', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waeawae', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Spells$sentinelDestroy, displayName: 'Banish Sentinel', internalName: 'sentinel/destroy', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qdwdqdw', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Spells$sentinelGetPos, displayName: 'Locate Sentinel', internalName: 'sentinel/get_pos', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waeawaede', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Spells$sentinelWayfind, displayName: 'Wayfind Sentinel', internalName: 'sentinel/wayfind', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waeawaedwa', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'akashic/read', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqwqqqqqaq', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'akashic/write', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eeeweeeeede', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Charon\'s Gambit', internalName: 'halt', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqdee', startDirection: $author$project$Logic$App$Types$Southwest},
-					{action: $author$project$Logic$App$Patterns$ReadWrite$read, displayName: 'Scribe\'s Reflection', internalName: 'read', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqqqqq', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$ReadWrite$readChronical, displayName: 'Chronicler\'s Purification', internalName: 'read/entity', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wawqwqwqwqwqw', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$ReadWrite$write, displayName: 'Scribe\'s Gambit', internalName: 'write', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'deeeee', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$ReadWrite$writeChronical, displayName: 'Chronicler\'s Gambit', internalName: 'write/entity', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wdwewewewewew', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$ReadWrite$readable, displayName: 'Auditor\'s Reflection', internalName: 'readable', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqqqqqe', startDirection: $author$project$Logic$App$Types$East},
-					{
-					action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
-						$author$project$Logic$App$Types$Boolean(false)),
-					displayName: 'Auditor\'s Purification',
-					internalName: 'readable/entity',
-					outputOptions: _List_Nil,
-					selectedOutput: $elm$core$Maybe$Nothing,
-					signature: 'wawqwqwqwqwqwew',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{action: $author$project$Logic$App$Patterns$ReadWrite$writable, displayName: 'Assessor\'s Reflection', internalName: 'writable', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'deeeeeq', startDirection: $author$project$Logic$App$Types$East},
-					{
-					action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
-						$author$project$Logic$App$Types$Boolean(false)),
-					displayName: 'Assessor\'s Purification',
-					internalName: 'writable/entity',
-					outputOptions: _List_Nil,
-					selectedOutput: $elm$core$Maybe$Nothing,
-					signature: 'wdwewewewewewqw',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{action: $author$project$Logic$App$Patterns$ReadWrite$readLocal, displayName: 'Muninn\'s Reflection', internalName: 'read/local', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qeewdweddw', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$ReadWrite$writeLocal, displayName: 'Huginn\'s Gambit', internalName: 'write/local', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eqqwawqaaw', startDirection: $author$project$Logic$App$Types$East},
-					{
-					action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant($author$project$Logic$App$Types$Null),
-					displayName: 'Nullary Reflection',
-					internalName: 'const/null',
-					outputOptions: _List_Nil,
-					selectedOutput: $elm$core$Maybe$Nothing,
-					signature: 'd',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
-						$author$project$Logic$App$Types$Boolean(true)),
-					displayName: 'True Reflection',
-					internalName: 'const/true',
-					outputOptions: _List_Nil,
-					selectedOutput: $elm$core$Maybe$Nothing,
-					signature: 'aqae',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
-						$author$project$Logic$App$Types$Boolean(false)),
-					displayName: 'False Reflection',
-					internalName: 'const/false',
-					outputOptions: _List_Nil,
-					selectedOutput: $elm$core$Maybe$Nothing,
-					signature: 'dedq',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
-						$author$project$Logic$App$Types$Vector(
-							_Utils_Tuple3(1, 0, 0))),
-					displayName: 'Vector Reflection +X',
-					internalName: 'const/vec/px',
-					outputOptions: _List_Nil,
-					selectedOutput: $elm$core$Maybe$Nothing,
-					signature: 'qqqqqea',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
-						$author$project$Logic$App$Types$Vector(
-							_Utils_Tuple3(0, 1, 0))),
-					displayName: 'Vector Reflection +Y',
-					internalName: 'const/vec/py',
-					outputOptions: _List_Nil,
-					selectedOutput: $elm$core$Maybe$Nothing,
-					signature: 'qqqqqew',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
-						$author$project$Logic$App$Types$Vector(
-							_Utils_Tuple3(0, 0, 1))),
-					displayName: 'Vector Reflection +Z',
-					internalName: 'const/vec/pz',
-					outputOptions: _List_Nil,
-					selectedOutput: $elm$core$Maybe$Nothing,
-					signature: 'qqqqqed',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
-						$author$project$Logic$App$Types$Vector(
-							_Utils_Tuple3(-1, 0, 0))),
-					displayName: 'Vector Reflection -X',
-					internalName: 'const/vec/nx',
-					outputOptions: _List_Nil,
-					selectedOutput: $elm$core$Maybe$Nothing,
-					signature: 'eeeeeqa',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
-						$author$project$Logic$App$Types$Vector(
-							_Utils_Tuple3(0, -1, 0))),
-					displayName: 'Vector Reflection -Y',
-					internalName: 'const/vec/ny',
-					outputOptions: _List_Nil,
-					selectedOutput: $elm$core$Maybe$Nothing,
-					signature: 'eeeeeqw',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
-						$author$project$Logic$App$Types$Vector(
-							_Utils_Tuple3(0, 0, -1))),
-					displayName: 'Vector Reflection -Z',
-					internalName: 'const/vec/nz',
-					outputOptions: _List_Nil,
-					selectedOutput: $elm$core$Maybe$Nothing,
-					signature: 'eeeeeqd',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
-						$author$project$Logic$App$Types$Vector(
-							_Utils_Tuple3(0, 0, 0))),
-					displayName: 'Vector Reflection Zero',
-					internalName: 'const/vec/0',
-					outputOptions: _List_Nil,
-					selectedOutput: $elm$core$Maybe$Nothing,
-					signature: 'qqqqq',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
-						$author$project$Logic$App$Types$Number($elm$core$Basics$pi)),
-					displayName: 'Arc\'s Reflection',
-					internalName: 'const/double/pi',
-					outputOptions: _List_Nil,
-					selectedOutput: $elm$core$Maybe$Nothing,
-					signature: 'qdwdq',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
-						$author$project$Logic$App$Types$Number($elm$core$Basics$pi * 2)),
-					displayName: 'Circle\'s Reflection',
-					internalName: 'const/double/tau',
-					outputOptions: _List_Nil,
-					selectedOutput: $elm$core$Maybe$Nothing,
-					signature: 'eawae',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
-						$author$project$Logic$App$Types$Number($elm$core$Basics$e)),
-					displayName: 'Euler\'s Reflection',
-					internalName: 'const/double/e',
-					outputOptions: _List_Nil,
-					selectedOutput: $elm$core$Maybe$Nothing,
-					signature: 'aaq',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$Selectors$getEntity,
-					displayName: 'Entity Purification',
-					internalName: 'get_entity',
-					outputOptions: _List_fromArray(
-						[$author$project$Logic$App$Types$EntityType, $author$project$Logic$App$Types$NullType]),
-					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2($author$project$Logic$App$Types$NullType, $author$project$Logic$App$Types$Null)),
-					signature: 'qqqqqdaqa',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$Selectors$getEntity,
-					displayName: 'Entity Purification: Animal',
-					internalName: 'get_entity/animal',
-					outputOptions: _List_fromArray(
-						[$author$project$Logic$App$Types$EntityType, $author$project$Logic$App$Types$NullType]),
-					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2($author$project$Logic$App$Types$NullType, $author$project$Logic$App$Types$Null)),
-					signature: 'qqqqqdaqaawa',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$Selectors$getEntity,
-					displayName: 'Entity Purification: Monster',
-					internalName: 'get_entity/monster',
-					outputOptions: _List_fromArray(
-						[$author$project$Logic$App$Types$EntityType, $author$project$Logic$App$Types$NullType]),
-					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2($author$project$Logic$App$Types$NullType, $author$project$Logic$App$Types$Null)),
-					signature: 'qqqqqdaqaawq',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$Selectors$getEntity,
-					displayName: 'Entity Purification: Item',
-					internalName: 'get_entity/item',
-					outputOptions: _List_fromArray(
-						[$author$project$Logic$App$Types$EntityType, $author$project$Logic$App$Types$NullType]),
-					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2($author$project$Logic$App$Types$NullType, $author$project$Logic$App$Types$Null)),
-					signature: 'qqqqqdaqaaww',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$Selectors$getEntity,
-					displayName: 'Entity Purification: Player',
-					internalName: 'get_entity/player',
-					outputOptions: _List_fromArray(
-						[$author$project$Logic$App$Types$EntityType, $author$project$Logic$App$Types$NullType]),
-					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2($author$project$Logic$App$Types$NullType, $author$project$Logic$App$Types$Null)),
-					signature: 'qqqqqdaqaawe',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$Selectors$getEntity,
-					displayName: 'Entity Purification: Living',
-					internalName: 'get_entity/living',
-					outputOptions: _List_fromArray(
-						[$author$project$Logic$App$Types$EntityType, $author$project$Logic$App$Types$NullType]),
-					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2($author$project$Logic$App$Types$NullType, $author$project$Logic$App$Types$Null)),
-					signature: 'qqqqqdaqaawd',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
-					displayName: 'Zone Distillation: Any',
-					internalName: 'zone_entity',
-					outputOptions: _List_fromArray(
-						[
-							$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
-						]),
-					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2(
-							$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
-							$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-					signature: 'qqqqqwded',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
-					displayName: 'Zone Distillation: Animal',
-					internalName: 'zone_entity/animal',
-					outputOptions: _List_fromArray(
-						[
-							$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
-						]),
-					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2(
-							$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
-							$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-					signature: 'qqqqqwdeddwa',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
-					displayName: 'Zone Distillation: Non-Animal',
-					internalName: 'zone_entity/not_animal',
-					outputOptions: _List_fromArray(
-						[
-							$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
-						]),
-					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2(
-							$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
-							$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-					signature: 'eeeeewaqaawa',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
-					displayName: 'Zone Distillation: Monster',
-					internalName: 'zone_entity/monster',
-					outputOptions: _List_fromArray(
-						[
-							$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
-						]),
-					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2(
-							$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
-							$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-					signature: 'qqqqqwdeddwq',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
-					displayName: 'Zone Distillation: Non-Monster',
-					internalName: 'zone_entity/not_monster',
-					outputOptions: _List_fromArray(
-						[
-							$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
-						]),
-					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2(
-							$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
-							$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-					signature: 'eeeeewaqaawq',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
-					displayName: 'Zone Distillation: Item',
-					internalName: 'zone_entity/item',
-					outputOptions: _List_fromArray(
-						[
-							$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
-						]),
-					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2(
-							$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
-							$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-					signature: 'qqqqqwdeddww',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
-					displayName: 'Zone Distillation: Non-Item',
-					internalName: 'zone_entity/not_item',
-					outputOptions: _List_fromArray(
-						[
-							$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
-						]),
-					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2(
-							$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
-							$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-					signature: 'eeeeewaqaaww',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
-					displayName: 'Zone Distillation: Player',
-					internalName: 'zone_entity/player',
-					outputOptions: _List_fromArray(
-						[
-							$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
-						]),
-					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2(
-							$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
-							$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-					signature: 'qqqqqwdeddwe',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
-					displayName: 'Zone Distillation: Non-Player',
-					internalName: 'zone_entity/not_player',
-					outputOptions: _List_fromArray(
-						[
-							$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
-						]),
-					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2(
-							$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
-							$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-					signature: 'eeeeewaqaawe',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
-					displayName: 'Zone Distillation: Living',
-					internalName: 'zone_entity/living',
-					outputOptions: _List_fromArray(
-						[
-							$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
-						]),
-					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2(
-							$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
-							$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-					signature: 'qqqqqwdeddwd',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{
-					action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
-					displayName: 'Zone Distillation: Non-Living',
-					internalName: 'zone_entity/not_living',
-					outputOptions: _List_fromArray(
-						[
-							$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
-						]),
-					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2(
-							$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
-							$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
-					signature: 'eeeeewaqaawd',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{action: $author$project$Logic$App$Patterns$Lists$append, displayName: 'Integration Distillation', internalName: 'append', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'edqde', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Lists$concat, displayName: 'Combination Distillation', internalName: 'concat', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaeaq', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Lists$index, displayName: 'Selection Distillation', internalName: 'index', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'deeed', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Lists$listSize, displayName: 'Abacus Purification', internalName: 'list_size', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqaeaq', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Lists$singleton, displayName: 'Single\'s Purification', internalName: 'singleton', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'adeeed', startDirection: $author$project$Logic$App$Types$East},
-					{
-					action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
-						$author$project$Logic$App$Types$IotaList($elm$core$Array$empty)),
-					displayName: 'Vacant Reflection',
-					internalName: 'empty_list',
-					outputOptions: _List_Nil,
-					selectedOutput: $elm$core$Maybe$Nothing,
-					signature: 'qqaeaae',
-					startDirection: $author$project$Logic$App$Types$East
-				},
-					{action: $author$project$Logic$App$Patterns$Lists$reverseList, displayName: 'Retrograde Purification', internalName: 'reverse_list', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqaede', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Lists$lastNList, displayName: 'Flock\'s Gambit', internalName: 'last_n_list', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ewdqdwe', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Lists$splat, displayName: 'Flock\'s Disintegration', internalName: 'splat', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qwaeawq', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Lists$indexOf, displayName: 'Locator\'s Distillation', internalName: 'index_of', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dedqde', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Lists$listRemove, displayName: 'Excisor\'s Distillation', internalName: 'list_remove', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'edqdewaqa', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Lists$slice, displayName: 'Selection Exaltation', internalName: 'slice', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaeaqwded', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Lists$modifyinPlace, displayName: 'Surgeon\'s Exaltation', internalName: 'modify_in_place', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wqaeaqw', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Lists$construct, displayName: 'Speaker\'s Distillation', internalName: 'construct', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddewedd', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$Lists$deconstruct, displayName: 'Speaker\'s Decomposition', internalName: 'deconstruct', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aaqwqaa', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Consideration', internalName: 'escape', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqaw', startDirection: $author$project$Logic$App$Types$West},
-					{
-					action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
-						$author$project$Logic$App$Types$OpenParenthesis($elm$core$Array$empty)),
-					displayName: 'Introspection',
-					internalName: 'open_paren',
-					outputOptions: _List_Nil,
-					selectedOutput: $elm$core$Maybe$Nothing,
-					signature: 'qqq',
-					startDirection: $author$project$Logic$App$Types$West
-				},
-					{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Retrospection', internalName: 'close_paren', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eee', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Hermes\' Gambit', internalName: 'eval', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'deaqq', startDirection: $author$project$Logic$App$Types$Southeast},
-					{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Thoth\'s Gambit', internalName: 'for_each', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dadad', startDirection: $author$project$Logic$App$Types$Northeast},
-					{action: $author$project$Logic$App$Patterns$PatternRegistry$saveMacro, displayName: 'Save Macro', internalName: 'save_macro', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'awaawa', startDirection: $author$project$Logic$App$Types$Southeast}
-				])));
+								_Utils_Tuple3(0, 0, -1))),
+						displayName: 'Vector Reflection -Z',
+						internalName: 'const/vec/nz',
+						outputOptions: _List_Nil,
+						selectedOutput: $elm$core$Maybe$Nothing,
+						signature: 'eeeeeqd',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
+							$author$project$Logic$App$Types$Vector(
+								_Utils_Tuple3(0, 0, 0))),
+						displayName: 'Vector Reflection Zero',
+						internalName: 'const/vec/0',
+						outputOptions: _List_Nil,
+						selectedOutput: $elm$core$Maybe$Nothing,
+						signature: 'qqqqq',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
+							$author$project$Logic$App$Types$Number($elm$core$Basics$pi)),
+						displayName: 'Arc\'s Reflection',
+						internalName: 'const/double/pi',
+						outputOptions: _List_Nil,
+						selectedOutput: $elm$core$Maybe$Nothing,
+						signature: 'qdwdq',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
+							$author$project$Logic$App$Types$Number($elm$core$Basics$pi * 2)),
+						displayName: 'Circle\'s Reflection',
+						internalName: 'const/double/tau',
+						outputOptions: _List_Nil,
+						selectedOutput: $elm$core$Maybe$Nothing,
+						signature: 'eawae',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
+							$author$project$Logic$App$Types$Number($elm$core$Basics$e)),
+						displayName: 'Euler\'s Reflection',
+						internalName: 'const/double/e',
+						outputOptions: _List_Nil,
+						selectedOutput: $elm$core$Maybe$Nothing,
+						signature: 'aaq',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$Selectors$getEntity,
+						displayName: 'Entity Purification',
+						internalName: 'get_entity',
+						outputOptions: _List_fromArray(
+							[$author$project$Logic$App$Types$EntityType, $author$project$Logic$App$Types$NullType]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2($author$project$Logic$App$Types$NullType, $author$project$Logic$App$Types$Null)),
+						signature: 'qqqqqdaqa',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$Selectors$getEntity,
+						displayName: 'Entity Purification: Animal',
+						internalName: 'get_entity/animal',
+						outputOptions: _List_fromArray(
+							[$author$project$Logic$App$Types$EntityType, $author$project$Logic$App$Types$NullType]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2($author$project$Logic$App$Types$NullType, $author$project$Logic$App$Types$Null)),
+						signature: 'qqqqqdaqaawa',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$Selectors$getEntity,
+						displayName: 'Entity Purification: Monster',
+						internalName: 'get_entity/monster',
+						outputOptions: _List_fromArray(
+							[$author$project$Logic$App$Types$EntityType, $author$project$Logic$App$Types$NullType]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2($author$project$Logic$App$Types$NullType, $author$project$Logic$App$Types$Null)),
+						signature: 'qqqqqdaqaawq',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$Selectors$getEntity,
+						displayName: 'Entity Purification: Item',
+						internalName: 'get_entity/item',
+						outputOptions: _List_fromArray(
+							[$author$project$Logic$App$Types$EntityType, $author$project$Logic$App$Types$NullType]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2($author$project$Logic$App$Types$NullType, $author$project$Logic$App$Types$Null)),
+						signature: 'qqqqqdaqaaww',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$Selectors$getEntity,
+						displayName: 'Entity Purification: Player',
+						internalName: 'get_entity/player',
+						outputOptions: _List_fromArray(
+							[$author$project$Logic$App$Types$EntityType, $author$project$Logic$App$Types$NullType]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2($author$project$Logic$App$Types$NullType, $author$project$Logic$App$Types$Null)),
+						signature: 'qqqqqdaqaawe',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$Selectors$getEntity,
+						displayName: 'Entity Purification: Living',
+						internalName: 'get_entity/living',
+						outputOptions: _List_fromArray(
+							[$author$project$Logic$App$Types$EntityType, $author$project$Logic$App$Types$NullType]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2($author$project$Logic$App$Types$NullType, $author$project$Logic$App$Types$Null)),
+						signature: 'qqqqqdaqaawd',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
+						displayName: 'Zone Distillation: Any',
+						internalName: 'zone_entity',
+						outputOptions: _List_fromArray(
+							[
+								$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
+							]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2(
+								$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
+								$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
+						signature: 'qqqqqwded',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
+						displayName: 'Zone Distillation: Animal',
+						internalName: 'zone_entity/animal',
+						outputOptions: _List_fromArray(
+							[
+								$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
+							]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2(
+								$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
+								$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
+						signature: 'qqqqqwdeddwa',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
+						displayName: 'Zone Distillation: Non-Animal',
+						internalName: 'zone_entity/not_animal',
+						outputOptions: _List_fromArray(
+							[
+								$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
+							]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2(
+								$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
+								$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
+						signature: 'eeeeewaqaawa',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
+						displayName: 'Zone Distillation: Monster',
+						internalName: 'zone_entity/monster',
+						outputOptions: _List_fromArray(
+							[
+								$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
+							]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2(
+								$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
+								$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
+						signature: 'qqqqqwdeddwq',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
+						displayName: 'Zone Distillation: Non-Monster',
+						internalName: 'zone_entity/not_monster',
+						outputOptions: _List_fromArray(
+							[
+								$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
+							]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2(
+								$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
+								$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
+						signature: 'eeeeewaqaawq',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
+						displayName: 'Zone Distillation: Item',
+						internalName: 'zone_entity/item',
+						outputOptions: _List_fromArray(
+							[
+								$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
+							]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2(
+								$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
+								$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
+						signature: 'qqqqqwdeddww',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
+						displayName: 'Zone Distillation: Non-Item',
+						internalName: 'zone_entity/not_item',
+						outputOptions: _List_fromArray(
+							[
+								$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
+							]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2(
+								$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
+								$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
+						signature: 'eeeeewaqaaww',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
+						displayName: 'Zone Distillation: Player',
+						internalName: 'zone_entity/player',
+						outputOptions: _List_fromArray(
+							[
+								$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
+							]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2(
+								$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
+								$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
+						signature: 'qqqqqwdeddwe',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
+						displayName: 'Zone Distillation: Non-Player',
+						internalName: 'zone_entity/not_player',
+						outputOptions: _List_fromArray(
+							[
+								$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
+							]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2(
+								$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
+								$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
+						signature: 'eeeeewaqaawe',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
+						displayName: 'Zone Distillation: Living',
+						internalName: 'zone_entity/living',
+						outputOptions: _List_fromArray(
+							[
+								$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
+							]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2(
+								$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
+								$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
+						signature: 'qqqqqwdeddwd',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$Selectors$zoneEntity,
+						displayName: 'Zone Distillation: Non-Living',
+						internalName: 'zone_entity/not_living',
+						outputOptions: _List_fromArray(
+							[
+								$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType)
+							]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2(
+								$author$project$Logic$App$Types$IotaListType($author$project$Logic$App$Types$EntityType),
+								$author$project$Logic$App$Types$IotaList($elm$core$Array$empty))),
+						signature: 'eeeeewaqaawd',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{action: $author$project$Logic$App$Patterns$Lists$append, displayName: 'Integration Distillation', internalName: 'append', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'edqde', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Lists$concat, displayName: 'Combination Distillation', internalName: 'concat', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaeaq', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Lists$index, displayName: 'Selection Distillation', internalName: 'index', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'deeed', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Lists$listSize, displayName: 'Abacus Purification', internalName: 'list_size', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqaeaq', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Lists$singleton, displayName: 'Single\'s Purification', internalName: 'singleton', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'adeeed', startDirection: $author$project$Logic$App$Types$East},
+						{
+						action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
+							$author$project$Logic$App$Types$IotaList($elm$core$Array$empty)),
+						displayName: 'Vacant Reflection',
+						internalName: 'empty_list',
+						outputOptions: _List_Nil,
+						selectedOutput: $elm$core$Maybe$Nothing,
+						signature: 'qqaeaae',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{action: $author$project$Logic$App$Patterns$Lists$reverseList, displayName: 'Retrograde Purification', internalName: 'reverse_list', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqaede', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Lists$lastNList, displayName: 'Flock\'s Gambit', internalName: 'last_n_list', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ewdqdwe', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Lists$splat, displayName: 'Flock\'s Disintegration', internalName: 'splat', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qwaeawq', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Lists$indexOf, displayName: 'Locator\'s Distillation', internalName: 'index_of', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dedqde', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Lists$listRemove, displayName: 'Excisor\'s Distillation', internalName: 'list_remove', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'edqdewaqa', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Lists$slice, displayName: 'Selection Exaltation', internalName: 'slice', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaeaqwded', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Lists$modifyinPlace, displayName: 'Surgeon\'s Exaltation', internalName: 'modify_in_place', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wqaeaqw', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Lists$construct, displayName: 'Speaker\'s Distillation', internalName: 'construct', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddewedd', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$Lists$deconstruct, displayName: 'Speaker\'s Decomposition', internalName: 'deconstruct', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aaqwqaa', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Consideration', internalName: 'escape', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqaw', startDirection: $author$project$Logic$App$Types$West},
+						{
+						action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
+							$author$project$Logic$App$Types$OpenParenthesis($elm$core$Array$empty)),
+						displayName: 'Introspection',
+						internalName: 'open_paren',
+						outputOptions: _List_Nil,
+						selectedOutput: $elm$core$Maybe$Nothing,
+						signature: 'qqq',
+						startDirection: $author$project$Logic$App$Types$West
+					},
+						{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Retrospection', internalName: 'close_paren', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eee', startDirection: $author$project$Logic$App$Types$East},
+						{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Hermes\' Gambit', internalName: 'eval', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'deaqq', startDirection: $author$project$Logic$App$Types$Southeast},
+						{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Thoth\'s Gambit', internalName: 'for_each', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'dadad', startDirection: $author$project$Logic$App$Types$Northeast},
+						{action: $author$project$Logic$App$Patterns$PatternRegistry$saveMacro, displayName: 'Save Macro', internalName: 'save_macro', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'awaawa', startDirection: $author$project$Logic$App$Types$Southeast}
+					]))));
 }
 try {
 	var $author$project$Logic$App$Patterns$PatternRegistry$patternRegistry = $author$project$Logic$App$Patterns$PatternRegistry$cyclic$patternRegistry();
@@ -16145,11 +16289,6 @@ var $elm$file$File$Select$file = F2(
 			toMsg,
 			_File_uploadOne(mimes));
 	});
-var $elm$core$List$concatMap = F2(
-	function (f, list) {
-		return $elm$core$List$concat(
-			A2($elm$core$List$map, f, list));
-	});
 var $author$project$Components$App$Grid$genDrawnPointsFromPatternArray = function (patternArray) {
 	return A2(
 		$elm$core$List$concatMap,
@@ -16996,7 +17135,7 @@ var $author$project$Components$App$Grid$updateUsedGridPoints = F5(
 				$elm$core$Maybe$withDefault,
 				_Utils_Tuple2($author$project$Logic$App$Patterns$PatternRegistry$unknownPattern, _List_Nil),
 				A2($elm$core$Array$get, 0, patternArray)).b;
-			var newGrid = A2($author$project$Components$App$Grid$applyUsedPointsToGrid, oldGrid, drawing);
+			var newGrid = A2($author$project$Logic$App$Grid$applyUsedPointsToGrid, oldGrid, drawing);
 			if (!$elm$core$Array$length(tail)) {
 				return newGrid;
 			} else {
@@ -22244,7 +22383,7 @@ var $author$project$Components$App$Grid$getGridpointFromOffsetCoordinates = F2(
 		};
 		return A2(
 			$elm$core$Maybe$withDefault,
-			$author$project$Components$App$Grid$emptyGridpoint,
+			$author$project$Logic$App$Grid$emptyGridpoint,
 			$elm$core$List$head(
 				A2(
 					$elm$core$List$filter,
@@ -22355,7 +22494,7 @@ var $author$project$Components$App$Grid$renderDrawingLine = function (model) {
 	var drawingMode = model.grid.drawing.drawingMode;
 	var activePoint = A2(
 		$elm$core$Maybe$withDefault,
-		$author$project$Components$App$Grid$emptyGridpoint,
+		$author$project$Logic$App$Grid$emptyGridpoint,
 		$elm$core$List$head(model.grid.drawing.activePath));
 	return drawingMode ? _List_fromArray(
 		[
