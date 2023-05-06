@@ -805,7 +805,7 @@ update msg model =
 
         ChangeMacroName signature newName ->
             let
-                updatedMacroDict =
+                newMacroDict =
                     Dict.update signature
                         (Maybe.map
                             (\value ->
@@ -815,8 +815,84 @@ update msg model =
                             )
                         )
                         model.castingContext.macros
+
+                newerMacroDict =
+                    --this is to fix macros inside of macros not showing the macro name
+                    Dict.map
+                        (\_ macro ->
+                            case macro of
+                                ( displayName, startDirection, iota ) ->
+                                    ( displayName
+                                    , startDirection
+                                    , case iota of
+                                        IotaList iotaList ->
+                                            IotaList <|
+                                                Array.map
+                                                    (\i ->
+                                                        case i of
+                                                            PatternIota pattern considered ->
+                                                                PatternIota (getPatternFromSignature (Just newMacroDict) pattern.signature) considered
+
+                                                            _ ->
+                                                                i
+                                                    )
+                                                    iotaList
+
+                                        _ ->
+                                            iota
+                                    )
+                        )
+                        newMacroDict
+
+                newPatternArray =
+                    Array.map
+                        (\tuple ->
+                            case tuple of
+                                ( pattern, gridpoints ) ->
+                                    case Dict.get pattern.signature newerMacroDict of
+                                        Just ( displayName, _, _ ) ->
+                                            ( { pattern | displayName = displayName }, gridpoints )
+
+                                        _ ->
+                                            ( pattern, gridpoints )
+                        )
+                        model.patternArray
+
+                updateIotaArray iotaArray =
+                    Array.map updateIota iotaArray
+
+                updateIota iota =
+                    case iota of
+                        PatternIota pattern considered ->
+                            case Dict.get pattern.signature newerMacroDict of
+                                Just ( displayName, _, _ ) ->
+                                    PatternIota { pattern | displayName = displayName } considered
+
+                                _ ->
+                                    PatternIota pattern considered
+
+                        IotaList list ->
+                            IotaList (updateIotaArray list)
+
+                        OpenParenthesis list ->
+                            OpenParenthesis (updateIotaArray list)
+
+                        _ ->
+                            iota
             in
-            ( { model | castingContext = { castingContext | macros = updatedMacroDict } }, Cmd.none )
+            --TODO: update ravenmind, held item, idk what else this is an absolute pain and this code is garbage and jank
+            ( { model
+                | castingContext =
+                    { castingContext
+                        | macros = newerMacroDict
+                        , ravenmind = Maybe.map updateIota castingContext.ravenmind
+                        , heldItemContent = Maybe.map updateIota castingContext.heldItemContent
+                    }
+                , patternArray = newPatternArray
+                , stack = updateIotaArray model.stack
+              }
+            , Cmd.none
+            )
 
         ContextMenuMsg message ->
             let
