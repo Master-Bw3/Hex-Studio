@@ -90,3 +90,23 @@ setEntityHeldItemContent context entityName heldItemContent =
                 )
                 context.entities
     }
+
+
+getEntityHeldItem : CastingContext -> String -> HeldItem
+getEntityHeldItem context entityName =
+    case Dict.get entityName context.entities of
+        Just { heldItem } ->
+            heldItem
+
+        _ ->
+            NoItem
+
+
+getEntityHeldItemContent : CastingContext -> String -> Maybe Iota
+getEntityHeldItemContent context entityName =
+    case Dict.get entityName context.entities of
+        Just { heldItemContent } ->
+            heldItemContent
+
+        _ ->
+            Nothing

@@ -3,7 +3,7 @@ module Logic.App.Patterns.ReadWrite exposing (..)
 import Array exposing (Array)
 import Logic.App.Patterns.OperatorUtils exposing (action1Input, action2Inputs, actionNoInput, getAny, getEntity)
 import Logic.App.Types exposing (ActionResult, CastingContext, HeldItem(..), Iota(..), Mishap(..))
-import Logic.App.Utils.EntityContext exposing (getPlayerHeldItem, getPlayerHeldItemContent, setPlayerHeldItemContent)
+import Logic.App.Utils.EntityContext exposing (getEntityHeldItem, getEntityHeldItemContent, getPlayerHeldItem, getPlayerHeldItemContent, setEntityHeldItem, setEntityHeldItemContent, setPlayerHeldItemContent)
 
 
 read : Array Iota -> CastingContext -> ActionResult
@@ -147,61 +147,77 @@ writeLocal stack ctx =
     action1Input stack ctx getAny action
 
 
-tempReadChronical : Array Iota -> CastingContext -> ActionResult
-tempReadChronical stack ctx =
+readChronical : Array Iota -> CastingContext -> ActionResult
+readChronical stack ctx =
     let
-        action _ context =
-            ( case getPlayerHeldItem context of
-                NoItem ->
-                    Array.empty
+        action iota context =
+            case iota of
+                Entity entity ->
+                    ( case getEntityHeldItem context entity of
+                        NoItem ->
+                            Array.empty
 
-                Trinket ->
-                    Array.empty
+                        Trinket ->
+                            Array.empty
 
-                Cypher ->
-                    Array.empty
+                        Cypher ->
+                            Array.empty
 
-                Artifact ->
-                    Array.empty
+                        Artifact ->
+                            Array.empty
 
-                Focus ->
-                    Array.fromList [ Maybe.withDefault Null (getPlayerHeldItemContent context) ]
+                        Focus ->
+                            Array.fromList [ Maybe.withDefault Null (getEntityHeldItemContent context entity) ]
 
-                Spellbook ->
-                    Array.fromList [ Maybe.withDefault Null (getPlayerHeldItemContent context) ]
+                        Spellbook ->
+                            Array.fromList [ Maybe.withDefault Null (getEntityHeldItemContent context entity) ]
 
-                Pie ->
-                    Array.fromList [ Number pi ]
-            , context
-            )
+                        Pie ->
+                            Array.fromList [ Number pi ]
+                    , context
+                    )
+
+                _ ->
+                    ( Garbage CatastrophicFailure
+                        |> Array.repeat 1
+                    , context
+                    )
     in
     action1Input stack ctx getEntity action
 
 
-tempWriteChronical : Array Iota -> CastingContext -> ActionResult
-tempWriteChronical stack ctx =
+writeChronical : Array Iota -> CastingContext -> ActionResult
+writeChronical stack ctx =
     let
-        action _ iota context =
-            case getPlayerHeldItem context of
-                NoItem ->
-                    ( Array.fromList [ iota ], context )
+        action iota1 iota2 context =
+            case iota1 of
+                Entity entity ->
+                    case getEntityHeldItem context entity of
+                        NoItem ->
+                            ( Array.fromList [ iota2 ], context )
 
-                Trinket ->
-                    ( Array.fromList [ iota ], context )
+                        Trinket ->
+                            ( Array.fromList [ iota2 ], context )
 
-                Cypher ->
-                    ( Array.fromList [ iota ], context )
+                        Cypher ->
+                            ( Array.fromList [ iota2 ], context )
 
-                Artifact ->
-                    ( Array.fromList [ iota ], context )
+                        Artifact ->
+                            ( Array.fromList [ iota2 ], context )
 
-                Focus ->
-                    ( Array.empty, setPlayerHeldItemContent context (Just iota) )
+                        Focus ->
+                            ( Array.empty, setEntityHeldItemContent context entity (Just iota2) )
 
-                Spellbook ->
-                    ( Array.empty, setPlayerHeldItemContent context (Just iota) )
+                        Spellbook ->
+                            ( Array.empty, setEntityHeldItemContent context entity (Just iota2) )
 
-                Pie ->
-                    ( Array.fromList [ iota ], context )
+                        Pie ->
+                            ( Array.fromList [ iota2 ], context )
+
+                _ ->
+                    ( Garbage CatastrophicFailure
+                        |> Array.repeat 1
+                    , context
+                    )
     in
     action2Inputs stack ctx getEntity getAny action

@@ -312,7 +312,15 @@ type alias SimplifiedCastingContext =
 simplifyCastingContext : CastingContext -> SimplifiedCastingContext
 simplifyCastingContext castingContext =
     { ravenmind = Maybe.map simplifyIota castingContext.ravenmind
-    , entities = Dict.empty
+    , entities =
+        Dict.fromList <|
+            List.map
+                (\entry ->
+                    case entry of
+                        ( name, { heldItem, heldItemContent } ) ->
+                            ( name, { heldItem = heldItem, heldItemContent = Maybe.map simplifyIota heldItemContent } )
+                )
+                (Dict.toList castingContext.entities)
     , macros =
         Dict.fromList <|
             List.map
@@ -367,7 +375,15 @@ unSimplifyCastingContext simplifiedCastingContext =
                 macrosLayer1
     in
     { ravenmind = Maybe.map (unSimplifyIota macros) simplifiedCastingContext.ravenmind
-    , entities = Dict.empty --temp
+    , entities =
+        Dict.fromList <|
+            List.map
+                (\entry ->
+                    case entry of
+                        ( name, { heldItem, heldItemContent } ) ->
+                            ( name, { heldItem = heldItem, heldItemContent = Maybe.map (unSimplifyIota macros) heldItemContent } )
+                )
+                (Dict.toList simplifiedCastingContext.entities)
     , macros = macros
     }
 

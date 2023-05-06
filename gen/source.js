@@ -12449,6 +12449,82 @@ var $author$project$Logic$App$Patterns$ReadWrite$read = F2(
 		};
 		return A3($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, ctx, action);
 	});
+var $author$project$Logic$App$Utils$EntityContext$getEntityHeldItem = F2(
+	function (context, entityName) {
+		var _v0 = A2($elm$core$Dict$get, entityName, context.entities);
+		if (_v0.$ === 'Just') {
+			var heldItem = _v0.a.heldItem;
+			return heldItem;
+		} else {
+			return $author$project$Logic$App$Types$NoItem;
+		}
+	});
+var $author$project$Logic$App$Utils$EntityContext$getEntityHeldItemContent = F2(
+	function (context, entityName) {
+		var _v0 = A2($elm$core$Dict$get, entityName, context.entities);
+		if (_v0.$ === 'Just') {
+			var heldItemContent = _v0.a.heldItemContent;
+			return heldItemContent;
+		} else {
+			return $elm$core$Maybe$Nothing;
+		}
+	});
+var $author$project$Logic$App$Patterns$ReadWrite$readChronical = F2(
+	function (stack, ctx) {
+		var action = F2(
+			function (iota, context) {
+				if (iota.$ === 'Entity') {
+					var entity = iota.a;
+					return _Utils_Tuple2(
+						function () {
+							var _v1 = A2($author$project$Logic$App$Utils$EntityContext$getEntityHeldItem, context, entity);
+							switch (_v1.$) {
+								case 'NoItem':
+									return $elm$core$Array$empty;
+								case 'Trinket':
+									return $elm$core$Array$empty;
+								case 'Cypher':
+									return $elm$core$Array$empty;
+								case 'Artifact':
+									return $elm$core$Array$empty;
+								case 'Focus':
+									return $elm$core$Array$fromList(
+										_List_fromArray(
+											[
+												A2(
+												$elm$core$Maybe$withDefault,
+												$author$project$Logic$App$Types$Null,
+												A2($author$project$Logic$App$Utils$EntityContext$getEntityHeldItemContent, context, entity))
+											]));
+								case 'Spellbook':
+									return $elm$core$Array$fromList(
+										_List_fromArray(
+											[
+												A2(
+												$elm$core$Maybe$withDefault,
+												$author$project$Logic$App$Types$Null,
+												A2($author$project$Logic$App$Utils$EntityContext$getEntityHeldItemContent, context, entity))
+											]));
+								default:
+									return $elm$core$Array$fromList(
+										_List_fromArray(
+											[
+												$author$project$Logic$App$Types$Number($elm$core$Basics$pi)
+											]));
+							}
+						}(),
+						context);
+				} else {
+					return _Utils_Tuple2(
+						A2(
+							$elm$core$Array$repeat,
+							1,
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure)),
+						context);
+				}
+			});
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, action);
+	});
 var $author$project$Logic$App$Patterns$ReadWrite$readLocal = F2(
 	function (stack, ctx) {
 		var action = function (context) {
@@ -12841,106 +12917,6 @@ var $author$project$Logic$App$Patterns$Math$tangent = F2(
 			});
 		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
 	});
-var $author$project$Logic$App$Patterns$ReadWrite$tempReadChronical = F2(
-	function (stack, ctx) {
-		var action = F2(
-			function (_v1, context) {
-				return _Utils_Tuple2(
-					function () {
-						var _v0 = $author$project$Logic$App$Utils$EntityContext$getPlayerHeldItem(context);
-						switch (_v0.$) {
-							case 'NoItem':
-								return $elm$core$Array$empty;
-							case 'Trinket':
-								return $elm$core$Array$empty;
-							case 'Cypher':
-								return $elm$core$Array$empty;
-							case 'Artifact':
-								return $elm$core$Array$empty;
-							case 'Focus':
-								return $elm$core$Array$fromList(
-									_List_fromArray(
-										[
-											A2(
-											$elm$core$Maybe$withDefault,
-											$author$project$Logic$App$Types$Null,
-											$author$project$Logic$App$Utils$EntityContext$getPlayerHeldItemContent(context))
-										]));
-							case 'Spellbook':
-								return $elm$core$Array$fromList(
-									_List_fromArray(
-										[
-											A2(
-											$elm$core$Maybe$withDefault,
-											$author$project$Logic$App$Types$Null,
-											$author$project$Logic$App$Utils$EntityContext$getPlayerHeldItemContent(context))
-										]));
-							default:
-								return $elm$core$Array$fromList(
-									_List_fromArray(
-										[
-											$author$project$Logic$App$Types$Number($elm$core$Basics$pi)
-										]));
-						}
-					}(),
-					context);
-			});
-		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, action);
-	});
-var $author$project$Logic$App$Patterns$ReadWrite$tempWriteChronical = F2(
-	function (stack, ctx) {
-		var action = F3(
-			function (_v1, iota, context) {
-				var _v0 = $author$project$Logic$App$Utils$EntityContext$getPlayerHeldItem(context);
-				switch (_v0.$) {
-					case 'NoItem':
-						return _Utils_Tuple2(
-							$elm$core$Array$fromList(
-								_List_fromArray(
-									[iota])),
-							context);
-					case 'Trinket':
-						return _Utils_Tuple2(
-							$elm$core$Array$fromList(
-								_List_fromArray(
-									[iota])),
-							context);
-					case 'Cypher':
-						return _Utils_Tuple2(
-							$elm$core$Array$fromList(
-								_List_fromArray(
-									[iota])),
-							context);
-					case 'Artifact':
-						return _Utils_Tuple2(
-							$elm$core$Array$fromList(
-								_List_fromArray(
-									[iota])),
-							context);
-					case 'Focus':
-						return _Utils_Tuple2(
-							$elm$core$Array$empty,
-							A2(
-								$author$project$Logic$App$Utils$EntityContext$setPlayerHeldItemContent,
-								context,
-								$elm$core$Maybe$Just(iota)));
-					case 'Spellbook':
-						return _Utils_Tuple2(
-							$elm$core$Array$empty,
-							A2(
-								$author$project$Logic$App$Utils$EntityContext$setPlayerHeldItemContent,
-								context,
-								$elm$core$Maybe$Just(iota)));
-					default:
-						return _Utils_Tuple2(
-							$elm$core$Array$fromList(
-								_List_fromArray(
-									[iota])),
-							context);
-				}
-			});
-		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
-	});
 var $author$project$Logic$App$Patterns$Math$toSet = F2(
 	function (stack, ctx) {
 		var constructSet = F2(
@@ -13095,6 +13071,94 @@ var $author$project$Logic$App$Patterns$ReadWrite$write = F2(
 				}
 			});
 		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
+	});
+var $author$project$Logic$App$Utils$EntityContext$setEntityHeldItemContent = F3(
+	function (context, entityName, heldItemContent) {
+		return _Utils_update(
+			context,
+			{
+				entities: A3(
+					$elm$core$Dict$update,
+					entityName,
+					function (v) {
+						if (v.$ === 'Just') {
+							var entity = v.a;
+							return $elm$core$Maybe$Just(
+								_Utils_update(
+									entity,
+									{heldItemContent: heldItemContent}));
+						} else {
+							return v;
+						}
+					},
+					context.entities)
+			});
+	});
+var $author$project$Logic$App$Patterns$ReadWrite$writeChronical = F2(
+	function (stack, ctx) {
+		var action = F3(
+			function (iota1, iota2, context) {
+				if (iota1.$ === 'Entity') {
+					var entity = iota1.a;
+					var _v1 = A2($author$project$Logic$App$Utils$EntityContext$getEntityHeldItem, context, entity);
+					switch (_v1.$) {
+						case 'NoItem':
+							return _Utils_Tuple2(
+								$elm$core$Array$fromList(
+									_List_fromArray(
+										[iota2])),
+								context);
+						case 'Trinket':
+							return _Utils_Tuple2(
+								$elm$core$Array$fromList(
+									_List_fromArray(
+										[iota2])),
+								context);
+						case 'Cypher':
+							return _Utils_Tuple2(
+								$elm$core$Array$fromList(
+									_List_fromArray(
+										[iota2])),
+								context);
+						case 'Artifact':
+							return _Utils_Tuple2(
+								$elm$core$Array$fromList(
+									_List_fromArray(
+										[iota2])),
+								context);
+						case 'Focus':
+							return _Utils_Tuple2(
+								$elm$core$Array$empty,
+								A3(
+									$author$project$Logic$App$Utils$EntityContext$setEntityHeldItemContent,
+									context,
+									entity,
+									$elm$core$Maybe$Just(iota2)));
+						case 'Spellbook':
+							return _Utils_Tuple2(
+								$elm$core$Array$empty,
+								A3(
+									$author$project$Logic$App$Utils$EntityContext$setEntityHeldItemContent,
+									context,
+									entity,
+									$elm$core$Maybe$Just(iota2)));
+						default:
+							return _Utils_Tuple2(
+								$elm$core$Array$fromList(
+									_List_fromArray(
+										[iota2])),
+								context);
+					}
+				} else {
+					return _Utils_Tuple2(
+						A2(
+							$elm$core$Array$repeat,
+							1,
+							$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$CatastrophicFailure)),
+						context);
+				}
+			});
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
 	});
 var $author$project$Logic$App$Patterns$ReadWrite$writeLocal = F2(
 	function (stack, ctx) {
@@ -13630,9 +13694,9 @@ function $author$project$Logic$App$Patterns$PatternRegistry$cyclic$patternRegist
 					{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'akashic/write', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eeeweeeeede', startDirection: $author$project$Logic$App$Types$East},
 					{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Charon\'s Gambit', internalName: 'halt', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqdee', startDirection: $author$project$Logic$App$Types$Southwest},
 					{action: $author$project$Logic$App$Patterns$ReadWrite$read, displayName: 'Scribe\'s Reflection', internalName: 'read', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqqqqq', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$ReadWrite$tempReadChronical, displayName: 'Chronicler\'s Purification', internalName: 'read/entity', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wawqwqwqwqwqw', startDirection: $author$project$Logic$App$Types$East},
+					{action: $author$project$Logic$App$Patterns$ReadWrite$readChronical, displayName: 'Chronicler\'s Purification', internalName: 'read/entity', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wawqwqwqwqwqw', startDirection: $author$project$Logic$App$Types$East},
 					{action: $author$project$Logic$App$Patterns$ReadWrite$write, displayName: 'Scribe\'s Gambit', internalName: 'write', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'deeeee', startDirection: $author$project$Logic$App$Types$East},
-					{action: $author$project$Logic$App$Patterns$ReadWrite$tempWriteChronical, displayName: 'Chronicler\'s Gambit', internalName: 'write/entity', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wdwewewewewew', startDirection: $author$project$Logic$App$Types$East},
+					{action: $author$project$Logic$App$Patterns$ReadWrite$writeChronical, displayName: 'Chronicler\'s Gambit', internalName: 'write/entity', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wdwewewewewew', startDirection: $author$project$Logic$App$Types$East},
 					{action: $author$project$Logic$App$Patterns$ReadWrite$readable, displayName: 'Auditor\'s Reflection', internalName: 'readable', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqqqqqe', startDirection: $author$project$Logic$App$Types$East},
 					{
 					action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
@@ -16474,28 +16538,6 @@ var $author$project$Logic$App$Utils$EntityContext$setEntityHeldItem = F3(
 					context.entities)
 			});
 	});
-var $author$project$Logic$App$Utils$EntityContext$setEntityHeldItemContent = F3(
-	function (context, entityName, heldItemContent) {
-		return _Utils_update(
-			context,
-			{
-				entities: A3(
-					$elm$core$Dict$update,
-					entityName,
-					function (v) {
-						if (v.$ === 'Just') {
-							var entity = v.a;
-							return $elm$core$Maybe$Just(
-								_Utils_update(
-									entity,
-									{heldItemContent: heldItemContent}));
-						} else {
-							return v;
-						}
-					},
-					context.entities)
-			});
-	});
 var $author$project$Logic$App$Grid$sortPatterns = function (model) {
 	var drawPatternsResult = A2(
 		$author$project$Logic$App$Grid$drawPatterns,
@@ -16589,7 +16631,7 @@ var $author$project$Logic$App$ImportExport$ImportExportProject$unSimplifyCasting
 	var macrosLayer1 = A2(
 		$elm$core$Dict$map,
 		F2(
-			function (_v4, macro) {
+			function (_v5, macro) {
 				var displayName = macro.a;
 				var startDirection = macro.b;
 				var iota = macro.c;
@@ -16602,7 +16644,7 @@ var $author$project$Logic$App$ImportExport$ImportExportProject$unSimplifyCasting
 	var macros = A2(
 		$elm$core$Dict$map,
 		F2(
-			function (_v0, macro) {
+			function (_v1, macro) {
 				var displayName = macro.a;
 				var startDirection = macro.b;
 				var iota = macro.c;
@@ -16638,7 +16680,24 @@ var $author$project$Logic$App$ImportExport$ImportExportProject$unSimplifyCasting
 			}),
 		macrosLayer1);
 	return {
-		entities: $elm$core$Dict$empty,
+		entities: $elm$core$Dict$fromList(
+			A2(
+				$elm$core$List$map,
+				function (entry) {
+					var name = entry.a;
+					var heldItem = entry.b.heldItem;
+					var heldItemContent = entry.b.heldItemContent;
+					return _Utils_Tuple2(
+						name,
+						{
+							heldItem: heldItem,
+							heldItemContent: A2(
+								$elm$core$Maybe$map,
+								$author$project$Logic$App$ImportExport$ImportExportProject$unSimplifyIota(macros),
+								heldItemContent)
+						});
+				},
+				$elm$core$Dict$toList(simplifiedCastingContext.entities))),
 		macros: macros,
 		ravenmind: A2(
 			$elm$core$Maybe$map,
@@ -21846,16 +21905,30 @@ var $author$project$Logic$App$ImportExport$ImportExportProject$simplifyIota = fu
 };
 var $author$project$Logic$App$ImportExport$ImportExportProject$simplifyCastingContext = function (castingContext) {
 	return {
-		entities: $elm$core$Dict$empty,
+		entities: $elm$core$Dict$fromList(
+			A2(
+				$elm$core$List$map,
+				function (entry) {
+					var name = entry.a;
+					var heldItem = entry.b.heldItem;
+					var heldItemContent = entry.b.heldItemContent;
+					return _Utils_Tuple2(
+						name,
+						{
+							heldItem: heldItem,
+							heldItemContent: A2($elm$core$Maybe$map, $author$project$Logic$App$ImportExport$ImportExportProject$simplifyIota, heldItemContent)
+						});
+				},
+				$elm$core$Dict$toList(castingContext.entities))),
 		macros: $elm$core$Dict$fromList(
 			A2(
 				$elm$core$List$map,
 				function (entry) {
 					var signature = entry.a;
-					var _v1 = entry.b;
-					var displayName = _v1.a;
-					var startDirection = _v1.b;
-					var iota = _v1.c;
+					var _v2 = entry.b;
+					var displayName = _v2.a;
+					var startDirection = _v2.b;
+					var iota = _v2.c;
 					return _Utils_Tuple2(
 						signature,
 						_Utils_Tuple3(
