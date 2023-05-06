@@ -69,17 +69,17 @@ saveExportPanel model =
         , visibilityToDisplayStyle visibility
         ]
         [ h1 [ class "panel_title" ] [ text "File" ]
-        , div [ class "input_label_box" ]
-            [ label [] [ text "Project Name:" ]
-            , input [ value model.projectName, onInput SetProjectName ] []
-            ]
-        , div [ class "seperator" ] []
+        -- , div [ class "input_label_box" ]
+        --     [ label [] [ text "Project Name:" ]
+        --     , input [ value model.projectName, onInput SetProjectName ] []
+        --     ]
+        -- , div [ class "seperator" ] []
 
-        -- , button [ class "generic_button" ] [ text " • Save Project" ]
-        -- , button [ class "generic_button" ] [ text " • Load Project" ]
-        , button [ class "generic_button", onClick SelectProjectFile ] [ text " • Import Project" ]
-        , button [ class "generic_button", onClick (Download (encodeProjectData <| modelToProjectData model) (model.projectName ++ ".hex") "text/plain") ] [ text " • Export Project" ]
-        , div [ class "seperator" ] []
+        -- -- , button [ class "generic_button" ] [ text " • Save Project" ]
+        -- -- , button [ class "generic_button" ] [ text " • Load Project" ]
+        -- , button [ class "generic_button", onClick SelectProjectFile ] [ text " • Import Project" ]
+        -- , button [ class "generic_button", onClick (Download (encodeProjectData <| modelToProjectData model) (model.projectName ++ ".hex") "text/plain") ] [ text " • Export Project" ]
+        -- , div [ class "seperator" ] []
 
         --
         , button [ class "generic_button", onClick (ViewOverlay ImportTextOverlay) ] [ text " • Import Patterns" ]
