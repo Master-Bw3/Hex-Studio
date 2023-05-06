@@ -10096,61 +10096,6 @@ var $author$project$Logic$App$Grid$centerMidpoints = function (points) {
 		},
 		points);
 };
-var $author$project$Logic$App$Patterns$OperatorUtils$actionNoInput = F3(
-	function (stack, ctx, action) {
-		var actionResult = action(ctx);
-		return $author$project$Logic$App$Patterns$OperatorUtils$nanOrInfinityCheck(actionResult.a) ? {
-			ctx: actionResult.b,
-			stack: A2(
-				$author$project$Logic$App$Utils$Utils$unshift,
-				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$MathematicalError),
-				stack),
-			success: false
-		} : {
-			ctx: actionResult.b,
-			stack: A2($elm$core$Array$append, actionResult.a, stack),
-			success: true
-		};
-	});
-var $author$project$Logic$App$Patterns$Circles$circleBoundsMax = F2(
-	function (stack, ctx) {
-		var action = function (_v0) {
-			return _Utils_Tuple2(
-				A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Vector(
-						_Utils_Tuple3(0.0, 0.0, 0.0))),
-				ctx);
-		};
-		return A3($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, ctx, action);
-	});
-var $author$project$Logic$App$Patterns$Circles$circleBoundsMin = F2(
-	function (stack, ctx) {
-		var action = function (_v0) {
-			return _Utils_Tuple2(
-				A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Vector(
-						_Utils_Tuple3(0.0, 0.0, 0.0))),
-				ctx);
-		};
-		return A3($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, ctx, action);
-	});
-var $author$project$Logic$App$Patterns$Circles$circleImpetusDirection = F2(
-	function (stack, ctx) {
-		var action = function (_v0) {
-			return _Utils_Tuple2(
-				A2(
-					$elm$core$Array$repeat,
-					1,
-					$author$project$Logic$App$Types$Vector(
-						_Utils_Tuple3(1.0, 0.0, 0.0))),
-				ctx);
-		};
-		return A3($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, ctx, action);
-	});
 var $elm$core$Basics$pi = _Basics_pi;
 var $author$project$Logic$App$Patterns$Math$coerceAxial = F2(
 	function (stack, ctx) {
@@ -10190,6 +10135,22 @@ var $author$project$Logic$App$Patterns$Math$coerceAxial = F2(
 					ctx);
 			});
 		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector, action);
+	});
+var $author$project$Logic$App$Patterns$OperatorUtils$actionNoInput = F3(
+	function (stack, ctx, action) {
+		var actionResult = action(ctx);
+		return $author$project$Logic$App$Patterns$OperatorUtils$nanOrInfinityCheck(actionResult.a) ? {
+			ctx: actionResult.b,
+			stack: A2(
+				$author$project$Logic$App$Utils$Utils$unshift,
+				$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$MathematicalError),
+				stack),
+			success: false
+		} : {
+			ctx: actionResult.b,
+			stack: A2($elm$core$Array$append, actionResult.a, stack),
+			success: true
+		};
 	});
 var $author$project$Logic$App$Patterns$OperatorUtils$spellNoInput = F2(
 	function (stack, ctx) {
@@ -13778,10 +13739,62 @@ function $author$project$Logic$App$Patterns$PatternRegistry$cyclic$patternRegist
 						signature: 'weaqa',
 						startDirection: $author$project$Logic$App$Types$East
 					},
-						{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Waystone Reflection', internalName: 'circle/impetus_pos', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eaqwqae', startDirection: $author$project$Logic$App$Types$East},
-						{action: $author$project$Logic$App$Patterns$Circles$circleImpetusDirection, displayName: 'Lodestone Reflection', internalName: 'circle/impetus_dir', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eaqwqaewede', startDirection: $author$project$Logic$App$Types$East},
-						{action: $author$project$Logic$App$Patterns$Circles$circleBoundsMin, displayName: 'Lesser Fold Reflection', internalName: 'circle/bounds/min', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eaqwqaewdd', startDirection: $author$project$Logic$App$Types$East},
-						{action: $author$project$Logic$App$Patterns$Circles$circleBoundsMax, displayName: 'Greater Fold Reflection', internalName: 'circle/bounds/max', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqwqawaaqa', startDirection: $author$project$Logic$App$Types$East},
+						{
+						action: $author$project$Logic$App$Patterns$OperatorUtils$spellNoInput,
+						displayName: 'Waystone Reflection',
+						internalName: 'circle/impetus_pos',
+						outputOptions: _List_fromArray(
+							[$author$project$Logic$App$Types$VectorType]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2(
+								$author$project$Logic$App$Types$VectorType,
+								$author$project$Logic$App$Types$Vector(
+									_Utils_Tuple3(0, 0, 0)))),
+						signature: 'eaqwqae',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$OperatorUtils$spellNoInput,
+						displayName: 'Lodestone Reflection',
+						internalName: 'circle/impetus_dir',
+						outputOptions: _List_fromArray(
+							[$author$project$Logic$App$Types$VectorType]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2(
+								$author$project$Logic$App$Types$VectorType,
+								$author$project$Logic$App$Types$Vector(
+									_Utils_Tuple3(0, 0, 0)))),
+						signature: 'eaqwqaewede',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$OperatorUtils$spellNoInput,
+						displayName: 'Lesser Fold Reflection',
+						internalName: 'circle/bounds/min',
+						outputOptions: _List_fromArray(
+							[$author$project$Logic$App$Types$VectorType]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2(
+								$author$project$Logic$App$Types$VectorType,
+								$author$project$Logic$App$Types$Vector(
+									_Utils_Tuple3(0, 0, 0)))),
+						signature: 'eaqwqaewdd',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{
+						action: $author$project$Logic$App$Patterns$OperatorUtils$spellNoInput,
+						displayName: 'Greater Fold Reflection',
+						internalName: 'circle/bounds/max',
+						outputOptions: _List_fromArray(
+							[$author$project$Logic$App$Types$VectorType]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2(
+								$author$project$Logic$App$Types$VectorType,
+								$author$project$Logic$App$Types$Vector(
+									_Utils_Tuple3(0, 0, 0)))),
+						signature: 'aqwqawaaqa',
+						startDirection: $author$project$Logic$App$Types$East
+					},
 						{action: $author$project$Logic$App$Patterns$Stack$swap, displayName: 'Jester\'s Gambit', internalName: 'swap', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aawdd', startDirection: $author$project$Logic$App$Types$Northeast},
 						{action: $author$project$Logic$App$Patterns$Stack$rotate, displayName: 'Rotation Gambit', internalName: 'rotate', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aaeaa', startDirection: $author$project$Logic$App$Types$East},
 						{action: $author$project$Logic$App$Patterns$Stack$rotateReverse, displayName: 'Rotation Gambit II', internalName: 'rotate_reverse', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddqdd', startDirection: $author$project$Logic$App$Types$East},
