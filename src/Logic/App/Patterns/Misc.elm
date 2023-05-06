@@ -6,6 +6,7 @@ import Html.Attributes exposing (action)
 import Logic.App.Patterns.OperatorUtils exposing (action1Input, getAny, getEntity, getVector, spell1Input, spell2Inputs)
 import Logic.App.Types exposing (ActionResult, CastingContext, Iota(..), Mishap(..))
 import Logic.App.Utils.Utils exposing (isJust, unshift)
+import Logic.App.Patterns.OperatorUtils exposing (getNumber)
 
 
 numberLiteral : Float -> Array Iota -> CastingContext -> ActionResult
@@ -84,3 +85,23 @@ mask maskCode stack ctx =
         , ctx = ctx
         , success = False
         }
+
+
+gravityGet : Array Iota -> CastingContext -> ActionResult
+gravityGet stack ctx =
+    spell1Input stack ctx getEntity
+
+
+gravitySet : Array Iota -> CastingContext -> ActionResult
+gravitySet stack ctx =
+    spell2Inputs stack ctx getEntity getVector
+
+
+pekhuiGet : Array Iota -> CastingContext -> ActionResult
+pekhuiGet stack ctx =
+    spell1Input stack ctx getEntity
+
+
+pekhuiSet : Array Iota -> CastingContext -> ActionResult
+pekhuiSet stack ctx =
+    spell2Inputs stack ctx getEntity getNumber

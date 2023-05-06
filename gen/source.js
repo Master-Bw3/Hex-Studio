@@ -11382,9 +11382,45 @@ var $author$project$Logic$App$Patterns$Misc$getEntityVelocity = F2(
 	function (stack, ctx) {
 		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity);
 	});
-var $author$project$Logic$App$Patterns$PatternRegistry$noAction = F2(
+var $author$project$Logic$App$Patterns$Misc$gravityGet = F2(
 	function (stack, ctx) {
-		return {ctx: ctx, stack: stack, success: true};
+		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity);
+	});
+var $author$project$Logic$App$Patterns$Misc$gravitySet = F2(
+	function (stack, ctx) {
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
+	});
+var $author$project$Logic$App$Patterns$GreatSpells$brainsweep = F2(
+	function (stack, ctx) {
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
+	});
+var $author$project$Logic$App$Patterns$GreatSpells$craftPhial = F2(
+	function (stack, ctx) {
+		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity);
+	});
+var $author$project$Logic$App$Patterns$GreatSpells$createLava = F2(
+	function (stack, ctx) {
+		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
+	});
+var $author$project$Logic$App$Patterns$GreatSpells$lightning = F2(
+	function (stack, ctx) {
+		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
+	});
+var $author$project$Logic$App$Patterns$Spells$potion = F2(
+	function (stack, ctx) {
+		return A5($author$project$Logic$App$Patterns$OperatorUtils$spell3Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber);
+	});
+var $author$project$Logic$App$Patterns$Spells$potionFixedPotency = F2(
+	function (stack, ctx) {
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, $author$project$Logic$App$Patterns$OperatorUtils$getNumber);
+	});
+var $author$project$Logic$App$Patterns$Spells$sentinelCreate = F2(
+	function (stack, ctx) {
+		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
+	});
+var $author$project$Logic$App$Patterns$GreatSpells$teleport = F2(
+	function (stack, ctx) {
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
 	});
 var $author$project$Logic$App$Patterns$PatternRegistry$greatSpellRegistry = A2(
 	$elm$core$List$map,
@@ -11393,19 +11429,19 @@ var $author$project$Logic$App$Patterns$PatternRegistry$greatSpellRegistry = A2(
 	},
 	_List_fromArray(
 		[
-			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Create Lava', internalName: 'create_lava', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qdwedadedae', startDirection: $author$project$Logic$App$Types$East},
-			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'White Sun\'s Zenith', internalName: 'potion/regeneration', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqaawawaedd', startDirection: $author$project$Logic$App$Types$East},
-			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Blue Sun\'s Zenith', internalName: 'potion/night_vision', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqaawawaeqdd', startDirection: $author$project$Logic$App$Types$East},
-			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Black Sun\'s Zenith', internalName: 'potion/absorption', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqaawawaeqqdd', startDirection: $author$project$Logic$App$Types$East},
-			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Red Sun\'s Zenith', internalName: 'potion/haste', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaawawaeqqqdd', startDirection: $author$project$Logic$App$Types$East},
-			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Green Sun\'s Zenith', internalName: 'potion/strength', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aawawaeqqqqdd', startDirection: $author$project$Logic$App$Types$East},
-			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Summon Lightning', internalName: 'lightning', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waadwawdaaweewq', startDirection: $author$project$Logic$App$Types$East},
-			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Summon Rain', internalName: 'summon_rain', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wwweeewwweewdawdwad', startDirection: $author$project$Logic$App$Types$East},
-			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Dispel Rain', internalName: 'dispel_rain', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eeewwweeewwaqqddqdqd', startDirection: $author$project$Logic$App$Types$East},
-			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Greater Teleport', internalName: 'teleport', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wwwqqqwwwqqeqqwwwqqwqqdqqqqqdqq', startDirection: $author$project$Logic$App$Types$East},
-			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Summon Greater Sentinel', internalName: 'sentinel/create/great', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waeawaeqqqwqwqqwq', startDirection: $author$project$Logic$App$Types$East},
-			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Craft Phial', internalName: 'craft/battery', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqqqaqwwaqqqqqeqaqqqawwqwqwqwqwqw', startDirection: $author$project$Logic$App$Types$East},
-			{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: 'Flay Mind', internalName: 'brainsweep', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qeqwqwqwqwqeqaeqeaqeqaeqaqded', startDirection: $author$project$Logic$App$Types$East}
+			{action: $author$project$Logic$App$Patterns$GreatSpells$createLava, displayName: 'Create Lava', internalName: 'create_lava', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qdwedadedae', startDirection: $author$project$Logic$App$Types$East},
+			{action: $author$project$Logic$App$Patterns$Spells$potion, displayName: 'White Sun\'s Zenith', internalName: 'potion/regeneration', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqqaawawaedd', startDirection: $author$project$Logic$App$Types$East},
+			{action: $author$project$Logic$App$Patterns$Spells$potionFixedPotency, displayName: 'Blue Sun\'s Zenith', internalName: 'potion/night_vision', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqqaawawaeqdd', startDirection: $author$project$Logic$App$Types$East},
+			{action: $author$project$Logic$App$Patterns$Spells$potion, displayName: 'Black Sun\'s Zenith', internalName: 'potion/absorption', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qqaawawaeqqdd', startDirection: $author$project$Logic$App$Types$East},
+			{action: $author$project$Logic$App$Patterns$Spells$potion, displayName: 'Red Sun\'s Zenith', internalName: 'potion/haste', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaawawaeqqqdd', startDirection: $author$project$Logic$App$Types$East},
+			{action: $author$project$Logic$App$Patterns$Spells$potion, displayName: 'Green Sun\'s Zenith', internalName: 'potion/strength', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aawawaeqqqqdd', startDirection: $author$project$Logic$App$Types$East},
+			{action: $author$project$Logic$App$Patterns$GreatSpells$lightning, displayName: 'Summon Lightning', internalName: 'lightning', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waadwawdaaweewq', startDirection: $author$project$Logic$App$Types$East},
+			{action: $author$project$Logic$App$Patterns$OperatorUtils$spellNoInput, displayName: 'Summon Rain', internalName: 'summon_rain', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wwweeewwweewdawdwad', startDirection: $author$project$Logic$App$Types$East},
+			{action: $author$project$Logic$App$Patterns$OperatorUtils$spellNoInput, displayName: 'Dispel Rain', internalName: 'dispel_rain', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'eeewwweeewwaqqddqdqd', startDirection: $author$project$Logic$App$Types$East},
+			{action: $author$project$Logic$App$Patterns$GreatSpells$teleport, displayName: 'Greater Teleport', internalName: 'teleport', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wwwqqqwwwqqeqqwwwqqwqqdqqqqqdqq', startDirection: $author$project$Logic$App$Types$East},
+			{action: $author$project$Logic$App$Patterns$Spells$sentinelCreate, displayName: 'Summon Greater Sentinel', internalName: 'sentinel/create/great', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'waeawaeqqqwqwqqwq', startDirection: $author$project$Logic$App$Types$East},
+			{action: $author$project$Logic$App$Patterns$GreatSpells$craftPhial, displayName: 'Craft Phial', internalName: 'craft/battery', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aqqqaqwwaqqqqqeqaqqqawwqwqwqwqwqw', startDirection: $author$project$Logic$App$Types$East},
+			{action: $author$project$Logic$App$Patterns$GreatSpells$brainsweep, displayName: 'Flay Mind', internalName: 'brainsweep', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qeqwqwqwqwqeqaeqeaqeqaeqaqded', startDirection: $author$project$Logic$App$Types$East}
 		]));
 var $author$project$Logic$App$Patterns$Math$greaterThan = F2(
 	function (stack, ctx) {
@@ -11816,6 +11852,10 @@ var $author$project$Logic$App$Types$Backspace = {$: 'Backspace'};
 var $author$project$Logic$App$Types$ClearPatterns = {$: 'ClearPatterns'};
 var $author$project$Logic$App$Types$Reset = {$: 'Reset'};
 var $author$project$Logic$App$Types$Wrap = {$: 'Wrap'};
+var $author$project$Logic$App$Patterns$PatternRegistry$noAction = F2(
+	function (stack, ctx) {
+		return {ctx: ctx, stack: stack, success: true};
+	});
 var $author$project$Logic$App$Patterns$PatternRegistry$metapatternRegistry = A2(
 	$elm$core$List$map,
 	function (pattern) {
@@ -12372,17 +12412,17 @@ var $author$project$Logic$App$Patterns$PatternRegistry$parseBookkeeperSignature 
 		}
 	}
 };
+var $author$project$Logic$App$Patterns$Misc$pekhuiGet = F2(
+	function (stack, ctx) {
+		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity);
+	});
+var $author$project$Logic$App$Patterns$Misc$pekhuiSet = F2(
+	function (stack, ctx) {
+		return A4($author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, $author$project$Logic$App$Patterns$OperatorUtils$getNumber);
+	});
 var $author$project$Logic$App$Patterns$Spells$placeBlock = F2(
 	function (stack, ctx) {
 		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
-	});
-var $author$project$Logic$App$Patterns$Spells$potion = F2(
-	function (stack, ctx) {
-		return A5($author$project$Logic$App$Patterns$OperatorUtils$spell3Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, $author$project$Logic$App$Patterns$OperatorUtils$getNumber);
-	});
-var $author$project$Logic$App$Patterns$Spells$potionFixedPotency = F2(
-	function (stack, ctx) {
-		return A4($author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getEntity, $author$project$Logic$App$Patterns$OperatorUtils$getNumber);
 	});
 var $author$project$Logic$App$Patterns$Math$powProj = F2(
 	function (stack, ctx) {
@@ -12758,10 +12798,6 @@ var $author$project$Logic$App$Patterns$Stack$rotateReverse = F2(
 					ctx);
 			});
 		return A6($author$project$Logic$App$Patterns$OperatorUtils$action3Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
-	});
-var $author$project$Logic$App$Patterns$Spells$sentinelCreate = F2(
-	function (stack, ctx) {
-		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
 	});
 var $author$project$Logic$App$Patterns$Spells$sentinelDestroy = F2(
 	function (stack, ctx) {
@@ -13604,10 +13640,35 @@ function $author$project$Logic$App$Patterns$PatternRegistry$cyclic$patternRegist
 				},
 				_List_fromArray(
 					[
-						{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'interop/gravity/get', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wawawddew', startDirection: $author$project$Logic$App$Types$East},
-						{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'interop/gravity/set', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wdwdwaaqw', startDirection: $author$project$Logic$App$Types$East},
-						{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'interop/pehkui/get', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aawawwawwa', startDirection: $author$project$Logic$App$Types$East},
-						{action: $author$project$Logic$App$Patterns$PatternRegistry$noAction, displayName: '', internalName: 'interop/pehkui/set', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddwdwwdwwd', startDirection: $author$project$Logic$App$Types$East},
+						{
+						action: $author$project$Logic$App$Patterns$Misc$gravityGet,
+						displayName: 'Gravitational Purification',
+						internalName: 'interop/gravity/get',
+						outputOptions: _List_fromArray(
+							[$author$project$Logic$App$Types$VectorType]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2(
+								$author$project$Logic$App$Types$VectorType,
+								$author$project$Logic$App$Types$Vector(
+									_Utils_Tuple3(0, -1, 0)))),
+						signature: 'wawawddew',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{action: $author$project$Logic$App$Patterns$Misc$gravitySet, displayName: 'Alter Gravity', internalName: 'interop/gravity/set', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'wdwdwaaqw', startDirection: $author$project$Logic$App$Types$East},
+						{
+						action: $author$project$Logic$App$Patterns$Misc$pekhuiGet,
+						displayName: 'Gulliver\'s Purification',
+						internalName: 'interop/pehkui/get',
+						outputOptions: _List_fromArray(
+							[$author$project$Logic$App$Types$NumberType]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2(
+								$author$project$Logic$App$Types$NumberType,
+								$author$project$Logic$App$Types$Number(1))),
+						signature: 'aawawwawwa',
+						startDirection: $author$project$Logic$App$Types$East
+					},
+						{action: $author$project$Logic$App$Patterns$Misc$pekhuiSet, displayName: 'Alter Scale', internalName: 'interop/pehkui/set', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'ddwdwwdwwd', startDirection: $author$project$Logic$App$Types$East},
 						{action: $author$project$Logic$App$Patterns$Selectors$getCaster, displayName: 'Mind\'s Reflection', internalName: 'get_caster', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'qaq', startDirection: $author$project$Logic$App$Types$Northeast},
 						{
 						action: $author$project$Logic$App$Patterns$Misc$entityPos,

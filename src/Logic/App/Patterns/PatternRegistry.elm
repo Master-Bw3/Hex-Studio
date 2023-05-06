@@ -6,10 +6,11 @@ import Dict exposing (Dict)
 import FontAwesome.Solid exposing (signature)
 import Logic.App.Grid exposing (centerMidpoints, drawPattern, gridpointToMidpoints)
 import Logic.App.Patterns.Circles exposing (..)
+import Logic.App.Patterns.GreatSpells exposing (..)
 import Logic.App.Patterns.Lists exposing (..)
 import Logic.App.Patterns.Math exposing (..)
 import Logic.App.Patterns.Misc exposing (..)
-import Logic.App.Patterns.OperatorUtils exposing (getIotaList, makeConstant, mapNothingToMissingIota, moveNothingsToFront, nanOrInfinityCheck)
+import Logic.App.Patterns.OperatorUtils exposing (getIotaList, makeConstant, mapNothingToMissingIota, moveNothingsToFront, nanOrInfinityCheck, spellNoInput)
 import Logic.App.Patterns.ReadWrite exposing (..)
 import Logic.App.Patterns.Selectors exposing (..)
 import Logic.App.Patterns.Spells exposing (..)
@@ -363,19 +364,19 @@ parseBookkeeperSignature signature =
 
 greatSpellRegistry : List Pattern
 greatSpellRegistry =
-    [ { signature = "qdwedadedae", internalName = "create_lava", action = noAction, displayName = "Create Lava", outputOptions = [], selectedOutput = Nothing, startDirection = East }
-    , { signature = "qqqqaawawaedd", internalName = "potion/regeneration", action = noAction, displayName = "White Sun's Zenith", outputOptions = [], selectedOutput = Nothing, startDirection = East }
-    , { signature = "qqqaawawaeqdd", internalName = "potion/night_vision", action = noAction, displayName = "Blue Sun's Zenith", outputOptions = [], selectedOutput = Nothing, startDirection = East }
-    , { signature = "qqaawawaeqqdd", internalName = "potion/absorption", action = noAction, displayName = "Black Sun's Zenith", outputOptions = [], selectedOutput = Nothing, startDirection = East }
-    , { signature = "qaawawaeqqqdd", internalName = "potion/haste", action = noAction, displayName = "Red Sun's Zenith", outputOptions = [], selectedOutput = Nothing, startDirection = East }
-    , { signature = "aawawaeqqqqdd", internalName = "potion/strength", action = noAction, displayName = "Green Sun's Zenith", outputOptions = [], selectedOutput = Nothing, startDirection = East }
-    , { signature = "waadwawdaaweewq", internalName = "lightning", action = noAction, displayName = "Summon Lightning", outputOptions = [], selectedOutput = Nothing, startDirection = East }
-    , { signature = "wwweeewwweewdawdwad", internalName = "summon_rain", action = noAction, displayName = "Summon Rain", outputOptions = [], selectedOutput = Nothing, startDirection = East }
-    , { signature = "eeewwweeewwaqqddqdqd", internalName = "dispel_rain", action = noAction, displayName = "Dispel Rain", outputOptions = [], selectedOutput = Nothing, startDirection = East }
-    , { signature = "wwwqqqwwwqqeqqwwwqqwqqdqqqqqdqq", internalName = "teleport", action = noAction, displayName = "Greater Teleport", outputOptions = [], selectedOutput = Nothing, startDirection = East }
-    , { signature = "waeawaeqqqwqwqqwq", internalName = "sentinel/create/great", action = noAction, displayName = "Summon Greater Sentinel", outputOptions = [], selectedOutput = Nothing, startDirection = East }
-    , { signature = "aqqqaqwwaqqqqqeqaqqqawwqwqwqwqwqw", internalName = "craft/battery", action = noAction, displayName = "Craft Phial", outputOptions = [], selectedOutput = Nothing, startDirection = East }
-    , { signature = "qeqwqwqwqwqeqaeqeaqeqaeqaqded", internalName = "brainsweep", action = noAction, displayName = "Flay Mind", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    [ { signature = "qdwedadedae", internalName = "create_lava", action = createLava, displayName = "Create Lava", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    , { signature = "qqqqaawawaedd", internalName = "potion/regeneration", action = potion, displayName = "White Sun's Zenith", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    , { signature = "qqqaawawaeqdd", internalName = "potion/night_vision", action = potionFixedPotency, displayName = "Blue Sun's Zenith", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    , { signature = "qqaawawaeqqdd", internalName = "potion/absorption", action = potion, displayName = "Black Sun's Zenith", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    , { signature = "qaawawaeqqqdd", internalName = "potion/haste", action = potion, displayName = "Red Sun's Zenith", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    , { signature = "aawawaeqqqqdd", internalName = "potion/strength", action = potion, displayName = "Green Sun's Zenith", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    , { signature = "waadwawdaaweewq", internalName = "lightning", action = lightning, displayName = "Summon Lightning", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    , { signature = "wwweeewwweewdawdwad", internalName = "summon_rain", action = spellNoInput, displayName = "Summon Rain", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    , { signature = "eeewwweeewwaqqddqdqd", internalName = "dispel_rain", action = spellNoInput, displayName = "Dispel Rain", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    , { signature = "wwwqqqwwwqqeqqwwwqqwqqdqqqqqdqq", internalName = "teleport", action = teleport, displayName = "Greater Teleport", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    , { signature = "waeawaeqqqwqwqqwq", internalName = "sentinel/create/great", action = sentinelCreate, displayName = "Summon Greater Sentinel", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    , { signature = "aqqqaqwwaqqqqqeqaqqqawwqwqwqwqwqw", internalName = "craft/battery", action = craftPhial, displayName = "Craft Phial", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    , { signature = "qeqwqwqwqwqeqaeqeaqeqaeqaqded", internalName = "brainsweep", action = brainsweep, displayName = "Flay Mind", outputOptions = [], selectedOutput = Nothing, startDirection = East }
     ]
         |> List.map
             (\pattern ->
@@ -395,10 +396,10 @@ greatSpellRegistry =
 
 patternRegistry : List Pattern
 patternRegistry =
-    [ { signature = "wawawddew", internalName = "interop/gravity/get", action = noAction, displayName = "", outputOptions = [], selectedOutput = Nothing, startDirection = East }
-    , { signature = "wdwdwaaqw", internalName = "interop/gravity/set", action = noAction, displayName = "", outputOptions = [], selectedOutput = Nothing, startDirection = East }
-    , { signature = "aawawwawwa", internalName = "interop/pehkui/get", action = noAction, displayName = "", outputOptions = [], selectedOutput = Nothing, startDirection = East }
-    , { signature = "ddwdwwdwwd", internalName = "interop/pehkui/set", action = noAction, displayName = "", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    [ { signature = "wawawddew", internalName = "interop/gravity/get", action = gravityGet, displayName = "Gravitational Purification", outputOptions = [ VectorType ], selectedOutput = Just ( VectorType, Vector ( 0, -1, 0 ) ), startDirection = East }
+    , { signature = "wdwdwaaqw", internalName = "interop/gravity/set", action = gravitySet, displayName = "Alter Gravity", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    , { signature = "aawawwawwa", internalName = "interop/pehkui/get", action = pekhuiGet, displayName = "Gulliver's Purification", outputOptions = [ NumberType ], selectedOutput = Just ( NumberType, Number 1 ), startDirection = East }
+    , { signature = "ddwdwwdwwd", internalName = "interop/pehkui/set", action = pekhuiSet, displayName = "Alter Scale", outputOptions = [], selectedOutput = Nothing, startDirection = East }
     , { signature = "qaq", internalName = "get_caster", action = getCaster, displayName = "Mind's Reflection", outputOptions = [], selectedOutput = Nothing, startDirection = Northeast }
     , { signature = "aa", internalName = "entity_pos/eye", action = entityPos, displayName = "Compass' Purification", outputOptions = [ VectorType ], selectedOutput = Just ( VectorType, Vector ( 0, 0, 0 ) ), startDirection = East }
     , { signature = "dd", internalName = "entity_pos/foot", action = entityPos, displayName = "Compass' Purification II", outputOptions = [ VectorType ], selectedOutput = Just ( VectorType, Vector ( 0, 0, 0 ) ), startDirection = East }
