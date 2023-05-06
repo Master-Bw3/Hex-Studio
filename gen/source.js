@@ -9140,9 +9140,6 @@ var $elm$regex$Regex$find = _Regex_findAtMost(_Regex_infinity);
 var $author$project$Logic$App$Types$Boolean = function (a) {
 	return {$: 'Boolean', a: a};
 };
-var $author$project$Logic$App$Types$Entity = function (a) {
-	return {$: 'Entity', a: a};
-};
 var $author$project$Logic$App$Types$EntityType = {$: 'EntityType'};
 var $author$project$Logic$App$Types$IotaListType = function (a) {
 	return {$: 'IotaListType', a: a};
@@ -9152,7 +9149,6 @@ var $author$project$Logic$App$Types$Number = function (a) {
 	return {$: 'Number', a: a};
 };
 var $author$project$Logic$App$Types$NumberType = {$: 'NumberType'};
-var $author$project$Logic$App$Types$Unset = {$: 'Unset'};
 var $author$project$Logic$App$Types$Vector = function (a) {
 	return {$: 'Vector', a: a};
 };
@@ -11287,6 +11283,9 @@ var $author$project$Logic$App$Patterns$Math$floorAction = F2(
 			});
 		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
 	});
+var $author$project$Logic$App$Types$Entity = function (a) {
+	return {$: 'Entity', a: a};
+};
 var $author$project$Logic$App$Patterns$Selectors$getCaster = F2(
 	function (stack, ctx) {
 		var action = function (_v0) {
@@ -11294,7 +11293,7 @@ var $author$project$Logic$App$Patterns$Selectors$getCaster = F2(
 				A2(
 					$elm$core$Array$repeat,
 					1,
-					$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset)),
+					$author$project$Logic$App$Types$Entity('Player')),
 				ctx);
 		};
 		return A3($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, ctx, action);
@@ -13505,9 +13504,7 @@ function $author$project$Logic$App$Patterns$PatternRegistry$cyclic$patternRegist
 					outputOptions: _List_fromArray(
 						[$author$project$Logic$App$Types$EntityType, $author$project$Logic$App$Types$NullType]),
 					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2(
-							$author$project$Logic$App$Types$EntityType,
-							$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset))),
+						_Utils_Tuple2($author$project$Logic$App$Types$NullType, $author$project$Logic$App$Types$Null)),
 					signature: 'weaqa',
 					startDirection: $author$project$Logic$App$Types$East
 				},
@@ -13802,9 +13799,7 @@ function $author$project$Logic$App$Patterns$PatternRegistry$cyclic$patternRegist
 					outputOptions: _List_fromArray(
 						[$author$project$Logic$App$Types$EntityType, $author$project$Logic$App$Types$NullType]),
 					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2(
-							$author$project$Logic$App$Types$EntityType,
-							$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset))),
+						_Utils_Tuple2($author$project$Logic$App$Types$NullType, $author$project$Logic$App$Types$Null)),
 					signature: 'qqqqqdaqa',
 					startDirection: $author$project$Logic$App$Types$East
 				},
@@ -13815,9 +13810,7 @@ function $author$project$Logic$App$Patterns$PatternRegistry$cyclic$patternRegist
 					outputOptions: _List_fromArray(
 						[$author$project$Logic$App$Types$EntityType, $author$project$Logic$App$Types$NullType]),
 					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2(
-							$author$project$Logic$App$Types$EntityType,
-							$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset))),
+						_Utils_Tuple2($author$project$Logic$App$Types$NullType, $author$project$Logic$App$Types$Null)),
 					signature: 'qqqqqdaqaawa',
 					startDirection: $author$project$Logic$App$Types$East
 				},
@@ -13828,9 +13821,7 @@ function $author$project$Logic$App$Patterns$PatternRegistry$cyclic$patternRegist
 					outputOptions: _List_fromArray(
 						[$author$project$Logic$App$Types$EntityType, $author$project$Logic$App$Types$NullType]),
 					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2(
-							$author$project$Logic$App$Types$EntityType,
-							$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset))),
+						_Utils_Tuple2($author$project$Logic$App$Types$NullType, $author$project$Logic$App$Types$Null)),
 					signature: 'qqqqqdaqaawq',
 					startDirection: $author$project$Logic$App$Types$East
 				},
@@ -13841,9 +13832,7 @@ function $author$project$Logic$App$Patterns$PatternRegistry$cyclic$patternRegist
 					outputOptions: _List_fromArray(
 						[$author$project$Logic$App$Types$EntityType, $author$project$Logic$App$Types$NullType]),
 					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2(
-							$author$project$Logic$App$Types$EntityType,
-							$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset))),
+						_Utils_Tuple2($author$project$Logic$App$Types$NullType, $author$project$Logic$App$Types$Null)),
 					signature: 'qqqqqdaqaaww',
 					startDirection: $author$project$Logic$App$Types$East
 				},
@@ -13854,9 +13843,7 @@ function $author$project$Logic$App$Patterns$PatternRegistry$cyclic$patternRegist
 					outputOptions: _List_fromArray(
 						[$author$project$Logic$App$Types$EntityType, $author$project$Logic$App$Types$NullType]),
 					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2(
-							$author$project$Logic$App$Types$EntityType,
-							$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset))),
+						_Utils_Tuple2($author$project$Logic$App$Types$NullType, $author$project$Logic$App$Types$Null)),
 					signature: 'qqqqqdaqaawe',
 					startDirection: $author$project$Logic$App$Types$East
 				},
@@ -13867,9 +13854,7 @@ function $author$project$Logic$App$Patterns$PatternRegistry$cyclic$patternRegist
 					outputOptions: _List_fromArray(
 						[$author$project$Logic$App$Types$EntityType, $author$project$Logic$App$Types$NullType]),
 					selectedOutput: $elm$core$Maybe$Just(
-						_Utils_Tuple2(
-							$author$project$Logic$App$Types$EntityType,
-							$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset))),
+						_Utils_Tuple2($author$project$Logic$App$Types$NullType, $author$project$Logic$App$Types$Null)),
 					signature: 'qqqqqdaqaawd',
 					startDirection: $author$project$Logic$App$Types$East
 				},
@@ -15461,15 +15446,6 @@ var $MartinSStewart$elm_serialize$Serialize$bool = A4(
 		$elm$bytes$Bytes$Decode$unsignedInt8),
 	$elm$json$Json$Encode$bool,
 	A2($elm$json$Json$Decode$map, $elm$core$Result$Ok, $elm$json$Json$Decode$bool));
-var $author$project$Logic$App$ImportExport$ImportExportProject$entityCodec = $MartinSStewart$elm_serialize$Serialize$finishCustomType(
-	A2(
-		$MartinSStewart$elm_serialize$Serialize$variant0,
-		$author$project$Logic$App$Types$Unset,
-		$MartinSStewart$elm_serialize$Serialize$customType(
-			F2(
-				function (unsetEncoder, value) {
-					return unsetEncoder;
-				}))));
 var $elm$json$Json$Decode$float = _Json_decodeFloat;
 var $elm$bytes$Bytes$Decode$float64 = function (endianness) {
 	return $elm$bytes$Bytes$Decode$Decoder(
@@ -15910,7 +15886,7 @@ function $author$project$Logic$App$ImportExport$ImportExportProject$cyclic$iotaC
 							A3(
 								$MartinSStewart$elm_serialize$Serialize$variant1,
 								$author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedEntity,
-								$author$project$Logic$App$ImportExport$ImportExportProject$entityCodec,
+								$MartinSStewart$elm_serialize$Serialize$string,
 								A3(
 									$MartinSStewart$elm_serialize$Serialize$variant1,
 									$author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedBoolean,
@@ -16210,7 +16186,8 @@ var $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString = function
 			var bool = iota.a;
 			return bool ? 'True' : 'False';
 		case 'Entity':
-			return 'Entity';
+			var name = iota.a;
+			return 'Entity \"' + (name + '\"');
 		case 'IotaList':
 			var list = iota.a;
 			return 'List: ' + A2(
@@ -20124,7 +20101,7 @@ var $author$project$Components$App$Panels$PatternPanel$draggedSourceConfig = fun
 	};
 };
 var $author$project$Logic$App$Utils$GetIotaValue$getIotaFromString = function (string) {
-	return (string === 'Null') ? $author$project$Logic$App$Types$Null : ((string === 'Entity') ? $author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset) : ((string === 'Vector') ? $author$project$Logic$App$Types$Vector(
+	return (string === 'Null') ? $author$project$Logic$App$Types$Null : ((string === 'Entity') ? $author$project$Logic$App$Types$Entity('Entity') : ((string === 'Vector') ? $author$project$Logic$App$Types$Vector(
 		_Utils_Tuple3(0, 0, 0)) : ((!_Utils_eq(
 		$elm$core$String$toFloat(string),
 		$elm$core$Maybe$Nothing)) ? $author$project$Logic$App$Types$Number(
@@ -20504,8 +20481,8 @@ var $author$project$Components$Icon$XButton$xButton = A2(
 						]))
 				]))
 		]));
-var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F8(
-	function (patternList, dragoverIndex, dragstartIndex, overDragHandle, insertionPoint, macroDict, timeline, timelineIndex) {
+var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F9(
+	function (patternList, dragoverIndex, dragstartIndex, overDragHandle, insertionPoint, macroDict, timeline, timelineIndex, castingContext) {
 		var patterns = $elm$core$List$unzip(
 			$elm$core$Array$toList(patternList)).a;
 		var fixedTimeline = ($elm$core$Array$length(timeline) < 2) ? A2(
@@ -20686,7 +20663,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F8(
 											])),
 									function () {
 										var _v0 = pattern.selectedOutput;
-										_v0$3:
+										_v0$4:
 										while (true) {
 											if (_v0.$ === 'Just') {
 												switch (_v0.a.a.$) {
@@ -20843,13 +20820,12 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F8(
 																		]))
 																]);
 														} else {
-															break _v0$3;
+															break _v0$4;
 														}
 													case 'NumberType':
 														if (_v0.a.b.$ === 'Number') {
 															var _v4 = _v0.a;
 															var _v5 = _v4.a;
-															var number = _v4.b.a;
 															return _List_fromArray(
 																[
 																	A2(
@@ -20910,12 +20886,71 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F8(
 																		]))
 																]);
 														} else {
-															break _v0$3;
+															break _v0$4;
+														}
+													case 'EntityType':
+														if (_v0.a.b.$ === 'Entity') {
+															var _v6 = _v0.a;
+															var _v7 = _v6.a;
+															return _List_fromArray(
+																[
+																	A2(
+																	$elm$html$Html$div,
+																	_List_fromArray(
+																		[
+																			$elm$html$Html$Attributes$class('output_option_box'),
+																			A2($elm$html$Html$Attributes$style, 'grid-template-columns', '2.1fr 3fr'),
+																			opacity
+																		]),
+																	_List_fromArray(
+																		[
+																			A2(
+																			$elm$html$Html$label,
+																			_List_Nil,
+																			_List_fromArray(
+																				[
+																					$elm$html$Html$text('Entity:')
+																				])),
+																			A2(
+																			$elm$html$Html$select,
+																			_List_fromArray(
+																				[
+																					$elm$html$Html$Events$onInput(
+																					function (str) {
+																						return A2(
+																							$author$project$Logic$App$Msg$UpdatePatternOuptut,
+																							index,
+																							_Utils_update(
+																								pattern,
+																								{
+																									selectedOutput: $elm$core$Maybe$Just(
+																										_Utils_Tuple2(
+																											$author$project$Logic$App$Types$EntityType,
+																											$author$project$Logic$App$Types$Entity(str)))
+																								}));
+																					})
+																				]),
+																			A2(
+																				$elm$core$List$map,
+																				function (x) {
+																					return A2(
+																						$elm$html$Html$option,
+																						_List_Nil,
+																						_List_fromArray(
+																							[
+																								$elm$html$Html$text(x.a)
+																							]));
+																				},
+																				$elm$core$Dict$toList(castingContext.entities)))
+																		]))
+																]);
+														} else {
+															break _v0$4;
 														}
 													case 'IotaListType':
 														if ((_v0.a.a.a.$ === 'EntityType') && (_v0.a.b.$ === 'IotaList')) {
-															var _v6 = _v0.a;
-															var _v7 = _v6.a.a;
+															var _v8 = _v0.a;
+															var _v9 = _v8.a.a;
 															return _List_fromArray(
 																[
 																	A2(
@@ -20959,7 +20994,7 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F8(
 																														$elm$core$Maybe$withDefault,
 																														0,
 																														$elm$core$String$toInt(str)),
-																													$author$project$Logic$App$Types$Entity($author$project$Logic$App$Types$Unset)))))
+																													$author$project$Logic$App$Types$Entity('Generic Entity')))))
 																								}));
 																					})
 																				]),
@@ -20979,13 +21014,13 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F8(
 																		]))
 																]);
 														} else {
-															break _v0$3;
+															break _v0$4;
 														}
 													default:
-														break _v0$3;
+														break _v0$4;
 												}
 											} else {
-												break _v0$3;
+												break _v0$4;
 											}
 										}
 										return _List_Nil;
@@ -21066,7 +21101,7 @@ var $author$project$Components$App$Panels$PatternPanel$patternPanel = function (
 					$elm$html$Html$Attributes$id('pattern_draggable_container'),
 					$mpizenberg$elm_pointer_events$Html$Events$Extra$Drag$onDropTarget($author$project$Components$App$Panels$PatternPanel$dropTargetConfig)),
 				$elm$core$List$reverse(
-					A8($author$project$Components$App$Panels$PatternPanel$renderPatternList, model.patternArray, model.ui.mouseOverElementIndex, model.ui.dragging.b, model.ui.overDragHandle, model.insertionPoint, model.castingContext.macros, model.timeline, model.timelineIndex))),
+					A9($author$project$Components$App$Panels$PatternPanel$renderPatternList, model.patternArray, model.ui.mouseOverElementIndex, model.ui.dragging.b, model.ui.overDragHandle, model.insertionPoint, model.castingContext.macros, model.timeline, model.timelineIndex, model.castingContext))),
 				A2(
 				$elm$html$Html$div,
 				_List_fromArray(

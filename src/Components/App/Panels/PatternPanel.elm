@@ -24,8 +24,8 @@ import Json.Decode as Json exposing (Decoder, at, float, int, map4)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (MouseMoveData, Msg(..))
 import Logic.App.Patterns.PatternRegistry exposing (patternRegistry)
-import Logic.App.Types exposing (ContextMenuContext(..), EntityType(..), GridPoint, Iota(..), IotaType(..), Panel(..), Pattern, Timeline)
-import Logic.App.Utils.GetIotaValue exposing (getIotaFromString, getIotaTypeAsString, getIotaTypeFromString)
+import Logic.App.Types exposing (CastingContext, ContextMenuContext(..), GridPoint, Iota(..), IotaType(..), Panel(..), Pattern, Timeline)
+import Logic.App.Utils.GetIotaValue exposing (getIotaFromString, getIotaTypeAsString, getIotaTypeFromString, getIotaValueAsString)
 import Logic.App.Utils.Utils exposing (ifThenElse, insert, isJust)
 import Settings.Theme exposing (accent1, accent2)
 import String exposing (fromInt)
@@ -76,6 +76,7 @@ patternPanel model =
                     model.castingContext.macros
                     model.timeline
                     model.timelineIndex
+                    model.castingContext
                 )
             )
         , div
@@ -131,8 +132,8 @@ draggedSourceConfig id =
     }
 
 
-renderPatternList : Array ( Pattern, List GridPoint ) -> Int -> Int -> Bool -> Int -> Dict String v -> Timeline -> Int -> List (Html Msg)
-renderPatternList patternList dragoverIndex dragstartIndex overDragHandle insertionPoint macroDict timeline timelineIndex =
+renderPatternList : Array ( Pattern, List GridPoint ) -> Int -> Int -> Bool -> Int -> Dict String v -> Timeline -> Int -> CastingContext -> List (Html Msg)
+renderPatternList patternList dragoverIndex dragstartIndex overDragHandle insertionPoint macroDict timeline timelineIndex castingContext =
     let
         fixedTimeline =
             if Array.length timeline < 2 then
@@ -263,7 +264,7 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle insert
                                                                 ]
                                                             ]
 
-                                                Just ( NumberType, Number number ) ->
+                                                Just ( NumberType, Number _ ) ->
                                                     [ div [ class "output_option_box", style "grid-template-columns" "2.1fr 3fr", opacity ]
                                                         [ label [] [ text "Number:" ]
                                                         , input
@@ -276,6 +277,16 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle insert
                                                                 )
                                                             ]
                                                             (List.map (\iota -> option [] [ text <| getIotaTypeAsString iota ]) pattern.outputOptions)
+                                                        ]
+                                                    ]
+
+                                                Just ( EntityType, Entity _ ) ->
+                                                    [ div [ class "output_option_box", style "grid-template-columns" "2.1fr 3fr", opacity ]
+                                                        [ label [] [ text "Entity:" ]
+                                                        , select
+                                                            [ onInput (\str -> UpdatePatternOuptut index { pattern | selectedOutput = Just ( EntityType, Entity str ) })
+                                                            ]
+                                                            (List.map (\x -> option [] [ text <| Tuple.first x ]) (Dict.toList castingContext.entities))
                                                         ]
                                                     ]
 
@@ -292,7 +303,8 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle insert
                                                                             | selectedOutput =
                                                                                 Just
                                                                                     ( IotaListType EntityType
-                                                                                    , IotaList (Array.repeat (Maybe.withDefault 0 <| String.toInt str) (Entity Unset))
+                                                                                    , IotaList (Array.repeat (Maybe.withDefault 0 <| String.toInt str) (Entity "Generic Entity"))
+                                                                                      --todo: enitiy selection
                                                                                     )
                                                                         }
                                                                 )

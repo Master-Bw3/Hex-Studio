@@ -4,7 +4,7 @@ import Array exposing (Array)
 import Array.Extra as Array
 import Html.Attributes exposing (action)
 import Logic.App.Patterns.OperatorUtils exposing (action1Input, getAny, getEntity, getVector, spell1Input, spell2Inputs)
-import Logic.App.Types exposing (ActionResult, CastingContext, EntityType(..), Iota(..), Mishap(..))
+import Logic.App.Types exposing (ActionResult, CastingContext, Iota(..), Mishap(..))
 import Logic.App.Utils.Utils exposing (isJust, unshift)
 
 

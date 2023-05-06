@@ -22,10 +22,6 @@ type HeldItem
     | NoItem
 
 
-type EntityType
-    = Unset
-
-
 type MetaActionMsg
     = None
     | ClearPatterns
@@ -84,7 +80,7 @@ type Iota
     = Number Float
     | Vector ( Float, Float, Float )
     | Boolean Bool
-    | Entity EntityType
+    | Entity String
     | IotaList (Array Iota)
     | PatternIota Pattern Bool
     | Null

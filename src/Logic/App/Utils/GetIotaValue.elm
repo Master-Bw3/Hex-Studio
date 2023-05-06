@@ -3,7 +3,7 @@ module Logic.App.Utils.GetIotaValue exposing (..)
 import Array
 import Html exposing (div, p, text)
 import Html.Attributes exposing (class, style)
-import Logic.App.Types exposing (EntityType(..), Iota(..), IotaType(..), Mishap(..))
+import Logic.App.Types exposing (Iota(..), IotaType(..), Mishap(..))
 import Settings.Theme exposing (iotaColorMap)
 
 
@@ -93,8 +93,8 @@ getIotaValueAsString iota =
             else
                 "False"
 
-        Entity _ ->
-            "Entity"
+        Entity name ->
+            "Entity \"" ++ name ++ "\""
 
         --fix later
         IotaList list ->
@@ -197,7 +197,7 @@ getIotaFromString string =
         Null
 
     else if string == "Entity" then
-        Entity Unset
+        Entity "Entity"
 
     else if string == "Vector" then
         Vector ( 0, 0, 0 )

@@ -13,7 +13,7 @@ import Logic.App.Patterns.ReadWrite exposing (..)
 import Logic.App.Patterns.Selectors exposing (..)
 import Logic.App.Patterns.Spells exposing (..)
 import Logic.App.Patterns.Stack exposing (..)
-import Logic.App.Types exposing (ActionResult, ApplyToStackResult(..), CastingContext, Direction(..), EntityType(..), HeldItem(..), Iota(..), IotaType(..), MetaActionMsg(..), Mishap(..), Pattern)
+import Logic.App.Types exposing (ActionResult, ApplyToStackResult(..), CastingContext, Direction(..), HeldItem(..), Iota(..), IotaType(..), MetaActionMsg(..), Mishap(..), Pattern)
 import Logic.App.Utils.RegexPatterns exposing (bookkeepersPattern)
 import Logic.App.Utils.Utils exposing (ifThenElse, unshift)
 import Ports.HexNumGen as HexNumGen
@@ -350,7 +350,7 @@ patternRegistry =
     , { signature = "wq", internalName = "get_entity_velocity", action = getEntityVelocity, displayName = "Pace Purification", outputOptions = [ VectorType ], selectedOutput = Just ( VectorType, Vector ( 0, 0, 0 ) ), startDirection = East }
     , { signature = "wqaawdd", internalName = "raycast", action = raycast, displayName = "Archer's Distillation", outputOptions = [ VectorType, NullType ], selectedOutput = Just ( VectorType, Vector ( 0, 0, 0 ) ), startDirection = East }
     , { signature = "weddwaa", internalName = "raycast/axis", action = raycastAxis, displayName = "Architect's Distillation", outputOptions = [ VectorType, NullType ], selectedOutput = Just ( VectorType, Vector ( 0, 0, 0 ) ), startDirection = East }
-    , { signature = "weaqa", internalName = "raycast/entity", action = raycastEntity, displayName = "Scout's Distillation", outputOptions = [ EntityType, NullType ], selectedOutput = Just ( EntityType, Entity Unset ), startDirection = East }
+    , { signature = "weaqa", internalName = "raycast/entity", action = raycastEntity, displayName = "Scout's Distillation", outputOptions = [ EntityType, NullType ], selectedOutput = Just ( NullType, Null ), startDirection = East }
     , { signature = "eaqwqae", internalName = "circle/impetus_pos", action = noAction, displayName = "Waystone Reflection", outputOptions = [], selectedOutput = Nothing, startDirection = East }
     , { signature = "eaqwqaewede", internalName = "circle/impetus_dir", action = circleImpetusDirection, displayName = "Lodestone Reflection", outputOptions = [], selectedOutput = Nothing, startDirection = East }
     , { signature = "eaqwqaewdd", internalName = "circle/bounds/min", action = circleBoundsMin, displayName = "Lesser Fold Reflection", outputOptions = [], selectedOutput = Nothing, startDirection = East }
@@ -461,12 +461,12 @@ patternRegistry =
     , { signature = "qdwdq", internalName = "const/double/pi", action = makeConstant (Number pi), displayName = "Arc's Reflection", outputOptions = [], selectedOutput = Nothing, startDirection = East }
     , { signature = "eawae", internalName = "const/double/tau", action = makeConstant (Number (pi * 2)), displayName = "Circle's Reflection", outputOptions = [], selectedOutput = Nothing, startDirection = East }
     , { signature = "aaq", internalName = "const/double/e", action = makeConstant (Number e), displayName = "Euler's Reflection", outputOptions = [], selectedOutput = Nothing, startDirection = East }
-    , { signature = "qqqqqdaqa", internalName = "get_entity", action = getEntity, displayName = "Entity Purification", outputOptions = [ EntityType, NullType ], selectedOutput = Just ( EntityType, Entity Unset ), startDirection = East }
-    , { signature = "qqqqqdaqaawa", internalName = "get_entity/animal", action = getEntity, displayName = "Entity Purification: Animal", outputOptions = [ EntityType, NullType ], selectedOutput = Just ( EntityType, Entity Unset ), startDirection = East }
-    , { signature = "qqqqqdaqaawq", internalName = "get_entity/monster", action = getEntity, displayName = "Entity Purification: Monster", outputOptions = [ EntityType, NullType ], selectedOutput = Just ( EntityType, Entity Unset ), startDirection = East }
-    , { signature = "qqqqqdaqaaww", internalName = "get_entity/item", action = getEntity, displayName = "Entity Purification: Item", outputOptions = [ EntityType, NullType ], selectedOutput = Just ( EntityType, Entity Unset ), startDirection = East }
-    , { signature = "qqqqqdaqaawe", internalName = "get_entity/player", action = getEntity, displayName = "Entity Purification: Player", outputOptions = [ EntityType, NullType ], selectedOutput = Just ( EntityType, Entity Unset ), startDirection = East }
-    , { signature = "qqqqqdaqaawd", internalName = "get_entity/living", action = getEntity, displayName = "Entity Purification: Living", outputOptions = [ EntityType, NullType ], selectedOutput = Just ( EntityType, Entity Unset ), startDirection = East }
+    , { signature = "qqqqqdaqa", internalName = "get_entity", action = getEntity, displayName = "Entity Purification", outputOptions = [ EntityType, NullType ], selectedOutput = Just ( NullType, Null ), startDirection = East }
+    , { signature = "qqqqqdaqaawa", internalName = "get_entity/animal", action = getEntity, displayName = "Entity Purification: Animal", outputOptions = [ EntityType, NullType ], selectedOutput = Just ( NullType, Null ), startDirection = East }
+    , { signature = "qqqqqdaqaawq", internalName = "get_entity/monster", action = getEntity, displayName = "Entity Purification: Monster", outputOptions = [ EntityType, NullType ], selectedOutput = Just ( NullType, Null ), startDirection = East }
+    , { signature = "qqqqqdaqaaww", internalName = "get_entity/item", action = getEntity, displayName = "Entity Purification: Item", outputOptions = [ EntityType, NullType ], selectedOutput = Just ( NullType, Null ), startDirection = East }
+    , { signature = "qqqqqdaqaawe", internalName = "get_entity/player", action = getEntity, displayName = "Entity Purification: Player", outputOptions = [ EntityType, NullType ], selectedOutput = Just ( NullType, Null ), startDirection = East }
+    , { signature = "qqqqqdaqaawd", internalName = "get_entity/living", action = getEntity, displayName = "Entity Purification: Living", outputOptions = [ EntityType, NullType ], selectedOutput = Just ( NullType, Null ), startDirection = East }
     , { signature = "qqqqqwded", internalName = "zone_entity", action = zoneEntity, displayName = "Zone Distillation: Any", outputOptions = [ IotaListType EntityType ], selectedOutput = Just ( IotaListType EntityType, IotaList Array.empty ), startDirection = East }
     , { signature = "qqqqqwdeddwa", internalName = "zone_entity/animal", action = zoneEntity, displayName = "Zone Distillation: Animal", outputOptions = [ IotaListType EntityType ], selectedOutput = Just ( IotaListType EntityType, IotaList Array.empty ), startDirection = East }
     , { signature = "eeeeewaqaawa", internalName = "zone_entity/not_animal", action = zoneEntity, displayName = "Zone Distillation: Non-Animal", outputOptions = [ IotaListType EntityType ], selectedOutput = Just ( IotaListType EntityType, IotaList Array.empty ), startDirection = East }

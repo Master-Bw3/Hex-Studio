@@ -2,7 +2,7 @@ module Logic.App.Patterns.Selectors exposing (..)
 
 import Array exposing (Array)
 import Logic.App.Patterns.OperatorUtils exposing (actionNoInput, getVector, spell1Input)
-import Logic.App.Types exposing (ActionResult, CastingContext, EntityType(..), Iota(..))
+import Logic.App.Types exposing (ActionResult, CastingContext, Iota(..))
 import Logic.App.Patterns.OperatorUtils exposing (getNumber)
 import Logic.App.Patterns.OperatorUtils exposing (spell2Inputs)
 
@@ -11,7 +11,7 @@ getCaster : Array Iota -> CastingContext -> ActionResult
 getCaster stack ctx =
     let
         action _ =
-            ( Entity Unset
+            ( Entity "Player"
                 |> Array.repeat 1
             , ctx
             )

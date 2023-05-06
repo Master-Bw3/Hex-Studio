@@ -7,7 +7,7 @@ import Json.Decode as Decode
 import Json.Encode as Encode
 import Logic.App.Model exposing (Model)
 import Logic.App.Patterns.PatternRegistry exposing (getPatternFromSignature)
-import Logic.App.Types exposing (CastingContext, Direction(..), EntityType(..), GridPoint, HeldItem(..), Iota(..), IotaType(..), Mishap(..), Pattern)
+import Logic.App.Types exposing (CastingContext, Direction(..), HeldItem(..), Iota(..), IotaType(..), Mishap(..), Pattern)
 import Serialize as S
 
 
@@ -58,7 +58,7 @@ type SimplifiedIota
     = SimplifiedNumber Float
     | SimplifiedVector ( Float, Float, Float )
     | SimplifiedBoolean Bool
-    | SimplifiedEntity EntityType
+    | SimplifiedEntity String
     | SimplifiedIotaList (Array SimplifiedIota)
     | SimplifiedPatternIota SimplifiedPattern Bool
     | SimplifiedNull
@@ -194,18 +194,6 @@ heldItemCodec =
         |> S.finishCustomType
 
 
-entityCodec : S.Codec e EntityType
-entityCodec =
-    S.customType
-        (\unsetEncoder value ->
-            case value of
-                Unset ->
-                    unsetEncoder
-        )
-        |> S.variant0 Unset
-        |> S.finishCustomType
-
-
 mishapCodec : S.Codec e Mishap
 mishapCodec =
     S.customType
@@ -301,7 +289,7 @@ iotaCodec =
         |> S.variant1 SimplifiedNumber S.float
         |> S.variant1 SimplifiedVector (S.triple S.float S.float S.float)
         |> S.variant1 SimplifiedBoolean S.bool
-        |> S.variant1 SimplifiedEntity entityCodec
+        |> S.variant1 SimplifiedEntity S.string
         |> S.variant1 SimplifiedIotaList (S.array (S.lazy (\() -> iotaCodec)))
         |> S.variant2 SimplifiedPatternIota patternCodec S.bool
         |> S.variant0 SimplifiedNull
