@@ -197,7 +197,7 @@ getIotaFromString string =
         Null
 
     else if string == "Entity" then
-        Entity "Entity"
+        Entity "Caster"
 
     else if string == "Vector" then
         Vector ( 0, 0, 0 )

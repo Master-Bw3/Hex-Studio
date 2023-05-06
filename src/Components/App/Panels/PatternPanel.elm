@@ -286,7 +286,7 @@ renderPatternList patternList dragoverIndex dragstartIndex overDragHandle insert
                                                         , select
                                                             [ onInput (\str -> UpdatePatternOuptut index { pattern | selectedOutput = Just ( EntityType, Entity str ) })
                                                             ]
-                                                            (List.map (\x -> option [] [ text <| Tuple.first x ]) (Dict.toList castingContext.entities))
+                                                            (List.map (\name -> option [] [ text <| name ]) <| "Caster" :: List.filter (\x -> x /= "Caster") (Dict.keys castingContext.entities))
                                                         ]
                                                     ]
 

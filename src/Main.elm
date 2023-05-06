@@ -95,7 +95,7 @@ init _ =
             }
       , castingContext =
             { ravenmind = Nothing
-            , entities = Dict.fromList [("Player", { heldItem = NoItem, heldItemContent = Nothing }), ("OwO", { heldItem = NoItem, heldItemContent = Nothing })]--Dict.singleton "Player" { heldItem = NoItem, heldItemContent = Nothing }
+            , entities = Dict.fromList [("Caster", { heldItem = NoItem, heldItemContent = Nothing }), ("OwO", { heldItem = NoItem, heldItemContent = Nothing })]--Dict.singleton "Caster" { heldItem = NoItem, heldItemContent = Nothing }
             , macros = Dict.empty
             }
       , time = 0

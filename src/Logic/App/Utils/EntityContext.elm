@@ -6,7 +6,7 @@ import Logic.App.Types exposing (CastingContext, HeldItem(..), Iota)
 
 getPlayerHeldItemContent : CastingContext -> Maybe Iota
 getPlayerHeldItemContent context =
-    case Dict.get "Player" context.entities of
+    case Dict.get "Caster" context.entities of
         Just { heldItemContent } ->
             heldItemContent
 
@@ -16,7 +16,7 @@ getPlayerHeldItemContent context =
 
 getPlayerHeldItem : CastingContext -> HeldItem
 getPlayerHeldItem context =
-    case Dict.get "Player" context.entities of
+    case Dict.get "Caster" context.entities of
         Just { heldItem } ->
             heldItem
 
@@ -28,7 +28,7 @@ setPlayerHeldItem : CastingContext -> HeldItem -> CastingContext
 setPlayerHeldItem context item =
     { context
         | entities =
-            Dict.update "Player"
+            Dict.update "Caster"
                 (\v ->
                     case v of
                         Just player ->
@@ -45,7 +45,7 @@ setPlayerHeldItemContent : CastingContext -> Maybe Iota -> CastingContext
 setPlayerHeldItemContent context heldItemContent =
     { context
         | entities =
-            Dict.update "Player"
+            Dict.update "Caster"
                 (\v ->
                     case v of
                         Just player ->

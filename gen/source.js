@@ -5877,7 +5877,7 @@ var $author$project$Main$init = function (_v0) {
 					_List_fromArray(
 						[
 							_Utils_Tuple2(
-							'Player',
+							'Caster',
 							{heldItem: $author$project$Logic$App$Types$NoItem, heldItemContent: $elm$core$Maybe$Nothing}),
 							_Utils_Tuple2(
 							'OwO',
@@ -10309,7 +10309,7 @@ var $author$project$Logic$App$Patterns$OperatorUtils$getPatternList = function (
 	}
 };
 var $author$project$Logic$App$Utils$EntityContext$getPlayerHeldItem = function (context) {
-	var _v0 = A2($elm$core$Dict$get, 'Player', context.entities);
+	var _v0 = A2($elm$core$Dict$get, 'Caster', context.entities);
 	if (_v0.$ === 'Just') {
 		var heldItem = _v0.a.heldItem;
 		return heldItem;
@@ -10697,7 +10697,7 @@ var $author$project$Logic$App$Utils$EntityContext$setPlayerHeldItemContent = F2(
 			{
 				entities: A3(
 					$elm$core$Dict$update,
-					'Player',
+					'Caster',
 					function (v) {
 						if (v.$ === 'Just') {
 							var player = v.a;
@@ -11295,7 +11295,7 @@ var $author$project$Logic$App$Patterns$Selectors$getCaster = F2(
 				A2(
 					$elm$core$Array$repeat,
 					1,
-					$author$project$Logic$App$Types$Entity('Player')),
+					$author$project$Logic$App$Types$Entity('Caster')),
 				ctx);
 		};
 		return A3($author$project$Logic$App$Patterns$OperatorUtils$actionNoInput, stack, ctx, action);
@@ -12397,7 +12397,7 @@ var $author$project$Logic$App$Patterns$Misc$raycastEntity = F2(
 		return A4($author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
 	});
 var $author$project$Logic$App$Utils$EntityContext$getPlayerHeldItemContent = function (context) {
-	var _v0 = A2($elm$core$Dict$get, 'Player', context.entities);
+	var _v0 = A2($elm$core$Dict$get, 'Caster', context.entities);
 	if (_v0.$ === 'Just') {
 		var heldItemContent = _v0.a.heldItemContent;
 		return heldItemContent;
@@ -19596,7 +19596,7 @@ var $author$project$Components$App$Panels$ConfigHexPanel$entitiesSection = funct
 					$elm$core$List$filter,
 					function (entry) {
 						var name = entry.a;
-						return name !== 'Player';
+						return name !== 'Caster';
 					},
 					$elm$core$Dict$toList(model.castingContext.entities)))));
 };
@@ -19629,7 +19629,7 @@ var $author$project$Components$App$Panels$ConfigHexPanel$heldItemSection = funct
 						_List_fromArray(
 							[
 								$elm$html$Html$Events$onInput(
-								$author$project$Logic$App$Msg$ChangeHeldItem('Player')),
+								$author$project$Logic$App$Msg$ChangeHeldItem('Caster')),
 								$elm$html$Html$Attributes$value(
 								$author$project$Logic$App$Utils$GetHeldItemAsString$getHeldItemAsString(
 									$author$project$Logic$App$Utils$EntityContext$getPlayerHeldItem(model.castingContext)))
@@ -20303,7 +20303,7 @@ var $author$project$Components$App$Panels$PatternPanel$draggedSourceConfig = fun
 	};
 };
 var $author$project$Logic$App$Utils$GetIotaValue$getIotaFromString = function (string) {
-	return (string === 'Null') ? $author$project$Logic$App$Types$Null : ((string === 'Entity') ? $author$project$Logic$App$Types$Entity('Entity') : ((string === 'Vector') ? $author$project$Logic$App$Types$Vector(
+	return (string === 'Null') ? $author$project$Logic$App$Types$Null : ((string === 'Entity') ? $author$project$Logic$App$Types$Entity('Caster') : ((string === 'Vector') ? $author$project$Logic$App$Types$Vector(
 		_Utils_Tuple3(0, 0, 0)) : ((!_Utils_eq(
 		$elm$core$String$toFloat(string),
 		$elm$core$Maybe$Nothing)) ? $author$project$Logic$App$Types$Number(
@@ -21134,16 +21134,24 @@ var $author$project$Components$App$Panels$PatternPanel$renderPatternList = F9(
 																				]),
 																			A2(
 																				$elm$core$List$map,
-																				function (x) {
+																				function (name) {
 																					return A2(
 																						$elm$html$Html$option,
 																						_List_Nil,
 																						_List_fromArray(
 																							[
-																								$elm$html$Html$text(x.a)
+																								$elm$html$Html$text(name)
 																							]));
 																				},
-																				$elm$core$Dict$toList(castingContext.entities)))
+																				A2(
+																					$elm$core$List$cons,
+																					'Caster',
+																					A2(
+																						$elm$core$List$filter,
+																						function (x) {
+																							return x !== 'Caster';
+																						},
+																						$elm$core$Dict$keys(castingContext.entities)))))
 																		]))
 																]);
 														} else {

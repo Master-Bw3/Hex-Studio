@@ -44,7 +44,7 @@ heldItemSection model =
             ]
             [ label [] [ text "Held Item:" ]
             , select
-                [ onInput (ChangeHeldItem "Player")
+                [ onInput (ChangeHeldItem "Caster")
                 , value <| getHeldItemAsString <| getPlayerHeldItem model.castingContext
                 ]
                 [ option [] [ text "Nothing" ]
@@ -136,7 +136,7 @@ entitiesSection model =
                     (\entry ->
                         case entry of
                             ( name, _ ) ->
-                                name /= "Player"
+                                name /= "Caster"
                     )
                     (Dict.toList model.castingContext.entities)
                 )
