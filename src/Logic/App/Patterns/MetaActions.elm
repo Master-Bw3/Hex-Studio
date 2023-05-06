@@ -10,6 +10,8 @@ import Logic.App.Patterns.PatternRegistry exposing (getPatternFromName)
 import Logic.App.Stack.EvalStack exposing (applyPatternsToStack)
 import Logic.App.Types exposing (ApplyToStackResult(..), Iota(..), MetaActionMsg(..))
 import Logic.App.Utils.Utils exposing (unshift)
+import Logic.App.Utils.PlayerContext exposing (setPlayerHeldItem)
+import Logic.App.Utils.PlayerContext exposing (setPlayerHeldItemContent)
 
 
 applyMetaAction : Model -> MetaActionMsg -> Model
@@ -33,7 +35,7 @@ applyMetaAction model metaActionMsg =
                 | patternArray = Array.empty
                 , grid = { grid | points = updateGridPoints grid.width grid.height Array.empty [] settings.gridScale }
                 , stack = Array.empty
-                , castingContext = { castingContext | heldItemContent = Nothing }
+                , castingContext = setPlayerHeldItemContent castingContext Nothing
                 , insertionPoint = 0
                 , timeline = Array.empty
             }

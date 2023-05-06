@@ -20,8 +20,8 @@ exportTextOverlay model =
         let
             patternText =
                 (exportPatternsAsLineList <| Array.map Tuple.first model.patternArray)
-                    -- ++ "\n-----------------------\n"
-                    -- ++ (exportAsGiveCommand <| Array.map Tuple.first model.patternArray)
+                    ++ "\n-----------------------\n"
+                    ++ (exportAsGiveCommand <| Array.map Tuple.first model.patternArray)
         in
         [ div [ class "overlay" ]
             [ div

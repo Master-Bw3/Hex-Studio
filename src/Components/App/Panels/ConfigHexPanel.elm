@@ -11,6 +11,8 @@ import Logic.App.Types exposing (Iota(..), Panel(..))
 import Logic.App.Utils.GetHeldItemAsString exposing (getHeldItemAsString)
 import Logic.App.Utils.GetIotaValue exposing (getIotaValueAsHtmlMsg)
 import Settings.Theme exposing (iotaColorMap)
+import Logic.App.Utils.PlayerContext exposing (getPlayerHeldItem)
+import Logic.App.Utils.PlayerContext exposing (getPlayerHeldItemContent)
 
 
 configHexPanel : Model -> Html Msg
@@ -41,7 +43,7 @@ heldItemSection model =
             [ label [] [ text "Held Item:" ]
             , select
                 [ onInput ChangeHeldItem
-                , value <| getHeldItemAsString model.castingContext.heldItem
+                , value <| getHeldItemAsString <| getPlayerHeldItem model.castingContext
                 ]
                 [ option [] [ text "Nothing" ]
                 , option [] [ text "Trinket" ]
@@ -54,7 +56,7 @@ heldItemSection model =
             ]
         , div [ class "stored_iota_container" ]
             (label [ class "stored_iota_label" ] [ text "Content:" ]
-                :: (case model.castingContext.heldItemContent of
+                :: (case getPlayerHeldItemContent model.castingContext of
                         Just iota ->
                             renderIotaBox iota
 

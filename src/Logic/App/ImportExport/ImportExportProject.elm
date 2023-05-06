@@ -310,19 +310,21 @@ iotaCodec =
         |> S.finishCustomType
 
 
+type alias SimplifiedCastingContextEntity =
+    { heldItem : HeldItem, heldItemContent : Maybe SimplifiedIota }
+
+
 type alias SimplifiedCastingContext =
-    { heldItem : HeldItem
-    , heldItemContent : Maybe SimplifiedIota
-    , ravenmind : Maybe SimplifiedIota
+    { ravenmind : Maybe SimplifiedIota
+    , entities : Dict String SimplifiedCastingContextEntity
     , macros : Dict String ( String, Direction, SimplifiedIota )
     }
 
 
 simplifyCastingContext : CastingContext -> SimplifiedCastingContext
 simplifyCastingContext castingContext =
-    { heldItem = castingContext.heldItem
-    , heldItemContent = Maybe.map simplifyIota castingContext.heldItemContent
-    , ravenmind = Maybe.map simplifyIota castingContext.ravenmind
+    { ravenmind = Maybe.map simplifyIota castingContext.ravenmind
+    , entities = Dict.empty
     , macros =
         Dict.fromList <|
             List.map
@@ -376,19 +378,25 @@ unSimplifyCastingContext simplifiedCastingContext =
                 )
                 macrosLayer1
     in
-    { heldItem = simplifiedCastingContext.heldItem
-    , heldItemContent = Maybe.map (unSimplifyIota macros) simplifiedCastingContext.heldItemContent
-    , ravenmind = Maybe.map (unSimplifyIota macros) simplifiedCastingContext.ravenmind
+    { ravenmind = Maybe.map (unSimplifyIota macros) simplifiedCastingContext.ravenmind
+    , entities = Dict.empty --temp
     , macros = macros
     }
+
+
+castingContextentityCodec : S.Codec e SimplifiedCastingContextEntity
+castingContextentityCodec =
+    S.record SimplifiedCastingContextEntity
+        |> S.field .heldItem heldItemCodec
+        |> S.field .heldItemContent (S.maybe iotaCodec)
+        |> S.finishRecord
 
 
 castingContextCodec : S.Codec e SimplifiedCastingContext
 castingContextCodec =
     S.record SimplifiedCastingContext
-        |> S.field .heldItem heldItemCodec
-        |> S.field .heldItemContent (S.maybe iotaCodec)
         |> S.field .ravenmind (S.maybe iotaCodec)
+        |> S.field .entities (S.dict S.string castingContextentityCodec)
         |> S.field .macros (S.dict S.string (S.triple S.string directionCodec iotaCodec))
         |> S.finishRecord
 

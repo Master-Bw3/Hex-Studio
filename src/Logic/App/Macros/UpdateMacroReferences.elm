@@ -5,6 +5,7 @@ import Dict
 import Logic.App.Model exposing (Model)
 import Logic.App.Patterns.PatternRegistry exposing (getPatternFromSignature)
 import Logic.App.Types exposing (Iota(..))
+import Logic.App.Utils.PlayerContext exposing (getPlayerHeldItemContent, setPlayerHeldItemContent)
 
 
 updateMacroReferences : Model -> Model
@@ -80,11 +81,12 @@ updateMacroReferences model =
     --TODO: update ravenmind, held item, idk what else this is an absolute pain and this code is garbage and jank
     { model
         | castingContext =
-            { castingContext
-                | macros = newerMacroDict
-                , ravenmind = Maybe.map updateIota castingContext.ravenmind
-                , heldItemContent = Maybe.map updateIota castingContext.heldItemContent
-            }
+            setPlayerHeldItemContent
+                { castingContext
+                    | macros = newerMacroDict
+                    , ravenmind = Maybe.map updateIota castingContext.ravenmind
+                }
+                (Maybe.map updateIota (getPlayerHeldItemContent castingContext))
         , patternArray = newPatternArray
         , stack = updateIotaArray model.stack
     }

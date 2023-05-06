@@ -3,6 +3,7 @@ module Logic.App.Patterns.Spells exposing (..)
 import Array exposing (Array)
 import Logic.App.Patterns.OperatorUtils exposing (action1Input, action2Inputs, actionNoInput, getEntity, getNumber, getPatternList, getVector, spell1Input, spell2Inputs, spell3Inputs, spellNoInput)
 import Logic.App.Types exposing (ActionResult, CastingContext, HeldItem(..), Iota(..))
+import Logic.App.Utils.PlayerContext exposing (getPlayerHeldItem, setPlayerHeldItemContent)
 
 
 explode : Array Iota -> CastingContext -> ActionResult
@@ -99,8 +100,8 @@ craftArtifact : HeldItem -> Array Iota -> CastingContext -> ActionResult
 craftArtifact requiredItem stack ctx =
     let
         action iota1 iota2 context =
-            if context.heldItem == requiredItem then
-                ( Array.empty, { context | heldItemContent = Just iota2 } )
+            if getPlayerHeldItem context == requiredItem then
+                ( Array.empty, setPlayerHeldItemContent context (Just iota2) )
 
             else
                 ( Array.fromList [ iota2, iota1 ], context )

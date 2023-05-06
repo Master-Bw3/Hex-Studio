@@ -3,13 +3,14 @@ module Logic.App.Patterns.ReadWrite exposing (..)
 import Array exposing (Array)
 import Logic.App.Patterns.OperatorUtils exposing (action1Input, action2Inputs, actionNoInput, getAny, getEntity)
 import Logic.App.Types exposing (ActionResult, CastingContext, EntityType(..), HeldItem(..), Iota(..), Mishap(..))
+import Logic.App.Utils.PlayerContext exposing (getPlayerHeldItem, getPlayerHeldItemContent, setPlayerHeldItemContent)
 
 
 read : Array Iota -> CastingContext -> ActionResult
 read stack ctx =
     let
         action context =
-            ( case context.heldItem of
+            ( case getPlayerHeldItem context of
                 NoItem ->
                     Array.empty
 
@@ -23,10 +24,10 @@ read stack ctx =
                     Array.empty
 
                 Focus ->
-                    Array.fromList [ Maybe.withDefault Null context.heldItemContent ]
+                    Array.fromList [ Maybe.withDefault Null (getPlayerHeldItemContent context) ]
 
                 Spellbook ->
-                    Array.fromList [ Maybe.withDefault Null context.heldItemContent ]
+                    Array.fromList [ Maybe.withDefault Null (getPlayerHeldItemContent context) ]
 
                 Pie ->
                     Array.fromList [ Number pi ]
@@ -40,7 +41,7 @@ write : Array Iota -> CastingContext -> ActionResult
 write stack ctx =
     let
         action iota context =
-            case context.heldItem of
+            case getPlayerHeldItem context of
                 NoItem ->
                     ( Array.fromList [ iota ], context )
 
@@ -54,10 +55,10 @@ write stack ctx =
                     ( Array.fromList [ iota ], context )
 
                 Focus ->
-                    ( Array.empty, { context | heldItemContent = Just iota } )
+                    ( Array.empty, setPlayerHeldItemContent context (Just iota) )
 
                 Spellbook ->
-                    ( Array.empty, { context | heldItemContent = Just iota } )
+                    ( Array.empty, setPlayerHeldItemContent context (Just iota) )
 
                 Pie ->
                     ( Array.fromList [ iota ], context )
@@ -69,7 +70,7 @@ readable : Array Iota -> CastingContext -> ActionResult
 readable stack ctx =
     let
         action context =
-            case context.heldItem of
+            case getPlayerHeldItem context of
                 NoItem ->
                     ( Array.repeat 1 (Boolean False), context )
 
@@ -98,7 +99,7 @@ writable : Array Iota -> CastingContext -> ActionResult
 writable stack ctx =
     let
         action context =
-            case context.heldItem of
+            case getPlayerHeldItem context of
                 NoItem ->
                     ( Array.repeat 1 (Boolean False), context )
 
@@ -150,7 +151,7 @@ tempReadChronical : Array Iota -> CastingContext -> ActionResult
 tempReadChronical stack ctx =
     let
         action _ context =
-            ( case context.heldItem of
+            ( case getPlayerHeldItem context of
                 NoItem ->
                     Array.empty
 
@@ -164,10 +165,10 @@ tempReadChronical stack ctx =
                     Array.empty
 
                 Focus ->
-                    Array.fromList [ Maybe.withDefault Null context.heldItemContent ]
+                    Array.fromList [ Maybe.withDefault Null (getPlayerHeldItemContent context) ]
 
                 Spellbook ->
-                    Array.fromList [ Maybe.withDefault Null context.heldItemContent ]
+                    Array.fromList [ Maybe.withDefault Null (getPlayerHeldItemContent context) ]
 
                 Pie ->
                     Array.fromList [ Number pi ]
@@ -181,7 +182,7 @@ tempWriteChronical : Array Iota -> CastingContext -> ActionResult
 tempWriteChronical stack ctx =
     let
         action _ iota context =
-            case context.heldItem of
+            case getPlayerHeldItem context of
                 NoItem ->
                     ( Array.fromList [ iota ], context )
 
@@ -195,10 +196,10 @@ tempWriteChronical stack ctx =
                     ( Array.fromList [ iota ], context )
 
                 Focus ->
-                    ( Array.empty, { context | heldItemContent = Just iota } )
+                    ( Array.empty, setPlayerHeldItemContent context (Just iota) )
 
                 Spellbook ->
-                    ( Array.empty, { context | heldItemContent = Just iota } )
+                    ( Array.empty, setPlayerHeldItemContent context (Just iota) )
 
                 Pie ->
                     ( Array.fromList [ iota ], context )

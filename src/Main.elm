@@ -41,8 +41,11 @@ import Settings.Theme exposing (..)
 import String exposing (fromInt)
 import Task
 import Time
+import Logic.App.Utils.PlayerContext exposing (setPlayerHeldItem)
+import Logic.App.Utils.PlayerContext exposing (setPlayerHeldItemContent)
 
 
+main : Program () Model Msg
 main =
     Browser.document
         { init = init
@@ -92,9 +95,8 @@ init _ =
             { gridScale = 1.0
             }
       , castingContext =
-            { heldItem = NoItem
-            , heldItemContent = Nothing
-            , ravenmind = Nothing
+            { ravenmind = Nothing
+            , entities = Dict.singleton "Player" { heldItem = NoItem, heldItemContent = Nothing }
             , macros = Dict.empty
             }
       , time = 0
@@ -623,7 +625,7 @@ update msg model =
                         _ ->
                             NoItem
             in
-            ( { model | castingContext = { castingContext | heldItem = item, heldItemContent = Nothing } }, Cmd.none )
+            ( { model | castingContext = setPlayerHeldItemContent (setPlayerHeldItem castingContext item) Nothing }, Cmd.none )
 
         RequestGridDrawingAsGIF ->
             ( { model | downloadSrc = "" }, GetGridDrawingAsGif.requestGIF () )
