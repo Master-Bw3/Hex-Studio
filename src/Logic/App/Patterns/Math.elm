@@ -1,11 +1,10 @@
 module Logic.App.Patterns.Math exposing (..)
 
-import Area exposing (Area)
+import Area
 import Array exposing (Array)
 import Bitwise
-import Json.Decode exposing (array)
-import Length exposing (Meters)
-import Logic.App.Patterns.OperatorUtils exposing (action1Input, action2Inputs, action3Inputs, checkEquality, getAny, getBoolean, getInteger, getIntegerOrList, getIotaList, getNumber, getNumberOrList, getNumberOrVector, getVector)
+import Length
+import Logic.App.Patterns.OperatorUtils exposing (action1Input, action2Inputs, action3Inputs, checkEquality, getAny, getBoolean, getInteger, getIntegerOrList, getIotaList, getNumber, getNumberOrVector, getVector)
 import Logic.App.Types exposing (ActionResult, CastingContext, Iota(..), Mishap(..))
 import Quantity exposing (Quantity(..))
 import Svg.Attributes exposing (azimuth)

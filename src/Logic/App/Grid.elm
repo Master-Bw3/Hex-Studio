@@ -1,7 +1,7 @@
 module Logic.App.Grid exposing (..)
 
 import Array exposing (Array)
-import Components.App.Grid exposing (applyPathToGrid, applyUsedPointsToGrid, emptyGridpoint, updateCoords)
+import Components.App.Grid exposing (applyUsedPointsToGrid, emptyGridpoint, updateCoords)
 import List.Extra as List
 import Logic.App.Model exposing (Model)
 import Logic.App.Types exposing (Direction(..), Grid, GridPoint, Pattern)

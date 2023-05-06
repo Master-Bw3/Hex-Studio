@@ -10,16 +10,15 @@ import Components.App.ContextMenu.Configs as Configs
 import Components.App.ContextMenu.ContextMenu exposing (..)
 import Components.App.Grid exposing (..)
 import ContextMenu
-import Dict exposing (Dict)
+import Dict
 import File
 import File.Download as Download
 import File.Select
 import Html exposing (..)
 import Json.Decode exposing (Decoder)
-import Json.Encode
 import Keyboard.Event exposing (decodeKeyboardEvent)
 import Logic.App.Grid exposing (drawPatterns, sortPatterns)
-import Logic.App.ImportExport.ImportExportProject exposing (decodeProjectData, encodeProjectData, modelToProjectData, unsimplifyProjectData)
+import Logic.App.ImportExport.ImportExportProject exposing (decodeProjectData, unsimplifyProjectData)
 import Logic.App.ImportExport.ImportParser exposing (parseInput)
 import Logic.App.Macros.UpdateMacroReferences exposing (updateMacroReferences)
 import Logic.App.Model exposing (Model)
@@ -31,7 +30,7 @@ import Logic.App.Patterns.PatternRegistry exposing (..)
 import Logic.App.Stack.EvalStack exposing (applyPatternsToStack)
 import Logic.App.Types exposing (..)
 import Logic.App.Utils.GetAngleSignature exposing (getAngleSignatureAndStartDir)
-import Logic.App.Utils.GetIotaValue exposing (getIotaTypeAsString, getIotaValueAsString)
+import Logic.App.Utils.GetIotaValue exposing (getIotaValueAsString)
 import Logic.App.Utils.Utils exposing (removeFromArray, unshift)
 import Ports.CheckMouseOverDragHandle as CheckMouseOverDragHandle
 import Ports.GetElementBoundingBoxById as GetElementBoundingBoxById

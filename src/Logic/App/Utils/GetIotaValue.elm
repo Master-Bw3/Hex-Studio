@@ -1,8 +1,8 @@
 module Logic.App.Utils.GetIotaValue exposing (..)
 
 import Array
-import Html exposing (br, div, li, ol, p, text)
-import Html.Attributes exposing (class, start, style)
+import Html exposing (div, p, text)
+import Html.Attributes exposing (class, style)
 import Logic.App.Types exposing (EntityType(..), Iota(..), IotaType(..), Mishap(..))
 import Settings.Theme exposing (iotaColorMap)
 

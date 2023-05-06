@@ -3,12 +3,11 @@ module Logic.App.Patterns.MetaActions exposing (..)
 import Array
 import Array.Extra as Array
 import Components.App.Grid exposing (updateGridPoints)
-import Dict
 import Logic.App.Grid exposing (drawPatterns)
 import Logic.App.Model exposing (Model)
 import Logic.App.PatternList.PatternArray exposing (applyColorToPatternFromResult, updateDrawingColors)
-import Logic.App.Patterns.PatternRegistry exposing (getPatternFromName, unknownPattern)
-import Logic.App.Stack.EvalStack exposing (ApplyResult, applyPatternsToStack)
+import Logic.App.Patterns.PatternRegistry exposing (getPatternFromName)
+import Logic.App.Stack.EvalStack exposing (applyPatternsToStack)
 import Logic.App.Types exposing (ApplyToStackResult(..), Iota(..), MetaActionMsg(..))
 import Logic.App.Utils.Utils exposing (unshift)
 

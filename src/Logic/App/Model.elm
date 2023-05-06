@@ -1,10 +1,9 @@
 module Logic.App.Model exposing (..)
 
 import Array exposing (Array)
-import Dict exposing (Dict)
 import Keyboard.Event exposing (KeyboardEvent)
 import Logic.App.Msg exposing (Msg)
-import Logic.App.Types exposing (CastingContext, Direction, Grid, GridPoint, HeldItem, Iota, Overlay, Panel, Pattern, Timeline)
+import Logic.App.Types exposing (CastingContext, Grid, GridPoint, Iota, Overlay, Panel, Pattern, Timeline)
 import ContextMenu exposing (ContextMenu)
 import Logic.App.Types exposing (ContextMenuContext)
 
