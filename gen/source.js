@@ -6883,17 +6883,7 @@ var $author$project$Logic$App$Msg$ImportProject = function (a) {
 var $author$project$Logic$App$Msg$ImportProjectFile = function (a) {
 	return {$: 'ImportProjectFile', a: a};
 };
-var $author$project$Logic$App$Types$IotaList = function (a) {
-	return {$: 'IotaList', a: a};
-};
 var $author$project$Logic$App$Types$None = {$: 'None'};
-var $author$project$Logic$App$Types$OpenParenthesis = function (a) {
-	return {$: 'OpenParenthesis', a: a};
-};
-var $author$project$Logic$App$Types$PatternIota = F2(
-	function (a, b) {
-		return {$: 'PatternIota', a: a, b: b};
-	});
 var $author$project$Logic$App$Types$Pie = {$: 'Pie'};
 var $author$project$Logic$App$Msg$SetTimelineIndex = function (a) {
 	return {$: 'SetTimelineIndex', a: a};
@@ -7641,6 +7631,10 @@ var $author$project$Logic$App$PatternList$PatternArray$applyColorToPatternFromRe
 					{color: $author$project$Settings$Theme$accent5});
 		}
 	});
+var $author$project$Logic$App$Types$PatternIota = F2(
+	function (a, b) {
+		return {$: 'PatternIota', a: a, b: b};
+	});
 var $author$project$Logic$App$Types$CatastrophicFailure = {$: 'CatastrophicFailure'};
 var $author$project$Logic$App$Types$Considered = {$: 'Considered'};
 var $author$project$Logic$App$Types$Failed = {$: 'Failed'};
@@ -7648,9 +7642,15 @@ var $author$project$Logic$App$Types$Garbage = function (a) {
 	return {$: 'Garbage', a: a};
 };
 var $author$project$Logic$App$Types$IncorrectIota = {$: 'IncorrectIota'};
+var $author$project$Logic$App$Types$IotaList = function (a) {
+	return {$: 'IotaList', a: a};
+};
 var $author$project$Logic$App$Types$NotEnoughIotas = {$: 'NotEnoughIotas'};
 var $author$project$Logic$App$Types$Null = {$: 'Null'};
 var $author$project$Logic$App$Types$NullType = {$: 'NullType'};
+var $author$project$Logic$App$Types$OpenParenthesis = function (a) {
+	return {$: 'OpenParenthesis', a: a};
+};
 var $author$project$Logic$App$Types$Succeeded = {$: 'Succeeded'};
 var $elm$core$Array$getHelp = F3(
 	function (shift, index, tree) {
@@ -16250,25 +16250,6 @@ var $elm$core$Array$indexedMap = F2(
 			true,
 			A3($elm$core$Elm$JsArray$foldl, helper, initialBuilder, tree));
 	});
-var $elm$core$Dict$map = F2(
-	function (func, dict) {
-		if (dict.$ === 'RBEmpty_elm_builtin') {
-			return $elm$core$Dict$RBEmpty_elm_builtin;
-		} else {
-			var color = dict.a;
-			var key = dict.b;
-			var value = dict.c;
-			var left = dict.d;
-			var right = dict.e;
-			return A5(
-				$elm$core$Dict$RBNode_elm_builtin,
-				color,
-				key,
-				A2(func, key, value),
-				A2($elm$core$Dict$map, func, left),
-				A2($elm$core$Dict$map, func, right));
-		}
-	});
 var $author$project$Logic$App$Msg$MouseMoveData = F4(
 	function (pageX, pageY, offsetHeight, offsetWidth) {
 		return {offsetHeight: offsetHeight, offsetWidth: offsetWidth, pageX: pageX, pageY: pageY};
@@ -16440,6 +16421,25 @@ var $elm$file$File$Download$string = F3(
 			A3(_File_download, name, mime, content));
 	});
 var $elm$file$File$toString = _File_toString;
+var $elm$core$Dict$map = F2(
+	function (func, dict) {
+		if (dict.$ === 'RBEmpty_elm_builtin') {
+			return $elm$core$Dict$RBEmpty_elm_builtin;
+		} else {
+			var color = dict.a;
+			var key = dict.b;
+			var value = dict.c;
+			var left = dict.d;
+			var right = dict.e;
+			return A5(
+				$elm$core$Dict$RBNode_elm_builtin,
+				color,
+				key,
+				A2(func, key, value),
+				A2($elm$core$Dict$map, func, left),
+				A2($elm$core$Dict$map, func, right));
+		}
+	});
 var $author$project$Logic$App$ImportExport$ImportExportProject$unSimplifyPattern = F2(
 	function (macros, simplifiedPattern) {
 		var pattern = A2(
@@ -16724,6 +16724,112 @@ var $jinjor$elm_contextmenu$ContextMenu$update = F2(
 			}
 		}
 	});
+var $author$project$Logic$App$Macros$UpdateMacroReferences$updateMacroReferences = function (model) {
+	var castingContext = model.castingContext;
+	var newerMacroDict = A2(
+		$elm$core$Dict$map,
+		F2(
+			function (_v6, macro) {
+				var displayName = macro.a;
+				var startDirection = macro.b;
+				var iota = macro.c;
+				return _Utils_Tuple3(
+					displayName,
+					startDirection,
+					function () {
+						if (iota.$ === 'IotaList') {
+							var iotaList = iota.a;
+							return $author$project$Logic$App$Types$IotaList(
+								A2(
+									$elm$core$Array$map,
+									function (i) {
+										if (i.$ === 'PatternIota') {
+											var pattern = i.a;
+											var considered = i.b;
+											return A2(
+												$author$project$Logic$App$Types$PatternIota,
+												A2(
+													$author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature,
+													$elm$core$Maybe$Just(castingContext.macros),
+													pattern.signature),
+												considered);
+										} else {
+											return i;
+										}
+									},
+									iotaList));
+						} else {
+							return iota;
+						}
+					}());
+			}),
+		castingContext.macros);
+	var newPatternArray = A2(
+		$elm$core$Array$map,
+		function (tuple) {
+			var pattern = tuple.a;
+			var gridpoints = tuple.b;
+			var _v4 = A2($elm$core$Dict$get, pattern.signature, newerMacroDict);
+			if (_v4.$ === 'Just') {
+				var _v5 = _v4.a;
+				var displayName = _v5.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						pattern,
+						{displayName: displayName}),
+					gridpoints);
+			} else {
+				return _Utils_Tuple2(pattern, gridpoints);
+			}
+		},
+		model.patternArray);
+	var updateIota = function (iota) {
+		switch (iota.$) {
+			case 'PatternIota':
+				var pattern = iota.a;
+				var considered = iota.b;
+				var _v1 = A2($elm$core$Dict$get, pattern.signature, newerMacroDict);
+				if (_v1.$ === 'Just') {
+					var _v2 = _v1.a;
+					var displayName = _v2.a;
+					return A2(
+						$author$project$Logic$App$Types$PatternIota,
+						_Utils_update(
+							pattern,
+							{displayName: displayName}),
+						considered);
+				} else {
+					return A2($author$project$Logic$App$Types$PatternIota, pattern, considered);
+				}
+			case 'IotaList':
+				var list = iota.a;
+				return $author$project$Logic$App$Types$IotaList(
+					updateIotaArray(list));
+			case 'OpenParenthesis':
+				var list = iota.a;
+				return $author$project$Logic$App$Types$OpenParenthesis(
+					updateIotaArray(list));
+			default:
+				return iota;
+		}
+	};
+	var updateIotaArray = function (iotaArray) {
+		return A2($elm$core$Array$map, updateIota, iotaArray);
+	};
+	return _Utils_update(
+		model,
+		{
+			castingContext: _Utils_update(
+				castingContext,
+				{
+					heldItemContent: A2($elm$core$Maybe$map, updateIota, castingContext.heldItemContent),
+					macros: newerMacroDict,
+					ravenmind: A2($elm$core$Maybe$map, updateIota, castingContext.ravenmind)
+				}),
+			patternArray: newPatternArray,
+			stack: updateIotaArray(model.stack)
+		});
+};
 var $author$project$Components$App$Grid$updateUsedGridPoints = F5(
 	function (gridWidth, gridHeight, patternArray, maybeGrid, scale) {
 		updateUsedGridPoints:
@@ -17087,7 +17193,7 @@ var $author$project$Main$update = F2(
 								$author$project$Main$update,
 								$author$project$Logic$App$Msg$SetTimelineIndex(
 									$elm$core$Array$length(newModel.timeline)),
-								newModel);
+								$author$project$Logic$App$Macros$UpdateMacroReferences$updateMacroReferences(newModel));
 						} else {
 							return _Utils_Tuple2(
 								_Utils_update(
@@ -17830,116 +17936,21 @@ var $author$project$Main$update = F2(
 								return _Utils_Tuple3(newName, direction, iota);
 							}),
 						model.castingContext.macros);
-					var newerMacroDict = A2(
-						$elm$core$Dict$map,
-						F2(
-							function (_v21, macro) {
-								var displayName = macro.a;
-								var startDirection = macro.b;
-								var iota = macro.c;
-								return _Utils_Tuple3(
-									displayName,
-									startDirection,
-									function () {
-										if (iota.$ === 'IotaList') {
-											var iotaList = iota.a;
-											return $author$project$Logic$App$Types$IotaList(
-												A2(
-													$elm$core$Array$map,
-													function (i) {
-														if (i.$ === 'PatternIota') {
-															var pattern = i.a;
-															var considered = i.b;
-															return A2(
-																$author$project$Logic$App$Types$PatternIota,
-																A2(
-																	$author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature,
-																	$elm$core$Maybe$Just(newMacroDict),
-																	pattern.signature),
-																considered);
-														} else {
-															return i;
-														}
-													},
-													iotaList));
-										} else {
-											return iota;
-										}
-									}());
-							}),
-						newMacroDict);
-					var newPatternArray = A2(
-						$elm$core$Array$map,
-						function (tuple) {
-							var pattern = tuple.a;
-							var gridpoints = tuple.b;
-							var _v19 = A2($elm$core$Dict$get, pattern.signature, newerMacroDict);
-							if (_v19.$ === 'Just') {
-								var _v20 = _v19.a;
-								var displayName = _v20.a;
-								return _Utils_Tuple2(
-									_Utils_update(
-										pattern,
-										{displayName: displayName}),
-									gridpoints);
-							} else {
-								return _Utils_Tuple2(pattern, gridpoints);
-							}
-						},
-						model.patternArray);
-					var updateIota = function (iota) {
-						switch (iota.$) {
-							case 'PatternIota':
-								var pattern = iota.a;
-								var considered = iota.b;
-								var _v16 = A2($elm$core$Dict$get, pattern.signature, newerMacroDict);
-								if (_v16.$ === 'Just') {
-									var _v17 = _v16.a;
-									var displayName = _v17.a;
-									return A2(
-										$author$project$Logic$App$Types$PatternIota,
-										_Utils_update(
-											pattern,
-											{displayName: displayName}),
-										considered);
-								} else {
-									return A2($author$project$Logic$App$Types$PatternIota, pattern, considered);
-								}
-							case 'IotaList':
-								var list = iota.a;
-								return $author$project$Logic$App$Types$IotaList(
-									updateIotaArray(list));
-							case 'OpenParenthesis':
-								var list = iota.a;
-								return $author$project$Logic$App$Types$OpenParenthesis(
-									updateIotaArray(list));
-							default:
-								return iota;
-						}
-					};
-					var updateIotaArray = function (iotaArray) {
-						return A2($elm$core$Array$map, updateIota, iotaArray);
-					};
 					return _Utils_Tuple2(
-						_Utils_update(
-							model,
-							{
-								castingContext: _Utils_update(
-									castingContext,
-									{
-										heldItemContent: A2($elm$core$Maybe$map, updateIota, castingContext.heldItemContent),
-										macros: newerMacroDict,
-										ravenmind: A2($elm$core$Maybe$map, updateIota, castingContext.ravenmind)
-									}),
-								patternArray: newPatternArray,
-								stack: updateIotaArray(model.stack)
-							}),
+						$author$project$Logic$App$Macros$UpdateMacroReferences$updateMacroReferences(
+							_Utils_update(
+								model,
+								{
+									castingContext: _Utils_update(
+										castingContext,
+										{macros: newMacroDict})
+								})),
 						$elm$core$Platform$Cmd$none);
 				case 'ContextMenuMsg':
 					var message = msg.a;
-					var _v26 = A2($jinjor$elm_contextmenu$ContextMenu$update, message, model.contextMenu);
-					var contextMenu = _v26.a;
-					var cmd = _v26.b;
+					var _v16 = A2($jinjor$elm_contextmenu$ContextMenu$update, message, model.contextMenu);
+					var contextMenu = _v16.a;
+					var cmd = _v16.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -17954,10 +17965,10 @@ var $author$project$Main$update = F2(
 							return _Utils_Tuple2(pat, $elm$core$Platform$Cmd$none);
 						},
 						function () {
-							var _v27 = A2($elm$core$Dict$get, sig, model.castingContext.macros);
-							if ((_v27.$ === 'Just') && (_v27.a.c.$ === 'IotaList')) {
-								var _v28 = _v27.a;
-								var patternList = _v28.c.a;
+							var _v17 = A2($elm$core$Dict$get, sig, model.castingContext.macros);
+							if ((_v17.$ === 'Just') && (_v17.a.c.$ === 'IotaList')) {
+								var _v18 = _v17.a;
+								var patternList = _v18.c.a;
 								return $elm$core$Array$toList(
 									A2(
 										$elm$core$Array$map,
@@ -18089,7 +18100,7 @@ var $author$project$Main$updatePatternArrayFromQueue = F2(
 				$author$project$Main$update,
 				$author$project$Logic$App$Msg$SetTimelineIndex(
 					$elm$core$Array$length(model.timeline)),
-				model);
+				$author$project$Logic$App$Macros$UpdateMacroReferences$updateMacroReferences(model));
 		}
 	});
 var $author$project$Logic$App$Msg$MouseMove = function (a) {

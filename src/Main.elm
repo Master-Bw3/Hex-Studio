@@ -21,6 +21,7 @@ import Keyboard.Event exposing (decodeKeyboardEvent)
 import Logic.App.Grid exposing (drawPatterns, sortPatterns)
 import Logic.App.ImportExport.ImportExportProject exposing (decodeProjectData, encodeProjectData, modelToProjectData, unsimplifyProjectData)
 import Logic.App.ImportExport.ImportParser exposing (parseInput)
+import Logic.App.Macros.UpdateMacroReferences exposing (updateMacroReferences)
 import Logic.App.Model exposing (Model)
 import Logic.App.Msg exposing (..)
 import Logic.App.PatternList.PatternArray exposing (addToPatternArray, applyColorToPatternFromResult, setDrawingColor, updateDrawingColors)
@@ -180,7 +181,7 @@ updatePatternArrayFromQueue insertionPoint model =
             ( { model | importQueue = Maybe.withDefault [] <| List.tail model.importQueue }, command )
 
     else
-        update (SetTimelineIndex (Array.length model.timeline)) model
+        update (SetTimelineIndex (Array.length model.timeline)) (updateMacroReferences model)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -321,7 +322,7 @@ update msg model =
                                 }
                                 newPattern.metaAction
                     in
-                    update (SetTimelineIndex (Array.length newModel.timeline)) <| newModel
+                    update (SetTimelineIndex (Array.length newModel.timeline)) <| updateMacroReferences newModel
 
                 else
                     ( { model | grid = { grid | drawing = { drawing | drawingMode = False, activePath = [] } } }, Cmd.none )
@@ -815,82 +816,8 @@ update msg model =
                             )
                         )
                         model.castingContext.macros
-
-                newerMacroDict =
-                    --this is to fix macros inside of macros not showing the macro name
-                    Dict.map
-                        (\_ macro ->
-                            case macro of
-                                ( displayName, startDirection, iota ) ->
-                                    ( displayName
-                                    , startDirection
-                                    , case iota of
-                                        IotaList iotaList ->
-                                            IotaList <|
-                                                Array.map
-                                                    (\i ->
-                                                        case i of
-                                                            PatternIota pattern considered ->
-                                                                PatternIota (getPatternFromSignature (Just newMacroDict) pattern.signature) considered
-
-                                                            _ ->
-                                                                i
-                                                    )
-                                                    iotaList
-
-                                        _ ->
-                                            iota
-                                    )
-                        )
-                        newMacroDict
-
-                newPatternArray =
-                    Array.map
-                        (\tuple ->
-                            case tuple of
-                                ( pattern, gridpoints ) ->
-                                    case Dict.get pattern.signature newerMacroDict of
-                                        Just ( displayName, _, _ ) ->
-                                            ( { pattern | displayName = displayName }, gridpoints )
-
-                                        _ ->
-                                            ( pattern, gridpoints )
-                        )
-                        model.patternArray
-
-                updateIotaArray iotaArray =
-                    Array.map updateIota iotaArray
-
-                updateIota iota =
-                    case iota of
-                        PatternIota pattern considered ->
-                            case Dict.get pattern.signature newerMacroDict of
-                                Just ( displayName, _, _ ) ->
-                                    PatternIota { pattern | displayName = displayName } considered
-
-                                _ ->
-                                    PatternIota pattern considered
-
-                        IotaList list ->
-                            IotaList (updateIotaArray list)
-
-                        OpenParenthesis list ->
-                            OpenParenthesis (updateIotaArray list)
-
-                        _ ->
-                            iota
             in
-            --TODO: update ravenmind, held item, idk what else this is an absolute pain and this code is garbage and jank
-            ( { model
-                | castingContext =
-                    { castingContext
-                        | macros = newerMacroDict
-                        , ravenmind = Maybe.map updateIota castingContext.ravenmind
-                        , heldItemContent = Maybe.map updateIota castingContext.heldItemContent
-                    }
-                , patternArray = newPatternArray
-                , stack = updateIotaArray model.stack
-              }
+            ( updateMacroReferences { model | castingContext = { castingContext | macros = newMacroDict } }
             , Cmd.none
             )
 
