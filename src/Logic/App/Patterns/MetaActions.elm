@@ -10,8 +10,7 @@ import Logic.App.Patterns.PatternRegistry exposing (getPatternFromName)
 import Logic.App.Stack.EvalStack exposing (applyPatternsToStack)
 import Logic.App.Types exposing (ApplyToStackResult(..), Iota(..), MetaActionMsg(..))
 import Logic.App.Utils.Utils exposing (unshift)
-import Logic.App.Utils.PlayerContext exposing (setPlayerHeldItem)
-import Logic.App.Utils.PlayerContext exposing (setPlayerHeldItemContent)
+import Logic.App.Utils.EntityContext exposing (setPlayerHeldItemContent)
 
 
 applyMetaAction : Model -> MetaActionMsg -> Model

@@ -5723,6 +5723,127 @@ var $elm$core$Task$attempt = F2(
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Dict$RBEmpty_elm_builtin = {$: 'RBEmpty_elm_builtin'};
 var $elm$core$Dict$empty = $elm$core$Dict$RBEmpty_elm_builtin;
+var $elm$core$Dict$Black = {$: 'Black'};
+var $elm$core$Dict$RBNode_elm_builtin = F5(
+	function (a, b, c, d, e) {
+		return {$: 'RBNode_elm_builtin', a: a, b: b, c: c, d: d, e: e};
+	});
+var $elm$core$Dict$Red = {$: 'Red'};
+var $elm$core$Dict$balance = F5(
+	function (color, key, value, left, right) {
+		if ((right.$ === 'RBNode_elm_builtin') && (right.a.$ === 'Red')) {
+			var _v1 = right.a;
+			var rK = right.b;
+			var rV = right.c;
+			var rLeft = right.d;
+			var rRight = right.e;
+			if ((left.$ === 'RBNode_elm_builtin') && (left.a.$ === 'Red')) {
+				var _v3 = left.a;
+				var lK = left.b;
+				var lV = left.c;
+				var lLeft = left.d;
+				var lRight = left.e;
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					$elm$core$Dict$Red,
+					key,
+					value,
+					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, lK, lV, lLeft, lRight),
+					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, rK, rV, rLeft, rRight));
+			} else {
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					color,
+					rK,
+					rV,
+					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Red, key, value, left, rLeft),
+					rRight);
+			}
+		} else {
+			if ((((left.$ === 'RBNode_elm_builtin') && (left.a.$ === 'Red')) && (left.d.$ === 'RBNode_elm_builtin')) && (left.d.a.$ === 'Red')) {
+				var _v5 = left.a;
+				var lK = left.b;
+				var lV = left.c;
+				var _v6 = left.d;
+				var _v7 = _v6.a;
+				var llK = _v6.b;
+				var llV = _v6.c;
+				var llLeft = _v6.d;
+				var llRight = _v6.e;
+				var lRight = left.e;
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					$elm$core$Dict$Red,
+					lK,
+					lV,
+					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, llK, llV, llLeft, llRight),
+					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, key, value, lRight, right));
+			} else {
+				return A5($elm$core$Dict$RBNode_elm_builtin, color, key, value, left, right);
+			}
+		}
+	});
+var $elm$core$Basics$compare = _Utils_compare;
+var $elm$core$Dict$insertHelp = F3(
+	function (key, value, dict) {
+		if (dict.$ === 'RBEmpty_elm_builtin') {
+			return A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Red, key, value, $elm$core$Dict$RBEmpty_elm_builtin, $elm$core$Dict$RBEmpty_elm_builtin);
+		} else {
+			var nColor = dict.a;
+			var nKey = dict.b;
+			var nValue = dict.c;
+			var nLeft = dict.d;
+			var nRight = dict.e;
+			var _v1 = A2($elm$core$Basics$compare, key, nKey);
+			switch (_v1.$) {
+				case 'LT':
+					return A5(
+						$elm$core$Dict$balance,
+						nColor,
+						nKey,
+						nValue,
+						A3($elm$core$Dict$insertHelp, key, value, nLeft),
+						nRight);
+				case 'EQ':
+					return A5($elm$core$Dict$RBNode_elm_builtin, nColor, nKey, value, nLeft, nRight);
+				default:
+					return A5(
+						$elm$core$Dict$balance,
+						nColor,
+						nKey,
+						nValue,
+						nLeft,
+						A3($elm$core$Dict$insertHelp, key, value, nRight));
+			}
+		}
+	});
+var $elm$core$Dict$insert = F3(
+	function (key, value, dict) {
+		var _v0 = A3($elm$core$Dict$insertHelp, key, value, dict);
+		if ((_v0.$ === 'RBNode_elm_builtin') && (_v0.a.$ === 'Red')) {
+			var _v1 = _v0.a;
+			var k = _v0.b;
+			var v = _v0.c;
+			var l = _v0.d;
+			var r = _v0.e;
+			return A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, k, v, l, r);
+		} else {
+			var x = _v0;
+			return x;
+		}
+	});
+var $elm$core$Dict$fromList = function (assocs) {
+	return A3(
+		$elm$core$List$foldl,
+		F2(
+			function (_v0, dict) {
+				var key = _v0.a;
+				var value = _v0.b;
+				return A3($elm$core$Dict$insert, key, value, dict);
+			}),
+		$elm$core$Dict$empty,
+		assocs);
+};
 var $elm$browser$Browser$Dom$getElement = _Browser_getElement;
 var $jinjor$elm_contextmenu$ContextMenu$ContextMenu = function (a) {
 	return {$: 'ContextMenu', a: a};
@@ -5736,15 +5857,6 @@ var $elm$core$Platform$Cmd$map = _Platform_map;
 var $elm$core$Basics$negate = function (n) {
 	return -n;
 };
-var $elm$core$Dict$Black = {$: 'Black'};
-var $elm$core$Dict$RBNode_elm_builtin = F5(
-	function (a, b, c, d, e) {
-		return {$: 'RBNode_elm_builtin', a: a, b: b, c: c, d: d, e: e};
-	});
-var $elm$core$Dict$singleton = F2(
-	function (key, value) {
-		return A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, key, value, $elm$core$Dict$RBEmpty_elm_builtin, $elm$core$Dict$RBEmpty_elm_builtin);
-	});
 var $jinjor$elm_contextmenu$ContextMenu$Arrow = {$: 'Arrow'};
 var $jinjor$elm_contextmenu$ContextMenu$Mirror = {$: 'Mirror'};
 var $jinjor$elm_contextmenu$ContextMenu$RightBottom = {$: 'RightBottom'};
@@ -5761,10 +5873,16 @@ var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
 		{
 			castingContext: {
-				entities: A2(
-					$elm$core$Dict$singleton,
-					'Player',
-					{heldItem: $author$project$Logic$App$Types$NoItem, heldItemContent: $elm$core$Maybe$Nothing}),
+				entities: $elm$core$Dict$fromList(
+					_List_fromArray(
+						[
+							_Utils_Tuple2(
+							'Player',
+							{heldItem: $author$project$Logic$App$Types$NoItem, heldItemContent: $elm$core$Maybe$Nothing}),
+							_Utils_Tuple2(
+							'OwO',
+							{heldItem: $author$project$Logic$App$Types$NoItem, heldItemContent: $elm$core$Maybe$Nothing})
+						])),
 				macros: $elm$core$Dict$empty,
 				ravenmind: $elm$core$Maybe$Nothing
 			},
@@ -6194,7 +6312,6 @@ var $elm$time$Time$State = F2(
 	});
 var $elm$time$Time$init = $elm$core$Task$succeed(
 	A2($elm$time$Time$State, $elm$core$Dict$empty, $elm$core$Dict$empty));
-var $elm$core$Basics$compare = _Utils_compare;
 var $elm$core$Dict$get = F2(
 	function (targetKey, dict) {
 		get:
@@ -6224,109 +6341,6 @@ var $elm$core$Dict$get = F2(
 						continue get;
 				}
 			}
-		}
-	});
-var $elm$core$Dict$Red = {$: 'Red'};
-var $elm$core$Dict$balance = F5(
-	function (color, key, value, left, right) {
-		if ((right.$ === 'RBNode_elm_builtin') && (right.a.$ === 'Red')) {
-			var _v1 = right.a;
-			var rK = right.b;
-			var rV = right.c;
-			var rLeft = right.d;
-			var rRight = right.e;
-			if ((left.$ === 'RBNode_elm_builtin') && (left.a.$ === 'Red')) {
-				var _v3 = left.a;
-				var lK = left.b;
-				var lV = left.c;
-				var lLeft = left.d;
-				var lRight = left.e;
-				return A5(
-					$elm$core$Dict$RBNode_elm_builtin,
-					$elm$core$Dict$Red,
-					key,
-					value,
-					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, lK, lV, lLeft, lRight),
-					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, rK, rV, rLeft, rRight));
-			} else {
-				return A5(
-					$elm$core$Dict$RBNode_elm_builtin,
-					color,
-					rK,
-					rV,
-					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Red, key, value, left, rLeft),
-					rRight);
-			}
-		} else {
-			if ((((left.$ === 'RBNode_elm_builtin') && (left.a.$ === 'Red')) && (left.d.$ === 'RBNode_elm_builtin')) && (left.d.a.$ === 'Red')) {
-				var _v5 = left.a;
-				var lK = left.b;
-				var lV = left.c;
-				var _v6 = left.d;
-				var _v7 = _v6.a;
-				var llK = _v6.b;
-				var llV = _v6.c;
-				var llLeft = _v6.d;
-				var llRight = _v6.e;
-				var lRight = left.e;
-				return A5(
-					$elm$core$Dict$RBNode_elm_builtin,
-					$elm$core$Dict$Red,
-					lK,
-					lV,
-					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, llK, llV, llLeft, llRight),
-					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, key, value, lRight, right));
-			} else {
-				return A5($elm$core$Dict$RBNode_elm_builtin, color, key, value, left, right);
-			}
-		}
-	});
-var $elm$core$Dict$insertHelp = F3(
-	function (key, value, dict) {
-		if (dict.$ === 'RBEmpty_elm_builtin') {
-			return A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Red, key, value, $elm$core$Dict$RBEmpty_elm_builtin, $elm$core$Dict$RBEmpty_elm_builtin);
-		} else {
-			var nColor = dict.a;
-			var nKey = dict.b;
-			var nValue = dict.c;
-			var nLeft = dict.d;
-			var nRight = dict.e;
-			var _v1 = A2($elm$core$Basics$compare, key, nKey);
-			switch (_v1.$) {
-				case 'LT':
-					return A5(
-						$elm$core$Dict$balance,
-						nColor,
-						nKey,
-						nValue,
-						A3($elm$core$Dict$insertHelp, key, value, nLeft),
-						nRight);
-				case 'EQ':
-					return A5($elm$core$Dict$RBNode_elm_builtin, nColor, nKey, value, nLeft, nRight);
-				default:
-					return A5(
-						$elm$core$Dict$balance,
-						nColor,
-						nKey,
-						nValue,
-						nLeft,
-						A3($elm$core$Dict$insertHelp, key, value, nRight));
-			}
-		}
-	});
-var $elm$core$Dict$insert = F3(
-	function (key, value, dict) {
-		var _v0 = A3($elm$core$Dict$insertHelp, key, value, dict);
-		if ((_v0.$ === 'RBNode_elm_builtin') && (_v0.a.$ === 'Red')) {
-			var _v1 = _v0.a;
-			var k = _v0.b;
-			var v = _v0.c;
-			var l = _v0.d;
-			var r = _v0.e;
-			return A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, k, v, l, r);
-		} else {
-			var x = _v0;
-			return x;
 		}
 	});
 var $elm$time$Time$addMySub = F2(
@@ -6627,18 +6641,6 @@ var $elm$browser$Browser$Events$addKey = function (sub) {
 			$elm$browser$Browser$Events$nodeToKey(node),
 			name),
 		sub);
-};
-var $elm$core$Dict$fromList = function (assocs) {
-	return A3(
-		$elm$core$List$foldl,
-		F2(
-			function (_v0, dict) {
-				var key = _v0.a;
-				var value = _v0.b;
-				return A3($elm$core$Dict$insert, key, value, dict);
-			}),
-		$elm$core$Dict$empty,
-		assocs);
 };
 var $elm$browser$Browser$Events$Event = F2(
 	function (key, event) {
@@ -10306,7 +10308,7 @@ var $author$project$Logic$App$Patterns$OperatorUtils$getPatternList = function (
 		return $elm$core$Maybe$Nothing;
 	}
 };
-var $author$project$Logic$App$Utils$PlayerContext$getPlayerHeldItem = function (context) {
+var $author$project$Logic$App$Utils$EntityContext$getPlayerHeldItem = function (context) {
 	var _v0 = A2($elm$core$Dict$get, 'Player', context.entities);
 	if (_v0.$ === 'Just') {
 		var heldItem = _v0.a.heldItem;
@@ -10688,7 +10690,7 @@ var $elm$core$Dict$update = F3(
 			return A2($elm$core$Dict$remove, targetKey, dictionary);
 		}
 	});
-var $author$project$Logic$App$Utils$PlayerContext$setPlayerHeldItemContent = F2(
+var $author$project$Logic$App$Utils$EntityContext$setPlayerHeldItemContent = F2(
 	function (context, heldItemContent) {
 		return _Utils_update(
 			context,
@@ -10715,11 +10717,11 @@ var $author$project$Logic$App$Patterns$Spells$craftArtifact = F3(
 		var action = F3(
 			function (iota1, iota2, context) {
 				return _Utils_eq(
-					$author$project$Logic$App$Utils$PlayerContext$getPlayerHeldItem(context),
+					$author$project$Logic$App$Utils$EntityContext$getPlayerHeldItem(context),
 					requiredItem) ? _Utils_Tuple2(
 					$elm$core$Array$empty,
 					A2(
-						$author$project$Logic$App$Utils$PlayerContext$setPlayerHeldItemContent,
+						$author$project$Logic$App$Utils$EntityContext$setPlayerHeldItemContent,
 						context,
 						$elm$core$Maybe$Just(iota2))) : _Utils_Tuple2(
 					$elm$core$Array$fromList(
@@ -12394,7 +12396,7 @@ var $author$project$Logic$App$Patterns$Misc$raycastEntity = F2(
 	function (stack, ctx) {
 		return A4($author$project$Logic$App$Patterns$OperatorUtils$spell2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
 	});
-var $author$project$Logic$App$Utils$PlayerContext$getPlayerHeldItemContent = function (context) {
+var $author$project$Logic$App$Utils$EntityContext$getPlayerHeldItemContent = function (context) {
 	var _v0 = A2($elm$core$Dict$get, 'Player', context.entities);
 	if (_v0.$ === 'Just') {
 		var heldItemContent = _v0.a.heldItemContent;
@@ -12408,7 +12410,7 @@ var $author$project$Logic$App$Patterns$ReadWrite$read = F2(
 		var action = function (context) {
 			return _Utils_Tuple2(
 				function () {
-					var _v0 = $author$project$Logic$App$Utils$PlayerContext$getPlayerHeldItem(context);
+					var _v0 = $author$project$Logic$App$Utils$EntityContext$getPlayerHeldItem(context);
 					switch (_v0.$) {
 						case 'NoItem':
 							return $elm$core$Array$empty;
@@ -12425,7 +12427,7 @@ var $author$project$Logic$App$Patterns$ReadWrite$read = F2(
 										A2(
 										$elm$core$Maybe$withDefault,
 										$author$project$Logic$App$Types$Null,
-										$author$project$Logic$App$Utils$PlayerContext$getPlayerHeldItemContent(context))
+										$author$project$Logic$App$Utils$EntityContext$getPlayerHeldItemContent(context))
 									]));
 						case 'Spellbook':
 							return $elm$core$Array$fromList(
@@ -12434,7 +12436,7 @@ var $author$project$Logic$App$Patterns$ReadWrite$read = F2(
 										A2(
 										$elm$core$Maybe$withDefault,
 										$author$project$Logic$App$Types$Null,
-										$author$project$Logic$App$Utils$PlayerContext$getPlayerHeldItemContent(context))
+										$author$project$Logic$App$Utils$EntityContext$getPlayerHeldItemContent(context))
 									]));
 						default:
 							return $elm$core$Array$fromList(
@@ -12468,7 +12470,7 @@ var $author$project$Logic$App$Patterns$ReadWrite$readLocal = F2(
 var $author$project$Logic$App$Patterns$ReadWrite$readable = F2(
 	function (stack, ctx) {
 		var action = function (context) {
-			var _v0 = $author$project$Logic$App$Utils$PlayerContext$getPlayerHeldItem(context);
+			var _v0 = $author$project$Logic$App$Utils$EntityContext$getPlayerHeldItem(context);
 			switch (_v0.$) {
 				case 'NoItem':
 					return _Utils_Tuple2(
@@ -12846,7 +12848,7 @@ var $author$project$Logic$App$Patterns$ReadWrite$tempReadChronical = F2(
 			function (_v1, context) {
 				return _Utils_Tuple2(
 					function () {
-						var _v0 = $author$project$Logic$App$Utils$PlayerContext$getPlayerHeldItem(context);
+						var _v0 = $author$project$Logic$App$Utils$EntityContext$getPlayerHeldItem(context);
 						switch (_v0.$) {
 							case 'NoItem':
 								return $elm$core$Array$empty;
@@ -12863,7 +12865,7 @@ var $author$project$Logic$App$Patterns$ReadWrite$tempReadChronical = F2(
 											A2(
 											$elm$core$Maybe$withDefault,
 											$author$project$Logic$App$Types$Null,
-											$author$project$Logic$App$Utils$PlayerContext$getPlayerHeldItemContent(context))
+											$author$project$Logic$App$Utils$EntityContext$getPlayerHeldItemContent(context))
 										]));
 							case 'Spellbook':
 								return $elm$core$Array$fromList(
@@ -12872,7 +12874,7 @@ var $author$project$Logic$App$Patterns$ReadWrite$tempReadChronical = F2(
 											A2(
 											$elm$core$Maybe$withDefault,
 											$author$project$Logic$App$Types$Null,
-											$author$project$Logic$App$Utils$PlayerContext$getPlayerHeldItemContent(context))
+											$author$project$Logic$App$Utils$EntityContext$getPlayerHeldItemContent(context))
 										]));
 							default:
 								return $elm$core$Array$fromList(
@@ -12890,7 +12892,7 @@ var $author$project$Logic$App$Patterns$ReadWrite$tempWriteChronical = F2(
 	function (stack, ctx) {
 		var action = F3(
 			function (_v1, iota, context) {
-				var _v0 = $author$project$Logic$App$Utils$PlayerContext$getPlayerHeldItem(context);
+				var _v0 = $author$project$Logic$App$Utils$EntityContext$getPlayerHeldItem(context);
 				switch (_v0.$) {
 					case 'NoItem':
 						return _Utils_Tuple2(
@@ -12920,14 +12922,14 @@ var $author$project$Logic$App$Patterns$ReadWrite$tempWriteChronical = F2(
 						return _Utils_Tuple2(
 							$elm$core$Array$empty,
 							A2(
-								$author$project$Logic$App$Utils$PlayerContext$setPlayerHeldItemContent,
+								$author$project$Logic$App$Utils$EntityContext$setPlayerHeldItemContent,
 								context,
 								$elm$core$Maybe$Just(iota)));
 					case 'Spellbook':
 						return _Utils_Tuple2(
 							$elm$core$Array$empty,
 							A2(
-								$author$project$Logic$App$Utils$PlayerContext$setPlayerHeldItemContent,
+								$author$project$Logic$App$Utils$EntityContext$setPlayerHeldItemContent,
 								context,
 								$elm$core$Maybe$Just(iota)));
 					default:
@@ -12986,7 +12988,7 @@ var $author$project$Logic$App$Patterns$Stack$tuck = F2(
 var $author$project$Logic$App$Patterns$ReadWrite$writable = F2(
 	function (stack, ctx) {
 		var action = function (context) {
-			var _v0 = $author$project$Logic$App$Utils$PlayerContext$getPlayerHeldItem(context);
+			var _v0 = $author$project$Logic$App$Utils$EntityContext$getPlayerHeldItem(context);
 			switch (_v0.$) {
 				case 'NoItem':
 					return _Utils_Tuple2(
@@ -13045,7 +13047,7 @@ var $author$project$Logic$App$Patterns$ReadWrite$write = F2(
 	function (stack, ctx) {
 		var action = F2(
 			function (iota, context) {
-				var _v0 = $author$project$Logic$App$Utils$PlayerContext$getPlayerHeldItem(context);
+				var _v0 = $author$project$Logic$App$Utils$EntityContext$getPlayerHeldItem(context);
 				switch (_v0.$) {
 					case 'NoItem':
 						return _Utils_Tuple2(
@@ -13075,14 +13077,14 @@ var $author$project$Logic$App$Patterns$ReadWrite$write = F2(
 						return _Utils_Tuple2(
 							$elm$core$Array$empty,
 							A2(
-								$author$project$Logic$App$Utils$PlayerContext$setPlayerHeldItemContent,
+								$author$project$Logic$App$Utils$EntityContext$setPlayerHeldItemContent,
 								context,
 								$elm$core$Maybe$Just(iota)));
 					case 'Spellbook':
 						return _Utils_Tuple2(
 							$elm$core$Array$empty,
 							A2(
-								$author$project$Logic$App$Utils$PlayerContext$setPlayerHeldItemContent,
+								$author$project$Logic$App$Utils$EntityContext$setPlayerHeldItemContent,
 								context,
 								$elm$core$Maybe$Just(iota)));
 					default:
@@ -14321,7 +14323,7 @@ var $author$project$Logic$App$Patterns$MetaActions$applyMetaAction = F2(
 				return _Utils_update(
 					model,
 					{
-						castingContext: A2($author$project$Logic$App$Utils$PlayerContext$setPlayerHeldItemContent, castingContext, $elm$core$Maybe$Nothing),
+						castingContext: A2($author$project$Logic$App$Utils$EntityContext$setPlayerHeldItemContent, castingContext, $elm$core$Maybe$Nothing),
 						grid: _Utils_update(
 							grid,
 							{
@@ -16451,21 +16453,43 @@ var $author$project$Logic$App$PatternList$PatternArray$setDrawingColor = F2(
 			},
 			drawing);
 	});
-var $author$project$Logic$App$Utils$PlayerContext$setPlayerHeldItem = F2(
-	function (context, item) {
+var $author$project$Logic$App$Utils$EntityContext$setEntityHeldItem = F3(
+	function (context, entityName, item) {
 		return _Utils_update(
 			context,
 			{
 				entities: A3(
 					$elm$core$Dict$update,
-					'Player',
+					entityName,
 					function (v) {
 						if (v.$ === 'Just') {
-							var player = v.a;
+							var entity = v.a;
 							return $elm$core$Maybe$Just(
 								_Utils_update(
-									player,
+									entity,
 									{heldItem: item}));
+						} else {
+							return v;
+						}
+					},
+					context.entities)
+			});
+	});
+var $author$project$Logic$App$Utils$EntityContext$setEntityHeldItemContent = F3(
+	function (context, entityName, heldItemContent) {
+		return _Utils_update(
+			context,
+			{
+				entities: A3(
+					$elm$core$Dict$update,
+					entityName,
+					function (v) {
+						if (v.$ === 'Just') {
+							var entity = v.a;
+							return $elm$core$Maybe$Just(
+								_Utils_update(
+									entity,
+									{heldItemContent: heldItemContent}));
 						} else {
 							return v;
 						}
@@ -16885,7 +16909,7 @@ var $author$project$Logic$App$Macros$UpdateMacroReferences$updateMacroReferences
 		model,
 		{
 			castingContext: A2(
-				$author$project$Logic$App$Utils$PlayerContext$setPlayerHeldItemContent,
+				$author$project$Logic$App$Utils$EntityContext$setPlayerHeldItemContent,
 				_Utils_update(
 					castingContext,
 					{
@@ -16895,7 +16919,7 @@ var $author$project$Logic$App$Macros$UpdateMacroReferences$updateMacroReferences
 				A2(
 					$elm$core$Maybe$map,
 					updateIota,
-					$author$project$Logic$App$Utils$PlayerContext$getPlayerHeldItemContent(castingContext))),
+					$author$project$Logic$App$Utils$EntityContext$getPlayerHeldItemContent(castingContext))),
 			patternArray: newPatternArray,
 			stack: updateIotaArray(model.stack)
 		});
@@ -17702,7 +17726,8 @@ var $author$project$Main$update = F2(
 							}),
 						$elm$core$Platform$Cmd$none);
 				case 'ChangeHeldItem':
-					var itemString = msg.a;
+					var entityName = msg.a;
+					var itemString = msg.b;
 					var item = function () {
 						switch (itemString) {
 							case 'Trinket':
@@ -17725,9 +17750,10 @@ var $author$project$Main$update = F2(
 						_Utils_update(
 							model,
 							{
-								castingContext: A2(
-									$author$project$Logic$App$Utils$PlayerContext$setPlayerHeldItemContent,
-									A2($author$project$Logic$App$Utils$PlayerContext$setPlayerHeldItem, castingContext, item),
+								castingContext: A3(
+									$author$project$Logic$App$Utils$EntityContext$setEntityHeldItemContent,
+									A3($author$project$Logic$App$Utils$EntityContext$setEntityHeldItem, castingContext, entityName, item),
+									entityName,
 									$elm$core$Maybe$Nothing)
 							}),
 						$elm$core$Platform$Cmd$none);
@@ -19201,10 +19227,10 @@ var $author$project$Components$App$Menu$menu = function (model) {
 					]))
 			]));
 };
-var $elm$html$Html$h1 = _VirtualDom_node('h1');
-var $author$project$Logic$App$Msg$ChangeHeldItem = function (a) {
-	return {$: 'ChangeHeldItem', a: a};
-};
+var $author$project$Logic$App$Msg$ChangeHeldItem = F2(
+	function (a, b) {
+		return {$: 'ChangeHeldItem', a: a, b: b};
+	});
 var $author$project$Logic$App$Utils$GetHeldItemAsString$getHeldItemAsString = function (heldItem) {
 	switch (heldItem.$) {
 		case 'Trinket':
@@ -19223,6 +19249,7 @@ var $author$project$Logic$App$Utils$GetHeldItemAsString$getHeldItemAsString = fu
 			return 'NoItem';
 	}
 };
+var $elm$html$Html$h1 = _VirtualDom_node('h1');
 var $elm$html$Html$label = _VirtualDom_node('label');
 var $elm$html$Html$option = _VirtualDom_node('option');
 var $author$project$Settings$Theme$iotaColorMap = function (iota) {
@@ -19407,6 +19434,172 @@ var $author$project$Components$App$Panels$ConfigHexPanel$renderIotaBox = functio
 		]);
 };
 var $elm$html$Html$select = _VirtualDom_node('select');
+var $author$project$Components$App$Panels$ConfigHexPanel$entitiesSection = function (model) {
+	var generateEntitySection = function (entry) {
+		var name = entry.a;
+		var heldItem = entry.b.heldItem;
+		var heldItemContent = entry.b.heldItemContent;
+		return A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$id('entity_section')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$label,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('stored_iota_label')
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text(name + ':')
+						])),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$id('held_item_section')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('input_label_box')
+								]),
+							_List_fromArray(
+								[
+									A2(
+									$elm$html$Html$label,
+									_List_Nil,
+									_List_fromArray(
+										[
+											$elm$html$Html$text('Held Item:')
+										])),
+									A2(
+									$elm$html$Html$select,
+									_List_fromArray(
+										[
+											$elm$html$Html$Events$onInput(
+											$author$project$Logic$App$Msg$ChangeHeldItem(name)),
+											$elm$html$Html$Attributes$value(
+											$author$project$Logic$App$Utils$GetHeldItemAsString$getHeldItemAsString(heldItem))
+										]),
+									_List_fromArray(
+										[
+											A2(
+											$elm$html$Html$option,
+											_List_Nil,
+											_List_fromArray(
+												[
+													$elm$html$Html$text('Nothing')
+												])),
+											A2(
+											$elm$html$Html$option,
+											_List_Nil,
+											_List_fromArray(
+												[
+													$elm$html$Html$text('Trinket')
+												])),
+											A2(
+											$elm$html$Html$option,
+											_List_Nil,
+											_List_fromArray(
+												[
+													$elm$html$Html$text('Cypher')
+												])),
+											A2(
+											$elm$html$Html$option,
+											_List_Nil,
+											_List_fromArray(
+												[
+													$elm$html$Html$text('Artifact')
+												])),
+											A2(
+											$elm$html$Html$option,
+											_List_Nil,
+											_List_fromArray(
+												[
+													$elm$html$Html$text('Spellbook')
+												])),
+											A2(
+											$elm$html$Html$option,
+											_List_Nil,
+											_List_fromArray(
+												[
+													$elm$html$Html$text('Focus')
+												])),
+											A2(
+											$elm$html$Html$option,
+											_List_Nil,
+											_List_fromArray(
+												[
+													$elm$html$Html$text('Pie')
+												]))
+										]))
+								])),
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('stored_iota_container')
+								]),
+							A2(
+								$elm$core$List$cons,
+								A2(
+									$elm$html$Html$label,
+									_List_fromArray(
+										[
+											$elm$html$Html$Attributes$class('stored_iota_label')
+										]),
+									_List_fromArray(
+										[
+											$elm$html$Html$text('Content:')
+										])),
+								function () {
+									if (heldItemContent.$ === 'Just') {
+										var iota = heldItemContent.a;
+										return $author$project$Components$App$Panels$ConfigHexPanel$renderIotaBox(iota);
+									} else {
+										return _List_Nil;
+									}
+								}()))
+						]))
+				]));
+	};
+	return A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$id('entities_section')
+			]),
+		A2(
+			$elm$core$List$cons,
+			A2(
+				$elm$html$Html$h1,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('entities_label')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Entities:')
+					])),
+			A2(
+				$elm$core$List$map,
+				generateEntitySection,
+				A2(
+					$elm$core$List$filter,
+					function (entry) {
+						var name = entry.a;
+						return name !== 'Player';
+					},
+					$elm$core$Dict$toList(model.castingContext.entities)))));
+};
 var $author$project$Components$App$Panels$ConfigHexPanel$heldItemSection = function (model) {
 	return A2(
 		$elm$html$Html$div,
@@ -19435,10 +19628,11 @@ var $author$project$Components$App$Panels$ConfigHexPanel$heldItemSection = funct
 						$elm$html$Html$select,
 						_List_fromArray(
 							[
-								$elm$html$Html$Events$onInput($author$project$Logic$App$Msg$ChangeHeldItem),
+								$elm$html$Html$Events$onInput(
+								$author$project$Logic$App$Msg$ChangeHeldItem('Player')),
 								$elm$html$Html$Attributes$value(
 								$author$project$Logic$App$Utils$GetHeldItemAsString$getHeldItemAsString(
-									$author$project$Logic$App$Utils$PlayerContext$getPlayerHeldItem(model.castingContext)))
+									$author$project$Logic$App$Utils$EntityContext$getPlayerHeldItem(model.castingContext)))
 							]),
 						_List_fromArray(
 							[
@@ -19512,7 +19706,7 @@ var $author$project$Components$App$Panels$ConfigHexPanel$heldItemSection = funct
 								$elm$html$Html$text('Content:')
 							])),
 					function () {
-						var _v0 = $author$project$Logic$App$Utils$PlayerContext$getPlayerHeldItemContent(model.castingContext);
+						var _v0 = $author$project$Logic$App$Utils$EntityContext$getPlayerHeldItemContent(model.castingContext);
 						if (_v0.$ === 'Just') {
 							var iota = _v0.a;
 							return $author$project$Components$App$Panels$ConfigHexPanel$renderIotaBox(iota);
@@ -19593,7 +19787,15 @@ var $author$project$Components$App$Panels$ConfigHexPanel$configHexPanel = functi
 						$elm$html$Html$Attributes$class('divider')
 					]),
 				_List_Nil),
-				$author$project$Components$App$Panels$ConfigHexPanel$ravenmindSection(model)
+				$author$project$Components$App$Panels$ConfigHexPanel$ravenmindSection(model),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('divider')
+					]),
+				_List_Nil),
+				$author$project$Components$App$Panels$ConfigHexPanel$entitiesSection(model)
 			]));
 };
 var $author$project$Logic$App$Msg$ChangeMacroName = F2(

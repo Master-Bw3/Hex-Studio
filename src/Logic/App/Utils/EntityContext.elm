@@ -1,4 +1,4 @@
-module Logic.App.Utils.PlayerContext exposing (..)
+module Logic.App.Utils.EntityContext exposing (..)
 
 import Dict
 import Logic.App.Types exposing (CastingContext, HeldItem(..), Iota)
@@ -50,6 +50,40 @@ setPlayerHeldItemContent context heldItemContent =
                     case v of
                         Just player ->
                             Just { player | heldItemContent = heldItemContent }
+
+                        Nothing ->
+                            v
+                )
+                context.entities
+    }
+
+
+setEntityHeldItem : CastingContext -> String -> HeldItem -> CastingContext
+setEntityHeldItem context entityName item =
+    { context
+        | entities =
+            Dict.update entityName
+                (\v ->
+                    case v of
+                        Just entity ->
+                            Just { entity | heldItem = item }
+
+                        Nothing ->
+                            v
+                )
+                context.entities
+    }
+
+
+setEntityHeldItemContent : CastingContext -> String -> Maybe Iota -> CastingContext
+setEntityHeldItemContent context entityName heldItemContent =
+    { context
+        | entities =
+            Dict.update entityName
+                (\v ->
+                    case v of
+                        Just entity ->
+                            Just { entity | heldItemContent = heldItemContent }
 
                         Nothing ->
                             v

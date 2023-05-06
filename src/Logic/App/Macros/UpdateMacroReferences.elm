@@ -5,7 +5,7 @@ import Dict
 import Logic.App.Model exposing (Model)
 import Logic.App.Patterns.PatternRegistry exposing (getPatternFromSignature)
 import Logic.App.Types exposing (Iota(..))
-import Logic.App.Utils.PlayerContext exposing (getPlayerHeldItemContent, setPlayerHeldItemContent)
+import Logic.App.Utils.EntityContext exposing (getPlayerHeldItemContent, setPlayerHeldItemContent)
 
 
 updateMacroReferences : Model -> Model

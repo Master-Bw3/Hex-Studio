@@ -29,6 +29,7 @@ import Logic.App.Patterns.OperatorUtils exposing (makeConstant)
 import Logic.App.Patterns.PatternRegistry exposing (..)
 import Logic.App.Stack.EvalStack exposing (applyPatternsToStack)
 import Logic.App.Types exposing (..)
+import Logic.App.Utils.EntityContext exposing (setEntityHeldItem, setEntityHeldItemContent)
 import Logic.App.Utils.GetAngleSignature exposing (getAngleSignatureAndStartDir)
 import Logic.App.Utils.GetIotaValue exposing (getIotaValueAsString)
 import Logic.App.Utils.Utils exposing (removeFromArray, unshift)
@@ -41,8 +42,6 @@ import Settings.Theme exposing (..)
 import String exposing (fromInt)
 import Task
 import Time
-import Logic.App.Utils.PlayerContext exposing (setPlayerHeldItem)
-import Logic.App.Utils.PlayerContext exposing (setPlayerHeldItemContent)
 
 
 main : Program () Model Msg
@@ -96,7 +95,7 @@ init _ =
             }
       , castingContext =
             { ravenmind = Nothing
-            , entities = Dict.singleton "Player" { heldItem = NoItem, heldItemContent = Nothing }
+            , entities = Dict.fromList [("Player", { heldItem = NoItem, heldItemContent = Nothing }), ("OwO", { heldItem = NoItem, heldItemContent = Nothing })]--Dict.singleton "Player" { heldItem = NoItem, heldItemContent = Nothing }
             , macros = Dict.empty
             }
       , time = 0
@@ -600,7 +599,7 @@ update msg model =
         RecieveMouseOverHandle bool ->
             ( { model | ui = { ui | overDragHandle = bool } }, Cmd.none )
 
-        ChangeHeldItem itemString ->
+        ChangeHeldItem entityName itemString ->
             let
                 item =
                     case itemString of
@@ -625,7 +624,7 @@ update msg model =
                         _ ->
                             NoItem
             in
-            ( { model | castingContext = setPlayerHeldItemContent (setPlayerHeldItem castingContext item) Nothing }, Cmd.none )
+            ( { model | castingContext = setEntityHeldItemContent (setEntityHeldItem castingContext entityName item) entityName Nothing }, Cmd.none )
 
         RequestGridDrawingAsGIF ->
             ( { model | downloadSrc = "" }, GetGridDrawingAsGif.requestGIF () )

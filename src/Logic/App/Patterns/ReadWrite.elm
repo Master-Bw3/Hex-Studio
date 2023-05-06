@@ -3,7 +3,7 @@ module Logic.App.Patterns.ReadWrite exposing (..)
 import Array exposing (Array)
 import Logic.App.Patterns.OperatorUtils exposing (action1Input, action2Inputs, actionNoInput, getAny, getEntity)
 import Logic.App.Types exposing (ActionResult, CastingContext, HeldItem(..), Iota(..), Mishap(..))
-import Logic.App.Utils.PlayerContext exposing (getPlayerHeldItem, getPlayerHeldItemContent, setPlayerHeldItemContent)
+import Logic.App.Utils.EntityContext exposing (getPlayerHeldItem, getPlayerHeldItemContent, setPlayerHeldItemContent)
 
 
 read : Array Iota -> CastingContext -> ActionResult

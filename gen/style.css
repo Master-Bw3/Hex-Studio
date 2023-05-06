@@ -700,3 +700,12 @@ button {
     flex-grow: 1;
 }
 
+.entities_label {
+    color: rgba(255, 255, 255, 0.6);
+    font-family: 'fira';
+    font-weight: bold;
+    font-size: 1.2em;
+    white-space: nowrap;
+    margin-left: 6px;
+    margin-bottom: 0.5em;
+}

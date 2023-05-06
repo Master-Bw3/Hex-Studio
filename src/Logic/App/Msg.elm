@@ -40,7 +40,7 @@ type Msg
     | Drop
     | SetFocus String
     | RecieveMouseOverHandle Bool
-    | ChangeHeldItem String
+    | ChangeHeldItem String String
     | RequestGridDrawingAsGIF
     | RecieveGridDrawingAsGIF String
     | RequestGridDrawingAsImage

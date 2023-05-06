@@ -3,7 +3,7 @@ module Logic.App.Patterns.Spells exposing (..)
 import Array exposing (Array)
 import Logic.App.Patterns.OperatorUtils exposing (action1Input, action2Inputs, actionNoInput, getEntity, getNumber, getPatternList, getVector, spell1Input, spell2Inputs, spell3Inputs, spellNoInput)
 import Logic.App.Types exposing (ActionResult, CastingContext, HeldItem(..), Iota(..))
-import Logic.App.Utils.PlayerContext exposing (getPlayerHeldItem, setPlayerHeldItemContent)
+import Logic.App.Utils.EntityContext exposing (getPlayerHeldItem, setPlayerHeldItemContent)
 
 
 explode : Array Iota -> CastingContext -> ActionResult
