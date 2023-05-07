@@ -1,7 +1,9 @@
 module Logic.App.Patterns.ReadWrite exposing (..)
 
 import Array exposing (Array)
-import Logic.App.Patterns.OperatorUtils exposing (action1Input, action2Inputs, actionNoInput, getAny, getEntity)
+import Dict
+import LineSegment2d exposing (vector)
+import Logic.App.Patterns.OperatorUtils exposing (action1Input, action2Inputs, action3Inputs, actionNoInput, getAny, getEntity, getPatternIota, getVector)
 import Logic.App.Types exposing (ActionResult, CastingContext, HeldItem(..), Iota(..), Mishap(..))
 import Logic.App.Utils.EntityContext exposing (getEntityHeldItem, getEntityHeldItemContent, getPlayerHeldItem, getPlayerHeldItemContent, setEntityHeldItem, setEntityHeldItemContent, setPlayerHeldItemContent)
 
@@ -221,3 +223,53 @@ writeChronical stack ctx =
                     )
     in
     action2Inputs stack ctx getEntity getAny action
+
+
+akashicRead : Array Iota -> CastingContext -> ActionResult
+akashicRead stack ctx =
+    let
+        action : Iota -> Iota -> CastingContext -> ( Array Iota, CastingContext )
+        action iota1 iota2 context =
+            case ( iota1, iota2 ) of
+                ( Vector ( x, y, z ), PatternIota pattern _ ) ->
+                    case Maybe.map (Dict.get pattern.signature) (Dict.get ( round x, round y, round z ) context.libraries) of
+                        -- gotta make sure ya know
+                        Just (Just (Just iota)) ->
+                            ( Array.fromList [ iota ], context )
+
+                        _ ->
+                            ( Array.empty, context )
+
+                _ ->
+                    ( Garbage CatastrophicFailure
+                        |> Array.repeat 1
+                    , context
+                    )
+    in
+    action2Inputs stack ctx getVector getPatternIota action
+
+
+akashicWrite : Array Iota -> CastingContext -> ActionResult
+akashicWrite stack ctx =
+    let
+        action iota1 iota2 iota3 context =
+            case ( iota1, iota2 ) of
+                ( Vector ( x, y, z ), PatternIota pattern _ ) ->
+                    case Dict.get ( round x, round y, round z ) context.libraries of
+                        Just entries ->
+                            ( Array.empty
+                            , { context
+                                | libraries = Dict.insert ( round x, round y, round z ) (Dict.insert pattern.signature (Just iota3) entries) context.libraries
+                              }
+                            )
+
+                        Nothing ->
+                            ( Array.empty, context )
+
+                _ ->
+                    ( Garbage CatastrophicFailure
+                        |> Array.repeat 1
+                    , context
+                    )
+    in
+    action3Inputs stack ctx getVector getPatternIota getAny action

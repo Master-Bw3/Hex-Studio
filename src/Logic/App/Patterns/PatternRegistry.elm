@@ -80,8 +80,7 @@ getPatternFromSignature maybeMacros signature =
                                         (\direction ->
                                             List.filter
                                                 (\greatSpell ->
-                                                    Set.isEmpty <|
-                                                        Set.diff (getCenterdMidpoints signature direction) (getCenterdMidpoints greatSpell.signature East)
+                                                    getCenterdMidpoints signature direction == getCenterdMidpoints greatSpell.signature East
                                                 )
                                                 greatSpellRegistry
                                         )
@@ -409,10 +408,10 @@ patternRegistry =
     , { signature = "wqaawdd", internalName = "raycast", action = raycast, displayName = "Archer's Distillation", outputOptions = [ VectorType, NullType ], selectedOutput = Just ( VectorType, Vector ( 0, 0, 0 ) ), startDirection = East }
     , { signature = "weddwaa", internalName = "raycast/axis", action = raycastAxis, displayName = "Architect's Distillation", outputOptions = [ VectorType, NullType ], selectedOutput = Just ( VectorType, Vector ( 0, 0, 0 ) ), startDirection = East }
     , { signature = "weaqa", internalName = "raycast/entity", action = raycastEntity, displayName = "Scout's Distillation", outputOptions = [ EntityType, NullType ], selectedOutput = Just ( NullType, Null ), startDirection = East }
-    , { signature = "eaqwqae", internalName = "circle/impetus_pos", action = spellNoInput, displayName = "Waystone Reflection", outputOptions = [VectorType], selectedOutput = Just ( VectorType, Vector ( 0, 0, 0 ) ), startDirection = East }
-    , { signature = "eaqwqaewede", internalName = "circle/impetus_dir", action = spellNoInput, displayName = "Lodestone Reflection", outputOptions = [VectorType], selectedOutput = Just ( VectorType, Vector ( 0, 0, 0 ) ), startDirection = East }
-    , { signature = "eaqwqaewdd", internalName = "circle/bounds/min", action = spellNoInput, displayName = "Lesser Fold Reflection", outputOptions = [VectorType], selectedOutput = Just ( VectorType, Vector ( 0, 0, 0 ) ), startDirection = East }
-    , { signature = "aqwqawaaqa", internalName = "circle/bounds/max", action = spellNoInput, displayName = "Greater Fold Reflection", outputOptions = [VectorType], selectedOutput = Just ( VectorType, Vector ( 0, 0, 0 ) ), startDirection = East }
+    , { signature = "eaqwqae", internalName = "circle/impetus_pos", action = spellNoInput, displayName = "Waystone Reflection", outputOptions = [ VectorType ], selectedOutput = Just ( VectorType, Vector ( 0, 0, 0 ) ), startDirection = East }
+    , { signature = "eaqwqaewede", internalName = "circle/impetus_dir", action = spellNoInput, displayName = "Lodestone Reflection", outputOptions = [ VectorType ], selectedOutput = Just ( VectorType, Vector ( 0, 0, 0 ) ), startDirection = East }
+    , { signature = "eaqwqaewdd", internalName = "circle/bounds/min", action = spellNoInput, displayName = "Lesser Fold Reflection", outputOptions = [ VectorType ], selectedOutput = Just ( VectorType, Vector ( 0, 0, 0 ) ), startDirection = East }
+    , { signature = "aqwqawaaqa", internalName = "circle/bounds/max", action = spellNoInput, displayName = "Greater Fold Reflection", outputOptions = [ VectorType ], selectedOutput = Just ( VectorType, Vector ( 0, 0, 0 ) ), startDirection = East }
     , { signature = "aawdd", internalName = "swap", action = swap, displayName = "Jester's Gambit", outputOptions = [], selectedOutput = Nothing, startDirection = Northeast }
     , { signature = "aaeaa", internalName = "rotate", action = rotate, displayName = "Rotation Gambit", outputOptions = [], selectedOutput = Nothing, startDirection = East }
     , { signature = "ddqdd", internalName = "rotate_reverse", action = rotateReverse, displayName = "Rotation Gambit II", outputOptions = [], selectedOutput = Nothing, startDirection = East }
@@ -448,7 +447,7 @@ patternRegistry =
     , { signature = "dw", internalName = "not", action = invertBool, displayName = "Negation Purification", outputOptions = [], selectedOutput = Nothing, startDirection = East }
     , { signature = "aw", internalName = "bool_coerce", action = boolCoerce, displayName = "Augur's Purification", outputOptions = [], selectedOutput = Nothing, startDirection = East }
     , { signature = "awdd", internalName = "if", action = ifBool, displayName = "Augur's Exaltation", outputOptions = [], selectedOutput = Nothing, startDirection = East }
-    , { signature = "eqqq", internalName = "random", action = makeConstant (Number 0.5), displayName = "Entropy Reflection", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    , { signature = "eqqq", internalName = "random", action = spellNoInput, displayName = "Entropy Reflection", outputOptions = [NumberType], selectedOutput = Just (NumberType, Number 0), startDirection = East }
     , { signature = "qqqqqaa", internalName = "sin", action = sine, displayName = "Sine Purification", outputOptions = [], selectedOutput = Nothing, startDirection = East }
     , { signature = "qqqqqad", internalName = "cos", action = cosine, displayName = "Cosine Purification", outputOptions = [], selectedOutput = Nothing, startDirection = East }
     , { signature = "wqqqqqadq", internalName = "tan", action = tangent, displayName = "Tangent Purification", outputOptions = [], selectedOutput = Nothing, startDirection = East }
@@ -493,8 +492,8 @@ patternRegistry =
     , { signature = "qdwdqdw", internalName = "sentinel/destroy", action = sentinelDestroy, displayName = "Banish Sentinel", outputOptions = [], selectedOutput = Nothing, startDirection = East }
     , { signature = "waeawaede", internalName = "sentinel/get_pos", action = sentinelGetPos, displayName = "Locate Sentinel", outputOptions = [], selectedOutput = Nothing, startDirection = East }
     , { signature = "waeawaedwa", internalName = "sentinel/wayfind", action = sentinelWayfind, displayName = "Wayfind Sentinel", outputOptions = [], selectedOutput = Nothing, startDirection = East }
-    , { signature = "qqqwqqqqqaq", internalName = "akashic/read", action = noAction, displayName = "", outputOptions = [], selectedOutput = Nothing, startDirection = East }
-    , { signature = "eeeweeeeede", internalName = "akashic/write", action = noAction, displayName = "", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    , { signature = "qqqwqqqqqaq", internalName = "akashic/read", action = akashicRead, displayName = "Akasha's Distillation", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    , { signature = "eeeweeeeede", internalName = "akashic/write", action = akashicWrite, displayName = "Akasha's Gambit", outputOptions = [], selectedOutput = Nothing, startDirection = East }
     , { signature = "aqdee", internalName = "halt", action = noAction, displayName = "Charon's Gambit", outputOptions = [], selectedOutput = Nothing, startDirection = Southwest }
     , { signature = "aqqqqq", internalName = "read", action = read, displayName = "Scribe's Reflection", outputOptions = [], selectedOutput = Nothing, startDirection = East }
     , { signature = "wawqwqwqwqwqw", internalName = "read/entity", action = readChronical, displayName = "Chronicler's Purification", outputOptions = [], selectedOutput = Nothing, startDirection = East }

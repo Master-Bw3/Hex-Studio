@@ -57,12 +57,17 @@ type Msg
     | SetTimelineIndex Int
     | HandleKeyboardEvent KeyboardEvent
     | ChangeMacroName String String
+    | RemoveMacro String
     | ContextMenuMsg (ContextMenu.Msg ContextMenuContext)
     | ExpandMacro String Int
     | SetProjectName String
     | RemoveEntity String
     | AddEntity String
     | UpdateEntityInputField String
+    | RemoveLibraryEntry (Int, Int, Int) String
+    | RemoveLibrary (Int, Int, Int)
+    | UpdateLibraryInputField String String String
+    | AddLibrary (String, String, String)
 
 type alias MouseMoveData =
     { pageX : Int

@@ -18,7 +18,7 @@ import Html exposing (..)
 import Json.Decode exposing (Decoder)
 import Keyboard.Event exposing (decodeKeyboardEvent)
 import Logic.App.Grid exposing (drawPatterns, sortPatterns)
-import Logic.App.ImportExport.ImportExportProject exposing (decodeProjectData, unsimplifyProjectData)
+import Logic.App.ImportExport.ImportExportProject.ImportExportProjectV1 exposing (decodeProjectData, unsimplifyProjectData)
 import Logic.App.ImportExport.ImportParser exposing (parseInput)
 import Logic.App.Macros.UpdateMacroReferences exposing (updateMacroReferences)
 import Logic.App.Model exposing (Model)
@@ -75,6 +75,7 @@ init _ =
             , importInput = ""
             , openOverlay = NoOverlay
             , entityInputField = ""
+            , libraryInputField = ( "", "", "" )
             }
       , grid =
             { height = 0
@@ -96,6 +97,7 @@ init _ =
             }
       , castingContext =
             { ravenmind = Nothing
+            , libraries = Dict.empty
             , entities = Dict.singleton "Caster" { heldItem = NoItem, heldItemContent = Nothing }
             , macros = Dict.empty
             }
@@ -822,6 +824,15 @@ update msg model =
             , Cmd.none
             )
 
+        RemoveMacro signature ->
+            let
+                newMacroDict =
+                    Dict.remove signature model.castingContext.macros
+            in
+            ( updateMacroReferences { model | castingContext = { castingContext | macros = newMacroDict } }
+            , Cmd.none
+            )
+
         ContextMenuMsg message ->
             let
                 ( contextMenu, cmd ) =
@@ -871,10 +882,61 @@ update msg model =
             ( { model | castingContext = { castingContext | entities = Dict.remove name castingContext.entities } }, Cmd.none )
 
         AddEntity name ->
-            ( { model | castingContext = { castingContext | entities = Dict.insert name { heldItem = NoItem, heldItemContent = Nothing } castingContext.entities } }, Cmd.none )
+            ( { model
+                | castingContext = { castingContext | entities = Dict.insert name { heldItem = NoItem, heldItemContent = Nothing } castingContext.entities }
+                , ui = { ui | entityInputField = "" }
+              }
+            , Cmd.none
+            )
 
         UpdateEntityInputField string ->
             ( { model | ui = { ui | entityInputField = string } }, Cmd.none )
+
+        RemoveLibraryEntry location signature ->
+            let
+                newLibrariesDict =
+                    case Dict.get location castingContext.libraries of
+                        Just library ->
+                            Dict.insert location (Dict.remove signature library) castingContext.libraries
+
+                        Nothing ->
+                            castingContext.libraries
+            in
+            ( { model | castingContext = { castingContext | libraries = newLibrariesDict } }, Cmd.none )
+
+        RemoveLibrary location ->
+            let
+                newLibrariesDict =
+                    Dict.remove location castingContext.libraries
+            in
+            ( { model | castingContext = { castingContext | libraries = newLibrariesDict } }, Cmd.none )
+
+        UpdateLibraryInputField x y z ->
+            let
+                newLibraryInputValue =
+                    ( x, y, z )
+            in
+            ( { model | ui = { ui | libraryInputField = newLibraryInputValue } }, Cmd.none )
+
+        AddLibrary location ->
+            let
+                ( x, y, z ) =
+                    location
+
+                newLibrariesDict =
+                    case ( String.toInt x, String.toInt y, String.toInt z ) of
+                        ( Just xInt, Just yInt, Just zInt ) ->
+                            Dict.insert ( xInt, yInt, zInt ) Dict.empty castingContext.libraries
+
+                        _ ->
+                            castingContext.libraries
+            in
+            ( { model
+                | castingContext = { castingContext | libraries = newLibrariesDict }
+                , ui = { ui | libraryInputField = ( "", "", "" ) }
+              }
+            , Cmd.none
+            )
 
 
 subscriptions : Model -> Sub Msg

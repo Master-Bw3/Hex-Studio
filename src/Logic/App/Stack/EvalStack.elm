@@ -29,6 +29,7 @@ applyPatternsToStack stack ctx patterns =
     let
         patternIotas =
             List.map (\pattern -> PatternIota pattern False) patterns
+
     in
     applyToStackLoop ( stack, Array.empty ) ctx patternIotas 0 Array.empty False False
 
