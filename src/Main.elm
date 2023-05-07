@@ -96,6 +96,7 @@ init _ =
             }
       , castingContext =
             { ravenmind = Nothing
+            , libraries = Dict.singleton (0, 0, 0) Dict.empty --Dict.empty
             , entities = Dict.singleton "Caster" { heldItem = NoItem, heldItemContent = Nothing }
             , macros = Dict.empty
             }

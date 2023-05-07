@@ -304,6 +304,7 @@ type alias SimplifiedCastingContextEntity =
 
 type alias SimplifiedCastingContext =
     { ravenmind : Maybe SimplifiedIota
+    , libraries : Dict ( Float, Float, Float ) (Dict String (Maybe SimplifiedIota))
     , entities : Dict String SimplifiedCastingContextEntity
     , macros : Dict String ( String, Direction, SimplifiedIota )
     }
@@ -312,15 +313,8 @@ type alias SimplifiedCastingContext =
 simplifyCastingContext : CastingContext -> SimplifiedCastingContext
 simplifyCastingContext castingContext =
     { ravenmind = Maybe.map simplifyIota castingContext.ravenmind
-    , entities =
-        Dict.fromList <|
-            List.map
-                (\entry ->
-                    case entry of
-                        ( name, { heldItem, heldItemContent } ) ->
-                            ( name, { heldItem = heldItem, heldItemContent = Maybe.map simplifyIota heldItemContent } )
-                )
-                (Dict.toList castingContext.entities)
+    , libraries = Dict.map (\_ values -> Dict.map (\_ iota -> Maybe.map simplifyIota iota) values) castingContext.libraries
+    , entities = Dict.map (\_ entity -> { heldItem = entity.heldItem, heldItemContent = Maybe.map simplifyIota entity.heldItemContent }) castingContext.entities
     , macros =
         Dict.fromList <|
             List.map
@@ -375,15 +369,8 @@ unSimplifyCastingContext simplifiedCastingContext =
                 macrosLayer1
     in
     { ravenmind = Maybe.map (unSimplifyIota macros) simplifiedCastingContext.ravenmind
-    , entities =
-        Dict.fromList <|
-            List.map
-                (\entry ->
-                    case entry of
-                        ( name, { heldItem, heldItemContent } ) ->
-                            ( name, { heldItem = heldItem, heldItemContent = Maybe.map (unSimplifyIota macros) heldItemContent } )
-                )
-                (Dict.toList simplifiedCastingContext.entities)
+    , libraries = Dict.map (\_ values -> Dict.map (\_ iota -> Maybe.map (unSimplifyIota macros) iota) values) simplifiedCastingContext.libraries
+    , entities = Dict.map (\_ entity -> { heldItem = entity.heldItem, heldItemContent = Maybe.map (unSimplifyIota macros) entity.heldItemContent }) simplifiedCastingContext.entities
     , macros = macros
     }
 
@@ -400,6 +387,7 @@ castingContextCodec : S.Codec e SimplifiedCastingContext
 castingContextCodec =
     S.record SimplifiedCastingContext
         |> S.field .ravenmind (S.maybe iotaCodec)
+        |> S.field .libraries (S.dict (S.triple S.float S.float S.float) (S.dict S.string (S.maybe iotaCodec)))
         |> S.field .entities (S.dict S.string castingContextentityCodec)
         |> S.field .macros (S.dict S.string (S.triple S.string directionCodec iotaCodec))
         |> S.finishRecord

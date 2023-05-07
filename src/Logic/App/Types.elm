@@ -137,6 +137,7 @@ type ApplyToStackResult
 
 type alias CastingContext =
     { ravenmind : Maybe Iota
+    , libraries : Dict ( Float, Float, Float ) (Dict String (Maybe Iota))
     , entities : Dict String { heldItem : HeldItem, heldItemContent : Maybe Iota }
     , macros : Dict String ( String, Direction, Iota )
     }

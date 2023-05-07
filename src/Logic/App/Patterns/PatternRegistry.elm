@@ -493,8 +493,8 @@ patternRegistry =
     , { signature = "qdwdqdw", internalName = "sentinel/destroy", action = sentinelDestroy, displayName = "Banish Sentinel", outputOptions = [], selectedOutput = Nothing, startDirection = East }
     , { signature = "waeawaede", internalName = "sentinel/get_pos", action = sentinelGetPos, displayName = "Locate Sentinel", outputOptions = [], selectedOutput = Nothing, startDirection = East }
     , { signature = "waeawaedwa", internalName = "sentinel/wayfind", action = sentinelWayfind, displayName = "Wayfind Sentinel", outputOptions = [], selectedOutput = Nothing, startDirection = East }
-    , { signature = "qqqwqqqqqaq", internalName = "akashic/read", action = noAction, displayName = "", outputOptions = [], selectedOutput = Nothing, startDirection = East }
-    , { signature = "eeeweeeeede", internalName = "akashic/write", action = noAction, displayName = "", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    , { signature = "qqqwqqqqqaq", internalName = "akashic/read", action = akashicRead, displayName = "Akasha's Distillation", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    , { signature = "eeeweeeeede", internalName = "akashic/write", action = akashicWrite, displayName = "Akasha's Gambit", outputOptions = [], selectedOutput = Nothing, startDirection = East }
     , { signature = "aqdee", internalName = "halt", action = noAction, displayName = "Charon's Gambit", outputOptions = [], selectedOutput = Nothing, startDirection = Southwest }
     , { signature = "aqqqqq", internalName = "read", action = read, displayName = "Scribe's Reflection", outputOptions = [], selectedOutput = Nothing, startDirection = East }
     , { signature = "wawqwqwqwqwqw", internalName = "read/entity", action = readChronical, displayName = "Chronicler's Purification", outputOptions = [], selectedOutput = Nothing, startDirection = East }
