@@ -8640,7 +8640,6 @@ var $author$project$Logic$App$Stack$EvalStack$forEach = F2(
 			}
 		}
 	});
-var $elm$core$Debug$log = _Debug_log;
 var $author$project$Logic$App$Stack$EvalStack$applyPatternsToStack = F3(
 	function (stack, ctx, patterns) {
 		var patternIotas = A2(
@@ -8649,18 +8648,6 @@ var $author$project$Logic$App$Stack$EvalStack$applyPatternsToStack = F3(
 				return A2($author$project$Logic$App$Types$PatternIota, pattern, false);
 			},
 			patterns);
-		var _v0 = A2(
-			$elm$core$Debug$log,
-			'libs',
-			A7(
-				$author$project$Logic$App$Stack$EvalStack$applyToStackLoop,
-				_Utils_Tuple2(stack, $elm$core$Array$empty),
-				ctx,
-				patternIotas,
-				0,
-				$elm$core$Array$empty,
-				false,
-				false).ctx.libraries);
 		return A7(
 			$author$project$Logic$App$Stack$EvalStack$applyToStackLoop,
 			_Utils_Tuple2(stack, $elm$core$Array$empty),
@@ -10952,27 +10939,6 @@ var $author$project$Logic$App$Patterns$Spells$destroyWater = F2(
 	function (stack, ctx) {
 		return A3($author$project$Logic$App$Patterns$OperatorUtils$spell1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getVector);
 	});
-var $elm$core$Set$Set_elm_builtin = function (a) {
-	return {$: 'Set_elm_builtin', a: a};
-};
-var $elm$core$Dict$diff = F2(
-	function (t1, t2) {
-		return A3(
-			$elm$core$Dict$foldl,
-			F3(
-				function (k, v, t) {
-					return A2($elm$core$Dict$remove, k, t);
-				}),
-			t1,
-			t2);
-	});
-var $elm$core$Set$diff = F2(
-	function (_v0, _v1) {
-		var dict1 = _v0.a;
-		var dict2 = _v1.a;
-		return $elm$core$Set$Set_elm_builtin(
-			A2($elm$core$Dict$diff, dict1, dict2));
-	});
 var $ianmackenzie$elm_geometry$Vector3d$cross = F2(
 	function (_v0, _v1) {
 		var v2 = _v0.a;
@@ -11420,6 +11386,9 @@ var $author$project$Logic$App$Patterns$Math$floorAction = F2(
 			});
 		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getNumber, action);
 	});
+var $elm$core$Set$Set_elm_builtin = function (a) {
+	return {$: 'Set_elm_builtin', a: a};
+};
 var $elm$core$Set$empty = $elm$core$Set$Set_elm_builtin($elm$core$Dict$empty);
 var $elm$core$Set$insert = F2(
 	function (key, _v0) {
@@ -11699,17 +11668,6 @@ var $author$project$Logic$App$Patterns$Math$invertBool = F2(
 			});
 		return A4($author$project$Logic$App$Patterns$OperatorUtils$action1Input, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getBoolean, action);
 	});
-var $elm$core$Dict$isEmpty = function (dict) {
-	if (dict.$ === 'RBEmpty_elm_builtin') {
-		return true;
-	} else {
-		return false;
-	}
-};
-var $elm$core$Set$isEmpty = function (_v0) {
-	var dict = _v0.a;
-	return $elm$core$Dict$isEmpty(dict);
-};
 var $author$project$Logic$App$Patterns$Lists$lastNList = F2(
 	function (stack, ctx) {
 		var newStack = A3(
@@ -13538,11 +13496,9 @@ var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature =
 									return A2(
 										$elm$core$List$filter,
 										function (greatSpell) {
-											return $elm$core$Set$isEmpty(
-												A2(
-													$elm$core$Set$diff,
-													A2(getCenterdMidpoints, signature, direction),
-													A2(getCenterdMidpoints, greatSpell.signature, $author$project$Logic$App$Types$East)));
+											return _Utils_eq(
+												A2(getCenterdMidpoints, signature, direction),
+												A2(getCenterdMidpoints, greatSpell.signature, $author$project$Logic$App$Types$East));
 										},
 										$author$project$Logic$App$Patterns$PatternRegistry$greatSpellRegistry);
 								},

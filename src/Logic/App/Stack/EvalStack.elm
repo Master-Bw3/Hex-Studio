@@ -30,7 +30,6 @@ applyPatternsToStack stack ctx patterns =
         patternIotas =
             List.map (\pattern -> PatternIota pattern False) patterns
 
-        _ = Debug.log "libs" (applyToStackLoop ( stack, Array.empty ) ctx patternIotas 0 Array.empty False False).ctx.libraries
     in
     applyToStackLoop ( stack, Array.empty ) ctx patternIotas 0 Array.empty False False
 
