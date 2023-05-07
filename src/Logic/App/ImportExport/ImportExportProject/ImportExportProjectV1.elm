@@ -1,4 +1,4 @@
-module Logic.App.ImportExport.ImportExportProject exposing (..)
+module Logic.App.ImportExport.ImportExportProject.ImportExportProjectV1 exposing (..)
 
 import Array exposing (Array)
 import Bytes exposing (Bytes)
@@ -417,11 +417,15 @@ modelToProjectData model =
 encodeProjectData : ProjectData -> String
 encodeProjectData projectData =
     S.encodeToString projectCodec projectData
-
+        |> String.append "V1_"
 
 decodeProjectData : String -> Maybe ProjectData
 decodeProjectData encodedProjectData =
-    Result.toMaybe <| S.decodeFromString projectCodec encodedProjectData
+    if String.startsWith "V1_" encodedProjectData then
+        Result.toMaybe <| S.decodeFromString projectCodec <| String.dropLeft 3 encodedProjectData
+
+    else
+        Nothing
 
 
 unsimplifyProjectData : ProjectData -> { patternArray : Array Pattern, castingContext : CastingContext, projectName : String }

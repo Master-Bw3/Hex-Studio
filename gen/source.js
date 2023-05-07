@@ -15250,15 +15250,15 @@ var $MartinSStewart$elm_serialize$Serialize$decodeFromString = F2(
 			return $elm$core$Result$Err($MartinSStewart$elm_serialize$Serialize$DataCorrupted);
 		}
 	});
-var $author$project$Logic$App$ImportExport$ImportExportProject$ProjectData = F3(
+var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$ProjectData = F3(
 	function (patternArray, castingContext, projectName) {
 		return {castingContext: castingContext, patternArray: patternArray, projectName: projectName};
 	});
-var $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedCastingContext = F4(
+var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedCastingContext = F4(
 	function (ravenmind, libraries, entities, macros) {
 		return {entities: entities, libraries: libraries, macros: macros, ravenmind: ravenmind};
 	});
-var $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedCastingContextEntity = F2(
+var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedCastingContextEntity = F2(
 	function (heldItem, heldItemContent) {
 		return {heldItem: heldItem, heldItemContent: heldItemContent};
 	});
@@ -15532,7 +15532,7 @@ var $MartinSStewart$elm_serialize$Serialize$variant0 = function (ctor) {
 		$elm$json$Json$Decode$succeed(
 			$elm$core$Result$Ok(ctor)));
 };
-var $author$project$Logic$App$ImportExport$ImportExportProject$heldItemCodec = $MartinSStewart$elm_serialize$Serialize$finishCustomType(
+var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$heldItemCodec = $MartinSStewart$elm_serialize$Serialize$finishCustomType(
 	A2(
 		$MartinSStewart$elm_serialize$Serialize$variant0,
 		$author$project$Logic$App$Types$NoItem,
@@ -15574,30 +15574,30 @@ var $author$project$Logic$App$ImportExport$ImportExportProject$heldItemCodec = $
 													return noItemEncoder;
 											}
 										}))))))))));
-var $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedBoolean = function (a) {
+var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedBoolean = function (a) {
 	return {$: 'SimplifiedBoolean', a: a};
 };
-var $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedEntity = function (a) {
+var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedEntity = function (a) {
 	return {$: 'SimplifiedEntity', a: a};
 };
-var $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedGarbage = function (a) {
+var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedGarbage = function (a) {
 	return {$: 'SimplifiedGarbage', a: a};
 };
-var $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedIotaList = function (a) {
+var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedIotaList = function (a) {
 	return {$: 'SimplifiedIotaList', a: a};
 };
-var $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedNull = {$: 'SimplifiedNull'};
-var $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedNumber = function (a) {
+var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedNull = {$: 'SimplifiedNull'};
+var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedNumber = function (a) {
 	return {$: 'SimplifiedNumber', a: a};
 };
-var $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedOpenParenthesis = function (a) {
+var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedOpenParenthesis = function (a) {
 	return {$: 'SimplifiedOpenParenthesis', a: a};
 };
-var $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedPatternIota = F2(
+var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedPatternIota = F2(
 	function (a, b) {
 		return {$: 'SimplifiedPatternIota', a: a, b: b};
 	});
-var $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedVector = function (a) {
+var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedVector = function (a) {
 	return {$: 'SimplifiedVector', a: a};
 };
 var $elm$bytes$Bytes$Encode$U32 = F2(
@@ -15864,7 +15864,7 @@ var $author$project$Logic$App$Types$IncorrectBlock = {$: 'IncorrectBlock'};
 var $author$project$Logic$App$Types$IncorrectItem = {$: 'IncorrectItem'};
 var $author$project$Logic$App$Types$TransgressOther = {$: 'TransgressOther'};
 var $author$project$Logic$App$Types$VectorOutOfAmbit = {$: 'VectorOutOfAmbit'};
-var $author$project$Logic$App$ImportExport$ImportExportProject$mishapCodec = $MartinSStewart$elm_serialize$Serialize$finishCustomType(
+var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$mishapCodec = $MartinSStewart$elm_serialize$Serialize$finishCustomType(
 	A2(
 		$MartinSStewart$elm_serialize$Serialize$variant0,
 		$author$project$Logic$App$Types$CatastrophicFailure,
@@ -15961,11 +15961,11 @@ var $author$project$Logic$App$ImportExport$ImportExportProject$mishapCodec = $Ma
 																	};
 																};
 															})))))))))))))));
-var $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedPattern = F3(
+var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedPattern = F3(
 	function (signature, active, startDirection) {
 		return {active: active, signature: signature, startDirection: startDirection};
 	});
-var $author$project$Logic$App$ImportExport$ImportExportProject$directionCodec = $MartinSStewart$elm_serialize$Serialize$finishCustomType(
+var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$directionCodec = $MartinSStewart$elm_serialize$Serialize$finishCustomType(
 	A2(
 		$MartinSStewart$elm_serialize$Serialize$variant0,
 		$author$project$Logic$App$Types$ErrorDirection,
@@ -16063,13 +16063,13 @@ var $MartinSStewart$elm_serialize$Serialize$string = A4(
 		$elm$bytes$Bytes$Decode$unsignedInt32($MartinSStewart$elm_serialize$Serialize$endian)),
 	$elm$json$Json$Encode$string,
 	A2($elm$json$Json$Decode$map, $elm$core$Result$Ok, $elm$json$Json$Decode$string));
-var $author$project$Logic$App$ImportExport$ImportExportProject$patternCodec = $MartinSStewart$elm_serialize$Serialize$finishRecord(
+var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$patternCodec = $MartinSStewart$elm_serialize$Serialize$finishRecord(
 	A3(
 		$MartinSStewart$elm_serialize$Serialize$field,
 		function ($) {
 			return $.startDirection;
 		},
-		$author$project$Logic$App$ImportExport$ImportExportProject$directionCodec,
+		$author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$directionCodec,
 		A3(
 			$MartinSStewart$elm_serialize$Serialize$field,
 			function ($) {
@@ -16082,7 +16082,7 @@ var $author$project$Logic$App$ImportExport$ImportExportProject$patternCodec = $M
 					return $.signature;
 				},
 				$MartinSStewart$elm_serialize$Serialize$string,
-				$MartinSStewart$elm_serialize$Serialize$record($author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedPattern)))));
+				$MartinSStewart$elm_serialize$Serialize$record($author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedPattern)))));
 var $MartinSStewart$elm_serialize$Serialize$triple = F3(
 	function (codecFirst, codecSecond, codecThird) {
 		return $MartinSStewart$elm_serialize$Serialize$finishRecord(
@@ -16213,51 +16213,51 @@ var $MartinSStewart$elm_serialize$Serialize$variant2 = F3(
 					2,
 					$MartinSStewart$elm_serialize$Serialize$getJsonDecoderHelper(m2))));
 	});
-function $author$project$Logic$App$ImportExport$ImportExportProject$cyclic$iotaCodec() {
+function $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$cyclic$iotaCodec() {
 	return $MartinSStewart$elm_serialize$Serialize$finishCustomType(
 		A3(
 			$MartinSStewart$elm_serialize$Serialize$variant1,
-			$author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedOpenParenthesis,
+			$author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedOpenParenthesis,
 			$MartinSStewart$elm_serialize$Serialize$array(
 				$MartinSStewart$elm_serialize$Serialize$lazy(
 					function (_v2) {
-						return $author$project$Logic$App$ImportExport$ImportExportProject$cyclic$iotaCodec();
+						return $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$cyclic$iotaCodec();
 					})),
 			A3(
 				$MartinSStewart$elm_serialize$Serialize$variant1,
-				$author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedGarbage,
-				$author$project$Logic$App$ImportExport$ImportExportProject$mishapCodec,
+				$author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedGarbage,
+				$author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$mishapCodec,
 				A2(
 					$MartinSStewart$elm_serialize$Serialize$variant0,
-					$author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedNull,
+					$author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedNull,
 					A4(
 						$MartinSStewart$elm_serialize$Serialize$variant2,
-						$author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedPatternIota,
-						$author$project$Logic$App$ImportExport$ImportExportProject$patternCodec,
+						$author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedPatternIota,
+						$author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$patternCodec,
 						$MartinSStewart$elm_serialize$Serialize$bool,
 						A3(
 							$MartinSStewart$elm_serialize$Serialize$variant1,
-							$author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedIotaList,
+							$author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedIotaList,
 							$MartinSStewart$elm_serialize$Serialize$array(
 								$MartinSStewart$elm_serialize$Serialize$lazy(
 									function (_v1) {
-										return $author$project$Logic$App$ImportExport$ImportExportProject$cyclic$iotaCodec();
+										return $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$cyclic$iotaCodec();
 									})),
 							A3(
 								$MartinSStewart$elm_serialize$Serialize$variant1,
-								$author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedEntity,
+								$author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedEntity,
 								$MartinSStewart$elm_serialize$Serialize$string,
 								A3(
 									$MartinSStewart$elm_serialize$Serialize$variant1,
-									$author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedBoolean,
+									$author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedBoolean,
 									$MartinSStewart$elm_serialize$Serialize$bool,
 									A3(
 										$MartinSStewart$elm_serialize$Serialize$variant1,
-										$author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedVector,
+										$author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedVector,
 										A3($MartinSStewart$elm_serialize$Serialize$triple, $MartinSStewart$elm_serialize$Serialize$float, $MartinSStewart$elm_serialize$Serialize$float, $MartinSStewart$elm_serialize$Serialize$float),
 										A3(
 											$MartinSStewart$elm_serialize$Serialize$variant1,
-											$author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedNumber,
+											$author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedNumber,
 											$MartinSStewart$elm_serialize$Serialize$float,
 											$MartinSStewart$elm_serialize$Serialize$customType(
 												function (numberEncoder) {
@@ -16311,12 +16311,12 @@ function $author$project$Logic$App$ImportExport$ImportExportProject$cyclic$iotaC
 												})))))))))));
 }
 try {
-	var $author$project$Logic$App$ImportExport$ImportExportProject$iotaCodec = $author$project$Logic$App$ImportExport$ImportExportProject$cyclic$iotaCodec();
-	$author$project$Logic$App$ImportExport$ImportExportProject$cyclic$iotaCodec = function () {
-		return $author$project$Logic$App$ImportExport$ImportExportProject$iotaCodec;
+	var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$iotaCodec = $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$cyclic$iotaCodec();
+	$author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$cyclic$iotaCodec = function () {
+		return $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$iotaCodec;
 	};
 } catch ($) {
-	throw 'Some top-level definitions from `Logic.App.ImportExport.ImportExportProject` are causing infinite recursion:\n\n  ┌─────┐\n  │    iotaCodec\n  └─────┘\n\nThese errors are very tricky, so read https://elm-lang.org/0.19.1/bad-recursion to learn how to fix it!';}
+	throw 'Some top-level definitions from `Logic.App.ImportExport.ImportExportProject.ImportExportProjectV1` are causing infinite recursion:\n\n  ┌─────┐\n  │    iotaCodec\n  └─────┘\n\nThese errors are very tricky, so read https://elm-lang.org/0.19.1/bad-recursion to learn how to fix it!';}
 var $MartinSStewart$elm_serialize$Serialize$maybe = function (justCodec) {
 	return $MartinSStewart$elm_serialize$Serialize$finishCustomType(
 		A3(
@@ -16337,20 +16337,20 @@ var $MartinSStewart$elm_serialize$Serialize$maybe = function (justCodec) {
 							}
 						})))));
 };
-var $author$project$Logic$App$ImportExport$ImportExportProject$castingContextentityCodec = $MartinSStewart$elm_serialize$Serialize$finishRecord(
+var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$castingContextentityCodec = $MartinSStewart$elm_serialize$Serialize$finishRecord(
 	A3(
 		$MartinSStewart$elm_serialize$Serialize$field,
 		function ($) {
 			return $.heldItemContent;
 		},
-		$MartinSStewart$elm_serialize$Serialize$maybe($author$project$Logic$App$ImportExport$ImportExportProject$iotaCodec),
+		$MartinSStewart$elm_serialize$Serialize$maybe($author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$iotaCodec),
 		A3(
 			$MartinSStewart$elm_serialize$Serialize$field,
 			function ($) {
 				return $.heldItem;
 			},
-			$author$project$Logic$App$ImportExport$ImportExportProject$heldItemCodec,
-			$MartinSStewart$elm_serialize$Serialize$record($author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedCastingContextEntity))));
+			$author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$heldItemCodec,
+			$MartinSStewart$elm_serialize$Serialize$record($author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedCastingContextEntity))));
 var $elm$core$Tuple$pair = F2(
 	function (a, b) {
 		return _Utils_Tuple2(a, b);
@@ -16389,7 +16389,7 @@ var $MartinSStewart$elm_serialize$Serialize$int = A4(
 		$elm$bytes$Bytes$Decode$float64($MartinSStewart$elm_serialize$Serialize$endian)),
 	$elm$json$Json$Encode$int,
 	A2($elm$json$Json$Decode$map, $elm$core$Result$Ok, $elm$json$Json$Decode$int));
-var $author$project$Logic$App$ImportExport$ImportExportProject$castingContextCodec = $MartinSStewart$elm_serialize$Serialize$finishRecord(
+var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$castingContextCodec = $MartinSStewart$elm_serialize$Serialize$finishRecord(
 	A3(
 		$MartinSStewart$elm_serialize$Serialize$field,
 		function ($) {
@@ -16398,13 +16398,13 @@ var $author$project$Logic$App$ImportExport$ImportExportProject$castingContextCod
 		A2(
 			$MartinSStewart$elm_serialize$Serialize$dict,
 			$MartinSStewart$elm_serialize$Serialize$string,
-			A3($MartinSStewart$elm_serialize$Serialize$triple, $MartinSStewart$elm_serialize$Serialize$string, $author$project$Logic$App$ImportExport$ImportExportProject$directionCodec, $author$project$Logic$App$ImportExport$ImportExportProject$iotaCodec)),
+			A3($MartinSStewart$elm_serialize$Serialize$triple, $MartinSStewart$elm_serialize$Serialize$string, $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$directionCodec, $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$iotaCodec)),
 		A3(
 			$MartinSStewart$elm_serialize$Serialize$field,
 			function ($) {
 				return $.entities;
 			},
-			A2($MartinSStewart$elm_serialize$Serialize$dict, $MartinSStewart$elm_serialize$Serialize$string, $author$project$Logic$App$ImportExport$ImportExportProject$castingContextentityCodec),
+			A2($MartinSStewart$elm_serialize$Serialize$dict, $MartinSStewart$elm_serialize$Serialize$string, $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$castingContextentityCodec),
 			A3(
 				$MartinSStewart$elm_serialize$Serialize$field,
 				function ($) {
@@ -16416,16 +16416,16 @@ var $author$project$Logic$App$ImportExport$ImportExportProject$castingContextCod
 					A2(
 						$MartinSStewart$elm_serialize$Serialize$dict,
 						$MartinSStewart$elm_serialize$Serialize$string,
-						$MartinSStewart$elm_serialize$Serialize$maybe($author$project$Logic$App$ImportExport$ImportExportProject$iotaCodec))),
+						$MartinSStewart$elm_serialize$Serialize$maybe($author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$iotaCodec))),
 				A3(
 					$MartinSStewart$elm_serialize$Serialize$field,
 					function ($) {
 						return $.ravenmind;
 					},
-					$MartinSStewart$elm_serialize$Serialize$maybe($author$project$Logic$App$ImportExport$ImportExportProject$iotaCodec),
-					$MartinSStewart$elm_serialize$Serialize$record($author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedCastingContext))))));
-var $author$project$Logic$App$ImportExport$ImportExportProject$patternArrayCodec = $MartinSStewart$elm_serialize$Serialize$array($author$project$Logic$App$ImportExport$ImportExportProject$patternCodec);
-var $author$project$Logic$App$ImportExport$ImportExportProject$projectCodec = $MartinSStewart$elm_serialize$Serialize$finishRecord(
+					$MartinSStewart$elm_serialize$Serialize$maybe($author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$iotaCodec),
+					$MartinSStewart$elm_serialize$Serialize$record($author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedCastingContext))))));
+var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$patternArrayCodec = $MartinSStewart$elm_serialize$Serialize$array($author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$patternCodec);
+var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$projectCodec = $MartinSStewart$elm_serialize$Serialize$finishRecord(
 	A3(
 		$MartinSStewart$elm_serialize$Serialize$field,
 		function ($) {
@@ -16437,14 +16437,14 @@ var $author$project$Logic$App$ImportExport$ImportExportProject$projectCodec = $M
 			function ($) {
 				return $.castingContext;
 			},
-			$author$project$Logic$App$ImportExport$ImportExportProject$castingContextCodec,
+			$author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$castingContextCodec,
 			A3(
 				$MartinSStewart$elm_serialize$Serialize$field,
 				function ($) {
 					return $.patternArray;
 				},
-				$author$project$Logic$App$ImportExport$ImportExportProject$patternArrayCodec,
-				$MartinSStewart$elm_serialize$Serialize$record($author$project$Logic$App$ImportExport$ImportExportProject$ProjectData)))));
+				$author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$patternArrayCodec,
+				$MartinSStewart$elm_serialize$Serialize$record($author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$ProjectData)))));
 var $elm$core$Result$toMaybe = function (result) {
 	if (result.$ === 'Ok') {
 		var v = result.a;
@@ -16453,9 +16453,12 @@ var $elm$core$Result$toMaybe = function (result) {
 		return $elm$core$Maybe$Nothing;
 	}
 };
-var $author$project$Logic$App$ImportExport$ImportExportProject$decodeProjectData = function (encodedProjectData) {
-	return $elm$core$Result$toMaybe(
-		A2($MartinSStewart$elm_serialize$Serialize$decodeFromString, $author$project$Logic$App$ImportExport$ImportExportProject$projectCodec, encodedProjectData));
+var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$decodeProjectData = function (encodedProjectData) {
+	return A2($elm$core$String$startsWith, 'V1_', encodedProjectData) ? $elm$core$Result$toMaybe(
+		A2(
+			$MartinSStewart$elm_serialize$Serialize$decodeFromString,
+			$author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$projectCodec,
+			A2($elm$core$String$dropLeft, 3, encodedProjectData))) : $elm$core$Maybe$Nothing;
 };
 var $elm$file$File$Select$file = F2(
 	function (mimes, toMsg) {
@@ -16888,7 +16891,7 @@ var $elm$core$Dict$map = F2(
 				A2($elm$core$Dict$map, func, right));
 		}
 	});
-var $author$project$Logic$App$ImportExport$ImportExportProject$unSimplifyPattern = F2(
+var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$unSimplifyPattern = F2(
 	function (macros, simplifiedPattern) {
 		var pattern = A2(
 			$author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature,
@@ -16898,7 +16901,7 @@ var $author$project$Logic$App$ImportExport$ImportExportProject$unSimplifyPattern
 			pattern,
 			{active: simplifiedPattern.active, startDirection: simplifiedPattern.startDirection});
 	});
-var $author$project$Logic$App$ImportExport$ImportExportProject$unSimplifyIota = F2(
+var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$unSimplifyIota = F2(
 	function (macros, simplifiedIota) {
 		switch (simplifiedIota.$) {
 			case 'SimplifiedNumber':
@@ -16918,14 +16921,14 @@ var $author$project$Logic$App$ImportExport$ImportExportProject$unSimplifyIota = 
 				return $author$project$Logic$App$Types$IotaList(
 					A2(
 						$elm$core$Array$map,
-						$author$project$Logic$App$ImportExport$ImportExportProject$unSimplifyIota(macros),
+						$author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$unSimplifyIota(macros),
 						list));
 			case 'SimplifiedPatternIota':
 				var pattern = simplifiedIota.a;
 				var considered = simplifiedIota.b;
 				return A2(
 					$author$project$Logic$App$Types$PatternIota,
-					A2($author$project$Logic$App$ImportExport$ImportExportProject$unSimplifyPattern, macros, pattern),
+					A2($author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$unSimplifyPattern, macros, pattern),
 					considered);
 			case 'SimplifiedNull':
 				return $author$project$Logic$App$Types$Null;
@@ -16937,11 +16940,11 @@ var $author$project$Logic$App$ImportExport$ImportExportProject$unSimplifyIota = 
 				return $author$project$Logic$App$Types$OpenParenthesis(
 					A2(
 						$elm$core$Array$map,
-						$author$project$Logic$App$ImportExport$ImportExportProject$unSimplifyIota(macros),
+						$author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$unSimplifyIota(macros),
 						list));
 		}
 	});
-var $author$project$Logic$App$ImportExport$ImportExportProject$unSimplifyCastingContext = function (simplifiedCastingContext) {
+var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$unSimplifyCastingContext = function (simplifiedCastingContext) {
 	var macrosLayer1 = A2(
 		$elm$core$Dict$map,
 		F2(
@@ -16952,7 +16955,7 @@ var $author$project$Logic$App$ImportExport$ImportExportProject$unSimplifyCasting
 				return _Utils_Tuple3(
 					displayName,
 					startDirection,
-					A2($author$project$Logic$App$ImportExport$ImportExportProject$unSimplifyIota, $elm$core$Dict$empty, iota));
+					A2($author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$unSimplifyIota, $elm$core$Dict$empty, iota));
 			}),
 		simplifiedCastingContext.macros);
 	var macros = A2(
@@ -17002,7 +17005,7 @@ var $author$project$Logic$App$ImportExport$ImportExportProject$unSimplifyCasting
 						heldItem: entity.heldItem,
 						heldItemContent: A2(
 							$elm$core$Maybe$map,
-							$author$project$Logic$App$ImportExport$ImportExportProject$unSimplifyIota(macros),
+							$author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$unSimplifyIota(macros),
 							entity.heldItemContent)
 					};
 				}),
@@ -17017,7 +17020,7 @@ var $author$project$Logic$App$ImportExport$ImportExportProject$unSimplifyCasting
 							function (_v2, iota) {
 								return A2(
 									$elm$core$Maybe$map,
-									$author$project$Logic$App$ImportExport$ImportExportProject$unSimplifyIota(macros),
+									$author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$unSimplifyIota(macros),
 									iota);
 							}),
 						values);
@@ -17026,17 +17029,17 @@ var $author$project$Logic$App$ImportExport$ImportExportProject$unSimplifyCasting
 		macros: macros,
 		ravenmind: A2(
 			$elm$core$Maybe$map,
-			$author$project$Logic$App$ImportExport$ImportExportProject$unSimplifyIota(macros),
+			$author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$unSimplifyIota(macros),
 			simplifiedCastingContext.ravenmind)
 	};
 };
-var $author$project$Logic$App$ImportExport$ImportExportProject$unsimplifyProjectData = function (projectData) {
-	var castingContext = $author$project$Logic$App$ImportExport$ImportExportProject$unSimplifyCastingContext(projectData.castingContext);
+var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$unsimplifyProjectData = function (projectData) {
+	var castingContext = $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$unSimplifyCastingContext(projectData.castingContext);
 	return {
 		castingContext: castingContext,
 		patternArray: A2(
 			$elm$core$Array$map,
-			$author$project$Logic$App$ImportExport$ImportExportProject$unSimplifyPattern(castingContext.macros),
+			$author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$unSimplifyPattern(castingContext.macros),
 			projectData.patternArray),
 		projectName: projectData.projectName
 	};
@@ -18269,8 +18272,8 @@ var $author$project$Main$update = F2(
 					var encoded = msg.a;
 					var maybeProjectData = A2(
 						$elm$core$Maybe$map,
-						$author$project$Logic$App$ImportExport$ImportExportProject$unsimplifyProjectData,
-						$author$project$Logic$App$ImportExport$ImportExportProject$decodeProjectData(encoded));
+						$author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$unsimplifyProjectData,
+						$author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$decodeProjectData(encoded));
 					if (maybeProjectData.$ === 'Just') {
 						var projectData = maybeProjectData.a;
 						var importQueue = $elm$core$List$reverse(
@@ -22292,6 +22295,7 @@ var $author$project$Logic$App$Msg$SelectProjectFile = {$: 'SelectProjectFile'};
 var $author$project$Logic$App$Msg$SetProjectName = function (a) {
 	return {$: 'SetProjectName', a: a};
 };
+var $elm$core$String$append = _String_append;
 var $MartinSStewart$elm_serialize$Serialize$encodeToBytes = F2(
 	function (codec, value) {
 		return $elm$bytes$Bytes$Encode$encode(
@@ -22587,49 +22591,52 @@ var $MartinSStewart$elm_serialize$Serialize$encodeToString = function (codec) {
 		$MartinSStewart$elm_serialize$Serialize$encodeToBytes(codec),
 		$MartinSStewart$elm_serialize$Serialize$replaceBase64Chars);
 };
-var $author$project$Logic$App$ImportExport$ImportExportProject$encodeProjectData = function (projectData) {
-	return A2($MartinSStewart$elm_serialize$Serialize$encodeToString, $author$project$Logic$App$ImportExport$ImportExportProject$projectCodec, projectData);
+var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$encodeProjectData = function (projectData) {
+	return A2(
+		$elm$core$String$append,
+		'V1_',
+		A2($MartinSStewart$elm_serialize$Serialize$encodeToString, $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$projectCodec, projectData));
 };
-var $author$project$Logic$App$ImportExport$ImportExportProject$simplifyPattern = function (pattern) {
+var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$simplifyPattern = function (pattern) {
 	return {active: pattern.active, signature: pattern.signature, startDirection: pattern.startDirection};
 };
-var $author$project$Logic$App$ImportExport$ImportExportProject$simplifyIota = function (iota) {
+var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$simplifyIota = function (iota) {
 	switch (iota.$) {
 		case 'Vector':
 			var vector = iota.a;
-			return $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedVector(vector);
+			return $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedVector(vector);
 		case 'Number':
 			var number = iota.a;
-			return $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedNumber(number);
+			return $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedNumber(number);
 		case 'Boolean':
 			var _boolean = iota.a;
-			return $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedBoolean(_boolean);
+			return $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedBoolean(_boolean);
 		case 'Entity':
 			var entity = iota.a;
-			return $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedEntity(entity);
+			return $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedEntity(entity);
 		case 'IotaList':
 			var list = iota.a;
-			return $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedIotaList(
-				A2($elm$core$Array$map, $author$project$Logic$App$ImportExport$ImportExportProject$simplifyIota, list));
+			return $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedIotaList(
+				A2($elm$core$Array$map, $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$simplifyIota, list));
 		case 'PatternIota':
 			var pattern = iota.a;
 			var considered = iota.b;
 			return A2(
-				$author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedPatternIota,
-				$author$project$Logic$App$ImportExport$ImportExportProject$simplifyPattern(pattern),
+				$author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedPatternIota,
+				$author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$simplifyPattern(pattern),
 				considered);
 		case 'Null':
-			return $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedNull;
+			return $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedNull;
 		case 'Garbage':
 			var mishap = iota.a;
-			return $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedGarbage(mishap);
+			return $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedGarbage(mishap);
 		default:
 			var list = iota.a;
-			return $author$project$Logic$App$ImportExport$ImportExportProject$SimplifiedOpenParenthesis(
-				A2($elm$core$Array$map, $author$project$Logic$App$ImportExport$ImportExportProject$simplifyIota, list));
+			return $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedOpenParenthesis(
+				A2($elm$core$Array$map, $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$simplifyIota, list));
 	}
 };
-var $author$project$Logic$App$ImportExport$ImportExportProject$simplifyCastingContext = function (castingContext) {
+var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$simplifyCastingContext = function (castingContext) {
 	return {
 		entities: A2(
 			$elm$core$Dict$map,
@@ -22637,7 +22644,7 @@ var $author$project$Logic$App$ImportExport$ImportExportProject$simplifyCastingCo
 				function (_v0, entity) {
 					return {
 						heldItem: entity.heldItem,
-						heldItemContent: A2($elm$core$Maybe$map, $author$project$Logic$App$ImportExport$ImportExportProject$simplifyIota, entity.heldItemContent)
+						heldItemContent: A2($elm$core$Maybe$map, $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$simplifyIota, entity.heldItemContent)
 					};
 				}),
 			castingContext.entities),
@@ -22649,7 +22656,7 @@ var $author$project$Logic$App$ImportExport$ImportExportProject$simplifyCastingCo
 						$elm$core$Dict$map,
 						F2(
 							function (_v2, iota) {
-								return A2($elm$core$Maybe$map, $author$project$Logic$App$ImportExport$ImportExportProject$simplifyIota, iota);
+								return A2($elm$core$Maybe$map, $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$simplifyIota, iota);
 							}),
 						values);
 				}),
@@ -22668,19 +22675,19 @@ var $author$project$Logic$App$ImportExport$ImportExportProject$simplifyCastingCo
 						_Utils_Tuple3(
 							displayName,
 							startDirection,
-							$author$project$Logic$App$ImportExport$ImportExportProject$simplifyIota(iota)));
+							$author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$simplifyIota(iota)));
 				},
 				$elm$core$Dict$toList(castingContext.macros))),
-		ravenmind: A2($elm$core$Maybe$map, $author$project$Logic$App$ImportExport$ImportExportProject$simplifyIota, castingContext.ravenmind)
+		ravenmind: A2($elm$core$Maybe$map, $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$simplifyIota, castingContext.ravenmind)
 	};
 };
-var $author$project$Logic$App$ImportExport$ImportExportProject$modelToProjectData = function (model) {
+var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$modelToProjectData = function (model) {
 	return {
-		castingContext: $author$project$Logic$App$ImportExport$ImportExportProject$simplifyCastingContext(model.castingContext),
+		castingContext: $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$simplifyCastingContext(model.castingContext),
 		patternArray: A2(
 			$elm$core$Array$map,
 			function (patternTuple) {
-				return $author$project$Logic$App$ImportExport$ImportExportProject$simplifyPattern(patternTuple.a);
+				return $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$simplifyPattern(patternTuple.a);
 			},
 			model.patternArray),
 		projectName: model.projectName
@@ -22758,8 +22765,8 @@ var $author$project$Components$App$Panels$FilePanel$saveExportPanel = function (
 						$elm$html$Html$Events$onClick(
 						A3(
 							$author$project$Logic$App$Msg$Download,
-							$author$project$Logic$App$ImportExport$ImportExportProject$encodeProjectData(
-								$author$project$Logic$App$ImportExport$ImportExportProject$modelToProjectData(model)),
+							$author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$encodeProjectData(
+								$author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$modelToProjectData(model)),
 							model.projectName + '.hex',
 							'text/plain'))
 					]),
