@@ -447,7 +447,7 @@ patternRegistry =
     , { signature = "dw", internalName = "not", action = invertBool, displayName = "Negation Purification", outputOptions = [], selectedOutput = Nothing, startDirection = East }
     , { signature = "aw", internalName = "bool_coerce", action = boolCoerce, displayName = "Augur's Purification", outputOptions = [], selectedOutput = Nothing, startDirection = East }
     , { signature = "awdd", internalName = "if", action = ifBool, displayName = "Augur's Exaltation", outputOptions = [], selectedOutput = Nothing, startDirection = East }
-    , { signature = "eqqq", internalName = "random", action = makeConstant (Number 0.5), displayName = "Entropy Reflection", outputOptions = [], selectedOutput = Nothing, startDirection = East }
+    , { signature = "eqqq", internalName = "random", action = spellNoInput, displayName = "Entropy Reflection", outputOptions = [NumberType], selectedOutput = Just (NumberType, Number 0), startDirection = East }
     , { signature = "qqqqqaa", internalName = "sin", action = sine, displayName = "Sine Purification", outputOptions = [], selectedOutput = Nothing, startDirection = East }
     , { signature = "qqqqqad", internalName = "cos", action = cosine, displayName = "Cosine Purification", outputOptions = [], selectedOutput = Nothing, startDirection = East }
     , { signature = "wqqqqqadq", internalName = "tan", action = tangent, displayName = "Tangent Purification", outputOptions = [], selectedOutput = Nothing, startDirection = East }

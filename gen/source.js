@@ -13905,12 +13905,15 @@ function $author$project$Logic$App$Patterns$PatternRegistry$cyclic$patternRegist
 						{action: $author$project$Logic$App$Patterns$Math$boolCoerce, displayName: 'Augur\'s Purification', internalName: 'bool_coerce', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'aw', startDirection: $author$project$Logic$App$Types$East},
 						{action: $author$project$Logic$App$Patterns$Math$ifBool, displayName: 'Augur\'s Exaltation', internalName: 'if', outputOptions: _List_Nil, selectedOutput: $elm$core$Maybe$Nothing, signature: 'awdd', startDirection: $author$project$Logic$App$Types$East},
 						{
-						action: $author$project$Logic$App$Patterns$OperatorUtils$makeConstant(
-							$author$project$Logic$App$Types$Number(0.5)),
+						action: $author$project$Logic$App$Patterns$OperatorUtils$spellNoInput,
 						displayName: 'Entropy Reflection',
 						internalName: 'random',
-						outputOptions: _List_Nil,
-						selectedOutput: $elm$core$Maybe$Nothing,
+						outputOptions: _List_fromArray(
+							[$author$project$Logic$App$Types$NumberType]),
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2(
+								$author$project$Logic$App$Types$NumberType,
+								$author$project$Logic$App$Types$Number(0))),
 						signature: 'eqqq',
 						startDirection: $author$project$Logic$App$Types$East
 					},
