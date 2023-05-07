@@ -50,6 +50,16 @@ menu model =
         , button
             ([ id "macro_menu_button"
              , class "menu_button"
+             , onClick (\event -> ViewPanel MacroPanel event.keys)
+             ]
+                ++ highlightIfActive MacroPanel
+            )
+            [ Icon.css
+            , Icon.bookmark |> Icon.styled [ Icon.sm ] |> Icon.view
+            ]
+        , button
+            ([ id "library_menu_button"
+             , class "menu_button"
              , onClick (\event -> ViewPanel LibraryPanel event.keys)
              ]
                 ++ highlightIfActive LibraryPanel
@@ -100,5 +110,4 @@ menu model =
             [ Icon.css
             , Icon.gear |> Icon.styled [ Icon.sm ] |> Icon.view
             ]
-        
         ]

@@ -24,6 +24,7 @@ type alias Model =
         , importInput : String
         , openOverlay : Overlay
         , entityInputField : String
+        , libraryInputField : (String, String, String)
         }
     , grid : Grid
     , mousePos : ( Float, Float )

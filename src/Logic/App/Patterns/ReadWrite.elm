@@ -231,8 +231,8 @@ akashicRead stack ctx =
         action : Iota -> Iota -> CastingContext -> ( Array Iota, CastingContext )
         action iota1 iota2 context =
             case ( iota1, iota2 ) of
-                ( Vector vector, PatternIota pattern _ ) ->
-                    case Maybe.map (Dict.get pattern.signature) (Dict.get vector context.libraries) of
+                ( Vector ( x, y, z ), PatternIota pattern _ ) ->
+                    case Maybe.map (Dict.get pattern.signature) (Dict.get ( round x, round y, round z ) context.libraries) of
                         -- gotta make sure ya know
                         Just (Just (Just iota)) ->
                             ( Array.fromList [ iota ], context )
@@ -254,12 +254,12 @@ akashicWrite stack ctx =
     let
         action iota1 iota2 iota3 context =
             case ( iota1, iota2 ) of
-                ( Vector vector, PatternIota pattern _ ) ->
-                    case Dict.get vector context.libraries of
+                ( Vector ( x, y, z ), PatternIota pattern _ ) ->
+                    case Dict.get ( round x, round y, round z ) context.libraries of
                         Just entries ->
                             ( Array.empty
                             , { context
-                                | libraries = Dict.insert vector (Dict.insert pattern.signature (Just iota3) entries) context.libraries
+                                | libraries = Dict.insert ( round x, round y, round z ) (Dict.insert pattern.signature (Just iota3) entries) context.libraries
                               }
                             )
 

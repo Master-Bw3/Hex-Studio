@@ -24,7 +24,7 @@ macroPanel : Model -> Html Msg
 macroPanel model =
     let
         visibility =
-            List.member LibraryPanel model.ui.openPanels
+            List.member MacroPanel model.ui.openPanels
     in
     div [ id "macro_panel", class "panel", visibilityToDisplayStyle visibility ]
         (h1 [ class "panel_title" ] [ text "Macros" ]
@@ -40,7 +40,16 @@ renderMacroDict model =
                 ( signature, ( displayName, _, iota ) ) ->
                     div [ class "stored_iota_container" ]
                         (div [ class "saved_iota_title" ]
-                            [ input
+                            [ button
+                                [ class "trash_button"
+                                , style "margin-left" "0.15em"
+                                , style "margin-right" "0.2em"
+                                , onClick (RemoveMacro signature)
+                                ]
+                                [ Icon.css
+                                , Icon.trash |> Icon.styled [ Icon.xs ] |> Icon.view
+                                ]
+                            , input
                                 [ class "stored_iota_label"
                                 , style "margin-right" "0"
                                 , Html.Attributes.value displayName

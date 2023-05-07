@@ -5765,10 +5765,7 @@ var $author$project$Main$init = function (_v0) {
 					$elm$core$Dict$singleton,
 					'Caster',
 					{heldItem: $author$project$Logic$App$Types$NoItem, heldItemContent: $elm$core$Maybe$Nothing}),
-				libraries: A2(
-					$elm$core$Dict$singleton,
-					_Utils_Tuple3(0, 0, 0),
-					$elm$core$Dict$empty),
+				libraries: $elm$core$Dict$empty,
 				macros: $elm$core$Dict$empty,
 				ravenmind: $elm$core$Maybe$Nothing
 			},
@@ -5798,6 +5795,7 @@ var $author$project$Main$init = function (_v0) {
 				dragging: _Utils_Tuple2(false, -1),
 				entityInputField: '',
 				importInput: '',
+				libraryInputField: _Utils_Tuple3('', '', ''),
 				mouseOverElementIndex: -1,
 				openOverlay: $author$project$Logic$App$Types$NoOverlay,
 				openPanels: _List_fromArray(
@@ -9568,21 +9566,31 @@ var $author$project$Logic$App$Patterns$OperatorUtils$getPatternIota = function (
 		return $elm$core$Maybe$Nothing;
 	}
 };
+var $elm$core$Basics$round = _Basics_round;
 var $author$project$Logic$App$Patterns$ReadWrite$akashicRead = F2(
 	function (stack, ctx) {
 		var action = F3(
 			function (iota1, iota2, context) {
 				var _v0 = _Utils_Tuple2(iota1, iota2);
 				if ((_v0.a.$ === 'Vector') && (_v0.b.$ === 'PatternIota')) {
-					var vector = _v0.a.a;
-					var _v1 = _v0.b;
-					var pattern = _v1.a;
-					var _v2 = A2(
+					var _v1 = _v0.a.a;
+					var x = _v1.a;
+					var y = _v1.b;
+					var z = _v1.c;
+					var _v2 = _v0.b;
+					var pattern = _v2.a;
+					var _v3 = A2(
 						$elm$core$Maybe$map,
 						$elm$core$Dict$get(pattern.signature),
-						A2($elm$core$Dict$get, vector, context.libraries));
-					if (((_v2.$ === 'Just') && (_v2.a.$ === 'Just')) && (_v2.a.a.$ === 'Just')) {
-						var iota = _v2.a.a.a;
+						A2(
+							$elm$core$Dict$get,
+							_Utils_Tuple3(
+								$elm$core$Basics$round(x),
+								$elm$core$Basics$round(y),
+								$elm$core$Basics$round(z)),
+							context.libraries));
+					if (((_v3.$ === 'Just') && (_v3.a.$ === 'Just')) && (_v3.a.a.$ === 'Just')) {
+						var iota = _v3.a.a.a;
 						return _Utils_Tuple2(
 							$elm$core$Array$fromList(
 								_List_fromArray(
@@ -9710,12 +9718,21 @@ var $author$project$Logic$App$Patterns$ReadWrite$akashicWrite = F2(
 			function (iota1, iota2, iota3, context) {
 				var _v0 = _Utils_Tuple2(iota1, iota2);
 				if ((_v0.a.$ === 'Vector') && (_v0.b.$ === 'PatternIota')) {
-					var vector = _v0.a.a;
-					var _v1 = _v0.b;
-					var pattern = _v1.a;
-					var _v2 = A2($elm$core$Dict$get, vector, context.libraries);
-					if (_v2.$ === 'Just') {
-						var entries = _v2.a;
+					var _v1 = _v0.a.a;
+					var x = _v1.a;
+					var y = _v1.b;
+					var z = _v1.c;
+					var _v2 = _v0.b;
+					var pattern = _v2.a;
+					var _v3 = A2(
+						$elm$core$Dict$get,
+						_Utils_Tuple3(
+							$elm$core$Basics$round(x),
+							$elm$core$Basics$round(y),
+							$elm$core$Basics$round(z)),
+						context.libraries);
+					if (_v3.$ === 'Just') {
+						var entries = _v3.a;
 						return _Utils_Tuple2(
 							$elm$core$Array$empty,
 							_Utils_update(
@@ -9723,7 +9740,10 @@ var $author$project$Logic$App$Patterns$ReadWrite$akashicWrite = F2(
 								{
 									libraries: A3(
 										$elm$core$Dict$insert,
-										vector,
+										_Utils_Tuple3(
+											$elm$core$Basics$round(x),
+											$elm$core$Basics$round(y),
+											$elm$core$Basics$round(z)),
 										A3(
 											$elm$core$Dict$insert,
 											pattern.signature,
@@ -9848,7 +9868,6 @@ var $author$project$Logic$App$Patterns$OperatorUtils$checkEquality = F2(
 		}
 		return _Utils_eq(iota1, iota2);
 	});
-var $elm$core$Basics$round = _Basics_round;
 var $author$project$Logic$App$Patterns$OperatorUtils$getIntegerOrList = function (iota) {
 	switch (iota.$) {
 		case 'Number':
@@ -16399,6 +16418,18 @@ var $MartinSStewart$elm_serialize$Serialize$dict = F2(
 			$MartinSStewart$elm_serialize$Serialize$list(
 				A2($MartinSStewart$elm_serialize$Serialize$tuple, keyCodec, valueCodec)));
 	});
+var $MartinSStewart$elm_serialize$Serialize$int = A4(
+	$MartinSStewart$elm_serialize$Serialize$build,
+	A2(
+		$elm$core$Basics$composeR,
+		$elm$core$Basics$toFloat,
+		$elm$bytes$Bytes$Encode$float64($MartinSStewart$elm_serialize$Serialize$endian)),
+	A2(
+		$elm$bytes$Bytes$Decode$map,
+		A2($elm$core$Basics$composeR, $elm$core$Basics$round, $elm$core$Result$Ok),
+		$elm$bytes$Bytes$Decode$float64($MartinSStewart$elm_serialize$Serialize$endian)),
+	$elm$json$Json$Encode$int,
+	A2($elm$json$Json$Decode$map, $elm$core$Result$Ok, $elm$json$Json$Decode$int));
 var $author$project$Logic$App$ImportExport$ImportExportProject$castingContextCodec = $MartinSStewart$elm_serialize$Serialize$finishRecord(
 	A3(
 		$MartinSStewart$elm_serialize$Serialize$field,
@@ -16422,7 +16453,7 @@ var $author$project$Logic$App$ImportExport$ImportExportProject$castingContextCod
 				},
 				A2(
 					$MartinSStewart$elm_serialize$Serialize$dict,
-					A3($MartinSStewart$elm_serialize$Serialize$triple, $MartinSStewart$elm_serialize$Serialize$float, $MartinSStewart$elm_serialize$Serialize$float, $MartinSStewart$elm_serialize$Serialize$float),
+					A3($MartinSStewart$elm_serialize$Serialize$triple, $MartinSStewart$elm_serialize$Serialize$int, $MartinSStewart$elm_serialize$Serialize$int, $MartinSStewart$elm_serialize$Serialize$int),
 					A2(
 						$MartinSStewart$elm_serialize$Serialize$dict,
 						$MartinSStewart$elm_serialize$Serialize$string,
@@ -18436,6 +18467,19 @@ var $author$project$Main$update = F2(
 										{macros: newMacroDict})
 								})),
 						$elm$core$Platform$Cmd$none);
+				case 'RemoveMacro':
+					var signature = msg.a;
+					var newMacroDict = A2($elm$core$Dict$remove, signature, model.castingContext.macros);
+					return _Utils_Tuple2(
+						$author$project$Logic$App$Macros$UpdateMacroReferences$updateMacroReferences(
+							_Utils_update(
+								model,
+								{
+									castingContext: _Utils_update(
+										castingContext,
+										{macros: newMacroDict})
+								})),
+						$elm$core$Platform$Cmd$none);
 				case 'ContextMenuMsg':
 					var message = msg.a;
 					var _v16 = A2($jinjor$elm_contextmenu$ContextMenu$update, message, model.contextMenu);
@@ -18530,10 +18574,13 @@ var $author$project$Main$update = F2(
 											name,
 											{heldItem: $author$project$Logic$App$Types$NoItem, heldItemContent: $elm$core$Maybe$Nothing},
 											castingContext.entities)
-									})
+									}),
+								ui: _Utils_update(
+									ui,
+									{entityInputField: ''})
 							}),
 						$elm$core$Platform$Cmd$none);
-				default:
+				case 'UpdateEntityInputField':
 					var string = msg.a;
 					return _Utils_Tuple2(
 						_Utils_update(
@@ -18542,6 +18589,95 @@ var $author$project$Main$update = F2(
 								ui: _Utils_update(
 									ui,
 									{entityInputField: string})
+							}),
+						$elm$core$Platform$Cmd$none);
+				case 'RemoveLibraryEntry':
+					var location = msg.a;
+					var signature = msg.b;
+					var newLibrariesDict = function () {
+						var _v20 = A2($elm$core$Dict$get, location, castingContext.libraries);
+						if (_v20.$ === 'Just') {
+							var library = _v20.a;
+							return A3(
+								$elm$core$Dict$insert,
+								location,
+								A2($elm$core$Dict$remove, signature, library),
+								castingContext.libraries);
+						} else {
+							return castingContext.libraries;
+						}
+					}();
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								castingContext: _Utils_update(
+									castingContext,
+									{libraries: newLibrariesDict})
+							}),
+						$elm$core$Platform$Cmd$none);
+				case 'RemoveLibrary':
+					var location = msg.a;
+					var newLibrariesDict = A2($elm$core$Dict$remove, location, castingContext.libraries);
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								castingContext: _Utils_update(
+									castingContext,
+									{libraries: newLibrariesDict})
+							}),
+						$elm$core$Platform$Cmd$none);
+				case 'UpdateLibraryInputField':
+					var x = msg.a;
+					var y = msg.b;
+					var z = msg.c;
+					var newLibraryInputValue = _Utils_Tuple3(x, y, z);
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								ui: _Utils_update(
+									ui,
+									{libraryInputField: newLibraryInputValue})
+							}),
+						$elm$core$Platform$Cmd$none);
+				default:
+					var location = msg.a;
+					var _v21 = location;
+					var x = _v21.a;
+					var y = _v21.b;
+					var z = _v21.c;
+					var newLibrariesDict = function () {
+						var _v22 = _Utils_Tuple3(
+							$elm$core$String$toInt(x),
+							$elm$core$String$toInt(y),
+							$elm$core$String$toInt(z));
+						if (((_v22.a.$ === 'Just') && (_v22.b.$ === 'Just')) && (_v22.c.$ === 'Just')) {
+							var xInt = _v22.a.a;
+							var yInt = _v22.b.a;
+							var zInt = _v22.c.a;
+							return A3(
+								$elm$core$Dict$insert,
+								_Utils_Tuple3(xInt, yInt, zInt),
+								$elm$core$Dict$empty,
+								castingContext.libraries);
+						} else {
+							return castingContext.libraries;
+						}
+					}();
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								castingContext: _Utils_update(
+									castingContext,
+									{libraries: newLibrariesDict}),
+								ui: _Utils_update(
+									ui,
+									{
+										libraryInputField: _Utils_Tuple3('', '', '')
+									})
 							}),
 						$elm$core$Platform$Cmd$none);
 			}
@@ -18954,6 +19090,7 @@ var $author$project$Components$App$Overlays$ImportTextOverlay$importTextOverlay 
 var $author$project$Logic$App$Types$ConfigHexPanel = {$: 'ConfigHexPanel'};
 var $author$project$Logic$App$Types$FilePanel = {$: 'FilePanel'};
 var $author$project$Logic$App$Types$LibraryPanel = {$: 'LibraryPanel'};
+var $author$project$Logic$App$Types$MacroPanel = {$: 'MacroPanel'};
 var $author$project$Logic$App$Types$StackPanel = {$: 'StackPanel'};
 var $author$project$Logic$App$Msg$ViewPanel = F2(
 	function (a, b) {
@@ -18977,6 +19114,13 @@ var $lattyware$elm_fontawesome$FontAwesome$present = function (icon) {
 		{attributes: _List_Nil, icon: icon, id: $elm$core$Maybe$Nothing, outer: $elm$core$Maybe$Nothing, role: 'img', title: $elm$core$Maybe$Nothing, transforms: _List_Nil});
 };
 var $lattyware$elm_fontawesome$FontAwesome$Solid$book = $lattyware$elm_fontawesome$FontAwesome$present($lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$book);
+var $lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$bookmark = A4(
+	$lattyware$elm_fontawesome$FontAwesome$IconDef,
+	'fas',
+	'bookmark',
+	_Utils_Tuple2(384, 512),
+	_Utils_Tuple2('M384 48V512l-192-112L0 512V48C0 21.5 21.5 0 48 0h288C362.5 0 384 21.5 384 48z', $elm$core$Maybe$Nothing));
+var $lattyware$elm_fontawesome$FontAwesome$Solid$bookmark = $lattyware$elm_fontawesome$FontAwesome$present($lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$bookmark);
 var $lattyware$elm_fontawesome$FontAwesome$Solid$Definitions$code = A4(
 	$lattyware$elm_fontawesome$FontAwesome$IconDef,
 	'fas',
@@ -19561,6 +19705,29 @@ var $author$project$Components$App$Menu$menu = function (model) {
 					_List_fromArray(
 						[
 							$elm$html$Html$Attributes$id('macro_menu_button'),
+							$elm$html$Html$Attributes$class('menu_button'),
+							$mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$onClick(
+							function (event) {
+								return A2($author$project$Logic$App$Msg$ViewPanel, $author$project$Logic$App$Types$MacroPanel, event.keys);
+							})
+						]),
+					highlightIfActive($author$project$Logic$App$Types$MacroPanel)),
+				_List_fromArray(
+					[
+						$lattyware$elm_fontawesome$FontAwesome$Styles$css,
+						$lattyware$elm_fontawesome$FontAwesome$view(
+						A2(
+							$lattyware$elm_fontawesome$FontAwesome$styled,
+							_List_fromArray(
+								[$lattyware$elm_fontawesome$FontAwesome$Attributes$sm]),
+							$lattyware$elm_fontawesome$FontAwesome$Solid$bookmark))
+					])),
+				A2(
+				$elm$html$Html$button,
+				_Utils_ap(
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$id('library_menu_button'),
 							$elm$html$Html$Attributes$class('menu_button'),
 							$mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$onClick(
 							function (event) {
@@ -20320,12 +20487,260 @@ var $author$project$Components$App$Panels$ConfigHexPanel$configHexPanel = functi
 				$author$project$Components$App$Panels$ConfigHexPanel$entitiesSection(model)
 			]));
 };
+var $author$project$Logic$App$Msg$AddLibrary = function (a) {
+	return {$: 'AddLibrary', a: a};
+};
+var $author$project$Logic$App$Msg$UpdateLibraryInputField = F3(
+	function (a, b, c) {
+		return {$: 'UpdateLibraryInputField', a: a, b: b, c: c};
+	});
+var $elm$html$Html$Attributes$placeholder = $elm$html$Html$Attributes$stringProperty('placeholder');
+var $author$project$Logic$App$Msg$RemoveLibrary = function (a) {
+	return {$: 'RemoveLibrary', a: a};
+};
+var $author$project$Logic$App$Msg$RemoveLibraryEntry = F2(
+	function (a, b) {
+		return {$: 'RemoveLibraryEntry', a: a, b: b};
+	});
+var $author$project$Components$App$Panels$LibraryPanel$renderIotaBox = function (iota) {
+	return _List_fromArray(
+		[
+			A2(
+			$elm$html$Html$div,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('iota_box'),
+							A2($elm$html$Html$Attributes$style, 'margin-left', '0.6em'),
+							A2($elm$html$Html$Attributes$style, 'margin-right', '0.6em')
+						]),
+					A3($author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsHtmlMsg, 0, iota, 0))
+				]))
+		]);
+};
+var $elm$core$Dict$values = function (dict) {
+	return A3(
+		$elm$core$Dict$foldr,
+		F3(
+			function (key, value, valueList) {
+				return A2($elm$core$List$cons, value, valueList);
+			}),
+		_List_Nil,
+		dict);
+};
+var $lattyware$elm_fontawesome$FontAwesome$Attributes$xs = $elm$svg$Svg$Attributes$class('fa-xs');
+var $author$project$Components$App$Panels$LibraryPanel$renderLibraryDict = function (model) {
+	var renderEntry = F2(
+		function (location, entry) {
+			var signature = entry.a;
+			var iota = entry.b;
+			return A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('stored_iota_container')
+					]),
+				A2(
+					$elm$core$List$cons,
+					A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('saved_iota_title')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$button,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('trash_button'),
+										$elm$html$Html$Events$onClick(
+										A2($author$project$Logic$App$Msg$RemoveLibraryEntry, location, signature))
+									]),
+								_List_fromArray(
+									[
+										$lattyware$elm_fontawesome$FontAwesome$Styles$css,
+										$lattyware$elm_fontawesome$FontAwesome$view(
+										A2(
+											$lattyware$elm_fontawesome$FontAwesome$styled,
+											_List_fromArray(
+												[$lattyware$elm_fontawesome$FontAwesome$Attributes$xs]),
+											$lattyware$elm_fontawesome$FontAwesome$Solid$trash))
+									])),
+								A2(
+								$elm$html$Html$label,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('stored_iota_label')
+									]),
+								_List_fromArray(
+									[
+										$elm$html$Html$text('Pattern \"' + (signature + '\"'))
+									]))
+							])),
+					$author$project$Components$App$Panels$LibraryPanel$renderIotaBox(
+						A2($elm$core$Maybe$withDefault, $author$project$Logic$App$Types$Null, iota))));
+		});
+	var renderLibrary = F2(
+		function (location, library) {
+			var x = location.a;
+			var y = location.b;
+			var z = location.c;
+			return A2(
+				$elm$html$Html$div,
+				_List_Nil,
+				A2(
+					$elm$core$List$cons,
+					A2(
+						$elm$html$Html$h1,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('library_label')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$button,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('trash_button'),
+										A2($elm$html$Html$Attributes$style, 'margin-left', '0.15em'),
+										A2($elm$html$Html$Attributes$style, 'margin-right', '0.2em'),
+										$elm$html$Html$Events$onClick(
+										$author$project$Logic$App$Msg$RemoveLibrary(location))
+									]),
+								_List_fromArray(
+									[
+										$lattyware$elm_fontawesome$FontAwesome$Styles$css,
+										$lattyware$elm_fontawesome$FontAwesome$view(
+										A2(
+											$lattyware$elm_fontawesome$FontAwesome$styled,
+											_List_fromArray(
+												[$lattyware$elm_fontawesome$FontAwesome$Attributes$xs]),
+											$lattyware$elm_fontawesome$FontAwesome$Solid$trash))
+									])),
+								$elm$html$Html$text(
+								'[' + ($elm$core$String$fromInt(x) + (', ' + ($elm$core$String$fromInt(y) + (', ' + ($elm$core$String$fromInt(z) + ']'))))))
+							])),
+					A2(
+						$elm$core$List$map,
+						renderEntry(location),
+						$elm$core$Dict$toList(library))));
+		});
+	return $elm$core$Dict$values(
+		A2($elm$core$Dict$map, renderLibrary, model.castingContext.libraries));
+};
+var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
+var $author$project$Components$App$Panels$LibraryPanel$libraryPanel = function (model) {
+	var visibility = A2($elm$core$List$member, $author$project$Logic$App$Types$LibraryPanel, model.ui.openPanels);
+	var _v0 = model.ui.libraryInputField;
+	var x = _v0.a;
+	var y = _v0.b;
+	var z = _v0.c;
+	return A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$id('library_panel'),
+				$elm$html$Html$Attributes$class('panel'),
+				$author$project$Components$App$Panels$Utils$visibilityToDisplayStyle(visibility)
+			]),
+		_Utils_ap(
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$h1,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('panel_title')
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Akashic Libraries')
+						])),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('input_label_box')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$input,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$placeholder('0'),
+									$elm$html$Html$Attributes$type_('number'),
+									$elm$html$Html$Attributes$value(x),
+									$elm$html$Html$Events$onInput(
+									function (val) {
+										return A3($author$project$Logic$App$Msg$UpdateLibraryInputField, val, y, z);
+									})
+								]),
+							_List_Nil),
+							A2(
+							$elm$html$Html$input,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$placeholder('0'),
+									$elm$html$Html$Attributes$type_('number'),
+									$elm$html$Html$Attributes$value(y),
+									$elm$html$Html$Events$onInput(
+									function (val) {
+										return A3($author$project$Logic$App$Msg$UpdateLibraryInputField, x, val, z);
+									})
+								]),
+							_List_Nil),
+							A2(
+							$elm$html$Html$input,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$placeholder('0'),
+									$elm$html$Html$Attributes$type_('number'),
+									$elm$html$Html$Attributes$value(z),
+									$elm$html$Html$Events$onInput(
+									function (val) {
+										return A3($author$project$Logic$App$Msg$UpdateLibraryInputField, x, y, val);
+									})
+								]),
+							_List_Nil),
+							A2(
+							$elm$html$Html$button,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('add_button'),
+									$elm$html$Html$Events$onClick(
+									$author$project$Logic$App$Msg$AddLibrary(model.ui.libraryInputField))
+								]),
+							_List_fromArray(
+								[
+									$lattyware$elm_fontawesome$FontAwesome$Styles$css,
+									$lattyware$elm_fontawesome$FontAwesome$view(
+									A2(
+										$lattyware$elm_fontawesome$FontAwesome$styled,
+										_List_fromArray(
+											[$lattyware$elm_fontawesome$FontAwesome$Attributes$sm]),
+										$lattyware$elm_fontawesome$FontAwesome$Solid$plus))
+								]))
+						]))
+				]),
+			$author$project$Components$App$Panels$LibraryPanel$renderLibraryDict(model)));
+};
 var $author$project$Logic$App$Msg$ChangeMacroName = F2(
 	function (a, b) {
 		return {$: 'ChangeMacroName', a: a, b: b};
 	});
 var $author$project$Logic$App$Msg$InputPattern = function (a) {
 	return {$: 'InputPattern', a: a};
+};
+var $author$project$Logic$App$Msg$RemoveMacro = function (a) {
+	return {$: 'RemoveMacro', a: a};
 };
 var $elm$core$List$intersperse = F2(
 	function (sep, xs) {
@@ -20366,7 +20781,6 @@ var $author$project$Components$App$Panels$MacroPanel$renderIotaBox = function (i
 				]))
 		]);
 };
-var $lattyware$elm_fontawesome$FontAwesome$Attributes$xs = $elm$svg$Svg$Attributes$class('fa-xs');
 var $author$project$Components$App$Panels$MacroPanel$renderMacroDict = function (model) {
 	var renderEntry = function (entry) {
 		var signature = entry.a;
@@ -20389,6 +20803,26 @@ var $author$project$Components$App$Panels$MacroPanel$renderMacroDict = function 
 						]),
 					_List_fromArray(
 						[
+							A2(
+							$elm$html$Html$button,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('trash_button'),
+									A2($elm$html$Html$Attributes$style, 'margin-left', '0.15em'),
+									A2($elm$html$Html$Attributes$style, 'margin-right', '0.2em'),
+									$elm$html$Html$Events$onClick(
+									$author$project$Logic$App$Msg$RemoveMacro(signature))
+								]),
+							_List_fromArray(
+								[
+									$lattyware$elm_fontawesome$FontAwesome$Styles$css,
+									$lattyware$elm_fontawesome$FontAwesome$view(
+									A2(
+										$lattyware$elm_fontawesome$FontAwesome$styled,
+										_List_fromArray(
+											[$lattyware$elm_fontawesome$FontAwesome$Attributes$xs]),
+										$lattyware$elm_fontawesome$FontAwesome$Solid$trash))
+								])),
 							A2(
 							$elm$html$Html$input,
 							_List_fromArray(
@@ -20436,7 +20870,7 @@ var $author$project$Components$App$Panels$MacroPanel$renderMacroDict = function 
 			$elm$core$Dict$toList(model.castingContext.macros)));
 };
 var $author$project$Components$App$Panels$MacroPanel$macroPanel = function (model) {
-	var visibility = A2($elm$core$List$member, $author$project$Logic$App$Types$LibraryPanel, model.ui.openPanels);
+	var visibility = A2($elm$core$List$member, $author$project$Logic$App$Types$MacroPanel, model.ui.openPanels);
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
@@ -20776,7 +21210,6 @@ var $author$project$Components$App$PatternAutoComplete$patternInputAutoComplete 
 				$author$project$Components$App$PatternAutoComplete$patternInputSuggestionList(model))),
 		getHighlightedOption);
 };
-var $elm$html$Html$Attributes$placeholder = $elm$html$Html$Attributes$stringProperty('placeholder');
 var $elm$virtual_dom$VirtualDom$MayPreventDefault = function (a) {
 	return {$: 'MayPreventDefault', a: a};
 };
@@ -21122,7 +21555,6 @@ var $jinjor$elm_contextmenu$ContextMenu$open = F2(
 	function (transform, context) {
 		return A3($jinjor$elm_contextmenu$ContextMenu$openIf, true, transform, context);
 	});
-var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
 var $elm$svg$Svg$style = $elm$svg$Svg$trustedNode('style');
 var $elm$svg$Svg$Attributes$x1 = _VirtualDom_attribute('x1');
 var $author$project$Components$Icon$XButton$xButton = A2(
@@ -22491,7 +22923,8 @@ var $author$project$Components$App$Panels$Panels$panels = function (model) {
 				$author$project$Components$App$Panels$StackPanel$stackPanel(model),
 				$author$project$Components$App$Panels$ConfigHexPanel$configHexPanel(model),
 				$author$project$Components$App$Panels$FilePanel$saveExportPanel(model),
-				$author$project$Components$App$Panels$MacroPanel$macroPanel(model)
+				$author$project$Components$App$Panels$MacroPanel$macroPanel(model),
+				$author$project$Components$App$Panels$LibraryPanel$libraryPanel(model)
 			]));
 };
 var $author$project$Components$App$LeftBox$leftBox = function (model) {

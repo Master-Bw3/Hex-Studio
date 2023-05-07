@@ -304,7 +304,7 @@ type alias SimplifiedCastingContextEntity =
 
 type alias SimplifiedCastingContext =
     { ravenmind : Maybe SimplifiedIota
-    , libraries : Dict ( Float, Float, Float ) (Dict String (Maybe SimplifiedIota))
+    , libraries : Dict ( Int, Int, Int ) (Dict String (Maybe SimplifiedIota))
     , entities : Dict String SimplifiedCastingContextEntity
     , macros : Dict String ( String, Direction, SimplifiedIota )
     }
@@ -387,7 +387,7 @@ castingContextCodec : S.Codec e SimplifiedCastingContext
 castingContextCodec =
     S.record SimplifiedCastingContext
         |> S.field .ravenmind (S.maybe iotaCodec)
-        |> S.field .libraries (S.dict (S.triple S.float S.float S.float) (S.dict S.string (S.maybe iotaCodec)))
+        |> S.field .libraries (S.dict (S.triple S.int S.int S.int) (S.dict S.string (S.maybe iotaCodec)))
         |> S.field .entities (S.dict S.string castingContextentityCodec)
         |> S.field .macros (S.dict S.string (S.triple S.string directionCodec iotaCodec))
         |> S.finishRecord
