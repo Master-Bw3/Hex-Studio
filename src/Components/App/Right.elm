@@ -25,7 +25,8 @@ right model =
             ]
             [ button
                 [ id "sort"
-                , onClick (SetTimelineIndex 2)
+                -- hacky way to sort grid because im lazy
+                , onClick (SetGridScale  model.settings.gridScale)
                 ]
                 [ Icon.css
                 , Icon.arrowDownShortWide |> Icon.styled [ Icon.sm ] |> Icon.view
