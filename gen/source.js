@@ -23344,7 +23344,7 @@ var $author$project$Components$App$Right$right = function (model) {
 							[
 								$elm$html$Html$Attributes$id('sort'),
 								$elm$html$Html$Events$onClick(
-								$author$project$Logic$App$Msg$SetTimelineIndex(2))
+								$author$project$Logic$App$Msg$SetGridScale(model.aV.aN))
 							]),
 						_List_fromArray(
 							[
