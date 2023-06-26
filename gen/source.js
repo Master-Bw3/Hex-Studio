@@ -10188,26 +10188,37 @@ var $author$project$Logic$App$Patterns$Math$coerceAxial = F2(
 					function () {
 						if (iota.$ === 1) {
 							var vector = iota.a;
-							var x = vector.a;
-							var y = vector.b;
-							var z = vector.c;
-							var theta = $elm$core$Basics$atan(y / x);
-							var snapped_theta = ($elm$core$Basics$pi / 2) * $elm$core$Basics$round(theta / ($elm$core$Basics$pi / 2));
-							var magnitude = $elm$core$Basics$sqrt(
-								(A2($elm$core$Basics$pow, x, 2) + A2($elm$core$Basics$pow, y, 2)) + A2($elm$core$Basics$pow, z, 2));
-							var azimuth = $elm$core$Basics$acos(z / magnitude);
-							var snapped_azimuth = ($elm$core$Basics$pi / 2) * $elm$core$Basics$round(azimuth / ($elm$core$Basics$pi / 2));
-							return A2(
-								$elm$core$Array$repeat,
-								1,
+							if (A2(
+								$author$project$Logic$App$Patterns$OperatorUtils$checkEquality,
+								iota,
 								$author$project$Logic$App$Types$Vector(
-									_Utils_Tuple3(
-										$elm$core$Basics$round(
-											$elm$core$Basics$sin(snapped_azimuth) * $elm$core$Basics$cos(snapped_theta)),
-										$elm$core$Basics$round(
-											$elm$core$Basics$sin(snapped_azimuth) * $elm$core$Basics$sin(snapped_theta)),
-										$elm$core$Basics$round(
-											$elm$core$Basics$cos(snapped_azimuth)))));
+									_Utils_Tuple3(0.0, 0.0, 0.0)))) {
+								return A2(
+									$elm$core$Array$repeat,
+									1,
+									$author$project$Logic$App$Types$Vector(vector));
+							} else {
+								var x = vector.a;
+								var y = vector.b;
+								var z = vector.c;
+								var theta = A2($elm$core$Basics$atan2, y, x);
+								var snapped_theta = ($elm$core$Basics$pi / 2) * $elm$core$Basics$round(theta / ($elm$core$Basics$pi / 2));
+								var magnitude = $elm$core$Basics$sqrt(
+									(A2($elm$core$Basics$pow, x, 2) + A2($elm$core$Basics$pow, y, 2)) + A2($elm$core$Basics$pow, z, 2));
+								var azimuth = $elm$core$Basics$acos(z / magnitude);
+								var snapped_azimuth = ($elm$core$Basics$pi / 2) * $elm$core$Basics$round(azimuth / ($elm$core$Basics$pi / 2));
+								return A2(
+									$elm$core$Array$repeat,
+									1,
+									$author$project$Logic$App$Types$Vector(
+										_Utils_Tuple3(
+											$elm$core$Basics$round(
+												$elm$core$Basics$sin(snapped_azimuth) * $elm$core$Basics$cos(snapped_theta)),
+											$elm$core$Basics$round(
+												$elm$core$Basics$sin(snapped_azimuth) * $elm$core$Basics$sin(snapped_theta)),
+											$elm$core$Basics$round(
+												$elm$core$Basics$cos(snapped_azimuth)))));
+							}
 						} else {
 							return A2(
 								$elm$core$Array$repeat,

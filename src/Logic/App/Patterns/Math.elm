@@ -4,6 +4,7 @@ import Area
 import Array exposing (Array)
 import Bitwise
 import Length
+import LineSegment2d exposing (vector)
 import Logic.App.Patterns.OperatorUtils exposing (action1Input, action2Inputs, action3Inputs, checkEquality, getAny, getBoolean, getInteger, getIntegerOrList, getIotaList, getNumber, getNumberOrVector, getVector)
 import Logic.App.Types exposing (ActionResult, CastingContext, Iota(..), Mishap(..))
 import Quantity exposing (Quantity(..))
@@ -336,30 +337,35 @@ coerceAxial stack ctx =
         action iota _ =
             ( case iota of
                 Vector vector ->
-                    case vector of
-                        ( x, y, z ) ->
-                            let
-                                magnitude =
-                                    sqrt (x ^ 2 + y ^ 2 + z ^ 2)
+                    if checkEquality iota (Vector ( 0.0, 0.0, 0.0 )) then
+                        Vector vector
+                        |> Array.repeat 1
 
-                                azimuth =
-                                    acos (z / magnitude)
+                    else
+                        case vector of
+                            ( x, y, z ) ->
+                                let
+                                    magnitude =
+                                        sqrt (x ^ 2 + y ^ 2 + z ^ 2)
 
-                                theta =
-                                    atan (y / x)
+                                    azimuth =
+                                        acos (z / magnitude)
 
-                                snapped_azimuth =
-                                    (pi / 2) * (toFloat <| round (azimuth / (pi / 2)))
+                                    theta =
+                                        atan2 y x
 
-                                snapped_theta =
-                                    (pi / 2) * (toFloat <| round (theta / (pi / 2)))
-                            in
-                            ( toFloat <| round <| sin snapped_azimuth * cos snapped_theta
-                            , toFloat <| round <| sin snapped_azimuth * sin snapped_theta
-                            , toFloat <| round <| cos snapped_azimuth
-                            )
-                                |> Vector
-                                |> Array.repeat 1
+                                    snapped_azimuth =
+                                        (pi / 2) * (toFloat <| round (azimuth / (pi / 2)))
+
+                                    snapped_theta =
+                                        (pi / 2) * (toFloat <| round (theta / (pi / 2)))
+                                in
+                                ( toFloat <| round <| sin snapped_azimuth * cos snapped_theta
+                                , toFloat <| round <| sin snapped_azimuth * sin snapped_theta
+                                , toFloat <| round <| cos snapped_azimuth
+                                )
+                                    |> Vector
+                                    |> Array.repeat 1
 
                 _ ->
                     Garbage CatastrophicFailure
