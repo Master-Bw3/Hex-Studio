@@ -40,18 +40,15 @@ body {
 }
 
 ::-webkit-scrollbar {
-    width: 1px;
+    width: 8px;
     height: 1px;
 }
 ::-webkit-scrollbar-track {
     background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-    background: var(--accent1);
+    background: #6a6b6c;
     border-radius: 10px;
-}
-::-webkit-scrollbar-thumb:hover {
-    background: var(--primary_medium);
 }
 
 body {
