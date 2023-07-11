@@ -579,7 +579,7 @@ metapatternRegistry : List Pattern
 metapatternRegistry =
     [ { signature = "qqqq", internalName = "clearPatterns", action = noAction, metaAction = ClearPatterns, displayName = "Clear", outputOptions = [], selectedOutput = Nothing }
     , { signature = "qqqqqa", internalName = "resetApp", action = noAction, metaAction = Reset, displayName = "Reset", outputOptions = [], selectedOutput = Nothing }
-    , { signature = "qa", internalName = "backspace", action = noAction, metaAction = Backspace, displayName = "Backspace", outputOptions = [], selectedOutput = Nothing }
+    , { signature = "wqa", internalName = "backspace", action = noAction, metaAction = Backspace, displayName = "Backspace", outputOptions = [], selectedOutput = Nothing }
     , { signature = "qwqqqwq", internalName = "wrap", action = noAction, metaAction = Wrap, displayName = "Wrap", outputOptions = [], selectedOutput = Nothing }
     ]
         |> List.map

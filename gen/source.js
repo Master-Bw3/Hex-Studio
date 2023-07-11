@@ -11887,7 +11887,7 @@ var $author$project$Logic$App$Patterns$PatternRegistry$metapatternRegistry = A2(
 		[
 			{a: $author$project$Logic$App$Patterns$PatternRegistry$noAction, dY: 'Clear', em: 'clearPatterns', w: 1, bE: _List_Nil, _: $elm$core$Maybe$Nothing, fn: 'qqqq'},
 			{a: $author$project$Logic$App$Patterns$PatternRegistry$noAction, dY: 'Reset', em: 'resetApp', w: 2, bE: _List_Nil, _: $elm$core$Maybe$Nothing, fn: 'qqqqqa'},
-			{a: $author$project$Logic$App$Patterns$PatternRegistry$noAction, dY: 'Backspace', em: 'backspace', w: 3, bE: _List_Nil, _: $elm$core$Maybe$Nothing, fn: 'qa'},
+			{a: $author$project$Logic$App$Patterns$PatternRegistry$noAction, dY: 'Backspace', em: 'backspace', w: 3, bE: _List_Nil, _: $elm$core$Maybe$Nothing, fn: 'wqa'},
 			{a: $author$project$Logic$App$Patterns$PatternRegistry$noAction, dY: 'Wrap', em: 'wrap', w: 4, bE: _List_Nil, _: $elm$core$Maybe$Nothing, fn: 'qwqqqwq'}
 		]));
 var $author$project$Logic$App$Patterns$OperatorUtils$getPositiveInteger = function (iota) {
