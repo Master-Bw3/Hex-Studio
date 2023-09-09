@@ -13054,6 +13054,164 @@ var $author$project$Logic$App$Patterns$Stack$swap = F2(
 			});
 		return A5($author$project$Logic$App$Patterns$OperatorUtils$action2Inputs, stack, ctx, $author$project$Logic$App$Patterns$OperatorUtils$getAny, $author$project$Logic$App$Patterns$OperatorUtils$getAny, action);
 	});
+var $elm$core$Maybe$map2 = F3(
+	function (func, ma, mb) {
+		if (ma.$ === 1) {
+			return $elm$core$Maybe$Nothing;
+		} else {
+			var a = ma.a;
+			if (mb.$ === 1) {
+				return $elm$core$Maybe$Nothing;
+			} else {
+				var b = mb.a;
+				return $elm$core$Maybe$Just(
+					A2(func, a, b));
+			}
+		}
+	});
+var $author$project$Logic$App$Patterns$Stack$swizzle = F2(
+	function (stack, ctx) {
+		var newStack = A3(
+			$elm$core$Array$slice,
+			1,
+			$elm$core$Array$length(stack),
+			stack);
+		var maybeIota = A2($elm$core$Array$get, 0, stack);
+		if (maybeIota.$ === 1) {
+			return {
+				a$: ctx,
+				fp: A2(
+					$elm$core$Array$append,
+					$elm$core$Array$fromList(
+						_List_fromArray(
+							[
+								$author$project$Logic$App$Types$Garbage(1)
+							])),
+					newStack),
+				bg: false
+			};
+		} else {
+			var iota = maybeIota.a;
+			var _v1 = $author$project$Logic$App$Patterns$OperatorUtils$getInteger(iota);
+			if (_v1.$ === 1) {
+				return {
+					a$: ctx,
+					fp: A2(
+						$author$project$Logic$App$Utils$Utils$unshift,
+						$author$project$Logic$App$Types$Garbage(2),
+						newStack),
+					bg: false
+				};
+			} else {
+				if (!iota.$) {
+					var number = iota.a;
+					var permutationSizeRec = F3(
+						function (accum, accumFact, input) {
+							permutationSizeRec:
+							while (true) {
+								if (_Utils_cmp(input, accumFact) < 0) {
+									return accum;
+								} else {
+									var next = 1 + accum;
+									var $temp$accum = next,
+										$temp$accumFact = next * accumFact,
+										$temp$input = input;
+									accum = $temp$accum;
+									accumFact = $temp$accumFact;
+									input = $temp$input;
+									continue permutationSizeRec;
+								}
+							}
+						});
+					var permutationSize = A2(permutationSizeRec, 1, 1);
+					var idxToCode = F2(
+						function (i, permSize) {
+							if (permSize <= 1) {
+								return _List_fromArray(
+									[0]);
+							} else {
+								var fact = function (n) {
+									if (!n) {
+										return 1;
+									} else {
+										var x = n;
+										return x * fact(x - 1);
+									}
+								};
+								var multiplier = fact(permSize - 1);
+								var digit = (i / multiplier) | 0;
+								return A2(
+									$elm$core$List$cons,
+									digit,
+									A2(idxToCode, i % multiplier, permSize - 1));
+							}
+						});
+					var idx = $elm$core$Basics$round(number);
+					var ps = permutationSize(idx);
+					var codeToPermutationReverse = F2(
+						function (c, remaining) {
+							if (!c.b) {
+								return $elm$core$Maybe$Just(_List_Nil);
+							} else {
+								var h = c.a;
+								var t = c.b;
+								var next = A2($elm_community$array_extra$Array$Extra$removeAt, h, remaining);
+								var elem = A2($elm$core$Array$get, h, remaining);
+								return A3(
+									$elm$core$Maybe$map2,
+									$elm$core$List$cons,
+									elem,
+									A2(codeToPermutationReverse, t, next));
+							}
+						});
+					var code = A2(idxToCode, idx, ps);
+					var oldSlice = $elm_community$array_extra$Array$Extra$reverse(
+						A3(
+							$elm$core$Array$slice,
+							0,
+							$elm$core$List$length(code),
+							newStack));
+					var maybeNewSlice = A2(
+						$elm$core$Maybe$map,
+						$elm$core$List$reverse,
+						A2(codeToPermutationReverse, code, oldSlice));
+					if (maybeNewSlice.$ === 1) {
+						return {
+							a$: ctx,
+							fp: A2(
+								$author$project$Logic$App$Utils$Utils$unshift,
+								$author$project$Logic$App$Types$Garbage(1),
+								stack),
+							bg: false
+						};
+					} else {
+						var newSlice = maybeNewSlice.a;
+						return {
+							a$: ctx,
+							fp: A2(
+								$elm$core$Array$append,
+								$elm$core$Array$fromList(newSlice),
+								A3(
+									$elm$core$Array$slice,
+									$elm$core$List$length(code),
+									$elm$core$Array$length(newStack),
+									newStack)),
+							bg: true
+						};
+					}
+				} else {
+					return {
+						a$: ctx,
+						fp: A2(
+							$author$project$Logic$App$Utils$Utils$unshift,
+							$author$project$Logic$App$Types$Garbage(12),
+							stack),
+						bg: false
+					};
+				}
+			}
+		}
+	});
 var $elm$core$Basics$tan = _Basics_tan;
 var $author$project$Logic$App$Patterns$Math$tangent = F2(
 	function (stack, ctx) {
@@ -13862,7 +14020,7 @@ function $author$project$Logic$App$Patterns$PatternRegistry$cyclic$patternRegist
 						{a: $author$project$Logic$App$Patterns$Stack$duplicateN, dY: 'Gemini Gambit', em: 'duplicate_n', bE: _List_Nil, _: $elm$core$Maybe$Nothing, fn: 'aadaadaa', dr: 2},
 						{a: $author$project$Logic$App$Patterns$Stack$fisherman, dY: 'Fisherman\'s Gambit', em: 'fisherman', bE: _List_Nil, _: $elm$core$Maybe$Nothing, fn: 'ddad', dr: 2},
 						{a: $author$project$Logic$App$Patterns$Stack$fishermanCopy, dY: 'Fisherman\'s Gambit II', em: 'fisherman/copy', bE: _List_Nil, _: $elm$core$Maybe$Nothing, fn: 'aada', dr: 2},
-						{a: $author$project$Logic$App$Patterns$PatternRegistry$noAction, dY: '', em: 'swizzle', bE: _List_Nil, _: $elm$core$Maybe$Nothing, fn: 'qaawdde', dr: 2},
+						{a: $author$project$Logic$App$Patterns$Stack$swizzle, dY: 'Swindler\'s Gambit', em: 'swizzle', bE: _List_Nil, _: $elm$core$Maybe$Nothing, fn: 'qaawdde', dr: 2},
 						{a: $author$project$Logic$App$Patterns$Math$add, dY: 'Additive Distillation', em: 'add', bE: _List_Nil, _: $elm$core$Maybe$Nothing, fn: 'waaw', dr: 2},
 						{a: $author$project$Logic$App$Patterns$Math$subtract, dY: 'Subtractive Distillation', em: 'sub', bE: _List_Nil, _: $elm$core$Maybe$Nothing, fn: 'wddw', dr: 2},
 						{a: $author$project$Logic$App$Patterns$Math$mulDot, dY: 'Multiplicative Distillation', em: 'mul_dot', bE: _List_Nil, _: $elm$core$Maybe$Nothing, fn: 'waqaw', dr: 2},
