@@ -1,11 +1,13 @@
 module Logic.App.Patterns.Stack exposing (..)
 
 import Array exposing (Array)
+import Array.Extra as Array
 import FontAwesome.Attributes exposing (stack)
 import Html.Attributes exposing (action)
 import Logic.App.Patterns.OperatorUtils exposing (action1Input, action2Inputs, action3Inputs, actionNoInput, getAny, getInteger)
 import Logic.App.Types exposing (ActionResult, CastingContext, Iota(..), Mishap(..))
 import Logic.App.Utils.Utils exposing (removeFromArray, unshift)
+import Maybe.Extra as Maybe
 
 
 swap : Array Iota -> CastingContext -> ActionResult
@@ -206,3 +208,75 @@ fishermanCopy stack ctx =
 
                         _ ->
                             { stack = unshift (Garbage CatastrophicFailure) stack, ctx = ctx, success = False }
+
+swizzle : Array Iota -> CastingContext -> ActionResult
+swizzle stack ctx =
+    let
+        maybeIota =
+            Array.get 0 stack
+
+        newStack =
+            Array.slice 1 (Array.length stack) stack
+    in
+        case maybeIota of
+            Nothing ->
+                { stack = Array.append (Array.fromList [ Garbage NotEnoughIotas ]) newStack, ctx = ctx, success = False }
+
+            Just iota ->
+                case getInteger <| iota of
+                    Nothing ->
+                        { stack = unshift (Garbage IncorrectIota) newStack, ctx = ctx, success = False }
+
+                    _ ->
+                        case iota of
+                            Number number ->
+                                -- HexCasting does something weird here I don't know how to replicate
+                                -- [0, 1, 1.5, Swindle] will error on the 0 with an error message about 1.5
+                                -- Very odd.
+                                let
+                                    permutationSizeRec accum accumFact input =
+                                        if input < accumFact then accum
+                                        else let next = 1 + accum in permutationSizeRec next (next * accumFact) input
+
+                                    permutationSize = permutationSizeRec 1 1
+
+                                    idx = round number
+                                    ps = permutationSize idx
+
+                                    idxToCode : Int -> Int -> List Int
+                                    idxToCode i permSize =
+                                        if permSize <= 1 then [0]
+                                        else
+                                            let
+                                                fact n =
+                                                    case n of
+                                                        0 -> 1
+                                                        x -> x * fact (x - 1)
+
+                                                multiplier = fact (permSize - 1)
+                                                digit = i // multiplier
+                                            in digit :: (idxToCode (remainderBy multiplier i) (permSize - 1))
+
+                                    code = idxToCode idx ps
+                                    oldSlice = Array.reverse (Array.slice 0 (List.length code) newStack)
+
+                                    codeToPermutationReverse c remaining =
+                                        case c of
+                                            [] -> Just []
+                                            h :: t ->
+                                                let
+                                                    elem = Array.get h remaining
+                                                    next = Array.removeAt h remaining
+                                                in Maybe.map2 (::) elem (codeToPermutationReverse t next)
+
+                                    maybeNewSlice = Maybe.map List.reverse (codeToPermutationReverse code oldSlice)
+                                in case maybeNewSlice of
+                                    Nothing ->
+                                        -- needs to be more garbage iotas here to represent reality
+                                        { stack = unshift (Garbage NotEnoughIotas) stack, ctx = ctx, success = False }
+
+                                    Just newSlice ->
+                                        { stack = Array.append (Array.fromList newSlice) (Array.slice (List.length code) (Array.length newStack) newStack), ctx = ctx, success = True }
+
+                            _ ->
+                                { stack = unshift (Garbage CatastrophicFailure) stack, ctx = ctx, success = False }

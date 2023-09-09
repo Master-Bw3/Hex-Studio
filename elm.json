@@ -23,6 +23,7 @@
             "elm-community/array-extra": "2.6.0",
             "elm-community/json-extra": "4.3.0",
             "elm-community/list-extra": "8.7.0",
+            "elm-community/maybe-extra": "5.3.0",
             "ianmackenzie/elm-geometry": "3.9.1",
             "ianmackenzie/elm-units": "2.9.0",
             "jinjor/elm-contextmenu": "2.0.0",

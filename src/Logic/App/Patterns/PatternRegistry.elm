@@ -423,7 +423,7 @@ patternRegistry =
     , { signature = "aadaadaa", internalName = "duplicate_n", action = duplicateN, displayName = "Gemini Gambit", outputOptions = [], selectedOutput = Nothing, startDirection = East }
     , { signature = "ddad", internalName = "fisherman", action = fisherman, displayName = "Fisherman's Gambit", outputOptions = [], selectedOutput = Nothing, startDirection = East }
     , { signature = "aada", internalName = "fisherman/copy", action = fishermanCopy, displayName = "Fisherman's Gambit II", outputOptions = [], selectedOutput = Nothing, startDirection = East }
-    , { signature = "qaawdde", internalName = "swizzle", action = noAction, displayName = "", outputOptions = [], selectedOutput = Nothing, startDirection = East } -- do this
+    , { signature = "qaawdde", internalName = "swizzle", action = swizzle, displayName = "Swindler's Gambit", outputOptions = [], selectedOutput = Nothing, startDirection = East } -- do this
     , { signature = "waaw", internalName = "add", action = add, displayName = "Additive Distillation", outputOptions = [], selectedOutput = Nothing, startDirection = East }
     , { signature = "wddw", internalName = "sub", action = subtract, displayName = "Subtractive Distillation", outputOptions = [], selectedOutput = Nothing, startDirection = East }
     , { signature = "waqaw", internalName = "mul_dot", action = mulDot, displayName = "Multiplicative Distillation", outputOptions = [], selectedOutput = Nothing, startDirection = East }
