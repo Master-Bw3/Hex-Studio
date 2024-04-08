@@ -28,8 +28,7 @@
             "ianmackenzie/elm-units": "2.9.0",
             "jinjor/elm-contextmenu": "2.0.0",
             "lattyware/elm-fontawesome": "6.0.0",
-            "mpizenberg/elm-pointer-events": "4.0.2",
-            "ryannhg/elm-spa": "6.0.0"
+            "mpizenberg/elm-pointer-events": "4.0.2"
         },
         "indirect": {
             "SwiftsNamesake/proper-keyboard": "4.0.0",
