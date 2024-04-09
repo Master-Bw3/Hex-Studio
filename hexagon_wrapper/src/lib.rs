@@ -55,7 +55,7 @@ fn decode_json(json: String) -> Vec<(String, Option<ActionValue>)> {
 
     instructions.iter().map(
         |value| {
-            (value["signature"].as_str().unwrap().to_string(), 
+            (value["identifier"].as_str().unwrap().to_string(), 
             value.as_object()
                 .and_then(|x| x.contains_key("value")
                 .then(|| decode_value(value))))

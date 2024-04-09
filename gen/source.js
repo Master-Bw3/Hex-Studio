@@ -9123,6 +9123,10 @@ var $author$project$Logic$App$Grid$drawPatterns = F2(
 			patternArray: drawPatternsResult.patternArray
 		};
 	});
+var $author$project$Logic$App$Types$Number = function (a) {
+	return {$: 'Number', a: a};
+};
+var $author$project$Logic$App$Types$NumberType = {$: 'NumberType'};
 var $elm$regex$Regex$Match = F4(
 	function (match, index, number, submatches) {
 		return {index: index, match: match, number: number, submatches: submatches};
@@ -9153,10 +9157,6 @@ var $author$project$Logic$App$Types$IotaListType = function (a) {
 	return {$: 'IotaListType', a: a};
 };
 var $author$project$Logic$App$Types$MathematicalError = {$: 'MathematicalError'};
-var $author$project$Logic$App$Types$Number = function (a) {
-	return {$: 'Number', a: a};
-};
-var $author$project$Logic$App$Types$NumberType = {$: 'NumberType'};
 var $author$project$Logic$App$Types$Vector = function (a) {
 	return {$: 'Vector', a: a};
 };
@@ -14664,8 +14664,6 @@ var $author$project$Logic$App$Patterns$PatternRegistry$parseBookkeeperCode = fun
 		};
 	}
 };
-var $elm$json$Json$Encode$float = _Json_wrap;
-var $author$project$Ports$HexNumGen$sendNumber = _Platform_outgoingPort('sendNumber', $elm$json$Json$Encode$float);
 var $elm$core$String$toFloat = _String_toFloat;
 var $elm$core$String$trim = _String_trim;
 var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName = F2(
@@ -14685,8 +14683,22 @@ var $author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName = F2(
 			if (_v1.$ === 'Just') {
 				var number = _v1.a;
 				return _Utils_Tuple2(
-					$author$project$Logic$App$Patterns$PatternRegistry$unknownPattern,
-					$author$project$Ports$HexNumGen$sendNumber(number));
+					{
+						action: $author$project$Logic$App$Patterns$PatternRegistry$noAction,
+						active: true,
+						color: $author$project$Settings$Theme$accent1,
+						displayName: 'Numerical Reflection: ' + name,
+						internalName: 'number',
+						metaAction: $author$project$Logic$App$Types$None,
+						outputOptions: _List_Nil,
+						selectedOutput: $elm$core$Maybe$Just(
+							_Utils_Tuple2(
+								$author$project$Logic$App$Types$NumberType,
+								$author$project$Logic$App$Types$Number(number))),
+						signature: '',
+						startDirection: $author$project$Logic$App$Types$Northeast
+					},
+					$elm$core$Platform$Cmd$none);
 			} else {
 				var regexMatch = $elm$core$String$trim(
 					A2(
@@ -15981,6 +15993,7 @@ var $MartinSStewart$elm_serialize$Serialize$bool = A4(
 	$elm$json$Json$Encode$bool,
 	A2($elm$json$Json$Decode$map, $elm$core$Result$Ok, $elm$json$Json$Decode$bool));
 var $elm$json$Json$Decode$float = _Json_decodeFloat;
+var $elm$json$Json$Encode$float = _Json_wrap;
 var $elm$bytes$Bytes$Decode$float64 = function (endianness) {
 	return $elm$bytes$Bytes$Decode$Decoder(
 		_Bytes_read_f64(
@@ -16759,8 +16772,8 @@ var $author$project$Logic$App$EncodeInstructions$encodePattern = function (patte
 			_List_fromArray(
 				[
 					_Utils_Tuple2(
-					'signature',
-					$elm$json$Json$Encode$string(pattern.signature)),
+					'identifier',
+					$elm$json$Json$Encode$string(pattern.internalName)),
 					_Utils_Tuple2(
 					'value',
 					$author$project$Logic$App$EncodeInstructions$encodeIota(iota))
@@ -16770,8 +16783,8 @@ var $author$project$Logic$App$EncodeInstructions$encodePattern = function (patte
 			_List_fromArray(
 				[
 					_Utils_Tuple2(
-					'signature',
-					$elm$json$Json$Encode$string(pattern.signature))
+					'identifier',
+					$elm$json$Json$Encode$string(pattern.internalName))
 				]));
 	}
 };
@@ -17188,6 +17201,7 @@ var $author$project$Logic$App$DecodeEvaluationResult$resultDecoder = A2(
 		'stack',
 		$elm$json$Json$Decode$array($author$project$Logic$App$DecodeEvaluationResult$iotaDecoder)));
 var $author$project$Ports$SendInstructions$sendInstructions = _Platform_outgoingPort('sendInstructions', $elm$json$Json$Encode$string);
+var $author$project$Ports$HexNumGen$sendNumber = _Platform_outgoingPort('sendNumber', $elm$json$Json$Encode$float);
 var $author$project$Logic$App$PatternList$PatternArray$setDrawingColor = F2(
 	function (drawing, color) {
 		return A2(
@@ -17931,9 +17945,9 @@ var $author$project$Main$update = F2(
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 					}
 				case 'MouseMove':
-					var _v1 = msg.a;
-					var x = _v1.a;
-					var y = _v1.b;
+					var _v2 = msg.a;
+					var x = _v2.a;
+					var y = _v2.b;
 					return drawing.drawingMode ? _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -17957,9 +17971,9 @@ var $author$project$Main$update = F2(
 							}),
 						$elm$core$Platform$Cmd$none);
 				case 'GridDown':
-					var _v2 = msg.a;
-					var x = _v2.a;
-					var y = _v2.b;
+					var _v3 = msg.a;
+					var x = _v3.a;
+					var y = _v3.b;
 					var mousePos = _Utils_Tuple2(x, y);
 					var closestPoint = A3($author$project$Components$App$Grid$getClosestPoint, mousePos, grid.points, model);
 					return (!closestPoint.used) ? _Utils_Tuple2(
@@ -17990,9 +18004,9 @@ var $author$project$Main$update = F2(
 										drawing,
 										{activePath: _List_Nil, drawingMode: false})
 								});
-							var _v3 = $author$project$Logic$App$Utils$GetAngleSignature$getAngleSignatureAndStartDir(drawing.activePath);
-							var signature = _v3.a;
-							var startDir = _v3.b;
+							var _v4 = $author$project$Logic$App$Utils$GetAngleSignature$getAngleSignatureAndStartDir(drawing.activePath);
+							var signature = _v4.a;
+							var startDir = _v4.b;
 							var directionlessPattern = A2(
 								$author$project$Logic$App$Patterns$PatternRegistry$getPatternFromSignature,
 								$elm$core$Maybe$Just(model.castingContext.macros),
@@ -18179,7 +18193,7 @@ var $author$project$Main$update = F2(
 										A2(
 											$elm$core$Array$indexedMap,
 											F2(
-												function (index, _v4) {
+												function (index, _v5) {
 													return '[data-index=\"' + ($elm$core$String$fromInt(index) + '\"]');
 												}),
 											model.patternArray)))
@@ -18197,11 +18211,6 @@ var $author$project$Main$update = F2(
 						$elm$core$Platform$Cmd$none);
 				case 'InputPattern':
 					var name = msg.a;
-					var newPattern = A2(
-						$author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName,
-						$elm$core$Maybe$Just(model.castingContext.macros),
-						name).a;
-					var newPattternArray = A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, model.insertionPoint);
 					var newImportQueue = (name !== '') ? A2(
 						$elm$core$List$cons,
 						A2(
@@ -18209,25 +18218,12 @@ var $author$project$Main$update = F2(
 							$elm$core$Maybe$Just(model.castingContext.macros),
 							name),
 						model.importQueue) : model.importQueue;
-					return _Utils_Tuple2(
+					return A2(
+						$author$project$Main$updatePatternArrayFromQueue,
+						model.insertionPoint,
 						_Utils_update(
 							model,
-							{patternArray: newPattternArray}),
-						$author$project$Ports$SendInstructions$sendInstructions(
-							A2(
-								$elm$core$Debug$log,
-								'sent',
-								A2(
-									$elm$json$Json$Encode$encode,
-									0,
-									$author$project$Logic$App$EncodeInstructions$encodeInstructions(
-										$elm_community$array_extra$Array$Extra$reverse(
-											A2(
-												$elm$core$Array$map,
-												function (x) {
-													return x.a;
-												},
-												newPattternArray)))))));
+							{importQueue: newImportQueue}));
 				case 'SendNumberLiteralToGenerate':
 					var number = msg.a;
 					return _Utils_Tuple2(
@@ -18378,8 +18374,8 @@ var $author$project$Main$update = F2(
 								$elm$core$List$sortWith,
 								F2(
 									function (a, b) {
-										var _v7 = A2($elm$core$Basics$compare, a.b, b.b);
-										switch (_v7.$) {
+										var _v8 = A2($elm$core$Basics$compare, a.b, b.b);
+										switch (_v8.$) {
 											case 'LT':
 												return $elm$core$Basics$LT;
 											case 'EQ':
@@ -18423,9 +18419,9 @@ var $author$project$Main$update = F2(
 					var originIndex = model.ui.dragging.b;
 					var index = (_Utils_cmp(model.ui.mouseOverElementIndex, originIndex) > 0) ? (model.ui.mouseOverElementIndex - 1) : model.ui.mouseOverElementIndex;
 					var newUncoloredPatternArray = function () {
-						var _v9 = A2($elm$core$Array$get, originIndex, patternArray);
-						if (_v9.$ === 'Just') {
-							var element = _v9.a;
+						var _v10 = A2($elm$core$Array$get, originIndex, patternArray);
+						if (_v10.$ === 'Just') {
+							var element = _v10.a;
 							return A3(
 								$elm_community$array_extra$Array$Extra$insertAt,
 								index,
@@ -18837,9 +18833,9 @@ var $author$project$Main$update = F2(
 						$elm$core$Platform$Cmd$none);
 				case 'ContextMenuMsg':
 					var message = msg.a;
-					var _v16 = A2($jinjor$elm_contextmenu$ContextMenu$update, message, model.contextMenu);
-					var contextMenu = _v16.a;
-					var cmd = _v16.b;
+					var _v17 = A2($jinjor$elm_contextmenu$ContextMenu$update, message, model.contextMenu);
+					var contextMenu = _v17.a;
+					var cmd = _v17.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -18854,10 +18850,10 @@ var $author$project$Main$update = F2(
 							return _Utils_Tuple2(pat, $elm$core$Platform$Cmd$none);
 						},
 						function () {
-							var _v17 = A2($elm$core$Dict$get, sig, model.castingContext.macros);
-							if ((_v17.$ === 'Just') && (_v17.a.c.$ === 'IotaList')) {
-								var _v18 = _v17.a;
-								var patternList = _v18.c.a;
+							var _v18 = A2($elm$core$Dict$get, sig, model.castingContext.macros);
+							if ((_v18.$ === 'Just') && (_v18.a.c.$ === 'IotaList')) {
+								var _v19 = _v18.a;
+								var patternList = _v19.c.a;
 								return $elm$core$Array$toList(
 									A2(
 										$elm$core$Array$map,
@@ -18950,9 +18946,9 @@ var $author$project$Main$update = F2(
 					var location = msg.a;
 					var signature = msg.b;
 					var newLibrariesDict = function () {
-						var _v20 = A2($elm$core$Dict$get, location, castingContext.libraries);
-						if (_v20.$ === 'Just') {
-							var library = _v20.a;
+						var _v21 = A2($elm$core$Dict$get, location, castingContext.libraries);
+						if (_v21.$ === 'Just') {
+							var library = _v21.a;
 							return A3(
 								$elm$core$Dict$insert,
 								location,
@@ -18999,19 +18995,19 @@ var $author$project$Main$update = F2(
 						$elm$core$Platform$Cmd$none);
 				case 'AddLibrary':
 					var location = msg.a;
-					var _v21 = location;
-					var x = _v21.a;
-					var y = _v21.b;
-					var z = _v21.c;
+					var _v22 = location;
+					var x = _v22.a;
+					var y = _v22.b;
+					var z = _v22.c;
 					var newLibrariesDict = function () {
-						var _v22 = _Utils_Tuple3(
+						var _v23 = _Utils_Tuple3(
 							$elm$core$String$toInt(x),
 							$elm$core$String$toInt(y),
 							$elm$core$String$toInt(z));
-						if (((_v22.a.$ === 'Just') && (_v22.b.$ === 'Just')) && (_v22.c.$ === 'Just')) {
-							var xInt = _v22.a.a;
-							var yInt = _v22.b.a;
-							var zInt = _v22.c.a;
+						if (((_v23.a.$ === 'Just') && (_v23.b.$ === 'Just')) && (_v23.c.$ === 'Just')) {
+							var xInt = _v23.a.a;
+							var yInt = _v23.b.a;
+							var zInt = _v23.c.a;
 							return A3(
 								$elm$core$Dict$insert,
 								_Utils_Tuple3(xInt, yInt, zInt),
@@ -19046,7 +19042,7 @@ var $author$project$Main$update = F2(
 						$elm$core$Debug$log,
 						'response',
 						A2($elm$json$Json$Decode$decodeString, $author$project$Logic$App$DecodeEvaluationResult$resultDecoder, response));
-					var _v23 = A2($elm$core$Debug$log, 'response', response);
+					var _v24 = A2($elm$core$Debug$log, 'response', response);
 					if (decoded.$ === 'Err') {
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 					} else {
@@ -19070,27 +19066,15 @@ var $author$project$Main$updatePatternArrayFromQueue = F2(
 				$elm$core$List$head(model.importQueue));
 			var newPattern = getPattern.a;
 			var newUncoloredPatternArray = A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, insertionPoint);
-			var command = getPattern.b;
-			var castingContext = model.castingContext;
-			var stackResult = A3($author$project$Logic$App$Stack$EvalStack$applyPatternsToStack, $elm$core$Array$empty, castingContext, _List_Nil);
-			var newPatternArray = A3(
-				$elm_community$array_extra$Array$Extra$map2,
-				F2(
-					function (patternTuple, result) {
-						return $author$project$Logic$App$PatternList$PatternArray$updateDrawingColors(
-							_Utils_Tuple2(
-								A2($author$project$Logic$App$PatternList$PatternArray$applyColorToPatternFromResult, patternTuple.a, result),
-								patternTuple.b));
-					}),
-				newUncoloredPatternArray,
-				stackResult.resultArray);
 			var patterns = A2(
 				$elm$core$Array$map,
 				function (x) {
 					return x.a;
 				},
-				newPatternArray);
+				newUncoloredPatternArray);
 			var drawPatternsResult = A2($author$project$Logic$App$Grid$drawPatterns, patterns, model.grid);
+			var command = getPattern.b;
+			var castingContext = model.castingContext;
 			return _Utils_eq(command, $elm$core$Platform$Cmd$none) ? A2(
 				$author$project$Main$updatePatternArrayFromQueue,
 				insertionPoint,
@@ -19099,7 +19083,6 @@ var $author$project$Main$updatePatternArrayFromQueue = F2(
 					_Utils_update(
 						model,
 						{
-							castingContext: stackResult.ctx,
 							grid: drawPatternsResult.grid,
 							importQueue: A2(
 								$elm$core$Maybe$withDefault,
@@ -19109,11 +19092,6 @@ var $author$project$Main$updatePatternArrayFromQueue = F2(
 								model.insertionPoint,
 								$elm$core$Array$length(model.patternArray)) > 0) ? 0 : model.insertionPoint,
 							patternArray: drawPatternsResult.patternArray,
-							stack: stackResult.stack,
-							timeline: A2(
-								$author$project$Logic$App$Utils$Utils$unshift,
-								{patternIndex: -1, stack: $elm$core$Array$empty},
-								stackResult.timeline),
 							ui: _Utils_update(
 								ui,
 								{patternInputField: ''})
@@ -19129,11 +19107,35 @@ var $author$project$Main$updatePatternArrayFromQueue = F2(
 					}),
 				command);
 		} else {
-			return A2(
+			var _v0 = A2(
 				$author$project$Main$update,
 				$author$project$Logic$App$Msg$SetTimelineIndex(
 					$elm$core$Array$length(model.timeline)),
 				$author$project$Logic$App$Macros$UpdateMacroReferences$updateMacroReferences(model));
+			var m = _v0.a;
+			var cmd = _v0.b;
+			return _Utils_Tuple2(
+				m,
+				$elm$core$Platform$Cmd$batch(
+					_List_fromArray(
+						[
+							cmd,
+							$author$project$Ports$SendInstructions$sendInstructions(
+							A2(
+								$elm$core$Debug$log,
+								'sent',
+								A2(
+									$elm$json$Json$Encode$encode,
+									0,
+									$author$project$Logic$App$EncodeInstructions$encodeInstructions(
+										$elm_community$array_extra$Array$Extra$reverse(
+											A2(
+												$elm$core$Array$map,
+												function (x) {
+													return x.a;
+												},
+												model.patternArray))))))
+						])));
 		}
 	});
 var $author$project$Logic$App$Msg$MouseMove = function (a) {

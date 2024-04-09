@@ -46,6 +46,7 @@ import Ports.SendInstructions as SendInstructions
 import Logic.App.EncodeInstructions exposing (encodeInstructions)
 import Json.Encode
 import Logic.App.DecodeEvaluationResult exposing (resultDecoder)
+import Ports.SendInstructions exposing (sendInstructions)
 
 
 main : Program () Model Msg
@@ -131,9 +132,6 @@ updatePatternArrayFromQueue insertionPoint model =
             castingContext =
                 model.castingContext
 
-            stackResult =
-                applyPatternsToStack Array.empty castingContext [] -- <| Debug.log "" (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern insertionPoint))
-
             getPattern =
                 List.head model.importQueue
                     |> Maybe.withDefault ( unknownPattern, Cmd.none )
@@ -150,16 +148,16 @@ updatePatternArrayFromQueue insertionPoint model =
                     newPattern
                     insertionPoint
 
-            newPatternArray =
-                Array.map2
-                    (\patternTuple result ->
-                        updateDrawingColors ( applyColorToPatternFromResult (Tuple.first patternTuple) result, Tuple.second patternTuple )
-                    )
-                    newUncoloredPatternArray
-                    stackResult.resultArray
+            -- newPatternArray =
+            --     Array.map2
+            --         (\patternTuple result ->
+            --             updateDrawingColors ( applyColorToPatternFromResult (Tuple.first patternTuple) result, Tuple.second patternTuple )
+            --         )
+            --         newUncoloredPatternArray
+            --         stackResult.resultArray
 
             patterns =
-                Array.map (\x -> Tuple.first x) newPatternArray
+                Array.map (\x -> Tuple.first x) newUncoloredPatternArray
 
             drawPatternsResult =
                 drawPatterns patterns model.grid
@@ -170,11 +168,11 @@ updatePatternArrayFromQueue insertionPoint model =
                     { model
                         | patternArray = drawPatternsResult.patternArray
                         , ui = { ui | patternInputField = "" }
-                        , stack = stackResult.stack
-                        , castingContext = stackResult.ctx
+                        -- , stack = stackResult.stack
+                        -- , castingContext = stackResult.ctx
                         , grid = drawPatternsResult.grid
                         , importQueue = Maybe.withDefault [] <| List.tail model.importQueue
-                        , timeline = unshift { stack = Array.empty, patternIndex = -1 } stackResult.timeline
+                        -- , timeline = unshift { stack = Array.empty, patternIndex = -1 } stackResult.timeline
                         , insertionPoint =
                             if model.insertionPoint > Array.length model.patternArray then
                                 0
@@ -188,7 +186,20 @@ updatePatternArrayFromQueue insertionPoint model =
             ( { model | importQueue = Maybe.withDefault [] <| List.tail model.importQueue }, command )
 
     else
-        update (SetTimelineIndex (Array.length model.timeline)) (updateMacroReferences model)
+        case update (SetTimelineIndex (Array.length model.timeline)) (updateMacroReferences model) of
+            (m, cmd) -> 
+                ( m
+                , Cmd.batch 
+                    [ cmd
+                    , Array.map (\x -> Tuple.first x) model.patternArray
+                        |> Array.reverse 
+                        |> encodeInstructions 
+                        |> Json.Encode.encode 0
+                        |> Debug.log "sent"
+                        |> SendInstructions.sendInstructions 
+                    ]
+                )
+
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -422,22 +433,8 @@ update msg model =
 
                     else
                         model.importQueue
-
-                newPattern = 
-                    Tuple.first <| getPatternFromName (Just model.castingContext.macros) name
-                
-                newPattternArray =
-                    (addToPatternArray model newPattern model.insertionPoint)
             in
-            -- updatePatternArrayFromQueue model.insertionPoint { model | importQueue = newImportQueue }
-            ( {model | patternArray = newPattternArray},
-            Array.map (\x -> Tuple.first x) newPattternArray
-            |> Array.reverse 
-            |> encodeInstructions 
-            |> Json.Encode.encode 0
-            |> Debug.log "sent"
-            |> SendInstructions.sendInstructions
-            )
+            updatePatternArrayFromQueue model.insertionPoint { model | importQueue = newImportQueue }
 
         SendNumberLiteralToGenerate number ->
             ( model, HexNumGen.sendNumber number )

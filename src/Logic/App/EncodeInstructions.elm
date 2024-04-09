@@ -17,11 +17,11 @@ encodePattern : Pattern -> E.Value
 encodePattern pattern =
     case pattern.selectedOutput of
         Just(_, iota) -> E.object 
-                [ ( "signature", E.string pattern.signature )
+                [ ( "identifier", E.string pattern.internalName )
                 , ( "value", encodeIota iota )
                 ]
         Nothing -> E.object
-                [ ( "signature", E.string pattern.signature )
+                [ ( "identifier", E.string pattern.internalName )
                 ]
 
 encodeIota : Iota -> E.Value

@@ -122,7 +122,17 @@ getPatternFromName maybeMacros name =
         Nothing ->
             case String.toFloat name of
                 Just number ->
-                    ( unknownPattern, HexNumGen.sendNumber number )
+                    ( { signature = ""
+                        , internalName = "number"
+                        , action = noAction
+                        , metaAction = None
+                        , displayName = "Numerical Reflection: " ++ name
+                        , color = accent1
+                        , outputOptions = []
+                        , active = True
+                        , selectedOutput = Just (NumberType, Number  number)
+                        , startDirection = Northeast
+                        }, Cmd.none )
 
                 Nothing ->
                     let
