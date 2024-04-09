@@ -7,10 +7,11 @@ import Html.Attributes exposing (pattern)
 import Logic.App.Types exposing (IotaType(..))
 import Logic.App.Types exposing (Iota(..))
 import Json.Encode exposing (bool)
+import Array exposing (Array)
 
-encodeInstructions : List(Pattern) -> E.Value
+encodeInstructions : Array(Pattern) -> E.Value
 encodeInstructions instructions = 
-    E.object [ ("instructions", E.list encodePattern instructions)]
+    E.object [ ("instructions", E.array encodePattern instructions)]
 
 encodePattern : Pattern -> E.Value
 encodePattern pattern =
@@ -25,15 +26,13 @@ encodePattern pattern =
 
 encodeIota : Iota -> E.Value
 encodeIota iota =
-    case (encodeIotaValue iota) of
-        Just encodedValue -> (E.object
-        [ ( "iota_type", encodeIotaType iota )
-        , ( "value",  encodedValue )
-        ])
+    let
+        encodedIotaValue = encodeIotaValue iota
+    in
+    case encodedIotaValue of
+        Just encodedValue -> E.object [( "iota_type", encodeIotaType iota ), ( "value",  encodedValue )]
 
         Nothing -> E.object [( "iota_type", encodeIotaType iota )]
-
- 
 
 encodeIotaValue : Iota -> Maybe(E.Value)
 encodeIotaValue iota = 
@@ -66,7 +65,7 @@ encodeIotaType iota =
     case iota of
         Number _ -> E.string "number"
 
-        Vector _ -> E.string "number"
+        Vector _ -> E.string "vector"
 
         Boolean _ -> E.string "boolean"
 

@@ -5841,6 +5841,9 @@ var $author$project$Logic$App$Msg$RecieveInputBoundingBox = function (a) {
 var $author$project$Logic$App$Msg$RecieveInputBoundingBoxes = function (a) {
 	return {$: 'RecieveInputBoundingBoxes', a: a};
 };
+var $author$project$Logic$App$Msg$RecieveInstructions = function (a) {
+	return {$: 'RecieveInstructions', a: a};
+};
 var $author$project$Logic$App$Msg$RecieveMouseOverHandle = function (a) {
 	return {$: 'RecieveMouseOverHandle', a: a};
 };
@@ -6830,6 +6833,7 @@ var $author$project$Ports$GetElementBoundingBoxById$recieveBoundingBoxes = _Plat
 var $author$project$Ports$CheckMouseOverDragHandle$recieveCheckMouseOverDragHandle = _Platform_incomingPort('recieveCheckMouseOverDragHandle', $elm$json$Json$Decode$bool);
 var $author$project$Ports$GetGridDrawingAsGif$recieveGIF = _Platform_incomingPort('recieveGIF', $elm$json$Json$Decode$string);
 var $author$project$Ports$GetGridDrawingAsImage$recieveImage = _Platform_incomingPort('recieveImage', $elm$json$Json$Decode$string);
+var $author$project$Ports$SendInstructions$recieveInstructions = _Platform_incomingPort('recieveInstructions', $elm$json$Json$Decode$string);
 var $author$project$Ports$HexNumGen$recieveNumber = _Platform_incomingPort('recieveNumber', $elm$json$Json$Decode$string);
 var $jinjor$elm_contextmenu$ContextMenu$Close = {$: 'Close'};
 var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
@@ -6867,6 +6871,7 @@ var $author$project$Main$subscriptions = function (model) {
 				$elm$browser$Browser$Events$onKeyDown(
 				A2($elm$json$Json$Decode$map, $author$project$Logic$App$Msg$HandleKeyboardEvent, $Gizra$elm_keyboard_event$Keyboard$Event$decodeKeyboardEvent)),
 				$author$project$Ports$HexNumGen$recieveNumber($author$project$Logic$App$Msg$RecieveGeneratedNumberLiteral),
+				$author$project$Ports$SendInstructions$recieveInstructions($author$project$Logic$App$Msg$RecieveInstructions),
 				$author$project$Ports$GetElementBoundingBoxById$recieveBoundingBox(
 				A2(
 					$elm$core$Basics$composeR,
@@ -16629,6 +16634,156 @@ var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProje
 			$author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$projectCodec,
 			A2($elm$core$String$dropLeft, 3, encodedProjectData))) : $elm$core$Maybe$Nothing;
 };
+var $elm$json$Json$Decode$decodeString = _Json_runOnString;
+var $elm$json$Json$Encode$array = F2(
+	function (func, entries) {
+		return _Json_wrap(
+			A3(
+				$elm$core$Array$foldl,
+				_Json_addEntry(func),
+				_Json_emptyArray(_Utils_Tuple0),
+				entries));
+	});
+var $author$project$Logic$App$EncodeInstructions$encodeIotaType = function (iota) {
+	switch (iota.$) {
+		case 'Number':
+			return $elm$json$Json$Encode$string('number');
+		case 'Vector':
+			return $elm$json$Json$Encode$string('vector');
+		case 'Boolean':
+			return $elm$json$Json$Encode$string('boolean');
+		case 'Entity':
+			return $elm$json$Json$Encode$string('entity');
+		case 'IotaList':
+			return $elm$json$Json$Encode$string('list');
+		case 'PatternIota':
+			return $elm$json$Json$Encode$string('pattern');
+		case 'Null':
+			return $elm$json$Json$Encode$string('null');
+		case 'Garbage':
+			return $elm$json$Json$Encode$string('garbage');
+		default:
+			return $elm$json$Json$Encode$string('');
+	}
+};
+var $elm$json$Json$Encode$object = function (pairs) {
+	return _Json_wrap(
+		A3(
+			$elm$core$List$foldl,
+			F2(
+				function (_v0, obj) {
+					var k = _v0.a;
+					var v = _v0.b;
+					return A3(_Json_addField, k, v, obj);
+				}),
+			_Json_emptyObject(_Utils_Tuple0),
+			pairs));
+};
+var $author$project$Logic$App$EncodeInstructions$encodeIota = function (iota) {
+	var encodedIotaValue = $author$project$Logic$App$EncodeInstructions$encodeIotaValue(iota);
+	if (encodedIotaValue.$ === 'Just') {
+		var encodedValue = encodedIotaValue.a;
+		return $elm$json$Json$Encode$object(
+			_List_fromArray(
+				[
+					_Utils_Tuple2(
+					'iota_type',
+					$author$project$Logic$App$EncodeInstructions$encodeIotaType(iota)),
+					_Utils_Tuple2('value', encodedValue)
+				]));
+	} else {
+		return $elm$json$Json$Encode$object(
+			_List_fromArray(
+				[
+					_Utils_Tuple2(
+					'iota_type',
+					$author$project$Logic$App$EncodeInstructions$encodeIotaType(iota))
+				]));
+	}
+};
+var $author$project$Logic$App$EncodeInstructions$encodeIotaValue = function (iota) {
+	switch (iota.$) {
+		case 'Number':
+			var number = iota.a;
+			return $elm$core$Maybe$Just(
+				$elm$json$Json$Encode$float(number));
+		case 'Vector':
+			var _v3 = iota.a;
+			var x = _v3.a;
+			var y = _v3.b;
+			var z = _v3.c;
+			return $elm$core$Maybe$Just(
+				$elm$json$Json$Encode$object(
+					_List_fromArray(
+						[
+							_Utils_Tuple2(
+							'x',
+							$elm$json$Json$Encode$float(x)),
+							_Utils_Tuple2(
+							'y',
+							$elm$json$Json$Encode$float(y)),
+							_Utils_Tuple2(
+							'z',
+							$elm$json$Json$Encode$float(z))
+						])));
+		case 'Boolean':
+			var bool = iota.a;
+			return $elm$core$Maybe$Just(
+				$elm$json$Json$Encode$bool(bool));
+		case 'Entity':
+			var entity = iota.a;
+			return $elm$core$Maybe$Just(
+				$elm$json$Json$Encode$string(entity));
+		case 'IotaList':
+			var list = iota.a;
+			return $elm$core$Maybe$Just(
+				A2($elm$json$Json$Encode$array, $author$project$Logic$App$EncodeInstructions$encodeIota, list));
+		case 'PatternIota':
+			var pattern = iota.a;
+			return $elm$core$Maybe$Just(
+				$author$project$Logic$App$EncodeInstructions$encodePattern(pattern));
+		case 'Null':
+			return $elm$core$Maybe$Nothing;
+		case 'Garbage':
+			return $elm$core$Maybe$Nothing;
+		default:
+			return $elm$core$Maybe$Nothing;
+	}
+};
+var $author$project$Logic$App$EncodeInstructions$encodePattern = function (pattern) {
+	var _v0 = pattern.selectedOutput;
+	if (_v0.$ === 'Just') {
+		var _v1 = _v0.a;
+		var iota = _v1.b;
+		return $elm$json$Json$Encode$object(
+			_List_fromArray(
+				[
+					_Utils_Tuple2(
+					'signature',
+					$elm$json$Json$Encode$string(pattern.signature)),
+					_Utils_Tuple2(
+					'value',
+					$author$project$Logic$App$EncodeInstructions$encodeIota(iota))
+				]));
+	} else {
+		return $elm$json$Json$Encode$object(
+			_List_fromArray(
+				[
+					_Utils_Tuple2(
+					'signature',
+					$elm$json$Json$Encode$string(pattern.signature))
+				]));
+	}
+};
+var $author$project$Logic$App$EncodeInstructions$encodeInstructions = function (instructions) {
+	return $elm$json$Json$Encode$object(
+		_List_fromArray(
+			[
+				_Utils_Tuple2(
+				'instructions',
+				A2($elm$json$Json$Encode$array, $author$project$Logic$App$EncodeInstructions$encodePattern, instructions))
+			]));
+};
 var $elm$file$File$Select$file = F2(
 	function (mimes, toMsg) {
 		return A2(
@@ -16848,6 +17003,7 @@ var $elm$core$Array$indexedMap = F2(
 			true,
 			A3($elm$core$Elm$JsArray$foldl, helper, initialBuilder, tree));
 	});
+var $elm$core$Debug$log = _Debug_log;
 var $author$project$Logic$App$Msg$MouseMoveData = F4(
 	function (pageX, pageY, offsetHeight, offsetWidth) {
 		return {offsetHeight: offsetHeight, offsetWidth: offsetWidth, pageX: pageX, pageY: pageY};
@@ -16982,6 +17138,56 @@ var $author$project$Ports$GetGridDrawingAsImage$requestImage = _Platform_outgoin
 	function ($) {
 		return $elm$json$Json$Encode$null;
 	});
+var $author$project$Logic$App$DecodeEvaluationResult$EvalResult = function (stack) {
+	return {stack: stack};
+};
+var $elm$json$Json$Decode$array = _Json_decodeArray;
+var $author$project$Logic$App$DecodeEvaluationResult$numberIotaDecoder = A2(
+	$elm$json$Json$Decode$map,
+	$author$project$Logic$App$Types$Number,
+	A2($elm$json$Json$Decode$field, 'value', $elm$json$Json$Decode$float));
+var $author$project$Logic$App$DecodeEvaluationResult$VectorObject = F3(
+	function (x, y, z) {
+		return {x: x, y: y, z: z};
+	});
+var $elm$json$Json$Decode$map3 = _Json_map3;
+var $author$project$Logic$App$DecodeEvaluationResult$mapVectorObject = function (vec) {
+	return $elm$json$Json$Decode$succeed(
+		$author$project$Logic$App$Types$Vector(
+			_Utils_Tuple3(vec.x, vec.y, vec.z)));
+};
+var $author$project$Logic$App$DecodeEvaluationResult$vectorIotaDecoder = A2(
+	$elm$json$Json$Decode$andThen,
+	$author$project$Logic$App$DecodeEvaluationResult$mapVectorObject,
+	A4(
+		$elm$json$Json$Decode$map3,
+		$author$project$Logic$App$DecodeEvaluationResult$VectorObject,
+		A2(
+			$elm$json$Json$Decode$at,
+			_List_fromArray(
+				['value', 'x']),
+			$elm$json$Json$Decode$float),
+		A2(
+			$elm$json$Json$Decode$at,
+			_List_fromArray(
+				['value', 'y']),
+			$elm$json$Json$Decode$float),
+		A2(
+			$elm$json$Json$Decode$at,
+			_List_fromArray(
+				['value', 'z']),
+			$elm$json$Json$Decode$float)));
+var $author$project$Logic$App$DecodeEvaluationResult$iotaDecoder = $elm$json$Json$Decode$oneOf(
+	_List_fromArray(
+		[$author$project$Logic$App$DecodeEvaluationResult$numberIotaDecoder, $author$project$Logic$App$DecodeEvaluationResult$vectorIotaDecoder]));
+var $author$project$Logic$App$DecodeEvaluationResult$resultDecoder = A2(
+	$elm$json$Json$Decode$map,
+	$author$project$Logic$App$DecodeEvaluationResult$EvalResult,
+	A2(
+		$elm$json$Json$Decode$field,
+		'stack',
+		$elm$json$Json$Decode$array($author$project$Logic$App$DecodeEvaluationResult$iotaDecoder)));
+var $author$project$Ports$SendInstructions$sendInstructions = _Platform_outgoingPort('sendInstructions', $elm$json$Json$Encode$string);
 var $author$project$Logic$App$PatternList$PatternArray$setDrawingColor = F2(
 	function (drawing, color) {
 		return A2(
@@ -17991,6 +18197,11 @@ var $author$project$Main$update = F2(
 						$elm$core$Platform$Cmd$none);
 				case 'InputPattern':
 					var name = msg.a;
+					var newPattern = A2(
+						$author$project$Logic$App$Patterns$PatternRegistry$getPatternFromName,
+						$elm$core$Maybe$Just(model.castingContext.macros),
+						name).a;
+					var newPattternArray = A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, model.insertionPoint);
 					var newImportQueue = (name !== '') ? A2(
 						$elm$core$List$cons,
 						A2(
@@ -17998,12 +18209,25 @@ var $author$project$Main$update = F2(
 							$elm$core$Maybe$Just(model.castingContext.macros),
 							name),
 						model.importQueue) : model.importQueue;
-					return A2(
-						$author$project$Main$updatePatternArrayFromQueue,
-						model.insertionPoint,
+					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{importQueue: newImportQueue}));
+							{patternArray: newPattternArray}),
+						$author$project$Ports$SendInstructions$sendInstructions(
+							A2(
+								$elm$core$Debug$log,
+								'sent',
+								A2(
+									$elm$json$Json$Encode$encode,
+									0,
+									$author$project$Logic$App$EncodeInstructions$encodeInstructions(
+										$elm_community$array_extra$Array$Extra$reverse(
+											A2(
+												$elm$core$Array$map,
+												function (x) {
+													return x.a;
+												},
+												newPattternArray)))))));
 				case 'SendNumberLiteralToGenerate':
 					var number = msg.a;
 					return _Utils_Tuple2(
@@ -18773,7 +18997,7 @@ var $author$project$Main$update = F2(
 									{libraryInputField: newLibraryInputValue})
 							}),
 						$elm$core$Platform$Cmd$none);
-				default:
+				case 'AddLibrary':
 					var location = msg.a;
 					var _v21 = location;
 					var x = _v21.a;
@@ -18811,6 +19035,28 @@ var $author$project$Main$update = F2(
 									})
 							}),
 						$elm$core$Platform$Cmd$none);
+				case 'SendInstructions':
+					var instructions = msg.a;
+					return _Utils_Tuple2(
+						model,
+						$author$project$Ports$SendInstructions$sendInstructions(instructions));
+				default:
+					var response = msg.a;
+					var decoded = A2(
+						$elm$core$Debug$log,
+						'response',
+						A2($elm$json$Json$Decode$decodeString, $author$project$Logic$App$DecodeEvaluationResult$resultDecoder, response));
+					var _v23 = A2($elm$core$Debug$log, 'response', response);
+					if (decoded.$ === 'Err') {
+						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+					} else {
+						var evalResult = decoded.a;
+						return _Utils_Tuple2(
+							_Utils_update(
+								model,
+								{stack: evalResult.stack}),
+							$elm$core$Platform$Cmd$none);
+					}
 			}
 		}
 	});
@@ -18826,18 +19072,7 @@ var $author$project$Main$updatePatternArrayFromQueue = F2(
 			var newUncoloredPatternArray = A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, insertionPoint);
 			var command = getPattern.b;
 			var castingContext = model.castingContext;
-			var stackResult = A3(
-				$author$project$Logic$App$Stack$EvalStack$applyPatternsToStack,
-				$elm$core$Array$empty,
-				castingContext,
-				$elm$core$List$reverse(
-					A2(
-						$elm$core$List$map,
-						function (x) {
-							return x.a;
-						},
-						$elm$core$Array$toList(
-							A3($author$project$Logic$App$PatternList$PatternArray$addToPatternArray, model, newPattern, insertionPoint)))));
+			var stackResult = A3($author$project$Logic$App$Stack$EvalStack$applyPatternsToStack, $elm$core$Array$empty, castingContext, _List_Nil);
 			var newPatternArray = A3(
 				$elm_community$array_extra$Array$Extra$map2,
 				F2(
@@ -19354,7 +19589,6 @@ var $mpizenberg$elm_pointer_events$Internal$Decode$Keys = F3(
 	function (alt, ctrl, shift) {
 		return {alt: alt, ctrl: ctrl, shift: shift};
 	});
-var $elm$json$Json$Decode$map3 = _Json_map3;
 var $mpizenberg$elm_pointer_events$Internal$Decode$keys = A4(
 	$elm$json$Json$Decode$map3,
 	$mpizenberg$elm_pointer_events$Internal$Decode$Keys,

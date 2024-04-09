@@ -42,6 +42,10 @@ import Settings.Theme exposing (..)
 import String exposing (fromInt)
 import Task
 import Time
+import Ports.SendInstructions as SendInstructions
+import Logic.App.EncodeInstructions exposing (encodeInstructions)
+import Json.Encode
+import Logic.App.DecodeEvaluationResult exposing (resultDecoder)
 
 
 main : Program () Model Msg
@@ -128,7 +132,7 @@ updatePatternArrayFromQueue insertionPoint model =
                 model.castingContext
 
             stackResult =
-                applyPatternsToStack Array.empty castingContext (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern insertionPoint))
+                applyPatternsToStack Array.empty castingContext [] -- <| Debug.log "" (List.reverse <| List.map (\x -> Tuple.first x) <| Array.toList (addToPatternArray model newPattern insertionPoint))
 
             getPattern =
                 List.head model.importQueue
@@ -418,8 +422,22 @@ update msg model =
 
                     else
                         model.importQueue
+
+                newPattern = 
+                    Tuple.first <| getPatternFromName (Just model.castingContext.macros) name
+                
+                newPattternArray =
+                    (addToPatternArray model newPattern model.insertionPoint)
             in
-            updatePatternArrayFromQueue model.insertionPoint { model | importQueue = newImportQueue }
+            -- updatePatternArrayFromQueue model.insertionPoint { model | importQueue = newImportQueue }
+            ( {model | patternArray = newPattternArray},
+            Array.map (\x -> Tuple.first x) newPattternArray
+            |> Array.reverse 
+            |> encodeInstructions 
+            |> Json.Encode.encode 0
+            |> Debug.log "sent"
+            |> SendInstructions.sendInstructions
+            )
 
         SendNumberLiteralToGenerate number ->
             ( model, HexNumGen.sendNumber number )
@@ -938,6 +956,23 @@ update msg model =
             , Cmd.none
             )
 
+        SendInstructions instructions ->
+            ( model, SendInstructions.sendInstructions instructions )
+
+        RecieveInstructions response ->
+            let 
+                _ = Debug.log "response" response
+                
+                decoded = Debug.log "response" <| Json.Decode.decodeString resultDecoder response
+            in
+            case decoded of 
+                Err _ -> 
+                    (model, Cmd.none)
+
+                Ok evalResult -> 
+                    ({model | stack = evalResult.stack}, Cmd.none)
+
+            
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
@@ -946,6 +981,7 @@ subscriptions model =
         , Time.every 100 Tick
         , Browser.Events.onKeyDown (Json.Decode.map HandleKeyboardEvent decodeKeyboardEvent)
         , HexNumGen.recieveNumber RecieveGeneratedNumberLiteral
+        , SendInstructions.recieveInstructions RecieveInstructions
         , GetElementBoundingBoxById.recieveBoundingBox (Json.Decode.decodeValue locationDecoder >> RecieveInputBoundingBox)
         , GetElementBoundingBoxById.recieveBoundingBoxes (List.map (Json.Decode.decodeValue locationDecoder) >> RecieveInputBoundingBoxes)
         , CheckMouseOverDragHandle.recieveCheckMouseOverDragHandle RecieveMouseOverHandle

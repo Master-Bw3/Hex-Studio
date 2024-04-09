@@ -1,23 +1,27 @@
 use std::{collections::HashMap, rc::Rc};
 
-use hexagon::{interpreter::interpret, iota::{hex_casting::{bool::BooleanIota, garbage::GarbageIota, null::NullIota, vector::VectorIota}, Iota}, parse_config::Config, parser::{ActionValue, AstNode, Location}, pattern_registry::{PatternRegistry, PatternRegistryExt}};
+use hexagon::{interpreter::interpret, iota::{hex_casting::{garbage::GarbageIota, null::NullIota, vector::VectorIota}, Iota}, parse_config::Config, parser::{ActionValue, AstNode, Location}, pattern_registry::{PatternRegistry, PatternRegistryExt}};
 use nalgebra::matrix;
 use serde_json::{Map, Value};
 use wasm_bindgen::prelude::wasm_bindgen;
 
 #[wasm_bindgen]
-pub fn eval(json: String) -> String {
+pub fn evaluate(json: String) -> String {
     let instructions = decode_json(json);
     let ast = construct_ast_from_signatures_and_values(instructions);
     let config = Config { 
-        libraries: HashMap::new(), 
-        entities: HashMap::new(), 
+        libraries: HashMap::new(),
+        entities: HashMap::new(),
         great_spell_sigs: PatternRegistry::gen_default_great_sigs() 
     };
 
     let result = interpret(ast, &config, HashMap::new(), "", "");
     match result {
-        Ok(state) => serialize_stack(&state.stack).to_string(),
+        Ok(state) => {
+            let mut map = Map::new();
+            map.insert("stack".to_string(), serialize_stack(&state.stack));
+            Value::Object(map).to_string()
+        },
         Err(e) => {
             println!("{:?}", e);
             todo!()

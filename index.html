@@ -19,13 +19,20 @@
             });
 
             import init, * as hexNumGen from './gen/pkg/hexnumgen_rs_wrapper.js';
+            import init2, * as hexagon from './gen/pkg/hexagon_wrapper.js';
+
             async function setup() {
                 await init();
+                await init2();
             }
             setup();
 
             app.ports.sendNumber.subscribe(function (input) {
                 app.ports.recieveNumber.send(hexNumGen.generate_number(input));
+            });
+
+            app.ports.sendInstructions.subscribe(function (input) {
+                app.ports.recieveInstructions.send(hexagon.evaluate(input));
             });
 
             function getElmentBoundingBoxById(id) {

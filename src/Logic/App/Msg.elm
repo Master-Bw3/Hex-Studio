@@ -68,6 +68,8 @@ type Msg
     | RemoveLibrary (Int, Int, Int)
     | UpdateLibraryInputField String String String
     | AddLibrary (String, String, String)
+    | SendInstructions String
+    | RecieveInstructions String
 
 type alias MouseMoveData =
     { pageX : Int
