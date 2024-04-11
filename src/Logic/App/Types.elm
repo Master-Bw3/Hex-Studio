@@ -64,6 +64,7 @@ type Mishap
     | TransgressOther
     | DisallowedAction
     | CatastrophicFailure
+    | Generic
 
 
 type IotaType

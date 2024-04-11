@@ -10,6 +10,6 @@
             "type": "shell",
             "label": "build (optimized)",
             "command": "elm make src/Main.elm --output gen/source.js --optimize"
-        }
+        },
     ]
 }

@@ -67,3 +67,8 @@ insert i value list =
     List.drop i list
         |> (::) value
         |> (++) (List.take i list)
+
+
+triple : a -> b -> c -> (a, b, c)
+triple a b c =
+  (a, b, c)

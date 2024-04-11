@@ -47,6 +47,7 @@ import Logic.App.EncodeInstructions exposing (encodeInstructions)
 import Json.Encode
 import Logic.App.DecodeEvaluationResult exposing (resultDecoder)
 import Ports.SendInstructions exposing (sendInstructions)
+import Logic.App.PatternList.PatternArray exposing (applyColorToPatternFromMishapLocation)
 
 
 main : Program () Model Msg
@@ -129,8 +130,8 @@ updatePatternArrayFromQueue insertionPoint model =
             ui =
                 model.ui
 
-            castingContext =
-                model.castingContext
+            -- castingContext =
+            --     model.castingContext
 
             getPattern =
                 List.head model.importQueue
@@ -961,13 +962,44 @@ update msg model =
                 _ = Debug.log "response" response
                 
                 decoded = Debug.log "response" <| Json.Decode.decodeString resultDecoder response
+        
             in
             case decoded of 
                 Err _ -> 
                     (model, Cmd.none)
 
-                Ok evalResult -> 
-                    ({model | stack = evalResult.stack}, Cmd.none)
+                Ok (Ok evalResult) -> 
+                    let
+                        coloredPatternArray =
+                            Array.map (\(pattern, gridDrawing) -> updateDrawingColors ({pattern | color = accent1 }, gridDrawing)) model.patternArray
+                    
+                        drawPatternsResult =
+                            drawPatterns (Array.map Tuple.first coloredPatternArray) model.grid
+                    in
+                    ({ model | 
+                       stack = evalResult.stack
+                     , patternArray = coloredPatternArray
+                     , grid = drawPatternsResult.grid
+                     }, Cmd.none)
+                
+                Ok (Err (mishap, location, evalResult)) ->
+                    let
+                        coloredPatternArray =
+                            Array.indexedMap
+                                (\index patternTuple ->
+                                    updateDrawingColors ( applyColorToPatternFromMishapLocation (Tuple.first patternTuple) (Array.length model.patternArray - index) location, Tuple.second patternTuple )
+                                )
+                                model.patternArray
+
+                        drawPatternsResult =
+                            drawPatterns (Array.map Tuple.first coloredPatternArray) model.grid
+                    in
+                    ({ model | 
+                       stack = evalResult.stack
+                     , patternArray = coloredPatternArray
+                     , grid = drawPatternsResult.grid
+                     }, Cmd.none)
+
 
             
 

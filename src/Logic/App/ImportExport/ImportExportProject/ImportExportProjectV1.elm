@@ -197,7 +197,7 @@ heldItemCodec =
 mishapCodec : S.Codec e Mishap
 mishapCodec =
     S.customType
-        (\invalidpatternencoder notenoughiotasencoder incorrectiotaencoder vectoroutofambitencoder entityoutofambitencoder entityisimmuneencoder mathematicalerrorencoder incorrectitemencoder incorrectblockencoder delvetoodeepencoder transgressotherencoder disallowedactionencoder catastrophicfailureencoder value ->
+        (\invalidpatternencoder notenoughiotasencoder incorrectiotaencoder vectoroutofambitencoder entityoutofambitencoder entityisimmuneencoder mathematicalerrorencoder incorrectitemencoder incorrectblockencoder delvetoodeepencoder transgressotherencoder disallowedactionencoder catastrophicfailureencoder genericencoder value ->
             case value of
                 InvalidPattern ->
                     invalidpatternencoder
@@ -237,6 +237,9 @@ mishapCodec =
 
                 CatastrophicFailure ->
                     catastrophicfailureencoder
+
+                Generic ->
+                    genericencoder
         )
         |> S.variant0 InvalidPattern
         |> S.variant0 NotEnoughIotas
@@ -251,6 +254,7 @@ mishapCodec =
         |> S.variant0 TransgressOther
         |> S.variant0 DisallowedAction
         |> S.variant0 CatastrophicFailure
+        |> S.variant0 Generic
         |> S.finishCustomType
 
 

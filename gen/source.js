@@ -7632,6 +7632,14 @@ var $author$project$Logic$App$PatternList$PatternArray$addToPatternArray = F3(
 			patternArray);
 	});
 var $author$project$Settings$Theme$accent4 = '#dd6666';
+var $author$project$Logic$App$PatternList$PatternArray$applyColorToPatternFromMishapLocation = F3(
+	function (pattern, index, location) {
+		return (_Utils_cmp(index, location) < 0) ? _Utils_update(
+			pattern,
+			{color: $author$project$Settings$Theme$accent1}) : (_Utils_eq(index, location) ? _Utils_update(
+			pattern,
+			{color: $author$project$Settings$Theme$accent4}) : pattern);
+	});
 var $author$project$Settings$Theme$accent5 = '#E0E3B8';
 var $author$project$Logic$App$PatternList$PatternArray$applyColorToPatternFromResult = F2(
 	function (pattern, result) {
@@ -16047,6 +16055,7 @@ var $author$project$Logic$App$Types$DelveTooDeep = {$: 'DelveTooDeep'};
 var $author$project$Logic$App$Types$DisallowedAction = {$: 'DisallowedAction'};
 var $author$project$Logic$App$Types$EntityIsImmune = {$: 'EntityIsImmune'};
 var $author$project$Logic$App$Types$EntityOutOfAmbit = {$: 'EntityOutOfAmbit'};
+var $author$project$Logic$App$Types$Generic = {$: 'Generic'};
 var $author$project$Logic$App$Types$IncorrectBlock = {$: 'IncorrectBlock'};
 var $author$project$Logic$App$Types$IncorrectItem = {$: 'IncorrectItem'};
 var $author$project$Logic$App$Types$TransgressOther = {$: 'TransgressOther'};
@@ -16054,86 +16063,94 @@ var $author$project$Logic$App$Types$VectorOutOfAmbit = {$: 'VectorOutOfAmbit'};
 var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$mishapCodec = $MartinSStewart$elm_serialize$Serialize$finishCustomType(
 	A2(
 		$MartinSStewart$elm_serialize$Serialize$variant0,
-		$author$project$Logic$App$Types$CatastrophicFailure,
+		$author$project$Logic$App$Types$Generic,
 		A2(
 			$MartinSStewart$elm_serialize$Serialize$variant0,
-			$author$project$Logic$App$Types$DisallowedAction,
+			$author$project$Logic$App$Types$CatastrophicFailure,
 			A2(
 				$MartinSStewart$elm_serialize$Serialize$variant0,
-				$author$project$Logic$App$Types$TransgressOther,
+				$author$project$Logic$App$Types$DisallowedAction,
 				A2(
 					$MartinSStewart$elm_serialize$Serialize$variant0,
-					$author$project$Logic$App$Types$DelveTooDeep,
+					$author$project$Logic$App$Types$TransgressOther,
 					A2(
 						$MartinSStewart$elm_serialize$Serialize$variant0,
-						$author$project$Logic$App$Types$IncorrectBlock,
+						$author$project$Logic$App$Types$DelveTooDeep,
 						A2(
 							$MartinSStewart$elm_serialize$Serialize$variant0,
-							$author$project$Logic$App$Types$IncorrectItem,
+							$author$project$Logic$App$Types$IncorrectBlock,
 							A2(
 								$MartinSStewart$elm_serialize$Serialize$variant0,
-								$author$project$Logic$App$Types$MathematicalError,
+								$author$project$Logic$App$Types$IncorrectItem,
 								A2(
 									$MartinSStewart$elm_serialize$Serialize$variant0,
-									$author$project$Logic$App$Types$EntityIsImmune,
+									$author$project$Logic$App$Types$MathematicalError,
 									A2(
 										$MartinSStewart$elm_serialize$Serialize$variant0,
-										$author$project$Logic$App$Types$EntityOutOfAmbit,
+										$author$project$Logic$App$Types$EntityIsImmune,
 										A2(
 											$MartinSStewart$elm_serialize$Serialize$variant0,
-											$author$project$Logic$App$Types$VectorOutOfAmbit,
+											$author$project$Logic$App$Types$EntityOutOfAmbit,
 											A2(
 												$MartinSStewart$elm_serialize$Serialize$variant0,
-												$author$project$Logic$App$Types$IncorrectIota,
+												$author$project$Logic$App$Types$VectorOutOfAmbit,
 												A2(
 													$MartinSStewart$elm_serialize$Serialize$variant0,
-													$author$project$Logic$App$Types$NotEnoughIotas,
+													$author$project$Logic$App$Types$IncorrectIota,
 													A2(
 														$MartinSStewart$elm_serialize$Serialize$variant0,
-														$author$project$Logic$App$Types$InvalidPattern,
-														$MartinSStewart$elm_serialize$Serialize$customType(
-															function (invalidpatternencoder) {
-																return function (notenoughiotasencoder) {
-																	return function (incorrectiotaencoder) {
-																		return function (vectoroutofambitencoder) {
-																			return function (entityoutofambitencoder) {
-																				return function (entityisimmuneencoder) {
-																					return function (mathematicalerrorencoder) {
-																						return function (incorrectitemencoder) {
-																							return function (incorrectblockencoder) {
-																								return function (delvetoodeepencoder) {
-																									return function (transgressotherencoder) {
-																										return function (disallowedactionencoder) {
-																											return function (catastrophicfailureencoder) {
-																												return function (value) {
-																													switch (value.$) {
-																														case 'InvalidPattern':
-																															return invalidpatternencoder;
-																														case 'NotEnoughIotas':
-																															return notenoughiotasencoder;
-																														case 'IncorrectIota':
-																															return incorrectiotaencoder;
-																														case 'VectorOutOfAmbit':
-																															return vectoroutofambitencoder;
-																														case 'EntityOutOfAmbit':
-																															return entityoutofambitencoder;
-																														case 'EntityIsImmune':
-																															return entityisimmuneencoder;
-																														case 'MathematicalError':
-																															return mathematicalerrorencoder;
-																														case 'IncorrectItem':
-																															return incorrectitemencoder;
-																														case 'IncorrectBlock':
-																															return incorrectblockencoder;
-																														case 'DelveTooDeep':
-																															return delvetoodeepencoder;
-																														case 'TransgressOther':
-																															return transgressotherencoder;
-																														case 'DisallowedAction':
-																															return disallowedactionencoder;
-																														default:
-																															return catastrophicfailureencoder;
-																													}
+														$author$project$Logic$App$Types$NotEnoughIotas,
+														A2(
+															$MartinSStewart$elm_serialize$Serialize$variant0,
+															$author$project$Logic$App$Types$InvalidPattern,
+															$MartinSStewart$elm_serialize$Serialize$customType(
+																function (invalidpatternencoder) {
+																	return function (notenoughiotasencoder) {
+																		return function (incorrectiotaencoder) {
+																			return function (vectoroutofambitencoder) {
+																				return function (entityoutofambitencoder) {
+																					return function (entityisimmuneencoder) {
+																						return function (mathematicalerrorencoder) {
+																							return function (incorrectitemencoder) {
+																								return function (incorrectblockencoder) {
+																									return function (delvetoodeepencoder) {
+																										return function (transgressotherencoder) {
+																											return function (disallowedactionencoder) {
+																												return function (catastrophicfailureencoder) {
+																													return function (genericencoder) {
+																														return function (value) {
+																															switch (value.$) {
+																																case 'InvalidPattern':
+																																	return invalidpatternencoder;
+																																case 'NotEnoughIotas':
+																																	return notenoughiotasencoder;
+																																case 'IncorrectIota':
+																																	return incorrectiotaencoder;
+																																case 'VectorOutOfAmbit':
+																																	return vectoroutofambitencoder;
+																																case 'EntityOutOfAmbit':
+																																	return entityoutofambitencoder;
+																																case 'EntityIsImmune':
+																																	return entityisimmuneencoder;
+																																case 'MathematicalError':
+																																	return mathematicalerrorencoder;
+																																case 'IncorrectItem':
+																																	return incorrectitemencoder;
+																																case 'IncorrectBlock':
+																																	return incorrectblockencoder;
+																																case 'DelveTooDeep':
+																																	return delvetoodeepencoder;
+																																case 'TransgressOther':
+																																	return transgressotherencoder;
+																																case 'DisallowedAction':
+																																	return disallowedactionencoder;
+																																case 'CatastrophicFailure':
+																																	return catastrophicfailureencoder;
+																																default:
+																																	return genericencoder;
+																															}
+																														};
+																													};
 																												};
 																											};
 																										};
@@ -16146,8 +16163,7 @@ var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProje
 																			};
 																		};
 																	};
-																};
-															})))))))))))))));
+																}))))))))))))))));
 var $author$project$Logic$App$ImportExport$ImportExportProject$ImportExportProjectV1$SimplifiedPattern = F3(
 	function (signature, active, startDirection) {
 		return {active: active, signature: signature, startDirection: startDirection};
@@ -16955,8 +16971,10 @@ var $author$project$Logic$App$Utils$GetIotaValue$getIotaValueAsString = function
 						return 'Transgress Other';
 					case 'DisallowedAction':
 						return 'Disallowed Action';
-					default:
+					case 'CatastrophicFailure':
 						return 'Catastrophic Failure';
+					default:
+						return 'Garbage';
 				}
 			}();
 			return 'Garbage (' + (mishapMessage + ')');
@@ -17151,6 +17169,7 @@ var $author$project$Ports$GetGridDrawingAsImage$requestImage = _Platform_outgoin
 	function ($) {
 		return $elm$json$Json$Encode$null;
 	});
+var $elm$json$Json$Decode$map3 = _Json_map3;
 var $author$project$Logic$App$DecodeEvaluationResult$EvalResult = function (stack) {
 	return {stack: stack};
 };
@@ -17163,7 +17182,6 @@ var $author$project$Logic$App$DecodeEvaluationResult$VectorObject = F3(
 	function (x, y, z) {
 		return {x: x, y: y, z: z};
 	});
-var $elm$json$Json$Decode$map3 = _Json_map3;
 var $author$project$Logic$App$DecodeEvaluationResult$mapVectorObject = function (vec) {
 	return $elm$json$Json$Decode$succeed(
 		$author$project$Logic$App$Types$Vector(
@@ -17190,16 +17208,84 @@ var $author$project$Logic$App$DecodeEvaluationResult$vectorIotaDecoder = A2(
 			_List_fromArray(
 				['value', 'z']),
 			$elm$json$Json$Decode$float)));
-var $author$project$Logic$App$DecodeEvaluationResult$iotaDecoder = $elm$json$Json$Decode$oneOf(
-	_List_fromArray(
-		[$author$project$Logic$App$DecodeEvaluationResult$numberIotaDecoder, $author$project$Logic$App$DecodeEvaluationResult$vectorIotaDecoder]));
-var $author$project$Logic$App$DecodeEvaluationResult$resultDecoder = A2(
+var $author$project$Logic$App$DecodeEvaluationResult$iotaDecoder = A2(
+	$elm$json$Json$Decode$andThen,
+	function (iotaType) {
+		switch (iotaType) {
+			case 'vector':
+				return $author$project$Logic$App$DecodeEvaluationResult$vectorIotaDecoder;
+			case 'number':
+				return $author$project$Logic$App$DecodeEvaluationResult$numberIotaDecoder;
+			case 'garbage':
+				return $elm$json$Json$Decode$succeed(
+					$author$project$Logic$App$Types$Garbage($author$project$Logic$App$Types$Generic));
+			default:
+				return $elm$json$Json$Decode$fail('expected valid iota type');
+		}
+	},
+	A2($elm$json$Json$Decode$field, 'iota_type', $elm$json$Json$Decode$string));
+var $author$project$Logic$App$DecodeEvaluationResult$resultStateDecoder = A2(
 	$elm$json$Json$Decode$map,
 	$author$project$Logic$App$DecodeEvaluationResult$EvalResult,
 	A2(
 		$elm$json$Json$Decode$field,
 		'stack',
 		$elm$json$Json$Decode$array($author$project$Logic$App$DecodeEvaluationResult$iotaDecoder)));
+var $author$project$Logic$App$Utils$Utils$triple = F3(
+	function (a, b, c) {
+		return _Utils_Tuple3(a, b, c);
+	});
+var $author$project$Logic$App$DecodeEvaluationResult$resultMishapDecoder = A2(
+	$elm$json$Json$Decode$andThen,
+	function (_v0) {
+		var mishap = _v0.a;
+		var location = _v0.b;
+		var state = _v0.c;
+		switch (mishap) {
+			case 'invalidPattern':
+				return $elm$json$Json$Decode$succeed(
+					_Utils_Tuple3($author$project$Logic$App$Types$InvalidPattern, location, state));
+			case 'notEnoughIotas':
+				return $elm$json$Json$Decode$succeed(
+					_Utils_Tuple3($author$project$Logic$App$Types$NotEnoughIotas, location, state));
+			case 'incorrectIota':
+				return $elm$json$Json$Decode$succeed(
+					_Utils_Tuple3($author$project$Logic$App$Types$IncorrectIota, location, state));
+			case 'mathematicalError':
+				return $elm$json$Json$Decode$succeed(
+					_Utils_Tuple3($author$project$Logic$App$Types$MathematicalError, location, state));
+			case 'holdingIncorrectItem':
+				return $elm$json$Json$Decode$succeed(
+					_Utils_Tuple3($author$project$Logic$App$Types$IncorrectItem, location, state));
+			default:
+				return $elm$json$Json$Decode$succeed(
+					_Utils_Tuple3($author$project$Logic$App$Types$CatastrophicFailure, location, state));
+		}
+	},
+	A4(
+		$elm$json$Json$Decode$map3,
+		$author$project$Logic$App$Utils$Utils$triple,
+		A2($elm$json$Json$Decode$field, 'mishap', $elm$json$Json$Decode$string),
+		A2($elm$json$Json$Decode$field, 'location', $elm$json$Json$Decode$int),
+		$author$project$Logic$App$DecodeEvaluationResult$resultStateDecoder));
+var $author$project$Logic$App$DecodeEvaluationResult$resultDecoder = $elm$json$Json$Decode$oneOf(
+	_List_fromArray(
+		[
+			A2(
+			$elm$json$Json$Decode$andThen,
+			function (x) {
+				return $elm$json$Json$Decode$succeed(
+					$elm$core$Result$Err(x));
+			},
+			$author$project$Logic$App$DecodeEvaluationResult$resultMishapDecoder),
+			A2(
+			$elm$json$Json$Decode$andThen,
+			function (x) {
+				return $elm$json$Json$Decode$succeed(
+					$elm$core$Result$Ok(x));
+			},
+			$author$project$Logic$App$DecodeEvaluationResult$resultStateDecoder)
+		]));
 var $author$project$Ports$SendInstructions$sendInstructions = _Platform_outgoingPort('sendInstructions', $elm$json$Json$Encode$string);
 var $author$project$Ports$HexNumGen$sendNumber = _Platform_outgoingPort('sendNumber', $elm$json$Json$Encode$float);
 var $author$project$Logic$App$PatternList$PatternArray$setDrawingColor = F2(
@@ -19046,12 +19132,59 @@ var $author$project$Main$update = F2(
 					if (decoded.$ === 'Err') {
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 					} else {
-						var evalResult = decoded.a;
-						return _Utils_Tuple2(
-							_Utils_update(
-								model,
-								{stack: evalResult.stack}),
-							$elm$core$Platform$Cmd$none);
+						if (decoded.a.$ === 'Ok') {
+							var evalResult = decoded.a.a;
+							var coloredPatternArray = A2(
+								$elm$core$Array$map,
+								function (_v26) {
+									var pattern = _v26.a;
+									var gridDrawing = _v26.b;
+									return $author$project$Logic$App$PatternList$PatternArray$updateDrawingColors(
+										_Utils_Tuple2(
+											_Utils_update(
+												pattern,
+												{color: $author$project$Settings$Theme$accent1}),
+											gridDrawing));
+								},
+								model.patternArray);
+							var drawPatternsResult = A2(
+								$author$project$Logic$App$Grid$drawPatterns,
+								A2($elm$core$Array$map, $elm$core$Tuple$first, coloredPatternArray),
+								model.grid);
+							return _Utils_Tuple2(
+								_Utils_update(
+									model,
+									{grid: drawPatternsResult.grid, patternArray: coloredPatternArray, stack: evalResult.stack}),
+								$elm$core$Platform$Cmd$none);
+						} else {
+							var _v27 = decoded.a.a;
+							var mishap = _v27.a;
+							var location = _v27.b;
+							var evalResult = _v27.c;
+							var coloredPatternArray = A2(
+								$elm$core$Array$indexedMap,
+								F2(
+									function (index, patternTuple) {
+										return $author$project$Logic$App$PatternList$PatternArray$updateDrawingColors(
+											_Utils_Tuple2(
+												A3(
+													$author$project$Logic$App$PatternList$PatternArray$applyColorToPatternFromMishapLocation,
+													patternTuple.a,
+													$elm$core$Array$length(model.patternArray) - index,
+													location),
+												patternTuple.b));
+									}),
+								model.patternArray);
+							var drawPatternsResult = A2(
+								$author$project$Logic$App$Grid$drawPatterns,
+								A2($elm$core$Array$map, $elm$core$Tuple$first, coloredPatternArray),
+								model.grid);
+							return _Utils_Tuple2(
+								_Utils_update(
+									model,
+									{grid: drawPatternsResult.grid, patternArray: coloredPatternArray, stack: evalResult.stack}),
+								$elm$core$Platform$Cmd$none);
+						}
 					}
 			}
 		}
@@ -19074,7 +19207,6 @@ var $author$project$Main$updatePatternArrayFromQueue = F2(
 				newUncoloredPatternArray);
 			var drawPatternsResult = A2($author$project$Logic$App$Grid$drawPatterns, patterns, model.grid);
 			var command = getPattern.b;
-			var castingContext = model.castingContext;
 			return _Utils_eq(command, $elm$core$Platform$Cmd$none) ? A2(
 				$author$project$Main$updatePatternArrayFromQueue,
 				insertionPoint,

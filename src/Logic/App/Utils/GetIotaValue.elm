@@ -157,6 +157,9 @@ getIotaValueAsString iota =
 
                         CatastrophicFailure ->
                             "Catastrophic Failure"
+
+                        Generic ->
+                            "Garbage"
             in
             "Garbage (" ++ mishapMessage ++ ")"
 

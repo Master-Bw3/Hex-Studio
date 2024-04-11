@@ -1,4 +1,4 @@
-module Logic.App.PatternList.PatternArray exposing (addToPatternArray, applyColorToPatternFromResult, updateDrawingColors, setDrawingColor)
+module Logic.App.PatternList.PatternArray exposing (addToPatternArray, applyColorToPatternFromResult, updateDrawingColors, setDrawingColor, applyColorToPatternFromMishapLocation)
 
 import Array exposing (Array)
 import Array.Extra as Array
@@ -81,3 +81,12 @@ applyColorToPatternFromResult pattern result =
 
         Considered ->
             { pattern | color = accent5 }
+
+applyColorToPatternFromMishapLocation : Pattern -> Int -> Int -> Pattern
+applyColorToPatternFromMishapLocation pattern index location =
+    if index < location then
+        { pattern | color = accent1 }
+    else if index == location then
+        { pattern | color = accent4 }
+    else
+        pattern
