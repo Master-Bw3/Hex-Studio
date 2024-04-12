@@ -1,10 +1,13 @@
 import gleam/int
 import lustre
 import lustre/element
-import lustre/element/html
-import lustre/attribute
+import lustre/element/html.{button, div}
+import lustre/attribute.{id}
 import lustre/event
 import lustre/effect
+import view/panels/panels.{view_panels}
+import view/menu.{view_menu}
+import view/grid_buttons.{sort_button, zoom_in_button, zoom_out_button}
 
 pub fn main() {
   let app = lustre.application(init, update, view)
@@ -34,5 +37,8 @@ pub fn update(model: Model, msg: Msg) -> #(Model, effect.Effect(Msg)) {
 pub fn view(model: Model) -> element.Element(Msg) {
   let count = int.to_string(model.count)
 
-  html.div([], [])
+  div([id("content")], [
+    div([id("left_box")], [view_menu(), view_panels()]),
+    div([id("right")], [sort_button(), zoom_out_button(), zoom_in_button()]),
+  ])
 }
