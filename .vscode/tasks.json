@@ -1,0 +1,10 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "launch dev server",
+            "command": "watchexec -r -e gleam -E DEVELOPMENT=true -- gleam run -m lustre/dev start --html=index.html"
+        },
+    ]
+}
