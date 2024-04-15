@@ -9,6 +9,9 @@ import view/panels/panels.{view_panels}
 import view/menu.{view_menu}
 import view/grid_buttons.{view_grid_buttons}
 import view/grid.{view_grid}
+import glearray.{type Array}
+import iota.{type Iota}
+import pattern.{type Pattern}
 
 pub fn main() {
   let app = lustre.application(init, update, view)
@@ -16,7 +19,7 @@ pub fn main() {
 }
 
 pub type Model {
-  Model(count: Int, cats: List(String))
+  Model(stack: Array(Iota), pattern_array: Array(Pattern, List(GridPoint)))
 }
 
 fn init(_flags) -> #(Model, effect.Effect(Msg)) {
