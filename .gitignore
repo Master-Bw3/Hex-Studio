@@ -2,3 +2,9 @@
 *.ez
 /build
 erl_crash.dump
+/priv
+.DS_Store
+node_modules/
+.lustre/
+dist/
+*_desktop_bundle/
