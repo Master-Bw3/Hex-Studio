@@ -1,4 +1,3 @@
-
 /// 2D Game Example - Orthographic Camera
 import gleam/float
 import gleam/option
@@ -25,14 +24,25 @@ pub type Msg {
 }
 
 pub fn main() -> Nil {
-  let assert Ok(Nil) = tiramisu.application(init:, update:, view:)
-  |> tiramisu.start("#app", tiramisu.FullScreen, option.None)
+  let assert Ok(Nil) =
+    tiramisu.application(init:, update:, view:)
+    |> tiramisu.start("#app", tiramisu.FullScreen, option.None)
   Nil
 }
 
 fn init(ctx: tiramisu.Context) -> #(Model, Effect(Msg), option.Option(_)) {
-  let bg_effect = background.set(ctx.scene, background.Color(0x1a1a2e), BackgroundSet, BackgroundSet)
-  #(Model(time: 0.0), effect.batch([bg_effect, effect.dispatch(Tick)]), option.None)
+  let bg_effect =
+    background.set(
+      ctx.scene,
+      background.Color(0x1a1a2e),
+      BackgroundSet,
+      BackgroundSet,
+    )
+  #(
+    Model(time: 0.0),
+    effect.batch([bg_effect, effect.dispatch(Tick)]),
+    option.None,
+  )
 }
 
 fn update(
@@ -51,19 +61,22 @@ fn update(
 }
 
 fn view(model: Model, ctx: tiramisu.Context) -> scene.Node {
-  let cam = camera.camera_2d(
-    size: vec2.Vec2(float.round(ctx.canvas_size.x), float.round(ctx.canvas_size.y)),
-  )
+  let cam =
+    camera.camera_2d(size: vec2.Vec2(
+      float.round(ctx.canvas_size.x),
+      float.round(ctx.canvas_size.y),
+    ))
   let assert Ok(sprite_geom) = geometry.plane(size: vec2.Vec2(50.0, 50.0))
-  let assert Ok(sprite_mat) = material.basic(
-    color: 0xff0066,
-    transparent: False,
-    opacity: 1.0,
-    map: option.None,
-    side: material.FrontSide,
-    alpha_test: 0.0,
-    depth_write: True,
-  )
+  let assert Ok(sprite_mat) =
+    material.basic(
+      color: 0xff0066,
+      transparent: False,
+      opacity: 1.0,
+      map: option.None,
+      side: material.FrontSide,
+      alpha_test: 0.0,
+      depth_write: True,
+    )
 
   scene.empty(id: "Scene", transform: transform.identity, children: [
     scene.camera(
@@ -86,8 +99,7 @@ fn view(model: Model, ctx: tiramisu.Context) -> scene.Node {
       id: "sprite",
       geometry: sprite_geom,
       material: sprite_mat,
-      transform:
-        transform.at(position: vec3.Vec3(0.0, 0.0, 0.0))
+      transform: transform.at(position: vec3.Vec3(0.0, 0.0, 0.0))
         |> transform.with_euler_rotation(vec3.Vec3(0.0, 0.0, model.time)),
       physics: option.None,
     ),
