@@ -1,12 +1,17 @@
 /// 2D Game Example - Orthographic Camera
 import gleam/float
+import gleam/int
+import gleam/list
 import gleam/option
+import gleam/result
 import gleam/time/duration
+import hexcoord/hexcoord
 import tiramisu
 import tiramisu/background
 import tiramisu/camera
 import tiramisu/effect.{type Effect}
 import tiramisu/geometry
+import tiramisu/input
 import tiramisu/light
 import tiramisu/material
 import tiramisu/scene
@@ -66,17 +71,36 @@ fn view(model: Model, ctx: tiramisu.Context) -> scene.Node {
       float.round(ctx.canvas_size.x),
       float.round(ctx.canvas_size.y),
     ))
-  let assert Ok(sprite_geom) = geometry.plane(size: vec2.Vec2(50.0, 50.0))
-  let assert Ok(sprite_mat) =
-    material.basic(
-      color: 0xff0066,
-      transparent: False,
-      opacity: 1.0,
-      map: option.None,
-      side: material.FrontSide,
-      alpha_test: 0.0,
-      depth_write: True,
-    )
+
+  let scale = 40.0
+
+  let dots_positions =
+    list.range(-5, 5)
+    |> list.flat_map(fn(y) {
+      list.range(-5, 5) |> list.map(fn(x) { hexcoord.axial(x, y) })
+    })
+
+  let dot_meshes =
+    list.map(dots_positions, fn(pos) {
+      let coord = hexcoord.to_pixel(pos, scale)
+      let mouse = input.mouse_position(ctx.input)
+
+      echo #(coord.0, coord.1, mouse.x, mouse.y)
+
+      let dot_size =
+        echo float.clamp(
+          200.0
+            /. distance(
+            coord.0,
+            coord.1,
+            mouse.x -. ctx.canvas_size.x /. 2.0,
+            ctx.canvas_size.y /. 2.0 -. mouse.y,
+          ),
+          0.1,
+          10.0,
+        )
+      dot(coord.0, coord.1, dot_size)
+    })
 
   scene.empty(id: "Scene", transform: transform.identity, children: [
     scene.camera(
@@ -95,13 +119,41 @@ fn view(model: Model, ctx: tiramisu.Context) -> scene.Node {
       },
       transform: transform.identity,
     ),
-    scene.mesh(
-      id: "sprite",
-      geometry: sprite_geom,
-      material: sprite_mat,
-      transform: transform.at(position: vec3.Vec3(0.0, 0.0, 0.0))
-        |> transform.with_euler_rotation(vec3.Vec3(0.0, 0.0, model.time)),
-      physics: option.None,
-    ),
+    ..dot_meshes
   ])
+}
+
+fn dot(x: Float, y: Float, dot_size: Float) {
+  let assert Ok(sprite_geom) = geometry.circle(dot_size, 6)
+  let assert Ok(sprite_mat) =
+    material.basic(
+      color: 0xff0066,
+      transparent: False,
+      opacity: 1.0,
+      map: option.None,
+      side: material.FrontSide,
+      alpha_test: 0.0,
+      depth_write: True,
+    )
+
+  scene.mesh(
+    id: float.to_string(x) <> float.to_string(y),
+    geometry: sprite_geom,
+    material: sprite_mat,
+    transform: transform.at(position: vec3.Vec3(x, y, 0.0)),
+    physics: option.None,
+  )
+}
+
+fn distance(x1, y1, x2, y2) {
+  let dist = {
+    use x <- result.try(float.power(x1 -. x2, 2.0))
+    use y <- result.try(float.power(y1 -. y2, 2.0))
+    float.square_root(x +. y)
+  }
+
+  case dist {
+    Ok(dist) -> dist
+    Error(Nil) -> 0.0
+  }
 }
