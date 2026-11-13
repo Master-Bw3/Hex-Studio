@@ -1,6 +1,9 @@
 # Hex-Studio
-An IDE for hexcasting\
+An IDE for hexcasting (for Minecraft 1.19)\
 https://master-bw3.github.io/Hex-Studio/
+
+This project is not currently being actively maintained
+
 ## Features
 - Save/load projects
 - Export pattern list to give command
